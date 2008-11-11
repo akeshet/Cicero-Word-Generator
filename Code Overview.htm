@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>Untitled Page</title>
+</head>
+<body>
+    This "solution" contains several main "projects":
+    <br />
+    <br />
+    <ul>
+        <li>Atticus: Atticus is the hardware server program. This project contains all of the
+            UI code for the server, and all of the hardware side code.</li>
+        <li>Cicero: Cicero is the client-side program. This project contains all of the UI code
+            for designing sequences, as well as some code for sending those sequences to the
+            server.</li>
+        <li>DataStructures: This project does not contain any executible. Instead, it contains
+            class definitions for all of the classes use to describe and store sequences.</li>
+        <li>Elgin: This is a simple RunLog viewing program, to view the RunLogs produced by
+            Cicero. It may eventually be extended to do things like batch processing.</li>
+    </ul>
+    <p>
+        &nbsp;</p>
+    <p>
+        Some of the key important files, perhaps worth looking at first in getting acquainted
+        with the code:</p>
+    <ul>
+        <li>Atticus/ServerRuntime/AtticusServerRuntime.cs: This file is the main server object.
+            It receives requests over .NET remoting (interface defined by ServerCommunicator),
+            detects hardware channels, creates buffers and triggers.</li>
+        <li>Atticus/AtticusServer.cs: Entry point for the atticus executible.</li>
+        <li>Atticus/Form1.cs: Top level user interface for Cicero. Best viewed with VisualStudio
+            designer.</li>
+        <li>Cicero/Controls/MainClientForm.cs: The top-level user interface for Cicero.
+            Most of the guts of the user interface resides in sub-controls of this. The easiest
+            way to understand this code is by viewing it with VisualStudio's designer.</li>
+        <li>Cicero/Program.cs: entry point for Cicero.</li>
+        <li>Cicero/Controls/RunForm.cs: A user interface object which displays a progress bar
+            during a run. RunForm also has makes all of the appropriate calls to servermanager
+            to send sequence objeects, settings objects, and start runs.</li>
+        <li>Cicero/Storage.cs: Contains static references to the settingsdata and sequencedata
+            objects being edited, as well as methods for loading and saving.</li>
+        <li>DataStructures/SequenceData/SequenceData.cs: The class which stores a sequence.
+            This class is effectively "edited" by Cicero, and then sent (along with SettingsData)
+            to the servers, which turn the SequenceData object into output buffers.</li>
+        <li>DataStructures/SettingsData/SettingsData.cs: The class which stores "settings".
+            This includes mapping from channel ID integers to Hardware channels (thorough LogicalChannelManager),
+            addressess of servers</li>
+        <li>DataStructures/Communication/ServerManager/ServerManager.cs: Contains a lot of client-server
+            communication code.</li>
+    </ul>
+    <p>
+        &nbsp;</p>
+    <p>
+        &nbsp;</p>
+    <p>
+        &nbsp;</p>
+
+</body>
+</html>

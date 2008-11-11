@@ -1,0 +1,19 @@
+Nov 19, 2007.
+
+---------------------------
+Problem:    
+
+Cicero or Atticus wont start, or throws up a message box about being unable to load a National Instruments library.
+
+Solution:
+
+Copy all of the files from the NationalInstrumentsLibraries folder into the same folder as the executible.
+---------------------------
+Problem:    
+
+Cicero throws up a message box or an exception when trying to first display a waveform.
+
+Solution:
+
+Copy all of the files from the NationalInstrumentsLibraries folder into the same folder as the executible.
+---------------------------

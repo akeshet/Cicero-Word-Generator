@@ -1,0 +1,26 @@
+How to synchronize two cards:
+
+In this example, Dev1 is a digital output card, and Dev 2 in an analog output card. 
+
+Server settings:
+   set the Trigger output to "/dev1/port1/line0"
+   
+   Wire port 1 line 0 of the digital output card to PFI2 of the digital output card, and to PFI0 of the analog output card.
+   
+   set the trigger in port for Dev1 to pfi2
+   set the trigger in port for Dev2 to pfi0
+   
+   Viola, you should now have synchronized starting of tasks on different devices. Note, since these instructions were written, it has occured to me that the same can be acccomplished
+   without needing any physical wiring, through use of the daqmx "connections" features.
+   
+ 
+ Next step: synchronize their clocks:
+    Set the master timebase source for both devices to PXI_Trig7.
+    In the server's list of daqmx "connections", connect FROM /dev1/20MHzTimeBase TO /dev1/pxi_trig7.
+ 
+ 
+   
+   Remaining mysteries: 
+     - If the sample clocks of the two devices are different, then despite this triggering method they will be offset by a time on the order of the slower clock.
+      ( compare to sync to ~ 1 us otherwise).
+ 

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Tahoma" Size="8.25" />
+  <Class Name="DataStructures.SequenceData">
+    <Position X="0.5" Y="0.5" Width="6" />
+    <TypeIdentifier>
+      <FileName>SequenceData\SequenceData.cs</FileName>
+      <HashCode>ABhCACCIAUBIgQEEDFPSRAcRkEAGBUAABiRBAIsFABA=</HashCode>
+    </TypeIdentifier>
+    <NestedTypes>
+      <Enum Name="DataStructures.SequenceData.VariableTimebaseTypes" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SequenceData\SequenceData.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Class Name="DataStructures.SequenceData.VariableTimebaseSegment" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SequenceData\SequenceData.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+  </Class>
+</ClassDiagram>
