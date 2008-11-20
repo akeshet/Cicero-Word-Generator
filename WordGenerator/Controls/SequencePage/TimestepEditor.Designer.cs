@@ -51,6 +51,11 @@ namespace WordGenerator.Controls
             this.setDescMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
             this.descriptionTextBox = new System.Windows.Forms.ToolStripTextBox();
+            this.separator = new System.Windows.Forms.ToolStripSeparator();
+            this.mark = new System.Windows.Forms.ToolStripMenuItem();
+            this.unmark = new System.Windows.Forms.ToolStripMenuItem();
+            this.markall = new System.Windows.Forms.ToolStripMenuItem();
+            this.unmarkall = new System.Windows.Forms.ToolStripMenuItem();
             this.enabledButton = new System.Windows.Forms.Button();
             this.analogSelector = new System.Windows.Forms.ComboBox();
             this.gpibSelector = new System.Windows.Forms.ComboBox();
@@ -58,11 +63,6 @@ namespace WordGenerator.Controls
             this.showHideButton = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.pulseIndicator = new System.Windows.Forms.Label();
-            this.separator = new System.Windows.Forms.ToolStripSeparator();
-            this.mark = new System.Windows.Forms.ToolStripMenuItem();
-            this.unmark = new System.Windows.Forms.ToolStripMenuItem();
-            this.markall = new System.Windows.Forms.ToolStripMenuItem();
-            this.unmarkall = new System.Windows.Forms.ToolStripMenuItem();
             this.durationEditor = new WordGenerator.Controls.VerticalParameterEditor();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -108,7 +108,7 @@ namespace WordGenerator.Controls
             this.markall,
             this.unmarkall});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(210, 358);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(210, 336);
             // 
             // outputNowToolStripMenuItem
             // 
@@ -238,6 +238,39 @@ namespace WordGenerator.Controls
             this.descriptionTextBox.Size = new System.Drawing.Size(100, 21);
             this.descriptionTextBox.TextChanged += new System.EventHandler(this.descriptionTextChanged);
             // 
+            // separator
+            // 
+            this.separator.Name = "separator";
+            this.separator.Size = new System.Drawing.Size(206, 6);
+            // 
+            // mark
+            // 
+            this.mark.Name = "mark";
+            this.mark.Size = new System.Drawing.Size(209, 22);
+            this.mark.Text = "Mark";
+            this.mark.Click += new System.EventHandler(this.mark_Click);
+            // 
+            // unmark
+            // 
+            this.unmark.Name = "unmark";
+            this.unmark.Size = new System.Drawing.Size(209, 22);
+            this.unmark.Text = "Unmark";
+            this.unmark.Click += new System.EventHandler(this.unmark_Click);
+            // 
+            // markall
+            // 
+            this.markall.Name = "markall";
+            this.markall.Size = new System.Drawing.Size(209, 22);
+            this.markall.Text = "Mark All";
+            this.markall.Click += new System.EventHandler(this.markall_Click);
+            // 
+            // unmarkall
+            // 
+            this.unmarkall.Name = "unmarkall";
+            this.unmarkall.Size = new System.Drawing.Size(209, 22);
+            this.unmarkall.Text = "Unmark All";
+            this.unmarkall.Click += new System.EventHandler(this.unmarkall_Click);
+            // 
             // enabledButton
             // 
             this.enabledButton.BackColor = System.Drawing.Color.Green;
@@ -309,42 +342,9 @@ namespace WordGenerator.Controls
             this.pulseIndicator.Text = "Pulses";
             this.pulseIndicator.Visible = false;
             // 
-            // separator
-            // 
-            this.separator.Name = "separator";
-            this.separator.Size = new System.Drawing.Size(206, 6);
-            // 
-            // mark
-            // 
-            this.mark.Name = "mark";
-            this.mark.Size = new System.Drawing.Size(209, 22);
-            this.mark.Text = "Mark";
-            this.mark.Click += new System.EventHandler(this.mark_Click);
-            // 
-            // unmark
-            // 
-            this.unmark.Name = "unmark";
-            this.unmark.Size = new System.Drawing.Size(209, 22);
-            this.unmark.Text = "Unmark";
-            this.unmark.Click += new System.EventHandler(this.unmark_Click);
-            // 
-            // markall
-            // 
-            this.markall.Name = "markall";
-            this.markall.Size = new System.Drawing.Size(209, 22);
-            this.markall.Text = "Mark All";
-            this.markall.Click += new System.EventHandler(this.markall_Click);
-            // 
-            // unmarkall
-            // 
-            this.unmarkall.Name = "unmarkall";
-            this.unmarkall.Size = new System.Drawing.Size(209, 22);
-            this.unmarkall.Text = "Unmark All";
-            this.unmarkall.Click += new System.EventHandler(this.unmarkall_Click);
-            // 
             // durationEditor
             // 
-            this.durationEditor.Location = new System.Drawing.Point(0, 90);
+            this.durationEditor.Location = new System.Drawing.Point(3, 90);
             this.durationEditor.Name = "durationEditor";
             this.durationEditor.Size = new System.Drawing.Size(81, 49);
             this.durationEditor.TabIndex = 4;

@@ -801,6 +801,43 @@ namespace WordGenerator.Controls
                 equationStatusLabel.BackColor = Color.Red;
         }
 
+        private void copyToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.currentWaveform != null)
+            {
+                if (currentWaveform.interpolationType == Waveform.InterpolationType.Combination)
+                {
+                    MessageBox.Show("Sorry, waveforms of the Combination interpolation type cannot be copied to clipboard. Instead, try copying to the common waveforms.");
+                }
+                Storage.clipboardWaveform = new Waveform(this.currentWaveform);
+            }
+        }
+
+        private void pasteFromClipboardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.currentWaveform != null)
+            {
+                if (Storage.clipboardWaveform != null)
+                {
+
+                    List<Variable> usedVars = new List<Variable>(Storage.clipboardWaveform.usedVariables().Keys);
+
+                    foreach (Variable var in usedVars)
+                    {
+                        if (!(Storage.sequenceData.Variables.Contains(var))) {
+                            MessageBox.Show("You have attempted to paste in a waveform from another sequence object that made use of variables. This is not permitted.");
+                            return;
+                        }
+                    }
+
+                    this.currentWaveform.copyWaveform(Storage.clipboardWaveform);
+
+                    this.layoutNewWaveform();
+                    
+                }
+            }
+        }
+
         
     }
 }

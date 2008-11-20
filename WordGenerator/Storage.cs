@@ -25,6 +25,8 @@ namespace WordGenerator
 
         public static SequenceData sequenceData;
 
+        public static Waveform clipboardWaveform;
+
 
         /// <summary>
         /// The SaveAndLoad class is a collection of methods that implement (as the title suggests!) saving and loading of

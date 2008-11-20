@@ -35,7 +35,11 @@ namespace WordGenerator.Controls
             this.interpolationTypeComboBox = new System.Windows.Forms.ComboBox();
             this.durationLabel = new System.Windows.Forms.Label();
             this.specialParametersBox = new System.Windows.Forms.GroupBox();
+            this.equationHelpText = new System.Windows.Forms.Label();
+            this.equationStatusLabel = new System.Windows.Forms.Label();
+            this.equationTextBox = new System.Windows.Forms.TextBox();
             this.specializedLabelStart = new System.Windows.Forms.Label();
+            this.specialParametersStartPoint = new WordGenerator.Controls.HorizontalParameterEditor();
             this.downButton = new System.Windows.Forms.Button();
             this.upButton = new System.Windows.Forms.Button();
             this.waveformCombosStart = new System.Windows.Forms.ComboBox();
@@ -54,13 +58,11 @@ namespace WordGenerator.Controls
             this.fileLoadGroupBox = new System.Windows.Forms.GroupBox();
             this.XLabel1 = new System.Windows.Forms.Label();
             this.YLabel1 = new System.Windows.Forms.Label();
-            this.equationTextBox = new System.Windows.Forms.TextBox();
-            this.equationStatusLabel = new System.Windows.Forms.Label();
-            this.equationHelpText = new System.Windows.Forms.Label();
-            this.specialParametersStartPoint = new WordGenerator.Controls.HorizontalParameterEditor();
             this.durationParameterEditor = new WordGenerator.Controls.HorizontalParameterEditor();
             this.XYParametersStart2 = new WordGenerator.Controls.HorizontalParameterEditor();
             this.XYParametersStart1 = new WordGenerator.Controls.HorizontalParameterEditor();
+            this.copyToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pasteFromClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.specialParametersBox.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.fileLoadGroupBox.SuspendLayout();
@@ -125,6 +127,34 @@ namespace WordGenerator.Controls
             this.specialParametersBox.TabStop = false;
             this.specialParametersBox.Text = "Specialized Parameters";
             // 
+            // equationHelpText
+            // 
+            this.equationHelpText.Location = new System.Drawing.Point(10, 97);
+            this.equationHelpText.Name = "equationHelpText";
+            this.equationHelpText.Size = new System.Drawing.Size(188, 56);
+            this.equationHelpText.TabIndex = 4;
+            this.equationHelpText.Text = "Enter equation. You may use any of the existing variables, and any of the functio" +
+                "ns described in the Variables tab. Use \"t\" for time (in seconds).";
+            this.equationHelpText.Visible = false;
+            // 
+            // equationStatusLabel
+            // 
+            this.equationStatusLabel.Location = new System.Drawing.Point(8, 44);
+            this.equationStatusLabel.Name = "equationStatusLabel";
+            this.equationStatusLabel.Size = new System.Drawing.Size(199, 41);
+            this.equationStatusLabel.TabIndex = 3;
+            this.equationStatusLabel.Text = "label1";
+            // 
+            // equationTextBox
+            // 
+            this.equationTextBox.Enabled = false;
+            this.equationTextBox.Location = new System.Drawing.Point(8, 20);
+            this.equationTextBox.Name = "equationTextBox";
+            this.equationTextBox.Size = new System.Drawing.Size(199, 20);
+            this.equationTextBox.TabIndex = 2;
+            this.equationTextBox.Visible = false;
+            this.equationTextBox.TextChanged += new System.EventHandler(this.equationTextBox_TextChanged);
+            // 
             // specializedLabelStart
             // 
             this.specializedLabelStart.AutoSize = true;
@@ -135,6 +165,16 @@ namespace WordGenerator.Controls
             this.specializedLabelStart.TabIndex = 1;
             this.specializedLabelStart.Text = "label1";
             this.specializedLabelStart.Visible = false;
+            // 
+            // specialParametersStartPoint
+            // 
+            this.specialParametersStartPoint.Enabled = false;
+            this.specialParametersStartPoint.Location = new System.Drawing.Point(59, 19);
+            this.specialParametersStartPoint.Name = "specialParametersStartPoint";
+            this.specialParametersStartPoint.Size = new System.Drawing.Size(157, 25);
+            this.specialParametersStartPoint.TabIndex = 0;
+            this.specialParametersStartPoint.UnitSelectorVisibility = false;
+            this.specialParametersStartPoint.Visible = false;
             // 
             // downButton
             // 
@@ -232,9 +272,11 @@ namespace WordGenerator.Controls
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.copyToCommonWaveformsToolStripMenuItem});
+            this.copyToCommonWaveformsToolStripMenuItem,
+            this.copyToClipboardToolStripMenuItem,
+            this.pasteFromClipboardToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(226, 26);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(226, 92);
             // 
             // copyToCommonWaveformsToolStripMenuItem
             // 
@@ -322,44 +364,6 @@ namespace WordGenerator.Controls
             this.YLabel1.Text = "Y";
             this.YLabel1.Visible = false;
             // 
-            // equationTextBox
-            // 
-            this.equationTextBox.Enabled = false;
-            this.equationTextBox.Location = new System.Drawing.Point(8, 20);
-            this.equationTextBox.Name = "equationTextBox";
-            this.equationTextBox.Size = new System.Drawing.Size(199, 20);
-            this.equationTextBox.TabIndex = 2;
-            this.equationTextBox.Visible = false;
-            this.equationTextBox.TextChanged += new System.EventHandler(this.equationTextBox_TextChanged);
-            // 
-            // equationStatusLabel
-            // 
-            this.equationStatusLabel.Location = new System.Drawing.Point(8, 44);
-            this.equationStatusLabel.Name = "equationStatusLabel";
-            this.equationStatusLabel.Size = new System.Drawing.Size(199, 41);
-            this.equationStatusLabel.TabIndex = 3;
-            this.equationStatusLabel.Text = "label1";
-            // 
-            // equationHelpText
-            // 
-            this.equationHelpText.Location = new System.Drawing.Point(10, 97);
-            this.equationHelpText.Name = "equationHelpText";
-            this.equationHelpText.Size = new System.Drawing.Size(188, 56);
-            this.equationHelpText.TabIndex = 4;
-            this.equationHelpText.Text = "Enter equation. You may use any of the existing variables, and any of the functio" +
-                "ns described in the Variables tab. Use \"t\" for time (in seconds).";
-            this.equationHelpText.Visible = false;
-            // 
-            // specialParametersStartPoint
-            // 
-            this.specialParametersStartPoint.Enabled = false;
-            this.specialParametersStartPoint.Location = new System.Drawing.Point(59, 19);
-            this.specialParametersStartPoint.Name = "specialParametersStartPoint";
-            this.specialParametersStartPoint.Size = new System.Drawing.Size(157, 25);
-            this.specialParametersStartPoint.TabIndex = 0;
-            this.specialParametersStartPoint.UnitSelectorVisibility = false;
-            this.specialParametersStartPoint.Visible = false;
-            // 
             // durationParameterEditor
             // 
             this.durationParameterEditor.Location = new System.Drawing.Point(81, 53);
@@ -388,6 +392,20 @@ namespace WordGenerator.Controls
             this.XYParametersStart1.TabIndex = 7;
             this.XYParametersStart1.UnitSelectorVisibility = true;
             this.XYParametersStart1.Visible = false;
+            // 
+            // copyToClipboardToolStripMenuItem
+            // 
+            this.copyToClipboardToolStripMenuItem.Name = "copyToClipboardToolStripMenuItem";
+            this.copyToClipboardToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.copyToClipboardToolStripMenuItem.Text = "Copy to Clipboard";
+            this.copyToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyToClipboardToolStripMenuItem_Click);
+            // 
+            // pasteFromClipboardToolStripMenuItem
+            // 
+            this.pasteFromClipboardToolStripMenuItem.Name = "pasteFromClipboardToolStripMenuItem";
+            this.pasteFromClipboardToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.pasteFromClipboardToolStripMenuItem.Text = "Paste from Clipboard";
+            this.pasteFromClipboardToolStripMenuItem.Click += new System.EventHandler(this.pasteFromClipboardToolStripMenuItem_Click);
             // 
             // WaveformEditor
             // 
@@ -461,5 +479,7 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.Label equationStatusLabel;
         private System.Windows.Forms.TextBox equationTextBox;
         private System.Windows.Forms.Label equationHelpText;
+        private System.Windows.Forms.ToolStripMenuItem copyToClipboardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pasteFromClipboardToolStripMenuItem;
     }
 }

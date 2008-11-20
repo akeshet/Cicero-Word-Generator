@@ -50,7 +50,7 @@ namespace DataStructures
 
         }
 
-        public static void getEquationInterpolation(string equationString, double startTime, double endTime, int nSamples, int startIndex, double[]output, List<Variable> existingVariables) 
+        public static void getEquationInterpolation(string equationString, double startTime, double endTime, int nSamples, int startIndex, double[]output, List<Variable> existingVariables, double wfDuration) 
         {
             string status = getEquationStatusString(equationString, existingVariables);
 
@@ -92,6 +92,10 @@ namespace DataStructures
                     if (usingTimeVariable)
                     {
                         double time = i * (endTime - startTime) / (double)nSamples + startTime;
+
+                        if (time > wfDuration)
+                            time = wfDuration;
+
                         eq.SetVariable("t", time);
                     }
                     try

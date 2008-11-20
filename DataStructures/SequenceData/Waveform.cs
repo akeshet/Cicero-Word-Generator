@@ -11,6 +11,48 @@ namespace DataStructures
 	[Serializable]
 	public class Waveform
 	{
+
+        public void copyWaveform(Waveform copyMe)
+        {
+            if (copyMe.combiners!=null)
+                this.combiners = new List<InterpolationType.CombinationOperators>(copyMe.combiners);
+            else
+                this.combiners = null;
+
+            this.dataFileName = copyMe.dataFileName;
+            this.dataFromFile = copyMe.dataFromFile;
+            this.equationString = copyMe.equationString;
+
+            if (copyMe.extraParameters != null)
+                this.extraParameters = new List<DimensionedParameter>(copyMe.extraParameters);
+            else
+                this.extraParameters = null;
+
+            this.myInterpolationType = copyMe.myInterpolationType;
+
+            if (copyMe.referencedWaveforms != null)
+                this.referencedWaveforms = new List<Waveform>(copyMe.referencedWaveforms);
+            else
+                this.referencedWaveforms = null;
+
+            this.waveformDuration = new DimensionedParameter(copyMe.waveformDuration);
+
+            this.waveformName = copyMe.waveformName;
+
+            if (copyMe.xValues != null)
+                this.xValues = new List<DimensionedParameter>(copyMe.xValues);
+            else
+                this.xValues = null;
+
+            this.YUnits = copyMe.YUnits;
+
+            if (copyMe.yValues != null)
+                this.yValues = new List<DimensionedParameter>(copyMe.yValues);
+            else
+                this.yValues = null;
+
+        }
+
 		#region InterpolationType
 
         /// <summary>
@@ -549,7 +591,7 @@ namespace DataStructures
 
                     case InterpolationID.Equation:
                         {
-                            WaveformEquationInterpolator.getEquationInterpolation(equationString, startTime, endTime, nSamples, startIndex, output, existingVariables);
+                            WaveformEquationInterpolator.getEquationInterpolation(equationString, startTime, endTime, nSamples, startIndex, output, existingVariables, wfDuration);
                         }
                         break;
 				}
@@ -1162,6 +1204,11 @@ namespace DataStructures
                 this.yValues = new List<DimensionedParameter>(copyMe.yValues);
 
             this.YUnits = copyMe.YUnits;
+
+            this.equationString = copyMe.equationString;
+            this.dataFileName = copyMe.dataFileName;
+            this.dataFromFile = copyMe.dataFromFile;
+
         }
 
         public Waveform()

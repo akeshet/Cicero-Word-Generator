@@ -82,6 +82,7 @@ namespace WordGenerator
             this.analogPage = new System.Windows.Forms.TabPage();
             this.analogGroupEditor1 = new WordGenerator.Controls.AnalogGroupEditor();
             this.sequencePage = new System.Windows.Forms.TabPage();
+            this.waitForReady = new System.Windows.Forms.CheckBox();
             this.lockDigitalCheckBox = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -99,7 +100,6 @@ namespace WordGenerator
             this.pulsesPage1 = new WordGenerator.Controls.PulsesPage();
             this.eventLogPage = new System.Windows.Forms.TabPage();
             this.messageLogTextBox = new System.Windows.Forms.TextBox();
-            this.waitForReady = new System.Windows.Forms.CheckBox();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.variablesPage.SuspendLayout();
@@ -429,7 +429,6 @@ namespace WordGenerator
             this.calculateVariableTimebaseAnalogBufferToolStripMenuItem.Name = "calculateVariableTimebaseAnalogBufferToolStripMenuItem";
             this.calculateVariableTimebaseAnalogBufferToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
             this.calculateVariableTimebaseAnalogBufferToolStripMenuItem.Text = "Calculate variable timebase analog buffer";
-            this.calculateVariableTimebaseAnalogBufferToolStripMenuItem.Visible = false;
             this.calculateVariableTimebaseAnalogBufferToolStripMenuItem.Click += new System.EventHandler(this.calculateVariableTimebaseAnalogBufferToolStripMenuItem_Click);
             // 
             // calculateVariableTimebaseDigitalBufferToolStripMenuItem
@@ -494,7 +493,7 @@ namespace WordGenerator
             // 
             // commonWaveformEditor1
             // 
-            this.commonWaveformEditor1.Location = new System.Drawing.Point(3, 6);
+            this.commonWaveformEditor1.Location = new System.Drawing.Point(3, 3);
             this.commonWaveformEditor1.Name = "commonWaveformEditor1";
             this.commonWaveformEditor1.Size = new System.Drawing.Size(1252, 844);
             this.commonWaveformEditor1.TabIndex = 0;
@@ -556,6 +555,17 @@ namespace WordGenerator
             this.sequencePage.Text = "Sequence (F1)";
             this.sequencePage.ToolTipText = "Testing";
             this.sequencePage.UseVisualStyleBackColor = true;
+            // 
+            // waitForReady
+            // 
+            this.waitForReady.AutoSize = true;
+            this.waitForReady.Location = new System.Drawing.Point(7, 791);
+            this.waitForReady.Name = "waitForReady";
+            this.waitForReady.Size = new System.Drawing.Size(97, 17);
+            this.waitForReady.TabIndex = 9;
+            this.waitForReady.Text = "Wait for Ready";
+            this.waitForReady.UseVisualStyleBackColor = true;
+            this.waitForReady.CheckedChanged += new System.EventHandler(this.waitForReady_CheckedChanged);
             // 
             // lockDigitalCheckBox
             // 
@@ -681,7 +691,7 @@ namespace WordGenerator
             // 
             // rS232GroupEditor1
             // 
-            this.rS232GroupEditor1.Location = new System.Drawing.Point(3, 6);
+            this.rS232GroupEditor1.Location = new System.Drawing.Point(3, 3);
             this.rS232GroupEditor1.Name = "rS232GroupEditor1";
             this.rS232GroupEditor1.Size = new System.Drawing.Size(1264, 918);
             this.rS232GroupEditor1.TabIndex = 0;
@@ -723,17 +733,6 @@ namespace WordGenerator
             this.messageLogTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.messageLogTextBox.Size = new System.Drawing.Size(1244, 885);
             this.messageLogTextBox.TabIndex = 0;
-            // 
-            // waitForReady
-            // 
-            this.waitForReady.AutoSize = true;
-            this.waitForReady.Location = new System.Drawing.Point(7, 791);
-            this.waitForReady.Name = "waitForReady";
-            this.waitForReady.Size = new System.Drawing.Size(97, 17);
-            this.waitForReady.TabIndex = 9;
-            this.waitForReady.Text = "Wait for Ready";
-            this.waitForReady.UseVisualStyleBackColor = true;
-            this.waitForReady.CheckedChanged += new System.EventHandler(this.waitForReady_CheckedChanged);
             // 
             // mainClientForm
             // 
