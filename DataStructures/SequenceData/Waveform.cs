@@ -359,11 +359,7 @@ namespace DataStructures
 							int i;
 							for (i = 0; (i < nSamples); i++)
 							{
-                                // Modified by REO 11/17/2008:
-                                // Have x range from startTime+stepSize to endTime, so alignment with endTime is exact.
-                                // This makes the final value (which becomes the dwell value for the rest of the sequence) correct.
-                                x = startTime + stepSize * (i + 1);
-								//x = startTime + stepSize * i;
+                                x = startTime + stepSize * i;
                                 if (x > wfDuration)
                                     x = wfDuration;
 
@@ -405,11 +401,7 @@ namespace DataStructures
 							int i;
 							for (i = 0; (i < nSamples); i++)
 							{
-                                // Modified by REO 11/17/2008:
-                                // Have x range from startTime+stepSize to endTime, so alignment with endTime is exact.
-                                // This makes the final value (which becomes the dwell value for the rest of the sequence) correct.
-                                x = startTime + stepSize * (i + 1);
-                                //x = startTime + stepSize * i;
+                                x = startTime + stepSize * i;
                                 if (x > wfDuration)
                                     x = wfDuration;
 
@@ -471,11 +463,7 @@ namespace DataStructures
 
                             for (int i = 0; i < nSamples; i++)
                             {
-                                // Modified by REO 11/17/2008:
-                                // Have x range from startTime+stepSize to endTime, so alignment with endTime is exact.
-                                // This makes the final value (which becomes the dwell value for the rest of the sequence) correct.
-                                x = startTime + stepSize * (i + 1);
-                                //x = startTime + stepSize * i;
+                                x = startTime + stepSize * i;
                                 if (x > wfDuration)
                                     x = wfDuration;
 
@@ -501,11 +489,7 @@ namespace DataStructures
                             double stepSize = (endTime - startTime) / ((double)nSamples);
                             for (int i = 0; i < nSamples; i++)
                             {
-                                // Modified by REO 11/17/2008:
-                                // Have x range from startTime+stepSize to endTime, so alignment with endTime is exact.
-                                // This makes the final value (which becomes the dwell value for the rest of the sequence) correct.
-                                x = startTime + stepSize * (i + 1);
-                                //x = startTime + stepSize * i;
+                                x = startTime + stepSize * i;
                                 if (x >= wfDuration)
                                     x = wfDuration;
 
@@ -535,11 +519,7 @@ namespace DataStructures
 
                             for (int i = 0; i < nSamples; i++)
                             {
-                                // Modified by REO 11/17/2008:
-                                // Have x range from startTime+stepSize to endTime, so alignment with endTime is exact.
-                                // This makes the final value (which becomes the dwell value for the rest of the sequence) correct.
-                                x = startTime + stepSize * (i + 1);
-                                //x = startTime + stepSize * i;
+                                x = startTime + stepSize * i;
                                 if (x > wfDuration)
                                     x = wfDuration;
 

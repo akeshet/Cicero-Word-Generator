@@ -1310,7 +1310,7 @@ namespace DataStructures
                             currentlyRunningGroup = null;
                         }
 
-                        dwellingValue = ans[currentSample - 1];
+                        dwellingValue = runningWaveform.getValueAtTime(runningWaveform.WaveformDuration.getBaseValue(), Variables);
                     }
                 }
             }
