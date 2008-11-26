@@ -62,14 +62,17 @@ namespace AtticusServer
 
             // start by adding the initialization string to the command buffer
             // this does nothing for unknown device types
-           commandBuffer.Add(new GpibCommand(HardwareChannel.HardwareConstants.gpibInitializationCommands[(int)deviceType], 0));
+            // Modified by REO 11/25/08: Null strings produce errors if written to device, so check
+            if(HardwareChannel.HardwareConstants.gpibInitializationCommands[(int)deviceType]!= null)
+                commandBuffer.Add(new GpibCommand(HardwareChannel.HardwareConstants.gpibInitializationCommands[(int)deviceType], 0));
 
 
            if (deviceType == HardwareChannel.HardwareConstants.GPIBDeviceType.Unknown)
            {
                foreach (GpibRampCommandConverter conv in commandConverters)
                {
-                   if (deviceSettings.DeviceDescription.Contains(conv.DeviceIdentifierSubstring))
+                   //Modified by REO 11/25/08: Null strings produce errors if written to device, so check
+                   if (deviceSettings.DeviceDescription.Contains(conv.DeviceIdentifierSubstring) && conv.InitializationCommand != null)
                        commandBuffer.Add(new GpibCommand(AddNewlineCharacters(conv.InitializationCommand), 0));
                }
            }
