@@ -70,7 +70,7 @@ namespace Elgin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nov 10, 2008.
+        ///   Looks up a localized string similar to Dec 16, 2008.
         /// </summary>
         internal static string BuildDate {
             get {
@@ -102,7 +102,7 @@ namespace Elgin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1.24.
+        ///   Looks up a localized string similar to 1.25.
         /// </summary>
         internal static string VersionString {
             get {
