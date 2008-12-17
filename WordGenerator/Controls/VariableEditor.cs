@@ -66,7 +66,10 @@ namespace WordGenerator.Controls
             else
                 this.listSelector.Visible = false;
 
-            this.valueSelector.Value = (decimal) this.variable.VariableValue;
+            if (!variable.DerivedVariable && !variable.PermanentVariable)
+            {
+                this.valueSelector.Value = (decimal)this.variable.VariableValue;
+            }
 
             this.textBox1.Text = variable.VariableName;
 
@@ -82,7 +85,7 @@ namespace WordGenerator.Controls
             if (variable != null)
             {
                 this.textBox1.Text = variable.VariableName;
-                if (!variable.DerivedVariable)
+                if (!variable.DerivedVariable && !variable.PermanentVariable)
                 {
                     this.valueSelector.Value = (decimal)variable.VariableValue;
                 }
@@ -91,19 +94,41 @@ namespace WordGenerator.Controls
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
+            bool oldPermanent = this.variable.PermanentVariable;
+
             if (variable != null)
             {
                 this.variable.VariableName = textBox1.Text;
                 if (this.variable.VariableName == "SeqMode")
                 {
                     this.BackColor = Color.Salmon;
+                    this.variable.PermanentVariable = false;
                 }
                 else
                 {
-                    this.BackColor = Color.Transparent;
+                    detectIfThisIsPermanentVariable();
                 }
             }
+
+            if (oldPermanent != this.variable.PermanentVariable)
+                updateLayout();
         }
+
+        private void detectIfThisIsPermanentVariable()
+        {
+            if (Storage.settingsData.PermanentVariables.ContainsKey(this.variable.VariableName))
+            {
+                this.BackColor = Color.BlueViolet;
+                this.variable.PermanentVariable = true;
+                this.variable.PermanentValue = Storage.settingsData.PermanentVariables[this.variable.VariableName];
+            }
+            else
+            {
+                this.BackColor = Color.Transparent;
+                this.variable.PermanentVariable = false;
+            }
+        }
+
 
         private void comboBox1_SelectedValueChanged(object sender, EventArgs e)
         {
@@ -214,102 +239,118 @@ namespace WordGenerator.Controls
                 combineOperatorsIndexMapping = new Dictionary<ComboBox, int>();
             }
 
-                            // remove all derived variable related elements, if any
-                foreach (HorizontalParameterEditor hpe in combinedValues)
-                {
-                    this.Controls.Remove(hpe);
-                }
-                foreach (ComboBox cb in combineOperators)
-                {
-                    this.Controls.Remove(cb);
-                }
-
-                combinedValues.Clear();
-                combineOperators.Clear();
-                combineOperatorsIndexMapping.Clear();
-
-            if (!variable.DerivedVariable)
+            // remove all derived variable related elements, if any
+            foreach (HorizontalParameterEditor hpe in combinedValues)
             {
+                this.Controls.Remove(hpe);
+            }
+            foreach (ComboBox cb in combineOperators)
+            {
+                this.Controls.Remove(cb);
+            }
 
-                this.valueSelector.Visible = true;
-                this.formulaTextBox.Visible = false;
-                
+            combinedValues.Clear();
+            combineOperators.Clear();
+            combineOperatorsIndexMapping.Clear();
 
+            detectIfThisIsPermanentVariable();
+            if (variable.PermanentVariable)
+            {
+                permanentValueLabel.Visible = true;
+                permanentValueLabel.Text = Storage.settingsData.PermanentVariables[this.variable.VariableName].ToString();
+                valueSelector.Visible = false;
                 derivedValueLabel.Visible = false;
-
-                
-
-                this.BorderStyle = BorderStyle.None;
-
+                formulaTextBox.Visible = false;
+                derivedCheckBox.Visible = false;
                 this.Size = new Size(220, 22);
             }
             else
             {
-                this.valueSelector.Visible = false;
-                listSelector.SelectedIndex = 0;
-                listSelector.Visible = false;
-                this.formulaTextBox.Visible = true;
-                derivedValueLabel.Visible = true;
+                permanentValueLabel.Visible = false;
 
-                this.Size = new Size(220, 104);
-                this.BorderStyle = BorderStyle.FixedSingle;
-
-
-            /*    foreach (DimensionedParameter dp in variable.CombinedValues)
+                if (!variable.DerivedVariable)
                 {
-                    HorizontalParameterEditor hpe = new HorizontalParameterEditor(dp);
-                    hpe.setUnitSelectorVisibility(false);
-                    combinedValues.Add(hpe);
-                    hpe.updateGUI += new EventHandler(hpe_updateGUI);
+
+                    this.valueSelector.Visible = true;
+                    this.formulaTextBox.Visible = false;
+
+
+                    derivedValueLabel.Visible = false;
+
+
+
+                    this.BorderStyle = BorderStyle.None;
+
+                    this.Size = new Size(220, 22);
                 }
-                for (int i = 0; i < variable.Combiners.Count; i++)
+                else
                 {
-                    ComboBox box = new ComboBox();
-                    box.Items.AddRange(Variable.combinerOperators);
-                    box.DropDownStyle = ComboBoxStyle.DropDownList;
-                    box.Width = 50;
-                    combineOperators.Add(box);
-                    combineOperatorsIndexMapping.Add(box, i);
+                    this.valueSelector.Visible = false;
+                    listSelector.SelectedIndex = 0;
+                    listSelector.Visible = false;
+                    this.formulaTextBox.Visible = true;
+                    derivedValueLabel.Visible = true;
+
+                    this.Size = new Size(220, 104);
+                    this.BorderStyle = BorderStyle.FixedSingle;
+
+
+                    /*    foreach (DimensionedParameter dp in variable.CombinedValues)
+                        {
+                            HorizontalParameterEditor hpe = new HorizontalParameterEditor(dp);
+                            hpe.setUnitSelectorVisibility(false);
+                            combinedValues.Add(hpe);
+                            hpe.updateGUI += new EventHandler(hpe_updateGUI);
+                        }
+                        for (int i = 0; i < variable.Combiners.Count; i++)
+                        {
+                            ComboBox box = new ComboBox();
+                            box.Items.AddRange(Variable.combinerOperators);
+                            box.DropDownStyle = ComboBoxStyle.DropDownList;
+                            box.Width = 50;
+                            combineOperators.Add(box);
+                            combineOperatorsIndexMapping.Add(box, i);
                     
-                    box.SelectedItem = variable.Combiners[i];
-                    box.SelectedIndexChanged += new EventHandler(box_SelectedIndexChanged);
+                            box.SelectedItem = variable.Combiners[i];
+                            box.SelectedIndexChanged += new EventHandler(box_SelectedIndexChanged);
+                        }
+
+                        // layout the component positions
+
+                        int y = this.valueSelector.Height + 5;
+
+                        for (int i=0; i<combinedValues.Count; i++) 
+                        {
+                            HorizontalParameterEditor hpe = combinedValues[i];
+                            hpe.Location = new Point(20, y);
+                            y += hpe.Height + 5;
+                            if (combineOperators.Count > i)
+                            {
+                                combineOperators[i].Location = new Point(20, y);
+                                y += combineOperators[i].Height + 5;
+                            }
+                        }
+
+                        derivedValueLabel.Location = new Point(5, y);
+                        derivedValueLabel.Visible = true;
+                        y += derivedValueLabel.Height;
+
+                        this.upButton.Location = new Point(upButton.Location.X, y);
+                        this.downButton.Location = new Point(downButton.Location.X, y);
+                        y += upButton.Height + 5;
+
+                        upButton.Visible = true;
+                        downButton.Visible = true;
+
+                        this.BorderStyle = BorderStyle.FixedSingle;
+
+
+                        this.Size = new Size(220, y);
+                        this.Controls.AddRange(combinedValues.ToArray());
+                        this.Controls.AddRange(combineOperators.ToArray());
+
+                        updateDerivedValue();*/
                 }
-
-                // layout the component positions
-
-                int y = this.valueSelector.Height + 5;
-
-                for (int i=0; i<combinedValues.Count; i++) 
-                {
-                    HorizontalParameterEditor hpe = combinedValues[i];
-                    hpe.Location = new Point(20, y);
-                    y += hpe.Height + 5;
-                    if (combineOperators.Count > i)
-                    {
-                        combineOperators[i].Location = new Point(20, y);
-                        y += combineOperators[i].Height + 5;
-                    }
-                }
-
-                derivedValueLabel.Location = new Point(5, y);
-                derivedValueLabel.Visible = true;
-                y += derivedValueLabel.Height;
-
-                this.upButton.Location = new Point(upButton.Location.X, y);
-                this.downButton.Location = new Point(downButton.Location.X, y);
-                y += upButton.Height + 5;
-
-                upButton.Visible = true;
-                downButton.Visible = true;
-
-                this.BorderStyle = BorderStyle.FixedSingle;
-
-
-                this.Size = new Size(220, y);
-                this.Controls.AddRange(combinedValues.ToArray());
-                this.Controls.AddRange(combineOperators.ToArray());
-
-                updateDerivedValue();*/
             }
         }
 

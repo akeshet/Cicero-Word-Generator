@@ -24,6 +24,20 @@ namespace DataStructures
             set { myLogicalChannelManager = value; }
         }
 
+        private Dictionary<string, double> permanentVariables;
+
+        public Dictionary<string, double> PermanentVariables
+        {
+            get
+            {
+                if (permanentVariables == null)
+                    permanentVariables = new Dictionary<string, double>();
+
+                return permanentVariables;
+            }
+            set { permanentVariables = value; }
+        }
+
         /// <summary>
         /// Returns a list of servers which have an enabled channel mapped to them, but which are not connected.
         /// If there are no such servers, returns an empty list.

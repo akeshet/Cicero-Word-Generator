@@ -384,6 +384,16 @@ namespace WordGenerator.Controls
             help.ShowDialog();
         }
 
+        private void permanentVariablesButton_Click(object sender, EventArgs e)
+        {
+            PermanentVariablesEditor pve = new PermanentVariablesEditor();
+            pve.ShowDialog();
+            foreach (VariableEditor ve in this.variableEditors)
+            {
+                ve.updateLayout();
+            }
+        }
+
 
 
     }

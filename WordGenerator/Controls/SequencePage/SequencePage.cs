@@ -823,12 +823,14 @@ namespace WordGenerator.Controls
 
         private void analogChannelLabelsPanel1_Enter(object sender, EventArgs e)
         {
-            timeStepsPanel.Focus();
+            // these apparently caused the program to freeze
+    //        timeStepsPanel.Focus();
         }
 
         private void digitalChannelLabelsPanel1_Enter(object sender, EventArgs e)
         {
-            timeStepsPanel.Focus();
+            // apparently caused program to freeze
+    //        timeStepsPanel.Focus();
         }
 
         private void digitalGridPanel_SizeChanged(object sender, EventArgs e)

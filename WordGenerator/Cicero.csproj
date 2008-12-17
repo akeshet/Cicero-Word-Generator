@@ -117,6 +117,12 @@
     <Compile Include="Controls\OverridePage\OverridePage.Designer.cs">
       <DependentUpon>OverridePage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PermanentVariablesEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\PermanentVariablesEditor.Designer.cs">
+      <DependentUpon>PermanentVariablesEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PropertyGridForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -331,6 +337,10 @@
     <EmbeddedResource Include="Controls\OverridePage\OverridePage.resx">
       <SubType>Designer</SubType>
       <DependentUpon>OverridePage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PermanentVariablesEditor.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>PermanentVariablesEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\PropertyGridForm.resx">
       <SubType>Designer</SubType>

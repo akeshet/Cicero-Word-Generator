@@ -452,9 +452,24 @@ namespace WordGenerator
                 sequence.ListIterationNumber = iterationNumber;
 
                 string listBoundVariableValues = "";
+
                 foreach (Variable var in sequence.Variables)
                 {
-                    if (var.ListDriven)
+                    if (Storage.settingsData.PermanentVariables.ContainsKey(var.VariableName))
+                    {
+                        var.PermanentVariable = true;
+                        var.PermanentValue = Storage.settingsData.PermanentVariables[var.VariableName];
+                    }
+                    else
+                    {
+                        var.PermanentVariable = false;
+                    }
+                }
+
+                foreach (Variable var in sequence.Variables)
+                {
+
+                    if (var.ListDriven && !var.PermanentVariable)
                     {
                         if (listBoundVariableValues == "")
                         {

@@ -53,6 +53,7 @@ namespace WordGenerator.Controls
             this.listEditorPanelPlaceholder = new WordGenerator.Controls.ListEditorPanel();
             this.runControl1 = new WordGenerator.Controls.RunControl();
             this.equationHelpButton = new System.Windows.Forms.Button();
+            this.permanentVariablesButton = new System.Windows.Forms.Button();
             this.variablesPanel.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -77,7 +78,7 @@ namespace WordGenerator.Controls
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.71028F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67.28972F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 53F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 61F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 63F));
             this.tableLayoutPanel1.Controls.Add(this.label1, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.nameLabel, 1, 0);
@@ -92,7 +93,7 @@ namespace WordGenerator.Controls
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(117, 0);
+            this.label1.Location = new System.Drawing.Point(115, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(34, 13);
             this.label1.TabIndex = 1;
@@ -110,7 +111,7 @@ namespace WordGenerator.Controls
             // nameLabel
             // 
             this.nameLabel.AutoSize = true;
-            this.nameLabel.Location = new System.Drawing.Point(40, 0);
+            this.nameLabel.Location = new System.Drawing.Point(39, 0);
             this.nameLabel.Name = "nameLabel";
             this.nameLabel.Size = new System.Drawing.Size(35, 13);
             this.nameLabel.TabIndex = 0;
@@ -119,7 +120,7 @@ namespace WordGenerator.Controls
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(170, 0);
+            this.label3.Location = new System.Drawing.Point(168, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(55, 13);
             this.label3.TabIndex = 4;
@@ -316,10 +317,21 @@ namespace WordGenerator.Controls
             this.equationHelpButton.UseVisualStyleBackColor = true;
             this.equationHelpButton.Click += new System.EventHandler(this.equationHelpButton_Click);
             // 
+            // permanentVariablesButton
+            // 
+            this.permanentVariablesButton.Location = new System.Drawing.Point(112, 74);
+            this.permanentVariablesButton.Name = "permanentVariablesButton";
+            this.permanentVariablesButton.Size = new System.Drawing.Size(85, 34);
+            this.permanentVariablesButton.TabIndex = 9;
+            this.permanentVariablesButton.Text = "Permanent Variables";
+            this.permanentVariablesButton.UseVisualStyleBackColor = true;
+            this.permanentVariablesButton.Click += new System.EventHandler(this.permanentVariablesButton_Click);
+            // 
             // VariablesAndListPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.permanentVariablesButton);
             this.Controls.Add(this.equationHelpButton);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBox1);
@@ -370,5 +382,6 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button equationHelpButton;
+        private System.Windows.Forms.Button permanentVariablesButton;
     }
 }

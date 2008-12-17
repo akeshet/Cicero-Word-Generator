@@ -42,6 +42,22 @@ namespace DataStructures
             set { description = value; }
         }
 
+        private bool permanentVariable;
+
+        public bool PermanentVariable
+        {
+            get { return permanentVariable; }
+            set { permanentVariable = value; }
+        }
+
+        private double permanentValue;
+
+        public double PermanentValue
+        {
+            get { return permanentValue; }
+            set { permanentValue = value; }
+        }
+
         private string variableFormula;
 
         public string VariableFormula
@@ -184,6 +200,9 @@ namespace DataStructures
                 }*/
                 if (passThroughVariable != null)
                     return passThroughVariable.VariableValue;
+
+                if (this.PermanentVariable)
+                    return this.PermanentValue;
 
                 return variableValue; 
             }

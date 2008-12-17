@@ -39,6 +39,7 @@ namespace WordGenerator.Controls
             this.formulaTextBox = new System.Windows.Forms.TextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.helpOnSupportedOperationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.permanentValueLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.valueSelector)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -137,10 +138,22 @@ namespace WordGenerator.Controls
             this.helpOnSupportedOperationsToolStripMenuItem.Text = "Help on supported operations";
             this.helpOnSupportedOperationsToolStripMenuItem.Click += new System.EventHandler(this.helpOnSupportedOperationsToolStripMenuItem_Click);
             // 
+            // permanentValueLabel
+            // 
+            this.permanentValueLabel.AutoSize = true;
+            this.permanentValueLabel.ForeColor = System.Drawing.Color.White;
+            this.permanentValueLabel.Location = new System.Drawing.Point(109, 4);
+            this.permanentValueLabel.Name = "permanentValueLabel";
+            this.permanentValueLabel.Size = new System.Drawing.Size(110, 13);
+            this.permanentValueLabel.TabIndex = 9;
+            this.permanentValueLabel.Text = "permanentValueLabel";
+            this.permanentValueLabel.Visible = false;
+            // 
             // VariableEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.permanentValueLabel);
             this.Controls.Add(this.formulaTextBox);
             this.Controls.Add(this.derivedValueLabel);
             this.Controls.Add(this.derivedCheckBox);
@@ -170,5 +183,6 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.TextBox formulaTextBox;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem helpOnSupportedOperationsToolStripMenuItem;
+        private System.Windows.Forms.Label permanentValueLabel;
     }
 }
