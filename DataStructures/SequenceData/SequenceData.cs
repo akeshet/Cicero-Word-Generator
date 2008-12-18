@@ -1104,7 +1104,7 @@ namespace DataStructures
                                 end = Math.Min(end, ans.Length);
                                 for (int i = start; i < end; i++)
                                 {
-                                    ans[i] = pulse.pulseValue;
+                                    ans[i] = pulse.PulseValue;
                                 }
                             }
                         }
@@ -1211,7 +1211,7 @@ namespace DataStructures
 
                                 for (int i = derivedStart; i < derivedEnd; i++)
                                 {
-                                    ans[i] = pulse.pulseValue;
+                                    ans[i] = pulse.PulseValue;
                                 }
                             }
                         }
@@ -1870,7 +1870,7 @@ namespace DataStructures
 
                             for (int i = start; i < end; i++)
                             {
-                                ans[i] = pulse.pulseValue;
+                                ans[i] = pulse.PulseValue;
                             }
                         }
                         currentSample += nStepSamples;

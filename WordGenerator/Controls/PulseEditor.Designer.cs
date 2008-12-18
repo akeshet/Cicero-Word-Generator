@@ -51,6 +51,8 @@ namespace WordGenerator.Controls
             this.upButton = new System.Windows.Forms.Button();
             this.downButton = new System.Windows.Forms.Button();
             this.duplicateButton = new System.Windows.Forms.Button();
+            this.getValueFromVariableCheckBox = new System.Windows.Forms.CheckBox();
+            this.valueVariableComboBox = new System.Windows.Forms.ComboBox();
             this.pulseDuration = new WordGenerator.Controls.HorizontalParameterEditor();
             this.endDelayTime = new WordGenerator.Controls.HorizontalParameterEditor();
             this.startDelayTime = new WordGenerator.Controls.HorizontalParameterEditor();
@@ -297,12 +299,37 @@ namespace WordGenerator.Controls
             this.duplicateButton.UseVisualStyleBackColor = true;
             this.duplicateButton.Click += new System.EventHandler(this.duplicateButton_Click);
             // 
+            // getValueFromVariableCheckBox
+            // 
+            this.getValueFromVariableCheckBox.AutoSize = true;
+            this.getValueFromVariableCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.getValueFromVariableCheckBox.Location = new System.Drawing.Point(147, 239);
+            this.getValueFromVariableCheckBox.Name = "getValueFromVariableCheckBox";
+            this.getValueFromVariableCheckBox.Size = new System.Drawing.Size(136, 17);
+            this.getValueFromVariableCheckBox.TabIndex = 15;
+            this.getValueFromVariableCheckBox.Text = "Get value from Variable";
+            this.getValueFromVariableCheckBox.UseVisualStyleBackColor = true;
+            this.getValueFromVariableCheckBox.CheckedChanged += new System.EventHandler(this.getValueFromVariableCheckBox_CheckedChanged);
+            // 
+            // valueVariableComboBox
+            // 
+            this.valueVariableComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.valueVariableComboBox.FormattingEnabled = true;
+            this.valueVariableComboBox.Location = new System.Drawing.Point(16, 235);
+            this.valueVariableComboBox.Name = "valueVariableComboBox";
+            this.valueVariableComboBox.Size = new System.Drawing.Size(110, 21);
+            this.valueVariableComboBox.TabIndex = 16;
+            this.valueVariableComboBox.Visible = false;
+            this.valueVariableComboBox.SelectedIndexChanged += new System.EventHandler(this.valueVariableComboBox_SelectedIndexChanged);
+            this.valueVariableComboBox.DropDown += new System.EventHandler(this.valueVariableComboBox_DropDown);
+            // 
             // pulseDuration
             // 
             this.pulseDuration.Location = new System.Drawing.Point(108, 201);
             this.pulseDuration.Name = "pulseDuration";
             this.pulseDuration.Size = new System.Drawing.Size(150, 22);
             this.pulseDuration.TabIndex = 7;
+            this.pulseDuration.UnitSelectorVisibility = false;
             // 
             // endDelayTime
             // 
@@ -310,6 +337,7 @@ namespace WordGenerator.Controls
             this.endDelayTime.Name = "endDelayTime";
             this.endDelayTime.Size = new System.Drawing.Size(150, 22);
             this.endDelayTime.TabIndex = 3;
+            this.endDelayTime.UnitSelectorVisibility = false;
             // 
             // startDelayTime
             // 
@@ -317,12 +345,15 @@ namespace WordGenerator.Controls
             this.startDelayTime.Name = "startDelayTime";
             this.startDelayTime.Size = new System.Drawing.Size(150, 22);
             this.startDelayTime.TabIndex = 3;
+            this.startDelayTime.UnitSelectorVisibility = false;
             // 
             // PulseEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.valueVariableComboBox);
+            this.Controls.Add(this.getValueFromVariableCheckBox);
             this.Controls.Add(this.duplicateButton);
             this.Controls.Add(this.downButton);
             this.Controls.Add(this.upButton);
@@ -376,5 +407,7 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.Button upButton;
         private System.Windows.Forms.Button downButton;
         private System.Windows.Forms.Button duplicateButton;
+        private System.Windows.Forms.CheckBox getValueFromVariableCheckBox;
+        private System.Windows.Forms.ComboBox valueVariableComboBox;
     }
 }

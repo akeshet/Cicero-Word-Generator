@@ -44,13 +44,16 @@ namespace WordGenerator.Controls
                 this.startDelayed.Checked = pulse.startDelayed;
                 this.endDelayed.Checked = pulse.endDelayed;
 
-                this.pulseValue.Checked = pulse.pulseValue;
+                this.pulseValue.Checked = pulse.PulseValue;
 
                 this.pulseNameTextBox.Text = pulse.PulseName;
                 this.pulseDescriptionTextBox.Text = pulse.PulseDescription;
 
                 this.startCondition.SelectedItem = pulse.startCondition;
                 this.endCondition.SelectedItem = pulse.endCondition;
+
+                this.getValueFromVariableCheckBox.Checked = pulse.ValueFromVariable;
+
             }
 
             updateElements();
@@ -188,7 +191,7 @@ namespace WordGenerator.Controls
 
         private void pulseValue_CheckedChanged(object sender, EventArgs e)
         {
-            pulse.pulseValue = pulseValue.Checked;
+            pulse.PulseValue = pulseValue.Checked;
             updateElements();
         }
 
@@ -240,6 +243,55 @@ namespace WordGenerator.Controls
             int currentIndex = Storage.sequenceData.DigitalPulses.IndexOf(pulse);
             Storage.sequenceData.DigitalPulses.Insert(currentIndex + 1, newPulse);
             WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+        }
+
+        private bool ignoreValueVariableComboBoxEvents = false;
+
+        private void getValueFromVariableCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            this.pulse.ValueFromVariable = getValueFromVariableCheckBox.Checked;
+
+            if (this.pulse.ValueFromVariable)
+            {
+
+
+                populateValueVariableComboBox();
+
+                if (pulse.ValueVariable != null)
+                {
+                    valueVariableComboBox.SelectedItem = pulse.ValueVariable;
+                }
+
+                valueVariableComboBox.Visible = true;
+            }
+            else
+            {
+                valueVariableComboBox.Visible = false;
+            }
+        }
+
+        private void populateValueVariableComboBox()
+        {
+            ignoreValueVariableComboBoxEvents = true;
+            valueVariableComboBox.Items.Clear();
+            foreach (Variable var in Storage.sequenceData.Variables)
+            {
+                valueVariableComboBox.Items.Add(var);
+            }
+            ignoreValueVariableComboBoxEvents = false;
+        }
+
+        private void valueVariableComboBox_DropDown(object sender, EventArgs e)
+        {
+            populateValueVariableComboBox();
+        }
+
+        private void valueVariableComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!ignoreValueVariableComboBoxEvents)
+            {
+                pulse.ValueVariable = valueVariableComboBox.SelectedItem as Variable;
+            }
         }
 
     }

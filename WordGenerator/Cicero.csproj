@@ -57,7 +57,7 @@
       <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NationalInstruments.UI.WindowsForms, Version=8.1.20.377, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=x86">
+    <Reference Include="NationalInstruments.UI.WindowsForms, Version=8.5.20.220, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
     </Reference>
@@ -462,11 +462,11 @@
       <DependentUpon>WaveformGraphCollection.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Controls\MainClientForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>MainClientForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

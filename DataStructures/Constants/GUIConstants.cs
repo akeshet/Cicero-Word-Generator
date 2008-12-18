@@ -9,7 +9,7 @@ namespace DataStructures
         //------------------------------------------------------------
         //  MainClientForm
         //------------------------------------------------------------ 
-        public const int nMaxRecentFiles = 10;
+        public const int nMaxRecentFiles = 30;
 
         public const int cyHorizontalScrollBarHeight = 20;
         public const int cxVerticalScrollBarWidth = 20;

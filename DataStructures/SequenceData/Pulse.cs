@@ -10,6 +10,27 @@ namespace DataStructures
     public class Pulse
     {
 
+        private bool valueFromVariable;
+
+        public bool ValueFromVariable
+        {
+            get { return valueFromVariable; }
+            set { 
+                valueFromVariable = value;
+                if (valueFromVariable == false)
+                {
+                    ValueVariable = null;
+                }
+            }
+        }
+        private Variable valueVariable;
+
+        public Variable ValueVariable
+        {
+            get { return valueVariable; }
+            set { valueVariable = value; }
+        }
+
         public Pulse(Pulse copyMe)
         {
             this.endCondition = copyMe.endCondition;
@@ -75,6 +96,17 @@ namespace DataStructures
                 }
             }
 
+            if (ValueFromVariable)
+            {
+                if (ValueVariable != null)
+                {
+                    if (!ans.ContainsKey(ValueVariable))
+                    {
+                        ans.Add(ValueVariable, "pulse value.");
+                    }
+                }
+            }
+
             return ans;
         }
 
@@ -108,7 +140,25 @@ namespace DataStructures
 
         public DimensionedParameter pulseDuration;
 
-        public bool pulseValue;
+        private bool pulseValue;
+
+        public bool PulseValue
+        {
+            get {
+                if (!ValueFromVariable)
+                {
+                    return pulseValue;
+                }
+                else {
+                    if (ValueVariable==null)
+                        return false;
+                    if (ValueVariable.VariableValue!=0)
+                        return true;
+                    return false;
+                }
+            }
+            set { pulseValue = value; }
+        }
 
         public Pulse()
         {
