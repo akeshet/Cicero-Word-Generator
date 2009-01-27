@@ -35,12 +35,14 @@ namespace WordGenerator.Controls
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.startDelayEnabled = new System.Windows.Forms.CheckBox();
             this.startDelayed = new System.Windows.Forms.CheckBox();
+            this.startDelayTime = new WordGenerator.Controls.HorizontalParameterEditor();
             this.label4 = new System.Windows.Forms.Label();
             this.startCondition = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.endDelayEnabled = new System.Windows.Forms.CheckBox();
             this.endDelayed = new System.Windows.Forms.CheckBox();
+            this.endDelayTime = new WordGenerator.Controls.HorizontalParameterEditor();
             this.label5 = new System.Windows.Forms.Label();
             this.endCondition = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -54,8 +56,6 @@ namespace WordGenerator.Controls
             this.getValueFromVariableCheckBox = new System.Windows.Forms.CheckBox();
             this.valueVariableComboBox = new System.Windows.Forms.ComboBox();
             this.pulseDuration = new WordGenerator.Controls.HorizontalParameterEditor();
-            this.endDelayTime = new WordGenerator.Controls.HorizontalParameterEditor();
-            this.startDelayTime = new WordGenerator.Controls.HorizontalParameterEditor();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -133,6 +133,14 @@ namespace WordGenerator.Controls
             this.startDelayed.UseVisualStyleBackColor = true;
             this.startDelayed.CheckedChanged += new System.EventHandler(this.startDelayed_CheckedChanged);
             // 
+            // startDelayTime
+            // 
+            this.startDelayTime.Location = new System.Drawing.Point(119, 65);
+            this.startDelayTime.Name = "startDelayTime";
+            this.startDelayTime.Size = new System.Drawing.Size(150, 22);
+            this.startDelayTime.TabIndex = 3;
+            this.startDelayTime.UnitSelectorVisibility = true;
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -200,6 +208,14 @@ namespace WordGenerator.Controls
             this.endDelayed.Text = "Delay?";
             this.endDelayed.UseVisualStyleBackColor = true;
             this.endDelayed.CheckedChanged += new System.EventHandler(this.endDelayed_CheckedChanged);
+            // 
+            // endDelayTime
+            // 
+            this.endDelayTime.Location = new System.Drawing.Point(119, 65);
+            this.endDelayTime.Name = "endDelayTime";
+            this.endDelayTime.Size = new System.Drawing.Size(150, 22);
+            this.endDelayTime.TabIndex = 3;
+            this.endDelayTime.UnitSelectorVisibility = true;
             // 
             // label5
             // 
@@ -329,23 +345,7 @@ namespace WordGenerator.Controls
             this.pulseDuration.Name = "pulseDuration";
             this.pulseDuration.Size = new System.Drawing.Size(150, 22);
             this.pulseDuration.TabIndex = 7;
-            this.pulseDuration.UnitSelectorVisibility = false;
-            // 
-            // endDelayTime
-            // 
-            this.endDelayTime.Location = new System.Drawing.Point(119, 65);
-            this.endDelayTime.Name = "endDelayTime";
-            this.endDelayTime.Size = new System.Drawing.Size(150, 22);
-            this.endDelayTime.TabIndex = 3;
-            this.endDelayTime.UnitSelectorVisibility = false;
-            // 
-            // startDelayTime
-            // 
-            this.startDelayTime.Location = new System.Drawing.Point(119, 65);
-            this.startDelayTime.Name = "startDelayTime";
-            this.startDelayTime.Size = new System.Drawing.Size(150, 22);
-            this.startDelayTime.TabIndex = 3;
-            this.startDelayTime.UnitSelectorVisibility = false;
+            this.pulseDuration.UnitSelectorVisibility = true;
             // 
             // PulseEditor
             // 

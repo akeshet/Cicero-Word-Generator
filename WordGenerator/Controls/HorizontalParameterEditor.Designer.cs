@@ -62,7 +62,7 @@ namespace WordGenerator.Controls
             // 
             this.unitSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.unitSelector.FormattingEnabled = true;
-            this.unitSelector.Location = new System.Drawing.Point(83, 1);
+            this.unitSelector.Location = new System.Drawing.Point(83, 0);
             this.unitSelector.Name = "unitSelector";
             this.unitSelector.Size = new System.Drawing.Size(47, 21);
             this.unitSelector.TabIndex = 3;
