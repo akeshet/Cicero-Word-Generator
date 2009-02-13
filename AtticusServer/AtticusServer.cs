@@ -61,6 +61,8 @@ namespace AtticusServer
                     serverSettings = new ServerSettings();
                 }
 
+                Console.WriteLine("Creating AtticusServerRuntime object...");
+
                 server = new AtticusServerRuntime(serverSettings);
 
                 Application.EnableVisualStyles();
@@ -104,7 +106,7 @@ namespace AtticusServer
             ExceptionViewerDialog dial = new ExceptionViewerDialog(e);
             dial.ShowDialog();
             System.Console.WriteLine("Caught an unhandled exception. " + e.Message + e.InnerException + e.Source + e.StackTrace);
-            throw e;
+          //  throw e;
         }
     }
 }

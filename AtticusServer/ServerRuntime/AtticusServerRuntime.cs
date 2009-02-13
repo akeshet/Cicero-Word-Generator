@@ -148,6 +148,9 @@ namespace AtticusServer
         #region Constructors
         public AtticusServerRuntime(ServerSettings settings) 
         {
+
+            System.Console.WriteLine("Running AtticusServerRuntime constructor...");
+
             myServerSettings = settings;
 
             refreshHardwareLists();
@@ -157,6 +160,10 @@ namespace AtticusServer
             // marshal the serverCommunicator if the start up settings say to do so.
             if (settings.ConnectOnStartup)
                 reachMarshalStatus(ServerStructures.ServerCommunicatorStatus.Connected);
+
+
+
+            System.Console.WriteLine("... done running AtticusServerRuntime constructor.");
 
         }
         #endregion
@@ -1699,6 +1706,9 @@ namespace AtticusServer
         /// </summary>
         public void refreshHardwareLists() {
 
+            System.Console.WriteLine("Running refreshHardwareLists()...");
+           
+
             // Set all the devices to disconnected. They will be set back to connected if they are detecter later in this method.
             foreach (DeviceSettings ds in serverSettings.myDevicesSettings.Values)
                 ds.deviceConnected = false;
@@ -1716,11 +1726,21 @@ namespace AtticusServer
 
             #region detect NI analog and digital  (daqMx)
 
+
+            System.Console.WriteLine("Accessing DaqSystem devices list...");
+
             DaqSystem daqSystem = DaqSystem.Local;
             string[] devices = daqSystem.Devices;
 
+
+            System.Console.WriteLine("...done.");
+
+            System.Console.WriteLine("Found " + devices.Length.ToString() + " devices.");
+
             for (int i = 0; i < devices.Length; i++)
             {
+                System.Console.WriteLine("Querying device " + i + "...");
+
                 detectedDevices.Add(devices[i]);
 
                 Device device = daqSystem.LoadDevice(devices[i]);
@@ -1762,6 +1782,8 @@ namespace AtticusServer
                     }
                 }
 
+                System.Console.WriteLine("...done.");
+
             }
 
             #endregion
@@ -1770,6 +1792,9 @@ namespace AtticusServer
 
             foreach (ServerSettings.rfsgDeviceName rfsgDevName in serverSettings.RfsgDeviceNames)
             {
+
+                System.Console.WriteLine("Querying RFSG devices...");
+
                 string devName = rfsgDevName.DeviceName;
                 HardwareChannel hc = new HardwareChannel(serverSettings.ServerName, devName, "rf_out", HardwareChannel.HardwareConstants.ChannelTypes.gpib);
                 hc.gpibMasquerade = true;
@@ -1782,6 +1807,9 @@ namespace AtticusServer
                     DeviceSettings devSettings = new DeviceSettings(devName, "RFSG driver library signal generator");
                     serverSettings.myDevicesSettings.Add(devName, devSettings);
                 }
+
+                System.Console.WriteLine("...done.");
+
             }
 
             #endregion
@@ -1791,6 +1819,9 @@ namespace AtticusServer
             // try a maxumimum of 10 GPIB boards... this is a totally arbitrary number.
             for (int i = 0; i < 10; i++)
             {
+
+                System.Console.WriteLine("Querying or detecting GPIB Board Number "  + i + "...");
+
                 try
                 {
                     NationalInstruments.NI4882.Board board = new NationalInstruments.NI4882.Board(i);
@@ -1873,6 +1904,9 @@ namespace AtticusServer
                 {
                    // throw e;
                 }
+
+                System.Console.WriteLine("...done.");
+
             }
             
             /*
@@ -1884,8 +1918,14 @@ namespace AtticusServer
 
             #region Detect NI RS232 ports
 
+            System.Console.WriteLine("Querying NI VisaNS Serial Resources...");
+
             string[] resourceNames = null;
             NationalInstruments.VisaNS.ResourceManager VisaRescources = null;
+
+            System.Console.WriteLine("...done.");
+
+
 
             try
             {
@@ -1909,6 +1949,9 @@ namespace AtticusServer
 
                 foreach (string s in resourceNames)
                 {
+
+                    System.Console.WriteLine("Querying Resource " + s);
+
                     NationalInstruments.VisaNS.HardwareInterfaceType hType;
                     short chanNum;
                     VisaRescources.ParseResource(s, out hType, out chanNum);
@@ -1934,6 +1977,8 @@ namespace AtticusServer
 
                         ss.Dispose();
                     }
+
+                    System.Console.WriteLine("...done.");
                 }
             }
 
@@ -1953,6 +1998,10 @@ namespace AtticusServer
                     myServerSettings.myDevicesSettings[device].deviceConnected = true;
                 }
             }
+
+
+
+            System.Console.WriteLine("...done running refreshHardwareLists().");
         }
 
 
