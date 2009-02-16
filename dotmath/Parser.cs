@@ -67,6 +67,11 @@ namespace dotMath
             private string m_sToken;
 			private CharType m_chType;
 
+            public override int GetHashCode()
+            {
+                return 1;
+            }
+
 			/// <summary>
 			/// Equals(Object): Tests for equality with another token.  Also
 			///		handles the null case.

@@ -561,8 +561,6 @@ namespace WordGenerator.Controls
 
             SuspendLayout();
 
-            int scrollbarSize = 16;
-
             // This stupid shit is designed to carefully force the horizontal scrollbar to appear, if necessary, but not force the vertical.
 
 /*            if (gSize.Width <= containerSize.Width)

@@ -10,6 +10,7 @@ namespace WordGenerator.Controls
 {
     public partial class RunControl : UserControl
     {
+
         public RunControl()
         {
             InitializeComponent();
@@ -17,8 +18,6 @@ namespace WordGenerator.Controls
             toolTip1.SetToolTip(continueListButton, "Runs through the remaining list iterations, beginning with the current iteration.");
             toolTip1.SetToolTip(runRandomList, "Runs through all list iterations in random order.");
         }
-
-        public event EventHandler messageLog;
 
         private void button1_Click(object sender, EventArgs e)
         {

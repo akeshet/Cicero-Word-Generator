@@ -14,10 +14,7 @@ namespace AtticusServer
 
         public static AtticusServerRuntime server;
         public static string serverSettingsFileName = "AtticusServerSettings.set";
-        /// <summary>
-        /// The "home directory" of atticus, should be the directory where the executable is.
-        /// </summary>
-        public static string startupDirectory;
+
 
 
         /// <summary>

@@ -68,7 +68,7 @@ namespace WordGenerator
 
                     Application.SetCompatibleTextRenderingDefault(false);
                 }
-                catch (InvalidOperationException e)
+                catch (InvalidOperationException)
                 {
                 }
 

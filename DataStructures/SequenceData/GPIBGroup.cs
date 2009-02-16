@@ -97,6 +97,11 @@ namespace DataStructures
                 return this == other;
             }
 
+            public override int GetHashCode()
+            {
+                return 1;
+            }
+
             private enum TypeEnum { raw_string, voltage_frequency_waveform, string_param_string };
             private static readonly string[] names = new string[] { "Raw", "A+F Ramp", "Parameter" };
 

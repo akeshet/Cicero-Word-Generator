@@ -397,7 +397,7 @@ namespace AtticusServer
 
                             messageLog(this, new MessageEvent("Variable timebase output clock buffer generated successfully. " + variableTimebaseClockTask.Stream.Buffer.OutputBufferSize + " samples per channel. On board buffer size: " + variableTimebaseClockTask.Stream.Buffer.OutputOnBoardBufferSize + " samples per channel."));
                         }
-                        catch (Exception e)
+                        catch (Exception )
                         {
                             messageLog(this, new MessageEvent("Unable to poll task for buffer information. This is probably not a problem."));
                         }
@@ -1053,7 +1053,7 @@ namespace AtticusServer
                         }
                     }
                 }
-                catch (ThreadAbortException e)
+                catch (ThreadAbortException )
                 {
                     Monitor.Exit(softTrigLock);
                 }
@@ -1065,7 +1065,7 @@ namespace AtticusServer
                 {
                     Monitor.Exit(softTrigLock);
                 }
-                catch (Exception ex)
+                catch (Exception )
                 {
                     messageLog(this, new MessageEvent("Also, caught exception when attempting to release software polling thread lock. This is probably not important."));
                 }
@@ -1362,11 +1362,19 @@ namespace AtticusServer
         {
             lock (remoteLockObj)
             {
-                messageLog(this, new MessageEvent("Received settings."));
-                this.settings = settings;
+                try
+                {
+                    messageLog(this, new MessageEvent("Received settings."));
+                    this.settings = settings;
 
-                findMyChannels();
-                return true;
+                    findMyChannels();
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    messageLog(this, new MessageEvent("Caught exception while attempting to verify settings. " + e.Message + e.StackTrace));
+                    return false;
+                }
             }
         }
 
@@ -1900,7 +1908,7 @@ namespace AtticusServer
                         }
                     }
                 }
-                catch (Exception e)
+                catch (Exception )
                 {
                    // throw e;
                 }

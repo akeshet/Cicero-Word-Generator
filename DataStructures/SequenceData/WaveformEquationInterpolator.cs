@@ -106,7 +106,7 @@ namespace DataStructures
                             output[i + startIndex] = eq.Calculate();
                         }
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         return;
                     }

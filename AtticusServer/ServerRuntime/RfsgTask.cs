@@ -126,7 +126,6 @@ namespace AtticusServer
                 }
                 else if (channelData.DataType == GPIBGroupChannelData.GpibChannelDataType.voltage_frequency_waveform)
                 {
-                    GpibRampCommandConverter rampConverter = null;
 
                     double[] amplitudeArray;
                     double[] frequencyArray;
@@ -350,7 +349,7 @@ namespace AtticusServer
                         rfsgDevice.ConfigureOutputEnabled(true);
                         success = true;
                     }
-                    catch (Exception e) { }
+                    catch (Exception ) { }
 
                     if (MainServerForm.instance.verboseCheckBox.Checked)
                     {
@@ -367,7 +366,7 @@ namespace AtticusServer
                         rfsgDevice.ConfigureOutputEnabled(false);
                         success = true;
                     }
-                    catch (Exception e)
+                    catch (Exception )
                     {
                     }
                     if (MainServerForm.instance.verboseCheckBox.Checked)
@@ -387,7 +386,7 @@ namespace AtticusServer
                             rfsgDevice.Initiate();
                             success = true;
                         }
-                        catch (Exception e)
+                        catch (Exception )
                         {
                         }
 

@@ -62,7 +62,7 @@ namespace AtticusServer
                 timebasePortNum = HardwareChannel.parsePortNumberFromChannelString(channelName);
                 timebaseLineNum = HardwareChannel.parseLineNumberFromChannelString(channelName);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new Exception("Channel name " + channelName + " is not a valid digital channel name. Cannot create a variable timebase output on this channel.");
             }
@@ -102,6 +102,9 @@ namespace AtticusServer
             {
                 throw new Exception("Variable timebase channel is on a port that shares a sample clock with a used output channel (on most devices, port 0 and 1 have a shared clock, and port 2 and 3 have a shared clock). This usage is not recommended, and not currently supported. Aborting buffer generation.");
 
+                #region Deprecated code
+
+                /*
                 Task task = new Task("Variable timebase output task");
 
                 // Create channels in the task
@@ -240,7 +243,9 @@ namespace AtticusServer
                 }
 
 
-                return task;
+                return task; */
+
+                #endregion
             }
             else
             {

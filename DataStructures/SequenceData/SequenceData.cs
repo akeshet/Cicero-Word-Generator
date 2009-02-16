@@ -1732,7 +1732,6 @@ namespace DataStructures
                         }
                         return ans;
                     }
-                    break;
                 default:
                     throw new Exception("Unsupported variable timebase type.");
             }

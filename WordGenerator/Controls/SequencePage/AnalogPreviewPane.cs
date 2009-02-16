@@ -244,7 +244,7 @@ namespace WordGenerator.Controls
                         {
                             Storage.sequenceData.getTimestepInterpolation(stepID, analogID, channelValues, colWidth * samples_per_pixel, j * colWidth * samples_per_pixel);
                         }
-                        catch (InterpolationException e)
+                        catch (InterpolationException)
                         {
                             WordGenerator.mainClientForm.instance.cursorWaitRelease();
                             return;

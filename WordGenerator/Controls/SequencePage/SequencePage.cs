@@ -94,7 +94,6 @@ namespace WordGenerator.Controls
 
             this.analogChannelLabelsPanel1.rowHeight = 50;
 
-            this.runControl1.messageLog += this.messageLog;
 
             toolTip1.SetToolTip(analogPreviewUpdate, "Re-draw the analog previous pane.");
 
