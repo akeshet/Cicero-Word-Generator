@@ -42,6 +42,13 @@ namespace AtticusServer
         private List<string> detectedDevices;
 
         /// <summary>
+        /// List of opal kelly devices in use.
+        /// </summary>
+        private List<com.opalkelly.frontpanel.okCUsbFrontPanel> opalKellyDevices;
+
+        private List<string> opalKellyDeviceNames;
+
+        /// <summary>
         /// To be called when the atticus server UI needs to be updated.
         /// </summary>
         public EventHandler updateGUI;
@@ -100,6 +107,11 @@ namespace AtticusServer
         /// Populated in generateBuffers method.
         /// </summary>
         private Dictionary<string, Task> daqMxTasks;
+
+        /// <summary>
+        /// A mapping from device name to Fpga Timebase Task for all the FPGA tasks that are to be run.
+        /// </summary>
+        private Dictionary<string, FpgaTimebaseTask> fpgaTasks;
 
         /// <summary>
         /// A Mapping from hardware channels to corresponding gpib tasks that are to be run. Note that there is one task
@@ -296,6 +308,10 @@ namespace AtticusServer
                         return BufferGenerationStatus.Failed_Buffer_Underrun;
 
 
+
+
+
+
                     messageLog(this, new MessageEvent("Generating buffers."));
                     if (settings == null)
                     {
@@ -310,6 +326,32 @@ namespace AtticusServer
 
                     // This is redundant.
                     sequence.ListIterationNumber = listIterationNumber;
+
+                    #region Generate variable timebase FPGA task
+
+                    if (serverSettings.UseOpalKellyFPGA)
+                    {
+                        fpgaTasks = new Dictionary<string, FpgaTimebaseTask>();
+                        foreach (DeviceSettings fsettings in myServerSettings.myDevicesSettings.Values)
+                        {
+                            if (fsettings.IsFPGADevice)
+                            {
+                                if (fsettings.DeviceEnabled)
+                                {
+                                    if (fsettings.UsingVariableTimebase)
+                                    {
+                                        messageLog(this, new MessageEvent("Creating Variable Timebase Task on fpga device " + fsettings.DeviceName + "."));
+                                        FpgaTimebaseTask ftask = new FpgaTimebaseTask(fsettings, opalKellyDevices[opalKellyDeviceNames.IndexOf(fsettings.DeviceName)], sequence, ((double)1) / ((double)(fsettings.SampleClockRate)));
+                                        fpgaTasks.Add(fsettings.DeviceName, ftask);
+                                        messageLog(this, new MessageEvent("...Done"));
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    #endregion
+
 
                     #region Generate variable timebase clock output task
 
@@ -1330,9 +1372,16 @@ namespace AtticusServer
                         variableTimebaseClockTask.Start();
                     }
 
-
                     // TO DO. Insert code that waits for external triggers to occur, before returning. This
                     // Will allow client UI to stay synced with external triggers, if such things are being provided.
+
+                    if (fpgaTasks != null)
+                    {
+                        foreach (FpgaTimebaseTask ft in fpgaTasks.Values)
+                        {
+                            ft.Start();
+                        }
+                    }
 
                     messageLog(this, new MessageEvent("Triggers generated. Sequence running."));
 
@@ -1406,6 +1455,14 @@ namespace AtticusServer
             try
             {
                 bool ans = true;
+
+                if (fpgaTasks != null)
+                {
+                    foreach (FpgaTimebaseTask ftask in fpgaTasks.Values)
+                    {
+                        ftask.Stop();
+                    }
+                }
 
                 if (variableTimebaseClockTask != null)
                 {
@@ -2007,6 +2064,53 @@ namespace AtticusServer
                 }
             }
 
+            if (this.serverSettings.UseOpalKellyFPGA)
+            {
+
+                System.Console.WriteLine("Scanning for Opal Kelly FPGA devices...");
+                opalKellyDevices = new List<com.opalkelly.frontpanel.okCUsbFrontPanel>();
+                opalKellyDeviceNames = new List<string>();
+
+                com.opalkelly.frontpanel.okCUsbFrontPanel ok = new com.opalkelly.frontpanel.okCUsbFrontPanel();
+                int fpgaDeviceCount = ok.GetDeviceCount();
+
+                System.Console.WriteLine("Found " + fpgaDeviceCount + " fpga device(s).");
+
+                for (int i = 0; i < fpgaDeviceCount; i++)
+                {
+                    string name = ok.GetDeviceListSerial(i);
+                    com.opalkelly.frontpanel.okCUsbFrontPanel fpgaDevice = new com.opalkelly.frontpanel.okCUsbFrontPanel();
+                    fpgaDevice.OpenBySerial(name);
+
+                    opalKellyDeviceNames.Add(name);
+                    opalKellyDevices.Add(fpgaDevice);
+
+                    if (!this.detectedDevices.Contains(name))
+                    {
+                        this.detectedDevices.Add(name);
+                    }
+
+                    if (!myServerSettings.myDevicesSettings.ContainsKey(name))
+                    {
+                        DeviceSettings newSettings = new DeviceSettings(name, "Opal Kelly FPGA Device");
+                        newSettings.deviceConnected = true;
+                        newSettings.isFPGADevice = true;
+                        myServerSettings.myDevicesSettings.Add(name, newSettings);
+                    }
+                    else
+                    {
+                        myServerSettings.myDevicesSettings[name].deviceConnected = true;
+                    }
+
+                    System.Console.WriteLine("Found fpga device " + name);
+                }
+
+            }
+            else
+            {
+                System.Console.WriteLine("Opal Kelly FPGA not enabled, so not scanning for them.");
+                opalKellyDevices = null;
+            }
 
 
             System.Console.WriteLine("...done running refreshHardwareLists().");

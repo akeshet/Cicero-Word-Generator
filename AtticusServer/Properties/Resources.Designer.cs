@@ -84,7 +84,7 @@ namespace AtticusServer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Jan 28, 2009.
+        ///   Looks up a localized string similar to Feb 20, 2009.
         /// </summary>
         internal static string BuildDate {
             get {
@@ -102,7 +102,7 @@ namespace AtticusServer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1.26.
+        ///   Looks up a localized string similar to 1.27.
         /// </summary>
         internal static string VersionString {
             get {

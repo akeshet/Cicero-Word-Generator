@@ -243,6 +243,15 @@ namespace AtticusServer
             set { rfsgDeviceNames = value; }
         }
 
+        private bool useOpalKellyFPGA;
+        [Description("Set to true if you are using an Opal Kelly FPGA module, and want Atticus to scan for such modules. Atticus is able to use these FPGA modules to efficiently create variable frequency clocks."),
+        Category("Hardware")]
+        public bool UseOpalKellyFPGA
+        {
+            get { return useOpalKellyFPGA; }
+            set { useOpalKellyFPGA = value; }
+        }
+
         public ServerSettings()
         {
             this.serverDeviceSettings = new Dictionary<string, DeviceSettings>();

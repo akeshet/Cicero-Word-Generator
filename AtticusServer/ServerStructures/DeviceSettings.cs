@@ -119,6 +119,17 @@ Category("Digital")]
             set { digitalDataTransferCondition = value; }
         }
 
+        public bool isFPGADevice;
+
+        [Description("True if this device is an Opal Kelly FPGA device."),
+        Category("Global")]
+        public bool IsFPGADevice
+        {
+            get { return isFPGADevice; }
+            
+        }
+
+
         private string deviceDescription;
 
         [Description("Description of the device, as returned from its hardware driver."),

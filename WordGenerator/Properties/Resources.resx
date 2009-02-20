@@ -121,7 +121,7 @@
     <value>(c) 2008  Aviv Keshet  (MIT),  Free software under GNU General Public License.</value>
   </data>
   <data name="BuildDate" xml:space="preserve">
-    <value>Jan 28, 2009</value>
+    <value>Feb 20, 2009</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="cicero_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -140,6 +140,6 @@
     <value>..\Resources\PulseIcon.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="VersionString" xml:space="preserve">
-    <value>1.26</value>
+    <value>1.27</value>
   </data>
 </root>

@@ -48,6 +48,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="libFrontPanel-csharp, Version=1.0.2719.19705, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\FPGA\libFrontPanel-csharp.dll</HintPath>
+    </Reference>
     <Reference Include="NationalInstruments.Common, Version=8.5.20.149, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
@@ -140,6 +144,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ServerRuntime\AtticusServerRuntime.cs" />
+    <Compile Include="ServerRuntime\FpgaTimebaseTask.cs" />
     <Compile Include="ServerRuntime\RfsgTask.cs" />
     <Compile Include="ServerRuntime\RS232Task.cs" />
     <Compile Include="ServerRuntime\DaqMxTaskGenerator.cs" />
@@ -189,4 +194,8 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PostBuildEvent>Copy "$(SolutionDir)FPGA\libFrontPanel-pinv.dll"  "$(TargetDir)"
+Copy "$(SolutionDir)FPGA\variable_timebase_fpga.bit"  "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
