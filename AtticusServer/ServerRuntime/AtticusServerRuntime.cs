@@ -2129,7 +2129,8 @@ namespace AtticusServer
                             System.Console.WriteLine("Programmed fpga device " + name + ". Used fpga code version based on sample clock source " + myServerSettings.myDevicesSettings[name].MySampleClockSource.ToString());
                         }
                     }
-                    System.Console.WriteLine("Fpga device " + name + " not programmed, as it is not enable or varible timebase on that device is not enabled.");
+                    if (!deviceProgrammed)
+                        System.Console.WriteLine("Fpga device " + name + " not programmed, as it is not enable or varible timebase on that device is not enabled.");
 
 
                 }

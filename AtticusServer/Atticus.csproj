@@ -50,7 +50,7 @@
   <ItemGroup>
     <Reference Include="libFrontPanel-csharp, Version=1.0.2719.19705, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\FPGA\libFrontPanel-csharp.dll</HintPath>
+      <HintPath>..\Opal Kelly\libFrontPanel-csharp.dll</HintPath>
     </Reference>
     <Reference Include="NationalInstruments.Common, Version=8.5.20.149, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=MSIL" />
     <Reference Include="NationalInstruments.DAQmx, Version=8.7.20.201, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=x86">
