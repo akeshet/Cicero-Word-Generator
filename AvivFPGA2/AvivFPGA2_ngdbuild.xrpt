@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<document OS="nt" product="ISE" version="10.1.03">
+
+  <!--The data in this file is primarily intended for consumption by Xilinx tools.
+    The structure and the elements are likely to change over the next few releases.
+    This means code written to parse this file will need to be revisited each subsequent release.-->
+
+  <application stringID="NgdBuild" timeStamp="Fri Feb 20 15:53:53 2009">
+    <task stringID="NGDBUILD_REPORT">
+      <section stringID="NGDBUILD_DESIGN_SUMMARY">
+        <item dataType="int" stringID="NGDBUILD_NUM_ERRORS" value="0"/>
+        <item dataType="int" stringID="NGDBUILD_FILTERED_WARNINGS" value="0"/>
+        <item dataType="int" stringID="NGDBUILD_NUM_WARNINGS" value="35"/>
+        <item dataType="int" stringID="NGDBUILD_FILTERED_INFOS" value="0"/>
+        <item dataType="int" stringID="NGDBUILD_NUM_INFOS" value="23"/>
+      </section>
+      <section stringID="NGDBUILD_CORE_SUMMARY">
+        <item COUNT="1" stringID="NGDBUILD_CORE" value="fifo_generator_v4_4, Xilinx CORE Generator 10.1.03_ip3"/>
+        <section stringID="NGDBUILD_CORE_GENERATION_SUMMARY">
+          <section stringID="NGDBUILD_CORE_INSTANCES">
+            <scope stringID="NGDBUILD_CORE_INSTANCE" value="TestFifo">
+              <item stringID="NGDBUILD_CORE_INFO" type="fifo_generator_v4_4" value="TestFifo"/>
+              <item c_common_clock="0" c_data_count_width="14" c_din_width="16" c_dout_rst_val="0" c_dout_width="128" c_full_flags_rst_val="0" c_has_almost_empty="0" c_has_almost_full="0" c_has_data_count="0" c_has_int_clk="0" c_has_overflow="1" c_has_rd_data_count="0" c_has_rst="1" c_has_srst="0" c_has_underflow="1" c_has_valid="0" c_has_wr_ack="0" c_has_wr_data_count="0" c_implementation_type="2" c_memory_type="1" c_msgon_val="1" c_overflow_low="0" c_preload_latency="1" c_preload_regs="0" c_prim_fifo_type="8kx4" c_prog_empty_thresh_assert_val="2" c_prog_empty_thresh_negate_val="3" c_prog_empty_type="0" c_prog_full_thresh_assert_val="16381" c_prog_full_thresh_negate_val="16380" c_prog_full_type="0" c_rd_data_count_width="11" c_rd_depth="2048" c_rd_freq="1" c_rd_pntr_width="11" c_underflow_low="0" c_use_dout_rst="1" c_use_ecc="0" c_use_embedded_reg="0" c_use_fwft_data_count="0" c_valid_low="0" c_wr_ack_low="0" c_wr_data_count_width="14" c_wr_depth="16384" c_wr_freq="1" c_wr_pntr_width="14" component_name="TestFifo" stringID="NGDBUILD_CORE_PARAMETERS" value="TestFifo"/>
+            </scope>
+          </section>
+        </section>
+      </section>
+    </task>
+  </application>
+
+</document>

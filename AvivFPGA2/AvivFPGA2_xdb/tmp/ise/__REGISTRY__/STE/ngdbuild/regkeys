@@ -1,0 +1,6 @@
+CommandLine
+C:\Xilinx\10.1\ISE\bin\nt\unwrapped\ngdbuild.exe -ise C:/Documents and Settings/Aviv Keshet/My Documents/FPGA/AvivFPGA2/AvivFPGA2.ise -intstyle ise -dd _ngo -aul -nt timestamp -i -p xc3s400-pq208-4 AvivFPGA2.ngc AvivFPGA2.ngd
+s
+FormatString
+ngdbuild [-p <partname>] {-sd <source_dir>} {-l <library>} [-ur <rules_file[.urf]>] [-dd <output_dir>] [-r] [-a] [-u] [-nt timestamp|on|off] [-uc <ucf_file[.ucf]>] [-aul] [-bm <bmm_file[.bmm]>] [-i] [-modular initial|module|assemble] [-intstyle ise|xflow|silent] [-quiet] [-verbose] [-active <active_module_name>] [-pimpath <pimpath>] {-use_pim <pim_module_name>} [-insert_keep_hierarchy] [--forcengd] {--n <ngl_file>} {--sl <library>} [--global_opt] [--script <tcl_file>] [--incremental] [--csttrans] <design_name> [<ngd_file[.ngd]>]
+s
