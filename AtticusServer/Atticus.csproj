@@ -189,8 +189,8 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>Copy "$(SolutionDir)FPGA\libFrontPanel-pinv.dll"  "$(TargetDir)"
-Copy "$(SolutionDir)FPGA\variable_timebase_fpga_internal.bit"  "$(TargetDir)"
-Copy "$(SolutionDir)FPGA\variable_timebase_fpga_external.bit"  "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>Copy "$(SolutionDir)Opal Kelly\libFrontPanel-pinv.dll"  "$(TargetDir)"
+Copy "$(SolutionDir)Opal Kelly\variable_timebase_fpga_internal.bit"  "$(TargetDir)"
+Copy "$(SolutionDir)Opal Kelly\variable_timebase_fpga_external.bit"  "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
