@@ -103,8 +103,6 @@ namespace AtticusServer
 
             byte[] data = FpgaTimebaseTask.createByteArray(segments, sequence);
 
-            opalKellyDevice.ConfigureFPGA("variable_timebase_fpga.bit");
-
             // Send the device an abort trigger.
             opalKellyDevice.ActivateTriggerIn(0x40, 1);
 

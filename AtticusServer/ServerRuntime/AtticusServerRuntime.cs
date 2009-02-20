@@ -340,10 +340,19 @@ namespace AtticusServer
                                 {
                                     if (fsettings.UsingVariableTimebase)
                                     {
-                                        messageLog(this, new MessageEvent("Creating Variable Timebase Task on fpga device " + fsettings.DeviceName + "."));
-                                        FpgaTimebaseTask ftask = new FpgaTimebaseTask(fsettings, opalKellyDevices[opalKellyDeviceNames.IndexOf(fsettings.DeviceName)], sequence, ((double)1) / ((double)(fsettings.SampleClockRate)));
-                                        fpgaTasks.Add(fsettings.DeviceName, ftask);
-                                        messageLog(this, new MessageEvent("...Done"));
+                                        if (opalKellyDeviceNames.Contains(fsettings.DeviceName))
+                                        {
+                                            messageLog(this, new MessageEvent("Creating Variable Timebase Task on fpga device " + fsettings.DeviceName + "."));
+                                            FpgaTimebaseTask ftask = new FpgaTimebaseTask(fsettings, opalKellyDevices[opalKellyDeviceNames.IndexOf(fsettings.DeviceName)], sequence, ((double)1) / ((double)(fsettings.SampleClockRate)));
+                                            fpgaTasks.Add(fsettings.DeviceName, ftask);
+                                            messageLog(this, new MessageEvent("...Done"));
+                                        }
+                                        else
+                                        {
+                                            messageLog(this, new MessageEvent("FPGA device " + fsettings.DeviceName + " is not programmed. Please press the refresh hardware button to program it. Or, if variable timebase on this device is not desired, set DeviceEnabled to false in this device's settings."));
+                                            messageLog(this, new MessageEvent("Unable to create variable timebase output on FPGA device. Aborting buffer generation."));
+                                            return BufferGenerationStatus.Failed_Invalid_Data;
+                                        }
                                     }
                                 }
                             }
@@ -2102,7 +2111,27 @@ namespace AtticusServer
                         myServerSettings.myDevicesSettings[name].deviceConnected = true;
                     }
 
-                    System.Console.WriteLine("Found fpga device " + name);
+                    bool deviceProgrammed = false;
+
+                    if (myServerSettings.myDevicesSettings[name].DeviceEnabled)
+                    {
+                        if (myServerSettings.myDevicesSettings[name].UsingVariableTimebase)
+                        {
+                            deviceProgrammed = true;
+                            if (myServerSettings.myDevicesSettings[name].MySampleClockSource == DeviceSettings.SampleClockSource.DerivedFromMaster)
+                            {
+                                fpgaDevice.ConfigureFPGA("variable_timebase_fpga_internal.bit");
+                            }
+                            else
+                            {
+                                fpgaDevice.ConfigureFPGA("variable_timebase_fpga_external.bit");
+                            }
+                            System.Console.WriteLine("Programmed fpga device " + name + ". Used fpga code version based on sample clock source " + myServerSettings.myDevicesSettings[name].MySampleClockSource.ToString());
+                        }
+                    }
+                    System.Console.WriteLine("Fpga device " + name + " not programmed, as it is not enable or varible timebase on that device is not enabled.");
+
+
                 }
 
             }

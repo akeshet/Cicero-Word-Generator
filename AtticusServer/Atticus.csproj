@@ -52,21 +52,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\FPGA\libFrontPanel-csharp.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.Common, Version=8.5.20.149, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
-    </Reference>
+    <Reference Include="NationalInstruments.Common, Version=8.5.20.149, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=MSIL" />
     <Reference Include="NationalInstruments.DAQmx, Version=8.7.20.201, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="NationalInstruments.NI4882, Version=8.1.20.119, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="NationalInstruments.VisaNS, Version=8.5.20.310, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -196,6 +190,7 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>Copy "$(SolutionDir)FPGA\libFrontPanel-pinv.dll"  "$(TargetDir)"
-Copy "$(SolutionDir)FPGA\variable_timebase_fpga.bit"  "$(TargetDir)"</PostBuildEvent>
+Copy "$(SolutionDir)FPGA\variable_timebase_fpga_internal.bit"  "$(TargetDir)"
+Copy "$(SolutionDir)FPGA\variable_timebase_fpga_external.bit"  "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
