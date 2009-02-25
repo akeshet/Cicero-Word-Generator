@@ -426,9 +426,9 @@ namespace AtticusServer
         /// <param name="usedDigitalChannels">digital channels which reside on this server.</param>
         /// <param name="usedAnalogChannels">analog channels which reside on this server</param>
         /// <returns></returns>
-        public static Task createDaqMxTask(string deviceName, DeviceSettings deviceSettings, SequenceData sequence, SettingsData settings, Dictionary<int, HardwareChannel> usedDigitalChannels, Dictionary<int, HardwareChannel> usedAnalogChannels, ServerSettings serverSettings)
+        public static Task createDaqMxTask(string deviceName, DeviceSettings deviceSettings, SequenceData sequence, SettingsData settings, Dictionary<int, HardwareChannel> usedDigitalChannels, Dictionary<int, HardwareChannel> usedAnalogChannels, ServerSettings serverSettings, out long expectedSamplesGenerated)
         {
-
+            expectedSamplesGenerated = 0;
 
             Task task = new Task(deviceName + " output task");
 
@@ -546,6 +546,8 @@ namespace AtticusServer
                     AnalogMultiChannelWriter writer = new AnalogMultiChannelWriter(task.Stream);
 
                     writer.WriteMultiSample(false, analogBuffer);
+                    // analog cards report the exact number of generated samples.
+                    expectedSamplesGenerated = nBaseSamples;
 
                 }
 
@@ -607,6 +609,8 @@ namespace AtticusServer
                     System.GC.Collect();
                     DigitalMultiChannelWriter writer = new DigitalMultiChannelWriter(task.Stream);
                     writer.WriteMultiSamplePort(false, digitalBuffer);
+                    /// Digital cards report the number of generated samples as a multiple of 4
+                    expectedSamplesGenerated = nSamples;
                 }
             }
             else // variable timebase buffer creation...
@@ -701,6 +705,8 @@ namespace AtticusServer
                     AnalogMultiChannelWriter writer = new AnalogMultiChannelWriter(task.Stream);
 
                     writer.WriteMultiSample(false, analogBuffer);
+                    // Analog cards report the exact number of samples generated.
+                    expectedSamplesGenerated = nBaseSamples;
 
                 }
 
@@ -762,6 +768,8 @@ namespace AtticusServer
                     System.GC.Collect();
                     DigitalMultiChannelWriter writer = new DigitalMultiChannelWriter(task.Stream);
                     writer.WriteMultiSamplePort(false, digitalBuffer);
+                    // digital cards report number of samples generated up to multiple of 4
+                    expectedSamplesGenerated = nSamples;
                 }
             }
                 

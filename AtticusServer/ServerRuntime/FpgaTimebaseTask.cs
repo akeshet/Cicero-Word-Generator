@@ -42,6 +42,17 @@ namespace AtticusServer
                 }
             }
 
+            // Add one final "pulse" at the end to trigger the dwell values. I'm basing this off the
+            // old variable timebase code that I found in the SequenceData program. Pretty sure it is right,
+            // and is unlikely to hurt. However, I do wonder if such short on pulses might not always be
+            // recognized by the NI cards.
+
+            ListItem finishItem = new ListItem();
+            finishItem.onCounts = 1;
+            finishItem.offCounts = 1;
+            finishItem.repeats = 1;
+            listItems.Add(finishItem);
+
             byte[] byteArray = new byte[listItems.Count * 16];
 
 

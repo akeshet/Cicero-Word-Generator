@@ -300,6 +300,17 @@ namespace AtticusServer
         {
             lock (remoteLockObj)
             {
+                clientFinishedRun = false;
+                if (taskFinishTimeClicks == null)
+                    taskFinishTimeClicks = new List<long>();
+                lock (taskFinishTimeClicks)
+                {
+                    taskFinishTimeClicks.Clear();
+                }
+
+                expectedNumberOfSamplesGenerated = new Dictionary<string, long>();
+
+
                 try
                 {
 
@@ -605,6 +616,8 @@ namespace AtticusServer
         /// </summary>
         private bool taskErrorsDetected = false;
 
+        public List<long> taskFinishTimeClicks;
+
         /// <summary>
         /// Event handler that gets called whenever a task finishes. If there is an error in the task, then it will get reported here.
         /// </summary>
@@ -612,6 +625,7 @@ namespace AtticusServer
         /// <param name="e"></param>
         void aTaskFinished(object sender, TaskDoneEventArgs e)
         {
+            long eventTime = DateTime.Now.Ticks;
 
             if (e.Error != null)
             {
@@ -631,7 +645,14 @@ namespace AtticusServer
                     {
                         messageLog(this, new MessageEvent("daqMx Task on unknown device finished."));
                     }
-                    messageLog(this, new MessageEvent("*** If you are seeing this message during a run, the task may have finished prematurely. If this is the case, and if the sample clock for this task is coming from an external source, consider adding a terminator and/or low pass filter on the receiving end to combat spurious clock edges. ***"));
+
+                    if (!clientFinishedRun)
+                    {
+                        lock (taskFinishTimeClicks)
+                        {
+                            taskFinishTimeClicks.Add(eventTime);
+                        }
+                    }
                 }
                 else
                 {
@@ -640,25 +661,73 @@ namespace AtticusServer
             }
         }
 
+        public Dictionary<string, long> expectedNumberOfSamplesGenerated;
+
+        public bool clientFinishedRun;
+
         public override bool runSuccess()
         {
+            long eventTime = DateTime.Now.Ticks;
+
             lock (remoteLockObj)
             {
-                messageLog(this, new MessageEvent("Client finished run. Buffer statuses:"));
+                clientFinishedRun = true;
+                messageLog(this, new MessageEvent("Client thinks the run is finished. Buffer statuses:"));
                 if (daqMxTasks.Count == 0)
                     messageLog(this, new MessageEvent("No buffers to report"));
+
+                bool samplesGeneratedMismatchDetected = false;
+                
                 foreach (string str in daqMxTasks.Keys)
                 {
                     Task task = daqMxTasks[str];
                     try
                     {
-                        messageLog(this, new MessageEvent(str + " " + task.Stream.TotalSamplesGeneratedPerChannel + "/" + task.Stream.Buffer.OutputBufferSize));
-
+                        long samplesGenerated = task.Stream.TotalSamplesGeneratedPerChannel;
+                        messageLog(this, new MessageEvent(str + " " + samplesGenerated + "/" + task.Stream.Buffer.OutputBufferSize));
+                        if (expectedNumberOfSamplesGenerated != null)
+                        {
+                            if (expectedNumberOfSamplesGenerated.ContainsKey(str))
+                            {
+                                long samplesExpected = expectedNumberOfSamplesGenerated[str];
+                                if (samplesGenerated != samplesExpected)
+                                {
+                                    messageLog(this, new MessageEvent("*** Expected generation of " + samplesExpected + " samples for this task."));
+                                    samplesGeneratedMismatchDetected = true;
+                                }
+                            }
+                        }
                     }
                     catch (Exception e)
                     {
                         messageLog(this, new MessageEvent("Unable to give buffer status of task " + str + ": " + e.Message));
                     }
+                }
+
+                bool earlyFinishDetected = false;
+                if (taskFinishTimeClicks != null)
+                {
+                    lock (taskFinishTimeClicks)
+                    {
+                        foreach (long time in taskFinishTimeClicks)
+                        {
+                            if ((eventTime - time) > 10000000)
+                            {
+                                earlyFinishDetected = true;
+                            }
+                        }
+                    }
+                }
+
+                if (earlyFinishDetected) {
+                    messageLog(this, new MessageEvent("***At least 1 daqMx task finished at least 1 second before the client notified the server that it thought the run was finished. This may indicate corruption of the timing signal driving this daqMx task. Reporting to client as error.***"));
+                    taskErrorsDetected = true;  
+                }
+
+                if (samplesGeneratedMismatchDetected)
+                {
+                    messageLog(this, new MessageEvent("***At least 1 daqMx task generated a different number of samples from the expected number. Reporting to client as an error."));
+                    taskErrorsDetected = true;
                 }
 
                 return (!taskErrorsDetected);
@@ -738,6 +807,8 @@ namespace AtticusServer
             {
                 if (deviceHasUsedChannels(dev))
                 {
+                    long expectedGenerated = 0;
+
                     messageLog(this, new MessageEvent("Generating buffer for " + dev));
                     Task task = DaqMxTaskGenerator.createDaqMxTask(dev,
                         deviceSettings,
@@ -745,12 +816,18 @@ namespace AtticusServer
                         settings,
                         usedDigitalChannels,
                         usedAnalogChannels,
-                        serverSettings);
+                        serverSettings,
+                        out expectedGenerated);
 
                     task.Done+=new TaskDoneEventHandler(aTaskFinished);
 
                     daqMxTasks.Add(dev, task);
                     messageLog(this, new MessageEvent("Buffer for " + dev + " generated. " + task.Stream.Buffer.OutputBufferSize + " samples per channel. On board buffer size " + task.Stream.Buffer.OutputOnBoardBufferSize + " samples per channel."));
+                    
+                    if (expectedGenerated != 0)
+                    {
+                        expectedNumberOfSamplesGenerated.Add(dev, expectedGenerated);
+                    }
                 }
                 else
                 {

@@ -1931,6 +1931,8 @@ namespace DataStructures
                 }
             }
 
+            // Add one last pulse at the end to push into dwell values? I don't remember, this comment
+            // it being written long after the code was.
             ans[currentSample] = true;
             return ans;
 
