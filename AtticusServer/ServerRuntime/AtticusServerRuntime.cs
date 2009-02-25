@@ -354,9 +354,10 @@ namespace AtticusServer
                                         if (opalKellyDeviceNames.Contains(fsettings.DeviceName))
                                         {
                                             messageLog(this, new MessageEvent("Creating Variable Timebase Task on fpga device " + fsettings.DeviceName + "."));
-                                            FpgaTimebaseTask ftask = new FpgaTimebaseTask(fsettings, opalKellyDevices[opalKellyDeviceNames.IndexOf(fsettings.DeviceName)], sequence, ((double)1) / ((double)(fsettings.SampleClockRate)));
+                                            int nSegs = 0;
+                                            FpgaTimebaseTask ftask = new FpgaTimebaseTask(fsettings, opalKellyDevices[opalKellyDeviceNames.IndexOf(fsettings.DeviceName)], sequence, ((double)1) / ((double)(fsettings.SampleClockRate)), out nSegs);
                                             fpgaTasks.Add(fsettings.DeviceName, ftask);
-                                            messageLog(this, new MessageEvent("...Done"));
+                                            messageLog(this, new MessageEvent("...Done (" + nSegs + " segments total)"));
                                         }
                                         else
                                         {

@@ -19,7 +19,7 @@ namespace AtticusServer
         }
 
         public static byte[] createByteArray(Dictionary<TimeStep, List<SequenceData.VariableTimebaseSegment>> segments,
-                                                SequenceData sequence)
+                                                SequenceData sequence, out int nSegments)
         {
             List<ListItem> listItems = new List<ListItem>();
 
@@ -42,6 +42,8 @@ namespace AtticusServer
                 }
             }
 
+
+
             // Add one final "pulse" at the end to trigger the dwell values. I'm basing this off the
             // old variable timebase code that I found in the SequenceData program. Pretty sure it is right,
             // and is unlikely to hurt. However, I do wonder if such short on pulses might not always be
@@ -52,6 +54,9 @@ namespace AtticusServer
             finishItem.offCounts = 1;
             finishItem.repeats = 1;
             listItems.Add(finishItem);
+
+
+            nSegments = listItems.Count;
 
             byte[] byteArray = new byte[listItems.Count * 16];
 
@@ -105,14 +110,14 @@ namespace AtticusServer
             return ans;
         }
 
-        public FpgaTimebaseTask(DeviceSettings deviceSettings, okCUsbFrontPanel opalKellyDevice, SequenceData sequence, double masterClockPeriod)
+        public FpgaTimebaseTask(DeviceSettings deviceSettings, okCUsbFrontPanel opalKellyDevice, SequenceData sequence, double masterClockPeriod, out int nSegments)
         {
             this.opalKellyDevice = opalKellyDevice;
 
             Dictionary<TimeStep, List<SequenceData.VariableTimebaseSegment>> segments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock,
                                                         masterClockPeriod);
 
-            byte[] data = FpgaTimebaseTask.createByteArray(segments, sequence);
+            byte[] data = FpgaTimebaseTask.createByteArray(segments, sequence, out nSegments);
 
             // Send the device an abort trigger.
             opalKellyDevice.ActivateTriggerIn(0x40, 1);
