@@ -421,7 +421,6 @@ namespace WordGenerator
             this.inspectVariableTimebaseToolStripMenuItem.Name = "inspectVariableTimebaseToolStripMenuItem";
             this.inspectVariableTimebaseToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
             this.inspectVariableTimebaseToolStripMenuItem.Text = "Inspect Variable Timebase";
-            this.inspectVariableTimebaseToolStripMenuItem.Visible = false;
             this.inspectVariableTimebaseToolStripMenuItem.Click += new System.EventHandler(this.inspectVariableTimebaseToolStripMenuItem_Click);
             // 
             // calculateVariableTimebaseAnalogBufferToolStripMenuItem

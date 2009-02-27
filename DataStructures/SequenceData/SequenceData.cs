@@ -1518,6 +1518,7 @@ namespace DataStructures
 
                                 if (runningGroups.Count == 0)
                                 {
+                                    
                                     timestepSegments.Add(new VariableTimebaseSegment(1, (int)(currentStep.StepDuration.getBaseValue() / masterTimebaseSampleDuration)));
                                 }
                                 else
@@ -1726,6 +1727,19 @@ namespace DataStructures
                                 }
 
                                 #endregion
+
+                                // clean up -- if there any segments of length <=0, remove them
+                                List<VariableTimebaseSegment> segmentsToRemove = new List<VariableTimebaseSegment>();
+                                foreach (VariableTimebaseSegment seg in timestepSegments)
+                                {
+                                    if (seg.MasterSamplesPerSegmentSample <= 0 || seg.NSegmentSamples <= 0)
+                                        segmentsToRemove.Add(seg);
+                                }
+                                foreach (VariableTimebaseSegment seg in segmentsToRemove)
+                                {
+                                    timestepSegments.Remove(seg);
+                                }
+                                
 
                                 ans.Add(currentStep, timestepSegments);
                             }
