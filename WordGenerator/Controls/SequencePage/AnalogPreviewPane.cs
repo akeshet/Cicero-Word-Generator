@@ -93,7 +93,7 @@ namespace WordGenerator.Controls
             }
             else
             {
-                val = wf.getValueAtTime(lagtime + extraTime, Storage.sequenceData.Variables);
+                val = wf.getValueAtTime(lagtime + extraTime, Storage.sequenceData.Variables, Storage.sequenceData.CommonWaveforms);
             }
 
             if (!maxValues.ContainsKey(channelID))
@@ -158,198 +158,205 @@ namespace WordGenerator.Controls
 
         public void redrawBuffer()
         {
-            drawCursor = false;
-            if (WordGenerator.mainClientForm.instance != null)
-                WordGenerator.mainClientForm.instance.cursorWait();
-
-
-            if (Storage.sequenceData == null)
+            try
             {
+                drawCursor = false;
                 if (WordGenerator.mainClientForm.instance != null)
+                    WordGenerator.mainClientForm.instance.cursorWait();
+
+
+                if (Storage.sequenceData == null)
+                {
+                    if (WordGenerator.mainClientForm.instance != null)
+                        WordGenerator.mainClientForm.instance.cursorWaitRelease();
+                    return;
+                }
+
+                int nDisplayedSteps = Storage.sequenceData.getNDisplayedTimeSteps();
+
+                /// higher numbers here mean that each pixel actually gets more than one sample, to reduce aliasing.
+                int samples_per_pixel = 1;
+
+                int xSize = nDisplayedSteps * colWidth;
+                int ySize = rowHeight * Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.analog].Channels.Count;
+
+                if ((xSize == 0) || (ySize == 0))
+                {
                     WordGenerator.mainClientForm.instance.cursorWaitRelease();
-                return;
-            }
-
-            int nDisplayedSteps = Storage.sequenceData.getNDisplayedTimeSteps();
-
-            /// higher numbers here mean that each pixel actually gets more than one sample, to reduce aliasing.
-            int samples_per_pixel = 1;
-
-            int xSize = nDisplayedSteps * colWidth;
-            int ySize = rowHeight * Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.analog].Channels.Count;
-
-            if ((xSize == 0) || (ySize == 0))
-            {
-                WordGenerator.mainClientForm.instance.cursorWaitRelease();
-                return;
-            }
-
-            Graphics gc;
-
-            if (placeholderPanel.Width != xSize || placeholderPanel.Height != ySize)
-            {
-                placeholderPanel.Width = xSize;
-                placeholderPanel.Height = ySize;
-            }
-
-
-            if (buffer != null)
-            {
-                if (buffer.Width != xSize || buffer.Height != ySize)
-                {
-                    buffer.Dispose();
-                    buffer = new Bitmap(xSize, ySize);
-                    gc = Graphics.FromImage(buffer);
-                   
-                }
-                else
-                {
-                    gc = Graphics.FromImage(buffer);
-                }
-            }
-            else
-            {
-                buffer = new Bitmap(xSize, ySize);
-                gc = Graphics.FromImage(buffer);
-            }
-
-            gc.FillRectangle(Brushes.Black, 0, 0, xSize, ySize);
-
-
-
-            List<int> analogIDs = new List<int>(Storage.settingsData.logicalChannelManager.Analogs.Keys);
-            analogIDs.Sort();
-
-
-            Brush continueBrush = new HatchBrush(HatchStyle.Percent20, Color.Green);
-            Brush disabledBrush = new HatchBrush(HatchStyle.Percent20, Color.Red);
-
-            double[] channelValues = new double[xSize * samples_per_pixel];
-            for (int i = 0; i < analogIDs.Count; i++)
-            {
-                int analogID = analogIDs[i];
-                for (int index = 0; index < xSize * samples_per_pixel; index++)
-                {
-                    channelValues[index] = 0;
+                    return;
                 }
 
-                for (int j = 0; j < nDisplayedSteps; j++)
-                {
-                    int stepID =
-                        Storage.sequenceData.getNthDisplayedTimeStepID(j);
+                Graphics gc;
 
-                    if (Storage.sequenceData.TimeSteps[stepID].StepEnabled)
+                if (placeholderPanel.Width != xSize || placeholderPanel.Height != ySize)
+                {
+                    placeholderPanel.Width = xSize;
+                    placeholderPanel.Height = ySize;
+                }
+
+
+                if (buffer != null)
+                {
+                    if (buffer.Width != xSize || buffer.Height != ySize)
                     {
-                        try
-                        {
-                            Storage.sequenceData.getTimestepInterpolation(stepID, analogID, channelValues, colWidth * samples_per_pixel, j * colWidth * samples_per_pixel);
-                        }
-                        catch (InterpolationException)
-                        {
-                            WordGenerator.mainClientForm.instance.cursorWaitRelease();
-                            return;
-                        }
+                        buffer.Dispose();
+                        buffer = new Bitmap(xSize, ySize);
+                        gc = Graphics.FromImage(buffer);
+
                     }
                     else
                     {
-                        double fillValue;
-                        if (j == 0)
+                        gc = Graphics.FromImage(buffer);
+                    }
+                }
+                else
+                {
+                    buffer = new Bitmap(xSize, ySize);
+                    gc = Graphics.FromImage(buffer);
+                }
+
+                gc.FillRectangle(Brushes.Black, 0, 0, xSize, ySize);
+
+
+
+                List<int> analogIDs = new List<int>(Storage.settingsData.logicalChannelManager.Analogs.Keys);
+                analogIDs.Sort();
+
+
+                Brush continueBrush = new HatchBrush(HatchStyle.Percent20, Color.Green);
+                Brush disabledBrush = new HatchBrush(HatchStyle.Percent20, Color.Red);
+
+                double[] channelValues = new double[xSize * samples_per_pixel];
+                for (int i = 0; i < analogIDs.Count; i++)
+                {
+                    int analogID = analogIDs[i];
+                    for (int index = 0; index < xSize * samples_per_pixel; index++)
+                    {
+                        channelValues[index] = 0;
+                    }
+
+                    for (int j = 0; j < nDisplayedSteps; j++)
+                    {
+                        int stepID =
+                            Storage.sequenceData.getNthDisplayedTimeStepID(j);
+
+                        if (Storage.sequenceData.TimeSteps[stepID].StepEnabled)
                         {
-                            fillValue = 0;
+                            try
+                            {
+                                Storage.sequenceData.getTimestepInterpolation(stepID, analogID, channelValues, colWidth * samples_per_pixel, j * colWidth * samples_per_pixel);
+                            }
+                            catch (InterpolationException)
+                            {
+                                WordGenerator.mainClientForm.instance.cursorWaitRelease();
+                                return;
+                            }
                         }
                         else
                         {
-                            fillValue = channelValues[colWidth * j * samples_per_pixel - 1];
+                            double fillValue;
+                            if (j == 0)
+                            {
+                                fillValue = 0;
+                            }
+                            else
+                            {
+                                fillValue = channelValues[colWidth * j * samples_per_pixel - 1];
+                            }
+                            for (int k = 0; k < colWidth * samples_per_pixel; k++)
+                            {
+                                channelValues[k + j * colWidth * samples_per_pixel] = fillValue;
+                            }
                         }
-                        for (int k = 0; k < colWidth * samples_per_pixel; k++)
-                        {
-                            channelValues[k + j * colWidth * samples_per_pixel] = fillValue;
-                        }
+
                     }
-
-                }
-                double maxValue = double.MinValue;
-                double minValue = double.MaxValue;
-                foreach (double samp in channelValues)
-                {
-                    if (samp > maxValue)
-                        maxValue = samp;
-                    if (samp < minValue)
-                        minValue = samp;
-                }
-
-                // we want to map each double value to a pixel point. y = m (samp + b)
-
-
-                // draw backgrounds
-
-                int y_offset = rowHeight * (i + 1);
-
-                for (int j = 0; j < Storage.sequenceData.getNDisplayedTimeSteps(); j++)
-                {
-                    TimeStep step = Storage.sequenceData.getNthDisplayedTimeStep(j);
-                    if (!step.StepEnabled)
-                        gc.FillRectangle(disabledBrush, j * colWidth, y_offset - rowHeight, colWidth, rowHeight);
-                    else if (step.AnalogGroup == null || !step.AnalogGroup.channelEnabled(analogID))
+                    double maxValue = double.MinValue;
+                    double minValue = double.MaxValue;
+                    foreach (double samp in channelValues)
                     {
-
-                        gc.FillRectangle(continueBrush, j * colWidth, y_offset - rowHeight, colWidth, rowHeight);
-
+                        if (samp > maxValue)
+                            maxValue = samp;
+                        if (samp < minValue)
+                            minValue = samp;
                     }
+
+                    // we want to map each double value to a pixel point. y = m (samp + b)
+
+
+                    // draw backgrounds
+
+                    int y_offset = rowHeight * (i + 1);
+
+                    for (int j = 0; j < Storage.sequenceData.getNDisplayedTimeSteps(); j++)
+                    {
+                        TimeStep step = Storage.sequenceData.getNthDisplayedTimeStep(j);
+                        if (!step.StepEnabled)
+                            gc.FillRectangle(disabledBrush, j * colWidth, y_offset - rowHeight, colWidth, rowHeight);
+                        else if (step.AnalogGroup == null || !step.AnalogGroup.channelEnabled(analogID))
+                        {
+
+                            gc.FillRectangle(continueBrush, j * colWidth, y_offset - rowHeight, colWidth, rowHeight);
+
+                        }
+                    }
+
+                    // draw divider lines.
+                    Pen dividerPen = new Pen(Brushes.Gray);
+
+                    gc.DrawLine(dividerPen, 0, i * rowHeight, xSize, i * rowHeight);
+
+                    double scale;
+                    int offs = 0;
+                    if (maxValue == minValue)
+                    {
+                        scale = 0;
+                        offs = -rowHeight / 2;
+                    }
+
+                    else
+                        scale = -(double)(rowHeight - 2) / (maxValue - minValue);
+
+
+
+
+                    int oldY = offs + (int)(scale * (channelValues[0] - minValue) + y_offset - 1);
+                    int newY;
+
+                    Pen linePen = new Pen(Color.White);
+
+                    for (int x = 1; x < xSize * samples_per_pixel; x++)
+                    {
+                        newY = offs + (int)(scale * (channelValues[x] - minValue) + y_offset - 1);
+                        gc.DrawLine(linePen, (x - 1) / samples_per_pixel, oldY, x / samples_per_pixel, newY);
+                        oldY = newY;
+                    }
+
+                    if (maxValues == null)
+                        maxValues = new Dictionary<int, double>();
+                    if (minValues == null)
+                        minValues = new Dictionary<int, double>();
+
+
+                    if (!maxValues.ContainsKey(analogID))
+                    {
+                        maxValues.Add(analogID, 0);
+                    }
+                    if (!minValues.ContainsKey(analogID))
+                    {
+                        minValues.Add(analogID, 0);
+                    }
+                    maxValues[analogID] = maxValue;
+                    minValues[analogID] = minValue;
                 }
-
-                // draw divider lines.
-                Pen dividerPen = new Pen(Brushes.Gray);
-                
-               gc.DrawLine(dividerPen, 0, i * rowHeight, xSize, i * rowHeight);
-
-                double scale;
-                int offs = 0;
-                if (maxValue == minValue)
-                {
-                    scale = 0;
-                    offs = -rowHeight / 2;
-                }
-
-                else
-                    scale = -(double)(rowHeight - 2) / (maxValue - minValue);
-
-
-
-
-                int oldY = offs + (int)(scale * (channelValues[0] - minValue) + y_offset - 1);
-                int newY;
-
-                Pen linePen = new Pen(Color.White);
-
-                for (int x = 1; x < xSize * samples_per_pixel; x++)
-                {
-                    newY = offs + (int)(scale * (channelValues[x] - minValue) + y_offset - 1);
-                    gc.DrawLine(linePen, (x - 1) / samples_per_pixel, oldY, x / samples_per_pixel, newY);
-                    oldY = newY;
-                }
-
-                if (maxValues == null)
-                    maxValues = new Dictionary<int, double>();
-                if (minValues == null)
-                    minValues = new Dictionary<int, double>();
-            
-
-                if (!maxValues.ContainsKey(analogID))
-                {
-                    maxValues.Add(analogID, 0);
-                }
-                if (!minValues.ContainsKey(analogID))
-                {
-                    minValues.Add(analogID, 0);
-                }
-                maxValues[analogID] = maxValue;
-                minValues[analogID] = minValue;
+                if (WordGenerator.mainClientForm.instance != null)
+                    WordGenerator.mainClientForm.instance.cursorWaitRelease();
             }
-            if (WordGenerator.mainClientForm.instance != null)
-                WordGenerator.mainClientForm.instance.cursorWaitRelease();
+            catch (Exception ex)
+            {
+                MessageBox.Show("Caught exception when trying to redraw analog preview buffer: " + ex.Message);
+            }
         }
-
+    
 
     }
 }

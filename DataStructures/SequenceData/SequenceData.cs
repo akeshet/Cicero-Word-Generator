@@ -702,7 +702,7 @@ namespace DataStructures
                     lagTime += TimeSteps[i].StepDuration.getBaseValue();
             }
 
-            TimeSteps[groupTimeStep].AnalogGroup.ChannelDatas[analogID].waveform.getInterpolation(nPoints, lagTime, lagTime + TimeSteps[timeStep].StepDuration.getBaseValue(), buf, offset, Variables);
+            TimeSteps[groupTimeStep].AnalogGroup.ChannelDatas[analogID].waveform.getInterpolation(nPoints, lagTime, lagTime + TimeSteps[timeStep].StepDuration.getBaseValue(), buf, offset, Variables, CommonWaveforms);
         }
 
         public double getAnalogValueAtEndOfTimestep(int timeStep, int analogID, List<Variable> existingVariables)
@@ -711,7 +711,7 @@ namespace DataStructures
             Waveform wf = getChannelWaveformAtTimestep(analogID, timeStep, ref lagTime);
             if (wf == null)
                 return 0;
-            return wf.getValueAtTime(lagTime + TimeSteps[timeStep].StepDuration.getBaseValue(), existingVariables);
+            return wf.getValueAtTime(lagTime + TimeSteps[timeStep].StepDuration.getBaseValue(), existingVariables, CommonWaveforms);
         }
 
         /// <summary>
@@ -867,7 +867,7 @@ namespace DataStructures
             int nSamples = this.nSamples(timeStepSize);
 
         
-            ans[0] = dwellWord().getEndAnalogValue(analogChannelID, Variables);
+            ans[0] = dwellWord().getEndAnalogValue(analogChannelID, Variables, CommonWaveforms);
 
 
             // forward fast to first timestep which actually uses this channel
@@ -913,7 +913,7 @@ namespace DataStructures
                 Waveform theWaveform = TimeSteps[currentStep].getChannelWaveform(analogChannelID);
 
                 theWaveform.getInterpolation(nStepSamples,
-                    interpolationStartTime, interpolationEndTime, ans, currentSample, Variables);
+                    interpolationStartTime, interpolationEndTime, ans, currentSample, Variables, CommonWaveforms);
                 
                 currentStep = endStep;
                 currentSample += nStepSamples;
@@ -1256,7 +1256,7 @@ namespace DataStructures
         public void computeAnalogBuffer(int analogChannelID, double masterTimebaseSampleDuration, double[] ans, Dictionary<TimeStep, List<VariableTimebaseSegment>> timebaseSegments)
         {
             int currentSample = 0;
-            double dwellingValue = dwellWord().getEndAnalogValue(analogChannelID, Variables);
+            double dwellingValue = dwellWord().getEndAnalogValue(analogChannelID, Variables, CommonWaveforms);
             AnalogGroup currentlyRunningGroup = null;
             double groupRunningTime = 0;
 
@@ -1299,7 +1299,7 @@ namespace DataStructures
                             runningWaveform.getInterpolation(segment.NSegmentSamples, waveformRunningTime,
                                 waveformRunningTime + segment.NSegmentSamples * segment.MasterSamplesPerSegmentSample * masterTimebaseSampleDuration,
                                 ans,
-                                currentSample, Variables);
+                                currentSample, Variables, CommonWaveforms);
                             currentSample += segment.NSegmentSamples;
                             waveformRunningTime += segment.NSegmentSamples * segment.MasterSamplesPerSegmentSample * masterTimebaseSampleDuration;
                         }
@@ -1311,12 +1311,12 @@ namespace DataStructures
                         }
 
                         dwellingValue = runningWaveform.getValueAtTime(runningWaveform.WaveformDuration.getBaseValue(),
-                            Variables);
+                            Variables, CommonWaveforms);
                     }
                 }
             }
 
-            ans[currentSample] = dwellWord().getEndAnalogValue(analogChannelID, Variables);
+            ans[currentSample] = dwellWord().getEndAnalogValue(analogChannelID, Variables, CommonWaveforms);
         }
 
         public static void fillBoolArray(bool[] array, bool value, int startIndex, int nEntries)

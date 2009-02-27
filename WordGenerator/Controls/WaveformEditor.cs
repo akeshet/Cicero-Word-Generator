@@ -85,9 +85,16 @@ namespace WordGenerator.Controls
 
         private void nameTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (currentWaveform != null)
-                currentWaveform.WaveformName = nameTextBox.Text;
-            updateGUI(sender, e);
+            try
+            {
+                if (currentWaveform != null)
+                    currentWaveform.WaveformName = nameTextBox.Text;
+                updateGUI(sender, e);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Caught exception when trying to change waveform name: " + ex.Message);
+            }
         }
 
 
@@ -773,14 +780,22 @@ namespace WordGenerator.Controls
         {
             if (currentWaveform != null)
             {
-                currentWaveform.EquationString = equationTextBox.Text;
-                if (updateGraph != null)
+                try
                 {
-                    updateGraph(this, null);
+                    currentWaveform.EquationString = equationTextBox.Text;
+                    if (updateGraph != null)
+                    {
+                        updateGraph(this, null);
+                    }
+
+                    updateEquationStatusLabel();
                 }
-
-                updateEquationStatusLabel();
-
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Caught exception when attempting waveform interpolation: " + ex.Message + ". Clearing equation.");
+                    currentWaveform.EquationString = "";
+                    equationTextBox.Text = "";
+                }
             }
         }
 
@@ -788,7 +803,7 @@ namespace WordGenerator.Controls
         {
             if (currentWaveform != null)
             {
-                equationStatusLabel.Text = WaveformEquationInterpolator.getEquationStatusString(currentWaveform.EquationString, Storage.sequenceData.Variables);
+                equationStatusLabel.Text = WaveformEquationInterpolator.getEquationStatusString(currentWaveform.EquationString, Storage.sequenceData.Variables, Storage.sequenceData.CommonWaveforms);
             }
             else
             {
@@ -836,6 +851,11 @@ namespace WordGenerator.Controls
                     
                 }
             }
+        }
+
+        private void equationHelpText_Click(object sender, EventArgs e)
+        {
+
         }
 
         

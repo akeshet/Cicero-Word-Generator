@@ -341,11 +341,11 @@ namespace DataStructures
             /// <param name="referencedWaveforms"></param>
             /// <param name="combiners"></param>
             /// <returns></returns>
-            public double getValueAtTime(double time, double wfDuration, double[] xValues, double[] yValues, double[] extraValues, List<Waveform> referencedWaveforms, List<CombinationOperators> combiners, string equationString, List<Variable> existingVariables)
+            public double getValueAtTime(double time, double wfDuration, double[] xValues, double[] yValues, double[] extraValues, List<Waveform> referencedWaveforms, List<CombinationOperators> combiners, string equationString, List<Variable> existingVariables, List<Waveform> existingCommonWaveforms)
             {
 
                 double[] arr = new double[1];
-                this.getInterpolation(1, time, time, wfDuration, xValues, yValues, extraValues, referencedWaveforms, combiners, arr, 0, equationString, existingVariables);
+                this.getInterpolation(1, time, time, wfDuration, xValues, yValues, extraValues, referencedWaveforms, combiners, arr, 0, equationString, existingVariables, existingCommonWaveforms);
                 return arr[0];
 
             }
@@ -364,7 +364,7 @@ namespace DataStructures
             /// <param name="usingManualValues">Bool specifying whether using "manual" or "variable" values. True for manual.</param>
             /// <param name="variableValues">Double array of variable values. Used only if usingManualValues is false, and if this is a combination type interpolation.</param>
             /// <returns></returns>
-			public void getInterpolation(int nSamples, double startTime, double endTime, double wfDuration , double [] xValues, double [] yValues, double [] extraValues, List<Waveform> referencedWaveforms, List<CombinationOperators> combiners, double [] output, int startIndex, string equationString, List<Variable> existingVariables) {
+			public void getInterpolation(int nSamples, double startTime, double endTime, double wfDuration , double [] xValues, double [] yValues, double [] extraValues, List<Waveform> referencedWaveforms, List<CombinationOperators> combiners, double [] output, int startIndex, string equationString, List<Variable> existingVariables, List<Waveform> existingCommonWaveforms) {
                 if (startTime > endTime)
                     startTime = endTime;
  
@@ -585,13 +585,13 @@ namespace DataStructures
                     case InterpolationID.Combination: 
                         {
                             // Since we've already allocated memory for the answer, lets not waste it. Thus, we pass a reference to the array for the interpolater to use.
-                            combinationInterpolation(nSamples, startTime, endTime, referencedWaveforms, combiners, output, startIndex, existingVariables);
+                            combinationInterpolation(nSamples, startTime, endTime, referencedWaveforms, combiners, output, startIndex, existingVariables, existingCommonWaveforms);
                         }
                         break;
 
                     case InterpolationID.Equation:
                         {
-                            WaveformEquationInterpolator.getEquationInterpolation(equationString, startTime, endTime, nSamples, startIndex, output, existingVariables, wfDuration);
+                            WaveformEquationInterpolator.getEquationInterpolation(equationString, startTime, endTime, nSamples, startIndex, output, existingVariables, existingCommonWaveforms, wfDuration);
                         }
                         break;
 				}
@@ -599,7 +599,7 @@ namespace DataStructures
 				return;
             }
             #region Combination Interpolater
-            private void combinationInterpolation(int nSamples, double startTime, double endTime, List<Waveform> referencedWaveforms, List<CombinationOperators> combiners, double [] output, int startIndex, List<Variable> existingVariables)
+            private void combinationInterpolation(int nSamples, double startTime, double endTime, List<Waveform> referencedWaveforms, List<CombinationOperators> combiners, double [] output, int startIndex, List<Variable> existingVariables, List<Waveform> existingCommonWaveforms)
             {
                 int numRefs = 0;
                 if (referencedWaveforms != null)
@@ -620,7 +620,7 @@ namespace DataStructures
 
                     int cutoffstart;
 
-                    theOnlyWaveform.getInterpolation(nSamples, startTime, endTime, output, startIndex, existingVariables);
+                    theOnlyWaveform.getInterpolation(nSamples, startTime, endTime, output, startIndex, existingVariables, existingCommonWaveforms);
                     cutoffstart =(int) ( (theOnlyWaveform.WaveformDuration.getBaseValue() - startTime) / (double)(endTime - startTime) * (double) nSamples);
 
                     if (cutoffstart < 1)
@@ -742,7 +742,7 @@ namespace DataStructures
                         }
 
 
-                        interpolations[j] = segmentWaveforms[i][j].getInterpolation(nSegmentSteps, 0, segmentTotalTime, existingVariables);
+                        interpolations[j] = segmentWaveforms[i][j].getInterpolation(nSegmentSteps, 0, segmentTotalTime, existingVariables, existingCommonWaveforms);
 
                     }
 
@@ -1103,18 +1103,18 @@ namespace DataStructures
         /// </summary>
         /// <param name="nSamples"></param>
         /// <returns></returns>
-        public double[] getInterpolation(int nSamples, List<Variable> existingVariables)
+        public double[] getInterpolation(int nSamples, List<Variable> existingVariables, List<Waveform> existingCommonWaveforms)
         {
-            return this.getInterpolation(nSamples, 0, waveformDuration.getBaseValue(), existingVariables);
+            return this.getInterpolation(nSamples, 0, waveformDuration.getBaseValue(), existingVariables, existingCommonWaveforms);
 
         }
 
-        public void getInterpolation(int nSamples, double[] output, int startIndex, List<Variable> existingVariables)
+        public void getInterpolation(int nSamples, double[] output, int startIndex, List<Variable> existingVariables, List<Waveform> existingCommonWaveforms)
         {
-            this.getInterpolation(nSamples, 0, waveformDuration.getBaseValue(), output, startIndex, existingVariables);
+            this.getInterpolation(nSamples, 0, waveformDuration.getBaseValue(), output, startIndex, existingVariables, existingCommonWaveforms);
         }
 
-        public double getValueAtTime(double time, List<Variable> existingVariables)
+        public double getValueAtTime(double time, List<Variable> existingVariables, List<Waveform> existingCommonWaveforms)
         {
             return this.interpolationType.getValueAtTime(time,
                 waveformDuration.getBaseValue(),
@@ -1124,10 +1124,11 @@ namespace DataStructures
                 referencedWaveforms,
                 combiners,
                 EquationString,
-                existingVariables);
+                existingVariables,
+                existingCommonWaveforms);
         }
 
-        public void getInterpolation(int nSamples, double startTime, double endTime, double [] output, int startIndex, List<Variable> existingVariables)
+        public void getInterpolation(int nSamples, double startTime, double endTime, double [] output, int startIndex, List<Variable> existingVariables, List<Waveform> existingCommonWaveforms)
         {
             if (interpolationType.referencesOtherWaveforms && this.isWaveformReferenceRecursive()) throw new InterpolationException("Interpolation Exception: Attempted to interpolate a recursive wavefunction.");
 
@@ -1144,15 +1145,16 @@ namespace DataStructures
                 output,
                 startIndex,
                 EquationString,
-                existingVariables);
+                existingVariables,
+                existingCommonWaveforms);
         }
 
-        public double [] getInterpolation(int nSamples, double startTime, double endTime, List<Variable> existingVariables)
+        public double [] getInterpolation(int nSamples, double startTime, double endTime, List<Variable> existingVariables, List<Waveform> existingCommonWaveforms)
         {
             if (nSamples > 0)
             {
                 double[] ans = new double[nSamples];
-                this.getInterpolation(nSamples, startTime, endTime, ans, 0, existingVariables);
+                this.getInterpolation(nSamples, startTime, endTime, ans, 0, existingVariables, existingCommonWaveforms);
                 return ans;
             }
             else

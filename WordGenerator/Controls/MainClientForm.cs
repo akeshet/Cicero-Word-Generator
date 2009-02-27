@@ -358,48 +358,52 @@ namespace WordGenerator
         /// </summary>
         public void RefreshSequenceDataToUI(SequenceData sequenceData)
         {
-            WordGenerator.mainClientForm.instance.cursorWait();
+            
+                WordGenerator.mainClientForm.instance.cursorWait();
 
-            this.commonWaveformEditor1.setCommonWaveforms(Storage.sequenceData.CommonWaveforms);
+                
+                this.commonWaveformEditor1.setCommonWaveforms(Storage.sequenceData.CommonWaveforms);
 
-            if (sequenceData.AnalogGroups.Count != 0)
-                this.analogGroupEditor1.setAnalogGroup(sequenceData.AnalogGroups[0]);
-            else
-                this.analogGroupEditor1.setAnalogGroup(null);
+                if (sequenceData.AnalogGroups.Count != 0)
+                    this.analogGroupEditor1.setAnalogGroup(sequenceData.AnalogGroups[0]);
+                else
+                    this.analogGroupEditor1.setAnalogGroup(null);
 
-            this.sequencePage1.layoutAll();
+                
+                this.sequencePage1.layoutAll();
 
-            this.variablesEditor1.layout();
+                this.variablesEditor1.layout();
 
-            if (sequenceData.GpibGroups.Count != 0)
-                this.gpibGroupEditor1.setGpibGroup(sequenceData.GpibGroups[0]);
-            else
-                this.gpibGroupEditor1.setGpibGroup(null);
+                if (sequenceData.GpibGroups.Count != 0)
+                    this.gpibGroupEditor1.setGpibGroup(sequenceData.GpibGroups[0]);
+                else
+                    this.gpibGroupEditor1.setGpibGroup(null);
 
-            if (sequenceData.RS232Groups.Count != 0)
-                this.rS232GroupEditor1.setRS232Group(sequenceData.RS232Groups[0]);
-            else
-                this.rS232GroupEditor1.setRS232Group(null);
+                if (sequenceData.RS232Groups.Count != 0)
+                    this.rS232GroupEditor1.setRS232Group(sequenceData.RS232Groups[0]);
+                else
+                    this.rS232GroupEditor1.setRS232Group(null);
 
-            this.analogGroupEditor1.updateRunOrderPanel();
-            this.gpibGroupEditor1.updateRunOrderPanel();
+                this.analogGroupEditor1.updateRunOrderPanel();
+                this.gpibGroupEditor1.updateRunOrderPanel();
 
-            updateFormTitle();
+                updateFormTitle();
 
-            if (!Storage.sequenceData.TimeSteps.Contains(CurrentlyOutputtingTimestep))
-            {
-                CurrentlyOutputtingTimestep = null;
-            }
+                if (!Storage.sequenceData.TimeSteps.Contains(CurrentlyOutputtingTimestep))
+                {
+                    CurrentlyOutputtingTimestep = null;
+                }
 
-            pulsesPage1.layout();
+                pulsesPage1.layout();
 
-            sequencePage1.forceUpdateAllScrollbars();
+                sequencePage1.forceUpdateAllScrollbars();
 
-            setTimestepEditorBackgrounds();
+                setTimestepEditorBackgrounds();
 
-            waitForReady.Checked = Storage.sequenceData.WaitForReady;
+                waitForReady.Checked = Storage.sequenceData.WaitForReady;
 
-            WordGenerator.mainClientForm.instance.cursorWaitRelease();
+                WordGenerator.mainClientForm.instance.cursorWaitRelease();
+
         }
 
         public void RefreshSettingsDataToUI(SettingsData settingsData)

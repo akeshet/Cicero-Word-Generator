@@ -134,8 +134,8 @@ namespace AtticusServer
                     int nSamples = (int)(ticks_to_seconds(groupDuration) * (double)deviceSettings.SampleClockRate);
                     double secondsPerSample = ticks_to_seconds(groupDuration) / (double)nSamples;
 
-                    amplitudeArray = channelData.volts.getInterpolation(nSamples, 0, ticks_to_seconds(groupDuration), sequence.Variables);
-                    frequencyArray = channelData.frequency.getInterpolation(nSamples, 0, ticks_to_seconds(groupDuration), sequence.Variables);
+                    amplitudeArray = channelData.volts.getInterpolation(nSamples, 0, ticks_to_seconds(groupDuration), sequence.Variables, sequence.CommonWaveforms);
+                    frequencyArray = channelData.frequency.getInterpolation(nSamples, 0, ticks_to_seconds(groupDuration), sequence.Variables, sequence.CommonWaveforms);
 
                     double lastFreq = Double.MinValue;
                     double lastAmp = Double.MinValue;

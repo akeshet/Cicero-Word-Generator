@@ -84,64 +84,78 @@ namespace WordGenerator.Controls
 
         public void updateGraph(Object sender, EventArgs e)
         {
-            if (waveform != null)
+            try
             {
-                this.waveFormNameLabel.Text = waveform.WaveformName;
-                this.channelLabel.Text = channelName;
-
-                int nSamples = NumSamples;
-                double[] yValues;
-                try
+                if (waveform != null)
                 {
-                    yValues = waveform.getInterpolation(nSamples, Storage.sequenceData.Variables);
-                    double [] xValues = new double[nSamples];
-                    double start = 0;
-                    double stepSize = waveform.WaveformDuration.getBaseValue() / (double)nSamples;
-                    for (int i = 0; i < nSamples; i++)
+                    this.waveFormNameLabel.Text = waveform.WaveformName;
+                    this.channelLabel.Text = channelName;
+
+                    int nSamples = NumSamples;
+                    double[] yValues;
+                    try
                     {
-                        xValues[i] = start + stepSize * i;
+                        yValues = waveform.getInterpolation(nSamples, Storage.sequenceData.Variables, Storage.sequenceData.CommonWaveforms);
+                        double[] xValues = new double[nSamples];
+                        double start = 0;
+                        double stepSize = waveform.WaveformDuration.getBaseValue() / (double)nSamples;
+                        for (int i = 0; i < nSamples; i++)
+                        {
+                            xValues[i] = start + stepSize * i;
+                        }
+                        double duration = waveform.WaveformDuration.getBaseValue();
+                        double timePerPixel = duration / (double)nSamples;
+
+                        waveformGraph1.PlotX(xValues, 0, timePerPixel);
+                        waveformGraph1.PlotY(yValues, 0, timePerPixel);
+
                     }
-                    double duration = waveform.WaveformDuration.getBaseValue();
-                    double timePerPixel = duration / (double) nSamples;
-
-                    waveformGraph1.PlotX(xValues, 0, timePerPixel);
-                    waveformGraph1.PlotY(yValues, 0, timePerPixel);
-
+                    catch (InterpolationException exception)
+                    {
+                        // user changed something that caused an interpolation error. Let's try to undo it.
+                        IParameterEditor ipe = sender as IParameterEditor;
+                        if (ipe != null)
+                        {
+                            MessageBox.Show("Invalid data detected, attempting to undo.");
+                            ipe.undoLastChange(this, null);
+                            this.updateGraph(this, null);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Invalid data, unable to undo. " + exception.Message);
+                            clearPlot();
+                            this.waveformGraph1.Enabled = false;
+                        }
+                    }
                 }
-                catch (InterpolationException exception)
+                else
                 {
-                    // user changed something that caused an interpolation error. Let's try to undo it.
-                    IParameterEditor ipe = sender as IParameterEditor;
-                    if (ipe != null)
-                    {
-                        MessageBox.Show("Invalid data detected, attempting to undo.");
-                        ipe.undoLastChange(this, null);
-                        this.updateGraph(this, null);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Invalid data, unable to undo. " + exception.Message);
-                        clearPlot();
-                        this.waveformGraph1.Enabled = false;
-                    }
+                    waveformGraph1.Enabled = false;
+                    clearPlot();
+                    waveFormNameLabel.Text = "";
+                    channelLabel.Text = "";
                 }
+                this.Invalidate();
             }
-            else
+            catch (Exception ex)
             {
-                waveformGraph1.Enabled = false;
-                clearPlot();
-                waveFormNameLabel.Text = "";
-                channelLabel.Text = "";
+                MessageBox.Show("Caught exception when attempting to update a waveform graph: " + ex.Message);
             }
-            this.Invalidate();
         }
 
         private void WaveformGraph_Click(object sender, EventArgs e)
         {
-            if (editable)
+            try
             {
-                if (gotClicked != null)
-                    gotClicked(this, e);
+                if (editable)
+                {
+                    if (gotClicked != null)
+                        gotClicked(this, e);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Caught exception when handling waveform click event: " + ex.Message);
             }
         }
 

@@ -519,6 +519,25 @@ namespace AtticusServer
 
                     #endregion
 
+                    #region Watchdog Timer stuff -- NOT FINISHED YET, THUS COMMENTED OUT
+
+                    /*
+                    if (serverSettings.UseWatchdogTimerMonitoringTask)
+                    {
+                        if (daqMxTasks.ContainsKey(serverSettings.DeviceToSyncSoftwareTimedTasksTo))
+                        {
+                            messageLog(this, new MessageEvent("Creating watchdog timer monitoring task"));
+                            WatchdogTimerTask wtask = new WatchdogTimerTask(sequence, myServerSettings.myDevicesSettings[serverSettings.DeviceToSyncSoftwareTimedTasksTo].SampleClockRate, daqMxTasks[serverSettings.DeviceToSyncSoftwareTimedTasksTo]);
+                        }
+                        else
+                        {
+                            messageLog(this, new MessageEvent("Unable to create watchdog timer monitoring task, since the hardware-timed device it was to be synched to is not being used. Continuing without watchdog."));
+                        }
+                    }
+                    */
+
+
+                    #endregion
 
 
                     #region GPIB device and masquerading gpib channels (like rfsg channels)

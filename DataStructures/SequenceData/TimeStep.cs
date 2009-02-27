@@ -128,13 +128,13 @@ namespace DataStructures
         /// </summary>
         /// <param name="analogChannelID"></param>
         /// <returns></returns>
-        public double getEndAnalogValue(int analogChannelID, List<Variable> existingVariables)
+        public double getEndAnalogValue(int analogChannelID, List<Variable> existingVariables, List<Waveform> existingCommonWaveforms)
         {
             Waveform wf = getChannelWaveform(analogChannelID);
             if (wf == null)
                 return 0;
 
-            return wf.getValueAtTime(this.stepDuration.getBaseValue(), existingVariables);
+            return wf.getValueAtTime(this.stepDuration.getBaseValue(), existingVariables, existingCommonWaveforms);
                
         }
 

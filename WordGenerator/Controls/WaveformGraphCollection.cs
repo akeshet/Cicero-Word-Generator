@@ -32,9 +32,16 @@ namespace WordGenerator.Controls
 
         public void redrawAllGraphs()
         {
-            foreach (WaveformGraph gr in waveformGraphs)
+            try
             {
-                gr.updateGraph(this, null);
+                foreach (WaveformGraph gr in waveformGraphs)
+                {
+                    gr.updateGraph(this, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Caught exception when attempting to redraw waveform collection " + ex.Message);
             }
         }
 

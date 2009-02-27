@@ -51,6 +51,8 @@ namespace WordGenerator.Controls
             this.button1 = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToCommonWaveformsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pasteFromClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileLoadCheckBox = new System.Windows.Forms.CheckBox();
             this.filePathTextBox = new System.Windows.Forms.TextBox();
             this.fileBrowseButton = new System.Windows.Forms.Button();
@@ -61,8 +63,6 @@ namespace WordGenerator.Controls
             this.durationParameterEditor = new WordGenerator.Controls.HorizontalParameterEditor();
             this.XYParametersStart2 = new WordGenerator.Controls.HorizontalParameterEditor();
             this.XYParametersStart1 = new WordGenerator.Controls.HorizontalParameterEditor();
-            this.copyToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pasteFromClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.specialParametersBox.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.fileLoadGroupBox.SuspendLayout();
@@ -129,13 +129,15 @@ namespace WordGenerator.Controls
             // 
             // equationHelpText
             // 
-            this.equationHelpText.Location = new System.Drawing.Point(10, 97);
+            this.equationHelpText.Location = new System.Drawing.Point(10, 89);
             this.equationHelpText.Name = "equationHelpText";
-            this.equationHelpText.Size = new System.Drawing.Size(188, 56);
+            this.equationHelpText.Size = new System.Drawing.Size(188, 67);
             this.equationHelpText.TabIndex = 4;
-            this.equationHelpText.Text = "Enter equation. You may use any of the existing variables, and any of the functio" +
-                "ns described in the Variables tab. Use \"t\" for time (in seconds).";
+            this.equationHelpText.Text = "Enter equation. You may use any of the existing variables or Common Waveforms, an" +
+                "d any of the functions described in the Variables tab. Use \"t\" for time (in seco" +
+                "nds).";
             this.equationHelpText.Visible = false;
+            this.equationHelpText.Click += new System.EventHandler(this.equationHelpText_Click);
             // 
             // equationStatusLabel
             // 
@@ -276,7 +278,7 @@ namespace WordGenerator.Controls
             this.copyToClipboardToolStripMenuItem,
             this.pasteFromClipboardToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(226, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(226, 70);
             // 
             // copyToCommonWaveformsToolStripMenuItem
             // 
@@ -284,6 +286,20 @@ namespace WordGenerator.Controls
             this.copyToCommonWaveformsToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.copyToCommonWaveformsToolStripMenuItem.Text = "Copy to Common Waveforms";
             this.copyToCommonWaveformsToolStripMenuItem.Click += new System.EventHandler(this.copyToCommonWaveformsToolStripMenuItem_Click);
+            // 
+            // copyToClipboardToolStripMenuItem
+            // 
+            this.copyToClipboardToolStripMenuItem.Name = "copyToClipboardToolStripMenuItem";
+            this.copyToClipboardToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.copyToClipboardToolStripMenuItem.Text = "Copy to Clipboard";
+            this.copyToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyToClipboardToolStripMenuItem_Click);
+            // 
+            // pasteFromClipboardToolStripMenuItem
+            // 
+            this.pasteFromClipboardToolStripMenuItem.Name = "pasteFromClipboardToolStripMenuItem";
+            this.pasteFromClipboardToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.pasteFromClipboardToolStripMenuItem.Text = "Paste from Clipboard";
+            this.pasteFromClipboardToolStripMenuItem.Click += new System.EventHandler(this.pasteFromClipboardToolStripMenuItem_Click);
             // 
             // fileLoadCheckBox
             // 
@@ -392,20 +408,6 @@ namespace WordGenerator.Controls
             this.XYParametersStart1.TabIndex = 7;
             this.XYParametersStart1.UnitSelectorVisibility = true;
             this.XYParametersStart1.Visible = false;
-            // 
-            // copyToClipboardToolStripMenuItem
-            // 
-            this.copyToClipboardToolStripMenuItem.Name = "copyToClipboardToolStripMenuItem";
-            this.copyToClipboardToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
-            this.copyToClipboardToolStripMenuItem.Text = "Copy to Clipboard";
-            this.copyToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyToClipboardToolStripMenuItem_Click);
-            // 
-            // pasteFromClipboardToolStripMenuItem
-            // 
-            this.pasteFromClipboardToolStripMenuItem.Name = "pasteFromClipboardToolStripMenuItem";
-            this.pasteFromClipboardToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
-            this.pasteFromClipboardToolStripMenuItem.Text = "Paste from Clipboard";
-            this.pasteFromClipboardToolStripMenuItem.Click += new System.EventHandler(this.pasteFromClipboardToolStripMenuItem_Click);
             // 
             // WaveformEditor
             // 
