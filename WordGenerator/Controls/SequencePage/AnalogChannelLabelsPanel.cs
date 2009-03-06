@@ -57,10 +57,10 @@ namespace WordGenerator.Controls
                 lbl.Height = rowHeight;
                 lbl.AutoEllipsis = true;
                 lbl.AutoSize = false;
-                lbl.Text = Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.analog].Channels[analogID].name;
+                lbl.Text = Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.analog].Channels[analogID].Name;
 
 
-                toolTip1.SetToolTip(lbl, Storage.settingsData.logicalChannelManager.Analogs[analogID].description);
+                toolTip1.SetToolTip(lbl, Storage.settingsData.logicalChannelManager.Analogs[analogID].Description);
 
                 Label idLbl = new Label();
                 idLbl.Text = analogID.ToString();
@@ -69,7 +69,7 @@ namespace WordGenerator.Controls
                 idLbl.Width = 20;
                 idLbl.Height = rowHeight;
 
-                toolTip1.SetToolTip(idLbl, Storage.settingsData.logicalChannelManager.Analogs[analogID].description);
+                toolTip1.SetToolTip(idLbl, Storage.settingsData.logicalChannelManager.Analogs[analogID].Description);
 
 
                 channelLabels.Add(lbl);

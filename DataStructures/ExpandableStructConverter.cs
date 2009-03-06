@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
 using System.Reflection.Emit;
+using System.Reflection;
 
 namespace DataStructures
 {
@@ -25,7 +26,10 @@ namespace DataStructures
             Type objectType = context.PropertyDescriptor.PropertyType;
             foreach (object key in propertyValues.Keys)
             {
-                objectType.InvokeMember(key.ToString(), System.Reflection.BindingFlags.SetProperty, null, ans, new Object[] { propertyValues[key] });
+            
+                    objectType.InvokeMember(key.ToString(), BindingFlags.Public | BindingFlags.NonPublic | 
+                                                            BindingFlags.Instance | BindingFlags.SetProperty, 
+                                                            null, ans, new Object[] { propertyValues[key] });
             }
             
 

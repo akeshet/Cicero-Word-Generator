@@ -41,7 +41,7 @@ namespace wgControlLibrary
             this.groupChannelData = groupChannelData;
             this.logicalChannel = logicalChannel;
 
-            this.toolTip1.SetToolTip(channelNameLabel, logicalChannel.description);
+            this.toolTip1.SetToolTip(channelNameLabel, logicalChannel.Description);
 
             this.layout();
 
@@ -155,8 +155,8 @@ namespace wgControlLibrary
 
         private void channelName_Paint(object sender, PaintEventArgs e)
         {
-            if (logicalChannel.name != null)
-                channelNameLabel.Text = logicalChannel.name;
+            if (logicalChannel.Name != null)
+                channelNameLabel.Text = logicalChannel.Name;
             else
                 channelNameLabel.Text = "null";
         }

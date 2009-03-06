@@ -6,31 +6,41 @@ using System.Threading;
 
 namespace AtticusServer
 {
+
     /// <summary>
     /// This class is not yet completed.
     /// </summary>
     class WatchdogTimerTask
     {
+
+        NationalInstruments.DAQmx.Task taskToWatch;
+
         struct WatchdogTimerSegment
         {
             public string timeStepName;
             public int timeStepID;
             public int sequenceSampleNumber;
             public long masterSampleNumber;
+
+            public override string ToString()
+            {
+                return timeStepName + " " + sequenceSampleNumber + "/" + masterSampleNumber;
+            }
         }
 
         private List<WatchdogTimerSegment> watchdogTimerSegments;
 
-        public WatchdogTimerTask(SequenceData sequence, int masterFrequency)
+        public WatchdogTimerTask(SequenceData sequence, int masterFrequency, NationalInstruments.DAQmx.Task taskToWatch,  double watchDogThresholdTime)
         {
-            Dictionary<TimeStep, List<SequenceData.VariableTimebaseSegment>> segments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock,
+            this.taskToWatch = taskToWatch;
+            TimestepTimebaseSegmentCollection segments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock,
                                          1.0 / ((double)masterFrequency));
 
             int currentSequenceSampleNumber = 0;
             long currentMasterSampleNumber=0;
             watchdogTimerSegments = new List<WatchdogTimerSegment>();
 
-            int thresholdTime = masterFrequency / 5;
+            int thresholdTime = (int)(masterFrequency*watchDogThresholdTime);
 
             for (int i = 0; i < sequence.TimeSteps.Count; i++)
             {
@@ -71,12 +81,23 @@ namespace AtticusServer
             }
         }
 
-        long taskStartTime;
-        
-     /*   public void Start()
+
+/*
+        Thread runThread;
+
+        public void Start()
         {
 
             taskStartTime = DateTime.Now.Ticks;
+
+            if (runThread != null)
+            {
+                if (runThread.ThreadState == ThreadState.Running)
+                {
+                    throw new Exception("Unable to start watchdog task, as the watchdog task running thread is already running.");
+                }
+            }
+
             currentCommand = 0;
 
             runThread = new Thread(new ThreadStart(runTaskProc));
@@ -84,9 +105,68 @@ namespace AtticusServer
 
         }
 
-        private void runTaskProc() {
 
-        }
-       */     
+        /// <summary>
+        /// This function is copied from RFSGTask, with modifications.
+        /// </summary>
+        public void runTaskProc()
+        {
+            try
+            {
+                while (true)
+                {
+                    long elaspedTime = DateTime.Now.Ticks - taskStartTime;
+                    if (currentCommand >= commandBuffer.Count)
+                    {
+                        disposeDevice();
+                        if (this.Done != null)
+                        {
+                            this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(null));
+                        }
+                        return;
+                    }
+                    while (elaspedTime >= commandBuffer[currentCommand].commandTime)
+                    {
+                        outputRfsgCommand(commandBuffer[currentCommand]);
+                        currentCommand++;
+                        if (currentCommand >= commandBuffer.Count)
+                            break;
+
+                        if (currentCommand >= commandBuffer.Count) // we've run out of new commands, so disable the timer.
+                        {
+                            disposeDevice();
+                            if (this.Done != null)
+                            {
+                                this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(null));
+                            }
+                            return;
+                        }
+                    }
+                    Thread.Sleep(1);
+                }
+            }
+            catch (Exception e)
+            {
+                if (e is ThreadAbortException)
+                {
+                    disposeDevice();
+                    if (this.Done != null)
+                    {
+                        this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(null));
+                    }
+                }
+                else
+                {
+                    AtticusServer.server.messageLog(this, new MessageEvent("Caught an exception while running RFSG task for GPIB channel " + channelID + ": " + e.Message + e.StackTrace));
+                    AtticusServer.server.messageLog(this, new MessageEvent("Aborting RFSG task."));
+                    disposeDevice();
+                    if (this.Done != null)
+                    {
+                        this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(e));
+                    }
+                }
+            }
+        }*/
+
     }
 }

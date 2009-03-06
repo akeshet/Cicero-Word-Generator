@@ -176,9 +176,9 @@ namespace WordGenerator.Controls
                             if (channelData.DataType == GPIBGroupChannelData.GpibChannelDataType.voltage_frequency_waveform)
                             {
                                 waveformsToDisplay.Add(channelData.volts);
-                                channelNamesToDisplay.Add(gpibChannelCollection.Channels[gpibID].name + " Vpp");
+                                channelNamesToDisplay.Add(gpibChannelCollection.Channels[gpibID].Name + " Vpp");
                                 waveformsToDisplay.Add(channelData.frequency);
-                                channelNamesToDisplay.Add(gpibChannelCollection.Channels[gpibID].name + " Hz");
+                                channelNamesToDisplay.Add(gpibChannelCollection.Channels[gpibID].Name + " Hz");
                             }
                         }
                     }

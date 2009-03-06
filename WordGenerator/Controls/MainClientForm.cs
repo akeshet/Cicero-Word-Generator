@@ -749,15 +749,9 @@ namespace WordGenerator
 
         private void calculateVariableTimebaseAnalogBufferToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Dictionary<TimeStep, List<SequenceData.VariableTimebaseSegment>> timebaseSegments = Storage.sequenceData.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, .000001);
-            int nSamples = 1;
-            foreach (List<SequenceData.VariableTimebaseSegment> segments in timebaseSegments.Values)
-            {
-                foreach (SequenceData.VariableTimebaseSegment segment in segments)
-                {
-                    nSamples += segment.NSegmentSamples;
-                }
-            }
+            TimestepTimebaseSegmentCollection timebaseSegments = Storage.sequenceData.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, .000001);
+            int nSamples = 1 + timebaseSegments.nSegmentSamples();
+
             double[] ans = new double[nSamples];
             Storage.sequenceData.computeAnalogBuffer(0, .000001, ans, timebaseSegments);
         }
@@ -817,7 +811,7 @@ namespace WordGenerator
         {
             SequenceData sequence = Storage.sequenceData;
 
-            Dictionary<TimeStep, List<SequenceData.VariableTimebaseSegment>> timebaseSegments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock,
+            TimestepTimebaseSegmentCollection timebaseSegments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock,
                 .001);
 
             int nVTSamples = 1;

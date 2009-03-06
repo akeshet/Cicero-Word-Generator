@@ -612,6 +612,23 @@ namespace DataStructures
             return null;
         }
 
+        public double getTimeAtTimestep(TimeStep step)
+        {
+            if (!TimeSteps.Contains(step))
+                return 0;
+            double ans = 0;
+            foreach (TimeStep st in TimeSteps)
+            {
+                if (st == step)
+                    return ans;
+                if (st.StepEnabled)
+                {
+                    ans += st.StepDuration.getBaseValue();
+                }
+            }
+            return ans;
+        }
+
         /// <summary>
         /// Get's the Nth timestep which is not hidden
         /// </summary>
@@ -769,13 +786,17 @@ namespace DataStructures
 
             foreach (int analogID in settings.logicalChannelManager.Analogs.Keys)
             {
-                if (settings.logicalChannelManager.Analogs[analogID].overridden)
+                if (settings.logicalChannelManager.Analogs[analogID].TogglingChannel)
+                {
+                    ans.analogValues.Add(analogID, 0);
+                }
+                else if (settings.logicalChannelManager.Analogs[analogID].overridden)
                 {
                     ans.analogValues.Add(analogID, settings.logicalChannelManager.Analogs[analogID].analogOverrideValue);
                 }
                 else
                 {
-                    if (settings.logicalChannelManager.Analogs[analogID].analogChannelOutputNowUsesDwellWord)
+                    if (settings.logicalChannelManager.Analogs[analogID].AnalogChannelOutputNowUsesDwellWord)
                     {
                         ans.analogValues.Add(analogID, getAnalogValueAtEndOfTimestep(TimeSteps.IndexOf(dwellWord()), analogID, Variables));
                     }
@@ -789,7 +810,10 @@ namespace DataStructures
             foreach (int digitalID in settings.logicalChannelManager.Digitals.Keys)
             {
                 bool val = false;
-                if (settings.logicalChannelManager.Digitals[digitalID].overridden)
+                if (settings.logicalChannelManager.Digitals[digitalID].TogglingChannel) {
+                    val = false;
+                }
+                else if (settings.logicalChannelManager.Digitals[digitalID].overridden)
                 {
                     val = settings.logicalChannelManager.Digitals[digitalID].digitalOverrideValue;
                 }
@@ -1144,7 +1168,7 @@ namespace DataStructures
         /// <param name="masterTimebaseSampleDuration"></param>
         /// <param name="ans"></param>
         /// <param name="timebaseSegments"></param>
-        public void computeDigitalBuffer(int digitalID, double masterTimebaseSampleDuration, bool[] ans, Dictionary<TimeStep, List<VariableTimebaseSegment>> timebaseSegments)
+        public void computeDigitalBuffer(int digitalID, double masterTimebaseSampleDuration, bool[] ans, TimestepTimebaseSegmentCollection timebaseSegments)
         {
 
             int currentSample = 0;
@@ -1158,10 +1182,9 @@ namespace DataStructures
                     int nSegmentSamples = 0;
                     if (!timebaseSegments.ContainsKey(currentStep))
                         throw new Exception("No timebase segment for timestep " + currentStep.ToString());
-                    foreach (VariableTimebaseSegment segment in timebaseSegments[currentStep])
-                    {
-                        nSegmentSamples += segment.NSegmentSamples;
-                    }
+
+                    nSegmentSamples = timebaseSegments.nSegmentSamples(currentStep);
+
 
                     for (int j = 0; j < nSegmentSamples; j++)
                     {
@@ -1184,11 +1207,8 @@ namespace DataStructures
                     if (step.StepEnabled)
                     {
 
-                        int nMasterSamplesInTimestep = 0;
-                        foreach (VariableTimebaseSegment segment in timebaseSegments[step])
-                        {
-                            nMasterSamplesInTimestep += segment.MasterSamplesPerSegmentSample * segment.NSegmentSamples;
-                        }
+                        int nMasterSamplesInTimestep = timebaseSegments.nMasterSamples(step);
+
                         if (step.DigitalData.ContainsKey(digitalID))
                         {
                             if (step.DigitalData[digitalID].usesPulse())
@@ -1227,7 +1247,7 @@ namespace DataStructures
         /// <param name="masterSample"></param>
         /// <param name="timebaseSegments"></param>
         /// <returns></returns>
-        public int getDerivedSampleFromMasterSample(int masterSample, Dictionary<TimeStep, List<VariableTimebaseSegment>> timebaseSegments)
+        public int getDerivedSampleFromMasterSample(int masterSample, TimestepTimebaseSegmentCollection timebaseSegments)
         {
             int currentDerivedSample = 0;
             int currentMasterSample=0;
@@ -1253,7 +1273,39 @@ namespace DataStructures
             return currentDerivedSample;
         }
 
-        public void computeAnalogBuffer(int analogChannelID, double masterTimebaseSampleDuration, double[] ans, Dictionary<TimeStep, List<VariableTimebaseSegment>> timebaseSegments)
+
+        /// <summary>
+        /// Gets the master timebase sample from a given derived timebase sample.
+        /// </summary>
+        /// <param name="derivedSample"></param>
+        /// <param name="timebaseSegments"></param>
+        /// <returns></returns>
+        public int getMasterSampleFromDerivedSample(int derivedSample, TimestepTimebaseSegmentCollection timebaseSegments)
+        {
+            int currentDerivedSample = 0;
+            int currentMasterSample = 0;
+            if (derivedSample == 0)
+                return 0;
+            foreach (TimeStep step in TimeSteps)
+            {
+                if (step.StepEnabled)
+                {
+                    foreach (VariableTimebaseSegment segment in timebaseSegments[step])
+                    {
+                        for (int i = 0; i < segment.NSegmentSamples; i++)
+                        {
+                            currentMasterSample += segment.MasterSamplesPerSegmentSample;
+                            currentDerivedSample++;
+                            if (currentDerivedSample >= derivedSample)
+                                return currentMasterSample;
+                        }
+                    }
+                }
+            }
+            return currentMasterSample;
+        }
+
+        public void computeAnalogBuffer(int analogChannelID, double masterTimebaseSampleDuration, double[] ans, TimestepTimebaseSegmentCollection timebaseSegments)
         {
             int currentSample = 0;
             double dwellingValue = dwellWord().getEndAnalogValue(analogChannelID, Variables, CommonWaveforms);
@@ -1278,11 +1330,10 @@ namespace DataStructures
 
                     if (currentlyRunningGroup == null)
                     {
-                        int nSegmentSamples = 0;
-                        foreach (VariableTimebaseSegment segment in timebaseSegments[currentStep])
-                        {
-                            nSegmentSamples += segment.NSegmentSamples;
-                        }
+                        int nSegmentSamples = timebaseSegments.nSegmentSamples(currentStep);
+
+
+
                         for (int j = 0; j < nSegmentSamples; j++)
                         {
                             ans[j + currentSample] = dwellingValue;
@@ -1484,14 +1535,14 @@ namespace DataStructures
         /// <param name="timebaseType"></param>
         /// <param name="masterTimebaseSampleDuration"></param>
         /// <returns></returns>
-        public Dictionary<TimeStep, List<VariableTimebaseSegment>> generateVariableTimebaseSegments(VariableTimebaseTypes timebaseType,  double masterTimebaseSampleDuration)
+        public TimestepTimebaseSegmentCollection generateVariableTimebaseSegments(VariableTimebaseTypes timebaseType,  double masterTimebaseSampleDuration)
         {
             switch (timebaseType)
             {
                 case VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock:
                     {
 
-                        Dictionary<TimeStep, List<VariableTimebaseSegment>> ans = new Dictionary<TimeStep, List<VariableTimebaseSegment>>();
+                        TimestepTimebaseSegmentCollection ans = new TimestepTimebaseSegmentCollection();
 
                         Dictionary<TimeStep, List<DigitalImpingement>> digitalImpingements = getDigitalImpingements(masterTimebaseSampleDuration);
 
@@ -1501,7 +1552,7 @@ namespace DataStructures
                             {
                                 TimeStep currentStep = TimeSteps[stepID];
 
-                                List<VariableTimebaseSegment> timestepSegments = new List<VariableTimebaseSegment>();
+                                VariableTimebaseSegmentCollection timestepSegments = new VariableTimebaseSegmentCollection();
                                 Dictionary<AnalogGroup, double> runningGroups = getRunningGroupRemainingTime(stepID);
 
                                 // first cull groups that have less remaining time than 2 master timbase cycles.
@@ -1801,14 +1852,8 @@ namespace DataStructures
         /// </summary>
         /// <param name="?"></param>
         /// <returns></returns>
-        public bool [] getDigitalBufferClockSharedWithVariableTimebaseClock(Dictionary<TimeStep, List<VariableTimebaseSegment>> timebaseSegments, int digitalID, double masterTimestepSize) {
-            int nSamples = 0;
-            foreach (TimeStep step in timebaseSegments.Keys) {
-                foreach (VariableTimebaseSegment segment in timebaseSegments[step])
-                {
-                    nSamples += segment.NSegmentSamples * segment.MasterSamplesPerSegmentSample;
-                }
-            }
+        public bool [] getDigitalBufferClockSharedWithVariableTimebaseClock(TimestepTimebaseSegmentCollection timebaseSegments, int digitalID, double masterTimestepSize) {
+            int nSamples = timebaseSegments.nMasterSamples();
 
             nSamples += 1 + 2; // 1 extra sample at the beginning for the clock's leading LOW, and 2 at the end for the extgra dwell pulse. (this matches
              // the number of samples in the variable timebase clock, see the following function
@@ -1828,11 +1873,7 @@ namespace DataStructures
             {
                 if (step.StepEnabled)
                 {
-                    int nStepSamples = 0;
-                    foreach (VariableTimebaseSegment segment in timebaseSegments[step])
-                    {
-                        nStepSamples += segment.MasterSamplesPerSegmentSample * segment.NSegmentSamples;
-                    }
+                    int nStepSamples = timebaseSegments.nMasterSamples(step);
 
                     // if the digital is true, fill this part of the buffer with trues. If not, 
                     // no need to do anything as the inital value of the array is false.
@@ -1864,11 +1905,8 @@ namespace DataStructures
                 {
                     if (step.StepEnabled)
                     {
-                        int nStepSamples = 0;
-                        foreach (VariableTimebaseSegment segment in timebaseSegments[step])
-                        {
-                            nStepSamples += segment.MasterSamplesPerSegmentSample * segment.NSegmentSamples;
-                        }
+                        int nStepSamples = timebaseSegments.nMasterSamples(step);
+
                         if (step.DigitalData[digitalID].usesPulse())
                         {
                             Pulse pulse = step.DigitalData[digitalID].DigitalPulse;
@@ -1894,16 +1932,9 @@ namespace DataStructures
             return ans;
         }
 
-        public bool[] getVariableTimebaseClock(Dictionary<TimeStep, List<VariableTimebaseSegment>> timebaseSegments)
+        public bool[] getVariableTimebaseClock(TimestepTimebaseSegmentCollection timebaseSegments)
         {
-            int nSamples = 0;
-            foreach (TimeStep step in timebaseSegments.Keys)
-            {
-                foreach (VariableTimebaseSegment segment in timebaseSegments[step])
-                {
-                    nSamples += segment.NSegmentSamples * segment.MasterSamplesPerSegmentSample;
-                }
-            }
+            int nSamples = timebaseSegments.nMasterSamples();
 
             nSamples += 1 + 2; // add 1 false sample at the beginning so that we start with a false, and 2 at the end so we can 
              // trigger the dwell values;

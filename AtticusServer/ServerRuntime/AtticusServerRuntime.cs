@@ -521,20 +521,20 @@ namespace AtticusServer
 
                     #region Watchdog Timer stuff -- NOT FINISHED YET, THUS COMMENTED OUT
 
-                    /*
+                    
                     if (serverSettings.UseWatchdogTimerMonitoringTask)
                     {
                         if (daqMxTasks.ContainsKey(serverSettings.DeviceToSyncSoftwareTimedTasksTo))
                         {
                             messageLog(this, new MessageEvent("Creating watchdog timer monitoring task"));
-                            WatchdogTimerTask wtask = new WatchdogTimerTask(sequence, myServerSettings.myDevicesSettings[serverSettings.DeviceToSyncSoftwareTimedTasksTo].SampleClockRate, daqMxTasks[serverSettings.DeviceToSyncSoftwareTimedTasksTo]);
+                            WatchdogTimerTask wtask = new WatchdogTimerTask(sequence, myServerSettings.myDevicesSettings[serverSettings.DeviceToSyncSoftwareTimedTasksTo].SampleClockRate, daqMxTasks[serverSettings.DeviceToSyncSoftwareTimedTasksTo], .2);
                         }
                         else
                         {
                             messageLog(this, new MessageEvent("Unable to create watchdog timer monitoring task, since the hardware-timed device it was to be synched to is not being used. Continuing without watchdog."));
                         }
                     }
-                    */
+                    
 
 
                     #endregion
@@ -748,6 +748,31 @@ namespace AtticusServer
                 {
                     messageLog(this, new MessageEvent("***At least 1 daqMx task generated a different number of samples from the expected number. Reporting to client as an error."));
                     taskErrorsDetected = true;
+                }
+
+                if (myServerSettings.UseFpgaMistriggerDetection)
+                {
+                    foreach (FpgaTimebaseTask ft in fpgaTasks.Values)
+                    {
+                        int ans = ft.getMistriggerStatus();
+                        if (ans != 0)
+                        {
+                            taskErrorsDetected = true;
+                            messageLog(this, new MessageEvent("FPGA Mistrigger detection detected a mistrigger at sample number " + ans));
+                            if (serverSettings.DeviceToSyncSoftwareTimedTasksTo != null && serverSettings.DeviceToSyncSoftwareTimedTasksTo != "")
+                            {
+                                int masterFreq = myServerSettings.myDevicesSettings[serverSettings.DeviceToSyncSoftwareTimedTasksTo].SampleClockRate;
+                                TimestepTimebaseSegmentCollection segments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, (1.0 / ((double)masterFreq)));
+                                int masterSamp = sequence.getMasterSampleFromDerivedSample(ans, segments);
+                                double seqTime = ((double)masterSamp) / ((double)masterFreq);
+                                TimeStep step = sequence.getTimeStepAtTime(seqTime);
+                                messageLog(this, new MessageEvent("This mistrigger was at master sample " + masterSamp + ", sequence time " + seqTime + ", Timestep [" + step.StepName + "] (based on timing info from " + myServerSettings.DeviceToSyncSoftwareTimedTasksTo + ")"));
+                                
+                                double remTime = seqTime - sequence.getTimeAtTimestep(step);
+                                messageLog(this, new MessageEvent("This mistrigger occured " + remTime + " s after the start of the stated timestep."));
+                            }
+                        }
+                    }
                 }
 
                 return (!taskErrorsDetected);
@@ -1723,7 +1748,7 @@ namespace AtticusServer
 
             if (errorChan != null)
             {
-                throw new Exception("Invalid settings data. Analog logical channel named " + errorChan.name + " is bound to a hardware channel on this server which is disabled or does not exist.");
+                throw new Exception("Invalid settings data. Analog logical channel named " + errorChan.Name + " is bound to a hardware channel on this server which is disabled or does not exist.");
             }
 
             //digital
@@ -1732,7 +1757,7 @@ namespace AtticusServer
 
             if (errorChan != null)
             {
-                throw new Exception("Invalid settings data. Digital logical channel named " + errorChan.name + " is bound to a hardware channel on this server which is disabled or does not exist.");
+                throw new Exception("Invalid settings data. Digital logical channel named " + errorChan.Name + " is bound to a hardware channel on this server which is disabled or does not exist.");
             }
 
             // gpib
@@ -1741,7 +1766,7 @@ namespace AtticusServer
 
             if (errorChan != null)
             {
-                throw new Exception("Invalid settings data. GPIB logical channel named " + errorChan.name + " is bound to a hardware channel on this server which is disabled or does not exist.");
+                throw new Exception("Invalid settings data. GPIB logical channel named " + errorChan.Name + " is bound to a hardware channel on this server which is disabled or does not exist.");
             }
 
             // rs232
@@ -1750,7 +1775,7 @@ namespace AtticusServer
 
             if (errorChan != null)
             {
-                throw new Exception("Invalid settings data. RS232 logical channel named " + errorChan.name + " is bound to a hardware channel on this server which is disabled or does not exist.");
+                throw new Exception("Invalid settings data. RS232 logical channel named " + errorChan.Name + " is bound to a hardware channel on this server which is disabled or does not exist.");
             }
 
             // populate the list of used daqmx devices
@@ -2170,6 +2195,8 @@ namespace AtticusServer
                 }
             }
 
+            #region FPGA Detection and configuration
+
             if (this.serverSettings.UseOpalKellyFPGA)
             {
 
@@ -2186,10 +2213,17 @@ namespace AtticusServer
                 {
                     string name = ok.GetDeviceListSerial(i);
                     com.opalkelly.frontpanel.okCUsbFrontPanel fpgaDevice = new com.opalkelly.frontpanel.okCUsbFrontPanel();
-                    fpgaDevice.OpenBySerial(name);
 
-                    opalKellyDeviceNames.Add(name);
-                    opalKellyDevices.Add(fpgaDevice);
+                    com.opalkelly.frontpanel.okCUsbFrontPanel.BoardModel boardModel;
+                    com.opalkelly.frontpanel.okCUsbFrontPanel.ErrorCode errorCode;
+
+                    errorCode = fpgaDevice.OpenBySerial(name);
+
+                    if (errorCode != com.opalkelly.frontpanel.okCUsbFrontPanel.ErrorCode.NoError)
+                    {
+                        System.Console.WriteLine("Unable to open FPGA device " + name + " due to error code " + errorCode.ToString());
+                        continue;
+                    }
 
                     if (!this.detectedDevices.Contains(name))
                     {
@@ -2217,13 +2251,25 @@ namespace AtticusServer
                             deviceProgrammed = true;
                             if (myServerSettings.myDevicesSettings[name].MySampleClockSource == DeviceSettings.SampleClockSource.DerivedFromMaster)
                             {
-                                fpgaDevice.ConfigureFPGA("variable_timebase_fpga_internal.bit");
+                                errorCode = fpgaDevice.ConfigureFPGA("variable_timebase_fpga_internal.bit");
                             }
                             else
                             {
-                                fpgaDevice.ConfigureFPGA("variable_timebase_fpga_external.bit");
+                                errorCode = fpgaDevice.ConfigureFPGA("variable_timebase_fpga_external.bit");
                             }
-                            System.Console.WriteLine("Programmed fpga device " + name + ". Used fpga code version based on sample clock source " + myServerSettings.myDevicesSettings[name].MySampleClockSource.ToString());
+
+                            if (errorCode == com.opalkelly.frontpanel.okCUsbFrontPanel.ErrorCode.NoError)
+                            {
+
+                                System.Console.WriteLine("Programmed fpga device " + name + ". Used fpga code version based on sample clock source " + myServerSettings.myDevicesSettings[name].MySampleClockSource.ToString());
+
+                                opalKellyDeviceNames.Add(name);
+                                opalKellyDevices.Add(fpgaDevice);
+                            }
+                            else
+                            {
+                                System.Console.WriteLine("Error when attempting to program fpga device, error code " + errorCode.ToString());
+                            }
                         }
                     }
                     if (!deviceProgrammed)
@@ -2231,7 +2277,6 @@ namespace AtticusServer
 
 
                 }
-
             }
             else
             {
@@ -2239,6 +2284,8 @@ namespace AtticusServer
                 opalKellyDevices = null;
             }
 
+
+            #endregion
 
             System.Console.WriteLine("...done running refreshHardwareLists().");
         }

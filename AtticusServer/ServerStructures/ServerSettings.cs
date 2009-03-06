@@ -262,6 +262,14 @@ namespace AtticusServer
             set { useOpalKellyFPGA = value; }
         }
 
+        private bool useFpgaMistriggerDetection;
+
+        public bool UseFpgaMistriggerDetection
+        {
+            get { return useFpgaMistriggerDetection; }
+            set { useFpgaMistriggerDetection = value; }
+        }
+
         public ServerSettings()
         {
             this.serverDeviceSettings = new Dictionary<string, DeviceSettings>();

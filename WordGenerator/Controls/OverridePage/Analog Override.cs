@@ -25,8 +25,8 @@ namespace WordGenerator
             this.checkBox1.Checked = channel.overridden;
             this.numericUpDown1.Value = (decimal) channel.analogOverrideValue;
             this.numericUpDown1.Enabled = this.checkBox1.Checked;
-            toolTip1.SetToolTip(label1, channel.description);
-            label1.Text = channelID.ToString() + " " + channel.name;
+            toolTip1.SetToolTip(label1, channel.Description);
+            label1.Text = channelID.ToString() + " " + channel.Name;
         }
 
         private void label2_Click(object sender, EventArgs e)

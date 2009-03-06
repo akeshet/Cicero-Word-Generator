@@ -45,7 +45,7 @@ namespace AtticusServer
 
             // First generate the variable timebase buffer. We will need stuff like its length for configuring the task, which is why we do this first.
                       
-            Dictionary<TimeStep, List<SequenceData.VariableTimebaseSegment>> timebaseSegments = sequenceData.generateVariableTimebaseSegments(timebaseType, 1.0 / deviceSettings.SampleClockRate);
+            TimestepTimebaseSegmentCollection timebaseSegments = sequenceData.generateVariableTimebaseSegments(timebaseType, 1.0 / deviceSettings.SampleClockRate);
             bool[] variableTimebaseBuffer = sequenceData.getVariableTimebaseClock(timebaseSegments);
 
 
@@ -267,7 +267,7 @@ namespace AtticusServer
         {
             Task task = new Task("Variable timebase output task");
 
-            Dictionary<TimeStep, List<SequenceData.VariableTimebaseSegment>> timebaseSegments = sequenceData.generateVariableTimebaseSegments(timebaseType,
+            TimestepTimebaseSegmentCollection timebaseSegments = sequenceData.generateVariableTimebaseSegments(timebaseType,
                 1.0 / (double)masterFrequency);
 
             bool [] buffer = sequenceData.getVariableTimebaseClock(timebaseSegments);
@@ -517,7 +517,11 @@ namespace AtticusServer
                     {
                         int analogID = analogIDs[i];
 
-                        if (settings.logicalChannelManager.Analogs[analogID].overridden)
+                        if (settings.logicalChannelManager.Analogs[analogID].TogglingChannel)
+                        {
+                            DaqMxTaskGenerator.getAnalogTogglingBuffer(singleChannelBuffer);
+                        }
+                        else if (settings.logicalChannelManager.Analogs[analogID].overridden)
                         {
                             for (int j = 0; j < singleChannelBuffer.Length; j++)
                             {
@@ -526,9 +530,9 @@ namespace AtticusServer
                         }
                         else
                         {
-
                             sequence.computeAnalogBuffer(analogIDs[i], timeStepSize, singleChannelBuffer);
                         }
+
                         for (int j = 0; j < nBaseSamples; j++)
                         {
                             analogBuffer[i, j] = singleChannelBuffer[j];
@@ -576,8 +580,11 @@ namespace AtticusServer
                             int digitalID = port_digital_IDs[portNum][lineNum];
                             if (digitalID != -1)
                             {
-
-                                if (settings.logicalChannelManager.Digitals[digitalID].overridden)
+                                if (settings.logicalChannelManager.Digitals[digitalID].TogglingChannel)
+                                {
+                                    getDigitalTogglingBuffer(singleChannelBuffer);
+                                }
+                                else if (settings.logicalChannelManager.Digitals[digitalID].overridden)
                                 {
                                     for (int j = 0; j < singleChannelBuffer.Length; j++)
                                     {
@@ -620,19 +627,11 @@ namespace AtticusServer
 
                 double timeStepSize = 1.0 / (double)deviceSettings.SampleClockRate;
 
-                Dictionary<TimeStep, List<SequenceData.VariableTimebaseSegment>> timebaseSegments =
+                TimestepTimebaseSegmentCollection timebaseSegments =
     sequence.generateVariableTimebaseSegments(serverSettings.VariableTimebaseType,
                                             timeStepSize);
 
-                int nBaseSamples = 0;
-
-                foreach (List<SequenceData.VariableTimebaseSegment> segments in timebaseSegments.Values)
-                {
-                    foreach (SequenceData.VariableTimebaseSegment segment in segments)
-                    {
-                        nBaseSamples += segment.NSegmentSamples;
-                    }
-                }
+                int nBaseSamples = timebaseSegments.nSegmentSamples();
 
                 nBaseSamples++; // add one sample for the dwell sample at the end of the buffer
 
@@ -677,7 +676,11 @@ namespace AtticusServer
                     {
                         int analogID = analogIDs[i];
 
-                        if (settings.logicalChannelManager.Analogs[analogID].overridden)
+                        if (settings.logicalChannelManager.Analogs[analogID].TogglingChannel)
+                        {
+                            getAnalogTogglingBuffer(singleChannelBuffer);
+                        }
+                        else if (settings.logicalChannelManager.Analogs[analogID].overridden)
                         {
                             for (int j = 0; j < singleChannelBuffer.Length; j++)
                             {
@@ -735,8 +738,11 @@ namespace AtticusServer
                             int digitalID = port_digital_IDs[portNum][lineNum];
                             if (digitalID != -1)
                             {
-
-                                if (settings.logicalChannelManager.Digitals[digitalID].overridden)
+                                if (settings.logicalChannelManager.Digitals[digitalID].TogglingChannel)
+                                {
+                                    getDigitalTogglingBuffer(singleChannelBuffer);
+                                }
+                                else if (settings.logicalChannelManager.Digitals[digitalID].overridden)
                                 {
                                     for (int j = 0; j < singleChannelBuffer.Length; j++)
                                     {
@@ -962,6 +968,22 @@ namespace AtticusServer
             return ans;
         }
 
+        public static void getDigitalTogglingBuffer(bool [] buffer)
+        {
+            for (int i = 0; i < buffer.Length; i+=2)
+            {
+                buffer[i] = true;
+                buffer[i+1] = false;
+            }
+        }
 
+        public static void getAnalogTogglingBuffer(double [] buffer)
+        {
+            for (int i = 0; i < buffer.Length; i += 2)
+            {
+                buffer[i] = 5;
+                buffer[i+1]=0;
+            }
+        }
     }
 }

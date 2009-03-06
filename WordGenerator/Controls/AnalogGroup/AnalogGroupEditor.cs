@@ -208,7 +208,7 @@ namespace WordGenerator.Controls
                         {
                             waveformsToDisplay.Add(channelData.waveform);
                             waveformsEditable.Add(!channelData.ChannelWaveformIsCommon);
-                            channelNamesToDisplay.Add(analogChannelCollection.Channels[id].name);
+                            channelNamesToDisplay.Add(analogChannelCollection.Channels[id].Name);
                         }
                     }
                 }

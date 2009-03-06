@@ -48,7 +48,7 @@ namespace WordGenerator.Controls
             {
                 int digitalID = digitalIDs[i];
                 Label lbl = new Label();
-                lbl.Text = Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.digital].Channels[digitalID].name;
+                lbl.Text = Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.digital].Channels[digitalID].Name;
                 lbl.Width = this.Width - 40;
                 lbl.Height = rowHeight;
                 lbl.Location = new Point(20, i * rowHeight);
@@ -56,7 +56,7 @@ namespace WordGenerator.Controls
                 lbl.AutoEllipsis = true;
                 lbl.AutoSize = false;
 
-                this.toolTip1.SetToolTip(lbl, Storage.settingsData.logicalChannelManager.Digitals[digitalID].description);
+                this.toolTip1.SetToolTip(lbl, Storage.settingsData.logicalChannelManager.Digitals[digitalID].Description);
                 
                 
 
@@ -67,7 +67,7 @@ namespace WordGenerator.Controls
                 idLbl.Location = new Point(0, i * rowHeight);
                 idLbl.TextAlign = ContentAlignment.MiddleLeft;
 
-                this.toolTip1.SetToolTip(idLbl, Storage.settingsData.logicalChannelManager.Digitals[digitalID].description);
+                this.toolTip1.SetToolTip(idLbl, Storage.settingsData.logicalChannelManager.Digitals[digitalID].Description);
 
                 Color bCol = DigitalGrid.TrueBrushColors[i % DigitalGrid.TrueBrushColors.Count];
 

@@ -20,8 +20,8 @@ namespace WordGenerator.ChannelManager
             // Initialize the fields with relevant information
             this.logicalIDText.Text = sd.logicalID.ToString();
             this.deviceTypeText.Text = sd.channelTypeString;
-            this.deviceNameText.Text = sd.lc.name;
-            this.deviceDescText.Text = sd.lc.description;
+            this.deviceNameText.Text = sd.lc.Name;
+            this.deviceDescText.Text = sd.lc.Description;
 
             this.availableHardwareChanCombo.Items.Clear();
             this.availableHardwareChanCombo.Items.Add(HardwareChannel.Unassigned);
@@ -45,15 +45,15 @@ namespace WordGenerator.ChannelManager
                 checkBox1.Visible = false;
             }
 
-            checkBox1.Checked = sd.lc.analogChannelOutputNowUsesDwellWord;
+            checkBox1.Checked = sd.lc.AnalogChannelOutputNowUsesDwellWord;
 
         }
 
         private void okButton_Click(object sender, EventArgs e)
         {
-            sd.lc.name = this.deviceNameText.Text;
-            sd.lc.description = this.deviceDescText.Text;
-            sd.lc.analogChannelOutputNowUsesDwellWord = checkBox1.Checked;
+            sd.lc.Name = this.deviceNameText.Text;
+            sd.lc.Description = this.deviceDescText.Text;
+            sd.lc.AnalogChannelOutputNowUsesDwellWord = checkBox1.Checked;
             
             if (this.availableHardwareChanCombo.SelectedItem is HardwareChannel)
                 sd.lc.hardwareChannel = (HardwareChannel) this.availableHardwareChanCombo.SelectedItem;

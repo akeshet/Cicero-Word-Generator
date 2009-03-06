@@ -29,7 +29,7 @@ namespace WordGenerator.Controls
             InitializeComponent();
             groupChannelData = new AnalogGroupChannelData(null, false, false);
             logicalChannel = new LogicalChannel();
-            logicalChannel.name = "Placeholder Channel";
+            logicalChannel.Name = "Placeholder Channel";
             this.commonWaveformSelector.Items.Add("Manual");
             this.commonWaveformSelector.SelectedItem = "Manual";
             this.setButtonAppearance();
@@ -44,10 +44,10 @@ namespace WordGenerator.Controls
 
 
             this.logicalChannel = logicalChannel;
-            this.toolTip1.SetToolTip(channelNameLabel, logicalChannel.description);
+            this.toolTip1.SetToolTip(channelNameLabel, logicalChannel.Description);
 
 
-            channelNameLabel.Text = channelID.ToString() + " " + logicalChannel.name;
+            channelNameLabel.Text = channelID.ToString() + " " + logicalChannel.Name;
         }
 
         private void layout()

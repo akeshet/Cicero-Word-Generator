@@ -27,10 +27,33 @@ namespace DataStructures
         public bool digitalOverrideValue;
         public double analogOverrideValue;
 
-        public string name;
-        public string description;
+        private string name;
+
+        public string Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
+        private string description;
+
+        public string Description
+        {
+            get { return description; }
+            set { description = value; }
+        }
 
         public HardwareChannel hardwareChannel;
+
+        /// <summary>
+        /// True if this channel will actually be a toggling channel... ie when the buffer is generated, it will oscillate between 0 and 1.
+        /// </summary>
+        private bool togglingChannel;
+
+        public bool TogglingChannel
+        {
+            get { return togglingChannel; }
+            set { togglingChannel = value; }
+        }
 
         public LogicalChannel()
         {
@@ -41,13 +64,20 @@ namespace DataStructures
             overridden = false;
             digitalOverrideValue = false;
             analogOverrideValue = 0;
+            togglingChannel = false;
         }
 
         /// <summary>
         /// Meaningfull only for analog logical channels. If true, then when running "output now" the analog channel
         /// gets its value from the end of the dwell word. Otherwise, it gets its value from the end of the output word.
         /// </summary>
-        public bool analogChannelOutputNowUsesDwellWord;
+        private bool analogChannelOutputNowUsesDwellWord;
+
+        public bool AnalogChannelOutputNowUsesDwellWord
+        {
+            get { return analogChannelOutputNowUsesDwellWord; }
+            set { analogChannelOutputNowUsesDwellWord = value; }
+        }
 
     }
 }

@@ -548,9 +548,9 @@ namespace WordGenerator
                     foreach (LogicalChannel lc in overriddenDigitals)
                     {
                         string actingName;
-                        if (lc.name != "" & lc.name != null)
+                        if (lc.Name != "" & lc.Name != null)
                         {
-                            actingName = lc.name;
+                            actingName = lc.Name;
                         }
                         else
                         {
@@ -569,9 +569,9 @@ namespace WordGenerator
                     foreach (LogicalChannel lc in overriddenAnalogs)
                     {
                         string actingName;
-                        if (lc.name != "" & lc.name != null)
+                        if (lc.Name != "" & lc.Name != null)
                         {
-                            actingName = lc.name;
+                            actingName = lc.Name;
                         }
                         else
                         {

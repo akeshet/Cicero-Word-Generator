@@ -83,8 +83,8 @@ namespace WordGenerator.ChannelManager
         {
             string[] row = { ct.ToString(),
                              logicalID.ToString(), 
-                             lc.name,
-                             lc.description,
+                             lc.Name,
+                             lc.Description,
                              lc.hardwareChannel.ToString() };
             logicalDevicesDataGridView.Rows.Add(row);
         }

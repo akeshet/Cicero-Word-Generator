@@ -32,8 +32,8 @@ namespace WordGenerator
                 this.valueBox.Enabled = false;
             }
 
-            this.label1.Text =  channelID.ToString() + " " + channel.name;
-            toolTip1.SetToolTip(label1, channel.description);
+            this.label1.Text =  channelID.ToString() + " " + channel.Name;
+            toolTip1.SetToolTip(label1, channel.Description);
             if (channel.hotkeyChar != 0)
             {
                 this.hotkeyLabel.Text = "{" + channel.hotkeyChar + "}";

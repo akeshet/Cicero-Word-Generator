@@ -92,9 +92,9 @@ namespace WordGenerator.ChannelManager
         {
             // Construct the logical channel
             LogicalChannel lc = new LogicalChannel();
-            lc.name = this.deviceNameText.Text;
-            lc.description = this.deviceDescText.Text;
-            lc.analogChannelOutputNowUsesDwellWord = checkBox1.Checked;
+            lc.Name = this.deviceNameText.Text;
+            lc.Description = this.deviceDescText.Text;
+            lc.AnalogChannelOutputNowUsesDwellWord = checkBox1.Checked;
 
             if (this.availableHardwareChanCombo.SelectedItem is HardwareChannel)
                 lc.hardwareChannel = (HardwareChannel)this.availableHardwareChanCombo.SelectedItem;

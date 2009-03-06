@@ -210,6 +210,12 @@ namespace WordGenerator.Controls
             if (currentWaveform != null)
             {
 
+                if (currentWaveform.interpolationType.xyParametersEnabled)
+                {
+                    sortButton.Visible = true;
+                    scaleButton.Visible = true;
+                }
+
                 // lay out specialized param editors
 
                 if (currentWaveform.interpolationType.extraParametersEnabled)
