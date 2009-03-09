@@ -74,6 +74,16 @@ namespace WordGenerator.ChannelManager
             {
                 checkBox1.Visible = false;
             }
+
+            if (selectedChannelType == HardwareChannel.HardwareConstants.ChannelTypes.analog ||
+                selectedChannelType == HardwareChannel.HardwareConstants.ChannelTypes.digital)
+            {
+                togglingCheck.Visible = true;
+            }
+            else
+            {
+                togglingCheck.Visible = false;
+            }
         }
 
         /// <summary>
@@ -95,6 +105,7 @@ namespace WordGenerator.ChannelManager
             lc.Name = this.deviceNameText.Text;
             lc.Description = this.deviceDescText.Text;
             lc.AnalogChannelOutputNowUsesDwellWord = checkBox1.Checked;
+            lc.TogglingChannel = togglingCheck.Checked;
 
             if (this.availableHardwareChanCombo.SelectedItem is HardwareChannel)
                 lc.hardwareChannel = (HardwareChannel)this.availableHardwareChanCombo.SelectedItem;
@@ -109,6 +120,11 @@ namespace WordGenerator.ChannelManager
 
             // Close
             this.Close();
+        }
+
+        private void togglingCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            
         }
 
 

@@ -42,6 +42,7 @@ namespace WordGenerator.ChannelManager
             this.deviceTypeText = new System.Windows.Forms.TextBox();
             this.refreshHardwareButton = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.togglingCheck = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // logicalIDText
@@ -63,7 +64,7 @@ namespace WordGenerator.ChannelManager
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(246, 152);
+            this.cancelButton.Location = new System.Drawing.Point(246, 169);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 21;
@@ -73,7 +74,7 @@ namespace WordGenerator.ChannelManager
             // 
             // okButton
             // 
-            this.okButton.Location = new System.Drawing.Point(171, 152);
+            this.okButton.Location = new System.Drawing.Point(165, 169);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 20;
@@ -151,7 +152,7 @@ namespace WordGenerator.ChannelManager
             // 
             // refreshHardwareButton
             // 
-            this.refreshHardwareButton.Location = new System.Drawing.Point(15, 152);
+            this.refreshHardwareButton.Location = new System.Drawing.Point(15, 169);
             this.refreshHardwareButton.Name = "refreshHardwareButton";
             this.refreshHardwareButton.Size = new System.Drawing.Size(105, 23);
             this.refreshHardwareButton.TabIndex = 27;
@@ -171,11 +172,24 @@ namespace WordGenerator.ChannelManager
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.Visible = false;
             // 
+            // togglingCheck
+            // 
+            this.togglingCheck.AutoSize = true;
+            this.togglingCheck.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.togglingCheck.Location = new System.Drawing.Point(15, 146);
+            this.togglingCheck.Name = "togglingCheck";
+            this.togglingCheck.Size = new System.Drawing.Size(300, 17);
+            this.togglingCheck.TabIndex = 29;
+            this.togglingCheck.Text = "Toggling Channel (for use with FPGA Mistrigger Detection)";
+            this.togglingCheck.UseVisualStyleBackColor = true;
+            this.togglingCheck.CheckedChanged += new System.EventHandler(this.togglingCheck_CheckedChanged);
+            // 
             // EditDevice
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(342, 209);
+            this.Controls.Add(this.togglingCheck);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.refreshHardwareButton);
             this.Controls.Add(this.deviceTypeText);
@@ -213,5 +227,6 @@ namespace WordGenerator.ChannelManager
         private System.Windows.Forms.TextBox deviceTypeText;
         private System.Windows.Forms.Button refreshHardwareButton;
         private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox togglingCheck;
     }
 }

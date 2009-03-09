@@ -36,6 +36,8 @@ namespace WordGenerator.ChannelManager
 
             this.availableHardwareChanCombo.SelectedItem = sd.lc.hardwareChannel;
 
+            togglingCheck.Checked = sd.lc.TogglingChannel;
+
             if (sd.channelType == HardwareChannel.HardwareConstants.ChannelTypes.analog)
             {
                 checkBox1.Visible = true;
@@ -43,6 +45,16 @@ namespace WordGenerator.ChannelManager
             else
             {
                 checkBox1.Visible = false;
+            }
+
+            if (sd.channelType == HardwareChannel.HardwareConstants.ChannelTypes.analog ||
+                sd.channelType == HardwareChannel.HardwareConstants.ChannelTypes.digital)
+            {
+                togglingCheck.Visible = true;
+            }
+            else
+            {
+                togglingCheck.Visible = false;
             }
 
             checkBox1.Checked = sd.lc.AnalogChannelOutputNowUsesDwellWord;
@@ -85,6 +97,11 @@ namespace WordGenerator.ChannelManager
 
         private void availableHardwareChanCombo_DropDownClosed(object sender, EventArgs e)
         {
+        }
+
+        private void togglingCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            sd.lc.TogglingChannel = togglingCheck.Checked;
         }
 
     }
