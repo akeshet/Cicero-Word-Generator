@@ -50,7 +50,7 @@ namespace AtticusServer
 
             // This final pulse is made to be 100 us long at least, just to be on the safe side.
 
-            int minCounts = 0.0001 / masterClockPeriod;
+            int minCounts = (int)(0.0001 / masterClockPeriod);
             if (minCounts <= 0)
                 minCounts = 1;
 
@@ -124,7 +124,7 @@ namespace AtticusServer
             TimestepTimebaseSegmentCollection segments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock,
                                                         masterClockPeriod);
 
-            byte[] data = FpgaTimebaseTask.createByteArray(segments, sequence, out nSegments);
+            byte[] data = FpgaTimebaseTask.createByteArray(segments, sequence, out nSegments, masterClockPeriod);
 
             // Send the device an abort trigger.
             errorCode = opalKellyDevice.ActivateTriggerIn(0x40, 1);
