@@ -1339,6 +1339,10 @@ namespace DataStructures
             {
                 return waveformDuration.getBaseValue();
             }
+            else if (myInterpolationType == InterpolationType.Equation)
+            {
+                return waveformDuration.getBaseValue();
+            }
             else
             {
                 throw new Exception("Unsupported interpolation type.");

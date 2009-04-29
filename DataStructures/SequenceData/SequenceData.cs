@@ -1524,7 +1524,7 @@ namespace DataStructures
             ///  - If there are no analog groups running during the beginning of that timestep, then still a single variabletimebase segment is created
             /// which just contains one clock edge.
             ///  - one additional clock pulse should be placed after the end of the last pulse, to trigger the return to the dwell word. This is not included
-            /// in the list of variable timebase segments.
+            /// in the list of variable timebase segments. 
             /// </summary>
             AnalogGroupControlledVariableFrequencyClock
         }
@@ -2439,6 +2439,29 @@ namespace DataStructures
             }*/
 
             return ans;
+        }
+
+        /// <summary>
+        /// Returns true if the given rs232 channel is used anywhere in the sequence. False otherwise.
+        /// </summary>
+        /// <param name="channelID"></param>
+        /// <returns></returns>
+        public bool rs232ChannelUsed(int channelID)
+        {
+            foreach (TimeStep step in TimeSteps)
+            {
+                if (step.StepEnabled)
+                {
+                    if (step.rs232Group != null)
+                    {
+                        if (step.rs232Group.channelEnabled(channelID))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
 
     }

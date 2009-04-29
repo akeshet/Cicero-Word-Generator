@@ -187,6 +187,8 @@ namespace WordGenerator.Controls
 
         private void layoutGraphCollection()
         {
+            waveformEditor1.setWaveform(null);
+
             if (WordGenerator.mainClientForm.instance!=null)
                 WordGenerator.mainClientForm.instance.cursorWait();
         

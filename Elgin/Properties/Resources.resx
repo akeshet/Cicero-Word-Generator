@@ -121,7 +121,7 @@
     <value>(c) 2008  Aviv Keshet  (MIT),  Free software under GNU General Public License.</value>
   </data>
   <data name="BuildDate" xml:space="preserve">
-    <value>Mar 9, 2009</value>
+    <value>Apr 29, 2009</value>
   </data>
   <data name="Contribs" xml:space="preserve">
     <value>Tony Kim (MIT), Ryan Olf (Berkeley)</value>
@@ -134,6 +134,6 @@
     <value>..\Resources\ElginSplash.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="VersionString" xml:space="preserve">
-    <value>1.29</value>
+    <value>1.30</value>
   </data>
 </root>

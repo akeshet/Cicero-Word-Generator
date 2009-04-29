@@ -270,6 +270,14 @@ namespace AtticusServer
             set { useFpgaMistriggerDetection = value; }
         }
 
+        private bool useFpgaRfModulatedClockOutput;
+
+        public bool UseFpgaRfModulatedClockOutput
+        {
+            get { return useFpgaRfModulatedClockOutput; }
+            set { useFpgaRfModulatedClockOutput = value; }
+        }
+
         public ServerSettings()
         {
             this.serverDeviceSettings = new Dictionary<string, DeviceSettings>();

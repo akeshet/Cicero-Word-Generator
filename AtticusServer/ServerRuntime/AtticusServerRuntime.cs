@@ -355,7 +355,7 @@ namespace AtticusServer
                                         {
                                             messageLog(this, new MessageEvent("Creating Variable Timebase Task on fpga device " + fsettings.DeviceName + "."));
                                             int nSegs = 0;
-                                            FpgaTimebaseTask ftask = new FpgaTimebaseTask(fsettings, opalKellyDevices[opalKellyDeviceNames.IndexOf(fsettings.DeviceName)], sequence, ((double)1) / ((double)(fsettings.SampleClockRate)), out nSegs);
+                                            FpgaTimebaseTask ftask = new FpgaTimebaseTask(fsettings, opalKellyDevices[opalKellyDeviceNames.IndexOf(fsettings.DeviceName)], sequence, ((double)1) / ((double)(fsettings.SampleClockRate)), out nSegs, myServerSettings.UseFpgaRfModulatedClockOutput);
                                             fpgaTasks.Add(fsettings.DeviceName, ftask);
                                             messageLog(this, new MessageEvent("...Done (" + nSegs + " segments total)"));
                                         }
@@ -581,20 +581,36 @@ namespace AtticusServer
                     #region RS 232 Devices
                     foreach (int rs232ID in usedRS232Channels.Keys)
                     {
-                        messageLog(this, new MessageEvent("Generating rs232 buffer for rs232 ID " + rs232ID));
-                        HardwareChannel hc = usedRS232Channels[rs232ID];
-                        //NationalInstruments.VisaNS.SerialSession device = new NationalInstruments.VisaNS.SerialSession(hc.ChannelName);
+                        if (sequence.rs232ChannelUsed(rs232ID))
+                        {
+                            messageLog(this, new MessageEvent("Generating rs232 buffer for rs232 ID " + rs232ID));
+                            HardwareChannel hc = usedRS232Channels[rs232ID];
+                            //NationalInstruments.VisaNS.SerialSession device = new NationalInstruments.VisaNS.SerialSession(hc.ChannelName);
 
-                        NationalInstruments.VisaNS.SerialSession device = getSerialSession(hc);
+                            NationalInstruments.VisaNS.SerialSession device;
 
+                            try
+                            {
+                                device = getSerialSession(hc);
+                            }
+                            catch (Exception e)
+                            {
+                                messageLog(this, new MessageEvent("Caught exception when attempting to open serial device for rs232 channel #" + rs232ID + ". Exception: " + e.Message + e.StackTrace));
+                                return BufferGenerationStatus.Failed_Out_Of_Memory;
+                            }
 
-                        //                NationalInstruments.VisaNS.RegisterBasedSession device = (NationalInstruments.VisaNS.RegisterBasedSession) NationalInstruments.VisaNS.ResourceManager.GetLocalManager().Open(hc.ChannelName);
+                            //                NationalInstruments.VisaNS.RegisterBasedSession device = (NationalInstruments.VisaNS.RegisterBasedSession) NationalInstruments.VisaNS.ResourceManager.GetLocalManager().Open(hc.ChannelName);
 
-                        RS232Task rs232task = new RS232Task(device);
-                        rs232task.generateBuffer(sequence, myServerSettings.myDevicesSettings["Serial"], hc, rs232ID);
-                        rs232task.Done += new TaskDoneEventHandler(aTaskFinished);
-                        rs232Tasks.Add(hc, rs232task);
-                        messageLog(this, new MessageEvent("Done."));
+                            RS232Task rs232task = new RS232Task(device);
+                            rs232task.generateBuffer(sequence, myServerSettings.myDevicesSettings["Serial"], hc, rs232ID);
+                            rs232task.Done += new TaskDoneEventHandler(aTaskFinished);
+                            rs232Tasks.Add(hc, rs232task);
+                            messageLog(this, new MessageEvent("Done."));
+                        }
+                        else
+                        {
+                            messageLog(this, new MessageEvent("Skipping rs232 channel ID " + rs232ID + ", that channel is not used in this sequence."));
+                        }
                     }
 
 
@@ -757,13 +773,14 @@ namespace AtticusServer
                         int ans = ft.getMistriggerStatus();
                         if (ans != 0)
                         {
+                            int errorSamp = ans - 1;
                             taskErrorsDetected = true;
-                            messageLog(this, new MessageEvent("FPGA Mistrigger detection detected a mistrigger at sample number " + ans));
+                            messageLog(this, new MessageEvent("FPGA Mistrigger detection detected a mistrigger at (or after) sample number " + errorSamp));
                             if (serverSettings.DeviceToSyncSoftwareTimedTasksTo != null && serverSettings.DeviceToSyncSoftwareTimedTasksTo != "")
                             {
                                 int masterFreq = myServerSettings.myDevicesSettings[serverSettings.DeviceToSyncSoftwareTimedTasksTo].SampleClockRate;
                                 TimestepTimebaseSegmentCollection segments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, (1.0 / ((double)masterFreq)));
-                                int masterSamp = sequence.getMasterSampleFromDerivedSample(ans, segments);
+                                int masterSamp = sequence.getMasterSampleFromDerivedSample(errorSamp, segments);
                                 double seqTime = ((double)masterSamp) / ((double)masterFreq);
                                 TimeStep step = sequence.getTimeStepAtTime(seqTime);
                                 messageLog(this, new MessageEvent("This mistrigger was at master sample " + masterSamp + ", sequence time " + seqTime + ", Timestep [" + step.StepName + "] (based on timing info from " + myServerSettings.DeviceToSyncSoftwareTimedTasksTo + ")"));
@@ -779,10 +796,22 @@ namespace AtticusServer
             }
         }
 
+        private Dictionary<HardwareChannel, NationalInstruments.VisaNS.SerialSession> serialSessions;
+
         private NationalInstruments.VisaNS.SerialSession getSerialSession(HardwareChannel hc)
         {
 
-            NationalInstruments.VisaNS.SerialSession device = (NationalInstruments.VisaNS.SerialSession)NationalInstruments.VisaNS.ResourceManager.GetLocalManager().Open(hc.ChannelName, NationalInstruments.VisaNS.AccessModes.LoadConfig, 100);
+            if (serialSessions == null)
+                serialSessions = new Dictionary<HardwareChannel, NationalInstruments.VisaNS.SerialSession>();
+
+            if (!serialSessions.ContainsKey(hc))
+            {
+                NationalInstruments.VisaNS.SerialSession device = (NationalInstruments.VisaNS.SerialSession)NationalInstruments.VisaNS.ResourceManager.GetLocalManager().Open(hc.ChannelName, NationalInstruments.VisaNS.AccessModes.LoadConfig, 100);
+                serialSessions.Add(hc, device);
+            }
+
+            return serialSessions[hc];
+
 
             // figure out if this device needs its settings modified...
 
@@ -807,7 +836,14 @@ namespace AtticusServer
             {
                 messageLog(this, new MessageEvent("Using default serial settings for " + hc.ChannelName));
             }*/
-            return device;
+        }
+
+        private void clearOpenSerialSessions()
+        {
+            if (serialSessions != null)
+            {
+                serialSessions.Clear();
+            }
         }
 
 
@@ -1728,6 +1764,8 @@ namespace AtticusServer
             }
             if (this.madeConnections!=null)
                 this.madeConnections.Clear();
+
+            clearOpenSerialSessions();
         }
 
         /// <summary>

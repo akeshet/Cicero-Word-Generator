@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using DataStructures;
 using com.opalkelly.frontpanel;
+using System.Threading;
 
 namespace AtticusServer
 {
@@ -19,7 +20,7 @@ namespace AtticusServer
         }
 
         public static byte[] createByteArray(TimestepTimebaseSegmentCollection segments,
-                                                SequenceData sequence, out int nSegments)
+                                                SequenceData sequence, out int nSegments, double masterClockPeriod)
         {
             List<ListItem> listItems = new List<ListItem>();
 
@@ -45,13 +46,17 @@ namespace AtticusServer
 
 
             // Add one final "pulse" at the end to trigger the dwell values. I'm basing this off the
-            // old variable timebase code that I found in the SequenceData program. Pretty sure it is right,
-            // and is unlikely to hurt. However, I do wonder if such short on pulses might not always be
-            // recognized by the NI cards.
+            // old variable timebase code that I found in the SequenceData program. 
+
+            // This final pulse is made to be 100 us long at least, just to be on the safe side.
+
+            int minCounts = 0.0001 / masterClockPeriod;
+            if (minCounts <= 0)
+                minCounts = 1;
 
             ListItem finishItem = new ListItem();
-            finishItem.onCounts = 1;
-            finishItem.offCounts = 1;
+            finishItem.onCounts = minCounts;
+            finishItem.offCounts = minCounts;
             finishItem.repeats = 1;
             listItems.Add(finishItem);
 
@@ -110,7 +115,7 @@ namespace AtticusServer
             return ans;
         }
 
-        public FpgaTimebaseTask(DeviceSettings deviceSettings, okCUsbFrontPanel opalKellyDevice, SequenceData sequence, double masterClockPeriod, out int nSegments)
+        public FpgaTimebaseTask(DeviceSettings deviceSettings, okCUsbFrontPanel opalKellyDevice, SequenceData sequence, double masterClockPeriod, out int nSegments, bool useRfModulation)
         {
             com.opalkelly.frontpanel.okCUsbFrontPanel.ErrorCode errorCode;
 
@@ -128,22 +133,26 @@ namespace AtticusServer
                 throw new Exception("Unable to set abort trigger to FPGA device. Error code " + errorCode.ToString());
             }
 
-            // Tell the device whether to wait for a hardware trigger.
-            if (deviceSettings.StartTriggerType == DeviceSettings.TriggerType.SoftwareTrigger)
+            UInt16 wireInValue = 0;
+            if (deviceSettings.StartTriggerType != DeviceSettings.TriggerType.SoftwareTrigger)
             {
-
-                errorCode = opalKellyDevice.SetWireInValue(0x00, 0x00);
-
+                wireInValue += 1;
             }
-            else
+
+            if (useRfModulation)
             {
-                errorCode = opalKellyDevice.SetWireInValue(0x00, 0xFF);   
+                wireInValue += 2;
             }
+
+            errorCode = opalKellyDevice.SetWireInValue(0x00, wireInValue);
 
             if (errorCode != okCUsbFrontPanel.ErrorCode.NoError)
             {
                 throw new Exception("Unable to send a wire in value to FPGA device. Error code " + errorCode.ToString());
             }
+
+
+            opalKellyDevice.UpdateWireIns();
 
             // pipe the byte stream to the device
             int xfered = opalKellyDevice.WriteToPipeIn(0x80, data.Length, data);
@@ -151,6 +160,14 @@ namespace AtticusServer
             {
                 throw new Exception("Error when piping clock data to FPGA device. Sent " + xfered + " bytes instead of " + data.Length + "bytes.");
             }
+
+
+
+        }
+
+        public void triggerMonitoringProc()
+        {
+
         }
 
         public void Start()
@@ -175,6 +192,7 @@ namespace AtticusServer
             int ans = highWord;
             ans = ans << 16;
             ans = ans + lowWord;
+           
             return ans;
         }
 
