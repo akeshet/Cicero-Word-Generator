@@ -160,7 +160,7 @@
     </Compile>
     <Compile Include="ServerStructures\DeviceSettings.cs" />
     <Compile Include="ServerStructures\GpibRampCommandConverter.cs" />
-    <Compile Include="ServerStructures\ServerSettings.cs" />
+    <Compile Include="ServerRuntime\ServerSettings.cs" />
     <Compile Include="ServerStructures\ServerStructures.cs" />
     <Compile Include="Wrappers\niRFSG.cs" />
   </ItemGroup>

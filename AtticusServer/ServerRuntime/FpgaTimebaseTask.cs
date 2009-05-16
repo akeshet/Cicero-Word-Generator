@@ -20,7 +20,7 @@ namespace AtticusServer
         }
 
         public static byte[] createByteArray(TimestepTimebaseSegmentCollection segments,
-                                                SequenceData sequence, out int nSegments, double masterClockPeriod)
+                                                SequenceData sequence, out int nSegments, double masterClockPeriod, bool assymetric)
         {
             List<ListItem> listItems = new List<ListItem>();
 
@@ -37,6 +37,16 @@ namespace AtticusServer
                         item.repeats = currentSeg.NSegmentSamples;
                         item.offCounts = currentSeg.MasterSamplesPerSegmentSample / 2;
                         item.onCounts = currentSeg.MasterSamplesPerSegmentSample - item.offCounts;
+
+                        if (assymetric)
+                        {
+                            if (item.onCounts > 5)
+                            {
+                                int difference = item.onCounts - 5;
+                                item.onCounts = 5;
+                                item.offCounts = item.offCounts + difference;
+                            }
+                        }
 
                         listItems.Add(item);
                     }
@@ -58,6 +68,12 @@ namespace AtticusServer
             finishItem.onCounts = minCounts;
             finishItem.offCounts = minCounts;
             finishItem.repeats = 1;
+
+            if (assymetric)
+            {
+                finishItem.onCounts = 5;
+            }
+
             listItems.Add(finishItem);
 
 
@@ -115,7 +131,7 @@ namespace AtticusServer
             return ans;
         }
 
-        public FpgaTimebaseTask(DeviceSettings deviceSettings, okCUsbFrontPanel opalKellyDevice, SequenceData sequence, double masterClockPeriod, out int nSegments, bool useRfModulation)
+        public FpgaTimebaseTask(DeviceSettings deviceSettings, okCUsbFrontPanel opalKellyDevice, SequenceData sequence, double masterClockPeriod, out int nSegments, bool useRfModulation, bool assymetric)
         {
             com.opalkelly.frontpanel.okCUsbFrontPanel.ErrorCode errorCode;
 
@@ -124,7 +140,7 @@ namespace AtticusServer
             TimestepTimebaseSegmentCollection segments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock,
                                                         masterClockPeriod);
 
-            byte[] data = FpgaTimebaseTask.createByteArray(segments, sequence, out nSegments, masterClockPeriod);
+            byte[] data = FpgaTimebaseTask.createByteArray(segments, sequence, out nSegments, masterClockPeriod, assymetric );
 
             // Send the device an abort trigger.
             errorCode = opalKellyDevice.ActivateTriggerIn(0x40, 1);

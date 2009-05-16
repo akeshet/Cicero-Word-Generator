@@ -250,7 +250,7 @@ namespace AtticusServer
             else
             {
                 return createDaqMxVariableTimebaseSource(
-                    channelName, masterFrequency, sequenceData, timebaseType, serverSettings);
+                    channelName, masterFrequency, sequenceData, timebaseType, serverSettings, deviceSettings);
             }
         }
         
@@ -263,7 +263,7 @@ namespace AtticusServer
         /// <param name="sequenceData"></param>
         /// <param name="timebaseType"></param>
         /// <returns></returns>
-        public static Task createDaqMxVariableTimebaseSource(string channelName, int masterFrequency, SequenceData sequenceData, SequenceData.VariableTimebaseTypes timebaseType, ServerSettings serverSettings)
+        public static Task createDaqMxVariableTimebaseSource(string channelName, int masterFrequency, SequenceData sequenceData, SequenceData.VariableTimebaseTypes timebaseType, ServerSettings serverSettings, DeviceSettings deviceSettings)
         {
             Task task = new Task("Variable timebase output task");
 
@@ -278,7 +278,7 @@ namespace AtticusServer
 
             task.DOChannels.CreateChannel(timebasePort, "", ChannelLineGrouping.OneChannelForAllLines);
 
-            task.Timing.ConfigureSampleClock("", (double)masterFrequency, SampleClockActiveEdge.Rising, SampleQuantityMode.FiniteSamples, buffer.Length);
+            task.Timing.ConfigureSampleClock("", (double)masterFrequency, deviceSettings.ClockEdge, SampleQuantityMode.FiniteSamples, buffer.Length);
 
             if (serverSettings.VariableTimebaseTriggerInput != "")
             {
@@ -484,11 +484,11 @@ namespace AtticusServer
 
                 if (deviceSettings.MySampleClockSource == DeviceSettings.SampleClockSource.DerivedFromMaster)
                 {
-                    task.Timing.ConfigureSampleClock("", deviceSettings.SampleClockRate, SampleClockActiveEdge.Rising, SampleQuantityMode.FiniteSamples, nSamples);
+                    task.Timing.ConfigureSampleClock("", deviceSettings.SampleClockRate, deviceSettings.ClockEdge, SampleQuantityMode.FiniteSamples, nSamples);
                 }
                 else
                 {
-                    task.Timing.ConfigureSampleClock(deviceSettings.SampleClockExternalSource, deviceSettings.SampleClockRate, SampleClockActiveEdge.Rising, SampleQuantityMode.FiniteSamples, nSamples);
+                    task.Timing.ConfigureSampleClock(deviceSettings.SampleClockExternalSource, deviceSettings.SampleClockRate, deviceSettings.ClockEdge, SampleQuantityMode.FiniteSamples, nSamples);
                 }
                 if (deviceSettings.MasterTimebaseSource != "" && deviceSettings.MasterTimebaseSource != null)
                 {
@@ -652,7 +652,7 @@ namespace AtticusServer
                 }
                 else
                 {
-                    task.Timing.ConfigureSampleClock(deviceSettings.SampleClockExternalSource, deviceSettings.SampleClockRate, SampleClockActiveEdge.Rising, SampleQuantityMode.FiniteSamples, nSamples);
+                    task.Timing.ConfigureSampleClock(deviceSettings.SampleClockExternalSource, deviceSettings.SampleClockRate, deviceSettings.ClockEdge, SampleQuantityMode.FiniteSamples, nSamples);
                 }
 
 

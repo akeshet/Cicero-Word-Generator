@@ -109,6 +109,18 @@ Category("Digital")]
             get { return digitalDataTransferMechanism; }
             set { digitalDataTransferMechanism = value; }
         }
+
+
+
+        public bool use32BitDigitalPorts;
+        [Description("For 6533 and 6534 cards, this is 16. For 6259 cards, this is 32. Other cards not yet supported."),
+        Category("Digital")]
+        public bool Use32BitDigitalPorts
+        {
+            get { return use32BitDigitalPorts; }
+        }
+
+
         private DODataTransferRequestCondition digitalDataTransferCondition;
 
         [Description("Sets the condition under which device requests new digital data transfer."),
@@ -191,6 +203,21 @@ Category("Digital")]
                 return masterTimebaseSource; 
             }
             set { masterTimebaseSource = value; }
+        }
+
+        private NationalInstruments.DAQmx.SampleClockActiveEdge clockEdge;
+
+        [Description("Clock edge for sample clock."),
+        Category("Timing")]
+        public NationalInstruments.DAQmx.SampleClockActiveEdge ClockEdge
+        {
+            get
+            {
+                if (clockEdge!= SampleClockActiveEdge.Rising && clockEdge!= SampleClockActiveEdge.Falling)
+                    clockEdge = SampleClockActiveEdge.Rising;
+                return clockEdge;
+            }
+            set { clockEdge = value; }
         }
 
         private string triggerInPort;

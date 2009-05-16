@@ -278,6 +278,14 @@ namespace AtticusServer
             set { useFpgaRfModulatedClockOutput = value; }
         }
 
+        private bool useFpgaAssymetricDutyCycleClocking;
+
+        public bool UseFpgaAssymetricDutyCycleClocking
+        {
+            get { return useFpgaAssymetricDutyCycleClocking; }
+            set { useFpgaAssymetricDutyCycleClocking = value; }
+        }
+
         public ServerSettings()
         {
             this.serverDeviceSettings = new Dictionary<string, DeviceSettings>();
