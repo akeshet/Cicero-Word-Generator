@@ -6,8 +6,9 @@ using System.ComponentModel;
 namespace DataStructures
 {
     /// <summary>
-    /// A sequence genre is a saved collection of the enabled/disabled and visible/invisible states of all of the timesteps. 
-    /// A given sequence can have many such genres, allowing it to quickly transform between different closely related sequence.
+    /// A sequence genre (now known as a sequence mode) is a saved collection of the enabled/disabled and 
+    /// visible/invisible states of all of the timesteps. 
+    /// A given sequence can have many such modes, allowing it to quickly transform between different closely related sequence.
     /// </summary>
     [Serializable, TypeConverter(typeof(ExpandableObjectConverter))]
     public class SequenceMode

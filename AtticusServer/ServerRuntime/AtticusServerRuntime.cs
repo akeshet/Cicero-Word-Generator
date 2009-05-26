@@ -420,7 +420,13 @@ namespace AtticusServer
 
                             // Re-capitalize the first letter of the string, so that it will match the way in which the
                             // device settings are stored in myDeviceSettings.
+                            // Note that this assumes that the device name is Dev# (where # is a number) !!
                             variableTimebaseOutputDevice = variableTimebaseOutputDevice.Replace('d', 'D');
+
+                            if (!variableTimebaseOutputDevice.Contains("Dev"))
+                            {
+                                messageLog(this, new MessageEvent("******* You are using a NI device named " + variableTimebaseOutputDevice + ". This does not follow the convention of naming your devices Dev1, Dev2, Dev3, etc. Unpredictable results are possible! Not recommended! *******"));
+                            }
 
                             // NOTE! This call will modify useDigitalChannels. Those digital channels which
                             // get their buffers generated within this task will be removed. This is useful,
@@ -485,6 +491,12 @@ namespace AtticusServer
                         // if not, generate each buffer sequentially, in this thread.
                         foreach (string dev in usedDaqMxDevices)
                         {
+                            if (!dev.Contains("Dev"))
+                            {
+                                messageLog(this, new MessageEvent("******* You are using a NI device named " + dev + ". This does not follow the convention of naming your devices Dev1, Dev2, Dev3, etc. Unpredictable results are possible! Not recommended! *******"));
+                                
+                            }
+
                             generateDaqMxTaskOnDevice(dev);
                         }
                     }
@@ -499,6 +511,11 @@ namespace AtticusServer
                             messageLog(this, new MessageEvent("Generating buffers in parallel..."));
                             foreach (string dev in usedDaqMxDevices)
                             {
+                               if (!dev.Contains("Dev"))
+                                {
+                                    messageLog(this, new MessageEvent("******* You are using a NI device named " + dev + ". This does not follow the convention of naming your devices Dev1, Dev2, Dev3, etc. Unpredictable results are possible! Not recommended! *******"));
+
+                                }
                                 Thread thread = new Thread(generateDaqMxTaskOnDevice);
                                 generateThreads.Add(thread);
 
@@ -529,6 +546,8 @@ namespace AtticusServer
                     
                     if (serverSettings.UseWatchdogTimerMonitoringTask)
                     {
+                        messageLog(this, new MessageEvent("Watchdog Timer tasks no longer supported. Ignoring serverSettings.UseWatchdogTimerMonitoringTask"));
+                        /*
                         if (daqMxTasks.ContainsKey(serverSettings.DeviceToSyncSoftwareTimedTasksTo))
                         {
                             messageLog(this, new MessageEvent("Creating watchdog timer monitoring task"));
@@ -537,7 +556,7 @@ namespace AtticusServer
                         else
                         {
                             messageLog(this, new MessageEvent("Unable to create watchdog timer monitoring task, since the hardware-timed device it was to be synched to is not being used. Continuing without watchdog."));
-                        }
+                        }*/
                     }
                     
 
@@ -568,7 +587,7 @@ namespace AtticusServer
                             switch (gpibChannel.myGpibMasqueradeType)
                             {
                                 case  HardwareChannel.GpibMasqueradeType.NONE:
-                                    messageLog(this, new MessageEvent("Error. GPIB channel with ID " + gpibID + " has its masquerading bit set to true, but has its masquerading type set to NONE."));
+                                    messageLog(this, new MessageEvent("********** Error. GPIB channel with ID " + gpibID + " has its masquerading bit set to true, but has its masquerading type set to NONE. **********"));
                                     break;
                                 case HardwareChannel.GpibMasqueradeType.RFSG:
                                     messageLog(this, new MessageEvent("Generating RFSG buffer for gpib ID " + gpibID));
@@ -660,7 +679,7 @@ namespace AtticusServer
         public List<long> taskFinishTimeClicks;
 
         /// <summary>
-        /// Event handler that gets called whenever a task finishes. If there is an error in the task, then it will get reported here.
+        /// Event handler that gets called (by a task) whenever a task finishes. If there is an error in the task, then it will get reported here.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1152,11 +1171,16 @@ namespace AtticusServer
                                 {
                                     if (serverSettings.SoftwareTaskTriggerMethod == ServerSettings.SoftwareTaskTriggerType.SampleClockEvent)
                                     {
+                                        messageLog(this, new MessageEvent("***** You are using SampleClockEvent as your SoftwareTaskTriggerMethod (in your ServerSettings). This is not recommended and no longer supported. Use PollBufferPosition instead. *****"));
+                                        /*
                                         lock (softwareTriggeringTaskLock)
                                         {
                                             softwareTriggeringTask = task;
                                         }
                                         task.SampleClock += triggerSoftwareTimedTasks;
+                                    
+                                         */
+                                        return false;
                                     }
                                 }
 
@@ -1232,7 +1256,7 @@ namespace AtticusServer
                 bool entered = Monitor.TryEnter(softTrigLock, 100);
                 if (!entered)
                 {
-                    messageLog(this, new MessageEvent("Unable to run software task triggering polling thread, as another such thread is already running. Software timed tasks may not be triggered."));
+                    messageLog(this, new MessageEvent("******* Unable to run software task triggering polling thread, as another such thread is already running. Software timed tasks may not be triggered. *******"));
                     return;
                 }
                 try
@@ -1294,11 +1318,16 @@ namespace AtticusServer
         /// This event handler will be called when a task on this server receives a sample clock. 
         /// We only want to consume the first such event. It will be used to start and software timed
         /// operations on this server.
+        /// 
+        /// NOTE: This method never worked well, and is not no longer in use. Polling the buffer position with a monitoring
+        /// thread ended up working much better. See softwareTaskTriggerPollingFunction()
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void triggerSoftwareTimedTasks(object sender, SampleClockEventArgs e)
         {
+            messageLog(this, new MessageEvent("******** triggerSoftwareTimedTasks(...) was called. This function is no longer supported. How did you get here? ********"));
+            /*
             lock (softTrigLock)
             {
                 if (!softwareTimedTasksTriggered)
@@ -1334,7 +1363,7 @@ namespace AtticusServer
                         messageLog(this, new MessageEvent("Ignored " + softwareTimedTriggerCount + " duplicate software-timed task triggers."));
                     }
                 }
-            }
+            }*/
         }
 
         public void shutDown()
@@ -1418,7 +1447,7 @@ namespace AtticusServer
                     }
 
 
-
+                    // If there is an additional "wait for ready" input, then wait for it.
                     if (serverSettings.ReadyInput != null)
                     {
                         if (serverSettings.ReadyInput != "")
@@ -1471,11 +1500,12 @@ namespace AtticusServer
                             }
                         }
                     }
+                    // ok, done waiting for the ready input (or never stopped to wait)
 
-                    // Hardware trigger outputs.
+                    // Hardware trigger outputs. This is not a recommended way to synchronize things.
                     if (serverSettings.TriggerOutputChannel != "" && serverSettings.TriggerOutputChannel != null)
                     {
-                        messageLog(this, new MessageEvent("This server is configured to use a trigger output channel. This is not recommended. Instead, either use a variable timebase sample clock, or derive your start trigger from the StartTrigger channel of a software triggered task."));
+                        messageLog(this, new MessageEvent("******* This server is configured to use a trigger output channel. This is not recommended. Instead, either use a variable timebase sample clock, or derive your start trigger from the StartTrigger channel of a software triggered task. *********"));
 
                         string triggerChannel = serverSettings.TriggerOutputChannel;
                         // Create trigger tasks

@@ -14,6 +14,10 @@ namespace AtticusServer
         /// This method is a sort of combination of createDaqMxVariableTimebaseSource and createDaqMxTask. It is intended 
         /// for use to create a digital output task that has both a variable timebase source on it, without having to discard
         /// all of the other channels on that port (and possibly on its neighboring port).
+        /// 
+        /// NOTE: No longer true. This function can not create the variable timebase outputs at the same time as
+        /// normal outputs. If you attempt to use digital outputs on the same half of the card as your variable timebase output,
+        /// this method will complain.
         /// </summary>
         /// <param name="channelName">
         /// Name of the channel that will output the variable timebase clock.
@@ -463,6 +467,7 @@ namespace AtticusServer
 
             // ok! now create the buffers
 
+            #region NON variable timebase buffer
             if (deviceSettings.UsingVariableTimebase == false)
             { 
                 // non "variable timebase" buffer creation
@@ -620,6 +625,8 @@ namespace AtticusServer
                     expectedSamplesGenerated = nSamples;
                 }
             }
+            #endregion
+            #region Variable timebase buffer creation
             else // variable timebase buffer creation...
             {
 
@@ -778,7 +785,8 @@ namespace AtticusServer
                     expectedSamplesGenerated = nSamples;
                 }
             }
-                
+
+            #endregion
 
             if (deviceSettings.StartTriggerType == DeviceSettings.TriggerType.TriggerIn)
             {

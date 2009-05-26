@@ -53,7 +53,7 @@ namespace DataStructures
         }
 
         /// <summary>
-        /// UI should set this to true is step hiding is enabled. 
+        /// UI should set this to true if step hiding is enabled. 
         /// </summary>
         public bool stepHidingEnabled;
 
@@ -328,6 +328,8 @@ namespace DataStructures
         /// When inserting a sequence, the inserted sequence had its own copies of the special variables. Here, we will clean up
         /// and duplicate special variables. This will require the use of the passThroughVariable field of Variable. This is the
         /// only place where this field should be set from.
+        /// 
+        /// It is possible to make a mess here...
         /// </summary>
         public void cleanupSpecialVariables()
         {

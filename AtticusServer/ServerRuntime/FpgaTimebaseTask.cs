@@ -7,6 +7,9 @@ using System.Threading;
 
 namespace AtticusServer
 {
+    /// <summary>
+    /// Task that generated a variable timebase using an OpalKelly FPGA.
+    /// </summary>
     class FpgaTimebaseTask
     {
 
@@ -38,6 +41,9 @@ namespace AtticusServer
                         item.offCounts = currentSeg.MasterSamplesPerSegmentSample / 2;
                         item.onCounts = currentSeg.MasterSamplesPerSegmentSample - item.offCounts;
 
+                        // in assymmetric mode (spelling?), the clock duty cycle is not held at 50%, but rather the pulses are made to be
+                        // 5 master cycles long at most. This is a workaround for the weird behavior of one of our fiber links
+                        // for sharing the variable timebase signal.
                         if (assymetric)
                         {
                             if (item.onCounts > 5)
@@ -58,7 +64,7 @@ namespace AtticusServer
             // Add one final "pulse" at the end to trigger the dwell values. I'm basing this off the
             // old variable timebase code that I found in the SequenceData program. 
 
-            // This final pulse is made to be 100 us long at least, just to be on the safe side.
+            // This final pulse is made to be 100 us long at least, just to be on the safe side. (unless assymetric mode is on)
 
             int minCounts = (int)(0.0001 / masterClockPeriod);
             if (minCounts <= 0)
