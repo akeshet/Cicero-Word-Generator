@@ -15,25 +15,6 @@ namespace WordGenerator
         public static void Main()
         {
 
-           
-
-            List<DataStructures.Variable> vars = new List<Variable>();
-
-            vars.Add(new Variable());
-            vars.Add(new Variable());
-            vars.Add(new Variable());
-
-            vars[0].VariableName = "asd";
-            vars[0].VariableValue = 3;
-
-            vars[1].VariableName = "b";
-            vars[2].VariableName = "c";
-
-            vars[2].VariableFormula = "max(1+2, 4)";
-
-            string ans = vars[2].parseVariableFormula(vars);
-            
-
 
             runCicero();
         }

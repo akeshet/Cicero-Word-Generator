@@ -52,11 +52,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Opal Kelly\libFrontPanel-csharp.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.Common, Version=8.5.20.149, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=MSIL">
+    <Reference Include="NationalInstruments.Common, Version=8.1.20.415, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NationalInstruments.DAQmx, Version=8.7.20.201, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=x86">
+    <Reference Include="NationalInstruments.DAQmx, Version=8.6.20.15, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
     </Reference>
@@ -64,7 +64,7 @@
       <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NationalInstruments.VisaNS, Version=8.5.20.310, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=x86">
+    <Reference Include="NationalInstruments.VisaNS, Version=8.1.20.222, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
     </Reference>
@@ -119,6 +119,7 @@
       <SubType>Designer</SubType>
       <DependentUpon>HardwareChannelsBrowser.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -28,7 +28,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NationalInstruments.Common, Version=8.5.20.149, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=MSIL">
+    <Reference Include="NationalInstruments.Common, Version=8.1.20.415, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
     </Reference>
@@ -107,6 +107,7 @@
       <SubType>Designer</SubType>
       <DependentUpon>LicenseInfoForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
