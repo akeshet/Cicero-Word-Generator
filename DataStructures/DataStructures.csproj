@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CiceroUtilityFunctions.cs" />
     <Compile Include="ClientStartupSettings.cs" />
     <Compile Include="Communication\ServerSettingsInterface.cs" />
     <Compile Include="ExceptionViewerDialog.cs">

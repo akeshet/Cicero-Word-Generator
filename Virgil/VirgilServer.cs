@@ -7,6 +7,7 @@ using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
 
+
 namespace Virgil
 {
     class VirgilServer : ServerCommunicator
@@ -60,9 +61,11 @@ namespace Virgil
             return this.serverSettings;
         }
 
+        DateTime nextRunTime;
         public override void nextRunTimeStamp(DateTime timeStamp)
         {
-            
+            nextRunTime = timeStamp;
+            messageLog(this, new MessageEvent("Next run time stamp: " + CiceroUtilityFunctions.getTimeStampString(timeStamp)));
         }
 
         public override bool outputGPIBGroup(GPIBGroup gpibGroup, SettingsData settings)

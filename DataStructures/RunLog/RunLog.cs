@@ -103,9 +103,7 @@ namespace DataStructures
             //runTime.ToString("s") returns a date time string which is formatted to make it string sortable by time
             // and suitable for file names (once the : are replaced with -)
 
-            string fileStamp = "RunLog-" + runTime.ToString("s");
-            fileStamp = fileStamp.Replace(":", "-");
-
+            string fileStamp = "RunLog-" + CiceroUtilityFunctions.getTimeStampString(runTime);
             string fileExt = ".clg";
 
             string fileDirectory = AppDomain.CurrentDomain.BaseDirectory + "RunLogs\\";

@@ -24,12 +24,26 @@ namespace Virgil
             this.server.messageLog += addMessageLogText;
             this.propertyGrid1.SelectedObject = settings;
 
+            try
+            {
+                VirgilH5Exporter.testForHDFLibrary();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("You do not appear to have a working HDF5 installation. For detailed information, re-run Virgil from a Console");
+                System.Console.WriteLine("Exception when testing for HDF library: " );
+                System.Console.WriteLine(e.Message + e.StackTrace);
+                System.Console.WriteLine("If this is a FileNotFound exception, this may indicate that you are missing hdf5dll.dll, szlibdll.dll, or some other dependency of HDF5DotNet.dll. Use Depends.exe to explore the dependencies of HDF5DotNet.dll");
+            }
+
         }
 
         private void connectButton_Click(object sender, EventArgs e)
         {
             connectButton.Enabled = false;
             server.openConnection();
+
+
         }
 
         public delegate void voidVoidDelegate();
