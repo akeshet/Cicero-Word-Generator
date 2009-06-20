@@ -24,10 +24,18 @@ using namespace System::Runtime::InteropServices;
 // Note: This differs from the current prototype in H5Fpublic.h and
 // it will go in H5FpublicNET.h
 
+
+// ************** MODIFIED BY AVIV KESHET KEYWORD UNDERSCORE_ADD
 [DllImport("hdf5dll.dll",
 	   CharSet=CharSet::Auto,
 	   CallingConvention=CallingConvention::StdCall)]
+// extern "C" int _cdecl H5Gcreate( // original
+#ifdef AVIV_UNDERSCORE_ADD
+extern "C" int _cdecl H5G_create( // modified
+#else
 extern "C" int _cdecl H5Gcreate(
+#endif
+
    int fileId, 
    [MarshalAs(UnmanagedType::LPStr)] 
    String^ groupName, size_t sizeHint);
@@ -72,10 +80,17 @@ namespace HDF5DotNet
    H5GroupId^ H5G::create(H5LocId^ groupOrFileId, String^ groupName, 
 			  size_t sizeHint)
    {
-      // Call "C" routine.
-      hid_t id = H5Gcreate(groupOrFileId->Id, groupName, sizeHint);
 
-      // Check for error status (so we can throw an exception)
+	   // *************** MODIFIED BY AVIV KESHET KEYWORD UNDERSCORE_ADD
+
+      // Call "C" routine.
+      // hid_t id = H5Gcreate(groupOrFileId->Id, groupName, sizeHint); // original line
+#ifdef AVIV_UNDERSCORE_ADD
+	   hid_t id = H5G_create(groupOrFileId->Id, groupName, sizeHint); // modification
+#else 
+		hid_t id = H5Gcreate(groupOrFileId->Id, groupName, sizeHint);
+#endif
+
       if (id < 0)
       {
 	 String^ message = String::Format(

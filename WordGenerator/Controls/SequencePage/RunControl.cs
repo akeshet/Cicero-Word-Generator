@@ -49,13 +49,27 @@ namespace WordGenerator.Controls
 
         private void runListButton_Click(object sender, EventArgs e)
         {
+            promptUserRegardingRepeats();
             RunForm runform = new RunForm(RunForm.RunType.Run_Full_List, repeatCheckBox.Checked);
             runform.ShowDialog();
             runform.Dispose();
         }
 
+        private void promptUserRegardingRepeats()
+        {
+            if (this.repeatCheckBox.Checked)
+            {
+                DialogResult result = MessageBox.Show("Would you like to turn off Run Repeatedly before doing this list run? You should.", "Turn off repeats?", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    this.repeatCheckBox.Checked = false;
+                }
+            }
+        }
+
         private void continueListButton_Click(object sender, EventArgs e)
         {
+            promptUserRegardingRepeats();
             RunForm runform = new RunForm(RunForm.RunType.Run_Continue_List, repeatCheckBox.Checked);
             runform.ShowDialog();
             runform.Dispose();

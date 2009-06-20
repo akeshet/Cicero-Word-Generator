@@ -65,7 +65,6 @@ namespace Virgil
         public override void nextRunTimeStamp(DateTime timeStamp)
         {
             nextRunTime = timeStamp;
-            messageLog(this, new MessageEvent("Next run time stamp: " + CiceroUtilityFunctions.getTimeStampString(timeStamp)));
         }
 
         public override bool outputGPIBGroup(GPIBGroup gpibGroup, SettingsData settings)
@@ -85,16 +84,24 @@ namespace Virgil
 
         public override bool ping()
         {
+            messageLog(this, new MessageEvent("Received PING from client."));
             return true;
         }
 
         public override bool runSuccess()
         {
+            string filename = CiceroUtilityFunctions.getTimeStampString(nextRunTime)+".h5";
+            string fullFilename = System.IO.Path.Combine(serverSettings.Hdf5FilePath, filename);
+
+            VirgilH5Exporter.writeSequenceMetadataFile(nextSequence, fullFilename);
+            messageLog(this, new MessageEvent("Wrote log for run with timestamp " + CiceroUtilityFunctions.getTimeStampString(nextRunTime)));
             return true;
         }
 
+        SequenceData nextSequence;
         public override bool setSequence(SequenceData sequence)
         {
+            this.nextSequence = sequence;
             return true;
         }
 

@@ -20,6 +20,12 @@
 #include "H5S.h"
 #include "H5P.h"
 
+
+
+	   // *************** MODIFIED BY AVIV KESHET KEYWORD UNDERSCORE_ADD
+//#define AVIV_UNDERSCORE_ADD
+
+
 // The HDF5DotNet namespace contains all the .NET wrappers for HDF5 library
 // calls.
 namespace HDF5DotNet

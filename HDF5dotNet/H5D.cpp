@@ -25,10 +25,16 @@ using namespace System::Runtime::InteropServices;
 #include "H5P.h"
 //#include "H5Common.h"
 
+
+	   // *************** MODIFIED BY AVIV KESHET KEYWORD UNDERSCORE_ADD
 [DllImport("hdf5dll.dll",
 	   CharSet=CharSet::Auto,
 	   CallingConvention=CallingConvention::StdCall)]
+#ifdef AVIV_UNDERSCORE_ADD
+extern "C" hid_t _cdecl H5D_create(hid_t fileId,
+#else
 extern "C" hid_t _cdecl H5Dcreate(hid_t fileId,
+#endif
 				  [MarshalAs(UnmanagedType::LPStr)] 
 				  String^ dataSetName,
 				  hid_t dataType,
@@ -86,7 +92,15 @@ namespace HDF5DotNet
 			    H5T::H5Type dataType,
 			    H5DataSpaceId^ dataSpaceId)
    {
-      hid_t status = H5Dcreate(groupOrFileId->Id, 
+
+	   	   // *************** MODIFIED BY AVIV KESHET KEYWORD UNDERSCORE_ADD
+      //hid_t status = H5Dcreate(groupOrFileId->Id, 
+#ifdef AVIV_UNDERSCORE_ADD
+	   hid_t status = H5D_create(groupOrFileId->Id,
+#else
+	hid_t status = H5Dcreate(groupOrFileId->Id, 
+#endif
+
 			       datasetName, 
 			       H5T::getStdType(dataType),
 			       dataSpaceId->Id,
@@ -112,7 +126,15 @@ namespace HDF5DotNet
 		     H5DataTypeId^ dataType,
 		     H5DataSpaceId^ dataSpaceId)
    {
-      hid_t status = H5Dcreate(groupOrFileId->Id, 
+
+	   // *************** MODIFIED BY AVIV KESHET KEYWORD UNDERSCORE_ADD
+
+     // hid_t status = H5Dcreate(groupOrFileId->Id,  // original
+#ifdef AVIV_UNDERSCORE_ADD
+	   hid_t status = H5D_create(groupOrFileId->Id,
+#else
+	hid_t status = H5Dcreate(groupOrFileId->Id,
+#endif
 			       datasetName, 
 			       dataType->Id,
 				   dataSpaceId->Id,

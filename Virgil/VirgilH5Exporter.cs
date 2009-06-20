@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using HDF5DotNet;
+using DataStructures;
 
 namespace Virgil
 {
@@ -11,6 +12,90 @@ namespace Virgil
         {
             H5FileId fileId = H5F.create("hdfLibraryTest", H5F.CreateMode.ACC_TRUNC);
             H5F.close(fileId);
+        }
+
+        public static void writeSequenceMetadataFile(SequenceData sequence, string filename)
+        {
+            H5FileId fileId = H5F.create(filename, H5F.CreateMode.ACC_TRUNC);
+
+            writeVariables(sequence, fileId);
+            writeTimesteps(sequence, fileId);
+
+            H5F.close(fileId);
+            
+            
+        }
+
+        private static void writeVariables(SequenceData sequence, H5FileId fileId)
+        {
+            List<string> createdVariableNames = new List<string>();
+            // Write variables
+            H5GroupId variableGroup = H5G.create(fileId, "/Variables", 0);
+
+
+
+            foreach (Variable var in sequence.Variables)
+            {
+                string temp = var.VariableName;
+                while (createdVariableNames.Contains(temp))
+                {
+                    temp = "!_" + temp;
+                }
+                writeDouble(variableGroup, var.VariableValue, temp);
+            }
+
+            H5G.close(variableGroup);
+        }
+
+        private static void writeTimesteps(SequenceData sequence, H5FileId fileId)
+        {
+
+            H5GroupId timestepGroup = H5G.create(fileId, "/Timesteps", 0);
+
+
+
+            for (int i=0; i<sequence.TimeSteps.Count; i++) 
+            {
+                TimeStep currentStep = sequence.TimeSteps[i];
+                H5GroupId currentStepGroup = H5G.create(timestepGroup, (1+i).ToString()+"_"+currentStep.StepName, 0);
+
+                bool refbool = currentStep.StepEnabled;
+                writeBool(currentStepGroup, refbool, "Enabled");
+                double duration = currentStep.StepDuration.getBaseValue();
+                writeDouble(currentStepGroup, duration, "Duration");
+
+
+                H5G.close(currentStepGroup);
+            }
+
+
+            H5G.close(timestepGroup);
+        }
+
+        private static void writeBool(H5GroupId h5groupId, bool refbool, string name)
+        {
+            H5DataTypeId boolType = H5T.getNativeType(H5T.H5Type.NATIVE_HBOOL, H5T.Direction.DEFAULT);
+            H5DataSpaceId spid = H5S.create(H5S.H5SClass.SCALAR);
+            H5DataSetId sid = H5D.create(h5groupId, name, boolType, spid);
+            H5D.writeScalar<bool>(sid, boolType, ref refbool);
+            H5D.close(sid);
+            H5S.close(spid);
+            H5T.close(boolType);
+        }
+
+        private static void writeDouble(H5GroupId h5groupID,  double value, string name)
+        {
+
+            H5DataTypeId doubleDataType = H5T.getNativeType(H5T.H5Type.NATIVE_DOUBLE, H5T.Direction.DEFAULT);
+            H5DataSpaceId doubleDataSpace = H5S.create(H5S.H5SClass.SCALAR);
+
+            H5DataSetId varId = H5D.create(h5groupID, name, doubleDataType, doubleDataSpace);
+            double refvalue = value;
+            H5D.writeScalar<double>(varId, doubleDataType, ref refvalue);
+            H5D.close(varId);
+
+            H5T.close(doubleDataType);
+            H5S.close(doubleDataSpace);
         }
     }
 }
