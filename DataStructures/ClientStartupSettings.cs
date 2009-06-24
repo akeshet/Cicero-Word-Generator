@@ -19,11 +19,24 @@ namespace DataStructures
     public class ClientStartupSettings
     {
         public List<string> recentFiles;
+        private Dictionary<string, DateTime> recentFilesLastUsageDates;
+
+        public Dictionary<string, DateTime> RecentFilesLastUsageDates
+        {
+            get {
+                if (recentFilesLastUsageDates == null)
+                {
+                    recentFilesLastUsageDates = new Dictionary<string, DateTime>();
+                }
+                return recentFilesLastUsageDates; 
+            }
+            set { recentFilesLastUsageDates = value; }
+        }
 
         public string settingsDataFileName;
         public string sequenceDataFileName;
 
-        const int nMaxRecentFiles = 20;
+        const int nMaxRecentFiles = 40;
 
         public ClientStartupSettings()
         {
@@ -43,10 +56,22 @@ namespace DataStructures
 
             recentFiles.Insert(0, newFile);
 
+            if (RecentFilesLastUsageDates.ContainsKey(newFile))
+            {
+                RecentFilesLastUsageDates.Remove(newFile);
+            }
+            RecentFilesLastUsageDates.Add(newFile, DateTime.Now);
+
             if (recentFiles.Count > nMaxRecentFiles)
             {
+                string removedFileName = recentFiles[recentFiles.Count - 1];
                 recentFiles.RemoveAt(recentFiles.Count - 1);
+                if (RecentFilesLastUsageDates.ContainsKey(removedFileName))
+                {
+                    RecentFilesLastUsageDates.Remove(removedFileName);
+                }
             }
+
         }
 
         /// <summary>

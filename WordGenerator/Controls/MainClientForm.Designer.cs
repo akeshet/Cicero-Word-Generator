@@ -28,6 +28,7 @@ namespace WordGenerator
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainClientForm));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.settingsFileLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -100,6 +101,7 @@ namespace WordGenerator
             this.pulsesPage1 = new WordGenerator.Controls.PulsesPage();
             this.eventLogPage = new System.Windows.Forms.TabPage();
             this.messageLogTextBox = new System.Windows.Forms.TextBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.variablesPage.SuspendLayout();
@@ -733,6 +735,12 @@ namespace WordGenerator
             this.messageLogTextBox.Size = new System.Drawing.Size(1244, 885);
             this.messageLogTextBox.TabIndex = 0;
             // 
+            // toolTip1
+            // 
+            this.toolTip1.AutomaticDelay = 0;
+            this.toolTip1.UseAnimation = false;
+            this.toolTip1.UseFading = false;
+            // 
             // mainClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -843,6 +851,7 @@ namespace WordGenerator
         private System.Windows.Forms.ToolStripMenuItem insertSequenceToolStripMenuItem;
         public System.Windows.Forms.CheckBox lockDigitalCheckBox;
         private System.Windows.Forms.CheckBox waitForReady;
+        private System.Windows.Forms.ToolTip toolTip1;
 
     }
 }

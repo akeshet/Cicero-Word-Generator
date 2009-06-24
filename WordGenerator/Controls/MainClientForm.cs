@@ -329,7 +329,17 @@ namespace WordGenerator
                         ToolStripSeparator tss = new ToolStripSeparator();
                         for (int i = 0; i < System.Math.Min(nRecentFiles, GUIConstants.nMaxRecentFiles); i++)
                         {
-                            ToolStripMenuItem tsmi = new ToolStripMenuItem(Storage.clientStartupSettings.recentFiles[i]);
+                            string recentFileName = Storage.clientStartupSettings.recentFiles[i];
+                            ToolStripMenuItem tsmi = new ToolStripMenuItem(recentFileName);
+                            if (Storage.clientStartupSettings.RecentFilesLastUsageDates.ContainsKey(recentFileName))
+                            {
+                                tsmi.ToolTipText = "Last open on " + Storage.clientStartupSettings.RecentFilesLastUsageDates[recentFileName].Date.ToShortDateString();
+
+                            }
+                            else
+                            {
+                                tsmi.ToolTipText = "Last open unknown.";
+                            }
                             tsmi.Click += new EventHandler(recentFileClick);
                             recentFilesToolStripMenuItem.DropDownItems.Add(tsmi);
                         }
@@ -969,6 +979,9 @@ namespace WordGenerator
                 Storage.sequenceData.WaitForReady = waitForReady.Checked;
             }
         }
+
+
+
 
     }
 }
