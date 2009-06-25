@@ -141,7 +141,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="hdf5dll.lib"
 				LinkIncremental="1"
-				GenerateDebugInformation="true"
+				GenerateDebugInformation="false"
 				TargetMachine="1"
 			/>
 			<Tool

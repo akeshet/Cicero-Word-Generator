@@ -28,6 +28,7 @@ namespace Virgil
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainVirgilForm));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -91,6 +92,7 @@ namespace Virgil
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(739, 495);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainVirgilForm";
             this.Text = "Virgil";
             this.tableLayoutPanel1.ResumeLayout(false);
