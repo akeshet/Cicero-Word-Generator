@@ -14,6 +14,19 @@ namespace DataStructures
     [Serializable, TypeConverter(typeof(ExpandableObjectConverter))]
     public class DimensionedParameter
     {
+        public static bool Equivalent(DimensionedParameter a, DimensionedParameter b) {
+            if (!Parameter.Equivalent(a.myParameter, b.myParameter))
+                return false;
+            if (a.ParameterString != b.ParameterString)
+                return false;
+            if (!Units.Equivalent(a.ParameterUnits, b.ParameterUnits))
+                return false;
+            if (a.ParameterValue != b.ParameterValue)
+                return false;
+
+            return true;
+        }
+
         public Parameter parameter;
 
         [Description("The parameter object underlying this dimensioned parameter.")]

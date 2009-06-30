@@ -2466,5 +2466,93 @@ namespace DataStructures
             return false;
         }
 
+        /// <summary>
+        /// Replaces all occurences of pulse replaceMe with withMe, and then removes replaceMe
+        /// from Pulses list.
+        /// </summary>
+        /// <param name="replaceMe"></param>
+        /// <param name="withMe"></param>
+        public void replacePulse(Pulse replaceMe, Pulse withMe)
+        {
+            foreach (TimeStep step in TimeSteps)
+            {
+                foreach (DigitalDataPoint dp in step.DigitalData.Values)
+                {
+                    if (dp.usesPulse())
+                    {
+                        if (dp.DigitalPulse == replaceMe)
+                        {
+                            dp.DigitalPulse = withMe;
+                        }
+                    }
+                }
+            }
+
+            if (DigitalPulses.Contains(replaceMe))
+            {
+                DigitalPulses.Remove(replaceMe);
+            }
+        }
+
+        /// <summary>
+        /// Replaces all occurences in sequence of analog gropu ReplaceMe with group Withme, then
+        /// removes ReplaceMe from list of groups.
+        /// </summary>
+        /// <param name="replaceMe"></param>
+        /// <param name="withMe"></param>
+        public void replaceAnalogGroup(AnalogGroup replaceMe, AnalogGroup withMe)
+        {
+            foreach (TimeStep step in TimeSteps)
+            {
+                if (step.AnalogGroup == replaceMe)
+                {
+                    step.AnalogGroup = withMe;
+                }
+            }
+
+            if (AnalogGroups.Contains(replaceMe))
+                AnalogGroups.Remove(replaceMe);
+        }
+
+        /// <summary>
+        /// Replaces all occurences in sequence of GPIB gropu ReplaceMe with group Withme, then
+        /// removes ReplaceMe from list of groups.
+        /// </summary>
+        /// <param name="replaceMe"></param>
+        /// <param name="withMe"></param>
+        public void replaceGPIBGroup(GPIBGroup replaceMe, GPIBGroup withMe)
+        {
+            foreach (TimeStep step in TimeSteps)
+            {
+                if (step.GpibGroup == replaceMe)
+                {
+                    step.GpibGroup = withMe;
+                }
+            }
+
+            if (gpibGroups.Contains(replaceMe))
+                gpibGroups.Remove(replaceMe);
+        }
+
+
+        /// <summary>
+        /// Replaces all occurences in sequence of RS232 gropu ReplaceMe with group Withme, then
+        /// removes ReplaceMe from list of groups.
+        /// </summary>
+        /// <param name="replaceMe"></param>
+        /// <param name="withMe"></param>
+        public void replaceRS232Group(RS232Group replaceMe, RS232Group withMe)
+        {
+            foreach (TimeStep step in TimeSteps)
+            {
+                if (step.rs232Group == replaceMe)
+                {
+                    step.rs232Group = withMe;
+                }
+            }
+
+            if (rs232Groups.Contains(replaceMe))
+                rs232Groups.Remove(replaceMe);
+        }
     }
 }

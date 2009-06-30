@@ -30,7 +30,6 @@ namespace WordGenerator.Controls
         {
             this.components = new System.ComponentModel.Container();
             this.groupChannelSelectorPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.groupChannelSelectorPlaceholder = new WordGenerator.Controls.GpibGroupChannelSelection();
             this.newGroupButton = new System.Windows.Forms.Button();
             this.gpibGroupSelector = new System.Windows.Forms.ComboBox();
             this.renameTextBox = new System.Windows.Forms.TextBox();
@@ -45,8 +44,11 @@ namespace WordGenerator.Controls
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.replacementGroupSelector = new System.Windows.Forms.ComboBox();
+            this.replaceGroupButton = new System.Windows.Forms.Button();
             this.waveformEditor1 = new WordGenerator.Controls.WaveformEditor();
             this.waveformGraphCollection1 = new WordGenerator.Controls.WaveformGraphCollection();
+            this.groupChannelSelectorPlaceholder = new WordGenerator.Controls.GpibGroupChannelSelection();
             this.groupChannelSelectorPanel.SuspendLayout();
             this.runOrderPanel.SuspendLayout();
             this.SuspendLayout();
@@ -59,15 +61,6 @@ namespace WordGenerator.Controls
             this.groupChannelSelectorPanel.Name = "groupChannelSelectorPanel";
             this.groupChannelSelectorPanel.Size = new System.Drawing.Size(227, 477);
             this.groupChannelSelectorPanel.TabIndex = 0;
-            // 
-            // groupChannelSelectorPlaceholder
-            // 
-            this.groupChannelSelectorPlaceholder.AutoSize = true;
-            this.groupChannelSelectorPlaceholder.Location = new System.Drawing.Point(3, 3);
-            this.groupChannelSelectorPlaceholder.Name = "groupChannelSelectorPlaceholder";
-            this.groupChannelSelectorPlaceholder.Size = new System.Drawing.Size(207, 53);
-            this.groupChannelSelectorPlaceholder.TabIndex = 0;
-            this.groupChannelSelectorPlaceholder.Visible = false;
             // 
             // newGroupButton
             // 
@@ -203,6 +196,30 @@ namespace WordGenerator.Controls
             this.toolTip1.InitialDelay = 100;
             this.toolTip1.ReshowDelay = 20;
             // 
+            // replacementGroupSelector
+            // 
+            this.replacementGroupSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.replacementGroupSelector.Enabled = false;
+            this.replacementGroupSelector.FormattingEnabled = true;
+            this.replacementGroupSelector.Location = new System.Drawing.Point(101, 289);
+            this.replacementGroupSelector.MaxDropDownItems = 100;
+            this.replacementGroupSelector.Name = "replacementGroupSelector";
+            this.replacementGroupSelector.Size = new System.Drawing.Size(122, 21);
+            this.replacementGroupSelector.TabIndex = 22;
+            this.replacementGroupSelector.SelectedValueChanged += new System.EventHandler(this.replacementGroupSelector_SelectedValueChanged);
+            this.replacementGroupSelector.DropDown += new System.EventHandler(this.replacementSelector_DropDown_1);
+            // 
+            // replaceGroupButton
+            // 
+            this.replaceGroupButton.Enabled = false;
+            this.replaceGroupButton.Location = new System.Drawing.Point(3, 289);
+            this.replaceGroupButton.Name = "replaceGroupButton";
+            this.replaceGroupButton.Size = new System.Drawing.Size(92, 22);
+            this.replaceGroupButton.TabIndex = 21;
+            this.replaceGroupButton.Text = "Replace Group";
+            this.replaceGroupButton.UseVisualStyleBackColor = true;
+            this.replaceGroupButton.Click += new System.EventHandler(this.replaceGroupButton_Click);
+            // 
             // waveformEditor1
             // 
             this.waveformEditor1.AutoScroll = true;
@@ -221,10 +238,21 @@ namespace WordGenerator.Controls
             this.waveformGraphCollection1.Size = new System.Drawing.Size(767, 750);
             this.waveformGraphCollection1.TabIndex = 1;
             // 
+            // groupChannelSelectorPlaceholder
+            // 
+            this.groupChannelSelectorPlaceholder.AutoSize = true;
+            this.groupChannelSelectorPlaceholder.Location = new System.Drawing.Point(3, 3);
+            this.groupChannelSelectorPlaceholder.Name = "groupChannelSelectorPlaceholder";
+            this.groupChannelSelectorPlaceholder.Size = new System.Drawing.Size(207, 53);
+            this.groupChannelSelectorPlaceholder.TabIndex = 0;
+            this.groupChannelSelectorPlaceholder.Visible = false;
+            // 
             // GpibGroupEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.replacementGroupSelector);
+            this.Controls.Add(this.replaceGroupButton);
             this.Controls.Add(this.runOrderPanel);
             this.Controls.Add(this.minus);
             this.Controls.Add(this.plus);
@@ -271,6 +299,8 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ComboBox replacementGroupSelector;
+        private System.Windows.Forms.Button replaceGroupButton;
 
     }
 }

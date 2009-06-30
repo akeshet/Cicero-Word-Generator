@@ -12,8 +12,31 @@ namespace DataStructures
     [Serializable, TypeConverter(typeof(ExpandableStructConverter))]
 	public struct Units
 	{
+        public static bool Equivalent(Units a, Units b)
+        {
+            if (a.dimension != b.dimension)
+                return false;
+            if (a.multiplier != b.multiplier)
+                return false;
+
+            return true;
+        }
+
         [Serializable, TypeConverter(typeof (Dimension.DimensionTypeConverter))]
 		public struct Dimension {
+
+            public static bool operator!=(Dimension a, Dimension b) {
+                if (a == b)
+                    return false;
+                return true;
+            }
+
+            public static bool operator ==(Dimension a, Dimension b)
+            {
+                if (a.myDimensionID == b.myDimensionID)
+                    return true;
+                return false;
+            }
 
             public class DimensionTypeConverter : EnumWrapperTypeConverter
             {

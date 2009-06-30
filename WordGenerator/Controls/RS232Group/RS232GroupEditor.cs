@@ -63,7 +63,13 @@ namespace WordGenerator.Controls.Temporary
         {
 
             if (rs232Group == null)
+            {
                 rs232Group = new RS232Group("Placehold RS232 group. Do not use.");
+                replacementGroupSelector.Enabled = false;
+            }
+            else
+                replacementGroupSelector.Enabled = true;
+
             this.rs232Group = rs232Group;
 
 
@@ -78,6 +84,7 @@ namespace WordGenerator.Controls.Temporary
             layoutGraphCollection();
             waveformEditor1.setWaveform(null);
             descBox.Text = rs232Group.GroupDescription;
+            replacementGroupSelector.SelectedItem = null;
 
         }
 
@@ -339,6 +346,41 @@ namespace WordGenerator.Controls.Temporary
         private void RS232GroupEditor_VisibleChanged(object sender, EventArgs e)
         {
             updateRunOrderPanel();
+        }
+
+        private void replacementSelector_DropDown_1(object sender, EventArgs e)
+        {
+            replacementGroupSelector.Items.Clear();
+            replacementGroupSelector.Items.AddRange(Storage.sequenceData.RS232Groups.ToArray());
+        }
+
+        private void replaceGroupButton_Click(object sender, EventArgs e)
+        {
+            RS232Group replacementGroup = replacementGroupSelector.SelectedItem as RS232Group;
+            if (replacementGroup != null)
+            {
+                if (replacementGroup != this.rs232Group)
+                {
+                    DialogResult result = MessageBox.Show("This will permanently replace all occurences of the currently edited group with the group selected near the Replace button. Are you sure you want to proceed?", "Replace analog group?", MessageBoxButtons.YesNo);
+                    if (result == DialogResult.Yes)
+                    {
+                        Storage.sequenceData.replaceRS232Group(rs232Group, replacementGroup);
+                        WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+                    }
+                }
+            }
+        }
+
+        private void replacementGroupSelector_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (replacementGroupSelector.SelectedItem as RS232Group == null)
+            {
+                replaceGroupButton.Enabled = false;
+            }
+            else
+            {
+                replaceGroupButton.Enabled = true;
+            }
         }
 
     }

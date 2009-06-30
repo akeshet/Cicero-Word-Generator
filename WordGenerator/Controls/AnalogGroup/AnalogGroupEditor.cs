@@ -144,7 +144,13 @@ namespace WordGenerator.Controls
             this.SuspendLayout();
 
             if (analogGroup == null)
+            {
                 analogGroup = new AnalogGroup("Placehold analog group. Do not use.");
+                replacementGroupSelector.Enabled = false;
+            }
+            else
+                replacementGroupSelector.Enabled = true;
+
             this.analogGroup = analogGroup;
 
 
@@ -161,6 +167,8 @@ namespace WordGenerator.Controls
             timeResolutionEditor.setParameterData(analogGroup.TimeResolution);
 
             this.descBox.Text = analogGroup.GroupDescription;
+
+            this.replacementGroupSelector.SelectedItem = null;
 
             this.ResumeLayout();
 
@@ -378,6 +386,41 @@ namespace WordGenerator.Controls
             this.waveformGraphCollection1.redrawAllGraphs();
             
            
+        }
+
+        private void replacementSelector_DropDown_1(object sender, EventArgs e)
+        {
+            replacementGroupSelector.Items.Clear();
+            replacementGroupSelector.Items.AddRange(Storage.sequenceData.AnalogGroups.ToArray());
+        }
+
+        private void replaceGroupButton_Click(object sender, EventArgs e)
+        {
+            AnalogGroup replacementGroup = replacementGroupSelector.SelectedItem as AnalogGroup;
+            if (replacementGroup != null)
+            {
+                if (replacementGroup != this.analogGroup)
+                {
+                    DialogResult result = MessageBox.Show("This will permanently replace all occurences of the currently edited group with the group selected near the Replace button. Are you sure you want to proceed?", "Replace analog group?", MessageBoxButtons.YesNo);
+                    if (result == DialogResult.Yes)
+                    {
+                        Storage.sequenceData.replaceAnalogGroup(analogGroup, replacementGroup);
+                        WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+                    }
+                }
+            }
+        }
+
+        private void replacementGroupSelector_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (replacementGroupSelector.SelectedItem as AnalogGroup == null)
+            {
+                replaceGroupButton.Enabled = false;
+            }
+            else
+            {
+                replaceGroupButton.Enabled = true;
+            }
         }
 
 

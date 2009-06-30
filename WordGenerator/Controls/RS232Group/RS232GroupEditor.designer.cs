@@ -40,12 +40,14 @@ namespace WordGenerator.Controls.Temporary
             this.label1 = new System.Windows.Forms.Label();
             this.plus = new System.Windows.Forms.Button();
             this.minus = new System.Windows.Forms.Button();
-            this.waveformEditor1 = new WordGenerator.Controls.WaveformEditor();
-            this.waveformGraphCollection1 = new WordGenerator.Controls.WaveformGraphCollection();
             this.runOrderPanel = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.replacementGroupSelector = new System.Windows.Forms.ComboBox();
+            this.replaceGroupButton = new System.Windows.Forms.Button();
+            this.waveformEditor1 = new WordGenerator.Controls.WaveformEditor();
+            this.waveformGraphCollection1 = new WordGenerator.Controls.WaveformGraphCollection();
             this.runOrderPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -155,23 +157,6 @@ namespace WordGenerator.Controls.Temporary
             this.minus.UseVisualStyleBackColor = true;
             this.minus.Click += new System.EventHandler(this.minus_Click);
             // 
-            // waveformEditor1
-            // 
-            this.waveformEditor1.AutoScroll = true;
-            this.waveformEditor1.Enabled = false;
-            this.waveformEditor1.Location = new System.Drawing.Point(224, 0);
-            this.waveformEditor1.Name = "waveformEditor1";
-            this.waveformEditor1.Size = new System.Drawing.Size(269, 790);
-            this.waveformEditor1.TabIndex = 2;
-            // 
-            // waveformGraphCollection1
-            // 
-            this.waveformGraphCollection1.AutoScroll = true;
-            this.waveformGraphCollection1.Location = new System.Drawing.Point(493, 1);
-            this.waveformGraphCollection1.Name = "waveformGraphCollection1";
-            this.waveformGraphCollection1.Size = new System.Drawing.Size(767, 750);
-            this.waveformGraphCollection1.TabIndex = 1;
-            // 
             // runOrderPanel
             // 
             this.runOrderPanel.AutoScroll = true;
@@ -201,10 +186,53 @@ namespace WordGenerator.Controls.Temporary
             this.label2.TabIndex = 0;
             this.label2.Text = "RS232 Group Run Order:";
             // 
+            // replacementGroupSelector
+            // 
+            this.replacementGroupSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.replacementGroupSelector.Enabled = false;
+            this.replacementGroupSelector.FormattingEnabled = true;
+            this.replacementGroupSelector.Location = new System.Drawing.Point(101, 289);
+            this.replacementGroupSelector.MaxDropDownItems = 100;
+            this.replacementGroupSelector.Name = "replacementGroupSelector";
+            this.replacementGroupSelector.Size = new System.Drawing.Size(122, 21);
+            this.replacementGroupSelector.TabIndex = 22;
+            this.replacementGroupSelector.SelectedValueChanged += new System.EventHandler(this.replacementGroupSelector_SelectedValueChanged);
+            this.replacementGroupSelector.DropDown += new System.EventHandler(this.replacementSelector_DropDown_1);
+            // 
+            // replaceGroupButton
+            // 
+            this.replaceGroupButton.Enabled = false;
+            this.replaceGroupButton.Location = new System.Drawing.Point(3, 289);
+            this.replaceGroupButton.Name = "replaceGroupButton";
+            this.replaceGroupButton.Size = new System.Drawing.Size(92, 22);
+            this.replaceGroupButton.TabIndex = 21;
+            this.replaceGroupButton.Text = "Replace Group";
+            this.replaceGroupButton.UseVisualStyleBackColor = true;
+            this.replaceGroupButton.Click += new System.EventHandler(this.replaceGroupButton_Click);
+            // 
+            // waveformEditor1
+            // 
+            this.waveformEditor1.AutoScroll = true;
+            this.waveformEditor1.Enabled = false;
+            this.waveformEditor1.Location = new System.Drawing.Point(224, 0);
+            this.waveformEditor1.Name = "waveformEditor1";
+            this.waveformEditor1.Size = new System.Drawing.Size(269, 790);
+            this.waveformEditor1.TabIndex = 2;
+            // 
+            // waveformGraphCollection1
+            // 
+            this.waveformGraphCollection1.AutoScroll = true;
+            this.waveformGraphCollection1.Location = new System.Drawing.Point(493, 1);
+            this.waveformGraphCollection1.Name = "waveformGraphCollection1";
+            this.waveformGraphCollection1.Size = new System.Drawing.Size(767, 750);
+            this.waveformGraphCollection1.TabIndex = 1;
+            // 
             // RS232GroupEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.replacementGroupSelector);
+            this.Controls.Add(this.replaceGroupButton);
             this.Controls.Add(this.runOrderPanel);
             this.Controls.Add(this.minus);
             this.Controls.Add(this.plus);
@@ -248,6 +276,8 @@ namespace WordGenerator.Controls.Temporary
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ComboBox replacementGroupSelector;
+        private System.Windows.Forms.Button replaceGroupButton;
 
     }
 }

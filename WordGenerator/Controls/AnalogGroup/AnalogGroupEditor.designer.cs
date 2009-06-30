@@ -30,7 +30,6 @@ namespace WordGenerator.Controls
         {
             this.components = new System.ComponentModel.Container();
             this.groupChannelSelectorPanel = new System.Windows.Forms.Panel();
-            this.groupChannelSelectorPlaceholder = new WordGenerator.Controls.GroupChannelSelection();
             this.newGroupButton = new System.Windows.Forms.Button();
             this.analogGroupSelector = new System.Windows.Forms.ComboBox();
             this.renameTextBox = new System.Windows.Forms.TextBox();
@@ -45,9 +44,12 @@ namespace WordGenerator.Controls
             this.runOrderPanel = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.replaceGroupButton = new System.Windows.Forms.Button();
+            this.replacementGroupSelector = new System.Windows.Forms.ComboBox();
             this.timeResolutionEditor = new WordGenerator.Controls.HorizontalParameterEditor();
             this.waveformEditor1 = new WordGenerator.Controls.WaveformEditor();
             this.waveformGraphCollection1 = new WordGenerator.Controls.WaveformGraphCollection();
+            this.groupChannelSelectorPlaceholder = new WordGenerator.Controls.GroupChannelSelection();
             this.groupChannelSelectorPanel.SuspendLayout();
             this.runOrderPanel.SuspendLayout();
             this.SuspendLayout();
@@ -60,15 +62,6 @@ namespace WordGenerator.Controls
             this.groupChannelSelectorPanel.Name = "groupChannelSelectorPanel";
             this.groupChannelSelectorPanel.Size = new System.Drawing.Size(220, 477);
             this.groupChannelSelectorPanel.TabIndex = 0;
-            // 
-            // groupChannelSelectorPlaceholder
-            // 
-            this.groupChannelSelectorPlaceholder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.groupChannelSelectorPlaceholder.Location = new System.Drawing.Point(0, 3);
-            this.groupChannelSelectorPlaceholder.Name = "groupChannelSelectorPlaceholder";
-            this.groupChannelSelectorPlaceholder.Size = new System.Drawing.Size(203, 28);
-            this.groupChannelSelectorPlaceholder.TabIndex = 0;
-            this.groupChannelSelectorPlaceholder.Visible = false;
             // 
             // newGroupButton
             // 
@@ -200,6 +193,30 @@ namespace WordGenerator.Controls
             this.label1.TabIndex = 0;
             this.label1.Text = "Analog Group Run Order:";
             // 
+            // replaceGroupButton
+            // 
+            this.replaceGroupButton.Enabled = false;
+            this.replaceGroupButton.Location = new System.Drawing.Point(3, 289);
+            this.replaceGroupButton.Name = "replaceGroupButton";
+            this.replaceGroupButton.Size = new System.Drawing.Size(92, 22);
+            this.replaceGroupButton.TabIndex = 19;
+            this.replaceGroupButton.Text = "Replace Group";
+            this.replaceGroupButton.UseVisualStyleBackColor = true;
+            this.replaceGroupButton.Click += new System.EventHandler(this.replaceGroupButton_Click);
+            // 
+            // replacementGroupSelector
+            // 
+            this.replacementGroupSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.replacementGroupSelector.Enabled = false;
+            this.replacementGroupSelector.FormattingEnabled = true;
+            this.replacementGroupSelector.Location = new System.Drawing.Point(101, 289);
+            this.replacementGroupSelector.MaxDropDownItems = 100;
+            this.replacementGroupSelector.Name = "replacementGroupSelector";
+            this.replacementGroupSelector.Size = new System.Drawing.Size(122, 21);
+            this.replacementGroupSelector.TabIndex = 20;
+            this.replacementGroupSelector.SelectedValueChanged += new System.EventHandler(this.replacementGroupSelector_SelectedValueChanged);
+            this.replacementGroupSelector.DropDown += new System.EventHandler(this.replacementSelector_DropDown_1);
+            // 
             // timeResolutionEditor
             // 
             this.timeResolutionEditor.Location = new System.Drawing.Point(6, 136);
@@ -226,10 +243,21 @@ namespace WordGenerator.Controls
             this.waveformGraphCollection1.Size = new System.Drawing.Size(785, 750);
             this.waveformGraphCollection1.TabIndex = 1;
             // 
+            // groupChannelSelectorPlaceholder
+            // 
+            this.groupChannelSelectorPlaceholder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.groupChannelSelectorPlaceholder.Location = new System.Drawing.Point(0, 3);
+            this.groupChannelSelectorPlaceholder.Name = "groupChannelSelectorPlaceholder";
+            this.groupChannelSelectorPlaceholder.Size = new System.Drawing.Size(203, 28);
+            this.groupChannelSelectorPlaceholder.TabIndex = 0;
+            this.groupChannelSelectorPlaceholder.Visible = false;
+            // 
             // AnalogGroupEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.replacementGroupSelector);
+            this.Controls.Add(this.replaceGroupButton);
             this.Controls.Add(this.runOrderPanel);
             this.Controls.Add(this.timeResolutionEditor);
             this.Controls.Add(this.minus);
@@ -277,6 +305,8 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.Panel runOrderPanel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button replaceGroupButton;
+        private System.Windows.Forms.ComboBox replacementGroupSelector;
 
     }
 }

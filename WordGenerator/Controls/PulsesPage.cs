@@ -21,16 +21,16 @@ namespace WordGenerator.Controls
 
         public void layout()
         {
-            this.pulseEditorPanel.SuspendLayout();
+            this.flowPanel1.SuspendLayout();
             foreach (PulseEditor pe in pulseEditors)
             {
-                this.pulseEditorPanel.Controls.Remove(pe);
+                this.flowPanel1.Controls.Remove(pe);
                 pe.Dispose();
             }
             pulseEditors.Clear();
 
-            this.pulseEditorPanel.ResumeLayout();
-            this.pulseEditorPanel.SuspendLayout();
+            this.flowPanel1.ResumeLayout();
+            this.flowPanel1.SuspendLayout();
 
             int i = 0;
             foreach (Pulse pulse in Storage.sequenceData.DigitalPulses)
@@ -42,14 +42,45 @@ namespace WordGenerator.Controls
                 i++;
                
             }
-            pulseEditorPanel.Controls.AddRange(pulseEditors.ToArray());
-            this.pulseEditorPanel.ResumeLayout();
+            flowPanel1.Controls.AddRange(pulseEditors.ToArray());
+            this.flowPanel1.ResumeLayout();
         }
 
         private void createPulse_Click(object sender, EventArgs e)
         {
             Storage.sequenceData.DigitalPulses.Add(new DataStructures.Pulse());
             this.layout();
+        }
+
+        private void cleanPulsesButton_Click(object sender, EventArgs e)
+        {
+            WordGenerator.mainClientForm.instance.cursorWait();
+
+            bool replacedPulses = false;
+
+            repeat:
+            for (int i = 0; i < Storage.sequenceData.DigitalPulses.Count; i++)
+            {
+                for (int j = i+1; j < Storage.sequenceData.DigitalPulses.Count; j++)
+                {
+                    Pulse a, b;
+                    a = Storage.sequenceData.DigitalPulses[i];
+                    b = Storage.sequenceData.DigitalPulses[j];
+                    if (Pulse.Equivalent(a, b))
+                    {
+                        Storage.sequenceData.replacePulse(b, a);
+                        replacedPulses = true;
+                        goto repeat;
+                    }
+                }
+            }
+
+            if (replacedPulses)
+            {
+                WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+            }
+
+            WordGenerator.mainClientForm.instance.cursorWaitRelease();
         }
     }
 }

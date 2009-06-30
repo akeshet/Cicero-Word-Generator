@@ -58,6 +58,42 @@ namespace WordGenerator
 
         private bool runRepeat;
 
+        private bool errorDetected;
+
+        public bool ErrorDetected
+        {
+            get { return errorDetected; }
+            set
+            {
+                bool temp = (errorDetected != value);
+                errorDetected = value;
+                if (temp)
+                    updateErrorDisplay();
+            }
+        }
+
+
+        private delegate void voidVoidDelegate();
+        private void updateErrorDisplay()
+        {
+            if (this.InvokeRequired)
+            {
+                voidVoidDelegate callback = new voidVoidDelegate(updateErrorDisplay);
+                this.Invoke(callback);
+            }
+            else
+            {
+                if (errorDetected)
+                {
+                    textBox1.BackColor = Color.Red;
+                }
+                else
+                {
+                    textBox1.BackColor = this.BackColor;
+                }
+            }
+        }
+
 
         private void setStatus(RunFormStatus status)
         {
@@ -337,6 +373,7 @@ namespace WordGenerator
                 if (!temp)
                 {
                     addMessageLogText(this, new MessageEvent("Calibration shot failed. Attempting to continue list run."));
+                    this.ErrorDetected = true;
                 }
             }
         }
@@ -345,7 +382,7 @@ namespace WordGenerator
 
         public bool do_random_order_list_run()
         {
-            addMessageLogText(this, new MessageEvent("Starting random-rder list run, " + Storage.sequenceData.Lists.iterationsCount() + " iterations."));
+            addMessageLogText(this, new MessageEvent("Starting random-order list run, " + Storage.sequenceData.Lists.iterationsCount() + " iterations."));
             List<int> iterationsRemaining = new List<int>();
             for (int i = 0; i < Storage.sequenceData.Lists.iterationsCount(); i++)
             {
@@ -442,6 +479,7 @@ namespace WordGenerator
                     if (!sequence.Lists.ListLocked)
                     {
                         addMessageLogText(this, new MessageEvent("Unable to lock lists. Aborting run. See the Variables tab."));
+                        ErrorDetected = true;
 
                         setStatus(RunFormStatus.FinishedRun);
                         return false;
@@ -492,6 +530,7 @@ namespace WordGenerator
                         if (var.parseVariableFormula(sequence.Variables) != null)
                         {
                             addMessageLogText(this, new MessageEvent("Warning! Derived variable " + var.ToString() + " has an an error. Will default to 0 for this run."));
+                            ErrorDetected = true;
                         }
                     }
                 }
@@ -508,7 +547,8 @@ namespace WordGenerator
                             WordGenerator.mainClientForm.instance.sequencePage1.setMode(mode);
                         }
                         else {
-                            addMessageLogText(this, new MessageEvent("Invalid sequence mode index. Ignoring the SeqMode variable."));
+                            addMessageLogText(this, new MessageEvent("Warning! Invalid sequence mode index. Ignoring the SeqMode variable."));
+                            ErrorDetected = true;
                         }
                     }
                 }
@@ -522,6 +562,7 @@ namespace WordGenerator
                     string missingServerList = ServerManager.convertListOfServersToOneString(missingServers);
 
                     addMessageLogText(this, new MessageEvent("Unable to start run. The following required servers are not connected: " + missingServerList + "."));
+                    ErrorDetected = true;
                     setStatus(RunFormStatus.FinishedRun);
                     return false;
                 }
@@ -596,6 +637,7 @@ namespace WordGenerator
                 if (actionStatus != ServerManager.ServerActionStatus.Success)
                 {
                     addMessageLogText(this, new MessageEvent("Unable to set start timestamp. " + actionStatus.ToString()));
+                    ErrorDetected = true;
                     setStatus(RunFormStatus.FinishedRun);
                     return false;
                 }
@@ -608,6 +650,7 @@ namespace WordGenerator
                 if (actionStatus != ServerManager.ServerActionStatus.Success)
                 {
                     addMessageLogText(this, new MessageEvent("Unable to send settings data. " + actionStatus.ToString()));
+                    ErrorDetected = true;
                     setStatus(RunFormStatus.FinishedRun);
                     return false;
                 }
@@ -618,6 +661,7 @@ namespace WordGenerator
                 if (actionStatus != ServerManager.ServerActionStatus.Success)
                 {
                     addMessageLogText(this, new MessageEvent("Unable to send sequence data. " + actionStatus.ToString()));
+                    ErrorDetected = true;
                     setStatus(RunFormStatus.FinishedRun);
                     return false;
                 }
@@ -628,6 +672,7 @@ namespace WordGenerator
                 if (actionStatus != ServerManager.ServerActionStatus.Success)
                 {
                     addMessageLogText(this, new MessageEvent("Unable to generate buffers. " + actionStatus.ToString()));
+                    ErrorDetected = true;
                     setStatus(RunFormStatus.FinishedRun);
                     return false;
                 }
@@ -639,6 +684,7 @@ namespace WordGenerator
                 actionStatus = Storage.settingsData.serverManager.armTasksOnConnectedServers(addMessageLogText);
                 if (actionStatus!= ServerManager.ServerActionStatus.Success) {
                     addMessageLogText(this, new MessageEvent("Unable to arm tasks. " + actionStatus.ToString()));
+                    ErrorDetected = true;
                     setStatus(RunFormStatus.FinishedRun);
                     return false;
                 }
@@ -650,6 +696,7 @@ namespace WordGenerator
                 if (actionStatus != ServerManager.ServerActionStatus.Success)
                 {
                     addMessageLogText(this, new MessageEvent("Unable to generate triggers. " + actionStatus.ToString()));
+                    ErrorDetected = true;
                     setStatus(RunFormStatus.FinishedRun);
                     return false;
                 }
@@ -694,6 +741,7 @@ namespace WordGenerator
                 if (actionStatus != ServerManager.ServerActionStatus.Success)
                 {
                     addMessageLogText(this, new MessageEvent("Run failed, possibly due to a buffer underrun. Please check the server event logs."));
+                    ErrorDetected = true;
                     setStatus(RunFormStatus.FinishedRun);
                     return false;
                 }
@@ -710,6 +758,7 @@ namespace WordGenerator
                 else
                 {
                     addMessageLogText(this, new MessageEvent("Log not written! Perhaps a file with this name already exists?"));
+                    ErrorDetected = true;
                 }
                 setStatus(RunFormStatus.FinishedRun);
 
@@ -806,6 +855,7 @@ namespace WordGenerator
                 else
                 {
                     addMessageLogText(this, new MessageEvent("Dwell output unsuccessfull."));
+                    ErrorDetected = true;
                 }
             }
         }
@@ -896,6 +946,12 @@ namespace WordGenerator
         {
             unregisterAllHotkeys();
         }
+
+        private void textBox1_Click(object sender, EventArgs e)
+        {
+            this.ErrorDetected = false;
+        }
+
 
 
         

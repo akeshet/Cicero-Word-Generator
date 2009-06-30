@@ -28,24 +28,27 @@ namespace WordGenerator.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            this.pulseEditorPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.flowPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.pulseEditorPlaceholder = new WordGenerator.Controls.PulseEditor();
             this.createPulse = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.pulseEditorPanel.SuspendLayout();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.cleanPulsesButton = new System.Windows.Forms.Button();
+            this.flowPanel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // pulseEditorPanel
+            // flowPanel1
             // 
-            this.pulseEditorPanel.AutoScroll = true;
-            this.pulseEditorPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pulseEditorPanel.Controls.Add(this.pulseEditorPlaceholder);
-            this.pulseEditorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pulseEditorPanel.Location = new System.Drawing.Point(183, 3);
-            this.pulseEditorPanel.Name = "pulseEditorPanel";
-            this.pulseEditorPanel.Size = new System.Drawing.Size(898, 854);
-            this.pulseEditorPanel.TabIndex = 0;
+            this.flowPanel1.AutoScroll = true;
+            this.flowPanel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.flowPanel1.Controls.Add(this.pulseEditorPlaceholder);
+            this.flowPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowPanel1.Location = new System.Drawing.Point(183, 3);
+            this.flowPanel1.Name = "flowPanel1";
+            this.flowPanel1.Size = new System.Drawing.Size(898, 854);
+            this.flowPanel1.TabIndex = 0;
             // 
             // pulseEditorPlaceholder
             // 
@@ -58,7 +61,7 @@ namespace WordGenerator.Controls
             // 
             // createPulse
             // 
-            this.createPulse.Location = new System.Drawing.Point(3, 3);
+            this.createPulse.Location = new System.Drawing.Point(3, 5);
             this.createPulse.Name = "createPulse";
             this.createPulse.Size = new System.Drawing.Size(124, 42);
             this.createPulse.TabIndex = 1;
@@ -71,8 +74,8 @@ namespace WordGenerator.Controls
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.createPulse, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.pulseEditorPanel, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.flowPanel1, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -81,6 +84,26 @@ namespace WordGenerator.Controls
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1084, 860);
             this.tableLayoutPanel1.TabIndex = 2;
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.cleanPulsesButton);
+            this.panel1.Controls.Add(this.createPulse);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(3, 3);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(174, 854);
+            this.panel1.TabIndex = 1;
+            // 
+            // cleanPulsesButton
+            // 
+            this.cleanPulsesButton.Location = new System.Drawing.Point(3, 66);
+            this.cleanPulsesButton.Name = "cleanPulsesButton";
+            this.cleanPulsesButton.Size = new System.Drawing.Size(124, 46);
+            this.cleanPulsesButton.TabIndex = 2;
+            this.cleanPulsesButton.Text = "Cleanup Duplicates";
+            this.cleanPulsesButton.UseVisualStyleBackColor = true;
+            this.cleanPulsesButton.Click += new System.EventHandler(this.cleanPulsesButton_Click);
+            // 
             // PulsesPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -88,17 +111,20 @@ namespace WordGenerator.Controls
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "PulsesPage";
             this.Size = new System.Drawing.Size(1084, 860);
-            this.pulseEditorPanel.ResumeLayout(false);
+            this.flowPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.FlowLayoutPanel pulseEditorPanel;
+        private System.Windows.Forms.FlowLayoutPanel flowPanel1;
         private PulseEditor pulseEditorPlaceholder;
         private System.Windows.Forms.Button createPulse;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button cleanPulsesButton;
     }
 }

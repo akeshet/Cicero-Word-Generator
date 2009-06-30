@@ -131,7 +131,12 @@ namespace WordGenerator.Controls
         {
 
             if (gpibGroup == null)
+            {
                 gpibGroup = new GPIBGroup("Placehold analog group. Do not use.");
+                replacementGroupSelector.Enabled = false;
+            }
+            else 
+                replacementGroupSelector.Enabled = true;
 
             previousObjectBackup = gpibGroup;
             
@@ -147,6 +152,8 @@ namespace WordGenerator.Controls
             layoutGraphCollection();
             waveformEditor1.setWaveform(null);
             descBox.Text = gpibGroup.GroupDescription;
+
+            replacementGroupSelector.SelectedItem = null;
 
         }
 
@@ -375,6 +382,41 @@ namespace WordGenerator.Controls
                 }
 
                 this.waveformGraphCollection1.redrawAllGraphs();
+            }
+        }
+
+        private void replacementSelector_DropDown_1(object sender, EventArgs e)
+        {
+            replacementGroupSelector.Items.Clear();
+            replacementGroupSelector.Items.AddRange(Storage.sequenceData.GpibGroups.ToArray());
+        }
+
+        private void replaceGroupButton_Click(object sender, EventArgs e)
+        {
+            GPIBGroup replacementGroup = replacementGroupSelector.SelectedItem as GPIBGroup;
+            if (replacementGroup != null)
+            {
+                if (replacementGroup != this.gpibGroup)
+                {
+                    DialogResult result = MessageBox.Show("This will permanently replace all occurences of the currently edited group with the group selected near the Replace button. Are you sure you want to proceed?", "Replace analog group?", MessageBoxButtons.YesNo);
+                    if (result == DialogResult.Yes)
+                    {
+                        Storage.sequenceData.replaceGPIBGroup(gpibGroup, replacementGroup);
+                        WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+                    }
+                }
+            }
+        }
+
+        private void replacementGroupSelector_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (replacementGroupSelector.SelectedItem as GPIBGroup == null)
+            {
+                replaceGroupButton.Enabled = false;
+            }
+            else
+            {
+                replaceGroupButton.Enabled = true;
             }
         }
 

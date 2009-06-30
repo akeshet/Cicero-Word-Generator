@@ -90,11 +90,23 @@ namespace Virgil
 
         public override bool runSuccess()
         {
-            string filename = CiceroUtilityFunctions.getTimeStampString(nextRunTime)+".h5";
-            string fullFilename = System.IO.Path.Combine(serverSettings.Hdf5FilePath, filename);
+            try
+            {
+                string filename = CiceroUtilityFunctions.getTimeStampString(nextRunTime) + ".h5";
+                string fullFilename = System.IO.Path.Combine(serverSettings.Hdf5FilePath, filename);
 
-            VirgilH5Exporter.writeSequenceMetadataFile(nextSequence, fullFilename);
-            messageLog(this, new MessageEvent("Wrote log for run with timestamp " + CiceroUtilityFunctions.getTimeStampString(nextRunTime)));
+                VirgilH5Exporter.writeSequenceMetadataFile(nextSequence, fullFilename);
+                messageLog(this, new MessageEvent("Wrote log for run with timestamp " + CiceroUtilityFunctions.getTimeStampString(nextRunTime)));
+
+            }
+            catch (Exception e)
+            {
+                messageLog(this, new MessageEvent("Caught exception when attempting to create hd5 file: " + e.Message + e.StackTrace));
+                if (e.InnerException!=null) {
+                    messageLog(this, new MessageEvent("Inner exception: " + e.InnerException.Message + e.InnerException.StackTrace));
+                }
+               
+            }
             return true;
         }
 

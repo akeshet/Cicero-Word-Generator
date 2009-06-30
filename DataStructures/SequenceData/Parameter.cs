@@ -75,5 +75,17 @@ namespace DataStructures
         {
             return this.getManualValue().ToString();
         }
+
+        public static bool Equivalent(Parameter a, Parameter b)
+        {
+            if (a.ManualValue != b.ManualValue)
+                return false;
+            if (a.Value != b.Value)
+                return false;
+            if (a.variable != b.variable)
+                return false;
+
+            return true;
+        }
     }
 }

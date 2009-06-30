@@ -8,6 +8,24 @@ namespace Virgil
 {
     class VirgilH5Exporter
     {
+
+        public static string forbiddenCharacters   = "./";
+        public static string replacementCharacters = "`|";
+
+        public static string replaceForbiddenCharacters(string input)
+        {
+            if (input == null)
+                return null;
+
+            for (int i = 0; i < forbiddenCharacters.Length; i++)
+            {
+                input = input.Replace(forbiddenCharacters[i], replacementCharacters[i]);
+            }
+
+            return input;
+
+        }
+
         public static void testForHDFLibrary()
         {
             H5FileId fileId = H5F.create("hdfLibraryTest", H5F.CreateMode.ACC_TRUNC);
@@ -57,7 +75,10 @@ namespace Virgil
             for (int i=0; i<sequence.TimeSteps.Count; i++) 
             {
                 TimeStep currentStep = sequence.TimeSteps[i];
-                H5GroupId currentStepGroup = H5G.create(timestepGroup, (1+i).ToString()+"_"+currentStep.StepName, 0);
+
+                H5GroupId currentStepGroup = H5G.create(timestepGroup, 
+                    replaceForbiddenCharacters((1+i).ToString()+"_"+currentStep.StepName), 
+                    0);
 
                 bool refbool = currentStep.StepEnabled;
                 writeBool(currentStepGroup, refbool, "Enabled");
@@ -74,6 +95,7 @@ namespace Virgil
 
         private static void writeBool(H5GroupId h5groupId, bool refbool, string name)
         {
+            name = replaceForbiddenCharacters(name);
             H5DataTypeId boolType = H5T.getNativeType(H5T.H5Type.NATIVE_HBOOL, H5T.Direction.DEFAULT);
             H5DataSpaceId spid = H5S.create(H5S.H5SClass.SCALAR);
             H5DataSetId sid = H5D.create(h5groupId, name, boolType, spid);
@@ -85,6 +107,7 @@ namespace Virgil
 
         private static void writeDouble(H5GroupId h5groupID,  double value, string name)
         {
+            name = replaceForbiddenCharacters(name);
 
             H5DataTypeId doubleDataType = H5T.getNativeType(H5T.H5Type.NATIVE_DOUBLE, H5T.Direction.DEFAULT);
             H5DataSpaceId doubleDataSpace = H5S.create(H5S.H5SClass.SCALAR);

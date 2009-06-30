@@ -10,6 +10,40 @@ namespace DataStructures
     public class Pulse
     {
 
+        public static bool Equivalent(Pulse a, Pulse b)
+        {
+            if (a.endCondition != b.endCondition)
+                return false;
+            if (!DimensionedParameter.Equivalent(a.endDelay, b.endDelay))
+                return false;
+            if (a.endDelayed != b.endDelayed)
+                return false;
+            if (a.endDelayEnabled != b.endDelayEnabled)
+                return false;
+            if (a.PulseDescription != b.PulseDescription)
+                return false;
+            if (!DimensionedParameter.Equivalent(a.pulseDuration, b.pulseDuration))
+                return false;
+            if (a.PulseName != b.PulseName)
+                return false;
+            if (a.PulseValue != b.PulseValue)
+                return false;
+            if (a.startCondition != b.startCondition)
+                return false;
+            if (!DimensionedParameter.Equivalent(a.startDelay ,b.startDelay))
+                return false;
+            if (a.startDelayed != b.startDelayed)
+                return false;
+            if (a.startDelayEnabled != b.startDelayEnabled)
+                return false;
+            if (a.ValueFromVariable != b.ValueFromVariable)
+                return false;
+            if (a.ValueVariable != b.ValueVariable)
+                return false;
+
+            return true;
+        }
+
         private bool valueFromVariable;
 
         public bool ValueFromVariable
