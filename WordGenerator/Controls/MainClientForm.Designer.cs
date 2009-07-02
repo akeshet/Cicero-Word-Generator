@@ -102,6 +102,8 @@ namespace WordGenerator
             this.eventLogPage = new System.Windows.Forms.TabPage();
             this.messageLogTextBox = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.compareSequenceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.variablesPage.SuspendLayout();
@@ -158,6 +160,8 @@ namespace WordGenerator
             this.openToolStripMenuItem,
             this.recentFilesToolStripMenuItem,
             this.saveAsToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.compareSequenceMenuItem,
             this.toolStripSeparator2,
             this.saveMarked,
             this.insertSequenceToolStripMenuItem,
@@ -741,6 +745,18 @@ namespace WordGenerator
             this.toolTip1.UseAnimation = false;
             this.toolTip1.UseFading = false;
             // 
+            // compareSequenceMenuItem
+            // 
+            this.compareSequenceMenuItem.Name = "compareSequenceMenuItem";
+            this.compareSequenceMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.compareSequenceMenuItem.Text = "Compare Sequences";
+            this.compareSequenceMenuItem.Click += new System.EventHandler(this.compareSequenceMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(205, 6);
+            // 
             // mainClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -852,6 +868,8 @@ namespace WordGenerator
         public System.Windows.Forms.CheckBox lockDigitalCheckBox;
         private System.Windows.Forms.CheckBox waitForReady;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem compareSequenceMenuItem;
 
     }
 }

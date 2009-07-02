@@ -185,7 +185,6 @@ namespace WordGenerator.ChannelManager
             mainClientForm.instance.RefreshSettingsDataToUI(Storage.settingsData);
           //  mainClientForm.instance.Enabled = true;
         }
-
  
     }
 }

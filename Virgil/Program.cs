@@ -19,6 +19,9 @@ namespace Virgil
         static void Main()
         {
 
+            System.Runtime.Remoting.Lifetime.LifetimeServices.LeaseTime = new TimeSpan(1000, 0, 0, 0, 0);
+
+
             VirgilServerSettings serverSettings;
 
             BinaryFormatter b = new BinaryFormatter();

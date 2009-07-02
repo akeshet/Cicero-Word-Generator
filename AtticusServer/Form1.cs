@@ -13,6 +13,43 @@ namespace AtticusServer
     public partial class MainServerForm : Form
     {
 
+        private bool displayError;
+
+        public bool DisplayError
+        {
+            get { return displayError; }
+            set
+            {
+                if (value != displayError)
+                {
+                    displayError = value;
+                    updateDisplayError();
+                }
+            }
+        }
+
+        private delegate void voidVoidDelegate();
+
+        private void updateDisplayError()
+        {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new voidVoidDelegate(updateDisplayError));
+            }
+            else
+            {
+                if (displayError)
+                {
+                    eventLogTextBox.BackColor = Color.Red;
+                }
+                else
+                {
+                    eventLogTextBox.BackColor = this.BackColor;
+                }
+            }
+        }
+
+
         public static MainServerForm instance;
 
         int cursorWaitCount = 0;
@@ -332,6 +369,11 @@ namespace AtticusServer
                     listBox1.Items.Remove(listBox1.SelectedItem);
                 }
             }
+        }
+
+        private void eventLogTextBox_Click(object sender, EventArgs e)
+        {
+            this.DisplayError = false;
         }
 
 

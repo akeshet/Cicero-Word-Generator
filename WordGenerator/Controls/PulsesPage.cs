@@ -70,7 +70,9 @@ namespace WordGenerator.Controls
                     {
                         Storage.sequenceData.replacePulse(b, a);
                         replacedPulses = true;
-                        goto repeat;
+                        goto repeat;            // YOU HAVE FOUND THE ONE AND ONLY "goto" statement in Cicero
+                                                // Congrats!
+                                                // Call Apogee and say Aardwolf.
                     }
                 }
             }

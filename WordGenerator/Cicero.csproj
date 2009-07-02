@@ -141,6 +141,12 @@
     <Compile Include="Controls\PulsesPage.Designer.cs">
       <DependentUpon>PulsesPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SequenceDifferencesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\SequenceDifferencesForm.Designer.cs">
+      <DependentUpon>SequenceDifferencesForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SequencePage\AnalogChannelLabelsPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -353,6 +359,10 @@
     <EmbeddedResource Include="Controls\PulsesPage.resx">
       <SubType>Designer</SubType>
       <DependentUpon>PulsesPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SequenceDifferencesForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SequenceDifferencesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SequencePage\AnalogChannelLabelsPanel.resx">
       <SubType>Designer</SubType>

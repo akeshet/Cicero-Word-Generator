@@ -322,6 +322,7 @@ namespace AtticusServer
                 {
                     AtticusServer.server.messageLog(this, new MessageEvent("Caught an exception while running RFSG task for GPIB channel " + channelID + ": " + e.Message + e.StackTrace));
                     AtticusServer.server.messageLog(this, new MessageEvent("Aborting RFSG task."));
+                    MainServerForm.instance.DisplayError = true;
                     disposeDevice();
                     if (this.Done != null)
                     {

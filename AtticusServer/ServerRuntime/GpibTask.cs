@@ -346,6 +346,7 @@ namespace AtticusServer
                 {
                     AtticusServer.server.messageLog(this, new MessageEvent("Caught an exception while running GPIB task for GPIB channel " + logicalChannelID + ": " + e.Message + e.StackTrace));
                     AtticusServer.server.messageLog(this, new MessageEvent("Aborting GPIB task."));
+                    MainServerForm.instance.DisplayError = true;
                     disposeDevice();
                     if (this.Done != null)
                     {

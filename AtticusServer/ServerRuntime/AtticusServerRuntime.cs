@@ -20,6 +20,14 @@ namespace AtticusServer
     public class AtticusServerRuntime : ServerCommunicator
     {
 
+        private void displayError()
+        {
+            if (MainServerForm.instance != null)
+            {
+                MainServerForm.instance.DisplayError = true;
+            }
+        }
+
         /// <summary>
         /// This is a lock object, used to make sure that only one instance of any remotely-called method is running at a time.
         /// The remotely called methods all lock this object.
@@ -267,6 +275,7 @@ namespace AtticusServer
                 catch (Exception e)
                 {
                     messageLog(this, new MessageEvent("Caught exception when attempting output of single timestep: " + e.Message + e.StackTrace));
+                    displayError();
                     return false;
                 }
             }
@@ -330,11 +339,13 @@ namespace AtticusServer
                     if (settings == null)
                     {
                         messageLog(this, new MessageEvent("Unable to generate buffers. Null settings."));
+                        displayError();
                         return BufferGenerationStatus.Failed_Settings_Null;
                     }
                     if (sequence == null)
                     {
                         messageLog(this, new MessageEvent("Unable to generate buffers. Null sequence."));
+                        displayError();
                         return BufferGenerationStatus.Failed_Sequence_Null;
                     }
 
@@ -358,7 +369,13 @@ namespace AtticusServer
                                         {
                                             messageLog(this, new MessageEvent("Creating Variable Timebase Task on fpga device " + fsettings.DeviceName + "."));
                                             int nSegs = 0;
-                                            FpgaTimebaseTask ftask = new FpgaTimebaseTask(fsettings, opalKellyDevices[opalKellyDeviceNames.IndexOf(fsettings.DeviceName)], sequence, ((double)1) / ((double)(fsettings.SampleClockRate)), out nSegs, myServerSettings.UseFpgaRfModulatedClockOutput, myServerSettings.UseFpgaAssymetricDutyCycleClocking);
+                                            FpgaTimebaseTask ftask = new FpgaTimebaseTask(fsettings, 
+                                                opalKellyDevices[opalKellyDeviceNames.IndexOf(fsettings.DeviceName)], 
+                                                sequence, 
+                                                ((double)1) / ((double)(fsettings.SampleClockRate)), 
+                                                out nSegs, 
+                                                myServerSettings.UseFpgaRfModulatedClockOutput, 
+                                                myServerSettings.UseFpgaAssymetricDutyCycleClocking);
                                             fpgaTasks.Add(fsettings.DeviceName, ftask);
                                             messageLog(this, new MessageEvent("...Done (" + nSegs + " segments total)"));
                                         }
@@ -366,6 +383,7 @@ namespace AtticusServer
                                         {
                                             messageLog(this, new MessageEvent("FPGA device " + fsettings.DeviceName + " is not programmed. Please press the refresh hardware button to program it. Or, if variable timebase on this device is not desired, set DeviceEnabled to false in this device's settings."));
                                             messageLog(this, new MessageEvent("Unable to create variable timebase output on FPGA device. Aborting buffer generation."));
+                                            displayError();
                                             return BufferGenerationStatus.Failed_Invalid_Data;
                                         }
                                     }
@@ -393,6 +411,7 @@ namespace AtticusServer
                             if (hc.physicalChannelName().ToUpper() == serverSettings.VariableTimebaseOutputChannel)
                             {
                                 messageLog(this, new MessageEvent("The variable timebase clock output channel also has a sequence-specified channel bound to it. This is not allowed."));
+                                displayError();
                                 return BufferGenerationStatus.Failed_Invalid_Data;
                             }
 
@@ -426,6 +445,7 @@ namespace AtticusServer
                             if (!variableTimebaseOutputDevice.Contains("Dev"))
                             {
                                 messageLog(this, new MessageEvent("******* You are using a NI device named " + variableTimebaseOutputDevice + ". This does not follow the convention of naming your devices Dev1, Dev2, Dev3, etc. Unpredictable results are possible! Not recommended! *******"));
+                                displayError();
                             }
 
                             // NOTE! This call will modify useDigitalChannels. Those digital channels which
@@ -494,7 +514,7 @@ namespace AtticusServer
                             if (!dev.Contains("Dev"))
                             {
                                 messageLog(this, new MessageEvent("******* You are using a NI device named " + dev + ". This does not follow the convention of naming your devices Dev1, Dev2, Dev3, etc. Unpredictable results are possible! Not recommended! *******"));
-                                
+                                displayError();
                             }
 
                             generateDaqMxTaskOnDevice(dev);
@@ -514,7 +534,7 @@ namespace AtticusServer
                                if (!dev.Contains("Dev"))
                                 {
                                     messageLog(this, new MessageEvent("******* You are using a NI device named " + dev + ". This does not follow the convention of naming your devices Dev1, Dev2, Dev3, etc. Unpredictable results are possible! Not recommended! *******"));
-
+                                    displayError();
                                 }
                                 Thread thread = new Thread(generateDaqMxTaskOnDevice);
                                 generateThreads.Add(thread);
@@ -588,6 +608,7 @@ namespace AtticusServer
                             {
                                 case  HardwareChannel.GpibMasqueradeType.NONE:
                                     messageLog(this, new MessageEvent("********** Error. GPIB channel with ID " + gpibID + " has its masquerading bit set to true, but has its masquerading type set to NONE. **********"));
+                                    displayError();
                                     break;
                                 case HardwareChannel.GpibMasqueradeType.RFSG:
                                     messageLog(this, new MessageEvent("Generating RFSG buffer for gpib ID " + gpibID));
@@ -664,6 +685,7 @@ namespace AtticusServer
                 catch (Exception e)
                 {
                     messageLog(this, new MessageEvent("Failed buffer generation due to exception: " + e.Message + "\n" + e.StackTrace));
+                    displayError();
                     return BufferGenerationStatus.Failed_Invalid_Data;
                 }
             }
@@ -690,6 +712,7 @@ namespace AtticusServer
             if (e.Error != null)
             {
                 messageLog(this, new MessageEvent("A task ended prematurely due to an error: " + e.Error.Message + e.Error.StackTrace));
+                displayError();
                 taskErrorsDetected = true;
             }
             else
@@ -753,6 +776,7 @@ namespace AtticusServer
                                 if (samplesGenerated != samplesExpected)
                                 {
                                     messageLog(this, new MessageEvent("*** Expected generation of " + samplesExpected + " samples for this task."));
+                                    displayError();
                                     samplesGeneratedMismatchDetected = true;
                                 }
                             }
@@ -781,12 +805,14 @@ namespace AtticusServer
 
                 if (earlyFinishDetected) {
                     messageLog(this, new MessageEvent("***At least 1 daqMx task finished at least 1 second before the client notified the server that it thought the run was finished. This may indicate corruption of the timing signal driving this daqMx task. Reporting to client as error.***"));
+                    displayError();
                     taskErrorsDetected = true;  
                 }
 
                 if (samplesGeneratedMismatchDetected)
                 {
                     messageLog(this, new MessageEvent("***At least 1 daqMx task generated a different number of samples from the expected number. Reporting to client as an error."));
+                    displayError();
                     taskErrorsDetected = true;
                 }
 
@@ -800,6 +826,7 @@ namespace AtticusServer
                             int errorSamp = ans - 1;
                             taskErrorsDetected = true;
                             messageLog(this, new MessageEvent("FPGA Mistrigger detection detected a mistrigger at (or after) sample number " + errorSamp));
+                            displayError();
                             if (serverSettings.DeviceToSyncSoftwareTimedTasksTo != null && serverSettings.DeviceToSyncSoftwareTimedTasksTo != "")
                             {
                                 int masterFreq = myServerSettings.myDevicesSettings[serverSettings.DeviceToSyncSoftwareTimedTasksTo].SampleClockRate;
@@ -1004,6 +1031,7 @@ namespace AtticusServer
                     if (gpibGroup == null)
                     {
                         messageLog(this, new MessageEvent("Received a null object, unable to comply."));
+                        displayError();
                         return false;
                     }
 
@@ -1042,6 +1070,7 @@ namespace AtticusServer
                             else
                             {
                                 messageLog(this, new MessageEvent("Skipping channel " + channelID + ", unsupported data type for an Output Now request: " + channelData.DataType.ToString()));
+                                displayError();
                             }
                         }
                     }
@@ -1050,6 +1079,7 @@ namespace AtticusServer
                 catch (Exception e)
                 {
                     messageLog(this, new MessageEvent("Caught exception when attempting to output gpib group: " + e.Message + e.StackTrace));
+                    displayError();
                     return false;
                 }
             }
@@ -1068,6 +1098,7 @@ namespace AtticusServer
                     if (rs232Group == null)
                     {
                         messageLog(this, new MessageEvent("Received a null output object. Unable to comply."));
+                        displayError();
                         return false;
                     }
 
@@ -1117,6 +1148,7 @@ namespace AtticusServer
                 catch (Exception e)
                 {
                     messageLog(this, new MessageEvent("Caught exception when attempting output of single rs232 group: " + e.Message + e.StackTrace));
+                    displayError();
                     return false;
                 }
 
@@ -1172,6 +1204,7 @@ namespace AtticusServer
                                     if (serverSettings.SoftwareTaskTriggerMethod == ServerSettings.SoftwareTaskTriggerType.SampleClockEvent)
                                     {
                                         messageLog(this, new MessageEvent("***** You are using SampleClockEvent as your SoftwareTaskTriggerMethod (in your ServerSettings). This is not recommended and no longer supported. Use PollBufferPosition instead. *****"));
+                                        displayError();
                                         /*
                                         lock (softwareTriggeringTaskLock)
                                         {
@@ -1231,6 +1264,7 @@ namespace AtticusServer
                 catch (Exception e)
                 {
                     messageLog(this, new MessageEvent("Unable to arm tasks due to exception: " + e.Message + e.StackTrace));
+                    displayError();
                     return false;
                 }
             }
@@ -1257,6 +1291,7 @@ namespace AtticusServer
                 if (!entered)
                 {
                     messageLog(this, new MessageEvent("******* Unable to run software task triggering polling thread, as another such thread is already running. Software timed tasks may not be triggered. *******"));
+                    displayError();
                     return;
                 }
                 try
@@ -1299,6 +1334,7 @@ namespace AtticusServer
             catch (Exception e)
             {
                 messageLog(this, new MessageEvent("Caught exception during software trigger polling thread: " + e.Message + e.StackTrace));
+                displayError();
                 try
                 {
                     Monitor.Exit(softTrigLock);
@@ -1327,6 +1363,7 @@ namespace AtticusServer
         void triggerSoftwareTimedTasks(object sender, SampleClockEventArgs e)
         {
             messageLog(this, new MessageEvent("******** triggerSoftwareTimedTasks(...) was called. This function is no longer supported. How did you get here? ********"));
+            displayError();
             /*
             lock (softTrigLock)
             {
@@ -1506,6 +1543,7 @@ namespace AtticusServer
                     if (serverSettings.TriggerOutputChannel != "" && serverSettings.TriggerOutputChannel != null)
                     {
                         messageLog(this, new MessageEvent("******* This server is configured to use a trigger output channel. This is not recommended. Instead, either use a variable timebase sample clock, or derive your start trigger from the StartTrigger channel of a software triggered task. *********"));
+                        displayError();
 
                         string triggerChannel = serverSettings.TriggerOutputChannel;
                         // Create trigger tasks
@@ -1592,6 +1630,7 @@ namespace AtticusServer
                 catch (Exception e)
                 {
                     messageLog(this, new MessageEvent("Unable to generate triggers due to exception. " + e.Message + e.StackTrace));
+                    displayError();
                     return false;
                 }
             }
@@ -1624,6 +1663,7 @@ namespace AtticusServer
                 catch (Exception e)
                 {
                     messageLog(this, new MessageEvent("Caught exception while attempting to verify settings. " + e.Message + e.StackTrace));
+                    displayError();
                     return false;
                 }
             }
@@ -1646,6 +1686,7 @@ namespace AtticusServer
                 catch (Exception e)
                 {
                     messageLog(this, new MessageEvent("Caught exception while attempting to STOP: " + e.Message + e.StackTrace));
+                    displayError();
                 }
             }
         }
@@ -1675,6 +1716,7 @@ namespace AtticusServer
                     catch (Exception e)
                     {
                         messageLog(this, new MessageEvent("Caught exception when trying to stop the variable timebase output task. This may indicate that the variable timebase clock suffered a buffer underrun in the previous run. Exception follows: " + e.Message + e.StackTrace));
+                        displayError();
                         ans = false;
                     }
 
@@ -1685,6 +1727,7 @@ namespace AtticusServer
                     catch (Exception e)
                     {
                         messageLog(this, new MessageEvent("Caught exception when trying to dispose of the variable timebase output task. This may indicate that the variable timebase clock suffered a buffer underrun in the previous run. Exception follows: " + e.Message + e.StackTrace));
+                        displayError();
                         ans = false;
                     }
 
@@ -1708,6 +1751,7 @@ namespace AtticusServer
                         catch (Exception e)
                         {
                             messageLog(this, new MessageEvent("Caught exception when trying to stop task on device " + dev + ". This may indicate that the previous run suffered from a buffer underrun. Exception follows: " + e.Message + e.StackTrace));
+                            displayError();
                             ans = false;
                         }
 
@@ -1718,6 +1762,7 @@ namespace AtticusServer
                         catch (Exception e)
                         {
                             messageLog(this, new MessageEvent("Caught exception when trying to dispose of task on device " + dev + ". This may indicated that the previous run suffered from a buffer underrun. Exception follows: " + e.Message + e.StackTrace));
+                            displayError();
                             ans = false;
                         }
 
@@ -1779,6 +1824,7 @@ namespace AtticusServer
             catch (Exception e)
             {
                 messageLog(this, new MessageEvent("Caught exception when attempting to stop tasks. " + e.Message + e.StackTrace));
+                displayError();
                 return false;
             }
 
@@ -1926,6 +1972,7 @@ namespace AtticusServer
             catch (Exception e)
             {
                 messageLog(this, new MessageEvent("Unable to start Marshal due to exception: " + e.Message + e.StackTrace));
+                displayError();
                 communicatorStatus = ServerStructures.ServerCommunicatorStatus.Disconnected;
                 updateGUI(this, null);
             }
@@ -2006,8 +2053,15 @@ namespace AtticusServer
 
             System.Console.WriteLine("Found " + devices.Length.ToString() + " devices.");
 
+            bool niDaqDevicesExistThatAreNotNamedDevSomething = false;
+
             for (int i = 0; i < devices.Length; i++)
             {
+                if (!devices[i].ToUpper().Contains("DEV"))
+                {
+                    niDaqDevicesExistThatAreNotNamedDevSomething = true;
+                }
+
                 System.Console.WriteLine("Querying device " + i + "...");
 
                 detectedDevices.Add(devices[i]);
@@ -2373,6 +2427,12 @@ namespace AtticusServer
             #endregion
 
             System.Console.WriteLine("...done running refreshHardwareLists().");
+
+            if (niDaqDevicesExistThatAreNotNamedDevSomething)
+            {
+                System.Console.WriteLine("!! NOTE !! Some NI devices were detected whose name does not follow the Dev1, Dev2, Dev3, naming convention. This will cause problems.");
+                MessageBox.Show("National Instruments cards were detected whose names do not corresponding to the Dev1, Dev2, Dev3, etc. naming convention. This convention is relied upon by Atticus. Not following this convention will cause problems when attempting to run sequences on these devices. Please use MAX (the NI-supplied program) to rename your NI devices to follow the convention.", "Invalid niDaq Device Names");
+            }
         }
 
 

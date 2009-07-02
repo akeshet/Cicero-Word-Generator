@@ -70,6 +70,7 @@
     <Compile Include="SequenceData\ListData.cs" />
     <Compile Include="SequenceData\Pulse.cs" />
     <Compile Include="SequenceData\RS232Group.cs" />
+    <Compile Include="SequenceData\SequenceComparer.cs" />
     <Compile Include="SequenceData\SequenceData.cs" />
     <Compile Include="SequenceData\SequenceGenre.cs" />
     <Compile Include="SequenceData\SingleOutputFrame.cs" />

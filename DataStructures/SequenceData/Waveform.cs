@@ -991,7 +991,12 @@ namespace DataStructures
         [Description("Extra parameters."), Category("Parameters")]
         public List<DimensionedParameter> ExtraParameters
         {
-            get { return extraParameters; }
+            get
+            {
+                if (extraParameters == null)
+                    extraParameters = new List<DimensionedParameter>();
+                return extraParameters;
+            }
             set { extraParameters = value; }
         }
 
@@ -1039,15 +1044,26 @@ namespace DataStructures
         [Description("Other referenced waveforms, if any, used in a combination interpolation."), Category("Parameters")]
         public List<Waveform> ReferencedWaveforms
         {
-            get { return referencedWaveforms; }
+            get
+            {
+                if (referencedWaveforms == null)
+                    referencedWaveforms = new List<Waveform>();
+                return referencedWaveforms;
+            }
             set { referencedWaveforms = value; }
         }
+
         private List<InterpolationType.CombinationOperators> combiners;
 
         [Description("Combination operators used, if any, in a combination interpolation."), Category("Parameters")]
         public List<InterpolationType.CombinationOperators> WaveformCombiners
         {
-            get { return combiners; }
+            get
+            {
+                if (combiners == null)
+                    combiners = new List<InterpolationType.CombinationOperators>();
+                return combiners;
+            }
             set { combiners = value; }
         }
 

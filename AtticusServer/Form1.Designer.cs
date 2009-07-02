@@ -30,6 +30,7 @@ namespace AtticusServer
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainServerForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.hcGrid = new System.Windows.Forms.PropertyGrid();
@@ -59,7 +60,6 @@ namespace AtticusServer
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splashScreenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.licenseInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.button2 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -86,6 +86,16 @@ namespace AtticusServer
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Hardware Settings";
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(16, 69);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(93, 37);
+            this.button2.TabIndex = 13;
+            this.button2.Text = "Delete Selected Device";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click_1);
             // 
             // button4
             // 
@@ -258,6 +268,7 @@ namespace AtticusServer
             this.eventLogTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.eventLogTextBox.Size = new System.Drawing.Size(968, 166);
             this.eventLogTextBox.TabIndex = 0;
+            this.eventLogTextBox.Click += new System.EventHandler(this.eventLogTextBox_Click);
             // 
             // groupBox4
             // 
@@ -349,16 +360,6 @@ namespace AtticusServer
             this.licenseInformationToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.licenseInformationToolStripMenuItem.Text = "License Information";
             this.licenseInformationToolStripMenuItem.Click += new System.EventHandler(this.licenseInformationToolStripMenuItem_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(16, 69);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(93, 37);
-            this.button2.TabIndex = 13;
-            this.button2.Text = "Delete Selected Device";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click_1);
             // 
             // MainServerForm
             // 

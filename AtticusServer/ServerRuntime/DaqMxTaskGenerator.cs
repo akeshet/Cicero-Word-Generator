@@ -22,7 +22,6 @@ namespace AtticusServer
         /// <param name="channelName">
         /// Name of the channel that will output the variable timebase clock.
         /// </param>
-        /// <param name="portsToUse">
         /// A list of integers specifying the digital ports that this task will use. The task will automatically
         /// make use of the full port that the variable timebase clock belongs to. If portsToUse is null, then 
         /// this function will automatically use both this port and its neighboring port (0 with 1, 2 with 3, etc).

@@ -189,8 +189,8 @@ namespace WordGenerator.ChannelManager
             this.Controls.Add(this.logicalDevSplitContainer);
             this.Name = "ChannelManager";
             this.Text = "ChannelManager";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ChannelManager_FormClosing);
             this.Load += new System.EventHandler(this.ChannelManager_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ChannelManager_FormClosing);
             this.logicalDevSplitContainer.Panel1.ResumeLayout(false);
             this.logicalDevSplitContainer.Panel2.ResumeLayout(false);
             this.logicalDevSplitContainer.Panel2.PerformLayout();

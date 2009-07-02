@@ -953,6 +953,45 @@ namespace WordGenerator
             {
                 string response;
 
+                bool dupAnalogs = false ;
+                bool dupPulses = false;
+                bool dupVariables=false;
+                bool dupgpibs=false;
+                bool duprs232s=false;
+
+                SequenceData seq = Storage.sequenceData;
+
+                foreach (AnalogGroup ag in seq.AnalogGroups)
+                {
+                    foreach (AnalogGroup ag2 in insertMe.AnalogGroups)
+                    {
+                        if (ag.GroupName == ag2.GroupName)
+                            dupAnalogs = true;
+                    }
+                }
+
+                foreach (Pulse p1 in seq.DigitalPulses)
+                    foreach (Pulse p2 in insertMe.DigitalPulses)
+                        if (p1.PulseName == p2.PulseName)
+                            dupPulses = true;
+
+                foreach (Variable v1 in seq.Variables)
+                    foreach (Variable v2 in insertMe.Variables)
+                        if (!v1.IsSpecialVariable)
+                            if (!v2.IsSpecialVariable)
+                                if (v1.VariableName == v2.VariableName)
+                                    dupVariables = true;
+
+                foreach (GPIBGroup g1 in seq.GpibGroups)
+                    foreach (GPIBGroup g2 in insertMe.GpibGroups)
+                        if (g1.GroupName == g2.GroupName)
+                            dupgpibs = true;
+
+                foreach (RS232Group g1 in seq.RS232Groups)
+                    foreach (RS232Group g2 in seq.RS232Groups)
+                        if (g1.GroupName == g2.GroupName)
+                            duprs232s = true;
+
                 if (markedSteps.Count == 0)
                 {
                     response = Storage.sequenceData.insertSequence(insertMe, 0);
@@ -967,6 +1006,22 @@ namespace WordGenerator
                     MessageBox.Show(response);
                 }
 
+                if (dupAnalogs)
+                    MessageBox.Show("The insertion operation has created duplicate Analog groups with identical names. To reduce confusion, it is recommended that the user now cleans these up.");
+                if (dupgpibs)
+                    MessageBox.Show("The insertion operation has created duplicate GPIB groups with identical names. To reduce confusion, it is recommended that the user now cleans these up.");
+                if (dupPulses)
+                    MessageBox.Show("The insertion operation has created duplicate Pulses with identical names. To reduce confusion, it is recommended that the user now cleans these up.");
+                if (duprs232s)
+                    MessageBox.Show("The insertion operation has created duplicate RS232 groups with identical names. To reduce confusion, it is recommended that the user now cleans these up.");
+                if (dupVariables)
+                    MessageBox.Show("The insertion operation has created duplicate Variables with identical names. To reduce confusion, it is recommended that the user now cleans these up.");
+
+
+
+
+
+
                 RefreshSequenceDataToUI(Storage.sequenceData);
             }
 
@@ -978,6 +1033,25 @@ namespace WordGenerator
             {
                 Storage.sequenceData.WaitForReady = waitForReady.Checked;
             }
+        }
+
+        private void compareSequenceMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SequenceData other = Storage.SaveAndLoad.LoadSequenceWithFileDialog();
+                List<SequenceComparer.SequenceDifference> differences = SequenceComparer.CompareSequences(
+                    other, Storage.sequenceData);
+                SequenceDifferencesForm frm = new SequenceDifferencesForm(differences);
+                frm.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Caught an exception when attempting to compare the sequences. Sequence comparison is still in its early stages. Please copy the following exception information and send it to the author. Don't worry, Cicero is not about to crash.");
+                ExceptionViewerDialog view = new ExceptionViewerDialog(ex);
+                view.ShowDialog();
+            }
+
         }
 
 
