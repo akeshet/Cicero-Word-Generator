@@ -59,10 +59,91 @@ namespace DataStructures
 
             diffs |= CompareLists<Waveform>("Common waveforms: ", seq1.CommonWaveforms, seq2.CommonWaveforms, ans, CompareWaveforms);
 
-            diffs |= CompareLists<SequenceMode>("Sequence modes: ", seq1.SequenceModes, seq2.SequenceModes, ans, CompareSequenceModes);
+            diffs |= CompareListsDatas("Lists: ", seq1.Lists, seq2.Lists, ans);
+
+    //  in present implementation, Sequence Mode comparison does not work, 
+    //  because of the way that CompareDictionaries works
+            // (ie it will report that modes from different sequence files have completely non-overlapping
+            // sets of keys, even if they are the same sort of sequence mode.)
+    //        diffs |= CompareLists<SequenceMode>("Sequence modes: ", seq1.SequenceModes, seq2.SequenceModes, ans, CompareSequenceModes);
 
             return ans;
 
+        }
+
+        private static bool CompareGenericStructArray<TType>(string preString, TType[] ar1, TType[] ar2, List<SequenceDifference> ans) where TType : IEquatable<TType>
+        {
+            if (ar1 == null || ar2 == null)
+            {
+                if ((ar1 == null) & (ar2 == null))
+                {
+                    return false;
+                }
+                else
+                {
+                    addDifference(preString+ "one array null, other not.", ans);
+                    return true;
+                }
+            }
+
+            if (ar1.Length != ar2.Length)
+            {
+                addDifference(preString+ "different lengths.", ans);
+                return true;
+            }
+
+            bool diffs = false;
+            for (int i = 0; i < ar1.Length; i++)
+            {
+                if (!(ar1[i].Equals(ar2[i])))
+                {
+                    diffs = true;
+                    addDifference(preString+"element #" + i + " differs.", ans);
+                }
+            }
+            return diffs;
+        }
+
+        private static bool CompareObjectArray<TType>(string preString, TType[] ar1, TType[] ar2, List<SequenceDifference> ans, compareItems<TType> compareItemsMethod) where TType : new()
+        {
+            if (ar1 == null || ar2 == null)
+            {
+                if ((ar1 == null) & (ar2 == null))
+                {
+                    return false;
+                }
+                else
+                {
+                    addDifference(preString + "one array null, other not.", ans);
+                    return true;
+                }
+            }
+
+            if (ar1.Length != ar2.Length)
+            {
+                addDifference(preString + "different lengths.", ans);
+                return true;
+            }
+
+            bool diffs = false;
+            for (int i = 0; i < ar1.Length; i++)
+            {
+                diffs |= compareItemsMethod(preString + "element #" + i + " ", ar1[i], ar2[i], ans);
+            }
+            return diffs;
+        }
+
+        private static bool CompareListsDatas(string preString, ListData a, ListData b, List<SequenceDifference> ans) {
+            bool diffs = false;
+            diffs |= CompareGenericStructArray<bool>(preString + "cross/commas ", a.Cross, b.Cross, ans);
+            diffs |= CompareGenericStructArray<bool>(preString + "list enabled/disabled ", a.ListEnabled, b.ListEnabled, ans);
+            diffs |= CompareObjectArray<List<double>>(preString + "list contents ", a.Lists, b.Lists, ans, CompareDoubleLists);
+            return diffs;
+        }
+
+        private static bool CompareDoubleLists(string preString, List<double> a, List<double> b, List<SequenceDifference> ans)
+        {
+            return CompareLists<double>(preString, a, b, ans, CompareDoubles);
         }
 
         private static bool CompareGroups<TChannelType>(string preString, Group<TChannelType> a, Group<TChannelType> b, List<SequenceDifference> ans,
@@ -157,7 +238,7 @@ namespace DataStructures
             bool diffs = false;
 
             diffs |= CompareParameters(preString + "duration ", a.WaveformDuration, b.WaveformDuration, ans);
-            diffs |= CompareLists<DimensionedParameter>(preString + "xValues ", a.XValues, b.YValues, ans, CompareParameters);
+            diffs |= CompareLists<DimensionedParameter>(preString + "xValues ", a.XValues, b.XValues, ans, CompareParameters);
             diffs |= CompareLists<DimensionedParameter>(preString + "yValues ", a.YValues, b.YValues, ans, CompareParameters);
             diffs |= CompareLists<DimensionedParameter>(preString + "special parameters ", a.ExtraParameters, b.ExtraParameters, ans, CompareParameters);
             diffs |= CompareStrings(preString + "data file names ", a.DataFileName, b.DataFileName, ans);
@@ -279,6 +360,16 @@ namespace DataStructures
             return diffs;
         }
 
+        /// <summary>
+        /// Compares two lists of any type of object, given a method for comparing the objects themselves.
+        /// </summary>
+        /// <typeparam name="TVal"></typeparam>
+        /// <param name="prestring"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="ans"></param>
+        /// <param name="compareValues"></param>
+        /// <returns></returns>
         private static bool CompareLists<TVal>(string prestring, List<TVal> a, List<TVal> b, List<SequenceDifference> ans,
             compareItems<TVal> compareValues)
         {
@@ -301,6 +392,17 @@ namespace DataStructures
             return diffs;
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <typeparam name="Tkey"></typeparam>
+        /// <typeparam name="TVal"></typeparam>
+        /// <param name="prestring"></param>
+        /// <param name="d1"></param>
+        /// <param name="d2"></param>
+        /// <param name="ans"></param>
+        /// <param name="compareValues"></param>
+        /// <returns></returns>
         private static bool CompareDictionaries<Tkey, TVal>(string prestring, Dictionary<Tkey, TVal> d1, Dictionary<Tkey, TVal> d2, List<SequenceDifference> ans,
             compareItems<TVal> compareValues)
         {
@@ -411,7 +513,10 @@ namespace DataStructures
             diffs |= CompareBools(preString + "start delay enabled/disabled ", a.startDelayEnabled, b.startDelayEnabled, ans);
 
             diffs |= CompareBools(preString + "value from variable/manual ", a.ValueFromVariable, b.ValueFromVariable, ans);
-            diffs |= CompareStrings(preString + "name of value variable ", a.ValueVariable.VariableName, b.ValueVariable.VariableName, ans);
+            if (a.ValueVariable != null && b.ValueVariable != null)
+            {
+                diffs |= CompareStrings(preString + "name of value variable ", a.ValueVariable.VariableName, b.ValueVariable.VariableName, ans);
+            }
             return diffs;
 
         }
@@ -420,7 +525,7 @@ namespace DataStructures
         {
             if (a != b)
             {
-                addDifference("differs.", ans);
+                addDifference(preString + "differs.", ans);
                 return true;
             }
             return false;

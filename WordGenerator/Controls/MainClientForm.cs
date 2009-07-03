@@ -1041,7 +1041,7 @@ namespace WordGenerator
             {
                 SequenceData other = Storage.SaveAndLoad.LoadSequenceWithFileDialog();
                 List<SequenceComparer.SequenceDifference> differences = SequenceComparer.CompareSequences(
-                    other, Storage.sequenceData);
+                    Storage.sequenceData, other);
                 SequenceDifferencesForm frm = new SequenceDifferencesForm(differences);
                 frm.ShowDialog();
             }

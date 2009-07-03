@@ -443,8 +443,8 @@ namespace DataStructures
 
             try
             {
-                invoke_method_on_server_params invoke_parameters = new invoke_method_on_server_params(method, parameters, communicator);
-                Thread invokeMethodThread = new Thread(new ParameterizedThreadStart(invoke_method_on_server_proc));
+                InvokeMethodOnServer_Parameters invoke_parameters = new InvokeMethodOnServer_Parameters(method, parameters, communicator);
+                Thread invokeMethodThread = new Thread(new ParameterizedThreadStart(InvokeMethodOnServer_Proc));
                 invokeMethodThread.Start(invoke_parameters);
 
                // invokeMethodThread.Join(msTimeout);
@@ -491,7 +491,12 @@ namespace DataStructures
             return ServerActionStatus.Success;
         }
 
-        private class invoke_method_on_server_params
+        /// <summary>
+        /// This class is used to pass information to InvokeMethodOnServer_Proc (run in a separate thread)
+        /// so that it can make the appropriate call to server communicator, with appropriate arguments,
+        /// and can send back the return value.
+        /// </summary>
+        private class InvokeMethodOnServer_Parameters
         {
             public MethodInfo method;
             public object[] parameters;
@@ -499,7 +504,7 @@ namespace DataStructures
 
             public Object returnValue;
 
-            public invoke_method_on_server_params(MethodInfo method, object[] parameters, ServerCommunicator communicator)
+            public InvokeMethodOnServer_Parameters(MethodInfo method, object[] parameters, ServerCommunicator communicator)
             {
                 this.method = method;
                 this.parameters = parameters;
@@ -509,9 +514,15 @@ namespace DataStructures
             public Exception runException;
         }
 
-        private static void invoke_method_on_server_proc(object obj)
+        /// <summary>
+        /// This is the function that actually makes the call to server communicator.
+        /// 
+        /// It is run in a separate thread, for historical reasons.
+        /// </summary>
+        /// <param name="obj"></param>
+        private static void InvokeMethodOnServer_Proc(object obj)
         {
-            invoke_method_on_server_params parameters = (invoke_method_on_server_params)obj;
+            InvokeMethodOnServer_Parameters parameters = (InvokeMethodOnServer_Parameters)obj;
             if (parameters != null)
             {
                 try
@@ -612,9 +623,9 @@ namespace DataStructures
             return runMethodOnConnectedServers(method, parameters, msTimeout, messageLog);
         }
 
-        public ServerActionStatus setSettingsOnConnectedServers(SettingsData settings, EventHandler messageLog) 
+        public ServerActionStatus setSettingsOnConnectedServers(SettingsData settings, EventHandler messageLog)
         {
-            return runNamedMethodOnConnectedServers("setSettings", new object[] {settings}, 4000, messageLog);
+            return runNamedMethodOnConnectedServers("setSettings", new object[] { settings }, 4000, messageLog);
         }
 
         public ServerActionStatus setSequenceOnConnectedServers(SequenceData sequence, EventHandler messageLog)
@@ -698,5 +709,47 @@ namespace DataStructures
             ans.Remove(ans.Length - 2);
             return ans;
         }
+
+        private void thisFunctionNeverGetsCalled(ServerCommunicator temp)
+        {
+            // The purpose of this function is to be found by perplexed programmers
+            // who have attempted to search for references to ServerCommunicator methods.
+
+            // The reason this is necessary is that there are NO direct calls made to any ServerCommunicator
+            // methods. There is an added layer of complexity which was added to allow for better performance. 
+
+            // The added complexity is that instead of just calling methods on ServerCommunicator, I am instead 
+            // calling them from the function InvokeMethodOnServer_Proc, run in its own thread. This allows me
+            // to kill or cancel the call to ServerCommunicator if it times out, due for instance to a network
+            // disconnection or a server shutting down.
+
+            // As a result of this, and in order to make the InvokeMethodOnServer_Proc function more general purpose,
+            // there are no direct calls to ServerCommunicator functions. Instead, they are referenced by name
+            // through the .NET reflection MethodInfo class. To see how this works, look at the function 
+            // setSettingsOnConnectedServers and work your way down.
+
+            // Should you need to add new methods to ServerCommunicator, and thus corresponding new
+            // methods to ServerManager, it should be straightforward to copy the technique I used.
+
+            // Alas, this is a bit confusing and not particularly transparent, which is why I have
+            // created this note.
+
+            temp.armTasks();
+            temp.generateBuffers(0);
+            temp.generateTrigger();
+            temp.getHardwareChannels();
+            temp.getServerName();
+            temp.getServerSettings();
+            temp.nextRunTimeStamp(DateTime.Now);
+            temp.outputGPIBGroup(null, null);
+            temp.outputRS232Group(null, null);
+            temp.outputSingleTimestep(null, null);
+            temp.ping();
+            temp.runSuccess();
+            temp.setSequence(null);
+            temp.setSettings(null);
+            temp.stop();
+        }
+
     }
 }
