@@ -1,0 +1,6 @@
+CommandLine
+C:\Xilinx\10.1\ISE\bin\nt\unwrapped\xst.exe -ise C:/Documents and Settings/Aviv Keshet/My Documents/FPGA/AvivFPGA2/AvivFPGA2.ise -intstyle ise -ifn C:/Documents and Settings/Aviv Keshet/My Documents/FPGA/AvivFPGA2/AvivFPGA2.xst -ofn C:/Documents and Settings/Aviv Keshet/My Documents/FPGA/AvivFPGA2/AvivFPGA2.syr -finalclean 1
+s
+FormatString
+xst [-ifn <InputFile>] [-ofn <OutputFile>] [-ise <iseProjectFile>] [--quiet] [-intstyle <Style>] [--deb <DebugLevel>] [--finalclean <Clean>] [--PcubeFlow] [--globOptFlow] [--XstNtrc]
+s
