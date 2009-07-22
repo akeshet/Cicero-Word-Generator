@@ -30,6 +30,7 @@ namespace WordGenerator.Controls
         {
             this.components = new System.ComponentModel.Container();
             this.groupChannelSelectorPanel = new System.Windows.Forms.Panel();
+            this.groupChannelSelectorPlaceholder = new WordGenerator.Controls.GroupChannelSelection();
             this.newGroupButton = new System.Windows.Forms.Button();
             this.analogGroupSelector = new System.Windows.Forms.ComboBox();
             this.renameTextBox = new System.Windows.Forms.TextBox();
@@ -49,7 +50,7 @@ namespace WordGenerator.Controls
             this.timeResolutionEditor = new WordGenerator.Controls.HorizontalParameterEditor();
             this.waveformEditor1 = new WordGenerator.Controls.WaveformEditor();
             this.waveformGraphCollection1 = new WordGenerator.Controls.WaveformGraphCollection();
-            this.groupChannelSelectorPlaceholder = new WordGenerator.Controls.GroupChannelSelection();
+            this.button2 = new System.Windows.Forms.Button();
             this.groupChannelSelectorPanel.SuspendLayout();
             this.runOrderPanel.SuspendLayout();
             this.SuspendLayout();
@@ -62,6 +63,15 @@ namespace WordGenerator.Controls
             this.groupChannelSelectorPanel.Name = "groupChannelSelectorPanel";
             this.groupChannelSelectorPanel.Size = new System.Drawing.Size(220, 477);
             this.groupChannelSelectorPanel.TabIndex = 0;
+            // 
+            // groupChannelSelectorPlaceholder
+            // 
+            this.groupChannelSelectorPlaceholder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.groupChannelSelectorPlaceholder.Location = new System.Drawing.Point(0, 3);
+            this.groupChannelSelectorPlaceholder.Name = "groupChannelSelectorPlaceholder";
+            this.groupChannelSelectorPlaceholder.Size = new System.Drawing.Size(203, 28);
+            this.groupChannelSelectorPlaceholder.TabIndex = 0;
+            this.groupChannelSelectorPlaceholder.Visible = false;
             // 
             // newGroupButton
             // 
@@ -243,19 +253,22 @@ namespace WordGenerator.Controls
             this.waveformGraphCollection1.Size = new System.Drawing.Size(785, 750);
             this.waveformGraphCollection1.TabIndex = 1;
             // 
-            // groupChannelSelectorPlaceholder
+            // button2
             // 
-            this.groupChannelSelectorPlaceholder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.groupChannelSelectorPlaceholder.Location = new System.Drawing.Point(0, 3);
-            this.groupChannelSelectorPlaceholder.Name = "groupChannelSelectorPlaceholder";
-            this.groupChannelSelectorPlaceholder.Size = new System.Drawing.Size(203, 28);
-            this.groupChannelSelectorPlaceholder.TabIndex = 0;
-            this.groupChannelSelectorPlaceholder.Visible = false;
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.Location = new System.Drawing.Point(119, 56);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(76, 34);
+            this.button2.TabIndex = 21;
+            this.button2.Text = "Delete Unused Groups";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // AnalogGroupEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.replacementGroupSelector);
             this.Controls.Add(this.replaceGroupButton);
             this.Controls.Add(this.runOrderPanel);
@@ -307,6 +320,7 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button replaceGroupButton;
         private System.Windows.Forms.ComboBox replacementGroupSelector;
+        private System.Windows.Forms.Button button2;
 
     }
 }

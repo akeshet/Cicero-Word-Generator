@@ -423,6 +423,24 @@ namespace WordGenerator.Controls
             }
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            DialogResult res = MessageBox.Show("This action will delete all unused analog groups (ie groups that are not activated anywhere in the sequence. Are you sure you want to continue?", "Delete unused groups?", MessageBoxButtons.YesNo);
+            if (res == DialogResult.Yes)
+            {
+                List<AnalogGroup> usedGroups = new List<AnalogGroup>();
+                foreach (TimeStep step in Storage.sequenceData.TimeSteps)
+                {
+                    if (step.AnalogGroup != null)
+                        if (!usedGroups.Contains(step.AnalogGroup))
+                            usedGroups.Add(step.AnalogGroup);
+                }
+
+                Storage.sequenceData.AnalogGroups = usedGroups;
+                WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+            }
+        }
+
 
     }
 }

@@ -46,6 +46,7 @@ namespace WordGenerator.Controls.Temporary
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.replacementGroupSelector = new System.Windows.Forms.ComboBox();
             this.replaceGroupButton = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.waveformEditor1 = new WordGenerator.Controls.WaveformEditor();
             this.waveformGraphCollection1 = new WordGenerator.Controls.WaveformGraphCollection();
             this.runOrderPanel.SuspendLayout();
@@ -210,6 +211,17 @@ namespace WordGenerator.Controls.Temporary
             this.replaceGroupButton.UseVisualStyleBackColor = true;
             this.replaceGroupButton.Click += new System.EventHandler(this.replaceGroupButton_Click);
             // 
+            // button3
+            // 
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button3.Location = new System.Drawing.Point(119, 56);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(76, 34);
+            this.button3.TabIndex = 23;
+            this.button3.Text = "Delete Unused Groups";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // waveformEditor1
             // 
             this.waveformEditor1.AutoScroll = true;
@@ -231,6 +243,7 @@ namespace WordGenerator.Controls.Temporary
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.replacementGroupSelector);
             this.Controls.Add(this.replaceGroupButton);
             this.Controls.Add(this.runOrderPanel);
@@ -278,6 +291,7 @@ namespace WordGenerator.Controls.Temporary
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ComboBox replacementGroupSelector;
         private System.Windows.Forms.Button replaceGroupButton;
+        private System.Windows.Forms.Button button3;
 
     }
 }

@@ -420,6 +420,25 @@ namespace WordGenerator.Controls
             }
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            DialogResult res = MessageBox.Show("This action will delete all unused gpib groups (ie groups that are not activated anywhere in the sequence. Are you sure you want to continue?", "Delete unused groups?", MessageBoxButtons.YesNo);
+            if (res == DialogResult.Yes)
+            {
+                List<GPIBGroup> usedGroups = new List<GPIBGroup>();
+                foreach (TimeStep step in Storage.sequenceData.TimeSteps)
+                {
+                    if (step.GpibGroup != null)
+                        if (!usedGroups.Contains(step.GpibGroup))
+                            usedGroups.Add(step.GpibGroup);
+                }
+
+                Storage.sequenceData.GpibGroups = usedGroups;
+                WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+            }
+
+        }
+
 
     }
 }

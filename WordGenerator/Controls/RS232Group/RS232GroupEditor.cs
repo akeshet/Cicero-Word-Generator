@@ -383,5 +383,24 @@ namespace WordGenerator.Controls.Temporary
             }
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            DialogResult res = MessageBox.Show("This action will delete all unused rs232 groups (ie groups that are not activated anywhere in the sequence. Are you sure you want to continue?", "Delete unused groups?", MessageBoxButtons.YesNo);
+            if (res == DialogResult.Yes)
+            {
+                List<RS232Group> usedGroups = new List<RS232Group>();
+                foreach (TimeStep step in Storage.sequenceData.TimeSteps)
+                {
+                    if (step.rs232Group != null)
+                        if (!usedGroups.Contains(step.rs232Group))
+                            usedGroups.Add(step.rs232Group);
+                }
+
+                Storage.sequenceData.RS232Groups = usedGroups;
+                WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+            }
+
+        }
+
     }
 }
