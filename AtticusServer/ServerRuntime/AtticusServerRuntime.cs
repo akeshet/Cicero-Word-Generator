@@ -772,12 +772,18 @@ namespace AtticusServer
                         {
                             if (expectedNumberOfSamplesGenerated.ContainsKey(str))
                             {
-                                long samplesExpected = expectedNumberOfSamplesGenerated[str];
-                                if (samplesGenerated != samplesExpected)
+                                if (myServerSettings.myDevicesSettings.ContainsKey(str))
                                 {
-                                    messageLog(this, new MessageEvent("*** Expected generation of " + samplesExpected + " samples for this task."));
-                                    displayError();
-                                    samplesGeneratedMismatchDetected = true;
+                                    if (myServerSettings.myDevicesSettings[str].MySampleClockSource == DeviceSettings.SampleClockSource.External)
+                                    {
+                                        long samplesExpected = expectedNumberOfSamplesGenerated[str];
+                                        if (samplesGenerated != samplesExpected)
+                                        {
+                                            messageLog(this, new MessageEvent("*** Expected generation of " + samplesExpected + " samples for this task."));
+                                            displayError();
+                                            samplesGeneratedMismatchDetected = true;
+                                        }
+                                    }
                                 }
                             }
                         }

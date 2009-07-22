@@ -178,6 +178,7 @@ namespace WordGenerator.Controls
             layoutEnableButton();
             layoutShowhideButton();
             updatePulsesIndicator();
+            updateWaitForRetriggerIndicator();
         }
 
         private void redrawStepNumberLabel(TimeStep stepData, int timeStepNumber)
@@ -697,6 +698,26 @@ namespace WordGenerator.Controls
         private void unmarkall_Click(object sender, EventArgs e)
         {
             WordGenerator.mainClientForm.instance.sequencePage1.unmarkAllTimesteps();
+        }
+
+        private void waitForRetriggerMenuItem_Click(object sender, EventArgs e)
+        {
+            this.StepData.WaitForRetrigger = !this.StepData.WaitForRetrigger;
+            updateWaitForRetriggerIndicator();
+        }
+
+        public void updateWaitForRetriggerIndicator()
+        {
+            if (this.StepData.WaitForRetrigger)
+            {
+                waitLabel.Visible = true;
+                waitForRetriggerMenuItem.Text = "Disable Wait-for-retrigger.";
+            }
+            else
+            {
+                waitLabel.Visible = false;
+                waitForRetriggerMenuItem.Text = "Enable Wait-for-retrigger.";
+            }
         }
 
 

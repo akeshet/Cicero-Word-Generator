@@ -68,6 +68,14 @@ namespace DataStructures
             set { stepHidden = value; }
         }
 
+        private bool waitForRetrigger;
+
+        public bool WaitForRetrigger
+        {
+            get { return waitForRetrigger; }
+            set { waitForRetrigger = value; }
+        }
+
         private AnalogGroup myAnalogGroup;
 
         [Category("Groups"), Description("The analog group started in this timestep, if any.")]

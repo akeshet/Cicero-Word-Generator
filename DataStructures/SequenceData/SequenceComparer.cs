@@ -319,6 +319,7 @@ namespace DataStructures
             diffs|=CompareParameters(preString + "Duration: " , a.StepDuration, b.StepDuration, ans);
             diffs|=CompareBools(preString + "Enabled/Disabled: ", a.StepEnabled, b.StepEnabled, ans);
             diffs|=CompareBools(preString + "Hidden/Shown: ", a.StepHidden, b.StepHidden, ans);
+            diffs |= CompareBools(preString + "Wait/Don't wait for trigger: ", a.WaitForRetrigger, b.WaitForRetrigger, ans);
 
             diffs|=CompareDictionaries<int, DigitalDataPoint>(preString + "Digital Values: ", a.DigitalData, b.DigitalData, ans, CompareDigitalDataPoint );
 

@@ -1,6 +1,0 @@
-CommandLine
-C:/Xilinx/10.1/ISE/bin/nt/unwrapped/trce.exe -ise C:/Documents and Settings/Aviv Keshet/My Documents/FPGA/AvivFPGA2/AvivFPGA2.ise -intstyle ise -v 3 -s 4 -xml AvivFPGA2 AvivFPGA2.ncd -o AvivFPGA2.twr AvivFPGA2.pcf -ucf xem3001v2.ucf
-s
-FormatString
-trce.exe ([-e|-v [<limit:0,2000000000>]] [-l <limit:0,2000000000>] [-n [<limit:0,2000000000>]] [-u [<limit:0,2000000000>]] [-skew] [-a] [--p] [-s <speed>] [-o <report[.twr]>] [--m] [-stamp <stampfile>] [-tsi <tsifile[.tsi]>] [-xml <report[.twx]>] [-nodatasheet] [-timegroups] [-fastpaths] [-intstyle ise|xflow|silent] [-ise <projectfile>] [--ucf <constraint[.ucf]>] <design[.ncd]> [<constraint[.pcf]>]) | ([-run <macro[.xtm]> [<design[.ncd]> [<constraint[.pcf]>]]] [-intstyle ise|xflow|silent] [-ise <projectfile>])
-s

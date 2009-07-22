@@ -63,7 +63,10 @@ namespace WordGenerator.Controls
             this.showHideButton = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.pulseIndicator = new System.Windows.Forms.Label();
+            this.waitLabel = new System.Windows.Forms.Label();
             this.durationEditor = new WordGenerator.Controls.VerticalParameterEditor();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.waitForRetriggerMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -90,6 +93,8 @@ namespace WordGenerator.Controls
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.outputNowToolStripMenuItem,
+            this.toolStripSeparator4,
+            this.waitForRetriggerMenuItem,
             this.toolStripSeparator2,
             this.insertTimestepBeforeToolStripMenuItem,
             this.insertTimestepAfterToolStripMenuItem,
@@ -108,7 +113,7 @@ namespace WordGenerator.Controls
             this.markall,
             this.unmarkall});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(210, 336);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(210, 386);
             // 
             // outputNowToolStripMenuItem
             // 
@@ -334,13 +339,26 @@ namespace WordGenerator.Controls
             // 
             this.pulseIndicator.AutoSize = true;
             this.pulseIndicator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.pulseIndicator.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pulseIndicator.ForeColor = System.Drawing.Color.Purple;
-            this.pulseIndicator.Location = new System.Drawing.Point(45, 0);
+            this.pulseIndicator.Location = new System.Drawing.Point(52, 0);
             this.pulseIndicator.Name = "pulseIndicator";
-            this.pulseIndicator.Size = new System.Drawing.Size(38, 13);
+            this.pulseIndicator.Size = new System.Drawing.Size(33, 12);
             this.pulseIndicator.TabIndex = 9;
             this.pulseIndicator.Text = "Pulses";
             this.pulseIndicator.Visible = false;
+            // 
+            // waitLabel
+            // 
+            this.waitLabel.AutoSize = true;
+            this.waitLabel.BackColor = System.Drawing.Color.Red;
+            this.waitLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.waitLabel.ForeColor = System.Drawing.Color.Purple;
+            this.waitLabel.Location = new System.Drawing.Point(28, 0);
+            this.waitLabel.Name = "waitLabel";
+            this.waitLabel.Size = new System.Drawing.Size(24, 12);
+            this.waitLabel.TabIndex = 10;
+            this.waitLabel.Text = "Wait";
             // 
             // durationEditor
             // 
@@ -351,11 +369,24 @@ namespace WordGenerator.Controls
             this.durationEditor.UnitSelectorVisibility = true;
             this.durationEditor.updateGUI += new System.EventHandler(this.durationEditor_updateGUI);
             // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(206, 6);
+            // 
+            // waitForRetriggerMenuItem
+            // 
+            this.waitForRetriggerMenuItem.Name = "waitForRetriggerMenuItem";
+            this.waitForRetriggerMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.waitForRetriggerMenuItem.Text = "Enable Wait-for-retrigger";
+            this.waitForRetriggerMenuItem.Click += new System.EventHandler(this.waitForRetriggerMenuItem_Click);
+            // 
             // TimestepEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ContextMenuStrip = this.contextMenuStrip1;
+            this.Controls.Add(this.waitLabel);
             this.Controls.Add(this.pulseIndicator);
             this.Controls.Add(this.showHideButton);
             this.Controls.Add(this.analogSelector);
@@ -412,5 +443,8 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.ToolStripMenuItem unmark;
         private System.Windows.Forms.ToolStripMenuItem markall;
         private System.Windows.Forms.ToolStripMenuItem unmarkall;
+        private System.Windows.Forms.Label waitLabel;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem waitForRetriggerMenuItem;
     }
 }

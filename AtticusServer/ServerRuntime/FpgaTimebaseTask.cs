@@ -20,6 +20,20 @@ namespace AtticusServer
             public int onCounts;
             public int offCounts;
             public int repeats;
+
+            public ListItem(int onCounts, int offCounts, int repeats)
+            {
+                this.onCounts = onCounts;
+                this.offCounts = offCounts;
+                this.repeats = repeats;
+            }
+
+            public bool isAllZeros()
+            {
+                if (onCounts == 0 && offCounts == 0 && repeats == 0)
+                    return true;
+                return false;
+            }
         }
 
         public static byte[] createByteArray(TimestepTimebaseSegmentCollection segments,
@@ -31,6 +45,12 @@ namespace AtticusServer
             {
                 if (sequence.TimeSteps[stepID].StepEnabled)
                 {
+                    if (sequence.TimeSteps[stepID].WaitForRetrigger)
+                    {
+                        listItems.Add(new ListItem(0, 0, 0)); // 0,0,0 list item is code for "wait for retrigger
+                                                              // FPGA knows how to handle this
+                    }
+
                     List<SequenceData.VariableTimebaseSegment> stepSegments = segments[sequence.TimeSteps[stepID]];
                     for (int i = 0; i < stepSegments.Count; i++)
                     {
@@ -54,7 +74,11 @@ namespace AtticusServer
                             }
                         }
 
-                        listItems.Add(item);
+                        if (!item.isAllZeros())
+                        { // filter out any erroneously produced all-zero codes, since these have
+                            // special meaning to the FPGA (they are "wait for retrigger" codes
+                            listItems.Add(item);
+                        }
                     }
                 }
             }
@@ -70,10 +94,7 @@ namespace AtticusServer
             if (minCounts <= 0)
                 minCounts = 1;
 
-            ListItem finishItem = new ListItem();
-            finishItem.onCounts = minCounts;
-            finishItem.offCounts = minCounts;
-            finishItem.repeats = 1;
+            ListItem finishItem = new ListItem(minCounts, minCounts, 1);
 
             if (assymetric)
             {

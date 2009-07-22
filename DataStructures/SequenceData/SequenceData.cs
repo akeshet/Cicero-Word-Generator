@@ -641,6 +641,9 @@ namespace DataStructures
             if (N >= getNDisplayedTimeSteps())
                 return null;
 
+            if (N < 0)
+                return null;
+
             return TimeSteps[getNthDisplayedTimeStepID(N)];
         }
 
