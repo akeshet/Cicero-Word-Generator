@@ -35,8 +35,8 @@ namespace AtticusServer
         List<String> analog_in_names;
         Task analogS7ReadTask;
         DateTime runTime;
-        bool analogInCardDetected=false;
-        
+        bool analogInCardDetected = false;
+
 
         /// <summary>
         /// This is a lock object, used to make sure that only one instance of any remotely-called method is running at a time.
@@ -50,7 +50,7 @@ namespace AtticusServer
         public List<HardwareChannel> MyHardwareChannels
         {
             get { return myHardwareChannels; }
-     //       set { myHardwareChannels = value; }
+            //       set { myHardwareChannels = value; }
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace AtticusServer
         /// as well as to the screen.
         /// </summary>
         public MainServerForm.MessageEventCallDelegate messageLog;
-        
+
         // The next three objects are used in marshalling / unmarshalling this class
         // (ie sharing it over .NET remoting)
         private Object marshalLock = new Object();
@@ -114,7 +114,7 @@ namespace AtticusServer
         /// The sequence data that will next be run. This is sent from the client via the setSequence method.
         /// </summary>
         private SequenceData sequence;
-        
+
         /// <summary>
         /// Settings data for the next run. This is sent from the client via the setSettings method.
         /// </summary>
@@ -179,7 +179,7 @@ namespace AtticusServer
         private Dictionary<int, HardwareChannel> usedRS232Channels;
 
         #region Constructors
-        public AtticusServerRuntime(ServerSettings settings) 
+        public AtticusServerRuntime(ServerSettings settings)
         {
 
             System.Console.WriteLine("Running AtticusServerRuntime constructor...");
@@ -382,12 +382,12 @@ namespace AtticusServer
                                         {
                                             messageLog(this, new MessageEvent("Creating Variable Timebase Task on fpga device " + fsettings.DeviceName + "."));
                                             int nSegs = 0;
-                                            FpgaTimebaseTask ftask = new FpgaTimebaseTask(fsettings, 
-                                                opalKellyDevices[opalKellyDeviceNames.IndexOf(fsettings.DeviceName)], 
-                                                sequence, 
-                                                ((double)1) / ((double)(fsettings.SampleClockRate)), 
-                                                out nSegs, 
-                                                myServerSettings.UseFpgaRfModulatedClockOutput, 
+                                            FpgaTimebaseTask ftask = new FpgaTimebaseTask(fsettings,
+                                                opalKellyDevices[opalKellyDeviceNames.IndexOf(fsettings.DeviceName)],
+                                                sequence,
+                                                ((double)1) / ((double)(fsettings.SampleClockRate)),
+                                                out nSegs,
+                                                myServerSettings.UseFpgaRfModulatedClockOutput,
                                                 myServerSettings.UseFpgaAssymetricDutyCycleClocking);
                                             fpgaTasks.Add(fsettings.DeviceName, ftask);
                                             messageLog(this, new MessageEvent("...Done (" + nSegs + " segments total)"));
@@ -489,13 +489,13 @@ namespace AtticusServer
                         else
                         {
                             variableTimebaseClockTask = DaqMxTaskGenerator.createDaqMxVariableTimebaseSource(
-                                serverSettings.VariableTimebaseOutputChannel, 
-                                serverSettings.VariableTimebaseMasterFrequency, 
-                                sequence, 
-                                serverSettings.VariableTimebaseType, 
+                                serverSettings.VariableTimebaseOutputChannel,
+                                serverSettings.VariableTimebaseMasterFrequency,
+                                sequence,
+                                serverSettings.VariableTimebaseType,
                                 serverSettings,
                                 serverSettings.myDevicesSettings[HardwareChannel.parseDeviceNameStringFromPhysicalChannelString(serverSettings.VariableTimebaseOutputChannel)]);
-                            
+
                             variableTimebaseClockTask.Done += new TaskDoneEventHandler(aTaskFinished);
                         }
 
@@ -504,7 +504,7 @@ namespace AtticusServer
 
                             messageLog(this, new MessageEvent("Variable timebase output clock buffer generated successfully. " + variableTimebaseClockTask.Stream.Buffer.OutputBufferSize + " samples per channel. On board buffer size: " + variableTimebaseClockTask.Stream.Buffer.OutputOnBoardBufferSize + " samples per channel."));
                         }
-                        catch (Exception )
+                        catch (Exception)
                         {
                             messageLog(this, new MessageEvent("Unable to poll task for buffer information. This is probably not a problem."));
                         }
@@ -544,7 +544,7 @@ namespace AtticusServer
                             messageLog(this, new MessageEvent("Generating buffers in parallel..."));
                             foreach (string dev in usedDaqMxDevices)
                             {
-                               if (!dev.Contains("Dev"))
+                                if (!dev.Contains("Dev"))
                                 {
                                     messageLog(this, new MessageEvent("******* You are using a NI device named " + dev + ". This does not follow the convention of naming your devices Dev1, Dev2, Dev3, etc. Unpredictable results are possible! Not recommended! *******"));
                                     displayError();
@@ -579,117 +579,117 @@ namespace AtticusServer
 
                     foreach (DeviceSettings ds in AtticusServer.server.serverSettings.myDevicesSettings.Values)
                     {
-                        analogInCardDetected|=ds.DeviceDescription.Contains("6259")&&ds.AnalogInEnabled;
+                        analogInCardDetected |= ds.DeviceDescription.Contains("6259") && ds.AnalogInEnabled;
                     }
-                    
-					if (analogInCardDetected)
-                    {                    
-                    // Create a channel
-                    analogS7ReadTask = new Task();
-                    analogS7ReadTask.SynchronizeCallbacks = false;
-                    analog_in_names = new List<string>();
-                    bool isUsed;
-                    
+
+                    if (analogInCardDetected)
+                    {
+                        // Create a channel
+                        analogS7ReadTask = new Task();
+                        analogS7ReadTask.SynchronizeCallbacks = false;
+                        analog_in_names = new List<string>();
+                        bool isUsed;
 
 
-                    AnalogInChannels the_channels = AtticusServer.server.serverSettings.AIChannels[0];
-                    AnalogInNames the_names = AtticusServer.server.serverSettings.AINames[0];
-                    
-                                           
+
+                        AnalogInChannels the_channels = AtticusServer.server.serverSettings.AIChannels[0];
+                        AnalogInNames the_names = AtticusServer.server.serverSettings.AINames[0];
+
+
                         #region Single ended
-                     for (int analog_index=0;analog_index<10;analog_index++)
-                     {
-                         PropertyInfo the_channel = the_channels.GetType().GetProperty("AS" + analog_index.ToString());
-                         isUsed=(bool)the_channel.GetValue(the_channels,null);
-                         if (isUsed)
-                         {
-                             if (analog_index < 5)
-                             {
-                                 analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + analog_index.ToString(), "",
-                                     AITerminalConfiguration.Nrse, -10, 10, AIVoltageUnits.Volts);
-                             }
-                             else
-                             {
-                                 analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 3).ToString(), "",
-                                     AITerminalConfiguration.Nrse, -10, 10, AIVoltageUnits.Volts);
-                             }
-                             string theName = (string)(the_names.GetType().GetProperty("AS" + analog_index.ToString()).GetValue(the_names, null));
-                             if (theName == "")
-                                 analog_in_names.Add("AIS" + analog_index.ToString());
-                             else
-                                 analog_in_names.Add(theName);
-                         }
-                     }
+                        for (int analog_index = 0; analog_index < 10; analog_index++)
+                        {
+                            PropertyInfo the_channel = the_channels.GetType().GetProperty("AS" + analog_index.ToString());
+                            isUsed = (bool)the_channel.GetValue(the_channels, null);
+                            if (isUsed)
+                            {
+                                if (analog_index < 5)
+                                {
+                                    analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + analog_index.ToString(), "",
+                                        AITerminalConfiguration.Nrse, -10, 10, AIVoltageUnits.Volts);
+                                }
+                                else
+                                {
+                                    analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 3).ToString(), "",
+                                        AITerminalConfiguration.Nrse, -10, 10, AIVoltageUnits.Volts);
+                                }
+                                string theName = (string)(the_names.GetType().GetProperty("AS" + analog_index.ToString()).GetValue(the_names, null));
+                                if (theName == "")
+                                    analog_in_names.Add("AIS" + analog_index.ToString());
+                                else
+                                    analog_in_names.Add(theName);
+                            }
+                        }
                         #endregion
 
-                         #region Differential
-                    for (int analog_index=0;analog_index<11;analog_index++)
-                     {
-                         PropertyInfo the_channel = the_channels.GetType().GetProperty("AD" + number_to_string(analog_index,2));
-                         isUsed = (bool)the_channel.GetValue(the_channels, null);
+                        #region Differential
+                        for (int analog_index = 0; analog_index < 11; analog_index++)
+                        {
+                            PropertyInfo the_channel = the_channels.GetType().GetProperty("AD" + number_to_string(analog_index, 2));
+                            isUsed = (bool)the_channel.GetValue(the_channels, null);
 
-                         if (isUsed)
-                         {
-                             if (analog_index < 3)
-                             {
-                                 analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 5).ToString(), "",
-                                     AITerminalConfiguration.Differential, -10, 10, AIVoltageUnits.Volts);
-                             }
-                             else
-                             {
-                                 analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 13).ToString(), "",
-                                     AITerminalConfiguration.Differential, -10, 10, AIVoltageUnits.Volts);
-                             }
-                             string theName = (string)(the_names.GetType().GetProperty("AD" + number_to_string(analog_index, 2)).GetValue(the_names, null));
-                             if (theName == "")
-                                 analog_in_names.Add("AID" + analog_index.ToString());
-                             else
-                                 analog_in_names.Add(theName);
-                         }
+                            if (isUsed)
+                            {
+                                if (analog_index < 3)
+                                {
+                                    analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 5).ToString(), "",
+                                        AITerminalConfiguration.Differential, -10, 10, AIVoltageUnits.Volts);
+                                }
+                                else
+                                {
+                                    analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 13).ToString(), "",
+                                        AITerminalConfiguration.Differential, -10, 10, AIVoltageUnits.Volts);
+                                }
+                                string theName = (string)(the_names.GetType().GetProperty("AD" + number_to_string(analog_index, 2)).GetValue(the_names, null));
+                                if (theName == "")
+                                    analog_in_names.Add("AID" + analog_index.ToString());
+                                else
+                                    analog_in_names.Add(theName);
+                            }
+                        }
+                        #endregion
+
+
+
+
+
+
+
+
+                        // Configure timing specs    
+                        analogS7ReadTask.Timing.ConfigureSampleClock("", (double)(AtticusServer.server.serverSettings.AIFrequency), SampleClockActiveEdge.Rising,
+                            SampleQuantityMode.FiniteSamples, sequence.nSamples(1 / ((double)(AtticusServer.server.serverSettings.AIFrequency))));
+
+                        analogS7ReadTask.Timing.ReferenceClockSource = "/PXI1Slot7/PXI_Trig7";
+                        analogS7ReadTask.Timing.ReferenceClockRate = 20000000;
+                        analogS7ReadTask.Stream.Timeout = Convert.ToInt32(sequence.SequenceDuration * 1000) + 10000;
+
+                        reader_analog_S7 = new AnalogMultiChannelReader(analogS7ReadTask.Stream);
+
                     }
                     #endregion
-                    
+
+                    #region Watchdog Timer stuff -- NOT FINISHED YET, THUS COMMENTED OUT
 
 
-                    
+                    if (serverSettings.UseWatchdogTimerMonitoringTask)
+                    {
+                        messageLog(this, new MessageEvent("Watchdog Timer tasks no longer supported. Ignoring serverSettings.UseWatchdogTimerMonitoringTask"));
+                        /*
+                        if (daqMxTasks.ContainsKey(serverSettings.DeviceToSyncSoftwareTimedTasksTo))
+                        {
+                            messageLog(this, new MessageEvent("Creating watchdog timer monitoring task"));
+                            WatchdogTimerTask wtask = new WatchdogTimerTask(sequence, myServerSettings.myDevicesSettings[serverSettings.DeviceToSyncSoftwareTimedTasksTo].SampleClockRate, daqMxTasks[serverSettings.DeviceToSyncSoftwareTimedTasksTo], .2);
+                        }
+                        else
+                        {
+                            messageLog(this, new MessageEvent("Unable to create watchdog timer monitoring task, since the hardware-timed device it was to be synched to is not being used. Continuing without watchdog."));
+                        }*/
+                    }
 
-                   
 
 
-                    // Configure timing specs    
-                    analogS7ReadTask.Timing.ConfigureSampleClock("", (double)(AtticusServer.server.serverSettings.AIFrequency), SampleClockActiveEdge.Rising,
-                        SampleQuantityMode.FiniteSamples, sequence.nSamples(1 / ((double)(AtticusServer.server.serverSettings.AIFrequency))));
-                    
-                    analogS7ReadTask.Timing.ReferenceClockSource = "/PXI1Slot7/PXI_Trig7";
-                    analogS7ReadTask.Timing.ReferenceClockRate = 20000000;
-                    analogS7ReadTask.Stream.Timeout = Convert.ToInt32(sequence.SequenceDuration*1000)+10000;
-
-                    reader_analog_S7 = new AnalogMultiChannelReader(analogS7ReadTask.Stream);
-                   
-                    }                                                                    
                     #endregion
-                    
-                  	 #region Watchdog Timer stuff -- NOT FINISHED YET, THUS COMMENTED OUT
-
-
-	                    if (serverSettings.UseWatchdogTimerMonitoringTask)
-	                    {
-	                        messageLog(this, new MessageEvent("Watchdog Timer tasks no longer supported. Ignoring serverSettings.UseWatchdogTimerMonitoringTask"));
-	                        /*
-	                        if (daqMxTasks.ContainsKey(serverSettings.DeviceToSyncSoftwareTimedTasksTo))
-	                        {
-	                            messageLog(this, new MessageEvent("Creating watchdog timer monitoring task"));
-	                            WatchdogTimerTask wtask = new WatchdogTimerTask(sequence, myServerSettings.myDevicesSettings[serverSettings.DeviceToSyncSoftwareTimedTasksTo].SampleClockRate, daqMxTasks[serverSettings.DeviceToSyncSoftwareTimedTasksTo], .2);
-	                        }
-	                        else
-	                        {
-	                            messageLog(this, new MessageEvent("Unable to create watchdog timer monitoring task, since the hardware-timed device it was to be synched to is not being used. Continuing without watchdog."));
-	                        }*/
-	                    }
-
-
-
-	                    #endregion  
 
 
 
@@ -716,14 +716,14 @@ namespace AtticusServer
                         {
                             switch (gpibChannel.myGpibMasqueradeType)
                             {
-                                case  HardwareChannel.GpibMasqueradeType.NONE:
+                                case HardwareChannel.GpibMasqueradeType.NONE:
                                     messageLog(this, new MessageEvent("********** Error. GPIB channel with ID " + gpibID + " has its masquerading bit set to true, but has its masquerading type set to NONE. **********"));
                                     displayError();
                                     break;
                                 case HardwareChannel.GpibMasqueradeType.RFSG:
                                     messageLog(this, new MessageEvent("Generating RFSG buffer for gpib ID " + gpibID));
                                     RfsgTask rftask = new RfsgTask(sequence, settings, gpibID, gpibChannel.DeviceName, serverSettings.myDevicesSettings[gpibChannel.DeviceName]);
-                                    rftask.Done+=new TaskDoneEventHandler(aTaskFinished);
+                                    rftask.Done += new TaskDoneEventHandler(aTaskFinished);
                                     rfsgTasks.Add(gpibChannel, rftask);
                                     messageLog(this, new MessageEvent("Done."));
                                     break;
@@ -884,9 +884,9 @@ namespace AtticusServer
                     a.Close();
                 }
             }
-            catch {}
-            
-         }                 
+            catch { }
+
+        }
 
         public Dictionary<string, long> expectedNumberOfSamplesGenerated;
 
@@ -904,7 +904,7 @@ namespace AtticusServer
                     messageLog(this, new MessageEvent("No buffers to report"));
 
                 bool samplesGeneratedMismatchDetected = false;
-                
+
                 foreach (string str in daqMxTasks.Keys)
                 {
                     Task task = daqMxTasks[str];
@@ -916,7 +916,7 @@ namespace AtticusServer
                         {
                             if (expectedNumberOfSamplesGenerated.ContainsKey(str))
                             {
-                                 if (myServerSettings.myDevicesSettings.ContainsKey(str))
+                                if (myServerSettings.myDevicesSettings.ContainsKey(str))
                                 {
                                     if (myServerSettings.myDevicesSettings[str].MySampleClockSource == DeviceSettings.SampleClockSource.External)
                                     {
@@ -953,10 +953,11 @@ namespace AtticusServer
                     }
                 }
 
-                if (earlyFinishDetected) {
+                if (earlyFinishDetected)
+                {
                     messageLog(this, new MessageEvent("***At least 1 daqMx task finished at least 1 second before the client notified the server that it thought the run was finished. This may indicate corruption of the timing signal driving this daqMx task. Reporting to client as error.***"));
                     displayError();
-                    taskErrorsDetected = true;  
+                    taskErrorsDetected = true;
                 }
 
                 if (samplesGeneratedMismatchDetected)
@@ -985,7 +986,7 @@ namespace AtticusServer
                                 double seqTime = ((double)masterSamp) / ((double)masterFreq);
                                 TimeStep step = sequence.getTimeStepAtTime(seqTime);
                                 messageLog(this, new MessageEvent("This mistrigger was at master sample " + masterSamp + ", sequence time " + seqTime + ", Timestep [" + step.StepName + "] (based on timing info from " + myServerSettings.DeviceToSyncSoftwareTimedTasksTo + ")"));
-                                
+
                                 double remTime = seqTime - sequence.getTimeAtTimestep(step);
                                 messageLog(this, new MessageEvent("This mistrigger occured " + remTime + " s after the start of the stated timestep."));
                             }
@@ -1018,25 +1019,25 @@ namespace AtticusServer
 
             //NationalInstruments.VisaNS.ResourceManager.GetLocalManager().Open(
 
-/*            bool customized = false;
-            foreach (SerialPortSettings sps in serverSettings.myDevicesSettings["Serial"].SerialSettings)
-            {
+            /*            bool customized = false;
+                        foreach (SerialPortSettings sps in serverSettings.myDevicesSettings["Serial"].SerialSettings)
+                        {
 
-                if (sps.PortName == hc.ChannelName)
-                {
-                    customized = true;
-                    messageLog(this, new MessageEvent("Applying custom serial settings to " + hc.ChannelName));
-                    device.BaudRate = sps.BaudRate;
-                    device.DataBits = sps.DataBits;
-                    device.Parity = sps.parity;
-                    device.StopBits = sps.StopBits;
-                    device.FlowControl = sps.FlowControl;
-                }
-            }
-            if (!customized)
-            {
-                messageLog(this, new MessageEvent("Using default serial settings for " + hc.ChannelName));
-            }*/
+                            if (sps.PortName == hc.ChannelName)
+                            {
+                                customized = true;
+                                messageLog(this, new MessageEvent("Applying custom serial settings to " + hc.ChannelName));
+                                device.BaudRate = sps.BaudRate;
+                                device.DataBits = sps.DataBits;
+                                device.Parity = sps.parity;
+                                device.StopBits = sps.StopBits;
+                                device.FlowControl = sps.FlowControl;
+                            }
+                        }
+                        if (!customized)
+                        {
+                            messageLog(this, new MessageEvent("Using default serial settings for " + hc.ChannelName));
+                        }*/
         }
 
         private void clearOpenSerialSessions()
@@ -1101,11 +1102,11 @@ namespace AtticusServer
                         serverSettings,
                         out expectedGenerated);
 
-                    task.Done+=new TaskDoneEventHandler(aTaskFinished);
+                    task.Done += new TaskDoneEventHandler(aTaskFinished);
 
                     daqMxTasks.Add(dev, task);
                     messageLog(this, new MessageEvent("Buffer for " + dev + " generated. " + task.Stream.Buffer.OutputBufferSize + " samples per channel. On board buffer size " + task.Stream.Buffer.OutputOnBoardBufferSize + " samples per channel."));
-                    
+
                     if (expectedGenerated != 0)
                     {
                         expectedNumberOfSamplesGenerated.Add(dev, expectedGenerated);
@@ -1133,7 +1134,7 @@ namespace AtticusServer
 
             // copying madeConnections to a temporary array so that I remove elements from madeconnections while
             // iterating through its elements
-            TerminalPair [] tempArray = madeConnections.ToArray();
+            TerminalPair[] tempArray = madeConnections.ToArray();
 
             foreach (TerminalPair pair in tempArray)
             {
@@ -1411,7 +1412,7 @@ namespace AtticusServer
 
 
                     if (analogInCardDetected)
-                    reader_analog_S7.BeginReadMultiSample(sequence.nSamples(1 / (double)(AtticusServer.server.serverSettings.AIFrequency)), new AsyncCallback(callback_S7), null);
+                        reader_analog_S7.BeginReadMultiSample(sequence.nSamples(1 / (double)(AtticusServer.server.serverSettings.AIFrequency)), new AsyncCallback(callback_S7), null);
 
                     return true;
                 }
@@ -1480,7 +1481,7 @@ namespace AtticusServer
                         }
                     }
                 }
-                catch (ThreadAbortException )
+                catch (ThreadAbortException)
                 {
                     Monitor.Exit(softTrigLock);
                 }
@@ -1493,7 +1494,7 @@ namespace AtticusServer
                 {
                     Monitor.Exit(softTrigLock);
                 }
-                catch (Exception )
+                catch (Exception)
                 {
                     messageLog(this, new MessageEvent("Also, caught exception when attempting to release software polling thread lock. This is probably not important."));
                 }
@@ -1865,7 +1866,7 @@ namespace AtticusServer
             }
         }
 
-#endregion
+        #endregion
 
         private bool stopAndCleanupTasks()
         {
@@ -2017,7 +2018,7 @@ namespace AtticusServer
                 device.Reset();
                 messageLog(this, new MessageEvent("Reset of " + dev + " finished."));
             }
-            if (this.madeConnections!=null)
+            if (this.madeConnections != null)
                 this.madeConnections.Clear();
 
             clearOpenSerialSessions();
@@ -2054,7 +2055,7 @@ namespace AtticusServer
             }
 
             // gpib
-            errorChan = findChannels(settings.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.gpib], 
+            errorChan = findChannels(settings.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.gpib],
                 usedGpibChannels);
 
             if (errorChan != null)
@@ -2073,7 +2074,8 @@ namespace AtticusServer
 
             // populate the list of used daqmx devices
             this.usedDaqMxDevices = new List<string>();
-            foreach (int analogID in usedAnalogChannels.Keys) {
+            foreach (int analogID in usedAnalogChannels.Keys)
+            {
                 HardwareChannel hc = settings.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.analog].Channels[analogID].hardwareChannel;
 
                 if (!usedDaqMxDevices.Contains(hc.DeviceName))
@@ -2126,13 +2128,13 @@ namespace AtticusServer
         /// <summary>
         /// This method start .NET remoting sharing of the server. Intended for use in a non UI thread.
         /// </summary>
-        private void startMarshalProc() 
+        private void startMarshalProc()
         {
             try
             {
                 lock (marshalLock)
                 {
-  
+
                     communicatorStatus = ServerStructures.ServerCommunicatorStatus.Connecting;
                     updateGUI(this, null);
                     tcpChannel = new TcpChannel(5678);
@@ -2155,13 +2157,13 @@ namespace AtticusServer
         /// <summary>
         /// This method stop .NET remoting of the server. Intended for use in a non UI thread.
         /// </summary>
-        private void stopMarshalProc() 
+        private void stopMarshalProc()
         {
 
             messageLog(this, new MessageEvent("Server disconnected is not currently implemented. You can achieve this functionality by restarting the server."));
             return;
 
-            
+
             /*
             try
             {
@@ -2194,23 +2196,24 @@ namespace AtticusServer
         /// This method is to be called on the server side, and is not open to use via remoting. Its purpose
         /// is to update the servers internal list of hardware channels by querying the National Instruments drivers.
         /// </summary>
-        public void refreshHardwareLists() {
+        public void refreshHardwareLists()
+        {
 
             System.Console.WriteLine("Running refreshHardwareLists()...");
-           
+
 
             // Set all the devices to disconnected. They will be set back to connected if they are detecter later in this method.
             foreach (DeviceSettings ds in serverSettings.myDevicesSettings.Values)
                 ds.deviceConnected = false;
 
-          
+
 
             myHardwareChannels = new List<HardwareChannel>();
 
             //List of string identifiers for all devices detected in the process.
             detectedDevices = new List<string>();
 
-            Dictionary<string, string> myDeviceDescriptions = new Dictionary<string,string>();
+            Dictionary<string, string> myDeviceDescriptions = new Dictionary<string, string>();
 
             // Detect National Instruments analog and digital channels.
 
@@ -2244,7 +2247,7 @@ namespace AtticusServer
 
 
                 myDeviceDescriptions.Add(devices[i], device.ProductType);
-                string [] analogs = device.AOPhysicalChannels;
+                string[] analogs = device.AOPhysicalChannels;
                 string[] digitalLines = device.DOLines;
 
                 if (!serverSettings.myDevicesSettings.ContainsKey(devices[i]))
@@ -2329,14 +2332,14 @@ namespace AtticusServer
             for (int i = 0; i < 10; i++)
             {
 
-                System.Console.WriteLine("Querying or detecting GPIB Board Number "  + i + "...");
+                System.Console.WriteLine("Querying or detecting GPIB Board Number " + i + "...");
 
                 try
                 {
                     NationalInstruments.NI4882.Board board = new NationalInstruments.NI4882.Board(i);
                     board.SendInterfaceClear();
-      //              board.BecomeActiveController(false);
-                    NationalInstruments.NI4882.AddressCollection listeners =  board.FindListeners();
+                    //              board.BecomeActiveController(false);
+                    NationalInstruments.NI4882.AddressCollection listeners = board.FindListeners();
 
 
                     if (listeners.Count != 0)
@@ -2344,14 +2347,14 @@ namespace AtticusServer
                         foreach (NationalInstruments.NI4882.Address address in listeners)
                         {
 
-                            
+
                             int wait_delay = 100;
 
                             try
                             {
                                 NationalInstruments.NI4882.Device dev = new NationalInstruments.NI4882.Device(i, address);
                                 dev.Clear();
-                                
+
                                 // ask the device for its identity
                                 gpibWriteDelegate writeDelegate = new gpibWriteDelegate(dev.Write);
                                 IAsyncResult result = writeDelegate.BeginInvoke("*IDN?\n", null, null);
@@ -2372,7 +2375,7 @@ namespace AtticusServer
                                 myDeviceDescriptions.Add(deviceName, deviceDescription);
 
 
-                                HardwareChannel.HardwareConstants.GPIBDeviceType gpibDeviceType = new HardwareChannel.HardwareConstants.GPIBDeviceType ();
+                                HardwareChannel.HardwareConstants.GPIBDeviceType gpibDeviceType = new HardwareChannel.HardwareConstants.GPIBDeviceType();
 
                                 // VERY IMPORTANT!!!!!!!!!!
                                 // *******************  THIS IS WHERE YOU ADD DEVICE-DETECTION CODE FOR NEW GPIB DEVICES *********************/
@@ -2409,20 +2412,20 @@ namespace AtticusServer
                         }
                     }
                 }
-                catch (Exception )
+                catch (Exception)
                 {
-                   // throw e;
+                    // throw e;
                 }
 
                 System.Console.WriteLine("...done.");
 
             }
-            
+
             /*
             NationalInstruments.NI4882.Board board = new NationalInstruments.NI4882.Board();
             board.FindListeners(
             */
-            
+
             #endregion
 
             #region Detect NI RS232 ports
@@ -2610,7 +2613,7 @@ namespace AtticusServer
         }
 
 
- 
+
 
         /// <summary>
         /// Starts a new thread which attempts to achieve the given thread marshal status.
@@ -2674,7 +2677,7 @@ namespace AtticusServer
         {
             string listBoundVariableValues = "";
 
-        foreach (Variable var in sequence.Variables)
+            foreach (Variable var in sequence.Variables)
             {
 
                 if (var.ListDriven && !var.PermanentVariable)
@@ -2687,9 +2690,9 @@ namespace AtticusServer
                 }
             }
 
-            
-                return listBoundVariableValues;
-            
+
+            return listBoundVariableValues;
+
         }
 
         private void dataToDataTable(double[,] sourceArray, ref DataTable dataTable)
@@ -2703,8 +2706,8 @@ namespace AtticusServer
 
             for (int currentDataIndex = 0; currentDataIndex < dataCount; currentDataIndex++)
             {
-                for (int currentChannelIndex = 1; currentChannelIndex < channelCount+1; currentChannelIndex++)
-                    dataTable.Rows[currentDataIndex][currentChannelIndex] = sourceArray.GetValue(currentChannelIndex-1, (int)((Double.Parse((dataTable.Rows[currentDataIndex][0]).ToString()))*AtticusServer.server.serverSettings.AIFrequency));
+                for (int currentChannelIndex = 1; currentChannelIndex < channelCount + 1; currentChannelIndex++)
+                    dataTable.Rows[currentDataIndex][currentChannelIndex] = sourceArray.GetValue(currentChannelIndex - 1, (int)((Double.Parse((dataTable.Rows[currentDataIndex][0]).ToString())) * AtticusServer.server.serverSettings.AIFrequency));
             }
 
         }
@@ -2714,29 +2717,29 @@ namespace AtticusServer
             int numOfChannels = analog_in_names.Count;
             dataTable.Rows.Clear();
             dataTable.Columns.Clear();
-            DataColumn[] dataColumn = new DataColumn[numOfChannels+1];
+            DataColumn[] dataColumn = new DataColumn[numOfChannels + 1];
 
             dataColumn[0] = new DataColumn();
             dataColumn[0].DataType = typeof(double);
             dataColumn[0].ColumnName = "t";
 
-            for (int currentChannelIndex = 1; currentChannelIndex < numOfChannels+1; currentChannelIndex++)
+            for (int currentChannelIndex = 1; currentChannelIndex < numOfChannels + 1; currentChannelIndex++)
             {
                 dataColumn[currentChannelIndex] = new DataColumn();
                 dataColumn[currentChannelIndex].DataType = typeof(double);
-                dataColumn[currentChannelIndex].ColumnName = analog_in_names[currentChannelIndex-1];
+                dataColumn[currentChannelIndex].ColumnName = analog_in_names[currentChannelIndex - 1];
             }
 
             dataTable.Columns.AddRange(dataColumn);
 
-            List<double> theTimes=new List<double>();
+            List<double> theTimes = new List<double>();
             int samplesFreq = AtticusServer.server.serverSettings.AIFrequency;
             foreach (AnalogInLogTime theLogTime in AtticusServer.server.serverSettings.AILogTimes)
             {
-                double timestep=Math.Round(sequence.timeAtTimestep(theLogTime.TimeStep-1),3,MidpointRounding.AwayFromZero);
-                double timebefore = Math.Max(timestep - ((double)theLogTime.TimeBefore) / 1000,0);
-                double timeafter = Math.Min(timestep + ((double)theLogTime.TimeAfter) / 1000,Math.Round(sequence.SequenceDuration,3,MidpointRounding.AwayFromZero));
-                for (int k = (int)(timebefore * samplesFreq); k < (int)(timeafter * samplesFreq + 1);k++ )
+                double timestep = Math.Round(sequence.timeAtTimestep(theLogTime.TimeStep - 1), 3, MidpointRounding.AwayFromZero);
+                double timebefore = Math.Max(timestep - ((double)theLogTime.TimeBefore) / 1000, 0);
+                double timeafter = Math.Min(timestep + ((double)theLogTime.TimeAfter) / 1000, Math.Round(sequence.SequenceDuration, 3, MidpointRounding.AwayFromZero));
+                for (int k = (int)(timebefore * samplesFreq); k < (int)(timeafter * samplesFreq + 1); k++)
                 {
                     theTimes.Add((double)k / (double)samplesFreq);
                 }
@@ -2747,19 +2750,19 @@ namespace AtticusServer
             int numOfRows = theTimes.Count;
             for (int currentDataIndex = 0; currentDataIndex < numOfRows; currentDataIndex++)
             {
-                object[] rowArr = new object[numOfChannels+1];
+                object[] rowArr = new object[numOfChannels + 1];
                 dataTable.Rows.Add(rowArr);
                 dataTable.Rows[currentDataIndex][0] = theTimes[currentDataIndex];
             }
 
-            
-            
-           
+
+
+
         }
 
         public string get_fileDirectory()
         {
-            
+
             DateTime today = DateTime.Today;
             string the_year = today.Year.ToString();
             CultureInfo the_current_culture = CultureInfo.CurrentCulture;
@@ -2771,9 +2774,9 @@ namespace AtticusServer
             string fileDirectory;
 
             if (settings.SavePath.EndsWith("/") || settings.SavePath.EndsWith(@"\"))
-                fileDirectory = settings.SavePath.Remove(settings.SavePath.Length-1)+@"\" + the_year + @"\" + the_month + the_year + @"\" + the_day + the_month + the_year;
-            else if (settings.SavePath!="")
-                fileDirectory = settings.SavePath+ @"\" + the_year + @"\" + the_month + the_year + @"\" + the_day + the_month + the_year;
+                fileDirectory = settings.SavePath.Remove(settings.SavePath.Length - 1) + @"\" + the_year + @"\" + the_month + the_year + @"\" + the_day + the_month + the_year;
+            else if (settings.SavePath != "")
+                fileDirectory = settings.SavePath + @"\" + the_year + @"\" + the_month + the_year + @"\" + the_day + the_month + the_year;
             else
                 fileDirectory = AppDomain.CurrentDomain.BaseDirectory + the_year + @"\" + the_month + the_year + @"\" + the_day + the_month + the_year;
             return fileDirectory;
@@ -2807,19 +2810,24 @@ namespace AtticusServer
             return ans;
         }
 
-       
-        
-       public List<double> DedupCollection ( List<double> input )        {    List<double> passedValues = new List<double>();    //relatively simple dupe check alg used as example
-    foreach (double item in input)
-    {
-        if (passedValues.Contains(item))
-            continue;
-        else
+
+
+        public List<double> DedupCollection(List<double> input)
         {
-            passedValues.Add(item);
+            List<double> passedValues = new List<double>();
+
+            //relatively simple dupe check alg used as example
+            foreach (double item in input)
+            {
+                if (passedValues.Contains(item))
+                    continue;
+                else
+                {
+                    passedValues.Add(item);
+                }
+            }
+            return passedValues;
         }
-    }
-    return passedValues;        }
 
     }
 }
