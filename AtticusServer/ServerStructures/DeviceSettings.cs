@@ -46,6 +46,16 @@ namespace AtticusServer
             get { return deviceName; }
         }
 
+        private bool analogInEnabled;
+
+        [Description("Determines whether analog input on this device is enabled."),
+        Category("Analog In")]
+        public bool AnalogInEnabled
+        {
+            get { return analogInEnabled; }
+            set { analogInEnabled = value; }
+        }
+
         private bool useCustomAnalogTransferSettings;
 
         [Description("If true, then AnalogDataTransferMechanism and AnalogDataTransferCondition will apply. If false, they wont. Some devices do not support customization of these properties."),

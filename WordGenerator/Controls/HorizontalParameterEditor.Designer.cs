@@ -79,6 +79,7 @@ namespace WordGenerator.Controls
             this.variableComboBox1.TabIndex = 2;
             this.variableComboBox1.Visible = false;
             this.variableComboBox1.RightClick += new System.EventHandler(this.variableComboBox1_RightClick);
+            this.variableComboBox1.VisibleChanged += new System.EventHandler(this.variableComboBox1_VisibleChanged);
             this.variableComboBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.variableComboBox1_Paint);
             this.variableComboBox1.SelectedIndexChanged += new System.EventHandler(this.variableComboBox1_SelectedIndexChanged);
             // 

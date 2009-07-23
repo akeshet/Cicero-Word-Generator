@@ -38,6 +38,7 @@ namespace WordGenerator.Controls
             this.setIterButt = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.runRandomList = new System.Windows.Forms.Button();
+            this.RunNoSave = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.iterationSelector)).BeginInit();
             this.SuspendLayout();
             // 
@@ -53,7 +54,7 @@ namespace WordGenerator.Controls
             // 
             // runCurrentButton
             // 
-            this.runCurrentButton.Location = new System.Drawing.Point(3, 106);
+            this.runCurrentButton.Location = new System.Drawing.Point(3, 307);
             this.runCurrentButton.Name = "runCurrentButton";
             this.runCurrentButton.Size = new System.Drawing.Size(110, 39);
             this.runCurrentButton.TabIndex = 4;
@@ -64,17 +65,17 @@ namespace WordGenerator.Controls
             // 
             // runListButton
             // 
-            this.runListButton.Location = new System.Drawing.Point(3, 174);
+            this.runListButton.Location = new System.Drawing.Point(4, 117);
             this.runListButton.Name = "runListButton";
             this.runListButton.Size = new System.Drawing.Size(110, 38);
             this.runListButton.TabIndex = 6;
-            this.runListButton.Text = "Run List";
+            this.runListButton.Text = "Run List (F12)";
             this.runListButton.UseVisualStyleBackColor = true;
             this.runListButton.Click += new System.EventHandler(this.runListButton_Click);
             // 
             // continueListButton
             // 
-            this.continueListButton.Location = new System.Drawing.Point(3, 218);
+            this.continueListButton.Location = new System.Drawing.Point(4, 161);
             this.continueListButton.Name = "continueListButton";
             this.continueListButton.Size = new System.Drawing.Size(110, 38);
             this.continueListButton.TabIndex = 7;
@@ -84,7 +85,7 @@ namespace WordGenerator.Controls
             // 
             // iterationSelector
             // 
-            this.iterationSelector.Location = new System.Drawing.Point(63, 66);
+            this.iterationSelector.Location = new System.Drawing.Point(63, 266);
             this.iterationSelector.Maximum = new decimal(new int[] {
             10000000,
             0,
@@ -99,7 +100,7 @@ namespace WordGenerator.Controls
             // repeatCheckBox
             // 
             this.repeatCheckBox.AutoSize = true;
-            this.repeatCheckBox.Location = new System.Drawing.Point(3, 151);
+            this.repeatCheckBox.Location = new System.Drawing.Point(9, 92);
             this.repeatCheckBox.Name = "repeatCheckBox";
             this.repeatCheckBox.Size = new System.Drawing.Size(103, 17);
             this.repeatCheckBox.TabIndex = 5;
@@ -108,7 +109,7 @@ namespace WordGenerator.Controls
             // 
             // setIterButt
             // 
-            this.setIterButt.Location = new System.Drawing.Point(3, 49);
+            this.setIterButt.Location = new System.Drawing.Point(3, 249);
             this.setIterButt.Name = "setIterButt";
             this.setIterButt.Size = new System.Drawing.Size(54, 51);
             this.setIterButt.TabIndex = 2;
@@ -118,7 +119,7 @@ namespace WordGenerator.Controls
             // 
             // runRandomList
             // 
-            this.runRandomList.Location = new System.Drawing.Point(3, 262);
+            this.runRandomList.Location = new System.Drawing.Point(4, 205);
             this.runRandomList.Name = "runRandomList";
             this.runRandomList.Size = new System.Drawing.Size(110, 38);
             this.runRandomList.TabIndex = 8;
@@ -126,10 +127,21 @@ namespace WordGenerator.Controls
             this.runRandomList.UseVisualStyleBackColor = true;
             this.runRandomList.Click += new System.EventHandler(this.runRandomList_Click);
             // 
+            // RunNoSave
+            // 
+            this.RunNoSave.Location = new System.Drawing.Point(3, 45);
+            this.RunNoSave.Name = "RunNoSave";
+            this.RunNoSave.Size = new System.Drawing.Size(110, 39);
+            this.RunNoSave.TabIndex = 9;
+            this.RunNoSave.Text = "Run Without Saving (F10)";
+            this.RunNoSave.UseVisualStyleBackColor = true;
+            this.RunNoSave.Click += new System.EventHandler(this.RunNoSave_Click);
+            // 
             // RunControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.RunNoSave);
             this.Controls.Add(this.runRandomList);
             this.Controls.Add(this.setIterButt);
             this.Controls.Add(this.repeatCheckBox);
@@ -139,7 +151,7 @@ namespace WordGenerator.Controls
             this.Controls.Add(this.runCurrentButton);
             this.Controls.Add(this.runZeroButton);
             this.Name = "RunControl";
-            this.Size = new System.Drawing.Size(119, 307);
+            this.Size = new System.Drawing.Size(119, 351);
             ((System.ComponentModel.ISupportInitialize)(this.iterationSelector)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -150,12 +162,13 @@ namespace WordGenerator.Controls
 
         public System.Windows.Forms.Button runZeroButton;
         private System.Windows.Forms.Button runCurrentButton;
-        private System.Windows.Forms.Button runListButton;
-        private System.Windows.Forms.Button continueListButton;
         private System.Windows.Forms.NumericUpDown iterationSelector;
         private System.Windows.Forms.Button setIterButt;
         private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.Button runRandomList;
         public System.Windows.Forms.CheckBox repeatCheckBox;
+        public System.Windows.Forms.Button runListButton;
+        public System.Windows.Forms.Button continueListButton;
+        public System.Windows.Forms.Button runRandomList;
+        public System.Windows.Forms.Button RunNoSave;
     }
 }

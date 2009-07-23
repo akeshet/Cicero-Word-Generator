@@ -39,14 +39,17 @@ namespace WordGenerator.Controls
         {
             Waveform current = this.waveformEditor1.getSelectedWaveform();
             Dictionary<Waveform, string> usedWFs = Storage.sequenceData.usedWaveforms();
-            if (usedWFs.ContainsKey(current))
+            if (current != null)
             {
-                MessageBox.Show("This common waveform is in use: " + usedWFs[current]);
-                return;
+                if (usedWFs.ContainsKey(current))
+                {
+                    MessageBox.Show("This common waveform is in use: " + usedWFs[current]);
+                    return;
+                }
+                Storage.sequenceData.CommonWaveforms.Remove(current);
+                this.waveformEditor1.setWaveform(null);
+                this.waveformGraphCollection1.setWaveforms(Storage.sequenceData.CommonWaveforms);
             }
-            Storage.sequenceData.CommonWaveforms.Remove(current);
-            this.waveformEditor1.setWaveform(null);
-            this.waveformGraphCollection1.setWaveforms(Storage.sequenceData.CommonWaveforms);
         }
     }
 }

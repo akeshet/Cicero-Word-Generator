@@ -7,6 +7,8 @@ using DataStructures;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace WordGenerator
 {
@@ -543,6 +545,7 @@ namespace WordGenerator
 
         private void mainClientForm_Load(object sender, EventArgs e)
         {
+            this.WindowState = FormWindowState.Maximized;
             /* CiceroSplashForm splash = new CiceroSplashForm();
              splash.Show();*/
         }
@@ -770,7 +773,7 @@ namespace WordGenerator
         {
             if (!suppressHotkeys)
             {
-                RunForm rf = new RunForm(RunForm.RunType.Run_Iteration_Zero, sequencePage1.runControl1.repeatCheckBox.Checked);
+                RunForm rf = new RunForm(RunForm.RunType.Run_Iteration_Zero, sequencePage1.runControl1.repeatCheckBox.Checked,true);
                 rf.ShowDialog();
             }
 
@@ -780,7 +783,7 @@ namespace WordGenerator
         {
             if (!suppressHotkeys)
             {
-                RunForm rf = new RunForm(RunForm.RunType.Run_Current_Iteration, sequencePage1.runControl1.repeatCheckBox.Checked);
+                RunForm rf = new RunForm(RunForm.RunType.Run_Current_Iteration, sequencePage1.runControl1.repeatCheckBox.Checked,true);
                 rf.ShowDialog();
             }
         }
@@ -789,7 +792,7 @@ namespace WordGenerator
         {
             if (!suppressHotkeys)
             {
-                RunForm rf = new RunForm(RunForm.RunType.Run_Full_List, sequencePage1.runControl1.repeatCheckBox.Checked);
+                RunForm rf = new RunForm(RunForm.RunType.Run_Full_List, sequencePage1.runControl1.repeatCheckBox.Checked, true);
                 rf.ShowDialog();
             }
         }
@@ -798,7 +801,7 @@ namespace WordGenerator
         {
             if (!suppressHotkeys)
             {
-                RunForm rf = new RunForm(RunForm.RunType.Run_Continue_List, sequencePage1.runControl1.repeatCheckBox.Checked);
+                RunForm rf = new RunForm(RunForm.RunType.Run_Continue_List, sequencePage1.runControl1.repeatCheckBox.Checked, true);
                 rf.ShowDialog();
             }
         }
@@ -807,7 +810,16 @@ namespace WordGenerator
         {
             if (!suppressHotkeys)
             {
-                RunForm rf = new RunForm(RunForm.RunType.Run_Random_Order_List, sequencePage1.runControl1.repeatCheckBox.Checked);
+                RunForm rf = new RunForm(RunForm.RunType.Run_Random_Order_List, sequencePage1.runControl1.repeatCheckBox.Checked, true);
+                rf.ShowDialog();
+            }
+        }
+
+        private void runWithoutSavingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!suppressHotkeys)
+            {
+                RunForm rf = new RunForm(RunForm.RunType.Run_Iteration_Zero, sequencePage1.runControl1.repeatCheckBox.Checked, false);
                 rf.ShowDialog();
             }
         }
@@ -1035,25 +1047,62 @@ namespace WordGenerator
             }
         }
 
-        private void compareSequenceMenuItem_Click(object sender, EventArgs e)
+        private void loadLogToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            try
+            OpenFileDialog fileDialog = new OpenFileDialog();
+
+            fileDialog.Title = "Open Log File";
+            fileDialog.Filter = "RunLog files (*.clg)|*.clg|All files (*.*)|*.*";
+            fileDialog.FilterIndex = 1;
+            fileDialog.Multiselect = false;
+
+            DialogResult result = fileDialog.ShowDialog();
+
+            string fileName = fileDialog.FileName;
+
+            if (result == DialogResult.OK)
             {
-                SequenceData other = Storage.SaveAndLoad.LoadSequenceWithFileDialog();
-                List<SequenceComparer.SequenceDifference> differences = SequenceComparer.CompareSequences(
-                    Storage.sequenceData, other);
-                SequenceDifferencesForm frm = new SequenceDifferencesForm(differences);
-                frm.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Caught an exception when attempting to compare the sequences. Sequence comparison is still in its early stages. Please copy the following exception information and send it to the author. Don't worry, Cicero is not about to crash.");
-                ExceptionViewerDialog view = new ExceptionViewerDialog(ex);
-                view.ShowDialog();
+                FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.None);
+                BinaryFormatter bf = new BinaryFormatter();
+                RunLog log = (RunLog)bf.Deserialize(fs);
+                fs.Close();
+
+                Storage.settingsData = log.RunSettings;
+                WordGenerator.mainClientForm.instance.OpenSettingsFileName = fileName;
+                Storage.sequenceData = log.RunSequence;                
+                WordGenerator.mainClientForm.instance.OpenSequenceFileName = fileName;
+
+                this.RefreshSequenceDataToUI(Storage.sequenceData);
+                this.handleMessageEvent(this, new MessageEvent("Loaded sequence file " + fileName));
+
             }
 
         }
 
+        private void mainClientForm_Activated(object sender, EventArgs e)
+        {
+            sequencePage1.runControl1.IsRunNoSaveEnabled=(Storage.settingsData.CameraPCs.Count != 0);
+            runWithoutSavingToolStripMenuItem.Enabled=(Storage.settingsData.CameraPCs.Count != 0);
+        } 
+
+	 	private void compareSequenceMenuItem_Click(object sender, EventArgs e)
+	        {
+	            try
+	            {
+	                SequenceData other = Storage.SaveAndLoad.LoadSequenceWithFileDialog();
+	                List<SequenceComparer.SequenceDifference> differences = SequenceComparer.CompareSequences(
+	                    Storage.sequenceData, other);
+	                SequenceDifferencesForm frm = new SequenceDifferencesForm(differences);
+	                frm.ShowDialog();
+	            }
+	            catch (Exception ex)
+	            {
+	                MessageBox.Show("Caught an exception when attempting to compare the sequences. Sequence comparison is still in its early stages. Please copy the following exception information and send it to the author. Don't worry, Cicero is not about to crash.");
+	                ExceptionViewerDialog view = new ExceptionViewerDialog(ex);
+	                view.ShowDialog();
+	            }
+
+	        }
 
 
 

@@ -46,6 +46,17 @@ namespace WordGenerator.Controls
 
             for (int i = 0; i < digitalIDs.Count; i++)
             {
+                Label fillerLbl = new Label();
+                fillerLbl.Text = "";
+                fillerLbl.Width = 18;
+                fillerLbl.Height = rowHeight;
+                fillerLbl.Location = new Point(this.Width-20, i * rowHeight);
+                fillerLbl.TextAlign = ContentAlignment.MiddleRight;
+                fillerLbl.AutoEllipsis = true;
+                fillerLbl.AutoSize = false;
+
+                
+
                 int digitalID = digitalIDs[i];
                 Label lbl = new Label();
                 lbl.Text = Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.digital].Channels[digitalID].Name;
@@ -73,12 +84,14 @@ namespace WordGenerator.Controls
 
                 lbl.BackColor = bCol;
                 idLbl.BackColor = bCol;
+                fillerLbl.BackColor = bCol;
 
                 lbl.ForeColor = Color.White;
                 idLbl.ForeColor = Color.White;
 
                 channelLabels.Add(lbl);
                 channelLabels.Add(idLbl);
+                channelLabels.Add(fillerLbl);
 
  
             }

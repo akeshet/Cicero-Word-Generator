@@ -48,6 +48,8 @@ namespace WordGenerator
             this.loadDefaultSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.saveDefaultSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.loadLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runIteration0ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,6 +57,7 @@ namespace WordGenerator
             this.runListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.continueListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runListInRandomOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runWithoutSavingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editLogicalDevicesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editServerManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -171,6 +174,8 @@ namespace WordGenerator
             this.loadDefaultSettings,
             this.saveDefaultSettings,
             this.toolStripSeparator1,
+            this.loadLogToolStripMenuItem,
+            this.toolStripMenuItem4,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
@@ -260,6 +265,18 @@ namespace WordGenerator
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(205, 6);
             // 
+            // loadLogToolStripMenuItem
+            // 
+            this.loadLogToolStripMenuItem.Name = "loadLogToolStripMenuItem";
+            this.loadLogToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.loadLogToolStripMenuItem.Text = "Load Log...";
+            this.loadLogToolStripMenuItem.Click += new System.EventHandler(this.loadLogToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(205, 6);
+            // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
@@ -274,7 +291,8 @@ namespace WordGenerator
             this.runCurrentIterationToolStripMenuItem,
             this.runListToolStripMenuItem,
             this.continueListToolStripMenuItem,
-            this.runListInRandomOrderToolStripMenuItem});
+            this.runListInRandomOrderToolStripMenuItem,
+            this.runWithoutSavingToolStripMenuItem});
             this.runToolStripMenuItem.Name = "runToolStripMenuItem";
             this.runToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.runToolStripMenuItem.Text = "&Run";
@@ -297,6 +315,7 @@ namespace WordGenerator
             // runListToolStripMenuItem
             // 
             this.runListToolStripMenuItem.Name = "runListToolStripMenuItem";
+            this.runListToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
             this.runListToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
             this.runListToolStripMenuItem.Text = "Run List";
             this.runListToolStripMenuItem.Click += new System.EventHandler(this.runListToolStripMenuItem_Click);
@@ -314,6 +333,14 @@ namespace WordGenerator
             this.runListInRandomOrderToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
             this.runListInRandomOrderToolStripMenuItem.Text = "Run List in Random Order";
             this.runListInRandomOrderToolStripMenuItem.Click += new System.EventHandler(this.runListInRandomOrderToolStripMenuItem_Click);
+            // 
+            // runWithoutSavingToolStripMenuItem
+            // 
+            this.runWithoutSavingToolStripMenuItem.Name = "runWithoutSavingToolStripMenuItem";
+            this.runWithoutSavingToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F10;
+            this.runWithoutSavingToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.runWithoutSavingToolStripMenuItem.Text = "Run Without Saving";
+            this.runWithoutSavingToolStripMenuItem.Click += new System.EventHandler(this.runWithoutSavingToolStripMenuItem_Click);
             // 
             // toolsToolStripMenuItem
             // 
@@ -771,6 +798,7 @@ namespace WordGenerator
             this.Name = "mainClientForm";
             this.Text = "Cicero Word Generator 1.0 Beta";
             this.Load += new System.EventHandler(this.mainClientForm_Load);
+            this.Activated += new System.EventHandler(this.mainClientForm_Activated);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.mainClientForm_FormClosed);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.mainClientForm_FormClosing);
             this.statusStrip.ResumeLayout(false);
@@ -870,6 +898,9 @@ namespace WordGenerator
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem compareSequenceMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadLogToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
+        private System.Windows.Forms.ToolStripMenuItem runWithoutSavingToolStripMenuItem;
 
     }
 }

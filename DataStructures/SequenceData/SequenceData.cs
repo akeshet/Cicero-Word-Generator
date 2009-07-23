@@ -242,6 +242,14 @@ namespace DataStructures
             }
         }
 
+        private bool aISaved;
+        [Browsable(false)]
+        public bool AISaved
+        {
+            get { return aISaved; }
+            set { aISaved=value;}
+        }
+
         private void setIterationNumber(int iterationNumber)
         {
 
@@ -640,7 +648,6 @@ namespace DataStructures
         {
             if (N >= getNDisplayedTimeSteps())
                 return null;
-
             if (N < 0)
                 return null;
 

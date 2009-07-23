@@ -10,6 +10,14 @@ namespace WordGenerator.Controls
 {
     public partial class RunControl : UserControl
     {
+        private bool isRunNoSaveEnabled;
+
+        public bool IsRunNoSaveEnabled
+        {
+            get { return isRunNoSaveEnabled; }
+            set { isRunNoSaveEnabled = value; this.RunNoSave.Enabled = isRunNoSaveEnabled; }
+
+        }
 
         public RunControl()
         {
@@ -17,18 +25,19 @@ namespace WordGenerator.Controls
             toolTip1.SetToolTip(runListButton, "Runs through all the list iterations, starting at iteration 0.");
             toolTip1.SetToolTip(continueListButton, "Runs through the remaining list iterations, beginning with the current iteration.");
             toolTip1.SetToolTip(runRandomList, "Runs through all list iterations in random order.");
+            isRunNoSaveEnabled = true;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            RunForm runform = new RunForm(RunForm.RunType.Run_Iteration_Zero, repeatCheckBox.Checked);
+            RunForm runform = new RunForm(RunForm.RunType.Run_Iteration_Zero, repeatCheckBox.Checked,true);
             runform.ShowDialog();
             runform.Dispose();
         }
 
         private void runCurrentButton_Click(object sender, EventArgs e)
         {
-            RunForm runform = new RunForm(RunForm.RunType.Run_Current_Iteration, repeatCheckBox.Checked);
+            RunForm runform = new RunForm(RunForm.RunType.Run_Current_Iteration, repeatCheckBox.Checked, true);
             runform.ShowDialog();
             runform.Dispose();
         }
@@ -48,9 +57,9 @@ namespace WordGenerator.Controls
         }
 
         private void runListButton_Click(object sender, EventArgs e)
-        {
+        {   
             promptUserRegardingRepeats();
-            RunForm runform = new RunForm(RunForm.RunType.Run_Full_List, repeatCheckBox.Checked);
+            RunForm runform = new RunForm(RunForm.RunType.Run_Full_List, repeatCheckBox.Checked, true);
             runform.ShowDialog();
             runform.Dispose();
         }
@@ -70,7 +79,7 @@ namespace WordGenerator.Controls
         private void continueListButton_Click(object sender, EventArgs e)
         {
             promptUserRegardingRepeats();
-            RunForm runform = new RunForm(RunForm.RunType.Run_Continue_List, repeatCheckBox.Checked);
+            RunForm runform = new RunForm(RunForm.RunType.Run_Continue_List, repeatCheckBox.Checked, true);
             runform.ShowDialog();
             runform.Dispose();
         }
@@ -90,9 +99,17 @@ namespace WordGenerator.Controls
         }
 
         private void runRandomList_Click(object sender, EventArgs e)
-        {
-            RunForm runform = new RunForm(RunForm.RunType.Run_Random_Order_List, repeatCheckBox.Checked);
+        {   
+			promptUserRegardingRepeats(); 
+            RunForm runform = new RunForm(RunForm.RunType.Run_Random_Order_List, repeatCheckBox.Checked, true);
             runform.ShowDialog();
+        }
+
+        private void RunNoSave_Click(object sender, EventArgs e)
+        {   
+            RunForm runform = new RunForm(RunForm.RunType.Run_Iteration_Zero, repeatCheckBox.Checked, false);
+            runform.ShowDialog();
+            runform.Dispose();
         }
 
 

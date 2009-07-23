@@ -156,7 +156,7 @@ namespace WordGenerator.Controls
             // 
             // seqNameBox
             // 
-            this.seqNameBox.Location = new System.Drawing.Point(2, 330);
+            this.seqNameBox.Location = new System.Drawing.Point(2, 373);
             this.seqNameBox.Name = "seqNameBox";
             this.seqNameBox.Size = new System.Drawing.Size(112, 20);
             this.seqNameBox.TabIndex = 2;
@@ -164,17 +164,17 @@ namespace WordGenerator.Controls
             // 
             // seqDescBox
             // 
-            this.seqDescBox.Location = new System.Drawing.Point(3, 387);
+            this.seqDescBox.Location = new System.Drawing.Point(3, 416);
             this.seqDescBox.Multiline = true;
             this.seqDescBox.Name = "seqDescBox";
-            this.seqDescBox.Size = new System.Drawing.Size(112, 220);
+            this.seqDescBox.Size = new System.Drawing.Size(112, 191);
             this.seqDescBox.TabIndex = 3;
             this.seqDescBox.TextChanged += new System.EventHandler(this.seqDescBox_TextChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 314);
+            this.label1.Location = new System.Drawing.Point(13, 357);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(90, 13);
             this.label1.TabIndex = 13;
@@ -183,7 +183,7 @@ namespace WordGenerator.Controls
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 371);
+            this.label2.Location = new System.Drawing.Point(2, 400);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(115, 13);
             this.label2.TabIndex = 14;
@@ -276,7 +276,7 @@ namespace WordGenerator.Controls
             // 
             this.runControl1.Location = new System.Drawing.Point(2, 3);
             this.runControl1.Name = "runControl1";
-            this.runControl1.Size = new System.Drawing.Size(119, 299);
+            this.runControl1.Size = new System.Drawing.Size(119, 351);
             this.runControl1.TabIndex = 1;
             // 
             // panel2

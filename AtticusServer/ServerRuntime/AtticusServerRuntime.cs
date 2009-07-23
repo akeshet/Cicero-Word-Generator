@@ -10,6 +10,10 @@ using System.Windows.Forms;
 using NationalInstruments.DAQmx;
 using System.ComponentModel;
 using System.IO.Ports;
+using System.Data;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
 
 
 
@@ -27,6 +31,12 @@ namespace AtticusServer
                 MainServerForm.instance.DisplayError = true;
             }
         }
+        AnalogMultiChannelReader reader_analog_S7;
+        List<String> analog_in_names;
+        Task analogS7ReadTask;
+        DateTime runTime;
+        bool analogInCardDetected=false;
+        
 
         /// <summary>
         /// This is a lock object, used to make sure that only one instance of any remotely-called method is running at a time.
@@ -292,6 +302,9 @@ namespace AtticusServer
 
         public override void nextRunTimeStamp(DateTime timeStamp)
         {
+
+
+            runTime = timeStamp;
             lock (remoteLockObj)
             {
                 return;
@@ -561,27 +574,124 @@ namespace AtticusServer
 
                     #endregion
 
-                    #region Watchdog Timer stuff -- NOT FINISHED YET, THUS COMMENTED OUT
 
-                    
-                    if (serverSettings.UseWatchdogTimerMonitoringTask)
+                    #region Analog In Task
+
+                    foreach (DeviceSettings ds in AtticusServer.server.serverSettings.myDevicesSettings.Values)
                     {
-                        messageLog(this, new MessageEvent("Watchdog Timer tasks no longer supported. Ignoring serverSettings.UseWatchdogTimerMonitoringTask"));
-                        /*
-                        if (daqMxTasks.ContainsKey(serverSettings.DeviceToSyncSoftwareTimedTasksTo))
-                        {
-                            messageLog(this, new MessageEvent("Creating watchdog timer monitoring task"));
-                            WatchdogTimerTask wtask = new WatchdogTimerTask(sequence, myServerSettings.myDevicesSettings[serverSettings.DeviceToSyncSoftwareTimedTasksTo].SampleClockRate, daqMxTasks[serverSettings.DeviceToSyncSoftwareTimedTasksTo], .2);
-                        }
-                        else
-                        {
-                            messageLog(this, new MessageEvent("Unable to create watchdog timer monitoring task, since the hardware-timed device it was to be synched to is not being used. Continuing without watchdog."));
-                        }*/
+                        analogInCardDetected|=ds.DeviceDescription.Contains("6259")&&ds.AnalogInEnabled;
                     }
                     
+					if (analogInCardDetected)
+                    {                    
+                    // Create a channel
+                    analogS7ReadTask = new Task();
+                    analogS7ReadTask.SynchronizeCallbacks = false;
+                    analog_in_names = new List<string>();
+                    bool isUsed;
+                    
 
 
+                    AnalogInChannels the_channels = AtticusServer.server.serverSettings.AIChannels[0];
+                    AnalogInNames the_names = AtticusServer.server.serverSettings.AINames[0];
+                    
+                                           
+                        #region Single ended
+                     for (int analog_index=0;analog_index<10;analog_index++)
+                     {
+                         PropertyInfo the_channel = the_channels.GetType().GetProperty("AS" + analog_index.ToString());
+                         isUsed=(bool)the_channel.GetValue(the_channels,null);
+                         if (isUsed)
+                         {
+                             if (analog_index < 5)
+                             {
+                                 analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + analog_index.ToString(), "",
+                                     AITerminalConfiguration.Nrse, -10, 10, AIVoltageUnits.Volts);
+                             }
+                             else
+                             {
+                                 analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 3).ToString(), "",
+                                     AITerminalConfiguration.Nrse, -10, 10, AIVoltageUnits.Volts);
+                             }
+                             string theName = (string)(the_names.GetType().GetProperty("AS" + analog_index.ToString()).GetValue(the_names, null));
+                             if (theName == "")
+                                 analog_in_names.Add("AIS" + analog_index.ToString());
+                             else
+                                 analog_in_names.Add(theName);
+                         }
+                     }
+                        #endregion
+
+                         #region Differential
+                    for (int analog_index=0;analog_index<11;analog_index++)
+                     {
+                         PropertyInfo the_channel = the_channels.GetType().GetProperty("AD" + number_to_string(analog_index,2));
+                         isUsed = (bool)the_channel.GetValue(the_channels, null);
+
+                         if (isUsed)
+                         {
+                             if (analog_index < 3)
+                             {
+                                 analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 5).ToString(), "",
+                                     AITerminalConfiguration.Differential, -10, 10, AIVoltageUnits.Volts);
+                             }
+                             else
+                             {
+                                 analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 13).ToString(), "",
+                                     AITerminalConfiguration.Differential, -10, 10, AIVoltageUnits.Volts);
+                             }
+                             string theName = (string)(the_names.GetType().GetProperty("AD" + number_to_string(analog_index, 2)).GetValue(the_names, null));
+                             if (theName == "")
+                                 analog_in_names.Add("AID" + analog_index.ToString());
+                             else
+                                 analog_in_names.Add(theName);
+                         }
+                    }
                     #endregion
+                    
+
+
+                    
+
+                   
+
+
+                    // Configure timing specs    
+                    analogS7ReadTask.Timing.ConfigureSampleClock("", (double)(AtticusServer.server.serverSettings.AIFrequency), SampleClockActiveEdge.Rising,
+                        SampleQuantityMode.FiniteSamples, sequence.nSamples(1 / ((double)(AtticusServer.server.serverSettings.AIFrequency))));
+                    
+                    analogS7ReadTask.Timing.ReferenceClockSource = "/PXI1Slot7/PXI_Trig7";
+                    analogS7ReadTask.Timing.ReferenceClockRate = 20000000;
+                    analogS7ReadTask.Stream.Timeout = Convert.ToInt32(sequence.SequenceDuration*1000)+10000;
+
+                    reader_analog_S7 = new AnalogMultiChannelReader(analogS7ReadTask.Stream);
+                   
+                    }                                                                    
+                    #endregion
+                    
+                  	 #region Watchdog Timer stuff -- NOT FINISHED YET, THUS COMMENTED OUT
+
+
+	                    if (serverSettings.UseWatchdogTimerMonitoringTask)
+	                    {
+	                        messageLog(this, new MessageEvent("Watchdog Timer tasks no longer supported. Ignoring serverSettings.UseWatchdogTimerMonitoringTask"));
+	                        /*
+	                        if (daqMxTasks.ContainsKey(serverSettings.DeviceToSyncSoftwareTimedTasksTo))
+	                        {
+	                            messageLog(this, new MessageEvent("Creating watchdog timer monitoring task"));
+	                            WatchdogTimerTask wtask = new WatchdogTimerTask(sequence, myServerSettings.myDevicesSettings[serverSettings.DeviceToSyncSoftwareTimedTasksTo].SampleClockRate, daqMxTasks[serverSettings.DeviceToSyncSoftwareTimedTasksTo], .2);
+	                        }
+	                        else
+	                        {
+	                            messageLog(this, new MessageEvent("Unable to create watchdog timer monitoring task, since the hardware-timed device it was to be synched to is not being used. Continuing without watchdog."));
+	                        }*/
+	                    }
+
+
+
+	                    #endregion  
+
+
 
 
                     #region GPIB device and masquerading gpib channels (like rfsg channels)
@@ -744,6 +854,40 @@ namespace AtticusServer
             }
         }
 
+        private void callback_S7(IAsyncResult ar)
+        {
+
+            //Read the available data from the channels
+
+            try
+            {
+                double[,] data_ana_in_S7 = new double[analogS7ReadTask.AIChannels.Count, sequence.nSamples(1 / (double)(AtticusServer.server.serverSettings.AIFrequency))];
+                data_ana_in_S7 = reader_analog_S7.EndReadMultiSample(ar);
+                DataTable dataTable = new DataTable();
+                InitializeDataTable(ref dataTable);
+                analogS7ReadTask.Dispose();
+                //data_acquired = true;
+                if (sequence.AISaved)
+                {
+                    dataToDataTable(data_ana_in_S7, ref dataTable);
+
+                    string day_folder = get_fileDirectory();
+                    if (!System.IO.Directory.Exists(day_folder + @"\Analog in"))
+                        System.IO.Directory.CreateDirectory(day_folder + @"\Analog in");
+
+
+                    string shot_name = get_fileStamp();
+
+
+                    System.IO.StreamWriter a = System.IO.File.CreateText(day_folder + @"\Analog in\" + shot_name + ".csv");
+                    DataTableHelper.ProduceCSV(dataTable, a, true);
+                    a.Close();
+                }
+            }
+            catch {}
+            
+         }                 
+
         public Dictionary<string, long> expectedNumberOfSamplesGenerated;
 
         public bool clientFinishedRun;
@@ -772,7 +916,7 @@ namespace AtticusServer
                         {
                             if (expectedNumberOfSamplesGenerated.ContainsKey(str))
                             {
-                                if (myServerSettings.myDevicesSettings.ContainsKey(str))
+                                 if (myServerSettings.myDevicesSettings.ContainsKey(str))
                                 {
                                     if (myServerSettings.myDevicesSettings[str].MySampleClockSource == DeviceSettings.SampleClockSource.External)
                                     {
@@ -1265,6 +1409,10 @@ namespace AtticusServer
                         variableTimebaseClockTask.Control(TaskAction.Commit);
                     }
 
+
+                    if (analogInCardDetected)
+                    reader_analog_S7.BeginReadMultiSample(sequence.nSamples(1 / (double)(AtticusServer.server.serverSettings.AIFrequency)), new AsyncCallback(callback_S7), null);
+
                     return true;
                 }
                 catch (Exception e)
@@ -1687,6 +1835,26 @@ namespace AtticusServer
                 try
                 {
                     messageLog(this, new MessageEvent("Received a STOP signal. Stopping any currently executing runs."));
+
+                    if (analogInCardDetected)
+                    {
+                        #region Stop Analog In
+                        try
+                        {
+
+                            analogS7ReadTask.Control(TaskAction.Abort);
+                            analogS7ReadTask.Stop();
+                            analogS7ReadTask.Dispose();
+                        }
+                        catch
+                        {
+
+
+                        }
+
+
+                        #endregion Stop Analog In
+                    }
                     stopAndCleanupTasks();
                 }
                 catch (Exception e)
@@ -2492,6 +2660,166 @@ namespace AtticusServer
 
         #endregion
 
+        static string number_to_string(int number, int n0)
+        {
+            string res = number.ToString();
+            for (int i = 0; i < n0 - number.ToString().Length; i++)
+            {
+                res = "0" + res;
+            }
+            return res;
+        }
+
+        public string listBoundVariables()
+        {
+            string listBoundVariableValues = "";
+
+        foreach (Variable var in sequence.Variables)
+            {
+
+                if (var.ListDriven && !var.PermanentVariable)
+                {
+                    if (listBoundVariableValues != "")
+                    {
+                        listBoundVariableValues += "_";
+                    }
+                    listBoundVariableValues += var.VariableName + " = " + var.VariableValue.ToString();
+                }
+            }
+
+            
+                return listBoundVariableValues;
+            
+        }
+
+        private void dataToDataTable(double[,] sourceArray, ref DataTable dataTable)
+        {
+            int channelCount = sourceArray.GetLength(0);
+            int dataCount;
+
+
+            dataCount = dataTable.Rows.Count;
+
+
+            for (int currentDataIndex = 0; currentDataIndex < dataCount; currentDataIndex++)
+            {
+                for (int currentChannelIndex = 1; currentChannelIndex < channelCount+1; currentChannelIndex++)
+                    dataTable.Rows[currentDataIndex][currentChannelIndex] = sourceArray.GetValue(currentChannelIndex-1, (int)((Double.Parse((dataTable.Rows[currentDataIndex][0]).ToString()))*AtticusServer.server.serverSettings.AIFrequency));
+            }
+
+        }
+
+        public void InitializeDataTable(ref DataTable dataTable)
+        {
+            int numOfChannels = analog_in_names.Count;
+            dataTable.Rows.Clear();
+            dataTable.Columns.Clear();
+            DataColumn[] dataColumn = new DataColumn[numOfChannels+1];
+
+            dataColumn[0] = new DataColumn();
+            dataColumn[0].DataType = typeof(double);
+            dataColumn[0].ColumnName = "t";
+
+            for (int currentChannelIndex = 1; currentChannelIndex < numOfChannels+1; currentChannelIndex++)
+            {
+                dataColumn[currentChannelIndex] = new DataColumn();
+                dataColumn[currentChannelIndex].DataType = typeof(double);
+                dataColumn[currentChannelIndex].ColumnName = analog_in_names[currentChannelIndex-1];
+            }
+
+            dataTable.Columns.AddRange(dataColumn);
+
+            List<double> theTimes=new List<double>();
+            int samplesFreq = AtticusServer.server.serverSettings.AIFrequency;
+            foreach (AnalogInLogTime theLogTime in AtticusServer.server.serverSettings.AILogTimes)
+            {
+                double timestep=Math.Round(sequence.timeAtTimestep(theLogTime.TimeStep-1),3,MidpointRounding.AwayFromZero);
+                double timebefore = Math.Max(timestep - ((double)theLogTime.TimeBefore) / 1000,0);
+                double timeafter = Math.Min(timestep + ((double)theLogTime.TimeAfter) / 1000,Math.Round(sequence.SequenceDuration,3,MidpointRounding.AwayFromZero));
+                for (int k = (int)(timebefore * samplesFreq); k < (int)(timeafter * samplesFreq + 1);k++ )
+                {
+                    theTimes.Add((double)k / (double)samplesFreq);
+                }
+            }
+            theTimes = DedupCollection(theTimes);
+            theTimes.Sort();
+
+            int numOfRows = theTimes.Count;
+            for (int currentDataIndex = 0; currentDataIndex < numOfRows; currentDataIndex++)
+            {
+                object[] rowArr = new object[numOfChannels+1];
+                dataTable.Rows.Add(rowArr);
+                dataTable.Rows[currentDataIndex][0] = theTimes[currentDataIndex];
+            }
+
+            
+            
+           
+        }
+
+        public string get_fileDirectory()
+        {
+            
+            DateTime today = DateTime.Today;
+            string the_year = today.Year.ToString();
+            CultureInfo the_current_culture = CultureInfo.CurrentCulture;
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US", false);
+            string the_month = String.Format("{0:MMM}", today).ToString();
+            Thread.CurrentThread.CurrentCulture = the_current_culture;
+            the_month = the_month.Substring(0, 1).ToUpper() + the_month.Substring(1);
+            string the_day = number_to_string(today.Day, 2);
+            string fileDirectory;
+
+            if (settings.SavePath.EndsWith("/") || settings.SavePath.EndsWith(@"\"))
+                fileDirectory = settings.SavePath.Remove(settings.SavePath.Length-1)+@"\" + the_year + @"\" + the_month + the_year + @"\" + the_day + the_month + the_year;
+            else if (settings.SavePath!="")
+                fileDirectory = settings.SavePath+ @"\" + the_year + @"\" + the_month + the_year + @"\" + the_day + the_month + the_year;
+            else
+                fileDirectory = AppDomain.CurrentDomain.BaseDirectory + the_year + @"\" + the_month + the_year + @"\" + the_day + the_month + the_year;
+            return fileDirectory;
+
+        }
+
+        public string get_fileStamp()
+        {
+            string fileStamp = number_to_string(runTime.Hour, 2) + number_to_string(runTime.Minute, 2) + number_to_string(runTime.Second, 2);
+            if (sequence.SequenceName != "")
+                fileStamp = fileStamp + "_" + ProcessName(sequence.SequenceName);
+            if (sequence.SequenceDescription != "")
+                fileStamp = fileStamp + "_" + ProcessName(sequence.SequenceDescription);
+            if (listBoundVariables() != "")
+                fileStamp = fileStamp + "_" + listBoundVariables();
+            return fileStamp;
+        }
+
+        public string ProcessName(string theName)
+        {
+            string ans = theName;
+            foreach (Variable var in sequence.Variables)
+            {
+
+                if (!var.ListDriven || var.PermanentVariable)
+                {
+                    if (theName.Contains(var.VariableName))
+                        ans = ans.Replace(var.VariableName, var.VariableName + " = " + var.VariableValue.ToString());
+                }
+            }
+            return ans;
+        }
+
+       
+        
+       public List<double> DedupCollection ( List<double> input )        {    List<double> passedValues = new List<double>();    //relatively simple dupe check alg used as example
+    foreach (double item in input)
+    {
+        if (passedValues.Contains(item))
+            continue;
+        else
+        {
+            passedValues.Add(item);
+        }
+    }
+    return passedValues;        }
 
     }
 }

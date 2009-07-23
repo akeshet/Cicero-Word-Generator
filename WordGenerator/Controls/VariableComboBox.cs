@@ -22,7 +22,7 @@ namespace WordGenerator.Controls
         {
             InitializeComponent();
             this.comboBox1.Items.Add("Manual");
-
+            toolTip1.ShowAlways = true;
             if (WordGenerator.Storage.sequenceData != null)
             {
                 foreach (Variable var in WordGenerator.Storage.sequenceData.Variables)
@@ -104,5 +104,16 @@ namespace WordGenerator.Controls
                 comboBox1.SelectedItem = this.backupSelectedItem;
         }
 
+        
+
+        private void toolTip1_Popup(object sender, PopupEventArgs e)
+        {
+            if (comboBox1.SelectedText != "Manual" && toolTip1.GetToolTip(comboBox1) != this.SelectedVariable.VariableName + " = " + this.SelectedVariable.VariableValue.ToString())
+                toolTip1.SetToolTip(comboBox1, this.SelectedVariable.VariableName + " = " + this.SelectedVariable.VariableValue.ToString());
+        }
+
+        
+
+       
     }
 }

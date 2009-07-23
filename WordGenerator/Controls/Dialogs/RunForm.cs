@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using DataStructures;
 using System.Threading;
 using System.Runtime.InteropServices;
+using System.Net;
+using System.Net.Sockets;
 
 namespace WordGenerator
 {
@@ -19,6 +21,16 @@ namespace WordGenerator
         private delegate bool boolIntSequenceDelegate(int a, SequenceData seq);
         private delegate void MessageEventCallDelegate(object o, MessageEvent e);
         private delegate void setStatusDelegate(RunFormStatus o);
+
+        Thread getConfirmationThread;
+
+        List<Socket> CameraPCsSocketList;
+        List<SettingsData.IPAdresses> connectedPCs;
+
+        bool isIdle=false;
+        bool isCameraSaving = true;
+
+        DateTime runStartTime;
 
         private delegate bool boolVoidDelegate();
 
@@ -58,7 +70,7 @@ namespace WordGenerator
 
         private bool runRepeat;
 
-        private bool errorDetected;
+        		private bool errorDetected;
 
         public bool ErrorDetected
         {
@@ -94,7 +106,6 @@ namespace WordGenerator
             }
         }
 
-
         private void setStatus(RunFormStatus status)
         {
             if (this.InvokeRequired)
@@ -128,7 +139,7 @@ namespace WordGenerator
                         stopButton.Enabled = false;
                         closeButton.Enabled = true;
                         progressBar.Enabled = false;
-                        if (this.runType == RunType.Run_Iteration_Zero || this.runType == RunType.Run_Current_Iteration)
+                        if ((this.runType == RunType.Run_Iteration_Zero || this.runType == RunType.Run_Current_Iteration)&& !isIdle)
                         {
                             runAgainButton.Enabled = true;
                         }
@@ -150,6 +161,51 @@ namespace WordGenerator
 
         public RunForm()
         {
+            IPAddress lclhst=null;
+            IPEndPoint ipe=null;
+            CameraPCsSocketList = new List<Socket>();
+            connectedPCs=new List<SettingsData.IPAdresses>();
+            bool errorOccured=false;
+            foreach (SettingsData.IPAdresses ipAdress in Storage.settingsData.CameraPCs)
+            {
+                errorOccured = false;
+                if (ipAdress.inUse)
+                {
+                    try
+                    {
+
+                        lclhst = Dns.GetHostEntry(ipAdress.pcAddress).AddressList[0];
+                        ipe = new IPEndPoint(lclhst, ipAdress.Port);
+                        CameraPCsSocketList.Add(new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp));
+
+                        CameraPCsSocketList[CameraPCsSocketList.Count - 1].Blocking = false;
+                        CameraPCsSocketList[CameraPCsSocketList.Count - 1].SendTimeout = 100;
+                        CameraPCsSocketList[CameraPCsSocketList.Count - 1].ReceiveTimeout = 100;
+
+                    }
+                    catch
+                    {
+                        errorOccured = true;
+                    }
+                    if (errorOccured)
+                        continue;
+                    else
+                    {
+                        connectedPCs.Add(ipAdress);
+                        try
+                        {
+                            CameraPCsSocketList[CameraPCsSocketList.Count - 1].Connect(ipe);
+                        }
+                        catch { }
+                    }
+                }
+            }
+
+            if (Storage.settingsData.CameraPCs.Count != 0)
+            {
+                getConfirmationThread = new Thread(new ThreadStart(getConfirmationEntryPoint));
+                getConfirmationThread.Start();
+            }
             // Supress hotkeys in main form when this form is runnings. This will be cleared when the run form closes.
             WordGenerator.mainClientForm.instance.suppressHotkeys = true;
 
@@ -213,6 +269,27 @@ namespace WordGenerator
         {
             this.runType = runType;
             this.runRepeat = runRepeat;
+            if (runType == RunType.Run_Full_List || runType == RunType.Run_Continue_List)
+                runRepeat = false;
+
+            if (runType != RunType.Run_Current_Iteration && runType != RunType.Run_Iteration_Zero)
+                abortAfterThis.Visible = true;
+
+
+            if (runRepeat)
+                abortAfterThis.Visible = true;
+        }
+
+        public RunForm(RunType runType, bool runRepeat, bool isCameraSaving)
+            : this()
+        {
+            this.runType = runType;
+            this.isCameraSaving = isCameraSaving;
+            this.savingWarning.Visible = !isCameraSaving;
+            Storage.sequenceData.AISaved = isCameraSaving;
+
+            this.runRepeat = runRepeat;
+
             if (runType == RunType.Run_Full_List || runType == RunType.Run_Continue_List)
                 runRepeat = false;
 
@@ -305,28 +382,48 @@ namespace WordGenerator
         {
             // start run! woo hoo!
             // do it async so as not to block the UI thread.
-            switch (runType)
+            bool listCouldBeLocked = true;
+            if (!Storage.sequenceData.Lists.ListLocked)
             {
-                case RunType.Run_Iteration_Zero:
-                    boolIntSequenceDelegate runZero = new boolIntSequenceDelegate(do_run);
-                    runZero.BeginInvoke(0, Storage.sequenceData, null, null);
-                    break;
-                case RunType.Run_Current_Iteration:
-                    boolSequenceDelegate runCurrent = new boolSequenceDelegate(do_run);
-                    runCurrent.BeginInvoke(Storage.sequenceData, null, null);
-                    break;
-                case RunType.Run_Full_List:
-                    boolVoidDelegate runList = new boolVoidDelegate(do_list_run);
-                    runList.BeginInvoke(null, null);
-                    break;
-                case RunType.Run_Continue_List:
-                    boolVoidDelegate runContinueList = new boolVoidDelegate(do_continue_list_run);
-                    runContinueList.BeginInvoke(null, null);
-                    break;
-                case RunType.Run_Random_Order_List:
-                    boolVoidDelegate runRandomList = new boolVoidDelegate(do_random_order_list_run);
-                    runRandomList.BeginInvoke(null, null);
-                    break;
+                addMessageLogText(this, new MessageEvent("Lists not locked, attempting to lock them..."));
+
+                WordGenerator.mainClientForm.instance.variablesEditor1.tryLockLists();
+
+                if (!Storage.sequenceData.Lists.ListLocked)
+                {
+                    addMessageLogText(this, new MessageEvent("Unable to lock lists. Aborting run. See the Variables tab."));
+
+                    setStatus(RunFormStatus.FinishedRun);
+                    listCouldBeLocked= false;
+                }
+                addMessageLogText(this, new MessageEvent("Lists locked successfully."));
+            }
+
+            if (listCouldBeLocked)
+            {
+                switch (runType)
+                {
+                    case RunType.Run_Iteration_Zero:
+                        boolIntSequenceDelegate runZero = new boolIntSequenceDelegate(do_run);
+                        runZero.BeginInvoke(0, Storage.sequenceData, null, null);
+                        break;
+                    case RunType.Run_Current_Iteration:
+                        boolSequenceDelegate runCurrent = new boolSequenceDelegate(do_run);
+                        runCurrent.BeginInvoke(Storage.sequenceData, null, null);
+                        break;
+                    case RunType.Run_Full_List:
+                        boolVoidDelegate runList = new boolVoidDelegate(do_list_run);
+                        runList.BeginInvoke(null, null);
+                        break;
+                    case RunType.Run_Continue_List:
+                        boolVoidDelegate runContinueList = new boolVoidDelegate(do_continue_list_run);
+                        runContinueList.BeginInvoke(null, null);
+                        break;
+                    case RunType.Run_Random_Order_List:
+                        boolVoidDelegate runRandomList = new boolVoidDelegate(do_random_order_list_run);
+                        runRandomList.BeginInvoke(null, null);
+                        break;
+                }
             }
         }
 
@@ -467,8 +564,26 @@ namespace WordGenerator
 
 
                 updateTitleBar(calibrationShot);
-                
 
+                bool wrongSavePath=false;
+                try
+                {
+                    if (Storage.settingsData.SavePath != "")
+                        System.IO.Directory.GetFiles(Storage.settingsData.SavePath);
+
+                }
+                catch
+                {
+                    wrongSavePath = true;
+                }
+
+                if (wrongSavePath)
+                {
+                    addMessageLogText(this, new MessageEvent("Unable to locate save path. Aborting run. See the SavePath setting."));
+
+                    setStatus(RunFormStatus.FinishedRun);
+                    return false;
+                }
 
                 if (!sequence.Lists.ListLocked)
                 {
@@ -627,7 +742,32 @@ namespace WordGenerator
                 }
 
 
-                DateTime runStartTime = DateTime.Now;
+                runStartTime = DateTime.Now;
+
+                #region Sending camera instructions
+                if (Storage.settingsData.UseCameras)
+                {
+
+                    byte[] msg;// = Encoding.ASCII.GetBytes(get_fileStamp(sequence));
+                    string shot_name = get_fileStamp(sequence);
+                    string sequenceTime = sequence.SequenceDuration.ToString();
+                    string FCamera;
+                    string UCamera;
+
+                    foreach (Socket theSocket in CameraPCsSocketList)
+                    {
+                        try
+                        {
+                            int index=CameraPCsSocketList.IndexOf(theSocket);
+                            FCamera = connectedPCs[index].useFWCamera.ToString();
+                            UCamera = connectedPCs[index].useUSBCamera.ToString();
+                            msg = Encoding.ASCII.GetBytes(shot_name+"@"+sequenceTime+"@"+FCamera+"@"+UCamera+"@"+isCameraSaving.ToString()+"@\0");
+                            theSocket.Send(msg, 0, msg.Length, SocketFlags.None);
+                        }
+                        catch { }
+                    }
+                }
+                #endregion
 
                 ServerManager.ServerActionStatus actionStatus;
 
@@ -727,7 +867,7 @@ namespace WordGenerator
                     this.Invoke(pbud, new object[] { elapsed_milliseconds, sequence });
 
 
-                    if (elapsed_milliseconds >= (duration * 1000.0))
+                    if (elapsed_milliseconds >= (200+duration * 1000.0))
                         break;
                     Thread.Sleep(100);
                     //EndInvoke(res);
@@ -831,6 +971,24 @@ namespace WordGenerator
 
         private void stopButton_Click(object sender, EventArgs e)
         {
+            foreach (Socket theSocket in CameraPCsSocketList)
+            {
+                try
+                {
+
+                    theSocket.Send(Encoding.ASCII.GetBytes("Abort"), 0, Encoding.ASCII.GetBytes("Abort").Length, SocketFlags.None);
+                }
+                catch { }
+            }
+            
+            //Give time for the dwell word to be sent
+            isIdle = true;
+            this.runAgainButton.Enabled = false;
+            System.Timers.Timer idleTimer = new System.Timers.Timer(1000);
+            idleTimer.SynchronizingObject = this;
+            idleTimer.Elapsed += new System.Timers.ElapsedEventHandler(idleTimer_Elapsed);
+            idleTimer.Start();
+
             if (this.runningThread != null)
                 runningThread.Abort();
             this.setStatus(RunFormStatus.FinishedRun);
@@ -930,7 +1088,21 @@ namespace WordGenerator
 
         private void RunForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!closeButton.Enabled)
+            if (Storage.settingsData.CameraPCs.Count != 0)
+            {
+                getConfirmationThread.Abort();
+            }
+             
+            foreach (Socket theSocket in CameraPCsSocketList)
+            {
+                try
+                {
+
+                    theSocket.Send(Encoding.ASCII.GetBytes("Closing"), 0, Encoding.ASCII.GetBytes("Closing").Length, SocketFlags.None);
+                }
+                catch { }
+            }
+                if (!closeButton.Enabled)
             {
                 e.Cancel = true;
             }
@@ -947,15 +1119,102 @@ namespace WordGenerator
             unregisterAllHotkeys();
         }
 
-        private void textBox1_Click(object sender, EventArgs e)
+        public string get_fileStamp(SequenceData sequence)
         {
-            this.ErrorDetected = false;
+            string fileStamp = number_to_string(runStartTime.Hour, 2) + number_to_string(runStartTime.Minute, 2) + number_to_string(runStartTime.Second, 2);
+            if (sequence.SequenceName != "")
+                fileStamp = fileStamp + "_" + ProcessName(sequence.SequenceName,sequence);
+            if (sequence.SequenceDescription != "")
+                fileStamp = fileStamp + "_" + ProcessName(sequence.SequenceDescription,sequence);
+            if (listBoundVariables(sequence) != "")
+                fileStamp = fileStamp + "_" + listBoundVariables(sequence);
+            return fileStamp;
+        }
+        static string number_to_string(int number, int n0)
+        {
+            string res = number.ToString();
+            for (int i = 0; i < n0 - number.ToString().Length; i++)
+            {
+                res = "0" + res;
+            }
+            return res;
         }
 
+        public string listBoundVariables(SequenceData sequence)
+        {
+            string listBoundVariableValues = "";
+
+            foreach (Variable var in sequence.Variables)
+            {
+
+                if (var.ListDriven && !var.PermanentVariable)
+                {
+                    if (listBoundVariableValues != "")
+                    {
+                        listBoundVariableValues += "_";
+                    }
+                    listBoundVariableValues += var.VariableName + " = " + var.VariableValue.ToString();
+                }
+            }
 
 
-        
+            return listBoundVariableValues;
 
+        }
 
+        public string ProcessName(string theName,SequenceData sequence)
+        {
+            string ans = theName;
+            foreach (Variable var in sequence.Variables)
+            {
+
+                if (!var.ListDriven || var.PermanentVariable)
+                {
+                    if (theName.Contains(var.VariableName))
+                        ans=ans.Replace(var.VariableName, var.VariableName + " = " + var.VariableValue.ToString());
+                }
+            }
+            return ans;
+        }
+
+        private void getConfirmationEntryPoint()
+        {
+            string[] conf;
+            byte[] bconf;
+            while (true)
+            {
+                Thread.Sleep(1);
+                foreach (Socket theSocket in CameraPCsSocketList)
+                {
+                    try
+                    {
+                        if (theSocket.Available > 0)
+                        {
+                            bconf = new byte[theSocket.Available];
+                            theSocket.Receive(bconf, 0, bconf.Length, SocketFlags.None);
+                            conf = (Encoding.ASCII.GetString(bconf)).Split('.');
+                            for (int i = 0; conf.Length > i; i++)
+                            {
+                                if (conf[i] != "")
+                                    addMessageLogText(this, new MessageEvent(conf[i] + "."));
+                            }
+                        }
+                    }
+                    catch { }
+                }
+            }
+        }
+
+        private void idleTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {       
+            this.runAgainButton.Enabled=true;
+            isIdle = false;
+            (sender as System.Timers.Timer).Stop();
+        }
+	  
+		private void textBox1_Click(object sender, EventArgs e)
+	        {
+	            this.ErrorDetected = false;
+	        }
     }
 }

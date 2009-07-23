@@ -178,6 +178,46 @@ namespace AtticusServer
             set { connections = value; }
         }
 
+        private int aIFrequency=1000;
+
+        [Description("Sampling frequency for the Analog In channels"),
+        Category("Analog In")]
+        public int AIFrequency
+        {
+            get { return aIFrequency; }
+            set { aIFrequency = value; }
+        }
+
+        private List<AnalogInChannels> aIChannels;
+
+        [Description("The list of Analog In channels which are to be used"),
+        Category("Analog In")]
+        public List<AnalogInChannels> AIChannels
+        {
+            get { return aIChannels; }
+            set { aIChannels = value; }
+        }
+
+        private List<AnalogInNames> aINames;
+
+        [Description("Custom names for the Analog In channels"),
+        Category("Analog In")]
+        public List<AnalogInNames> AINames
+        {
+            get { return aINames; }
+            set { aINames = value; }
+        }
+
+        private List<AnalogInLogTime> aILogTimes;
+
+        [Description("A list of timesteps at the beginning of which data will be saved"),
+        Category("Analog In")]
+        public List<AnalogInLogTime> AILogTimes
+        {
+            get { return aILogTimes; }
+            set { aILogTimes = value; }
+        }
+
         private bool useMultiThreadedDaqmxBufferGeneration;
 
         [Description("If true, daqmx buffers will be generated using multi-threading. This speeds up buffer generation time, especially on multi-processor machines. Downsides: uses more memory, and buffer errors will cause Atticus to crash rather than being handled intelligently."),
@@ -290,6 +330,9 @@ namespace AtticusServer
         {
             this.serverDeviceSettings = new Dictionary<string, DeviceSettings>();
             this.connections = new List<TerminalPair>();
+            this.aILogTimes = new List<AnalogInLogTime>();
+            this.aIChannels = new List<AnalogInChannels>();
+            this.aINames = new List<AnalogInNames>();
         }
 
     }

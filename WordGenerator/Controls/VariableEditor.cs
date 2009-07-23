@@ -19,6 +19,8 @@ namespace WordGenerator.Controls
 
         public event EventHandler valueChanged;
 
+        private decimal backupValue=0;
+
         public bool ListLocked
         {
             get { 
@@ -136,9 +138,11 @@ namespace WordGenerator.Controls
             {
                 variable.ListDriven = false;
                 listSelector.Visible = false;
+                this.valueSelector.Value = backupValue;
             }
             else
             {
+                this.backupValue = valueSelector.Value;
                 int listNum = listSelector.SelectedIndex;
                 this.variable.ListDriven = true;
                 this.variable.ListNumber = listNum;

@@ -378,6 +378,10 @@ namespace WordGenerator.Controls
 
             if (!Storage.sequenceData.Lists.ListLocked)
             {
+                WordGenerator.mainClientForm.instance.variablesEditor1.tryLockLists();
+            }
+            if (!Storage.sequenceData.Lists.ListLocked)
+            {
                 if (!silent)
                     messageLog(this, new MessageEvent("Unable to output timestep, lists not locked."));
                 if (showErrorDialog)

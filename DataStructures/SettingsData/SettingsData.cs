@@ -88,6 +88,111 @@ namespace DataStructures
             set { outputAnalogDwellValuesOnOutputNow = value; }
         }
 
+        private bool useCameras;
+
+        [Description("If true, instructions are sent to cameras."),
+        Category("Cameras")]
+        public bool UseCameras
+        {
+            get {return useCameras; }
+            set { useCameras = value; }
+        }
+
+        private List<IPAdresses> cameraPCs;
+
+        [TypeConverter(typeof(ExpandableObjectConverter)), Serializable]
+        public class IPAdresses
+        {
+            private string PcAddress;
+
+            public string pcAddress
+            {
+                get { return PcAddress; }
+                set { PcAddress = value; }
+            }
+
+            private int port;
+            
+            public int Port
+            {
+                get { return port; }
+                set { port = value; }
+            }
+
+            private bool InUse;
+
+            public bool inUse
+            {
+                get { return InUse; }
+                set { InUse = value; }
+            }
+
+            private bool UseFWCamera;
+
+            public bool useFWCamera
+            {
+                get { return UseFWCamera; }
+                set { UseFWCamera = value; }
+            }
+
+            private bool UseUSBCamera;
+
+            public bool useUSBCamera
+            {
+                get { return UseUSBCamera; }
+                set { UseUSBCamera = value; }
+            }
+
+            public IPAdresses()
+            {
+                PcAddress = "";
+                port = 66666;
+                InUse = true;
+                UseUSBCamera = true;
+                UseFWCamera = true;
+            }
+        }
+
+        [Description("List of the IP Adresses where the cameras are."),
+        Category("Cameras")]
+        public List<IPAdresses> CameraPCs
+        {
+            get { return cameraPCs; }
+            set { cameraPCs = value; }
+        }
+
+        private bool freezeTimeVariableUnit;
+
+        [Description("If true, time variables will all be used in ms.")]
+        public bool FreezeTimeVariableUnit
+        {
+            get { return freezeTimeVariableUnit; }
+            set { freezeTimeVariableUnit = value; }
+
+        }
+
+        private string savePath;
+
+        [Description("Sets the path in which any file produced should be saved"),
+        Category("Saving")]
+        public string SavePath
+        {
+            get { return savePath; }
+            set { savePath = value; }
+
+        }
+
+        private bool useMitFileStamp=true;
+
+        [Description("Decides whether the old naming pattern should be used."),
+        Category("Saving"),DefaultValue(true)]
+        public bool UseMitFileStamp
+        {
+            get { return useMitFileStamp; }
+            set { useMitFileStamp = value; }
+
+        }
+
         private ServerManager myServerManager;
 
         public ServerManager serverManager
@@ -100,6 +205,8 @@ namespace DataStructures
         {
             myLogicalChannelManager = new LogicalChannelManager();
             myServerManager = new ServerManager();
+            cameraPCs = new List<IPAdresses>();
+            useMitFileStamp = true;
         }
     }
 }

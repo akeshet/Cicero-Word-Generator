@@ -18,6 +18,14 @@ namespace WordGenerator.Controls
         public VariablesAndListPage()
         {
             InitializeComponent();
+            
+            this.runControl1.runZeroButton.Visible = false;
+            this.runControl1.repeatCheckBox.Visible = false;
+            this.runControl1.runListButton.Visible = false;
+            this.runControl1.RunNoSave.Visible = false;
+            this.runControl1.runRandomList.Visible = false;
+            this.runControl1.continueListButton.Visible = false;
+            
             variableEditors = new List<VariableEditor>();
             listPanels = new List<ListEditorPanel>();
             for (int i = 0; i < ListData.NLists; i++)
@@ -30,8 +38,12 @@ namespace WordGenerator.Controls
                 listPanels.Add(lep);
             }
             this.Controls.AddRange(listPanels.ToArray());
-
-            this.runControl1.runZeroButton.Visible = false;
+            this.runControl1.SendToBack();
+            this.listFillerSelector.Items.Clear();
+            for (int i = 0; i < ListData.NLists; i++)
+            {
+                this.listFillerSelector.Items.Add("List " + (i + 1));
+            }
         }
 
         public void layout()
@@ -187,6 +199,24 @@ namespace WordGenerator.Controls
                     }
                 }
 
+                // check to make sure that no variable is assigned to a disabled list
+                List<int> usedList = new List<int>();
+                foreach (Variable var in Storage.sequenceData.Variables)
+                {
+                    if (var.ListDriven && !Storage.sequenceData.Lists.ListEnabled[var.ListNumber - 1])
+                    {
+                        this.LockMessage.Text = "Variable [" + var.ToString() + "] is bound to disabled List " + (var.ListNumber) + ".";
+                        return;
+                    }
+                    else if (var.ListDriven)
+                        usedList.Add(var.ListNumber - 1);
+                }
+                // disable all unneccessarily enabled list
+                for (int i = 0; i < ListData.NLists - 1; i++)
+                {
+                    if (!usedList.Contains(i) && Storage.sequenceData.Lists.ListEnabled[i])
+                    listPanels[i].setEnabledBox(false);  
+                }
                 // check for length matching
                 for (int i = 0; i < ListData.NLists - 1; i++)
                 {
@@ -210,15 +240,6 @@ namespace WordGenerator.Controls
                     }
                 }
 
-                // check to make sure that no variable is assigned to a disabled list
-                foreach (Variable var in Storage.sequenceData.Variables)
-                {
-                    if (var.ListDriven && !Storage.sequenceData.Lists.ListEnabled[var.ListNumber - 1])
-                    {
-                        this.LockMessage.Text = "Variable [" + var.ToString() + "] is bound to disabled List " + (var.ListNumber) + ".";
-                        return;
-                    }
-                }
 
                 // Tests passed. Ok, lets lock the lists.
 
@@ -393,6 +414,29 @@ namespace WordGenerator.Controls
                 ve.updateLayout();
             }
         }
+
+        private void listFillerSelector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.listFillerButton.Enabled = Storage.sequenceData.Lists.ListEnabled[listFillerSelector.SelectedIndex] && !Storage.sequenceData.Lists.ListLocked;
+        }
+
+        private void listFillerButton_Click(object sender, EventArgs e)
+        {
+            List<Double> fillers = new List<double>();
+            try
+            {
+                int numOfFillers = (int)(1 + (this.listFillerStop.Value - this.listFillerStart.Value) / this.listFillerStep.Value);
+                for (int i = 0; i < numOfFillers; i++)
+                {
+                    fillers.Add((double)(this.listFillerStart.Value + i * this.listFillerStep.Value));
+                }
+                listPanels[listFillerSelector.SelectedIndex].setData(fillers);
+            }
+            catch
+            {
+                MessageBox.Show("Check your parameters.");
+            }
+         }
 
 
 

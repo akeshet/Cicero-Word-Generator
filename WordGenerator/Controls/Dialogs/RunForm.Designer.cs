@@ -38,6 +38,7 @@ namespace WordGenerator
             this.runAgainButton = new System.Windows.Forms.Button();
             this.fortuneCookieLabel = new System.Windows.Forms.Label();
             this.abortAfterThis = new System.Windows.Forms.CheckBox();
+            this.savingWarning = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // progressBar
@@ -120,7 +121,7 @@ namespace WordGenerator
             this.fortuneCookieLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fortuneCookieLabel.Location = new System.Drawing.Point(48, 466);
             this.fortuneCookieLabel.Name = "fortuneCookieLabel";
-            this.fortuneCookieLabel.Size = new System.Drawing.Size(477, 159);
+            this.fortuneCookieLabel.Size = new System.Drawing.Size(477, 121);
             this.fortuneCookieLabel.TabIndex = 8;
             // 
             // abortAfterThis
@@ -134,11 +135,24 @@ namespace WordGenerator
             this.abortAfterThis.UseVisualStyleBackColor = true;
             this.abortAfterThis.Visible = false;
             // 
+            // savingWarning
+            // 
+            this.savingWarning.AutoSize = true;
+            this.savingWarning.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.savingWarning.ForeColor = System.Drawing.Color.Red;
+            this.savingWarning.Location = new System.Drawing.Point(216, 600);
+            this.savingWarning.Name = "savingWarning";
+            this.savingWarning.Size = new System.Drawing.Size(150, 25);
+            this.savingWarning.TabIndex = 10;
+            this.savingWarning.Text = "NOT SAVING";
+            this.savingWarning.Visible = false;
+            // 
             // RunForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(570, 634);
+            this.Controls.Add(this.savingWarning);
             this.Controls.Add(this.abortAfterThis);
             this.Controls.Add(this.fortuneCookieLabel);
             this.Controls.Add(this.runAgainButton);
@@ -176,5 +190,6 @@ namespace WordGenerator
         private System.Windows.Forms.Button runAgainButton;
         private System.Windows.Forms.Label fortuneCookieLabel;
         private System.Windows.Forms.CheckBox abortAfterThis;
+        private System.Windows.Forms.Label savingWarning;
     }
 }

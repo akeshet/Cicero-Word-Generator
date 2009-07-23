@@ -22,6 +22,7 @@ namespace AtticusServer
         /// <param name="channelName">
         /// Name of the channel that will output the variable timebase clock.
         /// </param>
+        /// <param name="portsToUse">
         /// A list of integers specifying the digital ports that this task will use. The task will automatically
         /// make use of the full port that the variable timebase clock belongs to. If portsToUse is null, then 
         /// this function will automatically use both this port and its neighboring port (0 with 1, 2 with 3, etc).
@@ -349,7 +350,7 @@ namespace AtticusServer
             List<int> usedPortNumbers;
 
             // Parse and create channels.
-            parseAndCreateChannels(deviceName, usedDigitalChannels, usedAnalogChannels, task, out analogIDs, out analogs, out port_digital_IDs, out usedPortNumbers);
+            parseAndCreateChannels(deviceName,deviceSettings, usedDigitalChannels, usedAnalogChannels, task, out analogIDs, out analogs, out port_digital_IDs, out usedPortNumbers);
 
 
             // now create buffer.
@@ -443,7 +444,7 @@ namespace AtticusServer
             List<int> usedPortNumbers;
 
             // Parse and create channels.
-            parseAndCreateChannels(deviceName, usedDigitalChannels, usedAnalogChannels, task, out analogIDs, out analogs, out port_digital_IDs, out usedPortNumbers);
+            parseAndCreateChannels(deviceName,deviceSettings, usedDigitalChannels, usedAnalogChannels, task, out analogIDs, out analogs, out port_digital_IDs, out usedPortNumbers);
 
 
 
@@ -555,7 +556,7 @@ namespace AtticusServer
 
                     writer.WriteMultiSample(false, analogBuffer);
                     // analog cards report the exact number of generated samples.
-                    expectedSamplesGenerated = nBaseSamples;
+                    expectedSamplesGenerated = nSamples;
 
                 }
 
@@ -613,7 +614,7 @@ namespace AtticusServer
                         }
                         for (int j = nBaseSamples; j < nSamples; j++)
                         {
-                            digitalBuffer[i, j] = digitalBuffer[portNum, j - 1];
+                            digitalBuffer[i, j] = digitalBuffer[i, j - 1];
                         }
                     }
                     singleChannelBuffer = null;
@@ -715,7 +716,7 @@ namespace AtticusServer
 
                     writer.WriteMultiSample(false, analogBuffer);
                     // Analog cards report the exact number of samples generated.
-                    expectedSamplesGenerated = nBaseSamples;
+                    expectedSamplesGenerated = nSamples;
 
                 }
 
@@ -829,7 +830,7 @@ namespace AtticusServer
         /// <param name="usedPortNumbers">
         /// An out parameter, which will store a list of integers corresponding to the digital port numbers that were used on this device, in the order created.
         /// </param>
-        private static void parseAndCreateChannels(string deviceName, Dictionary<int, HardwareChannel> usedDigitalChannels, Dictionary<int, HardwareChannel> usedAnalogChannels, Task task, out List<int> analogIDs, out List<HardwareChannel> analogs, out Dictionary<int, int[]> port_digital_IDs, out List<int> usedPortNumbers)
+        private static void parseAndCreateChannels(string deviceName,DeviceSettings deviceSettings, Dictionary<int, HardwareChannel> usedDigitalChannels, Dictionary<int, HardwareChannel> usedAnalogChannels, Task task, out List<int> analogIDs, out List<HardwareChannel> analogs, out Dictionary<int, int[]> port_digital_IDs, out List<int> usedPortNumbers)
         {
             // figure out which of the analog and digital channels belong on this device. Add them here and index by 
             // logical ID#
@@ -854,7 +855,10 @@ namespace AtticusServer
             // of the channel which is connected to the nth line of that port. If there is no channel on that port,
             // the ID is -1.
 
-            groupDigitalChannels(digitalIDs, digitals, out port_digital_IDs, out usedPortNumbers);
+            if (deviceSettings.DeviceDescription.Contains("6533"))
+            groupDigitalChannels(digitalIDs, digitals, out port_digital_IDs, out usedPortNumbers,true);
+            else
+            groupDigitalChannels(digitalIDs, digitals, out port_digital_IDs, out usedPortNumbers, false);
 
             //ok! create the channels.
 
@@ -882,14 +886,14 @@ namespace AtticusServer
         /// <param name="digitals"></param>
         /// <param name="port_digital_IDs"></param>
         /// <param name="usedPortNumbers"></param>
-        private static void groupDigitalChannels(List<int> digitalIDs, List<HardwareChannel> digitals, out Dictionary<int, int[]> port_digital_IDs, out List<int> usedPortNumbers)
+        private static void groupDigitalChannels(List<int> digitalIDs, List<HardwareChannel> digitals, out Dictionary<int, int[]> port_digital_IDs, out List<int> usedPortNumbers,bool is6533)
         {
             List<int> allPorts = new List<int>();
             for (int i = 0; i < 100; i++)
             {
                 allPorts.Add(i);
             }
-            groupDigitalChannels(digitalIDs, digitals,out port_digital_IDs, out usedPortNumbers, allPorts);
+            groupDigitalChannels(digitalIDs, digitals,out port_digital_IDs, out usedPortNumbers, is6533, allPorts);
         }
 
         /// <summary>
@@ -900,7 +904,7 @@ namespace AtticusServer
         /// <param name="port_digital_IDs"></param>
         /// <param name="usedPortNumbers"></param>
         /// <param name="allowedPortsToUse"></param>
-        private static void groupDigitalChannels(List<int> digitalIDs, List<HardwareChannel> digitals, out Dictionary<int, int[]> port_digital_IDs, out List<int> usedPortNumbers, List<int> allowedPortsToUse)
+        private static void groupDigitalChannels(List<int> digitalIDs, List<HardwareChannel> digitals, out Dictionary<int, int[]> port_digital_IDs, out List<int> usedPortNumbers, bool is6533,List<int> allowedPortsToUse)
         {
             // Irritating but true fact of life: To make the DAQmx drivers happy 
             // we have to output the digital outputs in 8 bit groups corresponding to 
@@ -919,13 +923,32 @@ namespace AtticusServer
                     HardwareChannel hc = digitals[i];
 
                     int portNum = hc.daqMxDigitalPortNumber();
+                    int portNumBis;
                     if (!usedPortNumbers.Contains(portNum))
                     {
                         if (allowedPortsToUse.Contains(portNum))
                         {
-                            usedPortNumbers.Add(portNum);
-                            // create the array mapping line number to digital IDs, and fill it with -1s.
-                            port_digital_IDs.Add(portNum, new int[] { -1, -1, -1, -1, -1, -1, -1, -1 });
+                            if (!is6533)
+                            {
+                                usedPortNumbers.Add(portNum);
+                                // Ports have to be used by pairs for the Daqmx driver to work. If port 0 is used, port 1 has to be used too, and the opposite too, etc...
+                                portNumBis = portNum - 2 * (portNum % 2) + 1;
+                                usedPortNumbers.Add(portNumBis);
+                                // create the array mapping line number to digital IDs, and fill it with -1s.
+                                port_digital_IDs.Add(portNum, new int[] { -1, -1, -1, -1, -1, -1, -1, -1 });
+                                port_digital_IDs.Add(portNumBis, new int[] { -1, -1, -1, -1, -1, -1, -1, -1 });
+                            }
+                            else
+                            {
+                                usedPortNumbers.Add(0);
+                                usedPortNumbers.Add(1);
+                                usedPortNumbers.Add(2);
+                                usedPortNumbers.Add(3);
+                                port_digital_IDs.Add(0, new int[] { -1, -1, -1, -1, -1, -1, -1, -1 });
+                                port_digital_IDs.Add(1, new int[] { -1, -1, -1, -1, -1, -1, -1, -1 });
+                                port_digital_IDs.Add(2, new int[] { -1, -1, -1, -1, -1, -1, -1, -1 });
+                                port_digital_IDs.Add(3, new int[] { -1, -1, -1, -1, -1, -1, -1, -1 });
+                            }
                         }
                     }
 
