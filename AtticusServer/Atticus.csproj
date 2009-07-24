@@ -148,7 +148,7 @@
     <Compile Include="ServerRuntime\AtticusServerRuntime.cs" />
     <Compile Include="ServerRuntime\AnalogInChannels.cs" />
     <Compile Include="ServerRuntime\AnalogInNames.cs" />
-    <Compile Include="ServerRuntime\ExporttoCSV.cs" />
+    <Compile Include="ServerRuntime\DataTableHelper.cs" />
     <Compile Include="ServerRuntime\FpgaTimebaseTask.cs" />
     <Compile Include="ServerRuntime\RfsgTask.cs" />
     <Compile Include="ServerRuntime\RS232Task.cs" />

@@ -103,49 +103,9 @@ namespace DataStructures
         {
             BinaryFormatter b = new BinaryFormatter();
             
-            string fileStamp;
+            string fileStamp=NamingFunctions.get_fileStamp(runSequence,runSettings,runTime);
             string fileExt = ".clg";
-            string fileDirectory;
-
-            if (runSettings.UseMitFileStamp)
-            {
-                //runTime.ToString("s") returns a date time string which is formatted to make it string sortable by time
-                // and suitable for file names (once the : are replaced with -)
-                fileStamp = "RunLog-" + CiceroUtilityFunctions.getTimeStampString(runTime);
-
-                if (runSettings.SavePath.EndsWith("/") || runSettings.SavePath.EndsWith(@"\"))
-                    fileDirectory = runSettings.SavePath.Remove(runSettings.SavePath.Length - 1) + @"\RunLogs\\";
-                else if (runSettings.SavePath != "")
-                    fileDirectory = runSettings.SavePath + @"\RunLogs\";
-                else
-                    fileDirectory = AppDomain.CurrentDomain.BaseDirectory + "RunLogs\\";
-            }
-            else
-            {
-                fileStamp = number_to_string(runTime.Hour, 2) + number_to_string(runTime.Minute, 2) + number_to_string(runTime.Second, 2);
-                if (runSequence.SequenceName != "")
-                    fileStamp = fileStamp + "_" + ProcessName(runSequence.SequenceName);
-                if (runSequence.SequenceDescription != "")
-                    fileStamp = fileStamp + "_" + ProcessName(runSequence.SequenceDescription);
-                if (listBoundVariables() != "")
-                    fileStamp = fileStamp + "_" + listBoundVariables();
-
-                DateTime today = DateTime.Today;
-                string the_year = today.Year.ToString();
-                CultureInfo the_current_culture = CultureInfo.CurrentCulture;
-                Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US", false);
-                string the_month = String.Format("{0:MMM}", today).ToString();
-                Thread.CurrentThread.CurrentCulture = the_current_culture;
-                the_month = the_month.Substring(0, 1).ToUpper() + the_month.Substring(1);
-                string the_day = number_to_string(today.Day, 2);
-
-                if (runSettings.SavePath.EndsWith("/") || runSettings.SavePath.EndsWith(@"\"))
-                    fileDirectory = runSettings.SavePath.Remove(runSettings.SavePath.Length - 1) + @"\" + the_year + @"\" + the_month + the_year + @"\" + the_day + the_month + the_year + @"\RunLogs\";
-                else if (runSettings.SavePath != "")
-                    fileDirectory = runSettings.SavePath + @"\" + the_year + @"\" + the_month + the_year + @"\" + the_day + the_month + the_year + @"\RunLogs\";
-                else
-                    fileDirectory = AppDomain.CurrentDomain.BaseDirectory + the_year + @"\" + the_month + the_year + @"\" + the_day + the_month + the_year;
-            }
+            string fileDirectory = NamingFunctions.get_fileDirectory(runSettings) + @"\RunLogs\";
 
             try
             {
@@ -169,51 +129,5 @@ namespace DataStructures
             return fullFileName;
         }
 
-        public string listBoundVariables()
-        {
-            string listBoundVariableValues = "";
-
-            
-
-            foreach (Variable var in runSequence.Variables)
-            {
-
-                if (var.ListDriven && !var.PermanentVariable)
-                {
-                    if (listBoundVariableValues != "")
-                    {
-                        listBoundVariableValues += "_";
-                    }
-                    listBoundVariableValues += var.VariableName + " = " + var.VariableValue.ToString();
-                }
-            }
-
-            
-                return listBoundVariableValues;
-            
-        }
-        public string ProcessName(string theName)
-        {
-            string ans = theName;
-            foreach (Variable var in runSequence.Variables)
-            {
-
-                if (!var.ListDriven || var.PermanentVariable)
-                {
-                    if (theName.Contains(var.VariableName))
-                        ans=ans.Replace(var.VariableName, var.VariableName + " = " + var.VariableValue.ToString());
-                }
-            }
-            return ans;
-        }
-        static string number_to_string(int number, int n0)
-        {
-            string res = number.ToString();
-            for (int i = 0; i < n0 - number.ToString().Length; i++)
-            {
-                res = "0" + res;
-            }
-            return res;
-        }
     }
 }

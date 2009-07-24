@@ -31,11 +31,11 @@ namespace AtticusServer
                 MainServerForm.instance.DisplayError = true;
             }
         }
-        AnalogMultiChannelReader reader_analog_S7;
-        List<String> analog_in_names;
-        Task analogS7ReadTask;
-        DateTime runTime;
-        bool analogInCardDetected = false;
+        AnalogMultiChannelReader reader_analog_S7; //AnalogMultiChannelReader object for analog in
+        List<String> analog_in_names; //List of the custom names fo the analog innputs
+        Task analogS7ReadTask; // Task for analog input acquisition
+        DateTime runTime; //Timestamp used to name files
+        bool analogInCardDetected = false; // boolean detecting the existence of a 6259 card with analog inputs activated
 
 
         /// <summary>
@@ -574,9 +574,10 @@ namespace AtticusServer
 
                     #endregion
 
-
+                    // This is where the analog input task is defined
                     #region Analog In Task
-
+                    
+					//First we determine if an analog in task should be created
                     foreach (DeviceSettings ds in AtticusServer.server.serverSettings.myDevicesSettings.Values)
                     {
                         analogInCardDetected |= ds.DeviceDescription.Contains("6259") && ds.AnalogInEnabled;
@@ -584,18 +585,18 @@ namespace AtticusServer
 
                     if (analogInCardDetected)
                     {
-                        // Create a channel
+                        // Creates the analog in task
                         analogS7ReadTask = new Task();
                         analogS7ReadTask.SynchronizeCallbacks = false;
                         analog_in_names = new List<string>();
                         bool isUsed;
 
 
-
+                       // Obtains a list of the analog in channels to be included in the task, and their name
                         AnalogInChannels the_channels = AtticusServer.server.serverSettings.AIChannels[0];
                         AnalogInNames the_names = AtticusServer.server.serverSettings.AINames[0];
 
-
+                       // We use part of the channels as single ended, and part as differential. He channels are added here. The task is created on Slot 7. This shouldn't be hard coded and will be changed.
                         #region Single ended
                         for (int analog_index = 0; analog_index < 10; analog_index++)
                         {
@@ -625,7 +626,7 @@ namespace AtticusServer
                         #region Differential
                         for (int analog_index = 0; analog_index < 11; analog_index++)
                         {
-                            PropertyInfo the_channel = the_channels.GetType().GetProperty("AD" + number_to_string(analog_index, 2));
+                            PropertyInfo the_channel = the_channels.GetType().GetProperty("AD" + NamingFunctions.number_to_string(analog_index, 2));
                             isUsed = (bool)the_channel.GetValue(the_channels, null);
 
                             if (isUsed)
@@ -640,7 +641,7 @@ namespace AtticusServer
                                     analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 13).ToString(), "",
                                         AITerminalConfiguration.Differential, -10, 10, AIVoltageUnits.Volts);
                                 }
-                                string theName = (string)(the_names.GetType().GetProperty("AD" + number_to_string(analog_index, 2)).GetValue(the_names, null));
+                                string theName = (string)(the_names.GetType().GetProperty("AD" + NamingFunctions.number_to_string(analog_index, 2)).GetValue(the_names, null));
                                 if (theName == "")
                                     analog_in_names.Add("AID" + analog_index.ToString());
                                 else
@@ -648,15 +649,8 @@ namespace AtticusServer
                             }
                         }
                         #endregion
-
-
-
-
-
-
-
-
-                        // Configure timing specs    
+                        
+                        // Configure timing specs of the analog In task. Again these things shouldn't be hard coded and will be changed    
                         analogS7ReadTask.Timing.ConfigureSampleClock("", (double)(AtticusServer.server.serverSettings.AIFrequency), SampleClockActiveEdge.Rising,
                             SampleQuantityMode.FiniteSamples, sequence.nSamples(1 / ((double)(AtticusServer.server.serverSettings.AIFrequency))));
 
@@ -854,29 +848,28 @@ namespace AtticusServer
             }
         }
 
-        private void callback_S7(IAsyncResult ar)
-        {
-
-            //Read the available data from the channels
-
+        private void callback_S7(IAsyncResult ar) //This is what happens when the analog in task completes
+        {   
             try
             {
+				//Read the available data from the channels 
                 double[,] data_ana_in_S7 = new double[analogS7ReadTask.AIChannels.Count, sequence.nSamples(1 / (double)(AtticusServer.server.serverSettings.AIFrequency))];
                 data_ana_in_S7 = reader_analog_S7.EndReadMultiSample(ar);
                 DataTable dataTable = new DataTable();
-                InitializeDataTable(ref dataTable);
+                //Creates a new datatable to store data
+				DataTableHelper.InitializeDataTable(dataTable,sequence,AtticusServer.server.serverSettings,analog_in_names);
                 analogS7ReadTask.Dispose();
-                //data_acquired = true;
+                //Only if the sequence needs to save analog in, the data is exported to CSV
                 if (sequence.AISaved)
                 {
-                    dataToDataTable(data_ana_in_S7, ref dataTable);
+                    DataTableHelper.dataToDataTable(data_ana_in_S7, dataTable,AtticusServer.server.serverSettings.AIFrequency);
 
-                    string day_folder = get_fileDirectory();
+                    string day_folder = NamingFunctions.get_fileDirectory(settings);
                     if (!System.IO.Directory.Exists(day_folder + @"\Analog in"))
                         System.IO.Directory.CreateDirectory(day_folder + @"\Analog in");
 
 
-                    string shot_name = get_fileStamp();
+                    string shot_name = NamingFunctions.get_fileStamp(sequence,settings,runTime);
 
 
                     System.IO.StreamWriter a = System.IO.File.CreateText(day_folder + @"\Analog in\" + shot_name + ".csv");
@@ -1410,7 +1403,7 @@ namespace AtticusServer
                         variableTimebaseClockTask.Control(TaskAction.Commit);
                     }
 
-
+					//if needed, the analog input task is launched here
                     if (analogInCardDetected)
                         reader_analog_S7.BeginReadMultiSample(sequence.nSamples(1 / (double)(AtticusServer.server.serverSettings.AIFrequency)), new AsyncCallback(callback_S7), null);
 
@@ -1836,7 +1829,7 @@ namespace AtticusServer
                 try
                 {
                     messageLog(this, new MessageEvent("Received a STOP signal. Stopping any currently executing runs."));
-
+                    // Analog in task needs to be stopped
                     if (analogInCardDetected)
                     {
                         #region Stop Analog In
@@ -1849,8 +1842,6 @@ namespace AtticusServer
                         }
                         catch
                         {
-
-
                         }
 
 
@@ -2662,172 +2653,5 @@ namespace AtticusServer
 
 
         #endregion
-
-        static string number_to_string(int number, int n0)
-        {
-            string res = number.ToString();
-            for (int i = 0; i < n0 - number.ToString().Length; i++)
-            {
-                res = "0" + res;
-            }
-            return res;
-        }
-
-        public string listBoundVariables()
-        {
-            string listBoundVariableValues = "";
-
-            foreach (Variable var in sequence.Variables)
-            {
-
-                if (var.ListDriven && !var.PermanentVariable)
-                {
-                    if (listBoundVariableValues != "")
-                    {
-                        listBoundVariableValues += "_";
-                    }
-                    listBoundVariableValues += var.VariableName + " = " + var.VariableValue.ToString();
-                }
-            }
-
-
-            return listBoundVariableValues;
-
-        }
-
-        private void dataToDataTable(double[,] sourceArray, ref DataTable dataTable)
-        {
-            int channelCount = sourceArray.GetLength(0);
-            int dataCount;
-
-
-            dataCount = dataTable.Rows.Count;
-
-
-            for (int currentDataIndex = 0; currentDataIndex < dataCount; currentDataIndex++)
-            {
-                for (int currentChannelIndex = 1; currentChannelIndex < channelCount + 1; currentChannelIndex++)
-                    dataTable.Rows[currentDataIndex][currentChannelIndex] = sourceArray.GetValue(currentChannelIndex - 1, (int)((Double.Parse((dataTable.Rows[currentDataIndex][0]).ToString())) * AtticusServer.server.serverSettings.AIFrequency));
-            }
-
-        }
-
-        public void InitializeDataTable(ref DataTable dataTable)
-        {
-            int numOfChannels = analog_in_names.Count;
-            dataTable.Rows.Clear();
-            dataTable.Columns.Clear();
-            DataColumn[] dataColumn = new DataColumn[numOfChannels + 1];
-
-            dataColumn[0] = new DataColumn();
-            dataColumn[0].DataType = typeof(double);
-            dataColumn[0].ColumnName = "t";
-
-            for (int currentChannelIndex = 1; currentChannelIndex < numOfChannels + 1; currentChannelIndex++)
-            {
-                dataColumn[currentChannelIndex] = new DataColumn();
-                dataColumn[currentChannelIndex].DataType = typeof(double);
-                dataColumn[currentChannelIndex].ColumnName = analog_in_names[currentChannelIndex - 1];
-            }
-
-            dataTable.Columns.AddRange(dataColumn);
-
-            List<double> theTimes = new List<double>();
-            int samplesFreq = AtticusServer.server.serverSettings.AIFrequency;
-            foreach (AnalogInLogTime theLogTime in AtticusServer.server.serverSettings.AILogTimes)
-            {
-                double timestep = Math.Round(sequence.timeAtTimestep(theLogTime.TimeStep - 1), 3, MidpointRounding.AwayFromZero);
-                double timebefore = Math.Max(timestep - ((double)theLogTime.TimeBefore) / 1000, 0);
-                double timeafter = Math.Min(timestep + ((double)theLogTime.TimeAfter) / 1000, Math.Round(sequence.SequenceDuration, 3, MidpointRounding.AwayFromZero));
-                for (int k = (int)(timebefore * samplesFreq); k < (int)(timeafter * samplesFreq + 1); k++)
-                {
-                    theTimes.Add((double)k / (double)samplesFreq);
-                }
-            }
-            theTimes = DedupCollection(theTimes);
-            theTimes.Sort();
-
-            int numOfRows = theTimes.Count;
-            for (int currentDataIndex = 0; currentDataIndex < numOfRows; currentDataIndex++)
-            {
-                object[] rowArr = new object[numOfChannels + 1];
-                dataTable.Rows.Add(rowArr);
-                dataTable.Rows[currentDataIndex][0] = theTimes[currentDataIndex];
-            }
-
-
-
-
-        }
-
-        public string get_fileDirectory()
-        {
-
-            DateTime today = DateTime.Today;
-            string the_year = today.Year.ToString();
-            CultureInfo the_current_culture = CultureInfo.CurrentCulture;
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US", false);
-            string the_month = String.Format("{0:MMM}", today).ToString();
-            Thread.CurrentThread.CurrentCulture = the_current_culture;
-            the_month = the_month.Substring(0, 1).ToUpper() + the_month.Substring(1);
-            string the_day = number_to_string(today.Day, 2);
-            string fileDirectory;
-
-            if (settings.SavePath.EndsWith("/") || settings.SavePath.EndsWith(@"\"))
-                fileDirectory = settings.SavePath.Remove(settings.SavePath.Length - 1) + @"\" + the_year + @"\" + the_month + the_year + @"\" + the_day + the_month + the_year;
-            else if (settings.SavePath != "")
-                fileDirectory = settings.SavePath + @"\" + the_year + @"\" + the_month + the_year + @"\" + the_day + the_month + the_year;
-            else
-                fileDirectory = AppDomain.CurrentDomain.BaseDirectory + the_year + @"\" + the_month + the_year + @"\" + the_day + the_month + the_year;
-            return fileDirectory;
-
-        }
-
-        public string get_fileStamp()
-        {
-            string fileStamp = number_to_string(runTime.Hour, 2) + number_to_string(runTime.Minute, 2) + number_to_string(runTime.Second, 2);
-            if (sequence.SequenceName != "")
-                fileStamp = fileStamp + "_" + ProcessName(sequence.SequenceName);
-            if (sequence.SequenceDescription != "")
-                fileStamp = fileStamp + "_" + ProcessName(sequence.SequenceDescription);
-            if (listBoundVariables() != "")
-                fileStamp = fileStamp + "_" + listBoundVariables();
-            return fileStamp;
-        }
-
-        public string ProcessName(string theName)
-        {
-            string ans = theName;
-            foreach (Variable var in sequence.Variables)
-            {
-
-                if (!var.ListDriven || var.PermanentVariable)
-                {
-                    if (theName.Contains(var.VariableName))
-                        ans = ans.Replace(var.VariableName, var.VariableName + " = " + var.VariableValue.ToString());
-                }
-            }
-            return ans;
-        }
-
-
-
-        public List<double> DedupCollection(List<double> input)
-        {
-            List<double> passedValues = new List<double>();
-
-            //relatively simple dupe check alg used as example
-            foreach (double item in input)
-            {
-                if (passedValues.Contains(item))
-                    continue;
-                else
-                {
-                    passedValues.Add(item);
-                }
-            }
-            return passedValues;
-        }
-
     }
 }

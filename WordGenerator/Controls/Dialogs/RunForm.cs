@@ -749,7 +749,7 @@ namespace WordGenerator
                 {
 
                     byte[] msg;// = Encoding.ASCII.GetBytes(get_fileStamp(sequence));
-                    string shot_name = get_fileStamp(sequence);
+                    string shot_name = NamingFunctions.get_fileStamp(sequence,Storage.settingsData,runStartTime);
                     string sequenceTime = sequence.SequenceDuration.ToString();
                     string FCamera;
                     string UCamera;
@@ -1118,65 +1118,8 @@ namespace WordGenerator
         {
             unregisterAllHotkeys();
         }
-
-        public string get_fileStamp(SequenceData sequence)
-        {
-            string fileStamp = number_to_string(runStartTime.Hour, 2) + number_to_string(runStartTime.Minute, 2) + number_to_string(runStartTime.Second, 2);
-            if (sequence.SequenceName != "")
-                fileStamp = fileStamp + "_" + ProcessName(sequence.SequenceName,sequence);
-            if (sequence.SequenceDescription != "")
-                fileStamp = fileStamp + "_" + ProcessName(sequence.SequenceDescription,sequence);
-            if (listBoundVariables(sequence) != "")
-                fileStamp = fileStamp + "_" + listBoundVariables(sequence);
-            return fileStamp;
-        }
-        static string number_to_string(int number, int n0)
-        {
-            string res = number.ToString();
-            for (int i = 0; i < n0 - number.ToString().Length; i++)
-            {
-                res = "0" + res;
-            }
-            return res;
-        }
-
-        public string listBoundVariables(SequenceData sequence)
-        {
-            string listBoundVariableValues = "";
-
-            foreach (Variable var in sequence.Variables)
-            {
-
-                if (var.ListDriven && !var.PermanentVariable)
-                {
-                    if (listBoundVariableValues != "")
-                    {
-                        listBoundVariableValues += "_";
-                    }
-                    listBoundVariableValues += var.VariableName + " = " + var.VariableValue.ToString();
-                }
-            }
-
-
-            return listBoundVariableValues;
-
-        }
-
-        public string ProcessName(string theName,SequenceData sequence)
-        {
-            string ans = theName;
-            foreach (Variable var in sequence.Variables)
-            {
-
-                if (!var.ListDriven || var.PermanentVariable)
-                {
-                    if (theName.Contains(var.VariableName))
-                        ans=ans.Replace(var.VariableName, var.VariableName + " = " + var.VariableValue.ToString());
-                }
-            }
-            return ans;
-        }
-
+        
+        //Receives log messages from the camera software. Only runs if a camera is listed
         private void getConfirmationEntryPoint()
         {
             string[] conf;
@@ -1205,6 +1148,7 @@ namespace WordGenerator
             }
         }
 
+        //ReEnables the Run Again Button
         private void idleTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {       
             this.runAgainButton.Enabled=true;

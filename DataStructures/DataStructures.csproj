@@ -58,6 +58,7 @@
     <Compile Include="LicenseInfoForm.Designer.cs">
       <DependentUpon>LicenseInfoForm.cs</DependentUpon>
     </Compile>
+	<Compile Include="NamingFunctions.cs" />
     <Compile Include="RunLog\RunLog.cs" />
     <Compile Include="RunLog\RunLogAnnotation.cs" />
     <Compile Include="SequenceData\DimensionedParameter.cs" />
