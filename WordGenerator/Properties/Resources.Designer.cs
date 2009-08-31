@@ -70,7 +70,7 @@ namespace WordGenerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to July 3, 2009.
+        ///   Looks up a localized string similar to Aug 31, 2009.
         /// </summary>
         internal static string BuildDate {
             get {
@@ -93,7 +93,7 @@ namespace WordGenerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tony Kim (MIT), Ryan Olf (Berkeley).
+        ///   Looks up a localized string similar to Tony Kim (MIT), Ryan Olf (Berkeley), Emmanuel Minoun (ENS Paris).
         /// </summary>
         internal static string Contribs {
             get {
@@ -129,7 +129,7 @@ namespace WordGenerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1.32.
+        ///   Looks up a localized string similar to 1.33.
         /// </summary>
         internal static string VersionString {
             get {

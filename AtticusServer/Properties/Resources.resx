@@ -128,12 +128,12 @@
     <value>(c) 2008  Aviv Keshet  (MIT),  Free software under GNU General Public License.</value>
   </data>
   <data name="BuildDate" xml:space="preserve">
-    <value>July 3, 2009</value>
+    <value>Aug 31, 2009</value>
   </data>
   <data name="Contribs" xml:space="preserve">
-    <value>Tony Kim (MIT), Ryan Olf (Berkeley)</value>
+    <value>Tony Kim (MIT), Ryan Olf (Berkeley), Emmanuel Minoun (ENS Paris)</value>
   </data>
   <data name="VersionString" xml:space="preserve">
-    <value>1.32</value>
+    <value>1.33</value>
   </data>
 </root>

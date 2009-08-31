@@ -192,7 +192,7 @@ namespace DataStructures
 
         }
 
-        private bool useParisStyleFileTimestamps=true;
+        bool useParisStyleFileTimestamps;
 
         [Description("If false, original MIT-style file timestamps will be used. If true, Paris-style file ."),
         Category("Saving"),DefaultValue(false)]
