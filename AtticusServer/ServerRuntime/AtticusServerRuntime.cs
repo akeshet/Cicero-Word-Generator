@@ -448,12 +448,7 @@ namespace AtticusServer
                         if (otherChannelsOnVariableTimebaseDeviceAlsoUsed)
                         {
 
-                            string variableTimebaseOutputDevice = HardwareChannel.parseDeviceNameStringFromPhysicalChannelString(serverSettings.VariableTimebaseOutputChannel).ToLower();
-
-                            // Re-capitalize the first letter of the string, so that it will match the way in which the
-                            // device settings are stored in myDeviceSettings.
-                            // Note that this assumes that the device name is Dev# (where # is a number) !!
-                            variableTimebaseOutputDevice = variableTimebaseOutputDevice.Replace('d', 'D');
+                            string variableTimebaseOutputDevice = HardwareChannel.parseDeviceNameStringFromPhysicalChannelString(serverSettings.VariableTimebaseOutputChannel);
 
                             if (!variableTimebaseOutputDevice.Contains("Dev"))
                             {
@@ -469,17 +464,28 @@ namespace AtticusServer
 
                             int nDigitals = usedDigitalChannels.Count;
 
-                            variableTimebaseClockTask = DaqMxTaskGenerator.createDaqMxDigitalOutputAndVariableTimebaseSource(
-                                serverSettings.VariableTimebaseOutputChannel,
-                                null,
-                                serverSettings.VariableTimebaseMasterFrequency,
-                                sequence,
-                                serverSettings.VariableTimebaseType,
-                                variableTimebaseOutputDevice,
-                                serverSettings.myDevicesSettings[variableTimebaseOutputDevice],
-                                settings,
-                                usedDigitalChannels,
-                                serverSettings);
+                            if (myServerSettings.myDevicesSettings.ContainsKey(variableTimebaseOutputDevice))
+                            {
+                                messageLog(this, new MessageEvent("Variable timebase output device [" + variableTimebaseOutputDevice + "]"));
+
+                                variableTimebaseClockTask = DaqMxTaskGenerator.createDaqMxDigitalOutputAndVariableTimebaseSource(
+                                    serverSettings.VariableTimebaseOutputChannel,
+                                    null,
+                                    serverSettings.VariableTimebaseMasterFrequency,
+                                    sequence,
+                                    serverSettings.VariableTimebaseType,
+                                    variableTimebaseOutputDevice,
+                                    serverSettings.myDevicesSettings[variableTimebaseOutputDevice],
+                                    settings,
+                                    usedDigitalChannels,
+                                    serverSettings);
+                            }
+                            else
+                            {
+                                messageLog(this, new MessageEvent("***** Server does not contain device named " + variableTimebaseOutputDevice));
+                                displayError();
+                                return BufferGenerationStatus.Failed_Invalid_Data;
+                            }
 
                             variableTimebaseClockTask.Done += new TaskDoneEventHandler(aTaskFinished);
 
@@ -488,13 +494,28 @@ namespace AtticusServer
                         }
                         else
                         {
-                            variableTimebaseClockTask = DaqMxTaskGenerator.createDaqMxVariableTimebaseSource(
-                                serverSettings.VariableTimebaseOutputChannel,
-                                serverSettings.VariableTimebaseMasterFrequency,
-                                sequence,
-                                serverSettings.VariableTimebaseType,
-                                serverSettings,
-                                serverSettings.myDevicesSettings[HardwareChannel.parseDeviceNameStringFromPhysicalChannelString(serverSettings.VariableTimebaseOutputChannel)]);
+
+                            string variableTimebaseOutputDevice = HardwareChannel.parseDeviceNameStringFromPhysicalChannelString(serverSettings.VariableTimebaseOutputChannel);
+
+                            if (myServerSettings.myDevicesSettings.ContainsKey(variableTimebaseOutputDevice))
+                            {
+                                messageLog(this, new MessageEvent("Variable timebase output device [" + variableTimebaseOutputDevice + "]"));
+
+                                variableTimebaseClockTask = DaqMxTaskGenerator.createDaqMxVariableTimebaseSource(
+                                    serverSettings.VariableTimebaseOutputChannel,
+                                    serverSettings.VariableTimebaseMasterFrequency,
+                                    sequence,
+                                    serverSettings.VariableTimebaseType,
+                                    serverSettings,
+                                    serverSettings.myDevicesSettings[variableTimebaseOutputDevice]);
+                            }
+                            else
+                            {
+                                messageLog(this, new MessageEvent("***** Server does not contain device named " + variableTimebaseOutputDevice));
+                                displayError();
+                                return BufferGenerationStatus.Failed_Invalid_Data;
+                            }
+
 
                             variableTimebaseClockTask.Done += new TaskDoneEventHandler(aTaskFinished);
                         }

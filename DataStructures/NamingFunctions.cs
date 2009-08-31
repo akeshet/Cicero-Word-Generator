@@ -49,7 +49,7 @@ namespace DataStructures
         public static string get_fileDirectory(SettingsData settings)
         {
             string fileDirectory;
-            if (settings.UseMitFileStamp)
+            if (!settings.UseParisStyleFileTimestamps)
             {
                 if (settings.SavePath.EndsWith("/") || settings.SavePath.EndsWith(@"\"))
                     fileDirectory = settings.SavePath.Remove(settings.SavePath.Length - 1);
@@ -84,7 +84,7 @@ namespace DataStructures
         public static string get_fileStamp(SequenceData sequence, SettingsData settings, DateTime runTime)
         {
             string fileStamp;
-            if (settings.UseMitFileStamp)
+            if (!settings.UseParisStyleFileTimestamps)
             {
                 fileStamp = "RunLog-" + CiceroUtilityFunctions.getTimeStampString(runTime);
             }

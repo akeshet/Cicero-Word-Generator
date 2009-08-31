@@ -579,7 +579,7 @@ namespace WordGenerator
 
                 if (wrongSavePath)
                 {
-                    addMessageLogText(this, new MessageEvent("Unable to locate save path. Aborting run. See the SavePath setting."));
+                    addMessageLogText(this, new MessageEvent("Unable to locate save path. Aborting run. See the SavePath setting (under Advanced->Settings Explorer)."));
 
                     setStatus(RunFormStatus.FinishedRun);
                     return false;

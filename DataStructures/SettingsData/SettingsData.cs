@@ -157,7 +157,13 @@ namespace DataStructures
         Category("Cameras")]
         public List<IPAdresses> CameraPCs
         {
-            get { return cameraPCs; }
+            get
+            {
+                if (cameraPCs == null)
+                    cameraPCs = new List<IPAdresses>();
+
+                return cameraPCs;
+            }
             set { cameraPCs = value; }
         }
 
@@ -177,19 +183,23 @@ namespace DataStructures
         Category("Saving")]
         public string SavePath
         {
-            get { return savePath; }
+            get {
+                if (savePath == null)
+                    savePath = "";
+                return savePath; 
+            }
             set { savePath = value; }
 
         }
 
-        private bool useMitFileStamp=true;
+        private bool useParisStyleFileTimestamps=true;
 
-        [Description("Decides whether the old naming pattern should be used."),
-        Category("Saving"),DefaultValue(true)]
-        public bool UseMitFileStamp
+        [Description("If false, original MIT-style file timestamps will be used. If true, Paris-style file ."),
+        Category("Saving"),DefaultValue(false)]
+        public bool UseParisStyleFileTimestamps
         {
-            get { return useMitFileStamp; }
-            set { useMitFileStamp = value; }
+            get { return useParisStyleFileTimestamps; }
+            set { useParisStyleFileTimestamps = value; }
 
         }
 
@@ -206,7 +216,6 @@ namespace DataStructures
             myLogicalChannelManager = new LogicalChannelManager();
             myServerManager = new ServerManager();
             cameraPCs = new List<IPAdresses>();
-            useMitFileStamp = true;
         }
     }
 }

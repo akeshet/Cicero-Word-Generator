@@ -37,20 +37,30 @@ namespace DataStructures
         }
 
         /// <summary>
-        /// eg returns "DEV1" when passed /dev1/chasdlkjfh/234
+        /// eg returns "dev1" when passed /dev1/chasdlkjfh/234
+        /// 
+        /// This method just parses out the string between the first two right slashes
         /// </summary>
         /// <param name="channelString"></param>
         /// <returns></returns>
         public static string parseDeviceNameStringFromPhysicalChannelString(string channelString)
         {
+            
+
+  
             if (channelString == null)
                 return null;
-            channelString = channelString.ToUpper();
-            int devStartIndex = channelString.IndexOf("DEV");
-            channelString = channelString.Substring(devStartIndex+3);
+
+            if (channelString[0]!='/') {
+                throw new Exception("Channel string does not begin with \"/\"");
+            }
+
+            channelString = channelString.Substring(1);
+
             int slashIndex = channelString.IndexOf("/");
             channelString = channelString.Substring(0, slashIndex);
-            return "DEV"+ channelString;
+
+            return channelString;
         }
 
         /// <summary>

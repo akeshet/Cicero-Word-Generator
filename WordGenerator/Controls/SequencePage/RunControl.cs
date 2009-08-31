@@ -15,7 +15,11 @@ namespace WordGenerator.Controls
         public bool IsRunNoSaveEnabled
         {
             get { return isRunNoSaveEnabled; }
-            set { isRunNoSaveEnabled = value; this.RunNoSave.Enabled = isRunNoSaveEnabled; }
+            set { 
+                isRunNoSaveEnabled = value; 
+                this.RunNoSave.Enabled = isRunNoSaveEnabled;
+                this.RunNoSave.Visible = isRunNoSaveEnabled;
+            }
 
         }
 
