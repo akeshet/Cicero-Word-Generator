@@ -79,7 +79,7 @@ namespace Elgin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tony Kim (MIT), Ryan Olf (Berkeley), Emmanuel Minoun (ENS Paris).
+        ///   Looks up a localized string similar to Tony Kim (MIT), Ryan Olf (Berkeley), Emmanuel Mimoun (ENS Paris).
         /// </summary>
         internal static string Contribs {
             get {

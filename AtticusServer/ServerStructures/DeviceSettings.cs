@@ -356,5 +356,16 @@ Category("RFSG")]
             this.deviceDescription = deviceDescription;
         }
 
+        public enum DeviceErrorCheckSamplesGeneratedSensitivity { Strict, Within4, Disabled };
+        private DeviceErrorCheckSamplesGeneratedSensitivity samplesGeneratedCheckSensitivity;
+
+        [Description("This field sets the strictness of how Atticus compares the number of samples generated to the number expected. Under certain circumstances, Atticus can be over sensitive to slight differences between generated and expected samples, and this field can be used to suppress false detections of mistriggers."),
+Category("Error Checking")]
+        public DeviceErrorCheckSamplesGeneratedSensitivity SamplesGeneratedCheckSensitivity
+        {
+            get { return samplesGeneratedCheckSensitivity; }
+            set { samplesGeneratedCheckSensitivity = value; }
+        }
+
     }
 }

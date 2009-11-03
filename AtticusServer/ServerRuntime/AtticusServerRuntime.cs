@@ -937,9 +937,32 @@ namespace AtticusServer
                                         long samplesExpected = expectedNumberOfSamplesGenerated[str];
                                         if (samplesGenerated != samplesExpected)
                                         {
-                                            messageLog(this, new MessageEvent("*** Expected generation of " + samplesExpected + " samples for this task."));
-                                            displayError();
-                                            samplesGeneratedMismatchDetected = true;
+                                            // The number of samples is not equal to the expected number. Should we announce this as an error?
+                                            // That depends on the error check sensitivity.
+                                            
+                                            bool announceError=false;
+                                            
+                                            if (myServerSettings.myDevicesSettings[str].SamplesGeneratedCheckSensitivity == DeviceSettings.DeviceErrorCheckSamplesGeneratedSensitivity.Strict)
+                                            {
+                                                announceError = true;
+                                            }
+                                            if (myServerSettings.myDevicesSettings[str].SamplesGeneratedCheckSensitivity == DeviceSettings.DeviceErrorCheckSamplesGeneratedSensitivity.Within4)
+                                            {
+                                                if (Math.Abs(samplesExpected - samplesGenerated) >= 4)
+                                                    announceError = true;
+                                            }
+                                            if (myServerSettings.myDevicesSettings[str].SamplesGeneratedCheckSensitivity == DeviceSettings.DeviceErrorCheckSamplesGeneratedSensitivity.Disabled)
+                                            {
+                                                announceError = false;
+                                            }
+
+
+                                            if (announceError)
+                                            {
+                                                messageLog(this, new MessageEvent("*** Expected generation of " + samplesExpected + " samples for this task."));
+                                                displayError();
+                                                samplesGeneratedMismatchDetected = true;
+                                            }
                                         }
                                     }
                                 }

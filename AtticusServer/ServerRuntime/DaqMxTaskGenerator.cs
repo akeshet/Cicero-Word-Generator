@@ -43,7 +43,8 @@ namespace AtticusServer
         /// <param name="usedAnalogChannels"></param>
         /// <param name="serverSettings"></param>
         /// <returns></returns>
-        public static Task createDaqMxDigitalOutputAndVariableTimebaseSource(string channelName, List<int> portsToUse, int masterFrequency, SequenceData sequenceData, SequenceData.VariableTimebaseTypes timebaseType,
+        public static Task createDaqMxDigitalOutputAndVariableTimebaseSource(string channelName, List<int> portsToUse, int masterFrequency, 
+            SequenceData sequenceData, SequenceData.VariableTimebaseTypes timebaseType,
             string deviceName, DeviceSettings deviceSettings, SettingsData settings, Dictionary<int, HardwareChannel> usedDigitalChannels,  ServerSettings serverSettings)
         {
 
@@ -267,7 +268,8 @@ namespace AtticusServer
         /// <param name="sequenceData"></param>
         /// <param name="timebaseType"></param>
         /// <returns></returns>
-        public static Task createDaqMxVariableTimebaseSource(string channelName, int masterFrequency, SequenceData sequenceData, SequenceData.VariableTimebaseTypes timebaseType, ServerSettings serverSettings, DeviceSettings deviceSettings)
+        public static Task createDaqMxVariableTimebaseSource(string channelName, int masterFrequency, SequenceData sequenceData, 
+            SequenceData.VariableTimebaseTypes timebaseType, ServerSettings serverSettings, DeviceSettings deviceSettings)
         {
             Task task = new Task("Variable timebase output task");
 
@@ -339,7 +341,8 @@ namespace AtticusServer
         /// <returns></returns>
 
 
-        public static Task createDaqMxTaskAndOutputNow(string deviceName, DeviceSettings deviceSettings, SingleOutputFrame output, SettingsData settings, Dictionary<int, HardwareChannel> usedDigitalChannels, Dictionary<int, HardwareChannel> usedAnalogChannels)
+        public static Task createDaqMxTaskAndOutputNow(string deviceName, DeviceSettings deviceSettings, SingleOutputFrame output, 
+            SettingsData settings, Dictionary<int, HardwareChannel> usedDigitalChannels, Dictionary<int, HardwareChannel> usedAnalogChannels)
         {
 
             Task task = new Task(deviceName + " output task");
@@ -430,7 +433,9 @@ namespace AtticusServer
         /// <param name="usedDigitalChannels">digital channels which reside on this server.</param>
         /// <param name="usedAnalogChannels">analog channels which reside on this server</param>
         /// <returns></returns>
-        public static Task createDaqMxTask(string deviceName, DeviceSettings deviceSettings, SequenceData sequence, SettingsData settings, Dictionary<int, HardwareChannel> usedDigitalChannels, Dictionary<int, HardwareChannel> usedAnalogChannels, ServerSettings serverSettings, out long expectedSamplesGenerated)
+        public static Task createDaqMxTask(string deviceName, DeviceSettings deviceSettings, SequenceData sequence, 
+            SettingsData settings, Dictionary<int, HardwareChannel> usedDigitalChannels, Dictionary<int, HardwareChannel> usedAnalogChannels, 
+            ServerSettings serverSettings, out long expectedSamplesGenerated)
         {
             expectedSamplesGenerated = 0;
 
@@ -555,7 +560,7 @@ namespace AtticusServer
                     AnalogMultiChannelWriter writer = new AnalogMultiChannelWriter(task.Stream);
 
                     writer.WriteMultiSample(false, analogBuffer);
-                    // analog cards report the exact number of generated samples.
+                    // analog cards report the exact number of generated samples. for non-variable timebase this is nSamples
                     expectedSamplesGenerated = nSamples;
 
                 }
@@ -715,8 +720,8 @@ namespace AtticusServer
                     AnalogMultiChannelWriter writer = new AnalogMultiChannelWriter(task.Stream);
 
                     writer.WriteMultiSample(false, analogBuffer);
-                    // Analog cards report the exact number of samples generated.
-                    expectedSamplesGenerated = nSamples;
+                    // Analog cards report the exact number of samples generated. for variable timebase this is nBaseSamples
+                    expectedSamplesGenerated = nBaseSamples;
 
                 }
 
