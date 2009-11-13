@@ -46,7 +46,7 @@
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				GenerateXMLDocumentationFiles="true"
-				WarningLevel="3"
+				WarningLevel="0"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -125,7 +125,7 @@
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				GenerateXMLDocumentationFiles="true"
-				WarningLevel="3"
+				WarningLevel="0"
 				DebugInformationFormat="3"
 			/>
 			<Tool

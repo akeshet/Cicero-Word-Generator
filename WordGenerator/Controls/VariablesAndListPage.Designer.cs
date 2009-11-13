@@ -64,7 +64,6 @@ namespace WordGenerator.Controls
             this.button1 = new System.Windows.Forms.Button();
             this.listEditorPanelPlaceholder = new WordGenerator.Controls.ListEditorPanel();
             this.runControl1 = new WordGenerator.Controls.RunControl();
-            this.advancedComboBox1 = new WordGenerator.Controls.AdvancedComboBox();
             this.variablesPanel.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -469,26 +468,10 @@ namespace WordGenerator.Controls
             this.runControl1.Size = new System.Drawing.Size(119, 300);
             this.runControl1.TabIndex = 5;
             // 
-            // advancedComboBox1
-            // 
-            this.advancedComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.advancedComboBox1.FormattingEnabled = true;
-            this.advancedComboBox1.Items.AddRange(new object[] {
-            "asdf",
-            "fdas",
-            "asdf",
-            "fdsa",
-            "qwerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"});
-            this.advancedComboBox1.Location = new System.Drawing.Point(36, 15);
-            this.advancedComboBox1.Name = "advancedComboBox1";
-            this.advancedComboBox1.Size = new System.Drawing.Size(121, 21);
-            this.advancedComboBox1.TabIndex = 13;
-            // 
             // VariablesAndListPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.advancedComboBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.LockMessage);
             this.Controls.Add(this.listFiller);
@@ -558,6 +541,5 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.Label LockMessage;
         private RunControl runControl1;
         private System.Windows.Forms.Button button1;
-        private AdvancedComboBox advancedComboBox1;
     }
 }
