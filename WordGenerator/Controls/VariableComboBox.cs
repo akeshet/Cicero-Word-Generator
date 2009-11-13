@@ -83,6 +83,8 @@ namespace WordGenerator.Controls
 
         private void comboBox1_DropDown(object sender, EventArgs e)
         {
+            this.Width = 200;
+            comboBox1.Width = 200;
             updateListItems();
         }
 
