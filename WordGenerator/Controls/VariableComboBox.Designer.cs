@@ -43,17 +43,20 @@ namespace WordGenerator.Controls
             this.comboBox1.Size = new System.Drawing.Size(80, 21);
             this.comboBox1.TabIndex = 0;
             this.toolTip1.SetToolTip(this.comboBox1, "d");
+            this.comboBox1.MouseHover += new System.EventHandler(this.comboBox1_MouseHover);
             this.comboBox1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.comboBox1_MouseClick);
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBox1.MouseEnter += new System.EventHandler(this.comboBox1_MouseEnter);
+            this.comboBox1.MouseLeave += new System.EventHandler(this.comboBox1_MouseLeave);
             this.comboBox1.DropDownClosed += new System.EventHandler(this.comboBox1_DropDownClosed);
             this.comboBox1.DropDown += new System.EventHandler(this.comboBox1_DropDown);
             // 
             // toolTip1
             // 
-            this.toolTip1.AutoPopDelay = 5000;
-            this.toolTip1.InitialDelay = 500;
-            this.toolTip1.ReshowDelay = 100;
-            this.toolTip1.ShowAlways = true;
+            this.toolTip1.AutomaticDelay = 100;
+            this.toolTip1.AutoPopDelay = 600000;
+            this.toolTip1.InitialDelay = 100;
+            this.toolTip1.ReshowDelay = 20;
             this.toolTip1.Popup += new System.Windows.Forms.PopupEventHandler(this.toolTip1_Popup);
             // 
             // VariableComboBox
@@ -63,6 +66,7 @@ namespace WordGenerator.Controls
             this.Controls.Add(this.comboBox1);
             this.Name = "VariableComboBox";
             this.Size = new System.Drawing.Size(81, 22);
+            this.Load += new System.EventHandler(this.VariableComboBox_Load);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.VariableComboBox_MouseClick);
             this.ResumeLayout(false);
 

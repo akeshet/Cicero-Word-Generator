@@ -21,6 +21,8 @@ namespace WordGenerator.Controls
             this.AutoScroll = true;
         }
 
+       
+
         public void layout()
         {
             this.SuspendLayout();
@@ -91,7 +93,7 @@ namespace WordGenerator.Controls
 
                 channelLabels.Add(lbl);
                 channelLabels.Add(idLbl);
-                channelLabels.Add(fillerLbl);
+   //             channelLabels.Add(fillerLbl);
 
  
             }
@@ -101,5 +103,6 @@ namespace WordGenerator.Controls
             this.ResumeLayout();
 
         }
+
     }
 }

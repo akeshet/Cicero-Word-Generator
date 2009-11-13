@@ -29,6 +29,21 @@ namespace DataStructures
         /// </summary>
         public static readonly int NLists = 10;
 
+        private bool relevant;
+
+        /// <summary>
+        /// A user-settable flag indicating whether the varaible is "relevant" to
+        /// whatever operation they are performing. This will get logged, and could
+        /// be useful for culling the information you're looking for from large archives
+        /// of run logs.
+        /// </summary>
+        public bool Relevant
+        {
+            get { return relevant; }
+            set { relevant = value; }
+        }
+
+
         private string description;
 
         public string Description

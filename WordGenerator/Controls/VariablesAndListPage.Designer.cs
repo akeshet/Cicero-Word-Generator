@@ -34,6 +34,7 @@ namespace WordGenerator.Controls
             this.label2 = new System.Windows.Forms.Label();
             this.nameLabel = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.variableEditorPlaceholder = new WordGenerator.Controls.VariableEditor();
             this.addButton = new System.Windows.Forms.Button();
             this.lockButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -60,9 +61,10 @@ namespace WordGenerator.Controls
             this.listFillerButton = new System.Windows.Forms.Button();
             this.listFillerSelector = new System.Windows.Forms.ComboBox();
             this.LockMessage = new System.Windows.Forms.Label();
-            this.variableEditorPlaceholder = new WordGenerator.Controls.VariableEditor();
+            this.button1 = new System.Windows.Forms.Button();
             this.listEditorPanelPlaceholder = new WordGenerator.Controls.ListEditorPanel();
             this.runControl1 = new WordGenerator.Controls.RunControl();
+            this.advancedComboBox1 = new WordGenerator.Controls.AdvancedComboBox();
             this.variablesPanel.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -91,7 +93,7 @@ namespace WordGenerator.Controls
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.71028F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67.28972F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 53F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 95F));
             this.tableLayoutPanel1.Controls.Add(this.label1, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.nameLabel, 1, 0);
@@ -106,7 +108,7 @@ namespace WordGenerator.Controls
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(93, 0);
+            this.label1.Location = new System.Drawing.Point(83, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(34, 13);
             this.label1.TabIndex = 1;
@@ -117,14 +119,14 @@ namespace WordGenerator.Controls
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(3, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(23, 13);
+            this.label2.Size = new System.Drawing.Size(15, 19);
             this.label2.TabIndex = 3;
             this.label2.Text = "Del";
             // 
             // nameLabel
             // 
             this.nameLabel.AutoSize = true;
-            this.nameLabel.Location = new System.Drawing.Point(32, 0);
+            this.nameLabel.Location = new System.Drawing.Point(29, 0);
             this.nameLabel.Name = "nameLabel";
             this.nameLabel.Size = new System.Drawing.Size(35, 13);
             this.nameLabel.TabIndex = 0;
@@ -133,17 +135,26 @@ namespace WordGenerator.Controls
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(146, 0);
+            this.label3.Location = new System.Drawing.Point(136, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(55, 13);
             this.label3.TabIndex = 4;
             this.label3.Text = "Equation?";
             // 
+            // variableEditorPlaceholder
+            // 
+            this.variableEditorPlaceholder.ListLocked = false;
+            this.variableEditorPlaceholder.Location = new System.Drawing.Point(3, 28);
+            this.variableEditorPlaceholder.Name = "variableEditorPlaceholder";
+            this.variableEditorPlaceholder.Size = new System.Drawing.Size(220, 22);
+            this.variableEditorPlaceholder.TabIndex = 2;
+            this.variableEditorPlaceholder.Visible = false;
+            // 
             // addButton
             // 
             this.addButton.Location = new System.Drawing.Point(24, 74);
             this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(80, 34);
+            this.addButton.Size = new System.Drawing.Size(55, 34);
             this.addButton.TabIndex = 1;
             this.addButton.Text = "Add Variable";
             this.addButton.UseVisualStyleBackColor = true;
@@ -290,9 +301,9 @@ namespace WordGenerator.Controls
             // 
             // equationHelpButton
             // 
-            this.equationHelpButton.Location = new System.Drawing.Point(203, 66);
+            this.equationHelpButton.Location = new System.Drawing.Point(158, 74);
             this.equationHelpButton.Name = "equationHelpButton";
-            this.equationHelpButton.Size = new System.Drawing.Size(66, 51);
+            this.equationHelpButton.Size = new System.Drawing.Size(57, 34);
             this.equationHelpButton.TabIndex = 8;
             this.equationHelpButton.Text = "Equation Help";
             this.equationHelpButton.UseVisualStyleBackColor = true;
@@ -300,9 +311,9 @@ namespace WordGenerator.Controls
             // 
             // permanentVariablesButton
             // 
-            this.permanentVariablesButton.Location = new System.Drawing.Point(112, 74);
+            this.permanentVariablesButton.Location = new System.Drawing.Point(82, 74);
             this.permanentVariablesButton.Name = "permanentVariablesButton";
-            this.permanentVariablesButton.Size = new System.Drawing.Size(85, 34);
+            this.permanentVariablesButton.Size = new System.Drawing.Size(73, 34);
             this.permanentVariablesButton.TabIndex = 9;
             this.permanentVariablesButton.Text = "Permanent Variables";
             this.permanentVariablesButton.UseVisualStyleBackColor = true;
@@ -433,14 +444,14 @@ namespace WordGenerator.Controls
             this.LockMessage.Size = new System.Drawing.Size(0, 13);
             this.LockMessage.TabIndex = 11;
             // 
-            // variableEditorPlaceholder
+            // button1
             // 
-            this.variableEditorPlaceholder.ListLocked = false;
-            this.variableEditorPlaceholder.Location = new System.Drawing.Point(3, 28);
-            this.variableEditorPlaceholder.Name = "variableEditorPlaceholder";
-            this.variableEditorPlaceholder.Size = new System.Drawing.Size(220, 22);
-            this.variableEditorPlaceholder.TabIndex = 2;
-            this.variableEditorPlaceholder.Visible = false;
+            this.button1.Location = new System.Drawing.Point(218, 74);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(70, 34);
+            this.button1.TabIndex = 12;
+            this.button1.Text = " Edit Relevance";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // listEditorPanelPlaceholder
             // 
@@ -452,15 +463,33 @@ namespace WordGenerator.Controls
             // 
             // runControl1
             // 
+            this.runControl1.IsRunNoSaveEnabled = true;
             this.runControl1.Location = new System.Drawing.Point(1092, 528);
             this.runControl1.Name = "runControl1";
             this.runControl1.Size = new System.Drawing.Size(119, 300);
             this.runControl1.TabIndex = 5;
             // 
+            // advancedComboBox1
+            // 
+            this.advancedComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.advancedComboBox1.FormattingEnabled = true;
+            this.advancedComboBox1.Items.AddRange(new object[] {
+            "asdf",
+            "fdas",
+            "asdf",
+            "fdsa",
+            "qwerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"});
+            this.advancedComboBox1.Location = new System.Drawing.Point(36, 15);
+            this.advancedComboBox1.Name = "advancedComboBox1";
+            this.advancedComboBox1.Size = new System.Drawing.Size(121, 21);
+            this.advancedComboBox1.TabIndex = 13;
+            // 
             // VariablesAndListPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.advancedComboBox1);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.LockMessage);
             this.Controls.Add(this.listFiller);
             this.Controls.Add(this.permanentVariablesButton);
@@ -528,5 +557,7 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label LockMessage;
         private RunControl runControl1;
+        private System.Windows.Forms.Button button1;
+        private AdvancedComboBox advancedComboBox1;
     }
 }

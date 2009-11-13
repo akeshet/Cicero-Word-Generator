@@ -273,6 +273,12 @@
     <Compile Include="Controls\VariableEditor.Designer.cs">
       <DependentUpon>VariableEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\VariableRelevanceEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\VariableRelevanceEditor.Designer.cs">
+      <DependentUpon>VariableRelevanceEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\VariablesAndListPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -451,6 +457,10 @@
     <EmbeddedResource Include="Controls\VariableEditor.resx">
       <SubType>Designer</SubType>
       <DependentUpon>VariableEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\VariableRelevanceEditor.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>VariableRelevanceEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\VariablesAndListPage.resx">
       <SubType>Designer</SubType>

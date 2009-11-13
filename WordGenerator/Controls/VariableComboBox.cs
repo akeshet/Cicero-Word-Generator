@@ -22,7 +22,6 @@ namespace WordGenerator.Controls
         {
             InitializeComponent();
             this.comboBox1.Items.Add("Manual");
-            toolTip1.ShowAlways = true;
             if (WordGenerator.Storage.sequenceData != null)
             {
                 foreach (Variable var in WordGenerator.Storage.sequenceData.Variables)
@@ -63,6 +62,8 @@ namespace WordGenerator.Controls
 
         public void DropDown()
         {
+            this.Width = 200;
+            comboBox1.Width = 200;
             comboBox1.Focus();
             comboBox1.Show();
             comboBox1.DroppedDown = true;
@@ -102,18 +103,67 @@ namespace WordGenerator.Controls
         {
             if (comboBox1.SelectedItem == null)
                 comboBox1.SelectedItem = this.backupSelectedItem;
+
+            this.Width = 80;
+            this.comboBox1.Width = 80;
         }
 
-        
+
 
         private void toolTip1_Popup(object sender, PopupEventArgs e)
         {
-            if (comboBox1.SelectedText != "Manual" && toolTip1.GetToolTip(comboBox1) != this.SelectedVariable.VariableName + " = " + this.SelectedVariable.VariableValue.ToString())
-                toolTip1.SetToolTip(comboBox1, this.SelectedVariable.VariableName + " = " + this.SelectedVariable.VariableValue.ToString());
+          if (this.SelectedVariable != null)
+            {
+
+                if (comboBox1.SelectedText != "Manual" && toolTip1.GetToolTip(comboBox1) != this.SelectedVariable.VariableName + " = " + this.SelectedVariable.VariableValue.ToString())
+                    toolTip1.SetToolTip(comboBox1, this.SelectedVariable.VariableName + " = " + this.SelectedVariable.VariableValue.ToString());
+
+            }
         }
 
-        
+        private void comboBox1_MouseHover(object sender, EventArgs e)
+        {
+            toolTip1.Active = true;
+            toolTip1_Popup(null, null);
+        }
 
+        private void comboBox1_MouseLeave(object sender, EventArgs e)
+        {
+            toolTip1.Active = false;
+        }
+
+        private void comboBox1_MouseEnter(object sender, EventArgs e)
+        {
+            toolTip1.Active = true;
+            toolTip1_Popup(null, null);
+        }
+
+        private void VariableComboBox_Load(object sender, EventArgs e)
+        {
+          /*  comboBox1.DrawMode = DrawMode.OwnerDrawFixed;
+            comboBox1.DrawItem += new DrawItemEventHandler(comboBox1_DrawItem);*/
+        }
+
+        void comboBox1_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            /*string text = this.comboBox1.GetItemText(e.Index);
+            e.DrawBackground();
+            using (SolidBrush br = new SolidBrush(e.ForeColor))
+            {
+                e.Graphics.DrawString(text, e.Font, br, e.Bounds);
+            }
+
+            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+            {
+                this.toolTip1.Show(text, comboBox1, e.Bounds.Right, e.Bounds.Bottom);
+            }
+            else
+            {
+                this.toolTip1.Hide(comboBox1);
+            }
+
+            e.DrawFocusRectangle();*/
+        }
        
     }
 }
