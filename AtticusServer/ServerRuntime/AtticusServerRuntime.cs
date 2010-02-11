@@ -1768,25 +1768,34 @@ namespace AtticusServer
                     }
 
 
-                    // Trigger the software timed operations, but only if these operations are not going to be
-                    // triggered through a triggering task. (see the armTasks function for more info).
-                    if (softwareTriggeringTask == null)
+
+                    if (!myServerSettings.TriggerSoftwareTasksAfterTimebaseTask)
                     {
-                        // software triggering for gpib tasks
-                        foreach (GpibTask gpTask in gpibTasksToTrigger)
+                        // Trigger the software timed operations, but only if these operations are not going to be
+                        // triggered through a triggering task. (see the armTasks function for more info).
+                        if (softwareTriggeringTask == null)
                         {
-                            gpTask.Start();
-                        }
+                            int softTrigs = 0;
+                            // software triggering for gpib tasks
+                            foreach (GpibTask gpTask in gpibTasksToTrigger)
+                            {
+                                gpTask.Start();
+                                softTrigs++;
+                            }
 
-                        // softward triggering for rs232 tasks
-                        foreach (RS232Task task in rs232TasksToTrigger)
-                        {
-                            task.Start();
-                        }
+                            // softward triggering for rs232 tasks
+                            foreach (RS232Task task in rs232TasksToTrigger)
+                            {
+                                task.Start();
+                                softTrigs++;
+                            }
 
-                        foreach (RfsgTask rftask in rfsgTasksToTrigger)
-                        {
-                            rftask.Start();
+                            foreach (RfsgTask rftask in rfsgTasksToTrigger)
+                            {
+                                rftask.Start();
+                                softTrigs++;
+                            }
+                            messageLog(this, new MessageEvent("Triggered " + softTrigs + " software-timed task(s) (without sync to a hardware timed task)."));
                         }
                     }
 
@@ -1801,7 +1810,63 @@ namespace AtticusServer
 
                     if (variableTimebaseClockTask != null)
                     {
+                        long before = DateTime.Now.Ticks;
                         variableTimebaseClockTask.Start();
+                        long after = DateTime.Now.Ticks;
+                        long elapsed = after - before;
+
+                        int ms = (int)(elapsed / 10000);
+                        messageLog(this, new MessageEvent("Triggered variable timebase clock task. Time elapsed waiting for task to start: " + ms + " ms."));
+
+                        if (!myServerSettings.SilenceSoftwareTimebaseDelayError)
+                        {
+                            // Detect possible long delay between timebase and software task trigger.
+                            if (ms > 50)
+                            {
+                                if (gpibTasks.Count + rs232Tasks.Count + rfsgTasks.Count > 0)
+                                {
+                                    if (softwareTriggeringTask == null)
+                                    {
+                                        if (!myServerSettings.TriggerSoftwareTasksAfterTimebaseTask)
+                                        {
+                                            messageLog(this, new MessageEvent("**** NOTE: There is a delay of ~" + ms + " ms between the start of your software-timed tasks and the start of your variable timebase. To reduce this, either use the DeviceToSyncSoftwareTasksTo sync method, or set TriggerSoftwareTasksAfterTimebaseTask to true. To silence this error, set SilenceSoftwareTimebaseDelayError to true.***"));
+                                            displayError();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (myServerSettings.TriggerSoftwareTasksAfterTimebaseTask)
+                    {
+                        // Trigger the software timed operations, but only if these operations are not going to be
+                        // triggered through a triggering task. (see the armTasks function for more info).
+                        if (softwareTriggeringTask == null)
+                        {
+                            int softTrigs = 0;
+                            // software triggering for gpib tasks
+                            foreach (GpibTask gpTask in gpibTasksToTrigger)
+                            {
+                                gpTask.Start();
+                                softTrigs++;
+                            }
+
+                            // softward triggering for rs232 tasks
+                            foreach (RS232Task task in rs232TasksToTrigger)
+                            {
+                                task.Start();
+                                softTrigs++;
+                            }
+
+                            foreach (RfsgTask rftask in rfsgTasksToTrigger)
+                            {
+                                rftask.Start();
+                                softTrigs++;
+                            }
+                              messageLog(this, new MessageEvent("Triggered " + softTrigs + " software-timed task(s) (without sync to a hardware timed task)."));                        
+                        }
+
                     }
 
                     // TO DO. Insert code that waits for external triggers to occur, before returning. This

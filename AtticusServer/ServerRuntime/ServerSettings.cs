@@ -143,6 +143,16 @@ namespace AtticusServer
             set { variableTimebaseType = value; }
         }
 
+        private bool triggerSoftwareTasksAfterTimebaseTask;
+
+        [Description("If set to true, software-timed tasks will be triggered after (instead of before) the variable timebase task is triggered (if there is a variable timebase task on this server). This setting only applies if the sync mechanism provided by DeviceToSyncSoftwareTimedTasksTo is not in use. On some configurations, the variable timebase task has a long delay between being told to trigger and when it actually does trigger, so setting this to true can improve the synchronization of starts between software timed tasks and hardware timed tasks on this server in the absence of the other sync mechanism."),
+        Category("Timing")]
+        public bool TriggerSoftwareTasksAfterTimebaseTask
+        {
+            get { return triggerSoftwareTasksAfterTimebaseTask; }
+            set { triggerSoftwareTasksAfterTimebaseTask = value; }
+        }
+
         private int variableTimebaseMasterFrequency;
 
         [Description("Sets the frequency of the master clock of the variable timebase."),
@@ -295,15 +305,25 @@ namespace AtticusServer
 
         private bool useOpalKellyFPGA;
         [Description("Set to true if you are using an Opal Kelly FPGA module, and want Atticus to scan for such modules. Atticus is able to use these FPGA modules to efficiently create variable frequency clocks."),
-        Category("Hardware")]
+        Category("Opal Kelly FPGA")]
         public bool UseOpalKellyFPGA
         {
             get { return useOpalKellyFPGA; }
             set { useOpalKellyFPGA = value; }
         }
 
+        private bool silenceSoftwareTimebaseDelayError;
+
+        [Category("Error Reporting")]
+        public bool SilenceSoftwareTimebaseDelayError
+        {
+            get { return silenceSoftwareTimebaseDelayError; }
+            set { silenceSoftwareTimebaseDelayError = value; }
+        }
+
         private bool useFpgaMistriggerDetection;
 
+        [Category("Opal Kelly FPGA")]
         public bool UseFpgaMistriggerDetection
         {
             get { return useFpgaMistriggerDetection; }
@@ -312,6 +332,7 @@ namespace AtticusServer
 
         private bool useFpgaRfModulatedClockOutput;
 
+        [Category("Opal Kelly FPGA")]
         public bool UseFpgaRfModulatedClockOutput
         {
             get { return useFpgaRfModulatedClockOutput; }
@@ -320,6 +341,7 @@ namespace AtticusServer
 
         private bool useFpgaAssymetricDutyCycleClocking;
 
+        [Category("Opal Kelly FPGA")]
         public bool UseFpgaAssymetricDutyCycleClocking
         {
             get { return useFpgaAssymetricDutyCycleClocking; }

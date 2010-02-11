@@ -70,7 +70,7 @@ namespace WordGenerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nov 13, 2009.
+        ///   Looks up a localized string similar to Feb 10, 2010.
         /// </summary>
         internal static string BuildDate {
             get {
@@ -129,7 +129,7 @@ namespace WordGenerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1.34.
+        ///   Looks up a localized string similar to 1.35.
         /// </summary>
         internal static string VersionString {
             get {
