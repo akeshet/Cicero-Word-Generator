@@ -8,7 +8,14 @@ namespace DataStructures
     /// <summary>
     /// This class defines a waveform, as used in Analog Groups, some gpibGroups, etc.
     /// </summary>
-	[Serializable]
+    [Serializable
+
+    ,TypeConverter(typeof(ExpandableObjectConverter))
+    // *** NOTE THE ABOVE LINE WAS ADDED Feb 11 2010. I don't know why it was missing in earlier revs,
+    // and I am thus slightly suspicious that I may have taken it out as a workaround to some bug in .NET remoting.
+    // SO if some weird bug in .NET remoting re-appears, I may have to remove above line.
+
+    ]
 	public class Waveform
 	{
 
