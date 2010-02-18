@@ -39,6 +39,8 @@ namespace WordGenerator
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.recentFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.compareSequenceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.saveMarked = new System.Windows.Forms.ToolStripMenuItem();
             this.insertSequenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,6 +60,11 @@ namespace WordGenerator
             this.continueListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runListInRandomOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runWithoutSavingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.timestepGroupsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
+            this.placeholderGroupClickerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.timestepGroupMenuSeparator = new System.Windows.Forms.ToolStripSeparator();
+            this.createNewTimestepGroupButton = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editLogicalDevicesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editServerManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -78,13 +85,9 @@ namespace WordGenerator
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.licenseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.variablesPage = new System.Windows.Forms.TabPage();
-            this.variablesEditor1 = new WordGenerator.Controls.VariablesAndListPage();
             this.commonWaveformPage = new System.Windows.Forms.TabPage();
-            this.commonWaveformEditor1 = new WordGenerator.Controls.CommonWaveformEditor();
             this.gpibPage = new System.Windows.Forms.TabPage();
-            this.gpibGroupEditor1 = new WordGenerator.Controls.GpibGroupEditor();
             this.analogPage = new System.Windows.Forms.TabPage();
-            this.analogGroupEditor1 = new WordGenerator.Controls.AnalogGroupEditor();
             this.sequencePage = new System.Windows.Forms.TabPage();
             this.waitForReady = new System.Windows.Forms.CheckBox();
             this.lockDigitalCheckBox = new System.Windows.Forms.CheckBox();
@@ -94,19 +97,24 @@ namespace WordGenerator
             this.serverManagerButton = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.sequencePage1 = new WordGenerator.Controls.SequencePage();
             this.mainTab = new System.Windows.Forms.TabControl();
             this.overrideTab = new System.Windows.Forms.TabPage();
-            this.overridePage1 = new WordGenerator.OverridePage();
             this.rs232Tab = new System.Windows.Forms.TabPage();
-            this.rS232GroupEditor1 = new WordGenerator.Controls.Temporary.RS232GroupEditor();
             this.pulsesTab = new System.Windows.Forms.TabPage();
-            this.pulsesPage1 = new WordGenerator.Controls.PulsesPage();
             this.eventLogPage = new System.Windows.Forms.TabPage();
             this.messageLogTextBox = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.compareSequenceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.assignAllMarkedTimestepsToGroupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.assignMarkedStepsToGroupComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.sequencePage1 = new WordGenerator.Controls.SequencePage();
+            this.overridePage1 = new WordGenerator.OverridePage();
+            this.analogGroupEditor1 = new WordGenerator.Controls.AnalogGroupEditor();
+            this.gpibGroupEditor1 = new WordGenerator.Controls.GpibGroupEditor();
+            this.rS232GroupEditor1 = new WordGenerator.Controls.Temporary.RS232GroupEditor();
+            this.commonWaveformEditor1 = new WordGenerator.Controls.CommonWaveformEditor();
+            this.variablesEditor1 = new WordGenerator.Controls.VariablesAndListPage();
+            this.pulsesPage1 = new WordGenerator.Controls.PulsesPage();
+            this.assignToolStripMenuItemAssignButton = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.variablesPage.SuspendLayout();
@@ -147,6 +155,7 @@ namespace WordGenerator
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.runToolStripMenuItem,
+            this.timestepGroupsToolStripMenuItem,
             this.toolsToolStripMenuItem,
             this.debugToolStripMenuItem,
             this.aboutToolStripMenuItem});
@@ -207,6 +216,18 @@ namespace WordGenerator
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.saveAsToolStripMenuItem.Text = "&Save Sequence As...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(205, 6);
+            // 
+            // compareSequenceMenuItem
+            // 
+            this.compareSequenceMenuItem.Name = "compareSequenceMenuItem";
+            this.compareSequenceMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.compareSequenceMenuItem.Text = "Compare Sequences";
+            this.compareSequenceMenuItem.Click += new System.EventHandler(this.compareSequenceMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -341,6 +362,47 @@ namespace WordGenerator
             this.runWithoutSavingToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
             this.runWithoutSavingToolStripMenuItem.Text = "Run Without Saving";
             this.runWithoutSavingToolStripMenuItem.Click += new System.EventHandler(this.runWithoutSavingToolStripMenuItem_Click);
+            // 
+            // timestepGroupsToolStripMenuItem
+            // 
+            this.timestepGroupsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripTextBox1,
+            this.placeholderGroupClickerToolStripMenuItem,
+            this.timestepGroupMenuSeparator,
+            this.createNewTimestepGroupButton,
+            this.assignAllMarkedTimestepsToGroupToolStripMenuItem});
+            this.timestepGroupsToolStripMenuItem.Name = "timestepGroupsToolStripMenuItem";
+            this.timestepGroupsToolStripMenuItem.Size = new System.Drawing.Size(99, 20);
+            this.timestepGroupsToolStripMenuItem.Text = "Timestep &Groups";
+            this.timestepGroupsToolStripMenuItem.DropDownOpening += new System.EventHandler(this.timestepGroupsToolStripMenuItem_DropDownOpening);
+            // 
+            // toolStripTextBox1
+            // 
+            this.toolStripTextBox1.Name = "toolStripTextBox1";
+            this.toolStripTextBox1.Size = new System.Drawing.Size(100, 21);
+            this.toolStripTextBox1.Visible = false;
+            // 
+            // placeholderGroupClickerToolStripMenuItem
+            // 
+            this.placeholderGroupClickerToolStripMenuItem.Checked = true;
+            this.placeholderGroupClickerToolStripMenuItem.CheckOnClick = true;
+            this.placeholderGroupClickerToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.placeholderGroupClickerToolStripMenuItem.Name = "placeholderGroupClickerToolStripMenuItem";
+            this.placeholderGroupClickerToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
+            this.placeholderGroupClickerToolStripMenuItem.Text = "Placeholder Group Clicker";
+            this.placeholderGroupClickerToolStripMenuItem.Visible = false;
+            // 
+            // timestepGroupMenuSeparator
+            // 
+            this.timestepGroupMenuSeparator.Name = "timestepGroupMenuSeparator";
+            this.timestepGroupMenuSeparator.Size = new System.Drawing.Size(257, 6);
+            // 
+            // createNewTimestepGroupButton
+            // 
+            this.createNewTimestepGroupButton.Name = "createNewTimestepGroupButton";
+            this.createNewTimestepGroupButton.Size = new System.Drawing.Size(260, 22);
+            this.createNewTimestepGroupButton.Text = "Create New Group";
+            this.createNewTimestepGroupButton.Click += new System.EventHandler(this.createNewTimestepGroupButton_Click);
             // 
             // toolsToolStripMenuItem
             // 
@@ -505,13 +567,6 @@ namespace WordGenerator
             this.variablesPage.Text = "Variables (F7)";
             this.variablesPage.UseVisualStyleBackColor = true;
             // 
-            // variablesEditor1
-            // 
-            this.variablesEditor1.Location = new System.Drawing.Point(0, 0);
-            this.variablesEditor1.Name = "variablesEditor1";
-            this.variablesEditor1.Size = new System.Drawing.Size(1264, 918);
-            this.variablesEditor1.TabIndex = 0;
-            // 
             // commonWaveformPage
             // 
             this.commonWaveformPage.Controls.Add(this.commonWaveformEditor1);
@@ -522,13 +577,6 @@ namespace WordGenerator
             this.commonWaveformPage.TabIndex = 3;
             this.commonWaveformPage.Text = "Common Waveform (F6)";
             this.commonWaveformPage.UseVisualStyleBackColor = true;
-            // 
-            // commonWaveformEditor1
-            // 
-            this.commonWaveformEditor1.Location = new System.Drawing.Point(3, 3);
-            this.commonWaveformEditor1.Name = "commonWaveformEditor1";
-            this.commonWaveformEditor1.Size = new System.Drawing.Size(1252, 844);
-            this.commonWaveformEditor1.TabIndex = 0;
             // 
             // gpibPage
             // 
@@ -541,14 +589,6 @@ namespace WordGenerator
             this.gpibPage.Text = "GPIB (F4)";
             this.gpibPage.UseVisualStyleBackColor = true;
             // 
-            // gpibGroupEditor1
-            // 
-            this.gpibGroupEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gpibGroupEditor1.Location = new System.Drawing.Point(3, 3);
-            this.gpibGroupEditor1.Name = "gpibGroupEditor1";
-            this.gpibGroupEditor1.Size = new System.Drawing.Size(1258, 890);
-            this.gpibGroupEditor1.TabIndex = 0;
-            // 
             // analogPage
             // 
             this.analogPage.Controls.Add(this.analogGroupEditor1);
@@ -559,14 +599,6 @@ namespace WordGenerator
             this.analogPage.TabIndex = 1;
             this.analogPage.Text = "Analog (F3)";
             this.analogPage.UseVisualStyleBackColor = true;
-            // 
-            // analogGroupEditor1
-            // 
-            this.analogGroupEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.analogGroupEditor1.Location = new System.Drawing.Point(3, 3);
-            this.analogGroupEditor1.Name = "analogGroupEditor1";
-            this.analogGroupEditor1.Size = new System.Drawing.Size(1258, 890);
-            this.analogGroupEditor1.TabIndex = 0;
             // 
             // sequencePage
             // 
@@ -666,15 +698,6 @@ namespace WordGenerator
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.populateSequenceWithNewChannelsToolStripMenuItem_Click);
             // 
-            // sequencePage1
-            // 
-            this.sequencePage1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sequencePage1.Location = new System.Drawing.Point(3, 3);
-            this.sequencePage1.Name = "sequencePage1";
-            this.sequencePage1.Size = new System.Drawing.Size(1258, 890);
-            this.sequencePage1.TabIndex = 0;
-            this.sequencePage1.messageLog += new System.EventHandler(this.handleMessageEvent);
-            // 
             // mainTab
             // 
             this.mainTab.Controls.Add(this.sequencePage);
@@ -703,14 +726,6 @@ namespace WordGenerator
             this.overrideTab.Text = "Override (F2)";
             this.overrideTab.UseVisualStyleBackColor = true;
             // 
-            // overridePage1
-            // 
-            this.overridePage1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.overridePage1.Location = new System.Drawing.Point(0, 0);
-            this.overridePage1.Name = "overridePage1";
-            this.overridePage1.Size = new System.Drawing.Size(1264, 896);
-            this.overridePage1.TabIndex = 0;
-            // 
             // rs232Tab
             // 
             this.rs232Tab.Controls.Add(this.rS232GroupEditor1);
@@ -721,13 +736,6 @@ namespace WordGenerator
             this.rs232Tab.Text = "RS232 (F5)";
             this.rs232Tab.UseVisualStyleBackColor = true;
             // 
-            // rS232GroupEditor1
-            // 
-            this.rS232GroupEditor1.Location = new System.Drawing.Point(3, 3);
-            this.rS232GroupEditor1.Name = "rS232GroupEditor1";
-            this.rS232GroupEditor1.Size = new System.Drawing.Size(1264, 918);
-            this.rS232GroupEditor1.TabIndex = 0;
-            // 
             // pulsesTab
             // 
             this.pulsesTab.Controls.Add(this.pulsesPage1);
@@ -737,14 +745,6 @@ namespace WordGenerator
             this.pulsesTab.TabIndex = 8;
             this.pulsesTab.Text = "Pulses (F8)";
             this.pulsesTab.UseVisualStyleBackColor = true;
-            // 
-            // pulsesPage1
-            // 
-            this.pulsesPage1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pulsesPage1.Location = new System.Drawing.Point(0, 0);
-            this.pulsesPage1.Name = "pulsesPage1";
-            this.pulsesPage1.Size = new System.Drawing.Size(1264, 896);
-            this.pulsesPage1.TabIndex = 0;
             // 
             // eventLogPage
             // 
@@ -772,17 +772,90 @@ namespace WordGenerator
             this.toolTip1.UseAnimation = false;
             this.toolTip1.UseFading = false;
             // 
-            // compareSequenceMenuItem
+            // assignAllMarkedTimestepsToGroupToolStripMenuItem
             // 
-            this.compareSequenceMenuItem.Name = "compareSequenceMenuItem";
-            this.compareSequenceMenuItem.Size = new System.Drawing.Size(208, 22);
-            this.compareSequenceMenuItem.Text = "Compare Sequences";
-            this.compareSequenceMenuItem.Click += new System.EventHandler(this.compareSequenceMenuItem_Click);
+            this.assignAllMarkedTimestepsToGroupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.assignMarkedStepsToGroupComboBox,
+            this.assignToolStripMenuItemAssignButton});
+            this.assignAllMarkedTimestepsToGroupToolStripMenuItem.Name = "assignAllMarkedTimestepsToGroupToolStripMenuItem";
+            this.assignAllMarkedTimestepsToGroupToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
+            this.assignAllMarkedTimestepsToGroupToolStripMenuItem.Text = "Assign all marked timesteps to group";
+            this.assignAllMarkedTimestepsToGroupToolStripMenuItem.DropDownOpening += new System.EventHandler(this.assignAllMarkedTimestepsToGroupToolStripMenuItem_DropDownOpening);
             // 
-            // toolStripSeparator3
+            // assignMarkedStepsToGroupComboBox
             // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(205, 6);
+            this.assignMarkedStepsToGroupComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.assignMarkedStepsToGroupComboBox.Name = "assignMarkedStepsToGroupComboBox";
+            this.assignMarkedStepsToGroupComboBox.Size = new System.Drawing.Size(121, 21);
+            // 
+            // sequencePage1
+            // 
+            this.sequencePage1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sequencePage1.Location = new System.Drawing.Point(3, 3);
+            this.sequencePage1.Name = "sequencePage1";
+            this.sequencePage1.Size = new System.Drawing.Size(1258, 890);
+            this.sequencePage1.TabIndex = 0;
+            this.sequencePage1.messageLog += new System.EventHandler(this.handleMessageEvent);
+            // 
+            // overridePage1
+            // 
+            this.overridePage1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.overridePage1.Location = new System.Drawing.Point(0, 0);
+            this.overridePage1.Name = "overridePage1";
+            this.overridePage1.Size = new System.Drawing.Size(1264, 896);
+            this.overridePage1.TabIndex = 0;
+            // 
+            // analogGroupEditor1
+            // 
+            this.analogGroupEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.analogGroupEditor1.Location = new System.Drawing.Point(3, 3);
+            this.analogGroupEditor1.Name = "analogGroupEditor1";
+            this.analogGroupEditor1.Size = new System.Drawing.Size(1258, 890);
+            this.analogGroupEditor1.TabIndex = 0;
+            // 
+            // gpibGroupEditor1
+            // 
+            this.gpibGroupEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gpibGroupEditor1.Location = new System.Drawing.Point(3, 3);
+            this.gpibGroupEditor1.Name = "gpibGroupEditor1";
+            this.gpibGroupEditor1.Size = new System.Drawing.Size(1258, 890);
+            this.gpibGroupEditor1.TabIndex = 0;
+            // 
+            // rS232GroupEditor1
+            // 
+            this.rS232GroupEditor1.Location = new System.Drawing.Point(3, 3);
+            this.rS232GroupEditor1.Name = "rS232GroupEditor1";
+            this.rS232GroupEditor1.Size = new System.Drawing.Size(1264, 918);
+            this.rS232GroupEditor1.TabIndex = 0;
+            // 
+            // commonWaveformEditor1
+            // 
+            this.commonWaveformEditor1.Location = new System.Drawing.Point(3, 3);
+            this.commonWaveformEditor1.Name = "commonWaveformEditor1";
+            this.commonWaveformEditor1.Size = new System.Drawing.Size(1252, 844);
+            this.commonWaveformEditor1.TabIndex = 0;
+            // 
+            // variablesEditor1
+            // 
+            this.variablesEditor1.Location = new System.Drawing.Point(0, 0);
+            this.variablesEditor1.Name = "variablesEditor1";
+            this.variablesEditor1.Size = new System.Drawing.Size(1264, 918);
+            this.variablesEditor1.TabIndex = 0;
+            // 
+            // pulsesPage1
+            // 
+            this.pulsesPage1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pulsesPage1.Location = new System.Drawing.Point(0, 0);
+            this.pulsesPage1.Name = "pulsesPage1";
+            this.pulsesPage1.Size = new System.Drawing.Size(1264, 896);
+            this.pulsesPage1.TabIndex = 0;
+            // 
+            // assignToolStripMenuItemAssignButton
+            // 
+            this.assignToolStripMenuItemAssignButton.Name = "assignToolStripMenuItemAssignButton";
+            this.assignToolStripMenuItemAssignButton.Size = new System.Drawing.Size(186, 22);
+            this.assignToolStripMenuItemAssignButton.Text = "Click here to confirm.";
+            this.assignToolStripMenuItemAssignButton.Click += new System.EventHandler(this.assignToolStripMenuItemAssignButton_Click);
             // 
             // mainClientForm
             // 
@@ -901,6 +974,14 @@ namespace WordGenerator
         private System.Windows.Forms.ToolStripMenuItem loadLogToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem runWithoutSavingToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem timestepGroupsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem placeholderGroupClickerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator timestepGroupMenuSeparator;
+        private System.Windows.Forms.ToolStripMenuItem createNewTimestepGroupButton;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBox1;
+        private System.Windows.Forms.ToolStripMenuItem assignAllMarkedTimestepsToGroupToolStripMenuItem;
+        private System.Windows.Forms.ToolStripComboBox assignMarkedStepsToGroupComboBox;
+        private System.Windows.Forms.ToolStripMenuItem assignToolStripMenuItemAssignButton;
 
     }
 }

@@ -58,7 +58,7 @@
     <Compile Include="LicenseInfoForm.Designer.cs">
       <DependentUpon>LicenseInfoForm.cs</DependentUpon>
     </Compile>
-	<Compile Include="NamingFunctions.cs" />
+    <Compile Include="NamingFunctions.cs" />
     <Compile Include="RunLog\RunLog.cs" />
     <Compile Include="RunLog\RunLogAnnotation.cs" />
     <Compile Include="SequenceData\DimensionedParameter.cs" />
@@ -77,6 +77,7 @@
     <Compile Include="SequenceData\SingleOutputFrame.cs" />
     <Compile Include="SequenceData\StringParameterString.cs" />
     <Compile Include="SequenceData\TimeStep.cs" />
+    <Compile Include="SequenceData\TimestepGroup.cs" />
     <Compile Include="SequenceData\TimestepTimebaseSegmentCollection.cs" />
     <Compile Include="SequenceData\Variable.cs" />
     <Compile Include="SequenceData\Waveform.cs" />

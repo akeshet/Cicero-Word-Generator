@@ -280,33 +280,50 @@ namespace WordGenerator.Controls
         }
 
 
-        private void updateTimestepEditorsAfterSequenceModeChange()
+        public void updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange()
         {
+            bool showHideOfTimeStepChanged = false;
+
             foreach (Control con in timeStepsFlowPanel.Controls)
             {
                 TimestepEditor te = con as TimestepEditor;
 
                 if (te != null)
                 {
-                    te.refreshButtonsAfterSequenceModeChange();
+                    te.refreshButtonsAndGroupIndicator();
 
                     if (hideHiddenTimesteps)
                     {
-                        te.Visible = !te.StepData.StepHidden;
+                        if (te.Visible == te.StepData.StepHidden)
+                        {
+                            te.Visible = !te.StepData.StepHidden;
+                            showHideOfTimeStepChanged = true;
+                        }
                     }
                     else
                     {
+                        if (te.Visible != true)
+                            showHideOfTimeStepChanged = true;
                         te.Visible = true;
                     }
                 }
 
-
             }
+            if (showHideOfTimeStepChanged)
+                layoutTheRest();
         }
 
+
+        /// <summary>
+        /// This function is somewhat time consuming, especially with long sequence files.
+        /// A 100-timestep long sequence will take ~8 seconds to run this function.
+        /// Avoid calling it unnecessarily.
+        /// </summary>
         private void layoutTimestepEditors() 
         {
             this.SuspendLayout();
+
+            timeStepsFlowPanel.Visible = false;
 
             timeStepsFlowPanel.SuspendLayout();
             // remove old timestep editors
@@ -358,7 +375,7 @@ namespace WordGenerator.Controls
 
                     timestepEditors.Add(editor);
 
-
+                    editor.SuspendLayout();
 
                 }
 
@@ -367,8 +384,21 @@ namespace WordGenerator.Controls
             this.timeStepsFlowPanel.Controls.AddRange(timestepEditors.ToArray());
 
             this.ResumeLayout();
+
+            foreach (Control con in this.timeStepsFlowPanel.Controls) 
+                con.SuspendLayout();
+
             this.Invalidate();
             timeStepsFlowPanel.ResumeLayout();
+            timeStepsPanel.AutoScroll = false;
+            timeStepsFlowPanel.AutoSize = false;
+            timeStepsFlowPanel.Visible = true; 
+            timeStepsFlowPanel.AutoSize = true;
+            timeStepsPanel.AutoScroll = true;
+
+            foreach (Control con in this.timeStepsFlowPanel.Controls)
+                con.ResumeLayout();
+
         }
 
         public void registerTimestepEditorEvents(TimestepEditor editor)
@@ -934,7 +964,7 @@ namespace WordGenerator.Controls
                     {
                         string message = SequenceMode.applySequenceMode(Storage.sequenceData, Storage.sequenceData.CurrentMode);
 
-                        updateTimestepEditorsAfterSequenceModeChange();
+                        updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
 
                         //layoutTimestepEditors();
                         layoutTheRest();
@@ -946,6 +976,8 @@ namespace WordGenerator.Controls
                 }
             }
         }
+
+
 
 
 

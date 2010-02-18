@@ -33,6 +33,8 @@ namespace WordGenerator.Controls
             this.timestepName = new System.Windows.Forms.TextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.outputNowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.waitForRetriggerMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.insertTimestepBeforeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.insertTimestepAfterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,6 +58,9 @@ namespace WordGenerator.Controls
             this.unmark = new System.Windows.Forms.ToolStripMenuItem();
             this.markall = new System.Windows.Forms.ToolStripMenuItem();
             this.unmarkall = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.timestepGroupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.timestepGroupComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.enabledButton = new System.Windows.Forms.Button();
             this.analogSelector = new System.Windows.Forms.ComboBox();
             this.gpibSelector = new System.Windows.Forms.ComboBox();
@@ -64,10 +69,15 @@ namespace WordGenerator.Controls
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.pulseIndicator = new System.Windows.Forms.Label();
             this.waitLabel = new System.Windows.Forms.Label();
+            this.timestepGroupIndicatorLabel = new System.Windows.Forms.Label();
+            this.analogPictureBox = new System.Windows.Forms.PictureBox();
+            this.gpibPictureBox = new System.Windows.Forms.PictureBox();
+            this.rs232PictureBox = new System.Windows.Forms.PictureBox();
             this.durationEditor = new WordGenerator.Controls.VerticalParameterEditor();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.waitForRetriggerMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.analogPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gpibPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rs232PictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // timeStepNumber
@@ -78,6 +88,7 @@ namespace WordGenerator.Controls
             this.timeStepNumber.Size = new System.Drawing.Size(14, 13);
             this.timeStepNumber.TabIndex = 0;
             this.timeStepNumber.Text = "#";
+            this.timeStepNumber.Visible = false;
             // 
             // timestepName
             // 
@@ -87,6 +98,7 @@ namespace WordGenerator.Controls
             this.timestepName.Size = new System.Drawing.Size(84, 20);
             this.timestepName.TabIndex = 1;
             this.timestepName.Text = "Name";
+            this.timestepName.Visible = false;
             this.timestepName.TextChanged += new System.EventHandler(this.timestepName_TextChanged);
             // 
             // contextMenuStrip1
@@ -111,9 +123,11 @@ namespace WordGenerator.Controls
             this.mark,
             this.unmark,
             this.markall,
-            this.unmarkall});
+            this.unmarkall,
+            this.toolStripSeparator5,
+            this.timestepGroupToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(210, 386);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(210, 392);
             // 
             // outputNowToolStripMenuItem
             // 
@@ -121,6 +135,18 @@ namespace WordGenerator.Controls
             this.outputNowToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.outputNowToolStripMenuItem.Text = "<Output Now>";
             this.outputNowToolStripMenuItem.Click += new System.EventHandler(this.outputNowToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(206, 6);
+            // 
+            // waitForRetriggerMenuItem
+            // 
+            this.waitForRetriggerMenuItem.Name = "waitForRetriggerMenuItem";
+            this.waitForRetriggerMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.waitForRetriggerMenuItem.Text = "Enable Wait-for-retrigger";
+            this.waitForRetriggerMenuItem.Click += new System.EventHandler(this.waitForRetriggerMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -276,16 +302,38 @@ namespace WordGenerator.Controls
             this.unmarkall.Text = "Unmark All";
             this.unmarkall.Click += new System.EventHandler(this.unmarkall_Click);
             // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(206, 6);
+            // 
+            // timestepGroupToolStripMenuItem
+            // 
+            this.timestepGroupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.timestepGroupComboBox});
+            this.timestepGroupToolStripMenuItem.Name = "timestepGroupToolStripMenuItem";
+            this.timestepGroupToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.timestepGroupToolStripMenuItem.Text = "Timestep Group";
+            this.timestepGroupToolStripMenuItem.DropDownOpening += new System.EventHandler(this.timestepGroupToolStripMenuItem_DropDownOpening);
+            // 
+            // timestepGroupComboBox
+            // 
+            this.timestepGroupComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.timestepGroupComboBox.Name = "timestepGroupComboBox";
+            this.timestepGroupComboBox.Size = new System.Drawing.Size(121, 21);
+            this.timestepGroupComboBox.SelectedIndexChanged += new System.EventHandler(this.timestepGroupComboBox_SelectedIndexChanged);
+            // 
             // enabledButton
             // 
             this.enabledButton.BackColor = System.Drawing.Color.Green;
-            this.enabledButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.enabledButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.enabledButton.Location = new System.Drawing.Point(0, 38);
             this.enabledButton.Name = "enabledButton";
             this.enabledButton.Size = new System.Drawing.Size(84, 22);
             this.enabledButton.TabIndex = 2;
             this.enabledButton.Text = "Enabled";
             this.enabledButton.UseVisualStyleBackColor = false;
+            this.enabledButton.Visible = false;
             this.enabledButton.Click += new System.EventHandler(this.enabledButton_Click);
             // 
             // analogSelector
@@ -296,6 +344,7 @@ namespace WordGenerator.Controls
             this.analogSelector.Name = "analogSelector";
             this.analogSelector.Size = new System.Drawing.Size(84, 21);
             this.analogSelector.TabIndex = 5;
+            this.analogSelector.Visible = false;
             this.analogSelector.SelectedValueChanged += new System.EventHandler(this.analogSelector_SelectedValueChanged);
             this.analogSelector.DropDownClosed += new System.EventHandler(this.analogSelector_DropDownClosed);
             this.analogSelector.DropDown += new System.EventHandler(this.analogSelector_DropDown);
@@ -308,6 +357,7 @@ namespace WordGenerator.Controls
             this.gpibSelector.Name = "gpibSelector";
             this.gpibSelector.Size = new System.Drawing.Size(84, 21);
             this.gpibSelector.TabIndex = 6;
+            this.gpibSelector.Visible = false;
             this.gpibSelector.SelectedValueChanged += new System.EventHandler(this.gpibSelector_SelectedValueChanged);
             this.gpibSelector.DropDownClosed += new System.EventHandler(this.gpibSelector_DropDownClosed);
             this.gpibSelector.DropDown += new System.EventHandler(this.gpibSelector_DropDown);
@@ -320,6 +370,7 @@ namespace WordGenerator.Controls
             this.rs232Selector.Name = "rs232Selector";
             this.rs232Selector.Size = new System.Drawing.Size(84, 21);
             this.rs232Selector.TabIndex = 7;
+            this.rs232Selector.Visible = false;
             this.rs232Selector.SelectedValueChanged += new System.EventHandler(this.rs232Selector_SelectedValueChanged);
             this.rs232Selector.DropDownClosed += new System.EventHandler(this.rs232Selector_DropDownClosed);
             this.rs232Selector.DropDown += new System.EventHandler(this.rs232Selector_DropDown);
@@ -333,6 +384,7 @@ namespace WordGenerator.Controls
             this.showHideButton.TabIndex = 3;
             this.showHideButton.Text = "Hide";
             this.showHideButton.UseVisualStyleBackColor = true;
+            this.showHideButton.Visible = false;
             this.showHideButton.Click += new System.EventHandler(this.showHideButton_Click);
             // 
             // pulseIndicator
@@ -341,11 +393,11 @@ namespace WordGenerator.Controls
             this.pulseIndicator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.pulseIndicator.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pulseIndicator.ForeColor = System.Drawing.Color.Purple;
-            this.pulseIndicator.Location = new System.Drawing.Point(52, 0);
+            this.pulseIndicator.Location = new System.Drawing.Point(73, 0);
             this.pulseIndicator.Name = "pulseIndicator";
-            this.pulseIndicator.Size = new System.Drawing.Size(33, 12);
+            this.pulseIndicator.Size = new System.Drawing.Size(11, 12);
             this.pulseIndicator.TabIndex = 9;
-            this.pulseIndicator.Text = "Pulses";
+            this.pulseIndicator.Text = "P";
             this.pulseIndicator.Visible = false;
             // 
             // waitLabel
@@ -354,11 +406,59 @@ namespace WordGenerator.Controls
             this.waitLabel.BackColor = System.Drawing.Color.Red;
             this.waitLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.waitLabel.ForeColor = System.Drawing.Color.Purple;
-            this.waitLabel.Location = new System.Drawing.Point(28, 0);
+            this.waitLabel.Location = new System.Drawing.Point(59, 0);
             this.waitLabel.Name = "waitLabel";
-            this.waitLabel.Size = new System.Drawing.Size(24, 12);
+            this.waitLabel.Size = new System.Drawing.Size(14, 12);
             this.waitLabel.TabIndex = 10;
-            this.waitLabel.Text = "Wait";
+            this.waitLabel.Text = "W";
+            // 
+            // timestepGroupIndicatorLabel
+            // 
+            this.timestepGroupIndicatorLabel.AutoSize = true;
+            this.timestepGroupIndicatorLabel.BackColor = System.Drawing.Color.Blue;
+            this.timestepGroupIndicatorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F);
+            this.timestepGroupIndicatorLabel.ForeColor = System.Drawing.Color.White;
+            this.timestepGroupIndicatorLabel.Location = new System.Drawing.Point(47, 0);
+            this.timestepGroupIndicatorLabel.Name = "timestepGroupIndicatorLabel";
+            this.timestepGroupIndicatorLabel.Size = new System.Drawing.Size(12, 12);
+            this.timestepGroupIndicatorLabel.TabIndex = 11;
+            this.timestepGroupIndicatorLabel.Text = "G";
+            // 
+            // analogPictureBox
+            // 
+            this.analogPictureBox.Image = global::WordGenerator.Properties.Resources._continue;
+            this.analogPictureBox.Location = new System.Drawing.Point(0, 142);
+            this.analogPictureBox.Name = "analogPictureBox";
+            this.analogPictureBox.Size = new System.Drawing.Size(84, 21);
+            this.analogPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.analogPictureBox.TabIndex = 12;
+            this.analogPictureBox.TabStop = false;
+            this.analogPictureBox.Visible = false;
+            this.analogPictureBox.MouseEnter += new System.EventHandler(this.analogPictureBox_MouseEnter);
+            // 
+            // gpibPictureBox
+            // 
+            this.gpibPictureBox.Image = global::WordGenerator.Properties.Resources._continue;
+            this.gpibPictureBox.Location = new System.Drawing.Point(0, 168);
+            this.gpibPictureBox.Name = "gpibPictureBox";
+            this.gpibPictureBox.Size = new System.Drawing.Size(84, 21);
+            this.gpibPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.gpibPictureBox.TabIndex = 13;
+            this.gpibPictureBox.TabStop = false;
+            this.gpibPictureBox.Visible = false;
+            this.gpibPictureBox.MouseEnter += new System.EventHandler(this.gpibPictureBox_MouseEnter);
+            // 
+            // rs232PictureBox
+            // 
+            this.rs232PictureBox.Image = global::WordGenerator.Properties.Resources._continue;
+            this.rs232PictureBox.Location = new System.Drawing.Point(0, 194);
+            this.rs232PictureBox.Name = "rs232PictureBox";
+            this.rs232PictureBox.Size = new System.Drawing.Size(84, 21);
+            this.rs232PictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.rs232PictureBox.TabIndex = 14;
+            this.rs232PictureBox.TabStop = false;
+            this.rs232PictureBox.Visible = false;
+            this.rs232PictureBox.MouseEnter += new System.EventHandler(this.rs232PictureBox_MouseEnter);
             // 
             // durationEditor
             // 
@@ -367,25 +467,15 @@ namespace WordGenerator.Controls
             this.durationEditor.Size = new System.Drawing.Size(81, 49);
             this.durationEditor.TabIndex = 4;
             this.durationEditor.UnitSelectorVisibility = true;
+            this.durationEditor.Visible = false;
             this.durationEditor.updateGUI += new System.EventHandler(this.durationEditor_updateGUI);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(206, 6);
-            // 
-            // waitForRetriggerMenuItem
-            // 
-            this.waitForRetriggerMenuItem.Name = "waitForRetriggerMenuItem";
-            this.waitForRetriggerMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.waitForRetriggerMenuItem.Text = "Enable Wait-for-retrigger";
-            this.waitForRetriggerMenuItem.Click += new System.EventHandler(this.waitForRetriggerMenuItem_Click);
             // 
             // TimestepEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ContextMenuStrip = this.contextMenuStrip1;
+            this.Controls.Add(this.timestepGroupIndicatorLabel);
             this.Controls.Add(this.waitLabel);
             this.Controls.Add(this.pulseIndicator);
             this.Controls.Add(this.showHideButton);
@@ -396,11 +486,19 @@ namespace WordGenerator.Controls
             this.Controls.Add(this.durationEditor);
             this.Controls.Add(this.enabledButton);
             this.Controls.Add(this.timestepName);
+            this.Controls.Add(this.analogPictureBox);
+            this.Controls.Add(this.gpibPictureBox);
+            this.Controls.Add(this.rs232PictureBox);
+            this.DoubleBuffered = true;
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "TimestepEditor";
             this.Size = new System.Drawing.Size(86, 219);
+            this.Layout += new System.Windows.Forms.LayoutEventHandler(this.TimestepEditor_Layout);
             this.Enter += new System.EventHandler(this.TimestepEditor_Enter);
             this.contextMenuStrip1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.analogPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gpibPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rs232PictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -446,5 +544,12 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.Label waitLabel;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem waitForRetriggerMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem timestepGroupToolStripMenuItem;
+        private System.Windows.Forms.ToolStripComboBox timestepGroupComboBox;
+        private System.Windows.Forms.Label timestepGroupIndicatorLabel;
+        private System.Windows.Forms.PictureBox analogPictureBox;
+        private System.Windows.Forms.PictureBox gpibPictureBox;
+        private System.Windows.Forms.PictureBox rs232PictureBox;
     }
 }

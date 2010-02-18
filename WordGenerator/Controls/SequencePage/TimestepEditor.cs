@@ -12,6 +12,11 @@ namespace WordGenerator.Controls
     public partial class TimestepEditor : UserControl
     {
 
+        // This function makes use of some picture boxes with previews of UI elements, to save drawing time when
+        // many of these timestep editors are first created.  The previews are swapped out for real
+        // elements when the mouse moves over them.
+
+
         private bool marked;
 
         public bool Marked
@@ -26,7 +31,7 @@ namespace WordGenerator.Controls
         /// <summary>
         /// Call this function on each timestep editor after a change in the sequence mode, to have the editor update its enabled/disabled and show/hide
         /// </summary>
-        public void refreshButtonsAfterSequenceModeChange()
+        public void refreshButtonsAndGroupIndicator()
         {
             bool nowEnabled = (this.enabledButton.Text == "Enabled");
 
@@ -37,6 +42,16 @@ namespace WordGenerator.Controls
 
 
             layoutShowhideButton();
+
+            layoutGroupIndicatorLabel();
+        }
+
+        public void layoutGroupIndicatorLabel()
+        {
+            if (stepData.UsesTimestepGroup)
+                timestepGroupIndicatorLabel.Visible = true;
+            else
+                timestepGroupIndicatorLabel.Visible = false;
         }
 
         public void updateBackColor(bool currentlyOutput)
@@ -144,6 +159,7 @@ namespace WordGenerator.Controls
             {
                 this.analogSelector.SelectedItem = stepData.AnalogGroup;
                 this.analogSelector.BackColor = Color.White;
+                this.analogSelector.Visible = true;
             }
             else
             {
@@ -156,6 +172,7 @@ namespace WordGenerator.Controls
             {
                 this.gpibSelector.SelectedItem = stepData.GpibGroup;
                 this.gpibSelector.BackColor = Color.White;
+                this.gpibSelector.Visible = true;
             }
             else
             {
@@ -167,6 +184,7 @@ namespace WordGenerator.Controls
             {
                 rs232Selector.SelectedItem = stepData.rs232Group;
                 rs232Selector.BackColor = Color.White;
+                this.rs232Selector.Visible = true;
             }
             else
             {
@@ -178,6 +196,7 @@ namespace WordGenerator.Controls
             layoutEnableButton();
             layoutShowhideButton();
             updatePulsesIndicator();
+            layoutGroupIndicatorLabel();
             updateWaitForRetriggerIndicator();
         }
 
@@ -724,6 +743,84 @@ namespace WordGenerator.Controls
             }
         }
 
+        private void timestepGroupToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        {
+            
+            timestepGroupComboBox.Items.Clear();
+            timestepGroupComboBox.Items.Add("None.");
+            timestepGroupComboBox.Items.AddRange(Storage.sequenceData.TimestepGroups.ToArray());
+
+            if (stepData.MyTimestepGroup == null)
+            {
+                timestepGroupComboBox.SelectedItem = "None.";
+            }
+            else
+            {
+                timestepGroupComboBox.SelectedItem = stepData.MyTimestepGroup;
+            }
+        }
+
+        private void timestepGroupComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            stepData.MyTimestepGroup = timestepGroupComboBox.SelectedItem as TimestepGroup;
+            WordGenerator.mainClientForm.instance.sequencePage1.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
+        }
+
+        private void TimestepEditor_Layout(object sender, LayoutEventArgs e)
+        {
+
+        }
+
+
+
+        private void analogPictureBox_MouseEnter(object sender, EventArgs e)
+        {
+            analogSelector.Visible = true;
+            analogPictureBox.Visible = false;
+        }
+
+        private void rs232PictureBox_MouseEnter(object sender, EventArgs e)
+        {
+            rs232Selector.Visible = true;
+            rs232PictureBox.Visible = false;
+        }
+
+        private void gpibPictureBox_MouseEnter(object sender, EventArgs e)
+        {
+            gpibSelector.Visible = true;
+            gpibPictureBox.Visible = false;
+        }
+
+
+        // Optimization for faster loading of sequence files.
+        // all of the UI elements are invisible when the timestep editor is created,
+        // they are only made visible the first time the timestep editor is painted
+        // (thus out-of-view timestep editors only have their sub-elements first
+        // made visible when they are scrolled into view).
+        // This, in combination with the picture-box previews of the analog, rs232, and gpib comboboxes
+        // causes of sequence loading speedup by a factor of ~3.
+        bool firstPaint = true;
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            if (firstPaint)
+            {
+                this.SuspendLayout();
+                firstPaint = false;
+                timeStepNumber.Visible = true;
+                timestepName.Visible = true;
+                enabledButton.Visible = true;
+                showHideButton.Visible = true;
+                durationEditor.Visible = true;
+                if (!analogSelector.Visible)
+                    analogPictureBox.Visible = true;
+                if (!gpibSelector.Visible)
+                    gpibPictureBox.Visible = true;
+                if (!rs232Selector.Visible)
+                    rs232PictureBox.Visible = true;
+                this.ResumeLayout();
+            }
+            base.OnPaintBackground(e);
+        }
 
 
     }

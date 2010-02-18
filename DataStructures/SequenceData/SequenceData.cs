@@ -39,6 +39,21 @@ namespace DataStructures
             set { currentMode = value; }
         }
 
+        private List<TimestepGroup> timestepGroups;
+
+        public List<TimestepGroup> TimestepGroups
+        {
+            get
+            {
+                if (timestepGroups == null)
+                {
+                    timestepGroups = new List<TimestepGroup>();
+                }
+                return timestepGroups;
+            }
+            set { timestepGroups = value; }
+        }
+
         private List<SequenceMode> sequenceModes;
 
         public List<SequenceMode> SequenceModes
@@ -165,6 +180,7 @@ namespace DataStructures
 
 
         private string sequenceName;
+
 
         /// <summary>
         /// Returns the first enabled timestep, which is going to act as the dwell word for our purposes.
@@ -554,6 +570,7 @@ namespace DataStructures
             commonWaveforms.AddRange( this.usedCommonWaveforms().Keys );
             variables.AddRange(this.usedVariables().Keys);
             DigitalPulses.AddRange(this.usedPulses());
+            TimestepGroups.AddRange(this.usedTsGroups());
         }
 
         #endregion
@@ -587,6 +604,7 @@ namespace DataStructures
             gpibGroups.AddRange(insertMe.gpibGroups);
             variables.AddRange(insertMe.variables);
             DigitalPulses.AddRange(insertMe.DigitalPulses);
+            TimestepGroups.AddRange(insertMe.TimestepGroups);
 
             this.TimeSteps.InsertRange(insertIndex, insertMe.TimeSteps);
 
@@ -2334,6 +2352,18 @@ namespace DataStructures
                         if (!ans.Contains(dp.DigitalPulse))
                             ans.Add(dp.DigitalPulse);
                 }
+            }
+            return ans;
+        }
+
+        public List<TimestepGroup> usedTsGroups()
+        {
+            List<TimestepGroup> ans= new List<TimestepGroup>();
+            foreach (TimeStep st in TimeSteps)
+            {
+                if (st.MyTimestepGroup != null)
+                    if (!ans.Contains(st.MyTimestepGroup))
+                        ans.Add(st.MyTimestepGroup);
             }
             return ans;
         }

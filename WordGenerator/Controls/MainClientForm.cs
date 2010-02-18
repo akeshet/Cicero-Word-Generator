@@ -963,6 +963,22 @@ namespace WordGenerator
             SequenceData insertMe = Storage.SaveAndLoad.LoadSequenceWithFileDialog();
             if (insertMe != null)
             {
+
+                bool insertAsTimestepGroup = false;
+
+                insertAsTimestepGroup = (MessageBox.Show("Would you like a new Timestep Group to be created, and for all the inserted timesteps to be placed in that group?", "Insert as group?", MessageBoxButtons.YesNo) == DialogResult.Yes);
+                TimestepGroup newGroup;
+                if (insertAsTimestepGroup)
+                {
+                    MessageBox.Show("The inserted subsequence will be assigned to a new timestep group named Inserted Sequence.", "Inserting as a group.");
+                    newGroup = new TimestepGroup("Inserted Sequence.");
+                    Storage.sequenceData.TimestepGroups.Add(newGroup);
+                    foreach (TimeStep step in insertMe.TimeSteps)
+                    {
+                        step.MyTimestepGroup = newGroup;
+                    }
+                }
+
                 string response;
 
                 bool dupAnalogs = false ;
@@ -970,6 +986,7 @@ namespace WordGenerator
                 bool dupVariables=false;
                 bool dupgpibs=false;
                 bool duprs232s=false;
+                bool dupTsGs = false;
 
                 SequenceData seq = Storage.sequenceData;
 
@@ -1000,9 +1017,14 @@ namespace WordGenerator
                             dupgpibs = true;
 
                 foreach (RS232Group g1 in seq.RS232Groups)
-                    foreach (RS232Group g2 in seq.RS232Groups)
+                    foreach (RS232Group g2 in insertMe.RS232Groups)
                         if (g1.GroupName == g2.GroupName)
                             duprs232s = true;
+
+                foreach (TimestepGroup tg1 in seq.TimestepGroups)
+                    foreach (TimestepGroup tg2 in insertMe.TimestepGroups)
+                        if (tg1.TimestepGroupName == tg2.TimestepGroupName)
+                            dupTsGs = true;
 
                 if (markedSteps.Count == 0)
                 {
@@ -1019,15 +1041,18 @@ namespace WordGenerator
                 }
 
                 if (dupAnalogs)
-                    MessageBox.Show("The insertion operation has created duplicate Analog groups with identical names. To reduce confusion, it is recommended that the user now cleans these up.");
+                    MessageBox.Show("The insertion operation has created duplicate Analog groups with identical names. To reduce confusion, it is recommended that the user now cleans these up.", "Analog Group duplicates detected.");
                 if (dupgpibs)
-                    MessageBox.Show("The insertion operation has created duplicate GPIB groups with identical names. To reduce confusion, it is recommended that the user now cleans these up.");
+                    MessageBox.Show("The insertion operation has created duplicate GPIB groups with identical names. To reduce confusion, it is recommended that the user now cleans these up.", "GPIB Group duplicates detected.");
                 if (dupPulses)
-                    MessageBox.Show("The insertion operation has created duplicate Pulses with identical names. To reduce confusion, it is recommended that the user now cleans these up.");
+                    MessageBox.Show("The insertion operation has created duplicate Pulses with identical names. To reduce confusion, it is recommended that the user now cleans these up.", "Pulse duplicates detected.");
                 if (duprs232s)
-                    MessageBox.Show("The insertion operation has created duplicate RS232 groups with identical names. To reduce confusion, it is recommended that the user now cleans these up.");
+                    MessageBox.Show("The insertion operation has created duplicate RS232 groups with identical names. To reduce confusion, it is recommended that the user now cleans these up.", "RS232 Group duplicates detected.");
                 if (dupVariables)
-                    MessageBox.Show("The insertion operation has created duplicate Variables with identical names. To reduce confusion, it is recommended that the user now cleans these up.");
+                    MessageBox.Show("The insertion operation has created duplicate Variables with identical names. To reduce confusion, it is recommended that the user now cleans these up.", "Variable duplicates detected.");
+                if (dupTsGs)
+                    MessageBox.Show("The insertion operation has created duplicate Timestep Groups with identical names. To reduce confusion, it is recommended that the user now cleans these up.", "Timestep Group duplicates detected.");
+
 
 
 
@@ -1104,7 +1129,205 @@ namespace WordGenerator
 
 	        }
 
+        private void timestepGroupsToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        {
+            timestepGroupsToolStripMenuItem.DropDownItems.Clear();
+            foreach (TimestepGroup tsg in Storage.sequenceData.TimestepGroups)
+            {
+                ToolStripMenuItem item = new ToolStripMenuItem();
+                
+                item.Tag = tsg;
+                item.Checked = tsg.GroupEnabled;
+                item.CheckOnClick = true;
+                item.Text = tsg.TimestepGroupName;
+                item.CheckedChanged += new EventHandler(timestepGroupItemCheckChanged);
 
+                ToolStripTextBox nameBox = new ToolStripTextBox();
+                nameBox.Tag = item;
+                nameBox.Text = tsg.TimestepGroupName;
+                nameBox.TextChanged += new EventHandler(nameEditBox_TextChanged);
 
+                ToolStripMenuItem deleteGroup = new ToolStripMenuItem();
+                deleteGroup.Text = "Delete group.";
+                deleteGroup.Tag = tsg;
+                deleteGroup.Click += new EventHandler(deleteTimestepGroupClick);
+
+                ToolStripSeparator sep = new ToolStripSeparator();
+
+                ToolStripMenuItem usageCount = new ToolStripMenuItem();
+                int i=0;
+                foreach (TimeStep step in Storage.sequenceData.TimeSteps)
+                {
+                    if (step.MyTimestepGroup == tsg)
+                        i++;
+                }
+                usageCount.Text = i.ToString() +  " timestep(s) assigned to this group.";
+
+                ToolStripMenuItem deleteTimestepsAndGroup = new ToolStripMenuItem();
+                if (i == 0)
+                    deleteTimestepsAndGroup.Enabled = false;
+                deleteTimestepsAndGroup.Tag = tsg;
+                deleteTimestepsAndGroup.Text = "Delete group and member timesteps.";
+                deleteTimestepsAndGroup.Click += new EventHandler(deleteTimestepsAndGroup_Click);
+                
+
+                item.DropDownItems.Add(nameBox);
+                item.DropDownItems.Add(deleteGroup);
+                item.DropDownItems.Add(sep);
+                item.DropDownItems.Add(usageCount);
+                item.DropDownItems.Add(deleteTimestepsAndGroup);
+
+                timestepGroupsToolStripMenuItem.DropDownItems.Add(item);
+            }
+            timestepGroupsToolStripMenuItem.DropDownItems.Add(timestepGroupMenuSeparator);
+            timestepGroupsToolStripMenuItem.DropDownItems.Add(createNewTimestepGroupButton);
+            timestepGroupsToolStripMenuItem.DropDownItems.Add(assignAllMarkedTimestepsToGroupToolStripMenuItem);
+            if (markedTimesteps().Count == 0)
+            {
+                assignAllMarkedTimestepsToGroupToolStripMenuItem.Enabled = false;
+                assignMarkedStepsToGroupComboBox.Enabled = false;
+                assignToolStripMenuItemAssignButton.Enabled = false;
+            }
+            else
+            {
+                assignAllMarkedTimestepsToGroupToolStripMenuItem.Enabled = true;
+                assignMarkedStepsToGroupComboBox.Enabled = true;
+                assignToolStripMenuItemAssignButton.Enabled = true;
+            }
+            
+        }
+
+        void deleteTimestepsAndGroup_Click(object sender, EventArgs e)
+        {
+            bool proceed = (MessageBox.Show("This operation will delete both the selected timestep group, and all timesteps that are assigned to it. Are you sure you want to proceed?", "Delete group and its members?", MessageBoxButtons.YesNo)==DialogResult.Yes);
+            if (proceed)
+            {
+                ToolStripMenuItem tsm = sender as ToolStripMenuItem;
+                TimestepGroup tsg = tsm.Tag as TimestepGroup;
+                if (tsg != null)
+                {
+                    List<TimeStep> removeList = new List<TimeStep>();
+                    foreach (TimeStep step in Storage.sequenceData.TimeSteps)
+                    {
+                        if (step.MyTimestepGroup == tsg)
+                        {
+                            removeList.Add(step);
+                        }
+                    }
+
+                    foreach (TimeStep step in removeList)
+                    {
+                        Storage.sequenceData.TimeSteps.Remove(step);
+                    }
+
+                    Storage.sequenceData.TimestepGroups.Remove(tsg);
+                    RefreshSequenceDataToUI(Storage.sequenceData);
+                    MessageBox.Show("Timestep group and member timesteps deleted.");
+                }
+                else
+                {
+                    MessageBox.Show("Error: null timestep group. Operation cancelled.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Operation cancelled.");
+            }
+
+        }
+
+        void deleteTimestepGroupClick(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to delete this timestep group?", "Delete timestep group?", MessageBoxButtons.YesNo) != DialogResult.Yes)
+                return;
+
+            ToolStripMenuItem tsmi = sender as ToolStripMenuItem;
+            TimestepGroup tsg = tsmi.Tag as TimestepGroup;
+
+            bool groupUsed = false;
+            bool delAnyway = false;
+            foreach (TimeStep step in Storage.sequenceData.TimeSteps)
+            {
+                if (step.MyTimestepGroup == tsg)
+                {
+                    groupUsed = true;
+                    break;
+                }
+            }
+
+            if (groupUsed)
+            {
+                delAnyway = (MessageBox.Show("The group you are about to delete is in use. Are you sure you want to delete it?", "Delete used timestep group?", MessageBoxButtons.YesNo) == DialogResult.Yes);
+            }
+
+            if ((!groupUsed) || delAnyway)
+            {
+                foreach (TimeStep step in Storage.sequenceData.TimeSteps)
+                {
+                    if (step.MyTimestepGroup == tsg)
+                    {
+                        step.MyTimestepGroup = null;
+                    }
+                }
+                Storage.sequenceData.TimestepGroups.Remove(tsg);
+
+                MessageBox.Show("Timestep group deleted.");
+                sequencePage1.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
+            }
+
+        }
+
+        void nameEditBox_TextChanged(object sender, EventArgs e)
+        {
+            ToolStripTextBox tstb = sender as ToolStripTextBox;
+            ToolStripMenuItem tsmi = tstb.Tag as ToolStripMenuItem;
+            TimestepGroup tsg = tsmi.Tag as TimestepGroup;
+            tsg.TimestepGroupName = tstb.Text;
+            tsmi.Text = tstb.Text;
+        }
+
+        void timestepGroupItemCheckChanged(object sender, EventArgs e)
+        {
+            ToolStripMenuItem tsm = sender as ToolStripMenuItem;
+            TimestepGroup tsg = tsm.Tag as TimestepGroup;
+            tsg.GroupEnabled = tsm.Checked;
+            this.sequencePage1.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
+            
+        }
+
+        private void createNewTimestepGroupButton_Click(object sender, EventArgs e)
+        {
+            Storage.sequenceData.TimestepGroups.Add(new TimestepGroup("New timestep group"));
+        }
+
+        private void assignAllMarkedTimestepsToGroupToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        {
+            assignMarkedStepsToGroupComboBox.Items.Clear();
+            assignMarkedStepsToGroupComboBox.Items.Add("None.");
+            assignMarkedStepsToGroupComboBox.Items.AddRange(Storage.sequenceData.TimestepGroups.ToArray());
+            assignMarkedStepsToGroupComboBox.SelectedItem = "None.";
+        }
+
+        private void assignToolStripMenuItemAssignButton_Click(object sender, EventArgs e)
+        {
+            TimestepGroup tsg = assignMarkedStepsToGroupComboBox.SelectedItem as TimestepGroup;
+            List<TimeStep> markedsts = markedTimesteps();
+
+            int i = 0;
+            foreach (TimeStep step in markedsts)
+            {
+                step.MyTimestepGroup = tsg;
+                i++;
+            }
+            if (tsg != null)
+            {
+                MessageBox.Show("Timestep group " + tsg.TimestepGroupName + " assigned to " + i + " marked timestep(s).");
+            }
+            else
+            {
+                MessageBox.Show("No Timestep group assigned to " + i + " marked timestep(s).");
+            }
+            sequencePage1.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
+        }
     }
 }

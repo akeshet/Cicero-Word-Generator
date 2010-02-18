@@ -40,6 +40,26 @@ namespace DataStructures
             return false;
         }
 
+        private TimestepGroup myTimestepGroup;
+
+        public TimestepGroup MyTimestepGroup
+        {
+            get { return myTimestepGroup; }
+            set { myTimestepGroup = value; }
+        }
+
+        private bool usesTimestepGroup;
+
+        public bool UsesTimestepGroup
+        {
+            get
+            {
+                if (MyTimestepGroup == null)
+                    return false;
+                return true;
+            }
+        }
+
 
         // 0 for unassigned
         private char hotKeyCharacter;
@@ -55,8 +75,21 @@ namespace DataStructures
         [Category("Global"), Description("Whether or not the timestep is enabled.")]
         public bool StepEnabled
         {
-            get { return stepEnabled; }
-            set { stepEnabled = value; }
+            get
+            {
+                if (UsesTimestepGroup)
+                    return (stepEnabled && MyTimestepGroup.GroupEnabled);
+                else
+                    return stepEnabled;
+            }
+            set
+            {
+                // Ignore outside modifications to enabled/disabled state if overridden by timestep group.
+                if (UsesTimestepGroup)
+                    if (!MyTimestepGroup.GroupEnabled)
+                        return;
+                stepEnabled = value;
+            }
         }
 
         private bool stepHidden;
@@ -64,8 +97,21 @@ namespace DataStructures
         [Category("Global"), Description("Whether or the the timestep is hidden.")]
         public bool StepHidden
         {
-            get { return stepHidden; }
-            set { stepHidden = value; }
+            get
+            {
+                if (UsesTimestepGroup)
+                    return (stepHidden || MyTimestepGroup.GroupHidden);
+                else
+                    return stepHidden;
+            }
+            set
+            {
+                // Ignore outside modifications to hidden/visible state if overridden by timestep group.
+                if (UsesTimestepGroup)
+                    if (!MyTimestepGroup.GroupEnabled)
+                        return;
+                stepHidden = value;
+            }
         }
 
         private bool waitForRetrigger;

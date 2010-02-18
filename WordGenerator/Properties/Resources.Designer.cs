@@ -60,6 +60,13 @@ namespace WordGenerator.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap _continue {
+            get {
+                object obj = ResourceManager.GetObject("continue", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to (c) 2008  Aviv Keshet  (MIT),  Free software under GNU General Public License..
         /// </summary>
@@ -70,7 +77,7 @@ namespace WordGenerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Feb 10, 2010.
+        ///   Looks up a localized string similar to Feb 18, 2010.
         /// </summary>
         internal static string BuildDate {
             get {
@@ -129,7 +136,7 @@ namespace WordGenerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1.35.
+        ///   Looks up a localized string similar to 1.36.
         /// </summary>
         internal static string VersionString {
             get {

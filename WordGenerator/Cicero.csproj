@@ -68,6 +68,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\AlternateFlowLayoutPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\Dialogs\FormulaHelpDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -559,6 +562,7 @@
   <ItemGroup>
     <None Include="Resources\CiceroSplash.jpg" />
     <Content Include="Resources\cicero_icon.ico" />
+    <Content Include="Resources\continue.bmp" />
     <None Include="Resources\Fortunes.txt" />
     <None Include="Resources\PulseIcon.ico" />
     <BaseApplicationManifest Include="Properties\app.manifest" />
