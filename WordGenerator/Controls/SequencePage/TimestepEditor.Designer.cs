@@ -426,7 +426,7 @@ namespace WordGenerator.Controls
             // 
             // analogPictureBox
             // 
-            this.analogPictureBox.Image = global::WordGenerator.Properties.Resources._continue;
+            this.analogPictureBox.Image = global::WordGenerator.Properties.Resources.continueImage;
             this.analogPictureBox.Location = new System.Drawing.Point(0, 142);
             this.analogPictureBox.Name = "analogPictureBox";
             this.analogPictureBox.Size = new System.Drawing.Size(84, 21);
@@ -438,7 +438,7 @@ namespace WordGenerator.Controls
             // 
             // gpibPictureBox
             // 
-            this.gpibPictureBox.Image = global::WordGenerator.Properties.Resources._continue;
+            this.gpibPictureBox.Image = global::WordGenerator.Properties.Resources.continueImage;
             this.gpibPictureBox.Location = new System.Drawing.Point(0, 168);
             this.gpibPictureBox.Name = "gpibPictureBox";
             this.gpibPictureBox.Size = new System.Drawing.Size(84, 21);
@@ -450,7 +450,7 @@ namespace WordGenerator.Controls
             // 
             // rs232PictureBox
             // 
-            this.rs232PictureBox.Image = global::WordGenerator.Properties.Resources._continue;
+            this.rs232PictureBox.Image = global::WordGenerator.Properties.Resources.continueImage;
             this.rs232PictureBox.Location = new System.Drawing.Point(0, 194);
             this.rs232PictureBox.Name = "rs232PictureBox";
             this.rs232PictureBox.Size = new System.Drawing.Size(84, 21);

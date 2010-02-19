@@ -60,13 +60,6 @@ namespace WordGenerator.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap _continue {
-            get {
-                object obj = ResourceManager.GetObject("continue", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         /// <summary>
         ///   Looks up a localized string similar to (c) 2008  Aviv Keshet  (MIT),  Free software under GNU General Public License..
         /// </summary>
@@ -77,7 +70,7 @@ namespace WordGenerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Feb 18, 2010.
+        ///   Looks up a localized string similar to Feb 19, 2010.
         /// </summary>
         internal static string BuildDate {
             get {
@@ -95,6 +88,13 @@ namespace WordGenerator.Properties {
         internal static System.Drawing.Bitmap CiceroSplash {
             get {
                 object obj = ResourceManager.GetObject("CiceroSplash", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap continueImage {
+            get {
+                object obj = ResourceManager.GetObject("continueImage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -136,7 +136,7 @@ namespace WordGenerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1.36.
+        ///   Looks up a localized string similar to 1.37.
         /// </summary>
         internal static string VersionString {
             get {
