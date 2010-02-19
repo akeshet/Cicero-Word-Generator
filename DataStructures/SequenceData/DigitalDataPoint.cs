@@ -18,6 +18,18 @@ namespace DataStructures
             set { digitalPulse = value; }
         }
 
+        private bool digitalContinue;
+
+        /// <summary>
+        /// Value is true if this digital point should, instead of following ManualValue, get its value from
+        /// the previous digital word.
+        /// </summary>
+        public bool DigitalContinue
+        {
+            get { return digitalContinue; }
+            set { digitalContinue = value; }
+        }
+
         /// <summary>
         /// Returns true if DigitalPulse is not null.
         /// </summary>
@@ -42,6 +54,7 @@ namespace DataStructures
             // parameter is a struct, so this is a copy operation
             this.parameter = copyMe.parameter;
             this.digitalPulse = copyMe.digitalPulse;
+            this.DigitalContinue = copyMe.digitalContinue;
         }
 
 

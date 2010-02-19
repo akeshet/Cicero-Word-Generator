@@ -851,7 +851,44 @@ namespace DataStructures
                 {
                     if (TimeSteps[timeStep].DigitalData.ContainsKey(digitalID))
                     {
-                        val = TimeSteps[timeStep].DigitalData[digitalID].getValue();
+                        DigitalDataPoint dp = TimeSteps[timeStep].DigitalData[digitalID];
+                        if (!dp.DigitalContinue)
+                        {
+                            val = TimeSteps[timeStep].DigitalData[digitalID].getValue();
+                        }
+                        else  // this digital value is a "continue" value, so, we have to go backwards in time until we find 
+                        // what value to continue from
+                        {
+                            int checkStep = timeStep - 1;
+                            val = false; // if we hunt all the way to the first timestep with no answer, the default answer is false
+                            while (checkStep >= 0)
+                            {
+                                if (TimeSteps[checkStep].StepEnabled)
+                                {
+                                    if (TimeSteps[checkStep].DigitalData.ContainsKey(digitalID))
+                                    {
+                                        if (TimeSteps[checkStep].DigitalData[digitalID].DigitalContinue)
+                                        {
+                                            checkStep--; // timestep had another continue keep hunting backwards...
+                                        }
+                                        else
+                                        {
+                                            val = TimeSteps[checkStep].DigitalData[digitalID].getValue();
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    checkStep--; // timestep was disabled, keep looking
+                                }
+                            }
+                        }
+
                     }
                 }
                 ans.digitalValues.Add(digitalID, val);
@@ -1110,7 +1147,7 @@ namespace DataStructures
             int nSamples = this.nSamples(timestepSize);
 
 
-            ans[0] = dwellWord().getDigitalValue(digitalID);
+            ans[0] = dwellWord().getDigitalValue(digitalID, TimeSteps, 0);
 
             int currentSample = 0;
             int currentStep = findNextEnabledTimestep(-1);
@@ -1123,7 +1160,7 @@ namespace DataStructures
 
                 int nStepSamples = 0;
                 computeNSamplesAndRemainderTime(ref nStepSamples, ref remainderTime, TimeSteps[currentStep].StepDuration.getBaseValue(), timestepSize);
-                bool value = TimeSteps[currentStep].getDigitalValue(digitalID);
+                bool value = TimeSteps[currentStep].getDigitalValue(digitalID, TimeSteps, currentStep);
                 fillBoolArray(ans, value, currentSample, nStepSamples);
                 currentSample += nStepSamples;
                 currentStep = findNextEnabledTimestep(currentStep);
@@ -1208,7 +1245,7 @@ namespace DataStructures
                 if (TimeSteps[stepID].StepEnabled)
                 {
                     TimeStep currentStep = TimeSteps[stepID];
-                    bool channelValue = TimeSteps[stepID].getDigitalValue(digitalID);
+                    bool channelValue = TimeSteps[stepID].getDigitalValue(digitalID, TimeSteps, stepID);
                     int nSegmentSamples = 0;
                     if (!timebaseSegments.ContainsKey(currentStep))
                         throw new Exception("No timebase segment for timestep " + currentStep.ToString());
@@ -1225,7 +1262,7 @@ namespace DataStructures
                 }
             }
 
-            ans[currentSample] = dwellWord().getDigitalValue(digitalID);
+            ans[currentSample] = dwellWord().getDigitalValue(digitalID, TimeSteps, 0);
 
             if (this.digitalChannelUsesPulses(digitalID))
             {
@@ -1895,10 +1932,10 @@ namespace DataStructures
 
             bool [] ans = new bool[nSamples];
 
-            ans[0] = dwellWord().getDigitalValue(digitalID);
+            ans[0] = dwellWord().getDigitalValue(digitalID, TimeSteps, 0);
 
             currentSample++;
-
+            int stepID = 0;
             foreach (TimeStep step in TimeSteps)
             {
                 if (step.StepEnabled)
@@ -1907,7 +1944,7 @@ namespace DataStructures
 
                     // if the digital is true, fill this part of the buffer with trues. If not, 
                     // no need to do anything as the inital value of the array is false.
-                    if (step.getDigitalValue(digitalID))
+                    if (step.getDigitalValue(digitalID, TimeSteps, stepID))
                     {
                         for (int j = 0; j < nStepSamples; j++)
                         {
@@ -1916,10 +1953,11 @@ namespace DataStructures
                     }
                     currentSample += nStepSamples;
                 }
+                stepID++;
             }
 
             // fill the rest of the buffer with dwell values
-            if (dwellWord().getDigitalValue(digitalID))
+            if (dwellWord().getDigitalValue(digitalID, TimeSteps, 0))
             {
                 for (int j = currentSample; j < nSamples; j++)
                 {

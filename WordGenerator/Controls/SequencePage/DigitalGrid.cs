@@ -7,6 +7,7 @@ using System.Drawing.Drawing2D;
 using wgControlLibrary;
 using DataStructures;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 
 namespace WordGenerator.Controls
 {
@@ -314,14 +315,34 @@ namespace WordGenerator.Controls
             }
         }
 
+
+        [DllImport("user32.dll")]
+        static extern bool GetKeyboardState(byte[] lpKeyState);
+
+        private bool CTRL_is_pressed()
+        {
+            byte[] answerBuffer = new byte[256];
+            GetKeyboardState(answerBuffer);
+            return (answerBuffer[0x11]&128)!=0; // 0x11 is the code for VK_CONTROL
+        }
+
         protected override void OnMouseUp(MouseEventArgs e)
         {
             if (!WordGenerator.mainClientForm.instance.lockDigitalCheckBox.Checked)
             {
                 //          base.OnMouseUp(e);
 
+                
+
                 if (e.Button == MouseButtons.Left)
                 {
+                    bool useContinue = false;
+
+                    if (CTRL_is_pressed())
+                    {
+                        useContinue = true;
+                    }
+
                     if (mouseClicking)
                     {
                         mouseClicking = false;
@@ -334,8 +355,27 @@ namespace WordGenerator.Controls
                         {
                             DigitalDataPoint dp = cellPointToDigitalDataPoint(new Point(col, clickStartPoint.Y));
                             if (dp != null)
+                            {
                                 if (dp.variable == null)
-                                    dp.ManualValue = !dp.ManualValue;
+                                {
+                                    if (useContinue)
+                                    {
+                                        dp.DigitalContinue = true;
+                                    }
+                                    else
+                                    {
+                                        if (dp.DigitalContinue)
+                                        {
+                                            dp.DigitalContinue = false;
+                                            dp.ManualValue = false;
+                                        }
+                                        else
+                                        {
+                                            dp.ManualValue = !dp.ManualValue;
+                                        }
+                                    }
+                                }
+                            }
                         }
 
 
@@ -447,6 +487,12 @@ namespace WordGenerator.Controls
         private Brush trueBrush(int row)
         {
             return new SolidBrush(TrueBrushColors[row % TrueBrushColors.Count]);
+        }
+
+        private Brush continueBrush(int row)
+        {
+            return new HatchBrush(HatchStyle.NarrowHorizontal, TrueBrushColors[row % TrueBrushColors.Count], Color.Tan);
+           // return new HatchBrush(HatchStyle.DarkUpwardDiagonal, TrueBrushColors[row % TrueBrushColors.Count], Color.Tan);
         }
 
         private static readonly Brush falseBrush = Brushes.Tan;
@@ -655,22 +701,27 @@ namespace WordGenerator.Controls
                 return;
             }
 
-            if (dp.variable == null) // manual control;
+            if (dp.variable == null)
             {
                 Brush br;
-                if (dp.ManualValue)
+                if (dp.DigitalContinue)
+                {
+                    br = continueBrush(p.Y);
+                }
+                else if (dp.ManualValue)
                 {
                     br = trueBrush(p.Y);
-                   // paintCell(g, p, trueBrush(p.Y), outlinePen);
+                    // paintCell(g, p, trueBrush(p.Y), outlinePen);
                 }
                 else
                 {
                     br = falseBrush;
-                   // paintCell(g, p, falseBrush, outlinePen);
+                    // paintCell(g, p, falseBrush, outlinePen);
                     //painCellRectInternal(g, p, new Pen(trueBrush(p.Y)));
                     //drawCellTopAndBottomInternalLines(g, p, new Pen(trueBrush(p.Y)));
                 }
                 paintCell(g, p, br, outlinePen);
+
             }
             else
             {
@@ -690,7 +741,7 @@ namespace WordGenerator.Controls
         {
             painCellRectInternal(g, p, pulseOutlintPen);
             Brush textBrush = Brushes.White;
-            if (!dp.getValue())
+            if (!dp.getValue() && !dp.DigitalContinue)
             {
                 textBrush = Brushes.Black;
             }

@@ -197,13 +197,57 @@ namespace DataStructures
         /// </summary>
         /// <param name="digitalChannelID"></param>
         /// <returns></returns>
-        public bool getDigitalValue(int digitalChannelID)
+        public bool getDigitalValue(int digitalChannelID, List<TimeStep> allSteps, int myIndex)
         {
             if (DigitalData == null)
                 return false;
             if (!DigitalData.ContainsKey(digitalChannelID))
                 return false;
-            return DigitalData[digitalChannelID].getValue();
+            if (DigitalData[digitalChannelID].DigitalContinue) // this will be slightly more complicated, we need to look back in time
+            {
+                return calculateDigitalContinueValue(digitalChannelID, allSteps, myIndex);
+            }
+            else
+            {
+                return DigitalData[digitalChannelID].getValue();
+            }
+        }
+
+        private bool calculateDigitalContinueValue(int digitalChannelID, List<TimeStep> allSteps, int myIndex)
+        {
+            if (allSteps[myIndex] != this)
+                throw new Exception("Error when attempting to calculate digital continue value.");
+            int checkStep = myIndex - 1;
+            bool val = false;
+            while (checkStep >= 0)
+            {
+                TimeStep st = allSteps[checkStep];
+                if (!st.StepEnabled)
+                {
+                    checkStep--;
+                    continue;
+                }
+
+                if (!st.digitalData.ContainsKey(digitalChannelID))
+                {
+                    val = false;
+                    break;
+                }
+
+                if (st.digitalData.ContainsKey(digitalChannelID))
+                {
+                    if (st.digitalData[digitalChannelID].DigitalContinue)
+                    {
+                        checkStep--;
+                        continue;
+                    }
+
+                    val = st.digitalData[digitalChannelID].getValue();
+                    break;
+
+                }
+            }
+            return val;
         }
 
         private Dictionary<int, DigitalDataPoint> digitalData;
@@ -239,6 +283,7 @@ namespace DataStructures
             this.StepEnabled = duplicateMe.StepEnabled;
             this.StepHidden = duplicateMe.StepHidden;
             this.StepName = "Copy of " + duplicateMe.StepName;
+            this.MyTimestepGroup = duplicateMe.MyTimestepGroup;
         }
 
         public override string ToString()

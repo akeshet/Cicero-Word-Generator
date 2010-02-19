@@ -320,6 +320,8 @@ namespace DataStructures
             diffs|=CompareBools(preString + "Enabled/Disabled: ", a.StepEnabled, b.StepEnabled, ans);
             diffs|=CompareBools(preString + "Hidden/Shown: ", a.StepHidden, b.StepHidden, ans);
             diffs |= CompareBools(preString + "Wait/Don't wait for trigger: ", a.WaitForRetrigger, b.WaitForRetrigger, ans);
+            diffs |= CompareObjectStrings(preString + "Timestep group name: ", a.MyTimestepGroup, b.MyTimestepGroup, ans);
+
 
             diffs|=CompareDictionaries<int, DigitalDataPoint>(preString + "Digital Values: ", a.DigitalData, b.DigitalData, ans, CompareDigitalDataPoint );
 
@@ -358,6 +360,7 @@ namespace DataStructures
             }
 
             diffs |= CompareBools(prestring + "manual value ", a.ManualValue, b.ManualValue, ans);
+            diffs |= CompareBools(prestring + "continue value ", a.DigitalContinue, b.DigitalContinue, ans);
             return diffs;
         }
 
@@ -444,6 +447,25 @@ namespace DataStructures
         private static bool CompareBools(string prestring, bool a, bool b, List<SequenceDifference> ans)
         {
             if (a != b)
+            {
+                ans.Add(new SequenceDifference(prestring + "differ."));
+                return true;
+            }
+            return false;
+        }
+
+        private static bool CompareObjectStrings(string prestring, object a, object b, List<SequenceDifference> ans)
+        {
+            if ((a == null&&b!=null) || (a!=null&&b==null))
+            {
+                ans.Add(new SequenceDifference(prestring + "one null, other not."));
+                return true;
+            }
+
+            if (a == null)
+                return false;
+
+            if (a.ToString() != b.ToString())
             {
                 ans.Add(new SequenceDifference(prestring + "differ."));
                 return true;
