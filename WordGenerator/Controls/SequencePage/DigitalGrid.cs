@@ -804,6 +804,12 @@ namespace WordGenerator.Controls
             }
         }
 
+        public void forceRepaint()
+        {
+            this.destroyBuffer();
+            this.Invalidate();
+        }
+
         private void repaintBuffer(PaintEventArgs e)
         {
             int currentCol = 0;

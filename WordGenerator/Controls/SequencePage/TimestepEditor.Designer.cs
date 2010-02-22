@@ -74,6 +74,8 @@ namespace WordGenerator.Controls
             this.gpibPictureBox = new System.Windows.Forms.PictureBox();
             this.rs232PictureBox = new System.Windows.Forms.PictureBox();
             this.durationEditor = new WordGenerator.Controls.VerticalParameterEditor();
+            this.setDigitalsToContinue = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.analogPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gpibPictureBox)).BeginInit();
@@ -124,53 +126,55 @@ namespace WordGenerator.Controls
             this.unmark,
             this.markall,
             this.unmarkall,
+            this.toolStripSeparator6,
+            this.setDigitalsToContinue,
             this.toolStripSeparator5,
             this.timestepGroupToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(210, 392);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(250, 442);
             // 
             // outputNowToolStripMenuItem
             // 
             this.outputNowToolStripMenuItem.Name = "outputNowToolStripMenuItem";
-            this.outputNowToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.outputNowToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.outputNowToolStripMenuItem.Text = "<Output Now>";
             this.outputNowToolStripMenuItem.Click += new System.EventHandler(this.outputNowToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(206, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(246, 6);
             // 
             // waitForRetriggerMenuItem
             // 
             this.waitForRetriggerMenuItem.Name = "waitForRetriggerMenuItem";
-            this.waitForRetriggerMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.waitForRetriggerMenuItem.Size = new System.Drawing.Size(249, 22);
             this.waitForRetriggerMenuItem.Text = "Enable Wait-for-retrigger";
             this.waitForRetriggerMenuItem.Click += new System.EventHandler(this.waitForRetriggerMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(206, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(246, 6);
             // 
             // insertTimestepBeforeToolStripMenuItem
             // 
             this.insertTimestepBeforeToolStripMenuItem.Name = "insertTimestepBeforeToolStripMenuItem";
-            this.insertTimestepBeforeToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.insertTimestepBeforeToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.insertTimestepBeforeToolStripMenuItem.Text = "Insert Timestep Before";
             this.insertTimestepBeforeToolStripMenuItem.Click += new System.EventHandler(this.insertTimestepBeforeToolStripMenuItem_Click);
             // 
             // insertTimestepAfterToolStripMenuItem
             // 
             this.insertTimestepAfterToolStripMenuItem.Name = "insertTimestepAfterToolStripMenuItem";
-            this.insertTimestepAfterToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.insertTimestepAfterToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.insertTimestepAfterToolStripMenuItem.Text = "Insert Timestep After";
             this.insertTimestepAfterToolStripMenuItem.Click += new System.EventHandler(this.insertTimestepAfterToolStripMenuItem_Click);
             // 
             // duplicateToolStripMenuItem
             // 
             this.duplicateToolStripMenuItem.Name = "duplicateToolStripMenuItem";
-            this.duplicateToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.duplicateToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.duplicateToolStripMenuItem.Text = "Duplicate Timestep";
             this.duplicateToolStripMenuItem.Click += new System.EventHandler(this.duplicateToolStripMenuItem_Click);
             // 
@@ -180,7 +184,7 @@ namespace WordGenerator.Controls
             this.toolStripMenuItem2,
             this.moveToTimestepCombobox});
             this.moveTimestepToolStripMenuItem.Name = "moveTimestepToolStripMenuItem";
-            this.moveTimestepToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.moveTimestepToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.moveTimestepToolStripMenuItem.Text = "Move timestep";
             // 
             // toolStripMenuItem2
@@ -199,14 +203,14 @@ namespace WordGenerator.Controls
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(206, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(246, 6);
             // 
             // setTimestepHotkeyToolStripMenuItem
             // 
@@ -214,7 +218,7 @@ namespace WordGenerator.Controls
             this.toolStripMenuItem1,
             this.hotkeyEntryTextBox});
             this.setTimestepHotkeyToolStripMenuItem.Name = "setTimestepHotkeyToolStripMenuItem";
-            this.setTimestepHotkeyToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.setTimestepHotkeyToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.setTimestepHotkeyToolStripMenuItem.Text = "Set timestep hotkey";
             // 
             // toolStripMenuItem1
@@ -232,19 +236,19 @@ namespace WordGenerator.Controls
             // removeTimestepHotkeyToolStripMenuItem
             // 
             this.removeTimestepHotkeyToolStripMenuItem.Name = "removeTimestepHotkeyToolStripMenuItem";
-            this.removeTimestepHotkeyToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.removeTimestepHotkeyToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.removeTimestepHotkeyToolStripMenuItem.Text = "Remove timestep hotkey";
             this.removeTimestepHotkeyToolStripMenuItem.Click += new System.EventHandler(this.removeTimestepHotkeyToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(206, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(246, 6);
             // 
             // viewDescMenuItem
             // 
             this.viewDescMenuItem.Name = "viewDescMenuItem";
-            this.viewDescMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.viewDescMenuItem.Size = new System.Drawing.Size(249, 22);
             this.viewDescMenuItem.Text = "View Timestep Description";
             this.viewDescMenuItem.Click += new System.EventHandler(this.viewDescMenuItem_Click);
             // 
@@ -254,7 +258,7 @@ namespace WordGenerator.Controls
             this.toolStripMenuItem5,
             this.descriptionTextBox});
             this.setDescMenuItem.Name = "setDescMenuItem";
-            this.setDescMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.setDescMenuItem.Size = new System.Drawing.Size(249, 22);
             this.setDescMenuItem.Text = "Set Timestep Description";
             // 
             // toolStripMenuItem5
@@ -272,47 +276,47 @@ namespace WordGenerator.Controls
             // separator
             // 
             this.separator.Name = "separator";
-            this.separator.Size = new System.Drawing.Size(206, 6);
+            this.separator.Size = new System.Drawing.Size(246, 6);
             // 
             // mark
             // 
             this.mark.Name = "mark";
-            this.mark.Size = new System.Drawing.Size(209, 22);
+            this.mark.Size = new System.Drawing.Size(249, 22);
             this.mark.Text = "Mark";
             this.mark.Click += new System.EventHandler(this.mark_Click);
             // 
             // unmark
             // 
             this.unmark.Name = "unmark";
-            this.unmark.Size = new System.Drawing.Size(209, 22);
+            this.unmark.Size = new System.Drawing.Size(249, 22);
             this.unmark.Text = "Unmark";
             this.unmark.Click += new System.EventHandler(this.unmark_Click);
             // 
             // markall
             // 
             this.markall.Name = "markall";
-            this.markall.Size = new System.Drawing.Size(209, 22);
+            this.markall.Size = new System.Drawing.Size(249, 22);
             this.markall.Text = "Mark All";
             this.markall.Click += new System.EventHandler(this.markall_Click);
             // 
             // unmarkall
             // 
             this.unmarkall.Name = "unmarkall";
-            this.unmarkall.Size = new System.Drawing.Size(209, 22);
+            this.unmarkall.Size = new System.Drawing.Size(249, 22);
             this.unmarkall.Text = "Unmark All";
             this.unmarkall.Click += new System.EventHandler(this.unmarkall_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(206, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(246, 6);
             // 
             // timestepGroupToolStripMenuItem
             // 
             this.timestepGroupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.timestepGroupComboBox});
             this.timestepGroupToolStripMenuItem.Name = "timestepGroupToolStripMenuItem";
-            this.timestepGroupToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.timestepGroupToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.timestepGroupToolStripMenuItem.Text = "Timestep Group";
             this.timestepGroupToolStripMenuItem.DropDownOpening += new System.EventHandler(this.timestepGroupToolStripMenuItem_DropDownOpening);
             // 
@@ -470,6 +474,18 @@ namespace WordGenerator.Controls
             this.durationEditor.Visible = false;
             this.durationEditor.updateGUI += new System.EventHandler(this.durationEditor_updateGUI);
             // 
+            // setDigitalsToContinue
+            // 
+            this.setDigitalsToContinue.Name = "setDigitalsToContinue";
+            this.setDigitalsToContinue.Size = new System.Drawing.Size(249, 22);
+            this.setDigitalsToContinue.Text = "Set all digital channels to Continue";
+            this.setDigitalsToContinue.Click += new System.EventHandler(this.setDigitalsToContinue_Click);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(246, 6);
+            // 
             // TimestepEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -551,5 +567,7 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.PictureBox analogPictureBox;
         private System.Windows.Forms.PictureBox gpibPictureBox;
         private System.Windows.Forms.PictureBox rs232PictureBox;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripMenuItem setDigitalsToContinue;
     }
 }

@@ -822,6 +822,18 @@ namespace WordGenerator.Controls
             base.OnPaintBackground(e);
         }
 
+        private void setDigitalsToContinue_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("This will set all digital channels in this timestep to Continue. To set individual channels to Continue, CTRL-click on their entries in the digital grid. Do you want to proceed?", "Set all digitals to continue?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                foreach (DigitalDataPoint dp in stepData.DigitalData.Values)
+                {
+                    dp.DigitalContinue = true;
+                }
+                WordGenerator.mainClientForm.instance.sequencePage1.digitalGrid1.forceRepaint();
+            }
+        }
+
 
     }
 }
