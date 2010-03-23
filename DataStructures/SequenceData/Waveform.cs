@@ -1329,8 +1329,23 @@ namespace DataStructures
             {
                 if (xValues.Count > 0)
                 {
-                    DimensionedParameter lastX = xValues[xValues.Count - 1];
-                    return Math.Min(lastX.getBaseValue(), waveformDuration.getBaseValue());
+                    // The following behavior, which was designed to wave waveform effective durations only as long as
+                    // the time in which they are changing, resulted in some glitches
+                    // for sharp events that happen precisely at the end of a waveform (for instance
+                    // if there were multiple x-values with the same value.
+                    // The behavior is being replaced by the more
+                    // naive and transparent behavior of just returning the waveformDuration value.
+                    /*
+                    double maxX = double.MinValue;
+                    foreach (DimensionedParameter xval in xValues)
+                    {
+                        if (xval.getBaseValue() > maxX)
+                            maxX = xval.getBaseValue();
+                    }
+                    return Math.Min(maxX, waveformDuration.getBaseValue());
+                     * */
+
+                    return waveformDuration.getBaseValue();
                 }
                 else
                 {
