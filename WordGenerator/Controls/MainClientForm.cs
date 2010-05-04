@@ -1176,8 +1176,9 @@ namespace WordGenerator
 
 
                 ToolStripMenuItem loopTsGroup = new ToolStripMenuItem();
-                loopTsGroup.Enabled = Storage.sequenceData.TimestepGroupIsLoopable(tsg);
-                loopTsGroup.Text = "Loop timestep group.";
+                //loopTsGroup.Enabled = Storage.sequenceData.TimestepGroupIsLoopable(tsg);
+                loopTsGroup.Enabled = false;
+                loopTsGroup.Text = "Loop timestep group. [not implemented]";
                 loopTsGroup.Tag = tsg;
                 if (loopTsGroup.Enabled)
                 {
