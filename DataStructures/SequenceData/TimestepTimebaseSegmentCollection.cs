@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.ComponentModel;
 
 namespace DataStructures
 {
-
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class VariableTimebaseSegmentCollection : List<SequenceData.VariableTimebaseSegment>
     {
         public VariableTimebaseSegmentCollection()
@@ -22,7 +23,29 @@ namespace DataStructures
                 ms += seg.NSegmentSamples * seg.MasterSamplesPerSegmentSample;
             }
 
-            return this.Count + " segs, " + ss + " ss, " + ms + " ms.";
+            return this.Count + " segs, " + ss + " segsamps, " + ms + " mastsamps.";
+        }
+    }
+
+    public class TimeStepOccurance
+    {
+        public TimeStep timeStep;
+        public int occurance;
+        public TimeStepOccurance(TimeStep timeStep, int occurance)
+        {
+            this.timeStep = timeStep;
+            this.occurance = occurance;
+        }
+
+        public override bool Equals(object obj)
+        {
+            TimeStepOccurance other = obj as TimeStepOccurance;
+            if (obj == null)
+                return false;
+            if (this.occurance == other.occurance)
+                if (this.timeStep == other.timeStep)
+                    return true;
+            return false;
         }
     }
 

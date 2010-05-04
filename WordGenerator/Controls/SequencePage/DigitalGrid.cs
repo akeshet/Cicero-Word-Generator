@@ -9,12 +9,15 @@ using DataStructures;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 
+
+
 namespace WordGenerator.Controls
 {
     public class DigitalGrid : UserControl
     {
         private Bitmap buffer;
 
+        
 
         private Point clickStartPoint;
         private Point clickEndPoint;
@@ -461,7 +464,7 @@ namespace WordGenerator.Controls
         
         public DigitalGrid() : base()
         {
-
+            InitializeComponent();
 
             this.DoubleBuffered = true;
 
@@ -753,7 +756,6 @@ namespace WordGenerator.Controls
 
         protected override void OnPaint(PaintEventArgs e)
         {
-
             if (buffer == null)
             {
                 createAndPaintNewBuffer();
@@ -768,6 +770,7 @@ namespace WordGenerator.Controls
             Rectangle sourceRectangle = new Rectangle(e.ClipRectangle.X , e.ClipRectangle.Y , e.ClipRectangle.Width, e.ClipRectangle.Height);
 
             e.Graphics.DrawImage(buffer, e.ClipRectangle, sourceRectangle, GraphicsUnit.Pixel);
+          
 
             base.OnPaint(e);
 
@@ -837,6 +840,7 @@ namespace WordGenerator.Controls
         private void InitializeComponent()
         {
             this.SuspendLayout();
+
             // 
             // DigitalGrid
             // 
@@ -845,6 +849,60 @@ namespace WordGenerator.Controls
 
         }
 
+
+
+
+
+        /* OpenGL Code -- Experimental */
+/*
+        bool glLoaded = false;
+        private void glControl1_Load(object sender, EventArgs e)
+        {
+            glLoaded = true;
+            glControl1.MakeCurrent();
+
+            glControlUpdateSize();
+
+
+        }
+
+        private void glControlUpdateSize()
+        {
+            if (glLoaded)
+            {
+                int w = glControl1.Width;
+                int h = glControl1.Height;
+                GL.MatrixMode(MatrixMode.Projection);
+                GL.LoadIdentity();
+                GL.Ortho(0, w, h, 0, -1, 1);
+                GL.Viewport(0, 0, w, h);
+            }
+        }
+
+        private void glControl1_SizeChanged(object sender, EventArgs e)
+        {
+            if (glLoaded)
+            {
+                glControl1.MakeCurrent();
+
+                glControlUpdateSize();
+            }
+        }
+
+        private void glControl1_Paint(object sender, PaintEventArgs e)
+        {
+            if (glLoaded)
+            {
+                glControl1.MakeCurrent();
+
+
+                GL.ClearColor(Color.Blue);
+                GL.Clear(ClearBufferMask.ColorBufferBit);
+
+                glControl1.SwapBuffers();
+            }
+        }
+        */
 
 
 

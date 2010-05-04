@@ -39,6 +39,7 @@ namespace WordGenerator.Controls
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(0, 0);
+            this.comboBox1.Margin = new System.Windows.Forms.Padding(0);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(80, 21);
             this.comboBox1.TabIndex = 0;
@@ -63,9 +64,12 @@ namespace WordGenerator.Controls
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.comboBox1);
+            this.ForeColor = System.Drawing.SystemColors.Window;
+            this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "VariableComboBox";
-            this.Size = new System.Drawing.Size(81, 22);
+            this.Size = new System.Drawing.Size(80, 21);
             this.Load += new System.EventHandler(this.VariableComboBox_Load);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.VariableComboBox_MouseClick);
             this.ResumeLayout(false);

@@ -264,6 +264,12 @@
     <Compile Include="Controls\StringParameterStringEditor.Designer.cs">
       <DependentUpon>StringParameterStringEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ToolStripNumericOrVariableEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ToolStripNumericUpDown.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\VariableComboBox.cs">
       <SubType>UserControl</SubType>
     </Compile>

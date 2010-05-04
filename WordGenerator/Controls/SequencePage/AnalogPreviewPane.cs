@@ -356,6 +356,13 @@ namespace WordGenerator.Controls
                 MessageBox.Show("Caught exception when trying to redraw analog preview buffer: " + ex.Message);
             }
         }
+
+        private void AnalogPreviewPane_Load(object sender, EventArgs e)
+        {
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
+            this.UpdateStyles();
+
+        }
     
 
     }

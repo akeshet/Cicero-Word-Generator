@@ -12,6 +12,10 @@ namespace WordGenerator.Controls
     public partial class HorizontalParameterEditor : WordGenerator.Controls.IParameterEditor
     {
 
+        public HorizontalParameterEditor(DimensionedParameter parameter, bool showUnitSelector) : this(parameter)
+        {
+            UnitSelectorVisibility = showUnitSelector;
+        }
 
         public HorizontalParameterEditor()
         {
@@ -211,25 +215,6 @@ namespace WordGenerator.Controls
         {
             valueSelector.Select(0, 100);
         }
-
-        private void variableComboBox1_VisibleChanged(object sender, EventArgs e)
-        {
-            if (dimensionedParameter.units.dimension.Equals(Units.Dimension.s))
-            {
-                unitSelector.Enabled = !variableComboBox1.Visible || !Storage.settingsData.FreezeTimeVariableUnit;
-                if (!unitSelector.Enabled)
-                {
-                    unitSelector.SelectedIndex = 1;
-                }
-            }
-            
-        }
-
-
-
-
-
-
     }
 }
 

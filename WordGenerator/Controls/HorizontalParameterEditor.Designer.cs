@@ -71,15 +71,16 @@ namespace WordGenerator.Controls
             // 
             // variableComboBox1
             // 
-            this.variableComboBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.variableComboBox1.BackColor = System.Drawing.SystemColors.Window;
             this.variableComboBox1.Enabled = false;
+            this.variableComboBox1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.variableComboBox1.Location = new System.Drawing.Point(0, 0);
+            this.variableComboBox1.Margin = new System.Windows.Forms.Padding(0);
             this.variableComboBox1.Name = "variableComboBox1";
-            this.variableComboBox1.Size = new System.Drawing.Size(81, 22);
+            this.variableComboBox1.Size = new System.Drawing.Size(80, 21);
             this.variableComboBox1.TabIndex = 2;
             this.variableComboBox1.Visible = false;
             this.variableComboBox1.RightClick += new System.EventHandler(this.variableComboBox1_RightClick);
-            this.variableComboBox1.VisibleChanged += new System.EventHandler(this.variableComboBox1_VisibleChanged);
             this.variableComboBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.variableComboBox1_Paint);
             this.variableComboBox1.SelectedIndexChanged += new System.EventHandler(this.variableComboBox1_SelectedIndexChanged);
             // 

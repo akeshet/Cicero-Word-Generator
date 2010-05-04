@@ -36,6 +36,7 @@ namespace WordGenerator.Controls
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.DoubleBuffered = true;
             this.Name = "AnalogPreviewPane";
+            this.Load += new System.EventHandler(this.AnalogPreviewPane_Load);
             this.ResumeLayout(false);
 
         }

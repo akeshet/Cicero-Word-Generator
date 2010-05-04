@@ -2431,6 +2431,22 @@ namespace DataStructures
                 }
             }
 
+            foreach (TimestepGroup tsg in TimestepGroups)
+            {
+                Dictionary<Variable, string> temp = tsg.usedVariables();
+                foreach (Variable var in temp.Keys)
+                {
+                    if (!ans.ContainsKey(var))
+                    {
+                        ans.Add(var, "Timestep Group" + tsg.ToString() + " " + temp[var]);
+                    }
+                    else
+                    {
+                        ans[var] += " Timestep Group" + tsg.ToString() + " " + temp[var];
+                    }
+                }
+            }
+
             foreach (AnalogGroup ag in AnalogGroups)
             {
                 Dictionary<Variable, string> temp = ag.usedVariables();
@@ -2631,6 +2647,42 @@ namespace DataStructures
 
             if (rs232Groups.Contains(replaceMe))
                 rs232Groups.Remove(replaceMe);
+        }
+
+        /// <summary>
+        /// Returns true if all the following conditions are met:
+        /// 1) Timestep group contains timesteps.
+        /// 2) Timesteps contained within group are consecutive.
+        /// </summary>
+        /// <returns></returns>
+        public bool TimestepGroupIsLoopable(TimestepGroup tsg)
+        {
+            if (tsg == null)
+                return false;
+            if (!TimestepGroups.Contains(tsg))
+                return false;
+
+            List<TimeStep> memberSteps = new List<TimeStep>();
+            List<int> memberStepIds = new List<int>();
+            foreach (TimeStep step in TimeSteps)
+            {
+                if (step.MyTimestepGroup == tsg)
+                {
+                    memberSteps.Add(step);
+                    memberStepIds.Add(TimeSteps.IndexOf(step));
+                }
+            }
+
+            if (memberStepIds.Count == 0)
+                return false;
+
+            int firstVal = memberStepIds[0];
+            for (int i = 0; i < memberStepIds.Count; i++)
+            {
+                if (memberStepIds[i] != firstVal + i)
+                    return false;
+            }
+            return true;
         }
     }
 }

@@ -756,7 +756,9 @@ namespace WordGenerator
 
         private void inspectVariableTimebaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PropertyGridForm dialog = new PropertyGridForm(Storage.sequenceData.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, .000001));
+            TimestepTimebaseSegmentCollection ans = Storage.sequenceData.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, .000001);
+           
+            PropertyGridForm dialog = new PropertyGridForm(ans);
             dialog.ShowDialog();
         }
 
@@ -834,7 +836,7 @@ namespace WordGenerator
             SequenceData sequence = Storage.sequenceData;
 
             TimestepTimebaseSegmentCollection timebaseSegments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock,
-                .001);
+                .000001);
 
             int nVTSamples = 1;
             foreach (TimeStep st in timebaseSegments.Keys)
@@ -850,10 +852,10 @@ namespace WordGenerator
             bool[] ans2 = new bool[nVTSamples];
             bool[] ans3;
 
-            ans1 = sequence.computeDigitalBuffer(0, .001);
-            sequence.computeDigitalBuffer(0, .001, ans2, timebaseSegments);
+            ans1 = sequence.computeDigitalBuffer(0, .000001);
+            sequence.computeDigitalBuffer(0, .000001, ans2, timebaseSegments);
 
-            ans3 = sequence.getDigitalBufferClockSharedWithVariableTimebaseClock(timebaseSegments, 0, .001);
+            ans3 = sequence.getDigitalBufferClockSharedWithVariableTimebaseClock(timebaseSegments, 0, .000001);
 
 
 
@@ -1153,6 +1155,8 @@ namespace WordGenerator
                 deleteGroup.Click += new EventHandler(deleteTimestepGroupClick);
 
                 ToolStripSeparator sep = new ToolStripSeparator();
+                ToolStripSeparator sep2 = new ToolStripSeparator();
+
 
                 ToolStripMenuItem usageCount = new ToolStripMenuItem();
                 int i=0;
@@ -1169,13 +1173,32 @@ namespace WordGenerator
                 deleteTimestepsAndGroup.Tag = tsg;
                 deleteTimestepsAndGroup.Text = "Delete group and member timesteps.";
                 deleteTimestepsAndGroup.Click += new EventHandler(deleteTimestepsAndGroup_Click);
-                
+
+
+                ToolStripMenuItem loopTsGroup = new ToolStripMenuItem();
+                loopTsGroup.Enabled = Storage.sequenceData.TimestepGroupIsLoopable(tsg);
+                loopTsGroup.Text = "Loop timestep group.";
+                loopTsGroup.Tag = tsg;
+                if (loopTsGroup.Enabled)
+                {
+                    loopTsGroup.Checked = tsg.LoopTimestepGroup;
+                    loopTsGroup.CheckOnClick = true;
+                    loopTsGroup.CheckedChanged += new EventHandler(loopTsGroup_CheckedChanged);
+
+                    ToolStripMenuItem ph = new ToolStripMenuItem();
+                    loopTsGroup.DropDownItems.Add("Number of times to loop:");
+                    loopTsGroup.DropDownItems.Add(new ToolStripNumericOrVariableEditor(tsg.LoopCount, false));
+                }
 
                 item.DropDownItems.Add(nameBox);
                 item.DropDownItems.Add(deleteGroup);
                 item.DropDownItems.Add(sep);
                 item.DropDownItems.Add(usageCount);
                 item.DropDownItems.Add(deleteTimestepsAndGroup);
+                item.DropDownItems.Add(sep2);
+                item.DropDownItems.Add(loopTsGroup);
+                
+
 
                 timestepGroupsToolStripMenuItem.DropDownItems.Add(item);
             }
@@ -1195,6 +1218,13 @@ namespace WordGenerator
                 assignToolStripMenuItemAssignButton.Enabled = true;
             }
             
+        }
+
+        void loopTsGroup_CheckedChanged(object sender, EventArgs e)
+        {
+            ToolStripMenuItem it = sender as ToolStripMenuItem;
+            TimestepGroup tsg = it.Tag as TimestepGroup;
+            tsg.LoopTimestepGroup = it.Checked;
         }
 
         void deleteTimestepsAndGroup_Click(object sender, EventArgs e)
@@ -1329,5 +1359,6 @@ namespace WordGenerator
             }
             sequencePage1.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
         }
+
     }
 }
