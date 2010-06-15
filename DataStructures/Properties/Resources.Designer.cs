@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AtticusServer.Properties {
+namespace DataStructures.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace AtticusServer.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AtticusServer.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DataStructures.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -60,17 +60,39 @@ namespace AtticusServer.Properties {
             }
         }
         
-        internal static System.Drawing.Icon athens_parthenon1 {
+        /// <summary>
+        ///   Looks up a localized string similar to (c) 2008  Aviv Keshet  (MIT),  Free software under GNU General Public License..
+        /// </summary>
+        internal static string AuthorString {
             get {
-                object obj = ResourceManager.GetObject("athens_parthenon1", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
+                return ResourceManager.GetString("AuthorString", resourceCulture);
             }
         }
         
-        internal static System.Drawing.Bitmap AtticusSplash {
+        /// <summary>
+        ///   Looks up a localized string similar to June 15, 2010.
+        /// </summary>
+        internal static string BuildDateString {
             get {
-                object obj = ResourceManager.GetObject("AtticusSplash", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("BuildDateString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tony Kim (MIT), Ryan Olf (Berkeley), Emmanuel Mimoun (ENS Paris).
+        /// </summary>
+        internal static string ContribsString {
+            get {
+                return ResourceManager.GetString("ContribsString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1.40.
+        /// </summary>
+        internal static string VersionString {
+            get {
+                return ResourceManager.GetString("VersionString", resourceCulture);
             }
         }
     }

@@ -60,6 +60,24 @@ namespace DataStructures
             }
         }
 
+        private bool loopCopy;
+
+        /// <summary>
+        /// True if this timestep is in fact a temporary
+        /// "loop copy" timestep which has been inserted into a sequence in 
+        /// order to implement a timestep group loop.
+        /// 
+        /// Loop copy timesteps should be removed immediately after use.
+        /// </summary>
+        public bool LoopCopy
+        {
+            get
+            {
+                return loopCopy;
+            }
+            set { loopCopy = value; }
+        }
+
 
         // 0 for unassigned
         private char hotKeyCharacter;
@@ -270,6 +288,10 @@ namespace DataStructures
             this.stepName = timeStepName;
         }
 
+        /// <summary>
+        /// Duplicate creation constructor for Timesteps. Creates an independently editable copy of the timestep
+        /// </summary>
+        /// <param name="duplicateMe"></param>
         public TimeStep(TimeStep duplicateMe) : this()
         {
             this.AnalogGroup = duplicateMe.AnalogGroup;
@@ -284,7 +306,21 @@ namespace DataStructures
             this.StepHidden = duplicateMe.StepHidden;
             this.StepName = "Copy of " + duplicateMe.StepName;
             this.MyTimestepGroup = duplicateMe.MyTimestepGroup;
+            this.WaitForRetrigger = duplicateMe.WaitForRetrigger;
+            this.Description = duplicateMe.Description;
+            this.LoopCopy = duplicateMe.LoopCopy;
         }
+
+        public TimeStep getLoopCopy(int loopNum, int totalLoops)
+        {
+            TimeStep ans = new TimeStep(this);
+            ans.LoopCopy = true;
+            ans.loopOriginalCopy = this;
+            ans.StepName = this.StepName + " Loop #" + loopNum + "/" + totalLoops;
+            return ans;
+        }
+
+        public TimeStep loopOriginalCopy;
 
         public override string ToString()
         {

@@ -66,6 +66,18 @@ namespace DataStructures
             set { loopCount = value; }
         }
 
+        public int LoopCountInt
+        {
+            get
+            {
+                if (LoopCount != null)
+                {
+                    return (int)LoopCount.getBaseValue();
+                }
+                else return 0;
+            }
+        }
+
         public Dictionary<Variable, string> usedVariables()
         {
             Dictionary<Variable, string> ans = new Dictionary<Variable, string>();

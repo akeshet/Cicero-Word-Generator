@@ -49,9 +49,28 @@ namespace WordGenerator.Controls
         public void layoutGroupIndicatorLabel()
         {
             if (stepData.UsesTimestepGroup)
+            {
+                
                 timestepGroupIndicatorLabel.Visible = true;
+                timestepGroupLoopIndicatorLabel.Visible = false;
+
+                if (stepData.MyTimestepGroup.LoopTimestepGroup)
+                {
+                    if (stepData.MyTimestepGroup.LoopCountInt > 1)
+                    {
+                        timestepGroupIndicatorLabel.Visible = false;
+                        timestepGroupLoopIndicatorLabel.Visible = true;
+                        timestepGroupLoopIndicatorLabel.Text = "L" + stepData.MyTimestepGroup.LoopCountInt;                      
+                    }
+                }
+                
+
+            }
             else
+            {
                 timestepGroupIndicatorLabel.Visible = false;
+                timestepGroupLoopIndicatorLabel.Visible = false;
+            }
         }
 
         public void updateBackColor(bool currentlyOutput)
@@ -460,6 +479,7 @@ namespace WordGenerator.Controls
             TimeStep newStep = new TimeStep("New timestep.");
             Storage.sequenceData.TimeSteps.Insert(stepNumber-1, newStep );
             Storage.sequenceData.populateWithChannels(Storage.settingsData);
+            Storage.sequenceData.timestepsInsertedOrMoved();
 
             TimestepEditor te = new TimestepEditor(newStep, stepNumber);
 
@@ -475,6 +495,7 @@ namespace WordGenerator.Controls
             TimeStep newStep = new TimeStep("New timestep.");
             Storage.sequenceData.TimeSteps.Insert(stepNumber, newStep);
             Storage.sequenceData.populateWithChannels(Storage.settingsData);
+            Storage.sequenceData.timestepsInsertedOrMoved();
 
             WordGenerator.mainClientForm.instance.sequencePage1.insertTimestepEditor(
                 new TimestepEditor(newStep, stepNumber + 1), stepNumber);
@@ -486,6 +507,7 @@ namespace WordGenerator.Controls
         {
             TimeStep newStep = new TimeStep(this.stepData);
             Storage.sequenceData.TimeSteps.Insert(stepNumber, newStep);
+            Storage.sequenceData.timestepsInsertedOrMoved();
 
             WordGenerator.mainClientForm.instance.sequencePage1.insertTimestepEditor(
                 new TimestepEditor(newStep, stepNumber + 1), stepNumber);
@@ -644,6 +666,7 @@ namespace WordGenerator.Controls
 
                     Storage.sequenceData.TimeSteps.RemoveAt(currentIndex);
                     Storage.sequenceData.TimeSteps.Insert(destinationIndex, this.stepData);
+                    Storage.sequenceData.timestepsInsertedOrMoved();
 
                     WordGenerator.mainClientForm.instance.sequencePage1.moveTimestepEditor(currentIndex, destinationIndex);
 

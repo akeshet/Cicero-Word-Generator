@@ -177,12 +177,15 @@ namespace WordGenerator
 
             if (Storage.sequenceData == null || Storage.sequenceData.SequenceName == "")
             {
-                textPreamble = "Cicero " + WordGenerator.Properties.Resources.VersionString;
+                textPreamble = "Cicero " + DataStructures.Information.VersionString;
             }
             else
             {
-                textPreamble = Storage.sequenceData.SequenceName + " - Cicero " + WordGenerator.Properties.Resources.VersionString;
+                textPreamble = Storage.sequenceData.SequenceName + " - Cicero " + DataStructures.Information.VersionString;
             }
+
+            if (studentEdition)
+                textPreamble += " *STUDENT EDITION* ";
 
             if (this.OpenSequenceFileName != "" && this.openSequenceFileName != null)
             {
@@ -373,6 +376,8 @@ namespace WordGenerator
             
                 WordGenerator.mainClientForm.instance.cursorWait();
 
+                lic_chk();
+
                 
                 this.commonWaveformEditor1.setCommonWaveforms(Storage.sequenceData.CommonWaveforms);
 
@@ -416,6 +421,26 @@ namespace WordGenerator
 
                 WordGenerator.mainClientForm.instance.cursorWaitRelease();
 
+        }
+
+        private void lic_chk()
+        {
+            if (DateTime.Now.Month == 4)
+            {
+                if (DateTime.Now.Day == 1)
+                {
+
+                    if (!this.studentEditionDisabled)
+                    {
+                        if (!studentEdition)
+                        {
+                            this.studentEdition = true;
+                            MessageBox.Show("Your Cicero Professional Edition (C) License expired on March 31. You are now running a temporary 24 hour STUDENT EDITION license. Please see http://web.mit.edu/~akeshet/www/Cicero/apr1.html for license renewal information.", "License expired -- temporary STUDENT EDITION license.");
+                        }
+                    }
+
+                }
+            }
         }
 
         public void RefreshSettingsDataToUI(SettingsData settingsData)
@@ -1131,6 +1156,11 @@ namespace WordGenerator
 
 	        }
 
+        /// <summary>
+        /// This method programatically builds the drop-down UI for timestep group editing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void timestepGroupsToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
         {
             timestepGroupsToolStripMenuItem.DropDownItems.Clear();
@@ -1176,9 +1206,8 @@ namespace WordGenerator
 
 
                 ToolStripMenuItem loopTsGroup = new ToolStripMenuItem();
-                //loopTsGroup.Enabled = Storage.sequenceData.TimestepGroupIsLoopable(tsg);
-                loopTsGroup.Enabled = false;
-                loopTsGroup.Text = "Loop timestep group. [not implemented]";
+                loopTsGroup.Enabled = Storage.sequenceData.TimestepGroupIsLoopable(tsg);
+                loopTsGroup.Text = "Loop timestep group.";
                 loopTsGroup.Tag = tsg;
                 if (loopTsGroup.Enabled)
                 {
@@ -1188,7 +1217,9 @@ namespace WordGenerator
 
                     ToolStripMenuItem ph = new ToolStripMenuItem();
                     loopTsGroup.DropDownItems.Add("Number of times to loop:");
-                    loopTsGroup.DropDownItems.Add(new ToolStripNumericOrVariableEditor(tsg.LoopCount, false));
+                    ToolStripNumericOrVariableEditor lced = new ToolStripNumericOrVariableEditor(tsg.LoopCount, false);
+                    loopTsGroup.DropDownItems.Add(lced);
+                    lced.valueChanged += new EventHandler(lced_valueChanged);
                 }
 
                 item.DropDownItems.Add(nameBox);
@@ -1221,11 +1252,22 @@ namespace WordGenerator
             
         }
 
+        /// <summary>
+        /// Update the loop counts in the timestep editors if the loop count changes.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void lced_valueChanged(object sender, EventArgs e)
+        {
+            this.sequencePage1.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
+        }
+
         void loopTsGroup_CheckedChanged(object sender, EventArgs e)
         {
             ToolStripMenuItem it = sender as ToolStripMenuItem;
             TimestepGroup tsg = it.Tag as TimestepGroup;
             tsg.LoopTimestepGroup = it.Checked;
+            this.sequencePage1.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
         }
 
         void deleteTimestepsAndGroup_Click(object sender, EventArgs e)
@@ -1359,6 +1401,26 @@ namespace WordGenerator
                 MessageBox.Show("No Timestep group assigned to " + i + " marked timestep(s).");
             }
             sequencePage1.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
+        }
+
+
+        public bool studentEdition = false;
+        public bool studentEditionDisabled = false;
+
+        private void stToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WordGenerator.mainClientForm.instance.studentEdition = true;
+
+        }
+
+        private void sequencePage1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void placeholderGroupClickerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
 
     }

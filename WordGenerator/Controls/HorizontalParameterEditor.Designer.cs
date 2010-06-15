@@ -39,13 +39,13 @@ namespace WordGenerator.Controls
             this.valueSelector.DecimalPlaces = 4;
             this.valueSelector.Location = new System.Drawing.Point(0, 1);
             this.valueSelector.Maximum = new decimal(new int[] {
-            10000000,
-            0,
+            1316134912,
+            2328,
             0,
             0});
             this.valueSelector.Minimum = new decimal(new int[] {
-            10000000,
-            0,
+            1316134912,
+            2328,
             0,
             -2147483648});
             this.valueSelector.Name = "valueSelector";

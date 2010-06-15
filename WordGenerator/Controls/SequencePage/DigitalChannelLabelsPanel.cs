@@ -82,7 +82,7 @@ namespace WordGenerator.Controls
 
                 this.toolTip1.SetToolTip(idLbl, Storage.settingsData.logicalChannelManager.Digitals[digitalID].Description);
 
-                Color bCol = DigitalGrid.TrueBrushColors[i % DigitalGrid.TrueBrushColors.Count];
+                Color bCol = DigitalGrid.ChannelColor(i);
 
                 lbl.BackColor = bCol;
                 idLbl.BackColor = bCol;

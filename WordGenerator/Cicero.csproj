@@ -569,6 +569,7 @@
     <None Include="Resources\CiceroSplash.jpg" />
     <Content Include="Resources\cicero_icon.ico" />
     <Content Include="Resources\continue.bmp" />
+    <None Include="Resources\StudentEdition-ps.png" />
     <None Include="Resources\Fortunes.txt" />
     <None Include="Resources\PulseIcon.ico" />
     <BaseApplicationManifest Include="Properties\app.manifest" />

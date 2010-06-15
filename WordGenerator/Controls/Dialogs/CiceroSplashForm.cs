@@ -14,7 +14,13 @@ namespace WordGenerator.Controls
         {
             InitializeComponent();
 
-            label1.Text = WordGenerator.Properties.Resources.VersionString + "          " + WordGenerator.Properties.Resources.BuildDate + "          \n" + WordGenerator.Properties.Resources.AuthorString + "\nContributors: " + WordGenerator.Properties.Resources.Contribs;
+            label1.Text = DataStructures.Information.VersionString + "          " + DataStructures.Information.BuildDateString + "          \n" + DataStructures.Information.AuthorString + "\nContributors: " + DataStructures.Information.ContribString;
+
+            if (WordGenerator.mainClientForm.instance.studentEdition)
+            {
+                WordGenerator.mainClientForm.instance.studentEdition = false;
+                WordGenerator.mainClientForm.instance.studentEditionDisabled = true;
+            }
 
         }
 

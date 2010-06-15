@@ -79,5 +79,20 @@ namespace DataStructures
             set { analogChannelOutputNowUsesDwellWord = value; }
         }
 
+        private bool doOverrideDigitalColor;
+
+        public bool DoOverrideDigitalColor
+        {
+            get { return doOverrideDigitalColor; }
+            set { doOverrideDigitalColor = value; }
+        }
+        private System.Drawing.Color overrideColor;
+
+        public System.Drawing.Color OverrideColor
+        {
+            get { return overrideColor; }
+            set { overrideColor = value; }
+        }
+
     }
 }

@@ -109,6 +109,7 @@ namespace WordGenerator.Controls
             timeStepsFlowPanel.Controls.Add(ed);
             timeStepsFlowPanel.Controls.SetChildIndex(ed, index);
             updateTimestepEditorNumbers();
+            updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
             layoutTheRest();
         }
 
@@ -118,6 +119,7 @@ namespace WordGenerator.Controls
             Control con = timeStepsFlowPanel.Controls[currentIndex];
             timeStepsFlowPanel.Controls.SetChildIndex(con, destinationIndex);
             updateTimestepEditorNumbers();
+            updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
             layoutTheRest();
 
         }
@@ -128,6 +130,7 @@ namespace WordGenerator.Controls
             timeStepsFlowPanel.Controls.Remove(editor);
             editor.Dispose();
             updateTimestepEditorNumbers();
+            updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
             layoutTheRest();
         }
 

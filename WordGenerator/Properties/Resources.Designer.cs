@@ -60,24 +60,6 @@ namespace WordGenerator.Properties {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to (c) 2008  Aviv Keshet  (MIT),  Free software under GNU General Public License..
-        /// </summary>
-        internal static string AuthorString {
-            get {
-                return ResourceManager.GetString("AuthorString", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to May 4, 2010.
-        /// </summary>
-        internal static string BuildDate {
-            get {
-                return ResourceManager.GetString("BuildDate", resourceCulture);
-            }
-        }
-        
         internal static System.Drawing.Icon cicero_icon {
             get {
                 object obj = ResourceManager.GetObject("cicero_icon", resourceCulture);
@@ -96,15 +78,6 @@ namespace WordGenerator.Properties {
             get {
                 object obj = ResourceManager.GetObject("continueImage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tony Kim (MIT), Ryan Olf (Berkeley), Emmanuel Mimoun (ENS Paris).
-        /// </summary>
-        internal static string Contribs {
-            get {
-                return ResourceManager.GetString("Contribs", resourceCulture);
             }
         }
         
@@ -135,12 +108,10 @@ namespace WordGenerator.Properties {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to 1.38.
-        /// </summary>
-        internal static string VersionString {
+        internal static System.Drawing.Bitmap StudentEdition_ps {
             get {
-                return ResourceManager.GetString("VersionString", resourceCulture);
+                object obj = ResourceManager.GetObject("StudentEdition_ps", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

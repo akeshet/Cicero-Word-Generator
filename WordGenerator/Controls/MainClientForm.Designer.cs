@@ -84,6 +84,7 @@ namespace WordGenerator
             this.inspectVariableTimebaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.calculateVariableTimebaseAnalogBufferToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.calculateVariableTimebaseDigitalBufferToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.licenseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -391,6 +392,7 @@ namespace WordGenerator
             this.placeholderGroupClickerToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
             this.placeholderGroupClickerToolStripMenuItem.Text = "Placeholder Group Clicker";
             this.placeholderGroupClickerToolStripMenuItem.Visible = false;
+            this.placeholderGroupClickerToolStripMenuItem.Click += new System.EventHandler(this.placeholderGroupClickerToolStripMenuItem_Click);
             // 
             // timestepGroupMenuSeparator
             // 
@@ -469,7 +471,8 @@ namespace WordGenerator
             this.saveToolStripMenuItem,
             this.inspectVariableTimebaseToolStripMenuItem,
             this.calculateVariableTimebaseAnalogBufferToolStripMenuItem,
-            this.calculateVariableTimebaseDigitalBufferToolStripMenuItem});
+            this.calculateVariableTimebaseDigitalBufferToolStripMenuItem,
+            this.stToolStripMenuItem});
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
             this.debugToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
             this.debugToolStripMenuItem.Text = "&Advanced";
@@ -554,6 +557,14 @@ namespace WordGenerator
             this.calculateVariableTimebaseDigitalBufferToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
             this.calculateVariableTimebaseDigitalBufferToolStripMenuItem.Text = "Calculate variable timebase digital buffer";
             this.calculateVariableTimebaseDigitalBufferToolStripMenuItem.Click += new System.EventHandler(this.calculateVariableTimebaseDigitalBufferToolStripMenuItem_Click);
+            // 
+            // stToolStripMenuItem
+            // 
+            this.stToolStripMenuItem.Name = "stToolStripMenuItem";
+            this.stToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
+            this.stToolStripMenuItem.Text = "Student Edition";
+            this.stToolStripMenuItem.Visible = false;
+            this.stToolStripMenuItem.Click += new System.EventHandler(this.stToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -757,6 +768,7 @@ namespace WordGenerator
             this.sequencePage1.Name = "sequencePage1";
             this.sequencePage1.Size = new System.Drawing.Size(1258, 890);
             this.sequencePage1.TabIndex = 0;
+            this.sequencePage1.Load += new System.EventHandler(this.sequencePage1_Load);
             this.sequencePage1.messageLog += new System.EventHandler(this.handleMessageEvent);
             // 
             // mainTab
@@ -981,6 +993,7 @@ namespace WordGenerator
         private System.Windows.Forms.ToolStripMenuItem assignAllMarkedTimestepsToGroupToolStripMenuItem;
         private System.Windows.Forms.ToolStripComboBox assignMarkedStepsToGroupComboBox;
         private System.Windows.Forms.ToolStripMenuItem assignToolStripMenuItemAssignButton;
+        private System.Windows.Forms.ToolStripMenuItem stToolStripMenuItem;
 
     }
 }

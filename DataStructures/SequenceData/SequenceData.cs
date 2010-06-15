@@ -468,7 +468,10 @@ namespace DataStructures
         [Category("Sequence"), Description("A list of the timesteps used in the sequence.")]
         public List<TimeStep> TimeSteps
         {
-            get { return steps; }
+            get
+            {
+                return steps;
+            }
             set { steps = value; }
         }
 
@@ -2683,6 +2686,87 @@ namespace DataStructures
                     return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Should be run whenever timesteps are created / inserted / moved,
+        /// to ensure that the looping timestep groups are still loopable.
+        /// </summary>
+        public void timestepsInsertedOrMoved()
+        {
+            checkAndRefreshTimestepGroupLoopability();
+        }
+
+        /// <summary>
+        /// Removes and "loop copy" timesteps. This must be run
+        /// at least once after each operation that creates the loop copies.
+        /// 
+        /// In addition, it can be run at any other time as a sanity check to make sure that there are no
+        /// loop copies. If there are no loop copies, the sequence will be unaffected.
+        /// </summary>
+        public void cleanupLoopCopies()
+        {
+            // This loop runs through the timestep list backwards. The reason to run backwards
+            // is that this allows use of the "RemoveAt" method of TimeSteps without affecting
+            // the index of earler-in-the-list items
+            for (int stepNum = TimeSteps.Count - 1; stepNum >= 0; stepNum--)
+            {
+                if (TimeSteps[stepNum].LoopCopy)
+                    TimeSteps.RemoveAt(stepNum);
+            }
+        }
+
+
+        public void createLoopCopies()
+        {
+            foreach (TimestepGroup tsg in this.TimestepGroups)
+            {
+                if (tsg.LoopTimestepGroup)
+                {
+                    if (TimestepGroupIsLoopable(tsg))
+                    {
+                        if (tsg.LoopCountInt > 1)
+                        {
+                            List<TimeStep> stepsToCopy = new List<TimeStep>();
+                            int lastId = 0;
+                            foreach (TimeStep st in TimeSteps)
+                            {
+                                if (st.MyTimestepGroup == tsg)
+                                {
+                                    stepsToCopy.Add(st);
+                                    lastId = TimeSteps.IndexOf(st);
+                                }
+                            }
+
+
+                            int currentId = lastId + 1;
+                            for (int loop = 1; loop < tsg.LoopCountInt; loop++)
+                            {
+                                foreach (TimeStep st in stepsToCopy)
+                                {
+                                    TimeSteps.Insert(currentId, st.getLoopCopy(loop+1, tsg.LoopCountInt));
+                                    currentId++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        public void checkAndRefreshTimestepGroupLoopability()
+        {
+            foreach (TimestepGroup tsg in this.TimestepGroups)
+            {
+                if (tsg.LoopTimestepGroup)
+                {
+                    if (!TimestepGroupIsLoopable(tsg))
+                    {
+                        tsg.LoopTimestepGroup = false;
+                    }
+                }
+            }
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Elgin
         public ElginSplash()
         {
             InitializeComponent();
-            label1.Text = Properties.Resources.VersionString + "          " + Properties.Resources.BuildDate + "          \n" + Properties.Resources.AuthorString + "\nContributors: " + Properties.Resources.Contribs;
+            label1.Text = DataStructures.Information.VersionString + "          " + DataStructures.Information.BuildDateString + "          \n" + DataStructures.Information.AuthorString + "\nContributors: " + DataStructures.Information.ContribString;
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)

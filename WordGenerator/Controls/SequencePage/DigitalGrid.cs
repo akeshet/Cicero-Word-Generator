@@ -208,6 +208,8 @@ namespace WordGenerator.Controls
                 */
 
             }
+
+            
         }
 
         TimestepEditor oldTe;
@@ -478,23 +480,39 @@ namespace WordGenerator.Controls
         /// </summary>
 
 
-        public static List<Color> TrueBrushColors
+        private static List<Color> TrueBrushColorsList
         {
             get {
                 return Storage.settingsData.DigitalGridColors;
             }
-        } 
+        }
+
+        public static Color ChannelColor(int i)
+        {
+            if (Storage.settingsData.logicalChannelManager.Digitals.ContainsKey(i))
+            {
+                if (Storage.settingsData.logicalChannelManager.Digitals[i] != null)
+                {
+                    if (Storage.settingsData.logicalChannelManager.Digitals[i].DoOverrideDigitalColor)
+                    {
+                        return Storage.settingsData.logicalChannelManager.Digitals[i].OverrideColor;
+                    }
+                }
+            }
+
+            return TrueBrushColorsList[i % TrueBrushColorsList.Count];
+        }
 
 
         
         private Brush trueBrush(int row)
         {
-            return new SolidBrush(TrueBrushColors[row % TrueBrushColors.Count]);
+            return new SolidBrush(ChannelColor(row));
         }
 
         private Brush continueBrush(int row)
         {
-            return new HatchBrush(HatchStyle.NarrowHorizontal, TrueBrushColors[row % TrueBrushColors.Count], Color.Tan);
+            return new HatchBrush(HatchStyle.NarrowHorizontal, ChannelColor(row), Color.Tan);
            // return new HatchBrush(HatchStyle.DarkUpwardDiagonal, TrueBrushColors[row % TrueBrushColors.Count], Color.Tan);
         }
 
@@ -511,6 +529,7 @@ namespace WordGenerator.Controls
 
         private static readonly Font variableFont = new Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 
+        private static readonly Brush seb = new TextureBrush(WordGenerator.Properties.Resources.StudentEdition_ps, WrapMode.Tile);
         /// <summary>
         /// Converts a pixel position to a grid cell position.
         /// </summary>
@@ -583,8 +602,10 @@ namespace WordGenerator.Controls
         /// <param name="brush"></param>
         private void paintCell(Graphics g, Point p, Brush fill, Pen outline)
         {
-            g.FillRectangle(fill, p.X * colWidth, p.Y * rowHeight, colWidth, rowHeight);
-            g.DrawRectangle(outline, p.X * colWidth, p.Y * rowHeight, colWidth, rowHeight);
+            if (fill!=null)
+                g.FillRectangle(fill, p.X * colWidth, p.Y * rowHeight, colWidth, rowHeight);
+            if (outline!=null)
+                g.DrawRectangle(outline, p.X * colWidth, p.Y * rowHeight, colWidth, rowHeight);
         }
 
         private void painCellRectInternal(Graphics g, Point p, Pen pen)
@@ -737,7 +758,12 @@ namespace WordGenerator.Controls
             if (dp.DigitalPulse != null)
             {
                 p = paintPulse(g, p, dp);
-            }         
+            }
+
+            if (WordGenerator.mainClientForm.instance.studentEdition)
+            {
+                paintCell(g, p, seb, null);
+            }
         }
 
         private Point paintPulse(Graphics g, Point p, DigitalDataPoint dp)
@@ -831,7 +857,10 @@ namespace WordGenerator.Controls
                 }
                 currentCol++;
             }
+
         }
+
+
 
 
 

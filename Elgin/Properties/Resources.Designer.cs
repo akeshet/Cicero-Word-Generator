@@ -60,33 +60,6 @@ namespace Elgin.Properties {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to (c) 2008  Aviv Keshet  (MIT),  Free software under GNU General Public License..
-        /// </summary>
-        internal static string AuthorString {
-            get {
-                return ResourceManager.GetString("AuthorString", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to May 4, 2010.
-        /// </summary>
-        internal static string BuildDate {
-            get {
-                return ResourceManager.GetString("BuildDate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tony Kim (MIT), Ryan Olf (Berkeley), Emmanuel Mimoun (ENS Paris).
-        /// </summary>
-        internal static string Contribs {
-            get {
-                return ResourceManager.GetString("Contribs", resourceCulture);
-            }
-        }
-        
         internal static System.Drawing.Icon elgin_horse_again {
             get {
                 object obj = ResourceManager.GetObject("elgin_horse_again", resourceCulture);
@@ -98,15 +71,6 @@ namespace Elgin.Properties {
             get {
                 object obj = ResourceManager.GetObject("ElginSplash", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 1.38.
-        /// </summary>
-        internal static string VersionString {
-            get {
-                return ResourceManager.GetString("VersionString", resourceCulture);
             }
         }
     }

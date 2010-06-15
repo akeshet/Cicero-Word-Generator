@@ -169,7 +169,7 @@ namespace AtticusServer
 
             InitializeComponent();
 
-            this.Text = "Atticus Server " + Properties.Resources.VersionString;
+            this.Text = "Atticus Server " + DataStructures.Information.VersionString;
 
             AtticusSplashForm splash = new AtticusSplashForm();
             splash.Show();

@@ -52,6 +52,7 @@
     <Compile Include="ExceptionViewerDialog.Designer.cs">
       <DependentUpon>ExceptionViewerDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Information.cs" />
     <Compile Include="LicenseInfoForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -59,6 +60,11 @@
       <DependentUpon>LicenseInfoForm.cs</DependentUpon>
     </Compile>
     <Compile Include="NamingFunctions.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="RunLog\RunLog.cs" />
     <Compile Include="RunLog\RunLogAnnotation.cs" />
     <Compile Include="SequenceData\DimensionedParameter.cs" />
@@ -112,6 +118,11 @@
       <DependentUpon>LicenseInfoForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />

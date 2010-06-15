@@ -27,7 +27,7 @@ namespace WordGenerator
         List<Socket> CameraPCsSocketList;
         List<SettingsData.IPAdresses> connectedPCs;
 
-        bool isIdle=false;
+        bool isIdle = false;
         bool isCameraSaving = true;
 
         DateTime runStartTime;
@@ -42,19 +42,20 @@ namespace WordGenerator
 
         private bool hasBeenActivated = false;
 
-        public enum RunType { 
+        public enum RunType
+        {
             /// <summary>
             /// Run iteration #0 only.
             /// </summary>
-            Run_Iteration_Zero, 
+            Run_Iteration_Zero,
             /// <summary>
             /// Run current iteration # only.
             /// </summary>
-            Run_Current_Iteration, 
+            Run_Current_Iteration,
             /// <summary>
             /// Run through the list of iteration #s in order.
             /// </summary>
-            Run_Full_List, 
+            Run_Full_List,
             /// <summary>
             /// Run through the remaining list of iteration #s in order, starting with the current iteration #.
             /// </summary>
@@ -70,7 +71,7 @@ namespace WordGenerator
 
         private bool runRepeat;
 
-        		private bool errorDetected;
+        private bool errorDetected;
 
         public bool ErrorDetected
         {
@@ -139,7 +140,7 @@ namespace WordGenerator
                         stopButton.Enabled = false;
                         closeButton.Enabled = true;
                         progressBar.Enabled = false;
-                        if ((this.runType == RunType.Run_Iteration_Zero || this.runType == RunType.Run_Current_Iteration)&& !isIdle)
+                        if ((this.runType == RunType.Run_Iteration_Zero || this.runType == RunType.Run_Current_Iteration) && !isIdle)
                         {
                             runAgainButton.Enabled = true;
                         }
@@ -161,11 +162,16 @@ namespace WordGenerator
 
         public RunForm()
         {
-            IPAddress lclhst=null;
-            IPEndPoint ipe=null;
+            if (WordGenerator.mainClientForm.instance.studentEdition)
+            {
+                MessageBox.Show("Your Cicero Professional Edition (C) License expired on March 31. You are now running a temporary 24 hour STUDENT EDITION license. Please see http://web.mit.edu/~akeshet/www/Cicero/apr1.html for license renewal information.", "License expired -- temporary STUDENT EDITION license.");
+            }
+
+            IPAddress lclhst = null;
+            IPEndPoint ipe = null;
             CameraPCsSocketList = new List<Socket>();
-            connectedPCs=new List<SettingsData.IPAdresses>();
-            bool errorOccured=false;
+            connectedPCs = new List<SettingsData.IPAdresses>();
+            bool errorOccured = false;
             foreach (SettingsData.IPAdresses ipAdress in Storage.settingsData.CameraPCs)
             {
                 errorOccured = false;
@@ -307,7 +313,7 @@ namespace WordGenerator
 
             if (this.InvokeRequired)
             {
-                MessageEventCallDelegate ev = new MessageEventCallDelegate(addMessageLogText);               
+                MessageEventCallDelegate ev = new MessageEventCallDelegate(addMessageLogText);
                 this.BeginInvoke(ev, new object[] { sender, e });
             }
             else
@@ -330,11 +336,11 @@ namespace WordGenerator
                 hasBeenActivated = true;
                 startRun();
             }
-            
+
 
         }
 
-        private  delegate void voidBoolDelegate(bool calibrationShot);
+        private delegate void voidBoolDelegate(bool calibrationShot);
 
         public void updateTitleBar(bool calibrationShot)
         {
@@ -366,7 +372,7 @@ namespace WordGenerator
                             break;
                     }
 
-                    if (runRepeat) 
+                    if (runRepeat)
                         title += " Repeat #" + repeatCount;
                     this.Text = title;
 
@@ -394,7 +400,7 @@ namespace WordGenerator
                     addMessageLogText(this, new MessageEvent("Unable to lock lists. Aborting run. See the Variables tab."));
 
                     setStatus(RunFormStatus.FinishedRun);
-                    listCouldBeLocked= false;
+                    listCouldBeLocked = false;
                 }
                 addMessageLogText(this, new MessageEvent("Lists locked successfully."));
             }
@@ -517,10 +523,10 @@ namespace WordGenerator
             addMessageLogText(this, new MessageEvent("Starting list run, " + Storage.sequenceData.Lists.iterationsCount() + " iterations."));
 
             int i = 0;
-            calibrationShot(i);  
+            calibrationShot(i);
             for (; i < Storage.sequenceData.Lists.iterationsCount(); i++)
             {
-                addMessageLogText(this, new MessageEvent("Iteration #"+i));
+                addMessageLogText(this, new MessageEvent("Iteration #" + i));
 
                 bool temp = do_run(i, Storage.sequenceData);
                 if (!temp)
@@ -555,9 +561,12 @@ namespace WordGenerator
             {
                 mainClientForm.instance.CurrentlyOutputtingTimestep = null;
 
-               
+
 
                 setStatus(RunFormStatus.StartingRun);
+
+                lic_chk();
+
 
                 addMessageLogText(this, new MessageEvent("Starting Run."));
 
@@ -565,7 +574,7 @@ namespace WordGenerator
 
                 updateTitleBar(calibrationShot);
 
-                bool wrongSavePath=false;
+                bool wrongSavePath = false;
                 try
                 {
                     if (Storage.settingsData.SavePath != "")
@@ -649,25 +658,46 @@ namespace WordGenerator
                         }
                     }
                 }
-                if (!calibrationShot) {
-                foreach (Variable var in sequence.Variables)
+                if (!calibrationShot)
                 {
-                    if (var.VariableName == "SeqMode")
+                    foreach (Variable var in sequence.Variables)
                     {
-                        addMessageLogText(this, new MessageEvent("Detected a variable with special name SeqMode. Nearest integer value " + (int) var.VariableValue + "."));
-                        int i = (int) var.VariableValue;
-                        if (i>=0 && i<Storage.sequenceData.SequenceModes.Count) {
-                            SequenceMode mode = Storage.sequenceData.SequenceModes[i];
-                            addMessageLogText(this, new MessageEvent("Settings sequence to sequence mode " + mode.ModeName + "."));
-                            WordGenerator.mainClientForm.instance.sequencePage1.setMode(mode);
-                        }
-                        else {
-                            addMessageLogText(this, new MessageEvent("Warning! Invalid sequence mode index. Ignoring the SeqMode variable."));
-                            ErrorDetected = true;
+                        if (var.VariableName == "SeqMode")
+                        {
+                            addMessageLogText(this, new MessageEvent("Detected a variable with special name SeqMode. Nearest integer value " + (int)var.VariableValue + "."));
+                            int i = (int)var.VariableValue;
+                            if (i >= 0 && i < Storage.sequenceData.SequenceModes.Count)
+                            {
+                                SequenceMode mode = Storage.sequenceData.SequenceModes[i];
+                                addMessageLogText(this, new MessageEvent("Settings sequence to sequence mode " + mode.ModeName + "."));
+                                WordGenerator.mainClientForm.instance.sequencePage1.setMode(mode);
+                            }
+                            else
+                            {
+                                addMessageLogText(this, new MessageEvent("Warning! Invalid sequence mode index. Ignoring the SeqMode variable."));
+                                ErrorDetected = true;
+                            }
                         }
                     }
                 }
+
+
+                // Create timestep "loop copies" if there are timestep loops in use
+                bool useLoops = false;
+                foreach (TimestepGroup tsg in sequence.TimestepGroups)
+                {
+                    if (tsg.LoopTimestepGroup && sequence.TimestepGroupIsLoopable(tsg) && tsg.LoopCountInt>1)
+                    {
+                        useLoops = true;
+                    }
                 }
+                if (useLoops)
+                {
+                    addMessageLogText(this, new MessageEvent("This sequence makes use of looping timestep groups. Creating temporary loop copies..."));
+                    sequence.createLoopCopies();
+                    addMessageLogText(this, new MessageEvent("...done"));
+                }
+
 
                 List<string> missingServers = Storage.settingsData.unconnectedRequiredServers();
 
@@ -749,7 +779,7 @@ namespace WordGenerator
                 {
 
                     byte[] msg;// = Encoding.ASCII.GetBytes(get_fileStamp(sequence));
-                    string shot_name = NamingFunctions.get_fileStamp(sequence,Storage.settingsData,runStartTime);
+                    string shot_name = NamingFunctions.get_fileStamp(sequence, Storage.settingsData, runStartTime);
                     string sequenceTime = sequence.SequenceDuration.ToString();
                     string FCamera;
                     string UCamera;
@@ -758,10 +788,10 @@ namespace WordGenerator
                     {
                         try
                         {
-                            int index=CameraPCsSocketList.IndexOf(theSocket);
+                            int index = CameraPCsSocketList.IndexOf(theSocket);
                             FCamera = connectedPCs[index].useFWCamera.ToString();
                             UCamera = connectedPCs[index].useUSBCamera.ToString();
-                            msg = Encoding.ASCII.GetBytes(shot_name+"@"+sequenceTime+"@"+FCamera+"@"+UCamera+"@"+isCameraSaving.ToString()+"@\0");
+                            msg = Encoding.ASCII.GetBytes(shot_name + "@" + sequenceTime + "@" + FCamera + "@" + UCamera + "@" + isCameraSaving.ToString() + "@\0");
                             theSocket.Send(msg, 0, msg.Length, SocketFlags.None);
                         }
                         catch { }
@@ -773,7 +803,7 @@ namespace WordGenerator
 
                 // send start timestamp
                 addMessageLogText(this, new MessageEvent("Sending run start timestamp."));
-                actionStatus = Storage.settingsData.serverManager.setNextRunTimestampOnConnectedServers(runStartTime,  addMessageLogText);
+                actionStatus = Storage.settingsData.serverManager.setNextRunTimestampOnConnectedServers(runStartTime, addMessageLogText);
                 if (actionStatus != ServerManager.ServerActionStatus.Success)
                 {
                     addMessageLogText(this, new MessageEvent("Unable to set start timestamp. " + actionStatus.ToString()));
@@ -822,7 +852,8 @@ namespace WordGenerator
 
                 addMessageLogText(this, new MessageEvent("Arming tasks."));
                 actionStatus = Storage.settingsData.serverManager.armTasksOnConnectedServers(addMessageLogText);
-                if (actionStatus!= ServerManager.ServerActionStatus.Success) {
+                if (actionStatus != ServerManager.ServerActionStatus.Success)
+                {
                     addMessageLogText(this, new MessageEvent("Unable to arm tasks. " + actionStatus.ToString()));
                     ErrorDetected = true;
                     setStatus(RunFormStatus.FinishedRun);
@@ -867,7 +898,7 @@ namespace WordGenerator
                     this.Invoke(pbud, new object[] { elapsed_milliseconds, sequence });
 
 
-                    if (elapsed_milliseconds >= (200+duration * 1000.0))
+                    if (elapsed_milliseconds >= (200 + duration * 1000.0))
                         break;
                     Thread.Sleep(100);
                     //EndInvoke(res);
@@ -887,6 +918,10 @@ namespace WordGenerator
                 }
 
 
+                if (useLoops)
+                    sequence.cleanupLoopCopies();
+
+
                 addMessageLogText(this, new MessageEvent("Finished run. Writing log file..."));
                 RunLog runLog = new RunLog(runStartTime, formCreationTime, sequence, Storage.settingsData, WordGenerator.mainClientForm.instance.OpenSequenceFileName, WordGenerator.mainClientForm.instance.OpenSettingsFileName);
                 string fileName = runLog.WriteLogFile();
@@ -901,6 +936,8 @@ namespace WordGenerator
                     ErrorDetected = true;
                 }
                 setStatus(RunFormStatus.FinishedRun);
+
+
 
 
                 if (runRepeat)
@@ -918,30 +955,50 @@ namespace WordGenerator
             return true;
         }
 
+        private void lic_chk()
+        {
+            if (WordGenerator.mainClientForm.instance.studentEdition)
+                addMessageLogText(this, new MessageEvent("Your Cicero Professional Edition (C) License expired on March 31. You are now running a temporary 24 hour STUDENT EDITION license. Please see http://web.mit.edu/~akeshet/www/Cicero/apr1.html for license renewal information."));
+        }
+
         private void updateProgressBar(int elapsed_milliseconds, SequenceData sequence)
         {
-            TimeStep step =  sequence.getTimeStepAtTime((double)elapsed_milliseconds / 1000.0);
-            mainClientForm.instance.CurrentlyOutputtingTimestep = step;
-            string stepName = "";
-            if (step != null)
-                stepName = step.StepName;
+            try
+            {
+                TimeStep step = sequence.getTimeStepAtTime((double)elapsed_milliseconds / 1000.0);
 
-            stepLabel.Text = stepName;
+                if (step != null)
+                {
+                    if (!step.LoopCopy)
+                        mainClientForm.instance.CurrentlyOutputtingTimestep = step;
+                    else
+                        mainClientForm.instance.CurrentlyOutputtingTimestep = step.loopOriginalCopy;
+                }
+                string stepName = "";
+                if (step != null)
+                    stepName = step.StepName;
 
-            if (elapsed_milliseconds >= progressBar.Maximum)
-            {
-                progressBar.Value = progressBar.Maximum;
-                timeLabel.Text = (progressBar.Maximum / 1000.0) + " s";
+                stepLabel.Text = stepName;
+
+                if (elapsed_milliseconds >= progressBar.Maximum)
+                {
+                    progressBar.Value = progressBar.Maximum;
+                    timeLabel.Text = (progressBar.Maximum / 1000.0) + " s";
+                }
+                else if (elapsed_milliseconds <= 0)
+                {
+                    progressBar.Value = 0;
+                    timeLabel.Text = "0 s";
+                }
+                else
+                {
+                    progressBar.Value = elapsed_milliseconds;
+                    timeLabel.Text = (elapsed_milliseconds / 1000.0) + " s";
+                }
             }
-            else if (elapsed_milliseconds <= 0)
+            catch (Exception e)
             {
-                progressBar.Value = 0;
-                timeLabel.Text = "0 s";
-            }
-            else
-            {
-                progressBar.Value = elapsed_milliseconds;
-                timeLabel.Text = (elapsed_milliseconds / 1000.0) + " s";
+                addMessageLogText(this, new MessageEvent("Except caught while updating progress bar: " + e.Message + e.StackTrace));
             }
         }
 
@@ -980,7 +1037,7 @@ namespace WordGenerator
                 }
                 catch { }
             }
-            
+
             //Give time for the dwell word to be sent
             isIdle = true;
             this.runAgainButton.Enabled = false;
@@ -1023,7 +1080,7 @@ namespace WordGenerator
             startRun();
         }
 
- 
+
 
         private void RunForm_Load(object sender, EventArgs e)
         {
@@ -1092,7 +1149,7 @@ namespace WordGenerator
             {
                 getConfirmationThread.Abort();
             }
-             
+
             foreach (Socket theSocket in CameraPCsSocketList)
             {
                 try
@@ -1102,10 +1159,12 @@ namespace WordGenerator
                 }
                 catch { }
             }
-                if (!closeButton.Enabled)
+            if (!closeButton.Enabled)
             {
                 e.Cancel = true;
             }
+
+            Storage.sequenceData.cleanupLoopCopies();
         }
 
 
@@ -1118,7 +1177,7 @@ namespace WordGenerator
         {
             unregisterAllHotkeys();
         }
-        
+
         //Receives log messages from the camera software. Only runs if a camera is listed
         private void getConfirmationEntryPoint()
         {
@@ -1150,15 +1209,15 @@ namespace WordGenerator
 
         //ReEnables the Run Again Button
         private void idleTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {       
-            this.runAgainButton.Enabled=true;
+        {
+            this.runAgainButton.Enabled = true;
             isIdle = false;
             (sender as System.Timers.Timer).Stop();
         }
-	  
-		private void textBox1_Click(object sender, EventArgs e)
-	        {
-	            this.ErrorDetected = false;
-	        }
+
+        private void textBox1_Click(object sender, EventArgs e)
+        {
+            this.ErrorDetected = false;
+        }
     }
 }

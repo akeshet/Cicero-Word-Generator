@@ -58,6 +58,8 @@ namespace WordGenerator.Controls
             this.unmark = new System.Windows.Forms.ToolStripMenuItem();
             this.markall = new System.Windows.Forms.ToolStripMenuItem();
             this.unmarkall = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.setDigitalsToContinue = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.timestepGroupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timestepGroupComboBox = new System.Windows.Forms.ToolStripComboBox();
@@ -74,8 +76,7 @@ namespace WordGenerator.Controls
             this.gpibPictureBox = new System.Windows.Forms.PictureBox();
             this.rs232PictureBox = new System.Windows.Forms.PictureBox();
             this.durationEditor = new WordGenerator.Controls.VerticalParameterEditor();
-            this.setDigitalsToContinue = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.timestepGroupLoopIndicatorLabel = new System.Windows.Forms.Label();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.analogPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gpibPictureBox)).BeginInit();
@@ -131,7 +132,7 @@ namespace WordGenerator.Controls
             this.toolStripSeparator5,
             this.timestepGroupToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(250, 442);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(250, 420);
             // 
             // outputNowToolStripMenuItem
             // 
@@ -306,6 +307,18 @@ namespace WordGenerator.Controls
             this.unmarkall.Text = "Unmark All";
             this.unmarkall.Click += new System.EventHandler(this.unmarkall_Click);
             // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(246, 6);
+            // 
+            // setDigitalsToContinue
+            // 
+            this.setDigitalsToContinue.Name = "setDigitalsToContinue";
+            this.setDigitalsToContinue.Size = new System.Drawing.Size(249, 22);
+            this.setDigitalsToContinue.Text = "Set all digital channels to Continue";
+            this.setDigitalsToContinue.Click += new System.EventHandler(this.setDigitalsToContinue_Click);
+            // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
@@ -474,23 +487,24 @@ namespace WordGenerator.Controls
             this.durationEditor.Visible = false;
             this.durationEditor.updateGUI += new System.EventHandler(this.durationEditor_updateGUI);
             // 
-            // setDigitalsToContinue
+            // timestepGroupLoopIndicatorLabel
             // 
-            this.setDigitalsToContinue.Name = "setDigitalsToContinue";
-            this.setDigitalsToContinue.Size = new System.Drawing.Size(249, 22);
-            this.setDigitalsToContinue.Text = "Set all digital channels to Continue";
-            this.setDigitalsToContinue.Click += new System.EventHandler(this.setDigitalsToContinue_Click);
-            // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(246, 6);
+            this.timestepGroupLoopIndicatorLabel.AutoSize = true;
+            this.timestepGroupLoopIndicatorLabel.BackColor = System.Drawing.Color.Yellow;
+            this.timestepGroupLoopIndicatorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F);
+            this.timestepGroupLoopIndicatorLabel.ForeColor = System.Drawing.Color.Black;
+            this.timestepGroupLoopIndicatorLabel.Location = new System.Drawing.Point(36, 0);
+            this.timestepGroupLoopIndicatorLabel.Name = "timestepGroupLoopIndicatorLabel";
+            this.timestepGroupLoopIndicatorLabel.Size = new System.Drawing.Size(10, 12);
+            this.timestepGroupLoopIndicatorLabel.TabIndex = 15;
+            this.timestepGroupLoopIndicatorLabel.Text = "L";
             // 
             // TimestepEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ContextMenuStrip = this.contextMenuStrip1;
+            this.Controls.Add(this.timestepGroupLoopIndicatorLabel);
             this.Controls.Add(this.timestepGroupIndicatorLabel);
             this.Controls.Add(this.waitLabel);
             this.Controls.Add(this.pulseIndicator);
@@ -569,5 +583,6 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.PictureBox rs232PictureBox;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripMenuItem setDigitalsToContinue;
+        private System.Windows.Forms.Label timestepGroupLoopIndicatorLabel;
     }
 }

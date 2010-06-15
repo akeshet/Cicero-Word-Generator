@@ -15,7 +15,7 @@ namespace Elgin
             InitializeComponent();
             ElginSplash splash = new ElginSplash();
             splash.Show();
-            this.Text = "Elgin Log Explorer " + Properties.Resources.VersionString;
+            this.Text = "Elgin Log Explorer " + DataStructures.Information.VersionString;
         }
 
         private ElginTrackerForm trackerForm;

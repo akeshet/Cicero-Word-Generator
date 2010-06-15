@@ -94,6 +94,7 @@ namespace WordGenerator.Controls
             this.Refresh();
             WordGenerator.mainClientForm.instance.sequencePage1.refreshAnalogPreviewIfAutomatic();
             WordGenerator.mainClientForm.instance.variablesEditor1.ved_valueChanged(this, null);
+            WordGenerator.mainClientForm.instance.sequencePage1.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
         }
 
         private void runCurrentButton_Paint(object sender, PaintEventArgs e)
