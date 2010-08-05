@@ -1,0 +1,145 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{07B67011-62AB-43E3-80F6-E00BCBFF8558}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DataStructures</RootNamespace>
+    <AssemblyName>DataStructures</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NationalInstruments.Common, Version=8.5.20.149, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NationalInstruments.NI4882, Version=8.1.20.119, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CiceroUtilityFunctions.cs" />
+    <Compile Include="ClientStartupSettings.cs" />
+    <Compile Include="Communication\ServerSettingsInterface.cs" />
+    <Compile Include="ExceptionViewerDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExceptionViewerDialog.Designer.cs">
+      <DependentUpon>ExceptionViewerDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Information.cs" />
+    <Compile Include="LicenseInfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LicenseInfoForm.Designer.cs">
+      <DependentUpon>LicenseInfoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NamingFunctions.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="RunLog\RunLog.cs" />
+    <Compile Include="RunLog\RunLogAnnotation.cs" />
+    <Compile Include="SequenceData\DimensionedParameter.cs" />
+    <Compile Include="Exceptions.cs" />
+    <Compile Include="SequenceData\Parameter.cs" />
+    <Compile Include="SequenceData\AnalogGroup.cs" />
+    <Compile Include="SequenceData\Group.cs" />
+    <Compile Include="SequenceData\DigitalDataPoint.cs" />
+    <Compile Include="SequenceData\GPIBGroup.cs" />
+    <Compile Include="SequenceData\ListData.cs" />
+    <Compile Include="SequenceData\Pulse.cs" />
+    <Compile Include="SequenceData\RS232Group.cs" />
+    <Compile Include="SequenceData\SequenceComparer.cs" />
+    <Compile Include="SequenceData\SequenceData.cs" />
+    <Compile Include="SequenceData\SequenceGenre.cs" />
+    <Compile Include="SequenceData\SingleOutputFrame.cs" />
+    <Compile Include="SequenceData\StringParameterString.cs" />
+    <Compile Include="SequenceData\TimeStep.cs" />
+    <Compile Include="SequenceData\TimestepGroup.cs" />
+    <Compile Include="SequenceData\TimestepTimebaseSegmentCollection.cs" />
+    <Compile Include="SequenceData\Variable.cs" />
+    <Compile Include="SequenceData\Waveform.cs" />
+    <Compile Include="SequenceData\WaveformEquationInterpolator.cs" />
+    <Compile Include="SettingsData\ChannelCollection.cs" />
+    <Compile Include="SettingsData\HardwareChannel.cs" />
+    <Compile Include="SettingsData\LogicalChannel.cs" />
+    <Compile Include="SettingsData\LogicalChannelManager.cs" />
+    <Compile Include="SettingsData\SettingsData.cs" />
+    <Compile Include="SequenceData\Units.cs" />
+    <Compile Include="Communication\ServerCommunicator.cs" />
+    <Compile Include="Communication\ServerManager\ServerInfo.cs" />
+    <Compile Include="Communication\ServerManager\ServerManager.cs" />
+    <Compile Include="Constants\CommunicationConstants.cs" />
+    <Compile Include="Constants\DefaultNames.cs" />
+    <Compile Include="Constants\GUIConstants.cs" />
+    <Compile Include="EnumWrapperTypeConverter.cs" />
+    <Compile Include="ExpandableStructConverter.cs" />
+    <Compile Include="MessageEvent.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransparentLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ExceptionViewerDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ExceptionViewerDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LicenseInfoForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>LicenseInfoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\dotmath\dotMath.csproj">
+      <Project>{B2EBEDE8-441A-4CC2-80FF-5F290D528919}</Project>
+      <Name>dotMath</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
