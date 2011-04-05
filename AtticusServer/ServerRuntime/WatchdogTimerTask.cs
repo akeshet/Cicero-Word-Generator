@@ -12,7 +12,6 @@ namespace AtticusServer
     /// </summary>
     class WatchdogTimerTask
     {
-
         NationalInstruments.DAQmx.Task taskToWatch;
 
         struct WatchdogTimerSegment

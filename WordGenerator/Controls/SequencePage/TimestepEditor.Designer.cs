@@ -75,8 +75,8 @@ namespace WordGenerator.Controls
             this.analogPictureBox = new System.Windows.Forms.PictureBox();
             this.gpibPictureBox = new System.Windows.Forms.PictureBox();
             this.rs232PictureBox = new System.Windows.Forms.PictureBox();
-            this.durationEditor = new WordGenerator.Controls.VerticalParameterEditor();
             this.timestepGroupLoopIndicatorLabel = new System.Windows.Forms.Label();
+            this.durationEditor = new WordGenerator.Controls.VerticalParameterEditor();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.analogPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gpibPictureBox)).BeginInit();
@@ -132,50 +132,50 @@ namespace WordGenerator.Controls
             this.toolStripSeparator5,
             this.timestepGroupToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(250, 420);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(258, 420);
             // 
             // outputNowToolStripMenuItem
             // 
             this.outputNowToolStripMenuItem.Name = "outputNowToolStripMenuItem";
-            this.outputNowToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.outputNowToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
             this.outputNowToolStripMenuItem.Text = "<Output Now>";
             this.outputNowToolStripMenuItem.Click += new System.EventHandler(this.outputNowToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(246, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(254, 6);
             // 
             // waitForRetriggerMenuItem
             // 
             this.waitForRetriggerMenuItem.Name = "waitForRetriggerMenuItem";
-            this.waitForRetriggerMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.waitForRetriggerMenuItem.Size = new System.Drawing.Size(257, 22);
             this.waitForRetriggerMenuItem.Text = "Enable Wait-for-retrigger";
             this.waitForRetriggerMenuItem.Click += new System.EventHandler(this.waitForRetriggerMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(246, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(254, 6);
             // 
             // insertTimestepBeforeToolStripMenuItem
             // 
             this.insertTimestepBeforeToolStripMenuItem.Name = "insertTimestepBeforeToolStripMenuItem";
-            this.insertTimestepBeforeToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.insertTimestepBeforeToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
             this.insertTimestepBeforeToolStripMenuItem.Text = "Insert Timestep Before";
             this.insertTimestepBeforeToolStripMenuItem.Click += new System.EventHandler(this.insertTimestepBeforeToolStripMenuItem_Click);
             // 
             // insertTimestepAfterToolStripMenuItem
             // 
             this.insertTimestepAfterToolStripMenuItem.Name = "insertTimestepAfterToolStripMenuItem";
-            this.insertTimestepAfterToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.insertTimestepAfterToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
             this.insertTimestepAfterToolStripMenuItem.Text = "Insert Timestep After";
             this.insertTimestepAfterToolStripMenuItem.Click += new System.EventHandler(this.insertTimestepAfterToolStripMenuItem_Click);
             // 
             // duplicateToolStripMenuItem
             // 
             this.duplicateToolStripMenuItem.Name = "duplicateToolStripMenuItem";
-            this.duplicateToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.duplicateToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
             this.duplicateToolStripMenuItem.Text = "Duplicate Timestep";
             this.duplicateToolStripMenuItem.Click += new System.EventHandler(this.duplicateToolStripMenuItem_Click);
             // 
@@ -185,33 +185,33 @@ namespace WordGenerator.Controls
             this.toolStripMenuItem2,
             this.moveToTimestepCombobox});
             this.moveTimestepToolStripMenuItem.Name = "moveTimestepToolStripMenuItem";
-            this.moveTimestepToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.moveTimestepToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
             this.moveTimestepToolStripMenuItem.Text = "Move timestep";
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(206, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(202, 22);
             this.toolStripMenuItem2.Text = "Select Destination Index:";
             // 
             // moveToTimestepCombobox
             // 
             this.moveToTimestepCombobox.Name = "moveToTimestepCombobox";
-            this.moveToTimestepCombobox.Size = new System.Drawing.Size(121, 21);
+            this.moveToTimestepCombobox.Size = new System.Drawing.Size(121, 23);
             this.moveToTimestepCombobox.DropDown += new System.EventHandler(this.moveToTimestepCombobox_DropDown);
             this.moveToTimestepCombobox.DropDownClosed += new System.EventHandler(this.moveToTimestepCombobox_DropDownClosed);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(246, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(254, 6);
             // 
             // setTimestepHotkeyToolStripMenuItem
             // 
@@ -219,7 +219,7 @@ namespace WordGenerator.Controls
             this.toolStripMenuItem1,
             this.hotkeyEntryTextBox});
             this.setTimestepHotkeyToolStripMenuItem.Name = "setTimestepHotkeyToolStripMenuItem";
-            this.setTimestepHotkeyToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.setTimestepHotkeyToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
             this.setTimestepHotkeyToolStripMenuItem.Text = "Set timestep hotkey";
             // 
             // toolStripMenuItem1
@@ -230,26 +230,27 @@ namespace WordGenerator.Controls
             // 
             // hotkeyEntryTextBox
             // 
+            this.hotkeyEntryTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.hotkeyEntryTextBox.Name = "hotkeyEntryTextBox";
-            this.hotkeyEntryTextBox.Size = new System.Drawing.Size(100, 21);
+            this.hotkeyEntryTextBox.Size = new System.Drawing.Size(100, 23);
             this.hotkeyEntryTextBox.TextChanged += new System.EventHandler(this.hotkeyEntryTextBox_TextChanged);
             // 
             // removeTimestepHotkeyToolStripMenuItem
             // 
             this.removeTimestepHotkeyToolStripMenuItem.Name = "removeTimestepHotkeyToolStripMenuItem";
-            this.removeTimestepHotkeyToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.removeTimestepHotkeyToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
             this.removeTimestepHotkeyToolStripMenuItem.Text = "Remove timestep hotkey";
             this.removeTimestepHotkeyToolStripMenuItem.Click += new System.EventHandler(this.removeTimestepHotkeyToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(246, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(254, 6);
             // 
             // viewDescMenuItem
             // 
             this.viewDescMenuItem.Name = "viewDescMenuItem";
-            this.viewDescMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.viewDescMenuItem.Size = new System.Drawing.Size(257, 22);
             this.viewDescMenuItem.Text = "View Timestep Description";
             this.viewDescMenuItem.Click += new System.EventHandler(this.viewDescMenuItem_Click);
             // 
@@ -259,77 +260,78 @@ namespace WordGenerator.Controls
             this.toolStripMenuItem5,
             this.descriptionTextBox});
             this.setDescMenuItem.Name = "setDescMenuItem";
-            this.setDescMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.setDescMenuItem.Size = new System.Drawing.Size(257, 22);
             this.setDescMenuItem.Text = "Set Timestep Description";
             // 
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(170, 22);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(166, 22);
             this.toolStripMenuItem5.Text = "Enter description:";
             // 
             // descriptionTextBox
             // 
+            this.descriptionTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.descriptionTextBox.Name = "descriptionTextBox";
-            this.descriptionTextBox.Size = new System.Drawing.Size(100, 21);
+            this.descriptionTextBox.Size = new System.Drawing.Size(100, 23);
             this.descriptionTextBox.TextChanged += new System.EventHandler(this.descriptionTextChanged);
             // 
             // separator
             // 
             this.separator.Name = "separator";
-            this.separator.Size = new System.Drawing.Size(246, 6);
+            this.separator.Size = new System.Drawing.Size(254, 6);
             // 
             // mark
             // 
             this.mark.Name = "mark";
-            this.mark.Size = new System.Drawing.Size(249, 22);
+            this.mark.Size = new System.Drawing.Size(257, 22);
             this.mark.Text = "Mark";
             this.mark.Click += new System.EventHandler(this.mark_Click);
             // 
             // unmark
             // 
             this.unmark.Name = "unmark";
-            this.unmark.Size = new System.Drawing.Size(249, 22);
+            this.unmark.Size = new System.Drawing.Size(257, 22);
             this.unmark.Text = "Unmark";
             this.unmark.Click += new System.EventHandler(this.unmark_Click);
             // 
             // markall
             // 
             this.markall.Name = "markall";
-            this.markall.Size = new System.Drawing.Size(249, 22);
+            this.markall.Size = new System.Drawing.Size(257, 22);
             this.markall.Text = "Mark All";
             this.markall.Click += new System.EventHandler(this.markall_Click);
             // 
             // unmarkall
             // 
             this.unmarkall.Name = "unmarkall";
-            this.unmarkall.Size = new System.Drawing.Size(249, 22);
+            this.unmarkall.Size = new System.Drawing.Size(257, 22);
             this.unmarkall.Text = "Unmark All";
             this.unmarkall.Click += new System.EventHandler(this.unmarkall_Click);
             // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(246, 6);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(254, 6);
             // 
             // setDigitalsToContinue
             // 
             this.setDigitalsToContinue.Name = "setDigitalsToContinue";
-            this.setDigitalsToContinue.Size = new System.Drawing.Size(249, 22);
+            this.setDigitalsToContinue.Size = new System.Drawing.Size(257, 22);
             this.setDigitalsToContinue.Text = "Set all digital channels to Continue";
             this.setDigitalsToContinue.Click += new System.EventHandler(this.setDigitalsToContinue_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(246, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(254, 6);
             // 
             // timestepGroupToolStripMenuItem
             // 
             this.timestepGroupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.timestepGroupComboBox});
             this.timestepGroupToolStripMenuItem.Name = "timestepGroupToolStripMenuItem";
-            this.timestepGroupToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.timestepGroupToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
             this.timestepGroupToolStripMenuItem.Text = "Timestep Group";
             this.timestepGroupToolStripMenuItem.DropDownOpening += new System.EventHandler(this.timestepGroupToolStripMenuItem_DropDownOpening);
             // 
@@ -337,7 +339,7 @@ namespace WordGenerator.Controls
             // 
             this.timestepGroupComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.timestepGroupComboBox.Name = "timestepGroupComboBox";
-            this.timestepGroupComboBox.Size = new System.Drawing.Size(121, 21);
+            this.timestepGroupComboBox.Size = new System.Drawing.Size(121, 23);
             this.timestepGroupComboBox.SelectedIndexChanged += new System.EventHandler(this.timestepGroupComboBox_SelectedIndexChanged);
             // 
             // enabledButton
@@ -356,15 +358,16 @@ namespace WordGenerator.Controls
             // analogSelector
             // 
             this.analogSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.analogSelector.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.analogSelector.FormattingEnabled = true;
             this.analogSelector.Location = new System.Drawing.Point(0, 142);
             this.analogSelector.Name = "analogSelector";
             this.analogSelector.Size = new System.Drawing.Size(84, 21);
             this.analogSelector.TabIndex = 5;
             this.analogSelector.Visible = false;
-            this.analogSelector.SelectedValueChanged += new System.EventHandler(this.analogSelector_SelectedValueChanged);
-            this.analogSelector.DropDownClosed += new System.EventHandler(this.analogSelector_DropDownClosed);
             this.analogSelector.DropDown += new System.EventHandler(this.analogSelector_DropDown);
+            this.analogSelector.DropDownClosed += new System.EventHandler(this.analogSelector_DropDownClosed);
+            this.analogSelector.SelectedValueChanged += new System.EventHandler(this.analogSelector_SelectedValueChanged);
             // 
             // gpibSelector
             // 
@@ -375,9 +378,9 @@ namespace WordGenerator.Controls
             this.gpibSelector.Size = new System.Drawing.Size(84, 21);
             this.gpibSelector.TabIndex = 6;
             this.gpibSelector.Visible = false;
-            this.gpibSelector.SelectedValueChanged += new System.EventHandler(this.gpibSelector_SelectedValueChanged);
-            this.gpibSelector.DropDownClosed += new System.EventHandler(this.gpibSelector_DropDownClosed);
             this.gpibSelector.DropDown += new System.EventHandler(this.gpibSelector_DropDown);
+            this.gpibSelector.DropDownClosed += new System.EventHandler(this.gpibSelector_DropDownClosed);
+            this.gpibSelector.SelectedValueChanged += new System.EventHandler(this.gpibSelector_SelectedValueChanged);
             // 
             // rs232Selector
             // 
@@ -388,9 +391,9 @@ namespace WordGenerator.Controls
             this.rs232Selector.Size = new System.Drawing.Size(84, 21);
             this.rs232Selector.TabIndex = 7;
             this.rs232Selector.Visible = false;
-            this.rs232Selector.SelectedValueChanged += new System.EventHandler(this.rs232Selector_SelectedValueChanged);
-            this.rs232Selector.DropDownClosed += new System.EventHandler(this.rs232Selector_DropDownClosed);
             this.rs232Selector.DropDown += new System.EventHandler(this.rs232Selector_DropDown);
+            this.rs232Selector.DropDownClosed += new System.EventHandler(this.rs232Selector_DropDownClosed);
+            this.rs232Selector.SelectedValueChanged += new System.EventHandler(this.rs232Selector_SelectedValueChanged);
             // 
             // showHideButton
             // 
@@ -477,16 +480,6 @@ namespace WordGenerator.Controls
             this.rs232PictureBox.Visible = false;
             this.rs232PictureBox.MouseEnter += new System.EventHandler(this.rs232PictureBox_MouseEnter);
             // 
-            // durationEditor
-            // 
-            this.durationEditor.Location = new System.Drawing.Point(3, 90);
-            this.durationEditor.Name = "durationEditor";
-            this.durationEditor.Size = new System.Drawing.Size(81, 49);
-            this.durationEditor.TabIndex = 4;
-            this.durationEditor.UnitSelectorVisibility = true;
-            this.durationEditor.Visible = false;
-            this.durationEditor.updateGUI += new System.EventHandler(this.durationEditor_updateGUI);
-            // 
             // timestepGroupLoopIndicatorLabel
             // 
             this.timestepGroupLoopIndicatorLabel.AutoSize = true;
@@ -498,6 +491,16 @@ namespace WordGenerator.Controls
             this.timestepGroupLoopIndicatorLabel.Size = new System.Drawing.Size(10, 12);
             this.timestepGroupLoopIndicatorLabel.TabIndex = 15;
             this.timestepGroupLoopIndicatorLabel.Text = "L";
+            // 
+            // durationEditor
+            // 
+            this.durationEditor.Location = new System.Drawing.Point(3, 90);
+            this.durationEditor.Name = "durationEditor";
+            this.durationEditor.Size = new System.Drawing.Size(81, 49);
+            this.durationEditor.TabIndex = 4;
+            this.durationEditor.UnitSelectorVisibility = true;
+            this.durationEditor.Visible = false;
+            this.durationEditor.updateGUI += new System.EventHandler(this.durationEditor_updateGUI);
             // 
             // TimestepEditor
             // 
@@ -523,8 +526,8 @@ namespace WordGenerator.Controls
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "TimestepEditor";
             this.Size = new System.Drawing.Size(86, 219);
-            this.Layout += new System.Windows.Forms.LayoutEventHandler(this.TimestepEditor_Layout);
             this.Enter += new System.EventHandler(this.TimestepEditor_Enter);
+            this.Layout += new System.Windows.Forms.LayoutEventHandler(this.TimestepEditor_Layout);
             this.contextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.analogPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gpibPictureBox)).EndInit();

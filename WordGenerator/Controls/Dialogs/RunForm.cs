@@ -992,7 +992,20 @@ namespace WordGenerator
                 }
                 else
                 {
+                    
+                    /// Workaround hack for a dumb bug in the windows 7 progress bar.
+                    /// The bar insists on animating "gradually" between various set values, but this causes
+                    /// it to be about 1 second out of sync with the run.
+                    /// However, when reducing the set value of the bar, animation is instant.
+                    /// So this code moves the bar forward past the correct point
+                    /// so tha the default code can move it back again (which is instant).
+                    if (WordGenerator.GlobalInfo.usingWindows7)
+                    {
+                        progressBar.Value = Math.Min(progressBar.Maximum, elapsed_milliseconds + 1);
+                    }
+
                     progressBar.Value = elapsed_milliseconds;
+
                     timeLabel.Text = (elapsed_milliseconds / 1000.0) + " s";
                 }
             }

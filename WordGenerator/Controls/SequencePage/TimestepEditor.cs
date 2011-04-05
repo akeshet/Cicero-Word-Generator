@@ -148,6 +148,16 @@ namespace WordGenerator.Controls
             rs232Selector.Items.Add("Continue");
             rs232Selector.SelectedItem = "Continue";
 
+            // If we are using Windows 7,
+            // then the combo boxes must have a non-default
+            // style in order to support background colors
+            if (WordGenerator.GlobalInfo.usingWindows7)
+            {
+                analogSelector.FlatStyle = FlatStyle.Popup;
+                gpibSelector.FlatStyle = FlatStyle.Popup;
+                rs232Selector.FlatStyle = FlatStyle.Popup;
+            }
+
             durationEditor.setMinimumAllowableManualValue(0);
 
             this.Width = TimestepEditorWidth;

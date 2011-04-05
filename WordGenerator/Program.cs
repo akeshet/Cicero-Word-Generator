@@ -5,6 +5,15 @@ using DataStructures;
 
 namespace WordGenerator
 {
+
+    public static class GlobalInfo
+    {
+        /// <summary>
+        /// Set to true if Windows 7 is being used.
+        /// </summary>
+        public static bool usingWindows7 = false;
+    }
+
     [Serializable]
     public class Program
     {
@@ -43,11 +52,21 @@ namespace WordGenerator
             {
                 AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
                 Application.EnableVisualStyles();
+
+                // Detect if Windows 7 or Vista is being used.
+                OperatingSystem osInfo = System.Environment.OSVersion;
+                if (osInfo.Version.Major == 6)
+                {
+                    WordGenerator.GlobalInfo.usingWindows7 = true;
+                }
+                
                
+
                 try
                 {
 
                     Application.SetCompatibleTextRenderingDefault(false);
+                   
                 }
                 catch (InvalidOperationException)
                 {

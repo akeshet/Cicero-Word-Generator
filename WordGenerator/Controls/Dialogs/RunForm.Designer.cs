@@ -169,10 +169,10 @@ namespace WordGenerator
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Run Controller";
-            this.Deactivate += new System.EventHandler(this.RunForm_Deactivate);
-            this.Load += new System.EventHandler(this.RunForm_Load);
             this.Activated += new System.EventHandler(this.RunForm_Activated);
+            this.Deactivate += new System.EventHandler(this.RunForm_Deactivate);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.RunForm_FormClosing);
+            this.Load += new System.EventHandler(this.RunForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

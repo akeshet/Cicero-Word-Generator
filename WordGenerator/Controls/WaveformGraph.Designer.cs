@@ -2,6 +2,9 @@ namespace WordGenerator.Controls
 {
     partial class WaveformGraph
     {
+
+        
+
         /// <summary> 
         /// Required designer variable.
         /// </summary>

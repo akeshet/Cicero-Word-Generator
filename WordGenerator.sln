@@ -1,12 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cicero", "WordGenerator\Cicero.csproj", "{AA55BBAF-9C99-4CC8-9FE3-D8F6A8B7EBA8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStructures", "DataStructures\DataStructures.csproj", "{07B67011-62AB-43E3-80F6-E00BCBFF8558}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atticus", "AtticusServer\Atticus.csproj", "{88DA2EF3-B748-43AB-8279-F22293844E29}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CEEFAE9A-6E13-4ADF-9C16-F36806A136BC}"
 	ProjectSection(SolutionItems) = preProject
 		Code Overview.htm = Code Overview.htm
@@ -14,6 +8,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TODO_Nov_9_07.txt = TODO_Nov_9_07.txt
 		Troubleshooting.txt = Troubleshooting.txt
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cicero", "WordGenerator\Cicero.csproj", "{AA55BBAF-9C99-4CC8-9FE3-D8F6A8B7EBA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStructures", "DataStructures\DataStructures.csproj", "{07B67011-62AB-43E3-80F6-E00BCBFF8558}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atticus", "AtticusServer\Atticus.csproj", "{88DA2EF3-B748-43AB-8279-F22293844E29}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elgin", "Elgin\Elgin.csproj", "{5F033A41-24F6-4B51-9602-03301DA111CD}"
 EndProject
@@ -23,9 +23,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Virgil", "Virgil\Virgil.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleServer", "ExampleServer\ExampleServer.csproj", "{E87C4F05-BCED-47F5-8A02-637A5A669E38}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HDF5DotNet", "HDF5dotNet\HDF5DotNet\HDF5DotNet.vcproj", "{867FF22E-70FC-44D8-B827-0FCDFEFA1851}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HDF5DotNet", "HDF5dotNet\HDF5DotNet\HDF5DotNet.vcxproj", "{867FF22E-70FC-44D8-B827-0FCDFEFA1851}"
 EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -121,9 +125,5 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = 
-	EndGlobalSection
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal

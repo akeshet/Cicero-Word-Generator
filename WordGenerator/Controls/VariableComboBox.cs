@@ -31,6 +31,13 @@ namespace WordGenerator.Controls
             }
 
             this.comboBox1.SelectedItem = "Manual";
+
+            /// If using Windows 7, we need to change the combo box
+            /// to a style that supports background colors.
+            if (WordGenerator.GlobalInfo.usingWindows7)
+            {
+                comboBox1.FlatStyle = FlatStyle.Popup;
+            }
         }
 
        
