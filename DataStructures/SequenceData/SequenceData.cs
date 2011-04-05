@@ -1599,14 +1599,22 @@ namespace DataStructures
             AnalogGroupControlledVariableFrequencyClock
         }
 
+
+     /*   public TimestepTimebaseSegmentCollection generateVariableTimebaseSegments(VariableTimebaseTypes timebaseType, double masterTimebaseSampleDuration)
+        {
+            return this.generateVariableTimebaseSegments(timebaseType, masterTimebaseSampleDuration, new List<int>(), new List<int>());
+        }*/
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="timebaseType"></param>
         /// <param name="masterTimebaseSampleDuration"></param>
         /// <returns></returns>
-        public TimestepTimebaseSegmentCollection generateVariableTimebaseSegments(VariableTimebaseTypes timebaseType,  double masterTimebaseSampleDuration)
+        public TimestepTimebaseSegmentCollection generateVariableTimebaseSegments(VariableTimebaseTypes timebaseType,  double masterTimebaseSampleDuration,
+            List <int> ignoredAnalogs, List <int> ignoredDigitals)
         {
+
             switch (timebaseType)
             {
                 case VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock:
@@ -1623,7 +1631,7 @@ namespace DataStructures
                                 TimeStep currentStep = TimeSteps[stepID];
 
                                 VariableTimebaseSegmentCollection timestepSegments = new VariableTimebaseSegmentCollection();
-                                Dictionary<AnalogGroup, double> runningGroups = getRunningGroupRemainingTime(stepID);
+                                Dictionary<AnalogGroup, double> runningGroups = getRunningGroupRemainingTime(stepID, ignoredAnalogs);
 
                                 // first cull groups that have less remaining time than 2 master timbase cycles.
                                 {
@@ -2054,22 +2062,30 @@ namespace DataStructures
 
         }
 
-        /// <summary>
+        public Dictionary<AnalogGroup, double> getRunningGroupRemainingTime(int timeStepID)
+        {
+            return this.getRunningGroupRemainingTime(timeStepID, new List<int>());
+        }
+            
+            
+            /// <summary>
         /// Returns a dictionary giving the running analog groups, as well as the remaining time until their effective duration
         /// is over, as determined at the beginning of the timestep given by timestepID.
         /// </summary>
         /// <param name="timeStepID"></param>
         /// <returns></returns>
-        public Dictionary<AnalogGroup, double> getRunningGroupRemainingTime(int timeStepID)
+        public Dictionary<AnalogGroup, double> getRunningGroupRemainingTime(int timeStepID, List<int> ignoredAnalogs)
         {
-            Dictionary<AnalogGroup, double> ans = getRunningAnalogGroups(timeStepID);
+            Dictionary<AnalogGroup, double> ans = getRunningAnalogGroups(timeStepID, ignoredAnalogs);
             List<AnalogGroup> groups = new List<AnalogGroup>(ans.Keys);
             foreach (AnalogGroup ag in groups)
             {
-                ans[ag] = ag.getEffectiveDuration() - ans[ag];
+                ans[ag] = ag.getEffectiveDuration(ignoredAnalogs) - ans[ag];
             }
             return ans;
         }
+
+
 
         /// <summary>
         /// Returns a dictionary containing all of the analog groups that are active at a given timestep, as well as a double
@@ -2081,7 +2097,7 @@ namespace DataStructures
         /// </summary>
         /// <param name="timeStepID"></param>
         /// <returns></returns>
-        public Dictionary<AnalogGroup, double> getRunningAnalogGroups(int timeStepID)
+        public Dictionary<AnalogGroup, double> getRunningAnalogGroups(int timeStepID, List<int> ignoredAnalogs)
         {
             Dictionary<AnalogGroup, double> ans = new Dictionary<AnalogGroup, double>();
 
@@ -2101,10 +2117,14 @@ namespace DataStructures
                         bool groupStillRunning = true;
 
                         double elapsedTime = 0;
-                        double effectiveDuration = ag.getEffectiveDuration();
+                        double effectiveDuration = ag.getEffectiveDuration(ignoredAnalogs);
                         channelActive.Clear();
                         foreach (int channelID in ag.ChannelDatas.Keys)
                         {
+                            // ignore the ignored channels
+                            if (ignoredAnalogs.Contains(channelID))
+                                continue;
+
                             if (ag.channelEnabled(channelID))
                                 channelActive.Add(channelID, true);
                         }
@@ -2128,6 +2148,10 @@ namespace DataStructures
                                     AnalogGroup interruptingGroup = TimeSteps[interimStep].AnalogGroup;
                                     foreach (int channelID in interruptingGroup.ChannelDatas.Keys)
                                     {
+                                        // ignore ignored channels
+                                        if (ignoredAnalogs.Contains(channelID))
+                                            continue;
+
                                         if (interruptingGroup.channelEnabled(channelID))
                                         {
                                             if (channelActive.ContainsKey(channelID))

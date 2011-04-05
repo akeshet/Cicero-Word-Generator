@@ -49,8 +49,13 @@ namespace AtticusServer
         {
 
             // First generate the variable timebase buffer. We will need stuff like its length for configuring the task, which is why we do this first.
-                      
-            TimestepTimebaseSegmentCollection timebaseSegments = sequenceData.generateVariableTimebaseSegments(timebaseType, 1.0 / deviceSettings.SampleClockRate);
+
+            string varID = deviceSettings.VariableTimebaseIDToGenerate;
+            List<int> ignoredAnalogs = settings.getIgnoredAnalogsForVariableTimebaseGeneration(varID);
+            List<int> ignoredDigitals = settings.getIgnoredDigitalsForVariableTimebaseGeneration(varID);
+
+            TimestepTimebaseSegmentCollection timebaseSegments = sequenceData.generateVariableTimebaseSegments(timebaseType, 1.0 / deviceSettings.SampleClockRate,
+                ignoredAnalogs, ignoredDigitals);
             bool[] variableTimebaseBuffer = sequenceData.getVariableTimebaseClock(timebaseSegments);
 
 
@@ -255,7 +260,7 @@ namespace AtticusServer
             else
             {
                 return createDaqMxVariableTimebaseSource(
-                    channelName, masterFrequency, sequenceData, timebaseType, serverSettings, deviceSettings);
+                    channelName, masterFrequency, sequenceData, settings, timebaseType, serverSettings, deviceSettings);
             }
         }
         
@@ -268,13 +273,18 @@ namespace AtticusServer
         /// <param name="sequenceData"></param>
         /// <param name="timebaseType"></param>
         /// <returns></returns>
-        public static Task createDaqMxVariableTimebaseSource(string channelName, int masterFrequency, SequenceData sequenceData, 
+        public static Task createDaqMxVariableTimebaseSource(string channelName, int masterFrequency, SequenceData sequenceData, SettingsData settings,
             SequenceData.VariableTimebaseTypes timebaseType, ServerSettings serverSettings, DeviceSettings deviceSettings)
         {
             Task task = new Task("Variable timebase output task");
 
+
+            string varID = deviceSettings.VariableTimebaseIDToGenerate;
+            List<int> ignoredAnalogs = settings.getIgnoredAnalogsForVariableTimebaseGeneration(varID);
+            List<int> ignoredDigitals = settings.getIgnoredDigitalsForVariableTimebaseGeneration(varID);
+
             TimestepTimebaseSegmentCollection timebaseSegments = sequenceData.generateVariableTimebaseSegments(timebaseType,
-                1.0 / (double)masterFrequency);
+                1.0 / (double)masterFrequency, ignoredAnalogs, ignoredDigitals);
 
             bool [] buffer = sequenceData.getVariableTimebaseClock(timebaseSegments);
 
@@ -639,9 +649,18 @@ namespace AtticusServer
 
                 double timeStepSize = 1.0 / (double)deviceSettings.SampleClockRate;
 
+                string varID = settings.getVariableTimebaseIdentifier(deviceName, serverSettings.ServerName);
+
+                if (varID != "default")
+                {
+                    AtticusServer.server.messageLog(deviceSettings, new MessageEvent("Task buffer for device " + deviceSettings.DeviceName + " will be using overridden variable timebase ID " + varID + " (as selected in this run's settings data )."));
+                }
+
+                List<int> ignoredAnalogs = settings.getIgnoredAnalogsForVariableTimebaseGeneration(varID);
+                List<int> ignoredDigitals = settings.getIgnoredDigitalsForVariableTimebaseGeneration(varID);
                 TimestepTimebaseSegmentCollection timebaseSegments =
     sequence.generateVariableTimebaseSegments(serverSettings.VariableTimebaseType,
-                                            timeStepSize);
+                                            timeStepSize, ignoredAnalogs, ignoredDigitals);
 
                 int nBaseSamples = timebaseSegments.nSegmentSamples();
 

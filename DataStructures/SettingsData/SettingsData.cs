@@ -217,5 +217,177 @@ namespace DataStructures
             myServerManager = new ServerManager();
             cameraPCs = new List<IPAdresses>();
         }
+
+
+
+        private List<DeviceTimingOverride> deviceTimingOverrides;
+
+        public List<DeviceTimingOverride> DeviceTimingOverrides
+        {
+            get
+            {
+                if (deviceTimingOverrides == null)
+                    deviceTimingOverrides = new List<DeviceTimingOverride>();
+                return deviceTimingOverrides;
+            }
+            set { deviceTimingOverrides = value; }
+        }
+
+
+        [Serializable, TypeConverter(typeof(ExpandableObjectConverter))]
+        public class DeviceTimingOverride
+        {
+            public enum OverrideType { None, VariableTimebaseOverride }
+
+            private string deviceName;
+
+            public string DeviceName
+            {
+                get { return deviceName; }
+                set { deviceName = value; }
+            }
+
+            private string serverName;
+
+            public string ServerName
+            {
+                get { return serverName; }
+                set { serverName = value; }
+            }
+
+            private string overrideIdentifier;
+
+            public string OverrideIdentifier
+            {
+                get { return overrideIdentifier; }
+                set { overrideIdentifier = value; }
+            }
+            private OverrideType myOverrideType;
+
+            public OverrideType MyOverrideType
+            {
+                get { return myOverrideType; }
+                set { myOverrideType = value; }
+            }
+            private bool enabled;
+
+            public bool Enabled
+            {
+                get { return enabled; }
+                set { enabled = value; }
+            }
+
+            public DeviceTimingOverride()
+            {
+                deviceName = "";
+                serverName = "";
+                overrideIdentifier = "";
+                myOverrideType = OverrideType.None;
+                enabled = false;
+            }
+
+        }
+
+
+#region Helper code for using variable frequency clocks that are differen per-device
+
+        /// <summary>
+        /// Returns "default" if there is no override for this device. (ie we should use the "default" variable timebase)
+        /// </summary>
+        /// <param name="deviceName"></param>
+        /// <param name="serverName"></param>
+        /// <returns></returns>
+        public string getVariableTimebaseIdentifier(string deviceName, string serverName)
+        {
+            string ans = null;
+            foreach (DeviceTimingOverride over in this.DeviceTimingOverrides)
+            {
+                if (over.ServerName == serverName && over.DeviceName == deviceName && over.Enabled 
+                    && over.MyOverrideType == DeviceTimingOverride.OverrideType.VariableTimebaseOverride)
+                {
+                    ans = over.OverrideIdentifier;
+                }
+            }
+
+            if (ans == null)
+                return "default";
+            return ans;
+        }
+
+        public List<int> getIgnoredAnalogsForVariableTimebaseGeneration(string timebaseIdentifier)
+        {
+            List<int> ans = new List<int>();
+
+            // caches results of calls to getVariableTimebaseIdentifier
+            Dictionary<string, string> identifierCache = new Dictionary<string, string>();
+
+
+            foreach (int channelID in this.logicalChannelManager.Analogs.Keys)
+            {
+                LogicalChannel channel = this.logicalChannelManager.Analogs[channelID];
+                if (channel.hardwareChannel == null || channel.hardwareChannel.isUnAssigned)
+                {
+                    ans.Add(channelID);
+                }
+                else
+                {
+
+                    string deviceName = channel.hardwareChannel.DeviceName;
+                    string serverName = channel.hardwareChannel.ServerName;
+                    string temp = serverName + "/" + deviceName;
+                    if (!identifierCache.ContainsKey(temp))
+                    {
+                        identifierCache.Add(temp, getVariableTimebaseIdentifier(deviceName, serverName));
+                    }
+                    string channelTimebaseIdentifier = identifierCache[temp];
+
+                    if (timebaseIdentifier != channelTimebaseIdentifier)
+                        ans.Add(channelID);
+
+                }
+            }
+
+            return ans;
+        }
+
+        public List<int> getIgnoredDigitalsForVariableTimebaseGeneration(string timebaseIdentifier)
+        {
+            List<int> ans = new List<int>();
+
+            // caches results of calls to getVariableTimebaseIdentifier
+            Dictionary<string, string> identifierCache = new Dictionary<string, string>();
+
+
+            foreach (int channelID in this.logicalChannelManager.Digitals.Keys)
+            {
+                LogicalChannel channel = this.logicalChannelManager.Digitals[channelID];
+                if (channel.hardwareChannel == null || channel.hardwareChannel.isUnAssigned)
+                {
+                    ans.Add(channelID);
+                }
+                else
+                {
+
+                    string deviceName = channel.hardwareChannel.DeviceName;
+                    string serverName = channel.hardwareChannel.ServerName;
+                    string temp = serverName + "/" + deviceName;
+                    if (!identifierCache.ContainsKey(temp))
+                    {
+                        identifierCache.Add(temp, getVariableTimebaseIdentifier(deviceName, serverName));
+                    }
+                    string channelTimebaseIdentifier = identifierCache[temp];
+
+                    if (timebaseIdentifier != channelTimebaseIdentifier)
+                        ans.Add(channelID);
+
+                }
+            }
+
+            return ans;
+        }
+
+#endregion
+
+
     }
 }

@@ -385,6 +385,7 @@ namespace AtticusServer
                                             FpgaTimebaseTask ftask = new FpgaTimebaseTask(fsettings,
                                                 opalKellyDevices[opalKellyDeviceNames.IndexOf(fsettings.DeviceName)],
                                                 sequence,
+                                                settings,
                                                 ((double)1) / ((double)(fsettings.SampleClockRate)),
                                                 out nSegs,
                                                 myServerSettings.UseFpgaRfModulatedClockOutput,
@@ -505,6 +506,7 @@ namespace AtticusServer
                                     serverSettings.VariableTimebaseOutputChannel,
                                     serverSettings.VariableTimebaseMasterFrequency,
                                     sequence,
+                                    settings,
                                     serverSettings.VariableTimebaseType,
                                     serverSettings,
                                     serverSettings.myDevicesSettings[variableTimebaseOutputDevice]);
@@ -1006,8 +1008,10 @@ namespace AtticusServer
 
                 if (myServerSettings.UseFpgaMistriggerDetection)
                 {
-                    foreach (FpgaTimebaseTask ft in fpgaTasks.Values)
+                    foreach (string devName in fpgaTasks.Keys)
                     {
+                        FpgaTimebaseTask ft = fpgaTasks[devName];
+
                         int ans = ft.getMistriggerStatus();
                         if (ans != 0)
                         {
@@ -1018,7 +1022,16 @@ namespace AtticusServer
                             if (serverSettings.DeviceToSyncSoftwareTimedTasksTo != null && serverSettings.DeviceToSyncSoftwareTimedTasksTo != "")
                             {
                                 int masterFreq = myServerSettings.myDevicesSettings[serverSettings.DeviceToSyncSoftwareTimedTasksTo].SampleClockRate;
-                                TimestepTimebaseSegmentCollection segments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, (1.0 / ((double)masterFreq)));
+
+                                DeviceSettings deviceSettings = serverSettings.myDevicesSettings[devName];
+                                string varID = deviceSettings.VariableTimebaseIDToGenerate;
+                                List<int> ignoredDigitals = settings.getIgnoredDigitalsForVariableTimebaseGeneration(varID);
+                                List<int> ignoredAnalogs = settings.getIgnoredAnalogsForVariableTimebaseGeneration(varID);
+                                TimestepTimebaseSegmentCollection segments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, (1.0 / ((double)masterFreq)),
+                                    ignoredAnalogs, ignoredDigitals);
+
+
+
                                 int masterSamp = sequence.getMasterSampleFromDerivedSample(errorSamp, segments);
                                 double seqTime = ((double)masterSamp) / ((double)masterFreq);
                                 TimeStep step = sequence.getTimeStepAtTime(seqTime);

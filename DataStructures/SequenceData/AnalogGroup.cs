@@ -129,11 +129,22 @@ namespace DataStructures
             return channelDatas[channelID].ChannelEnabled;
         }
 
-        public double getEffectiveDuration()
+   /*     public double getEffectiveDuration()
+        {
+            return getEffectiveDuration(new List<int>());
+        } */
+
+        public double getEffectiveDuration(List <int> ignoredAnalogs)
         {
             double ans = 0;
-            foreach (AnalogGroupChannelData channelData in ChannelDatas.Values)
+            foreach (int channelID in ChannelDatas.Keys)
             {
+                // ignore ignored channels
+                if (ignoredAnalogs.Contains(channelID))
+                    continue;
+
+                AnalogGroupChannelData channelData = ChannelDatas[channelID];
+
                 if (channelData.ChannelEnabled)
                 {
                     if (channelData.waveform != null)
@@ -143,6 +154,8 @@ namespace DataStructures
                             ans = temp;
                     }
                 }
+
+
             }
             return ans;
         }

@@ -27,7 +27,7 @@ namespace DataStructures
         }
     }
 
-    public class TimeStepOccurance
+  /*  public class TimeStepOccurance
     {
         public TimeStep timeStep;
         public int occurance;
@@ -47,7 +47,7 @@ namespace DataStructures
                     return true;
             return false;
         }
-    }
+    }*/ 
 
     public class TimestepTimebaseSegmentCollection : Dictionary<TimeStep, VariableTimebaseSegmentCollection>
     {

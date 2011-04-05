@@ -781,7 +781,8 @@ namespace WordGenerator
 
         private void inspectVariableTimebaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TimestepTimebaseSegmentCollection ans = Storage.sequenceData.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, .000001);
+            TimestepTimebaseSegmentCollection ans = Storage.sequenceData.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, .000001,
+                new List<int>(), new List<int>());
            
             PropertyGridForm dialog = new PropertyGridForm(ans);
             dialog.ShowDialog();
@@ -789,7 +790,8 @@ namespace WordGenerator
 
         private void calculateVariableTimebaseAnalogBufferToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TimestepTimebaseSegmentCollection timebaseSegments = Storage.sequenceData.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, .000001);
+            TimestepTimebaseSegmentCollection timebaseSegments = Storage.sequenceData.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, .000001,
+                new List<int>(), new List<int>());
             int nSamples = 1 + timebaseSegments.nSegmentSamples();
 
             double[] ans = new double[nSamples];
@@ -861,7 +863,7 @@ namespace WordGenerator
             SequenceData sequence = Storage.sequenceData;
 
             TimestepTimebaseSegmentCollection timebaseSegments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock,
-                .000001);
+                .000001, new List<int>(), new List<int>());
 
             int nVTSamples = 1;
             foreach (TimeStep st in timebaseSegments.Keys)

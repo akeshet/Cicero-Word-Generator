@@ -158,14 +158,17 @@ namespace AtticusServer
             return ans;
         }
 
-        public FpgaTimebaseTask(DeviceSettings deviceSettings, okCUsbFrontPanel opalKellyDevice, SequenceData sequence, double masterClockPeriod, out int nSegments, bool useRfModulation, bool assymetric)
+        public FpgaTimebaseTask(DeviceSettings deviceSettings, okCUsbFrontPanel opalKellyDevice, SequenceData sequence, SettingsData settingsData, double masterClockPeriod, out int nSegments, bool useRfModulation, bool assymetric)
         {
             com.opalkelly.frontpanel.okCUsbFrontPanel.ErrorCode errorCode;
 
             this.opalKellyDevice = opalKellyDevice;
 
+            List<int> ignoreDigitals = settingsData.getIgnoredDigitalsForVariableTimebaseGeneration(deviceSettings.VariableTimebaseIDToGenerate);
+            List<int> ignoreAnalogs = settingsData.getIgnoredAnalogsForVariableTimebaseGeneration(deviceSettings.VariableTimebaseIDToGenerate);
+
             TimestepTimebaseSegmentCollection segments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock,
-                                                        masterClockPeriod);
+                                                        masterClockPeriod, ignoreAnalogs, ignoreDigitals);
 
             byte[] data = FpgaTimebaseTask.createByteArray(segments, sequence, out nSegments, masterClockPeriod, assymetric );
 

@@ -46,7 +46,7 @@ namespace AtticusServer
 
         double ticks_to_seconds(long ticks)
         {
-            return ticks / 10000000;
+            return ticks / 10000000.0;
         }
 
         public RfsgTask(SequenceData sequence, SettingsData settings, int channelID, string rfsgDeviceName, DeviceSettings deviceSettings)

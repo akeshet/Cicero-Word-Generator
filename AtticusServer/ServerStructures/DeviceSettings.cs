@@ -367,5 +367,20 @@ Category("Error Checking")]
             set { samplesGeneratedCheckSensitivity = value; }
         }
 
+        private string variableTimebaseIDToGenerate;
+
+        [Description("If several different variable timebases are going to be generated, this field is used to specify which of these timebases this particular FPGA or digital output card will generate. Default value is \"default\"."),
+Category("Timing")]
+        public string VariableTimebaseIDToGenerate
+        {
+            get
+            {
+                if (variableTimebaseIDToGenerate == null)
+                    variableTimebaseIDToGenerate = "default";
+                return variableTimebaseIDToGenerate;
+            }
+            set { variableTimebaseIDToGenerate = value; }
+        }
+
     }
 }

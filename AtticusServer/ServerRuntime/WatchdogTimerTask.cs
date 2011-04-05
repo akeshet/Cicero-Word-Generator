@@ -30,7 +30,7 @@ namespace AtticusServer
 
         private List<WatchdogTimerSegment> watchdogTimerSegments;
 
-        public WatchdogTimerTask(SequenceData sequence, int masterFrequency, NationalInstruments.DAQmx.Task taskToWatch,  double watchDogThresholdTime)
+    /*    public WatchdogTimerTask(SequenceData sequence, int masterFrequency, NationalInstruments.DAQmx.Task taskToWatch,  double watchDogThresholdTime)
         {
             this.taskToWatch = taskToWatch;
             TimestepTimebaseSegmentCollection segments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock,
@@ -79,7 +79,7 @@ namespace AtticusServer
                 }
                 
             }
-        }
+        }*/
 
 
 /*
@@ -169,4 +169,5 @@ namespace AtticusServer
         }*/
 
     }
+
 }
