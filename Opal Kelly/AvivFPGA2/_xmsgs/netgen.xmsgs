@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- IMPORTANT: This is an internal file that has been generated
+     by the Xilinx ISE software.  Any direct editing or
+     changes made to this file may result in unpredictable
+     behavior or data corruption.  It is strongly advised that
+     users do not edit the contents of this file. -->
+<messages>
+<msg type="warning" file="NetListWriters" num="674" delta="unknown" >Mismatched property type detected - type <arg fmt="%s" index="1">S</arg> expected for property <arg fmt="%s" index="2">SLEW</arg>:, but type integer detected, ignored.
+</msg>
+
+<msg type="warning" file="NetListWriters" num="674" delta="unknown" >Mismatched property type detected - type <arg fmt="%s" index="1">S</arg> expected for property <arg fmt="%s" index="2">SLEW</arg>:, but type integer detected, ignored.
+</msg>
+
+<msg type="warning" file="NetListWriters" num="674" delta="unknown" >Mismatched property type detected - type <arg fmt="%s" index="1">S</arg> expected for property <arg fmt="%s" index="2">SLEW</arg>:, but type integer detected, ignored.
+</msg>
+
+<msg type="warning" file="NetListWriters" num="674" delta="unknown" >Mismatched property type detected - type <arg fmt="%s" index="1">S</arg> expected for property <arg fmt="%s" index="2">SLEW</arg>:, but type integer detected, ignored.
+</msg>
+
+<msg type="warning" file="NetListWriters" num="674" delta="unknown" >Mismatched property type detected - type <arg fmt="%s" index="1">S</arg> expected for property <arg fmt="%s" index="2">SLEW</arg>:, but type integer detected, ignored.
+</msg>
+
+<msg type="warning" file="NetListWriters" num="674" delta="unknown" >Mismatched property type detected - type <arg fmt="%s" index="1">S</arg> expected for property <arg fmt="%s" index="2">SLEW</arg>:, but type integer detected, ignored.
+</msg>
+
+<msg type="warning" file="NetListWriters" num="674" delta="unknown" >Mismatched property type detected - type <arg fmt="%s" index="1">S</arg> expected for property <arg fmt="%s" index="2">SLEW</arg>:, but type integer detected, ignored.
+</msg>
+
+<msg type="warning" file="NetListWriters" num="674" delta="unknown" >Mismatched property type detected - type <arg fmt="%s" index="1">S</arg> expected for property <arg fmt="%s" index="2">SLEW</arg>:, but type integer detected, ignored.
+</msg>
+
+<msg type="warning" file="NetListWriters" num="674" delta="unknown" >Mismatched property type detected - type <arg fmt="%s" index="1">S</arg> expected for property <arg fmt="%s" index="2">SLEW</arg>:, but type integer detected, ignored.
+</msg>
+
+<msg type="warning" file="NetListWriters" num="674" delta="unknown" >Mismatched property type detected - type <arg fmt="%s" index="1">S</arg> expected for property <arg fmt="%s" index="2">SLEW</arg>:, but type integer detected, ignored.
+</msg>
+
+<msg type="warning" file="NetListWriters" num="674" delta="unknown" >Mismatched property type detected - type <arg fmt="%s" index="1">S</arg> expected for property <arg fmt="%s" index="2">SLEW</arg>:, but type integer detected, ignored.
+</msg>
+
+<msg type="warning" file="NetListWriters" num="674" delta="unknown" >Mismatched property type detected - type <arg fmt="%s" index="1">S</arg> expected for property <arg fmt="%s" index="2">SLEW</arg>:, but type integer detected, ignored.
+</msg>
+
+<msg type="warning" file="NetListWriters" num="674" delta="unknown" >Mismatched property type detected - type <arg fmt="%s" index="1">S</arg> expected for property <arg fmt="%s" index="2">SLEW</arg>:, but type integer detected, ignored.
+</msg>
+
+<msg type="warning" file="NetListWriters" num="674" delta="unknown" >Mismatched property type detected - type <arg fmt="%s" index="1">S</arg> expected for property <arg fmt="%s" index="2">SLEW</arg>:, but type integer detected, ignored.
+</msg>
+
+<msg type="warning" file="NetListWriters" num="674" delta="unknown" >Mismatched property type detected - type <arg fmt="%s" index="1">S</arg> expected for property <arg fmt="%s" index="2">SLEW</arg>:, but type integer detected, ignored.
+</msg>
+
+<msg type="warning" file="NetListWriters" num="674" delta="unknown" >Mismatched property type detected - type <arg fmt="%s" index="1">S</arg> expected for property <arg fmt="%s" index="2">SLEW</arg>:, but type integer detected, ignored.
+</msg>
+
+<msg type="warning" file="NetListWriters" num="674" delta="unknown" >Mismatched property type detected - type <arg fmt="%s" index="1">S</arg> expected for property <arg fmt="%s" index="2">SLEW</arg>:, but type integer detected, ignored.
+</msg>
+
+<msg type="warning" file="NetListWriters" num="674" delta="unknown" >Mismatched property type detected - type <arg fmt="%s" index="1">S</arg> expected for property <arg fmt="%s" index="2">SLEW</arg>:, but type integer detected, ignored.
+</msg>
+
+<msg type="info" file="NetListWriters" num="633" delta="unknown" >The generated Verilog netlist contains Xilinx <arg fmt="%s" index="1">UNISIM</arg> simulation primitives and has to be used with <arg fmt="%s" index="2">UNISIM</arg> simulation library for correct compilation and simulation. 
+</msg>
+
+<msg type="info" file="NetListWriters" num="0" delta="unknown" >Setup Simulation - To perform a setup simulation, specify values in the Maximum (MAX) field with the following command line modifier:  -SDFMAX
+</msg>
+
+<msg type="info" file="NetListWriters" num="0" delta="unknown" >Hold Simulation - To perform the most accurate hold simulation, specify values in the Minimum (MIN) field with the following command line modifier:  -SDFMIN
+</msg>
+
+<msg type="info" file="NetListWriters" num="665" delta="unknown" >For more information on how to pass the SDF switches to the simulator, see your Simulator tool documentation.
+</msg>
+
+</messages>
+

@@ -1,0 +1,6 @@
+CommandLine
+C:\Xilinx\10.1\ISE\bin\nt\unwrapped\ngcbuild.exe -intstyle ise -dd C:\Documents and Settings\Aviv Keshet\My Documents\FPGA\AvivFPGA2\tmp\_cg C:\Documents and Settings\Aviv Keshet\My Documents\FPGA\AvivFPGA2\tmp\_cg\TestFifo.edn C:\Documents and Settings\Aviv Keshet\My Documents\FPGA\AvivFPGA2\tmp\_cg\TestFifo_unobf.ngc
+s
+FormatString
+ngcbuild [-p <partname>] {-sd <source_dir>} [-ur <rules_file[.urf]>] [-dd <output_dir>] [-r] [-nt timestamp|on|off] [-uc <ucf_file[.ucf]>] [-aul] [-i] [-intstyle ise|xflow|silent] [-quiet] [-verbose] [-active <active_module_name>] [-insert_keep_hierarchy] [--insert_secure_netlist prohibit|encrypt|noinit|enable_unisim_hdl|off] [--insert_secure_config off|protect] [--insert_secure_bitstream <bitstream_value>] [--insert_check_license <license_value> ] [--forcengd] [--script <tcl_file>] <design_name> <ngc_file[.ngc]>
+s

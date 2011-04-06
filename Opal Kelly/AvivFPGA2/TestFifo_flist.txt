@@ -1,0 +1,12 @@
+# Output products list for <TestFifo>
+TestFifo.asy
+TestFifo.ngc
+TestFifo.sym
+TestFifo.v
+TestFifo.veo
+TestFifo.vhd
+TestFifo.vho
+TestFifo.xco
+TestFifo_fifo_generator_v4_4_xst_1.ngc_xst.xrpt
+TestFifo_flist.txt
+TestFifo_xmdf.tcl

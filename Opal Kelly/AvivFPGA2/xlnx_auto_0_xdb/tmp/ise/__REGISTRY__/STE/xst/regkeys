@@ -1,0 +1,6 @@
+CommandLine
+C:\Xilinx\10.1\ISE\bin\nt\unwrapped\xst.exe -ifn tmp\_cg\_bbx\TestFifo_fifo_generator_v4_4_xst_1.scr -ofn tmp\_cg\_bbx\TestFifo_fifo_generator_v4_4_xst_1_xst.log -intstyle silent -finalclean 1
+s
+FormatString
+xst [-ifn <InputFile>] [-ofn <OutputFile>] [-ise <iseProjectFile>] [--quiet] [-intstyle <Style>] [--deb <DebugLevel>] [--finalclean <Clean>] [--PcubeFlow] [--globOptFlow] [--XstNtrc]
+s
