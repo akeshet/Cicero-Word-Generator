@@ -1,0 +1,166 @@
+#-------------------------------------------------------------------------
+# XEM3001v2 - Xilinx constraints file
+#
+# Pin mappings for the XEM3001v2.  Use this as a template and comment out 
+# the pins that are not used in your design.  (By default, map will fail
+# if this file contains constraints for signals not in your design).
+#
+# Copyright (c) 2004-2006 Opal Kelly Incorporated
+# $Rev: 158 $ $Date: 2006-10-08 18:34:52 -0700 (Sun, 08 Oct 2006) $
+#-------------------------------------------------------------------------
+
+#-------------------------------
+# FrontPanel Host Interface pins
+#-------------------------------
+NET "hi_in<0>"			LOC = "P79";
+NET "hi_in<1>"			LOC = "P57";
+NET "hi_in<2>"			LOC = "P58";
+NET "hi_in<3>"			LOC = "P78";
+NET "hi_in<4>"			LOC = "P61";
+NET "hi_in<5>"			LOC = "P62";
+NET "hi_in<6>"			LOC = "P63";
+NET "hi_in<7>"			LOC = "P64";
+NET "hi_out<0>"		LOC = "P81";
+NET "hi_out<1>"		LOC = "P85";
+NET "hi_inout<0>"		LOC = "P67";
+NET "hi_inout<1>"		LOC = "P68";
+NET "hi_inout<2>"		LOC = "P72";
+NET "hi_inout<3>"		LOC = "P74";
+NET "hi_inout<4>"		LOC = "P86";
+NET "hi_inout<5>"		LOC = "P87";
+NET "hi_inout<6>"		LOC = "P90";
+NET "hi_inout<7>"		LOC = "P92";
+NET "hi_inout<8>"		LOC = "P93";
+NET "hi_inout<9>"		LOC = "P94";
+NET "hi_inout<10>"	LOC = "P95";
+NET "hi_inout<11>"	LOC = "P96";
+NET "hi_inout<12>"	LOC = "P97";
+NET "hi_inout<13>"	LOC = "P100";
+NET "hi_inout<14>"	LOC = "P101";
+NET "hi_inout<15>"	LOC = "P102";
+
+#---------------
+# PLL Clock pins
+#---------------
+NET "clk1"		LOC = "P80";
+NET "clk2"		LOC = "P77";
+#NET "clk3"		LOC = "P76";
+
+#----------------
+# Port JP1 (zbus)
+#----------------
+#NET "zclk1"	LOC = "P183";
+#NET "zclk2"	LOC = "P181";
+#NET "zbus<0>"	LOC = "P187";
+#NET "zbus<1>"	LOC = "P185";
+#NET "zbus<2>"	LOC = "P182";
+#NET "zbus<3>"	LOC = "P178";
+#NET "zbus<4>"	LOC = "P176";
+#NET "zbus<5>"	LOC = "P175";
+#NET "zbus<6>"	LOC = "P172";
+#NET "zbus<7>"	LOC = "P171";
+#NET "zbus<8>"	LOC = "P169";
+#NET "zbus<9>"	LOC = "P168";
+#NET "zbus<10>"	LOC = "P167";
+#NET "zbus<11>"	LOC = "P166";
+#NET "zbus<12>"	LOC = "P165";
+#NET "zbus<13>"	LOC = "P162";
+
+#----------------
+# Port JP2 (ybus)
+#----------------
+NET "yclk1"	LOC = "P184";
+NET "ybus<0>"	LOC = "P52";
+NET "ybus<1>"	LOC = "P51";
+NET "ybus<2>"	LOC = "P50";
+NET "ybus<3>"	LOC = "P48";
+NET "ybus<4>"	LOC = "P46";
+NET "ybus<5>"	LOC = "P45";
+NET "ybus<6>"	LOC = "P44";
+NET "ybus<7>"	LOC = "P43";
+NET "ybus<8>"	LOC = "P42";
+NET "ybus<9>"	LOC = "P40";
+NET "ybus<10>"	LOC = "P39";
+NET "ybus<11>"	LOC = "P37";
+NET "ybus<12>"	LOC = "P36";
+NET "ybus<13>"	LOC = "P35";
+NET "ybus<14>"	LOC = "P34";
+NET "ybus<15>"	LOC = "P33";
+NET "ybus<16>"	LOC = "P31";
+NET "ybus<17>"	LOC = "P29";
+NET "ybus<18>"	LOC = "P28";
+NET "ybus<19>"	LOC = "P27";
+NET "ybus<20>"	LOC = "P26";
+NET "ybus<21>"	LOC = "P24";
+NET "ybus<22>"	LOC = "P22";
+NET "ybus<23>"	LOC = "P21";
+NET "ybus<24>"	LOC = "P20";
+NET "ybus<25>"	LOC = "P19";
+NET "ybus<26>"	LOC = "P18";
+NET "ybus<27>"	LOC = "P16";
+NET "ybus<28>"	LOC = "P15";
+NET "ybus<29>"	LOC = "P13";
+NET "ybus<30>"	LOC = "P12";
+NET "ybus<31>"	LOC = "P11";
+NET "ybus<32>"	LOC = "P10";
+NET "ybus<33>"	LOC = "P9";
+NET "ybus<34>"	LOC = "P7";
+NET "ybus<35>"	LOC = "P5";
+
+#----------------
+# Port JP3 (xbus)
+#----------------
+#NET "xclk1"	LOC = "P180";
+#NET "xbus<0>"	LOC = "P156";
+#NET "xbus<1>"	LOC = "P155";
+#NET "xbus<2>"	LOC = "P154";
+#NET "xbus<3>"	LOC = "P152";
+#NET "xbus<4>"	LOC = "P150";
+#NET "xbus<5>"	LOC = "P149";
+#NET "xbus<6>"	LOC = "P148";
+#NET "xbus<7>"	LOC = "P147";
+#NET "xbus<8>"	LOC = "P146";
+#NET "xbus<9>"	LOC = "P144";
+#NET "xbus<10>"	LOC = "P143";
+#NET "xbus<11>"	LOC = "P141";
+#NET "xbus<12>"	LOC = "P140";
+#NET "xbus<13>"	LOC = "P139";
+#NET "xbus<14>"	LOC = "P138";
+#NET "xbus<15>"	LOC = "P137";
+#NET "xbus<16>"	LOC = "P135";
+#NET "xbus<17>"	LOC = "P133";
+#NET "xbus<18>"	LOC = "P132";
+#NET "xbus<19>"	LOC = "P131";
+#NET "xbus<20>"	LOC = "P130";
+#NET "xbus<21>"	LOC = "P128";
+#NET "xbus<22>"	LOC = "P126";
+#NET "xbus<23>"	LOC = "P125";
+#NET "xbus<24>"	LOC = "P124";
+#NET "xbus<25>"	LOC = "P123";
+#NET "xbus<26>"	LOC = "P122";
+#NET "xbus<27>"	LOC = "P120";
+#NET "xbus<28>"	LOC = "P119";
+#NET "xbus<29>"	LOC = "P117";
+#NET "xbus<30>"	LOC = "P116";
+#NET "xbus<31>"	LOC = "P115";
+#NET "xbus<32>"	LOC = "P114";
+#NET "xbus<33>"	LOC = "P113";
+#NET "xbus<34>"	LOC = "P111";
+#NET "xbus<35>"	LOC = "P109";
+
+#------------
+# Peripherals
+#------------
+NET "led<0>"  LOC = "P205";
+NET "led<1>"  LOC = "P204";
+NET "led<2>"  LOC = "P203";
+NET "led<3>"  LOC = "P200";
+NET "led<4>"  LOC = "P199";
+NET "led<5>"  LOC = "P198";
+NET "led<6>"  LOC = "P197";
+NET "led<7>"  LOC = "P196";
+
+NET "button<0>" LOC = "P194";
+NET "button<1>" LOC = "P191";
+NET "button<2>" LOC = "P190";
+NET "button<3>" LOC = "P189";
