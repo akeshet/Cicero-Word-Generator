@@ -1,0 +1,32 @@
+The directory structure contains a number of projects:
+
+WordGenerator/
+   Code for Cicero, the UI program for making and running sequences.
+
+AtticusServer/
+   Code for the hardware server "Atticus".
+
+DataStructures/
+   Common code used by Cicero, Atticus, and other projects.
+
+dotmath/
+   Library used for parsing equations.
+
+Elgin/
+   Code for "Elgin", the run log viewer.
+
+ExampleServer/
+   Skeleton code for you to right a cicero "server", much like Atticus, with whatever functionality you want.
+
+HDF5dotNet/
+   No longer in use, library for exporting to hdf5 files.
+
+Opal Kelly/
+   Code for the fpga based variable frequency clock, and some other drivers to run it.
+
+Simplicio/
+   A simple server written by Ariel Sommer, currently not part of the repo.
+
+Virgil/
+   Code for a server that generates hdf5 logs out of runs. Currently deprecated code, project is not actively developed.
+
