@@ -103,10 +103,6 @@
       <Project>{07B67011-62AB-43E3-80F6-E00BCBFF8558}</Project>
       <Name>DataStructures</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HDF5dotNet\HDF5DotNet\HDF5DotNet.vcxproj">
-      <Project>{867FF22E-70FC-44D8-B827-0FCDFEFA1851}</Project>
-      <Name>HDF5DotNet</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\VirgilIco.ico" />
