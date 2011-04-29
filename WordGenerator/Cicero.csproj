@@ -77,6 +77,12 @@
     <Compile Include="Controls\Dialogs\FormulaHelpDialog.Designer.cs">
       <DependentUpon>FormulaHelpDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Dialogs\VariablePreviewEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\Dialogs\VariablePreviewEditorForm.Designer.cs">
+      <DependentUpon>VariablePreviewEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\OverridePage\Analog Override.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -282,6 +288,12 @@
     <Compile Include="Controls\VariableEditor.Designer.cs">
       <DependentUpon>VariableEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\VariablePreviewEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\VariablePreviewEditor.Designer.cs">
+      <DependentUpon>VariablePreviewEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\VariableRelevanceEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -346,6 +358,9 @@
     <EmbeddedResource Include="Controls\Dialogs\LogAnnotator.resx">
       <SubType>Designer</SubType>
       <DependentUpon>LogAnnotator.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Dialogs\VariablePreviewEditorForm.resx">
+      <DependentUpon>VariablePreviewEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\OverridePage\Analog Override.resx">
       <SubType>Designer</SubType>
@@ -466,6 +481,9 @@
     <EmbeddedResource Include="Controls\VariableEditor.resx">
       <SubType>Designer</SubType>
       <DependentUpon>VariableEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\VariablePreviewEditor.resx">
+      <DependentUpon>VariablePreviewEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\VariableRelevanceEditor.resx">
       <SubType>Designer</SubType>

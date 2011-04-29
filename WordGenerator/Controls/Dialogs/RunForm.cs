@@ -611,6 +611,8 @@ namespace WordGenerator
                     addMessageLogText(this, new MessageEvent("Lists locked successfully."));
                 }
 
+
+
                 sequence.ListIterationNumber = iterationNumber;
 
                 string listBoundVariableValues = "";
@@ -679,6 +681,14 @@ namespace WordGenerator
                             }
                         }
                     }
+                }
+
+
+                if (variablePreviewForm != null)
+                {
+                    addMessageLogText(this, new MessageEvent("Updating variables according to variable preview window..."));
+                    int nChanged = variablePreviewForm.refresh(sequence);
+                    addMessageLogText(this, new MessageEvent("... " + nChanged + " variable values changed."));
                 }
 
 
@@ -1178,6 +1188,9 @@ namespace WordGenerator
             }
 
             Storage.sequenceData.cleanupLoopCopies();
+
+            if (variablePreviewForm != null)
+                variablePreviewForm.Close();
         }
 
 
@@ -1231,6 +1244,30 @@ namespace WordGenerator
         private void textBox1_Click(object sender, EventArgs e)
         {
             this.ErrorDetected = false;
+        }
+
+        private WordGenerator.Controls.VariablePreviewEditorForm variablePreviewForm;
+
+        private void showVariablePreviewCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (showVariablePreviewCheckbox.Checked)
+            {
+                variablePreviewForm = new Controls.VariablePreviewEditorForm(Storage.sequenceData.Variables);
+                variablePreviewForm.FormClosed += new FormClosedEventHandler(variablePreviewForm_FormClosed);
+                variablePreviewForm.Show();
+            }
+            else
+            {
+                if (variablePreviewForm != null)
+                    variablePreviewForm.Close();
+                variablePreviewForm = null;
+            }
+        }
+
+        void variablePreviewForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            variablePreviewForm = null;
+            showVariablePreviewCheckbox.Checked = false;
         }
     }
 }

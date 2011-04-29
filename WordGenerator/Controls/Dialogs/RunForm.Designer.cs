@@ -39,6 +39,7 @@ namespace WordGenerator
             this.fortuneCookieLabel = new System.Windows.Forms.Label();
             this.abortAfterThis = new System.Windows.Forms.CheckBox();
             this.savingWarning = new System.Windows.Forms.Label();
+            this.showVariablePreviewCheckbox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // progressBar
@@ -147,11 +148,22 @@ namespace WordGenerator
             this.savingWarning.Text = "NOT SAVING";
             this.savingWarning.Visible = false;
             // 
+            // showVariablePreviewCheckbox
+            // 
+            this.showVariablePreviewCheckbox.Location = new System.Drawing.Point(336, 394);
+            this.showVariablePreviewCheckbox.Name = "showVariablePreviewCheckbox";
+            this.showVariablePreviewCheckbox.Size = new System.Drawing.Size(90, 66);
+            this.showVariablePreviewCheckbox.TabIndex = 11;
+            this.showVariablePreviewCheckbox.Text = "Variable preview";
+            this.showVariablePreviewCheckbox.UseVisualStyleBackColor = true;
+            this.showVariablePreviewCheckbox.CheckedChanged += new System.EventHandler(this.showVariablePreviewCheckbox_CheckedChanged);
+            // 
             // RunForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(570, 634);
+            this.Controls.Add(this.showVariablePreviewCheckbox);
             this.Controls.Add(this.savingWarning);
             this.Controls.Add(this.abortAfterThis);
             this.Controls.Add(this.fortuneCookieLabel);
@@ -191,5 +203,6 @@ namespace WordGenerator
         private System.Windows.Forms.Label fortuneCookieLabel;
         private System.Windows.Forms.CheckBox abortAfterThis;
         private System.Windows.Forms.Label savingWarning;
+        private System.Windows.Forms.CheckBox showVariablePreviewCheckbox;
     }
 }
