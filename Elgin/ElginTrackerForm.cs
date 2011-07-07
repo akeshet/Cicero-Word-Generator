@@ -134,6 +134,14 @@ namespace Elgin
             }
         }
 
+        /// <summary>
+        /// Return a string that contains either the variable value in string form for the given column and runlog, 
+        /// or an appropriate "Undefined" or "Unassigned" string if the runlog doesn't contain a variable of the intended name or id,
+        /// or if no name or id is assigned to this column.
+        /// </summary>
+        /// <param name="variableColumn"></param>
+        /// <param name="rlg"></param>
+        /// <returns></returns>
         private string getVariableString(DataGridViewColumn variableColumn, RunLog rlg)
         {
             if (variableSelections.ContainsKey(variableColumn))
