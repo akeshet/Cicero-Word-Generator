@@ -29,19 +29,18 @@
         private void InitializeComponent()
         {
             this.variablePreviewEditorPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.variablePreviewEditor1 = new WordGenerator.Controls.VariablePreviewEditor();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.variablePreviewEditor1 = new WordGenerator.Controls.VariablePreviewEditor();
             this.variablePreviewEditorPanel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // variablePreviewEditorPanel
             // 
-            this.variablePreviewEditorPanel.AutoScroll = true;
             this.variablePreviewEditorPanel.AutoSize = true;
             this.variablePreviewEditorPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.variablePreviewEditorPanel.Controls.Add(this.variablePreviewEditor1);
@@ -50,6 +49,14 @@
             this.variablePreviewEditorPanel.Name = "variablePreviewEditorPanel";
             this.variablePreviewEditorPanel.Size = new System.Drawing.Size(401, 33);
             this.variablePreviewEditorPanel.TabIndex = 0;
+            // 
+            // variablePreviewEditor1
+            // 
+            this.variablePreviewEditor1.Location = new System.Drawing.Point(3, 3);
+            this.variablePreviewEditor1.Name = "variablePreviewEditor1";
+            this.variablePreviewEditor1.Size = new System.Drawing.Size(395, 27);
+            this.variablePreviewEditor1.TabIndex = 0;
+            this.variablePreviewEditor1.Visible = false;
             // 
             // label1
             // 
@@ -96,27 +103,19 @@
             this.panel1.Size = new System.Drawing.Size(432, 421);
             this.panel1.TabIndex = 5;
             // 
-            // variablePreviewEditor1
-            // 
-            this.variablePreviewEditor1.Location = new System.Drawing.Point(3, 3);
-            this.variablePreviewEditor1.Name = "variablePreviewEditor1";
-            this.variablePreviewEditor1.Size = new System.Drawing.Size(395, 27);
-            this.variablePreviewEditor1.TabIndex = 0;
-            this.variablePreviewEditor1.Visible = false;
-            // 
             // VariablePreviewEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(459, 492);
+            this.ClientSize = new System.Drawing.Size(464, 492);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximumSize = new System.Drawing.Size(465, 520);
-            this.MinimumSize = new System.Drawing.Size(465, 520);
+            this.MaximumSize = new System.Drawing.Size(470, 520);
+            this.MinimumSize = new System.Drawing.Size(470, 520);
             this.Name = "VariablePreviewEditorForm";
             this.ShowIcon = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
