@@ -34,11 +34,11 @@ namespace WordGenerator.Controls
             this.label2 = new System.Windows.Forms.Label();
             this.nameLabel = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.variableEditorPlaceholder = new WordGenerator.Controls.VariableEditor();
             this.addButton = new System.Windows.Forms.Button();
             this.lockButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.loadCalSequence = new System.Windows.Forms.Button();
+            this.loadCalSequenceFromCurrentSequence = new System.Windows.Forms.Button();
+            this.loadCalSequenceFromFile = new System.Windows.Forms.Button();
             this.unloadCalSequence = new System.Windows.Forms.Button();
             this.calShotSequenceLabel = new System.Windows.Forms.Label();
             this.calShotSeqLabInfo = new System.Windows.Forms.Label();
@@ -61,6 +61,7 @@ namespace WordGenerator.Controls
             this.listFillerButton = new System.Windows.Forms.Button();
             this.listFillerSelector = new System.Windows.Forms.ComboBox();
             this.LockMessage = new System.Windows.Forms.Label();
+            this.variableEditorPlaceholder = new WordGenerator.Controls.VariableEditor();
             this.listEditorPanelPlaceholder = new WordGenerator.Controls.ListEditorPanel();
             this.runControl1 = new WordGenerator.Controls.RunControl();
             this.variablesPanel.SuspendLayout();
@@ -91,7 +92,7 @@ namespace WordGenerator.Controls
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.71028F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67.28972F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 53F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 96F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 102F));
             this.tableLayoutPanel1.Controls.Add(this.label1, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.nameLabel, 1, 0);
@@ -106,7 +107,7 @@ namespace WordGenerator.Controls
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(82, 0);
+            this.label1.Location = new System.Drawing.Point(76, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(34, 13);
             this.label1.TabIndex = 1;
@@ -124,7 +125,7 @@ namespace WordGenerator.Controls
             // nameLabel
             // 
             this.nameLabel.AutoSize = true;
-            this.nameLabel.Location = new System.Drawing.Point(29, 0);
+            this.nameLabel.Location = new System.Drawing.Point(27, 0);
             this.nameLabel.Name = "nameLabel";
             this.nameLabel.Size = new System.Drawing.Size(35, 13);
             this.nameLabel.TabIndex = 0;
@@ -133,20 +134,11 @@ namespace WordGenerator.Controls
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(135, 0);
+            this.label3.Location = new System.Drawing.Point(129, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(55, 13);
             this.label3.TabIndex = 4;
             this.label3.Text = "Equation?";
-            // 
-            // variableEditorPlaceholder
-            // 
-            this.variableEditorPlaceholder.ListLocked = false;
-            this.variableEditorPlaceholder.Location = new System.Drawing.Point(3, 28);
-            this.variableEditorPlaceholder.Name = "variableEditorPlaceholder";
-            this.variableEditorPlaceholder.Size = new System.Drawing.Size(220, 22);
-            this.variableEditorPlaceholder.TabIndex = 2;
-            this.variableEditorPlaceholder.Visible = false;
             // 
             // addButton
             // 
@@ -170,7 +162,8 @@ namespace WordGenerator.Controls
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.loadCalSequence);
+            this.groupBox1.Controls.Add(this.loadCalSequenceFromCurrentSequence);
+            this.groupBox1.Controls.Add(this.loadCalSequenceFromFile);
             this.groupBox1.Controls.Add(this.unloadCalSequence);
             this.groupBox1.Controls.Add(this.calShotSequenceLabel);
             this.groupBox1.Controls.Add(this.calShotSeqLabInfo);
@@ -187,21 +180,31 @@ namespace WordGenerator.Controls
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Calibration Shots";
             // 
-            // loadCalSequence
+            // loadCalSequenceFromCurrentSequence
             // 
-            this.loadCalSequence.Location = new System.Drawing.Point(225, 103);
-            this.loadCalSequence.Name = "loadCalSequence";
-            this.loadCalSequence.Size = new System.Drawing.Size(122, 26);
-            this.loadCalSequence.TabIndex = 9;
-            this.loadCalSequence.Text = "Load Sequence";
-            this.loadCalSequence.UseVisualStyleBackColor = true;
-            this.loadCalSequence.Click += new System.EventHandler(this.loadCalSequence_Click);
+            this.loadCalSequenceFromCurrentSequence.Location = new System.Drawing.Point(234, 103);
+            this.loadCalSequenceFromCurrentSequence.Name = "loadCalSequenceFromCurrentSequence";
+            this.loadCalSequenceFromCurrentSequence.Size = new System.Drawing.Size(113, 26);
+            this.loadCalSequenceFromCurrentSequence.TabIndex = 10;
+            this.loadCalSequenceFromCurrentSequence.Text = "Load Current";
+            this.loadCalSequenceFromCurrentSequence.UseVisualStyleBackColor = true;
+            this.loadCalSequenceFromCurrentSequence.Click += new System.EventHandler(this.loadCalSequenceFromCurrentSequence_Click);
+            // 
+            // loadCalSequenceFromFile
+            // 
+            this.loadCalSequenceFromFile.Location = new System.Drawing.Point(126, 103);
+            this.loadCalSequenceFromFile.Name = "loadCalSequenceFromFile";
+            this.loadCalSequenceFromFile.Size = new System.Drawing.Size(104, 26);
+            this.loadCalSequenceFromFile.TabIndex = 9;
+            this.loadCalSequenceFromFile.Text = "Load From File";
+            this.loadCalSequenceFromFile.UseVisualStyleBackColor = true;
+            this.loadCalSequenceFromFile.Click += new System.EventHandler(this.loadCalSequence_Click);
             // 
             // unloadCalSequence
             // 
             this.unloadCalSequence.Location = new System.Drawing.Point(14, 103);
             this.unloadCalSequence.Name = "unloadCalSequence";
-            this.unloadCalSequence.Size = new System.Drawing.Size(118, 26);
+            this.unloadCalSequence.Size = new System.Drawing.Size(108, 26);
             this.unloadCalSequence.TabIndex = 8;
             this.unloadCalSequence.Text = "Unload Sequence";
             this.unloadCalSequence.UseVisualStyleBackColor = true;
@@ -442,6 +445,15 @@ namespace WordGenerator.Controls
             this.LockMessage.Size = new System.Drawing.Size(0, 13);
             this.LockMessage.TabIndex = 11;
             // 
+            // variableEditorPlaceholder
+            // 
+            this.variableEditorPlaceholder.ListLocked = false;
+            this.variableEditorPlaceholder.Location = new System.Drawing.Point(3, 28);
+            this.variableEditorPlaceholder.Name = "variableEditorPlaceholder";
+            this.variableEditorPlaceholder.Size = new System.Drawing.Size(220, 22);
+            this.variableEditorPlaceholder.TabIndex = 2;
+            this.variableEditorPlaceholder.Visible = false;
+            // 
             // listEditorPanelPlaceholder
             // 
             this.listEditorPanelPlaceholder.Location = new System.Drawing.Point(326, 3);
@@ -512,7 +524,7 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.CheckBox runCalFirstCheck;
         private System.Windows.Forms.Label calShotSequenceLabel;
         private System.Windows.Forms.Label calShotSeqLabInfo;
-        private System.Windows.Forms.Button loadCalSequence;
+        private System.Windows.Forms.Button loadCalSequenceFromFile;
         private System.Windows.Forms.Button unloadCalSequence;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel panel1;
@@ -529,5 +541,6 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label LockMessage;
         private RunControl runControl1;
+        private System.Windows.Forms.Button loadCalSequenceFromCurrentSequence;
     }
 }

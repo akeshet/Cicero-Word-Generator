@@ -326,7 +326,8 @@ namespace WordGenerator.Controls
                 runEveryNCheck.Enabled = false;
                 calShotSequenceLabel.Enabled = false;
                 calShotSeqLabInfo.Enabled = false;
-                loadCalSequence.Enabled = false;
+                loadCalSequenceFromFile.Enabled = false;
+                loadCalSequenceFromCurrentSequence.Enabled = false;
                 unloadCalSequence.Enabled = false;
             }
             else
@@ -340,13 +341,15 @@ namespace WordGenerator.Controls
                 calShotSeqLabInfo.Enabled = true;
                 if (Storage.sequenceData.CalibrationShotsInfo.CalibrationShotSequence == null)
                 {
-                    loadCalSequence.Enabled = true;
+                    loadCalSequenceFromFile.Enabled = true;
+                    loadCalSequenceFromCurrentSequence.Enabled = true;
                     unloadCalSequence.Enabled = false;
                 }
                 else
                 {
                     unloadCalSequence.Enabled = true;
-                    loadCalSequence.Enabled = false;
+                    loadCalSequenceFromFile.Enabled = false;
+                    loadCalSequenceFromCurrentSequence.Enabled = false;
                 }
             }
         }
@@ -390,20 +393,27 @@ namespace WordGenerator.Controls
         {
             if (Storage.sequenceData != null)
             {
-                Storage.sequenceData.calibrationShotsInfo.CalibrationShotSequence = Storage.SaveAndLoad.LoadSequenceWithFileDialog();
-                if (Storage.sequenceData.calibrationShotsInfo.CalibrationShotSequence != null)
-                {
-                    if (!Storage.sequenceData.calibrationShotsInfo.CalibrationShotSequence.Lists.ListLocked)
-                    {
-                        MessageBox.Show("The sequence file you have specified for use as a calibration shot does not have its lists locked, and therefore will not be usable as a calibration shot. To use this file as a calibration shot, please re-save it with its lists locked.", "Unable to use calibration shot with unlocked lists.");
-                        Storage.sequenceData.calibrationShotsInfo.CalibrationShotSequence = null;
-                        
-                    }
-                    else
-                        Storage.sequenceData.calibrationShotsInfo.CalibrationShotSequence.CalibrationShot = true;
-                }
-                layoutCalibrationUI();
+                SequenceData calibrationShotSequence = Storage.SaveAndLoad.LoadSequenceWithFileDialog();
+
+                setCalibrationSequence(calibrationShotSequence);
             }
+        }
+
+        private void setCalibrationSequence(SequenceData calibrationShotSequence)
+        {
+            Storage.sequenceData.calibrationShotsInfo.CalibrationShotSequence = calibrationShotSequence;
+            if (Storage.sequenceData.calibrationShotsInfo.CalibrationShotSequence != null)
+            {
+                if (!Storage.sequenceData.calibrationShotsInfo.CalibrationShotSequence.Lists.ListLocked)
+                {
+                    MessageBox.Show("The sequence you have specified for use as a calibration shot does not have its lists locked, and therefore will not be usable as a calibration shot. To use this file as a calibration shot, lock its lists.", "Unable to use calibration shot with unlocked lists.");
+                    Storage.sequenceData.calibrationShotsInfo.CalibrationShotSequence = null;
+
+                }
+                else
+                    Storage.sequenceData.calibrationShotsInfo.CalibrationShotSequence.CalibrationShot = true;
+            }
+            layoutCalibrationUI();
         }
 
         private void equationHelpButton_Click(object sender, EventArgs e)
@@ -445,9 +455,20 @@ namespace WordGenerator.Controls
             }
          }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void loadCalSequenceFromCurrentSequence_Click(object sender, EventArgs e)
         {
+            SequenceData copyOfCurrentSequence = null;
 
+            // Create a deep copy of the current sequence file, by serializing and then deserializing. A clever trick.
+            using (System.IO.MemoryStream ms  = new System.IO.MemoryStream())
+            {
+                System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                bf.Serialize(ms, Storage.sequenceData);
+                ms.Position = 0;
+                copyOfCurrentSequence = (SequenceData)bf.Deserialize(ms);
+            }
+
+            setCalibrationSequence(copyOfCurrentSequence);
         }
 
 
