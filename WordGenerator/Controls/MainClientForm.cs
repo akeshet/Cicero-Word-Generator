@@ -800,7 +800,7 @@ namespace WordGenerator
         {
             if (!suppressHotkeys)
             {
-                RunForm rf = new RunForm(RunForm.RunType.Run_Iteration_Zero, sequencePage1.runControl1.repeatCheckBox.Checked,true);
+                RunForm rf = new RunForm(Storage.sequenceData, RunForm.RunType.Run_Iteration_Zero, sequencePage1.runControl1.repeatCheckBox.Checked, true);
                 rf.ShowDialog();
             }
 
@@ -810,7 +810,7 @@ namespace WordGenerator
         {
             if (!suppressHotkeys)
             {
-                RunForm rf = new RunForm(RunForm.RunType.Run_Current_Iteration, sequencePage1.runControl1.repeatCheckBox.Checked,true);
+                RunForm rf = new RunForm(Storage.sequenceData, RunForm.RunType.Run_Current_Iteration, sequencePage1.runControl1.repeatCheckBox.Checked, true);
                 rf.ShowDialog();
             }
         }
@@ -819,7 +819,7 @@ namespace WordGenerator
         {
             if (!suppressHotkeys)
             {
-                RunForm rf = new RunForm(RunForm.RunType.Run_Full_List, sequencePage1.runControl1.repeatCheckBox.Checked, true);
+                RunForm rf = new RunForm(Storage.sequenceData, RunForm.RunType.Run_Full_List, sequencePage1.runControl1.repeatCheckBox.Checked, true);
                 rf.ShowDialog();
             }
         }
@@ -828,7 +828,7 @@ namespace WordGenerator
         {
             if (!suppressHotkeys)
             {
-                RunForm rf = new RunForm(RunForm.RunType.Run_Continue_List, sequencePage1.runControl1.repeatCheckBox.Checked, true);
+                RunForm rf = new RunForm(Storage.sequenceData, RunForm.RunType.Run_Continue_List, sequencePage1.runControl1.repeatCheckBox.Checked, true);
                 rf.ShowDialog();
             }
         }
@@ -837,7 +837,7 @@ namespace WordGenerator
         {
             if (!suppressHotkeys)
             {
-                RunForm rf = new RunForm(RunForm.RunType.Run_Random_Order_List, sequencePage1.runControl1.repeatCheckBox.Checked, true);
+                RunForm rf = new RunForm(Storage.sequenceData, RunForm.RunType.Run_Random_Order_List, sequencePage1.runControl1.repeatCheckBox.Checked, true);
                 rf.ShowDialog();
             }
         }
@@ -846,7 +846,7 @@ namespace WordGenerator
         {
             if (!suppressHotkeys)
             {
-                RunForm rf = new RunForm(RunForm.RunType.Run_Iteration_Zero, sequencePage1.runControl1.repeatCheckBox.Checked, false);
+                RunForm rf = new RunForm(Storage.sequenceData, RunForm.RunType.Run_Iteration_Zero, sequencePage1.runControl1.repeatCheckBox.Checked, false);
                 rf.ShowDialog();
             }
         }

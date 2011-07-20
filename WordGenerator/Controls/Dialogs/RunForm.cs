@@ -163,8 +163,9 @@ namespace WordGenerator
 
         private Dictionary<int, Button> hotkeyButtons;
 
-        public RunForm()
+        public RunForm(SequenceData sequenceToRun)
         {
+            this.runningSequence = sequenceToRun;
             if (WordGenerator.mainClientForm.instance.studentEdition)
             {
                 MessageBox.Show("Your Cicero Professional Edition (C) License expired on March 31. You are now running a temporary 24 hour STUDENT EDITION license. Please see http://web.mit.edu/~akeshet/www/Cicero/apr1.html for license renewal information.", "License expired -- temporary STUDENT EDITION license.");
@@ -273,8 +274,8 @@ namespace WordGenerator
             hotkeyButtons.Clear();
         }
 
-        public RunForm(RunType runType, bool runRepeat)
-            : this()
+        public RunForm(SequenceData sequenceToRun, RunType runType, bool runRepeat)
+            : this(sequenceToRun)
         {
             this.runType = runType;
             this.runRepeat = runRepeat;
@@ -289,13 +290,15 @@ namespace WordGenerator
                 abortAfterThis.Visible = true;
         }
 
-        public RunForm(RunType runType, bool runRepeat, bool isCameraSaving)
-            : this()
+        public RunForm(SequenceData sequenceToRun, RunType runType, bool runRepeat, bool isCameraSaving)
+            : this(sequenceToRun)
         {
             this.runType = runType;
+
             this.isCameraSaving = isCameraSaving;
             this.savingWarning.Visible = !isCameraSaving;
-            Storage.sequenceData.AISaved = isCameraSaving;
+
+            runningSequence.AISaved = isCameraSaving;
 
             this.runRepeat = runRepeat;
 
@@ -362,16 +365,16 @@ namespace WordGenerator
                             title += "0.";
                             break;
                         case RunType.Run_Current_Iteration:
-                            title += Storage.sequenceData.ListIterationNumber.ToString() + ".";
+                            title += runningSequence.ListIterationNumber.ToString() + ".";
                             break;
                         case RunType.Run_Full_List:
-                            title += Storage.sequenceData.ListIterationNumber.ToString() + "/" + (Storage.sequenceData.Lists.iterationsCount() - 1) + ".";
+                            title += runningSequence.ListIterationNumber.ToString() + "/" + (runningSequence.Lists.iterationsCount() - 1) + ".";
                             break;
                         case RunType.Run_Continue_List:
-                            title += Storage.sequenceData.ListIterationNumber.ToString() + "/" + (Storage.sequenceData.Lists.iterationsCount() - 1) + ".";
+                            title += runningSequence.ListIterationNumber.ToString() + "/" + (runningSequence.Lists.iterationsCount() - 1) + ".";
                             break;
                         case RunType.Run_Random_Order_List:
-                            title += Storage.sequenceData.ListIterationNumber.ToString() + "/" + (Storage.sequenceData.Lists.iterationsCount() - 1) + " (random run #" + random_order_run_iteration_number + ").";
+                            title += runningSequence.ListIterationNumber.ToString() + "/" + (runningSequence.Lists.iterationsCount() - 1) + " (random run #" + random_order_run_iteration_number + ").";
                             break;
                     }
 
@@ -392,13 +395,20 @@ namespace WordGenerator
             // start run! woo hoo!
             // do it async so as not to block the UI thread.
 
-            if (!Storage.sequenceData.Lists.ListLocked)
+            if (!runningSequence.Lists.ListLocked)
             {
+                if (runningSequence != Storage.sequenceData)
+                {
+                    addMessageLogText(this, new MessageEvent("Cannot lock the lists of a background-running sequence or a calibration shot. Aborting."));
+                    setStatus(RunFormStatus.FinishedRun);
+                    return;
+                }
+
                 addMessageLogText(this, new MessageEvent("Lists not locked, attempting to lock them..."));
 
                 WordGenerator.mainClientForm.instance.variablesEditor1.tryLockLists();
 
-                if (!Storage.sequenceData.Lists.ListLocked)
+                if (!runningSequence.Lists.ListLocked)
                 {
                     addMessageLogText(this, new MessageEvent("Unable to lock lists. Aborting run. See the Variables tab."));
 
@@ -412,11 +422,11 @@ namespace WordGenerator
             {
                 case RunType.Run_Iteration_Zero:
                     boolIntSequenceDelegate runZero = new boolIntSequenceDelegate(do_run);
-                    runZero.BeginInvoke(0, Storage.sequenceData, null, null);
+                    runZero.BeginInvoke(0, runningSequence, null, null);
                     break;
                 case RunType.Run_Current_Iteration:
                     boolSequenceDelegate runCurrent = new boolSequenceDelegate(do_run);
-                    runCurrent.BeginInvoke(Storage.sequenceData, null, null);
+                    runCurrent.BeginInvoke(runningSequence, null, null);
                     break;
                 case RunType.Run_Full_List:
                     boolVoidDelegate runList = new boolVoidDelegate(do_list_run);
@@ -441,9 +451,9 @@ namespace WordGenerator
 
         public bool do_continue_list_run()
         {
-            addMessageLogText(this, new MessageEvent("Starting continue list run. " + Storage.sequenceData.Lists.iterationsCount() + " total iterations. Starting at iteration #" + Storage.sequenceData.ListIterationNumber));
+            addMessageLogText(this, new MessageEvent("Starting continue list run. " + runningSequence.Lists.iterationsCount() + " total iterations. Starting at iteration #" + runningSequence.ListIterationNumber));
 
-            int i = Storage.sequenceData.ListIterationNumber;
+            int i = runningSequence.ListIterationNumber;
 
             bool previousRunSuccessful = calibrationShot(i);
             if (!previousRunSuccessful)
@@ -453,11 +463,11 @@ namespace WordGenerator
             }
 
 
-            for (; i < Storage.sequenceData.Lists.iterationsCount(); i++)
+            for (; i < runningSequence.Lists.iterationsCount(); i++)
             {
 
                 addMessageLogText(this, new MessageEvent("Iteration #" + i));
-                previousRunSuccessful = do_run(i, Storage.sequenceData);
+                previousRunSuccessful = do_run(i, runningSequence);
                 if (!previousRunSuccessful)
                 {
                     addMessageLogText(this, new MessageEvent("Aborting list run at iteration #" + i));
@@ -479,11 +489,11 @@ namespace WordGenerator
 
         private bool calibrationShot(int i)
         {
-            if (Storage.sequenceData.CalibrationShotsInfo.calibrationShotRequiredOnThisRun(i,
-                Storage.sequenceData.Lists.iterationsCount()))
+            if (runningSequence.CalibrationShotsInfo.calibrationShotRequiredOnThisRun(i,
+                runningSequence.Lists.iterationsCount()))
             {
                 addMessageLogText(this, new MessageEvent("Taking a calibration shot."));
-                bool temp = do_run(0, Storage.sequenceData.calibrationShotsInfo.CalibrationShotSequence, true);
+                bool temp = do_run(0, runningSequence.calibrationShotsInfo.CalibrationShotSequence, true);
                 if (!temp)
                 {
                     addMessageLogText(this, new MessageEvent("Calibration shot failed. Aborting list run."));
@@ -499,9 +509,9 @@ namespace WordGenerator
 
         public bool do_random_order_list_run()
         {
-            addMessageLogText(this, new MessageEvent("Starting random-order list run, " + Storage.sequenceData.Lists.iterationsCount() + " iterations."));
+            addMessageLogText(this, new MessageEvent("Starting random-order list run, " + runningSequence.Lists.iterationsCount() + " iterations."));
             List<int> iterationsRemaining = new List<int>();
-            for (int i = 0; i < Storage.sequenceData.Lists.iterationsCount(); i++)
+            for (int i = 0; i < runningSequence.Lists.iterationsCount(); i++)
             {
                 iterationsRemaining.Add(i);
             }
@@ -522,7 +532,7 @@ namespace WordGenerator
                 int selectedIteration = iterationsRemaining[selectedIterationIndex];
 
                 addMessageLogText(this, new MessageEvent("Iteration # " + selectedIteration + " (randomly selected)."));
-                previousRunSuccessful = do_run(selectedIteration, Storage.sequenceData);
+                previousRunSuccessful = do_run(selectedIteration, runningSequence);
                 if (!previousRunSuccessful)
                 {
                     addMessageLogText(this, new MessageEvent("Aborting randomized list run after " + random_order_run_iteration_number + " randomly selected iterations."));
@@ -545,7 +555,7 @@ namespace WordGenerator
 
         public bool do_list_run()
         {
-            addMessageLogText(this, new MessageEvent("Starting list run, " + Storage.sequenceData.Lists.iterationsCount() + " iterations."));
+            addMessageLogText(this, new MessageEvent("Starting list run, " + runningSequence.Lists.iterationsCount() + " iterations."));
 
             int i = 0;
             bool previousRunSuccessful = calibrationShot(i);
@@ -555,11 +565,11 @@ namespace WordGenerator
                 return false;
             }
 
-            for (; i < Storage.sequenceData.Lists.iterationsCount(); i++)
+            for (; i < runningSequence.Lists.iterationsCount(); i++)
             {
                 addMessageLogText(this, new MessageEvent("Iteration #" + i));
 
-                previousRunSuccessful = do_run(i, Storage.sequenceData);
+                previousRunSuccessful = do_run(i, runningSequence);
                 if (!previousRunSuccessful)
                 {
                     addMessageLogText(this, new MessageEvent("Aborting list run at iteration #" + i));
@@ -582,7 +592,7 @@ namespace WordGenerator
 
         public bool do_run(SequenceData sequence)
         {
-            return do_run(Storage.sequenceData.ListIterationNumber, sequence);
+            return do_run(runningSequence.ListIterationNumber, sequence);
         }
 
         public bool do_run(int iterationNumber, SequenceData sequence)
@@ -716,11 +726,18 @@ namespace WordGenerator
                         {
                             addMessageLogText(this, new MessageEvent("Detected a variable with special name SeqMode. Nearest integer value " + (int)var.VariableValue + "."));
                             int i = (int)var.VariableValue;
-                            if (i >= 0 && i < Storage.sequenceData.SequenceModes.Count)
+                            if (i >= 0 && i < runningSequence.SequenceModes.Count)
                             {
-                                SequenceMode mode = Storage.sequenceData.SequenceModes[i];
-                                addMessageLogText(this, new MessageEvent("Settings sequence to sequence mode " + mode.ModeName + "."));
-                                WordGenerator.mainClientForm.instance.sequencePage1.setMode(mode);
+                                SequenceMode mode = runningSequence.SequenceModes[i];
+                                if (runningSequence == Storage.sequenceData)
+                                {
+                                    addMessageLogText(this, new MessageEvent("Settings sequence to sequence mode " + mode.ModeName + "."));
+                                    WordGenerator.mainClientForm.instance.sequencePage1.setMode(mode);
+                                }
+                                else
+                                {
+                                    addMessageLogText(this, new MessageEvent("Currently running sequence is either a calibration shot or background running sequence. Cannot change the sequence mode of a background sequence. Skipping mode change."));
+                                }
                             }
                             else
                             {
@@ -1123,7 +1140,7 @@ namespace WordGenerator
             addMessageLogText(this, new MessageEvent("Run aborting."));
             Storage.settingsData.serverManager.stopAllServers(addMessageLogText);
             addMessageLogText(this, new MessageEvent("Run aborted."));
-            TimeStep step = Storage.sequenceData.dwellWord();
+            TimeStep step = runningSequence.dwellWord();
             if (step != null)
             {
                 addMessageLogText(this, new MessageEvent("Attempting to output the dwell timestep."));
@@ -1235,7 +1252,7 @@ namespace WordGenerator
                 e.Cancel = true;
             }
 
-            Storage.sequenceData.cleanupLoopCopies();
+            runningSequence.cleanupLoopCopies();
 
             if (variablePreviewForm != null)
                 variablePreviewForm.Close();
@@ -1300,7 +1317,7 @@ namespace WordGenerator
         {
             if (showVariablePreviewCheckbox.Checked)
             {
-                variablePreviewForm = new Controls.VariablePreviewEditorForm(Storage.sequenceData.Variables);
+                variablePreviewForm = new Controls.VariablePreviewEditorForm(runningSequence.Variables);
                 variablePreviewForm.FormClosed += new FormClosedEventHandler(variablePreviewForm_FormClosed);
                 variablePreviewForm.Show();
             }
