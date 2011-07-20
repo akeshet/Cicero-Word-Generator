@@ -444,29 +444,39 @@ namespace WordGenerator
 
             int i = Storage.sequenceData.ListIterationNumber;
 
-            calibrationShot(i);
+            bool previousRunSuccessful = calibrationShot(i);
+            if (!previousRunSuccessful)
+            {
+                addMessageLogText(this, new MessageEvent("Aborting list after initial shot."));
+                return false;
+            }
 
 
             for (; i < Storage.sequenceData.Lists.iterationsCount(); i++)
             {
 
                 addMessageLogText(this, new MessageEvent("Iteration #" + i));
-                bool temp = do_run(i, Storage.sequenceData);
-                if (!temp)
+                previousRunSuccessful = do_run(i, Storage.sequenceData);
+                if (!previousRunSuccessful)
                 {
                     addMessageLogText(this, new MessageEvent("Aborting list run at iteration #" + i));
                     return false;
                 }
                 if (i != 0)
                 {
-                    calibrationShot(i);
+                    previousRunSuccessful =  calibrationShot(i);
+                    if (!previousRunSuccessful)
+                    {
+                        addMessageLogText(this, new MessageEvent("Aborting list after calibration shot, at iteration #" + i));
+                        return false;
+                    }
                 }
             }
             addMessageLogText(this, new MessageEvent("Continue list run successful."));
             return true;
         }
 
-        private void calibrationShot(int i)
+        private bool calibrationShot(int i)
         {
             if (Storage.sequenceData.CalibrationShotsInfo.calibrationShotRequiredOnThisRun(i,
                 Storage.sequenceData.Lists.iterationsCount()))
@@ -475,10 +485,13 @@ namespace WordGenerator
                 bool temp = do_run(0, Storage.sequenceData.calibrationShotsInfo.CalibrationShotSequence, true);
                 if (!temp)
                 {
-                    addMessageLogText(this, new MessageEvent("Calibration shot failed. Attempting to continue list run."));
+                    addMessageLogText(this, new MessageEvent("Calibration shot failed. Aborting list run."));
                     this.ErrorDetected = true;
                 }
+                return temp;
             }
+            else
+                return true;
         }
 
         private int random_order_run_iteration_number;
@@ -494,7 +507,13 @@ namespace WordGenerator
 
             random_order_run_iteration_number = 0;
 
-            calibrationShot(random_order_run_iteration_number);
+            bool previousRunSuccessful = calibrationShot(random_order_run_iteration_number);
+            if (!previousRunSuccessful)
+            {
+                addMessageLogText(this, new MessageEvent("Aborting list after initial calibration shot."));
+                return false;
+            }
+
             while (iterationsRemaining.Count != 0)
             {
                 Random rand = new Random();
@@ -502,15 +521,20 @@ namespace WordGenerator
                 int selectedIteration = iterationsRemaining[selectedIterationIndex];
 
                 addMessageLogText(this, new MessageEvent("Iteration # " + selectedIteration + " (randomly selected)."));
-                bool temp = do_run(selectedIteration, Storage.sequenceData);
-                if (!temp)
+                previousRunSuccessful = do_run(selectedIteration, Storage.sequenceData);
+                if (!previousRunSuccessful)
                 {
                     addMessageLogText(this, new MessageEvent("Aborting randomized list run after " + random_order_run_iteration_number + " randomly selected iterations."));
                     return false;
                 }
                 random_order_run_iteration_number++;
 
-                calibrationShot(random_order_run_iteration_number);
+                previousRunSuccessful = calibrationShot(random_order_run_iteration_number);
+                if (!previousRunSuccessful)
+                {
+                    addMessageLogText(this, new MessageEvent("Aborting list after calibration shot."));
+                    return false;
+                }
 
                 iterationsRemaining.Remove(selectedIteration);
             }
@@ -523,20 +547,32 @@ namespace WordGenerator
             addMessageLogText(this, new MessageEvent("Starting list run, " + Storage.sequenceData.Lists.iterationsCount() + " iterations."));
 
             int i = 0;
-            calibrationShot(i);
+            bool previousRunSuccessful = calibrationShot(i);
+            if (!previousRunSuccessful)
+            {
+                addMessageLogText(this, new MessageEvent("Aborting list after initial calibration shot."));
+                return false;
+            }
+
             for (; i < Storage.sequenceData.Lists.iterationsCount(); i++)
             {
                 addMessageLogText(this, new MessageEvent("Iteration #" + i));
 
-                bool temp = do_run(i, Storage.sequenceData);
-                if (!temp)
+                previousRunSuccessful = do_run(i, Storage.sequenceData);
+                if (!previousRunSuccessful)
                 {
                     addMessageLogText(this, new MessageEvent("Aborting list run at iteration #" + i));
                     return false;
                 }
+
                 if (i != 0)
                 {
-                    calibrationShot(i);
+                    previousRunSuccessful = calibrationShot(i);
+                    if (!previousRunSuccessful)
+                    {
+                        addMessageLogText(this, new MessageEvent("Aborting list after calibration shot, at iteration #" + i));
+                        return false;
+                    }
                 }
             }
             addMessageLogText(this, new MessageEvent("List run successful."));
@@ -596,6 +632,15 @@ namespace WordGenerator
 
                 if (!sequence.Lists.ListLocked)
                 {
+                    if (calibrationShot)
+                    {
+                        addMessageLogText(this, new MessageEvent("Calibration shot error -- Lists in the calibration shot are not locked. They must be locked manually. Please open your calibration sequence file, lock the lists, save your calibration sequence, and then re-import the calibration shot in this sequence."));
+                        addMessageLogText(this, new MessageEvent("Skipping calibration shot and aborting run as a result of previous error."));
+                        ErrorDetected = true;
+                        setStatus(RunFormStatus.FinishedRun);
+                        return false;
+                    }
+
                     addMessageLogText(this, new MessageEvent("Lists not locked, attempting to lock them..."));
 
                     WordGenerator.mainClientForm.instance.variablesEditor1.tryLockLists();
