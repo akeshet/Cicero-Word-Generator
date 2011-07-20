@@ -15,6 +15,8 @@ namespace WordGenerator
 {
     public partial class RunForm : Form
     {
+ 
+
         int repeatCount = 1;
 
         private delegate bool boolSequenceDelegate(SequenceData seq);
@@ -388,7 +390,7 @@ namespace WordGenerator
         {
             // start run! woo hoo!
             // do it async so as not to block the UI thread.
-            bool listCouldBeLocked = true;
+
             if (!Storage.sequenceData.Lists.ListLocked)
             {
                 addMessageLogText(this, new MessageEvent("Lists not locked, attempting to lock them..."));
@@ -405,32 +407,30 @@ namespace WordGenerator
                 addMessageLogText(this, new MessageEvent("Lists locked successfully."));
             }
 
-            if (listCouldBeLocked)
+            switch (runType)
             {
-                switch (runType)
-                {
-                    case RunType.Run_Iteration_Zero:
-                        boolIntSequenceDelegate runZero = new boolIntSequenceDelegate(do_run);
-                        runZero.BeginInvoke(0, Storage.sequenceData, null, null);
-                        break;
-                    case RunType.Run_Current_Iteration:
-                        boolSequenceDelegate runCurrent = new boolSequenceDelegate(do_run);
-                        runCurrent.BeginInvoke(Storage.sequenceData, null, null);
-                        break;
-                    case RunType.Run_Full_List:
-                        boolVoidDelegate runList = new boolVoidDelegate(do_list_run);
-                        runList.BeginInvoke(null, null);
-                        break;
-                    case RunType.Run_Continue_List:
-                        boolVoidDelegate runContinueList = new boolVoidDelegate(do_continue_list_run);
-                        runContinueList.BeginInvoke(null, null);
-                        break;
-                    case RunType.Run_Random_Order_List:
-                        boolVoidDelegate runRandomList = new boolVoidDelegate(do_random_order_list_run);
-                        runRandomList.BeginInvoke(null, null);
-                        break;
-                }
+                case RunType.Run_Iteration_Zero:
+                    boolIntSequenceDelegate runZero = new boolIntSequenceDelegate(do_run);
+                    runZero.BeginInvoke(0, Storage.sequenceData, null, null);
+                    break;
+                case RunType.Run_Current_Iteration:
+                    boolSequenceDelegate runCurrent = new boolSequenceDelegate(do_run);
+                    runCurrent.BeginInvoke(Storage.sequenceData, null, null);
+                    break;
+                case RunType.Run_Full_List:
+                    boolVoidDelegate runList = new boolVoidDelegate(do_list_run);
+                    runList.BeginInvoke(null, null);
+                    break;
+                case RunType.Run_Continue_List:
+                    boolVoidDelegate runContinueList = new boolVoidDelegate(do_continue_list_run);
+                    runContinueList.BeginInvoke(null, null);
+                    break;
+                case RunType.Run_Random_Order_List:
+                    boolVoidDelegate runRandomList = new boolVoidDelegate(do_random_order_list_run);
+                    runRandomList.BeginInvoke(null, null);
+                    break;
             }
+
         }
 
         private delegate void progressBarInitDelegate(double dur);
@@ -610,6 +610,7 @@ namespace WordGenerator
 
                 updateTitleBar(calibrationShot);
 
+                // Begin section of undocumented Paris code that Aviv doesn't understand.
                 bool wrongSavePath = false;
                 try
                 {
@@ -629,6 +630,7 @@ namespace WordGenerator
                     setStatus(RunFormStatus.FinishedRun);
                     return false;
                 }
+                // End section of undocumented Paris code that Aviv doesn't understand
 
                 if (!sequence.Lists.ListLocked)
                 {
