@@ -74,6 +74,7 @@
     <Compile Include="ExceptionViewerDialog.Designer.cs">
       <DependentUpon>ExceptionViewerDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="HelperFunctions.cs" />
     <Compile Include="Information.cs" />
     <Compile Include="LicenseInfoForm.cs">
       <SubType>Form</SubType>

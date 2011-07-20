@@ -457,17 +457,7 @@ namespace WordGenerator.Controls
 
         private void loadCalSequenceFromCurrentSequence_Click(object sender, EventArgs e)
         {
-            SequenceData copyOfCurrentSequence = null;
-
-            // Create a deep copy of the current sequence file, by serializing and then deserializing. A clever trick.
-            using (System.IO.MemoryStream ms  = new System.IO.MemoryStream())
-            {
-                System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                bf.Serialize(ms, Storage.sequenceData);
-                ms.Position = 0;
-                copyOfCurrentSequence = (SequenceData)bf.Deserialize(ms);
-            }
-
+            SequenceData copyOfCurrentSequence = (SequenceData)HelperFunctions.createDeepCopyBySerialization(Storage.sequenceData);
             setCalibrationSequence(copyOfCurrentSequence);
         }
 
