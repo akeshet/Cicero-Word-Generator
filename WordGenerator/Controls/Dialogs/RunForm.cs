@@ -15,7 +15,8 @@ namespace WordGenerator
 {
     public partial class RunForm : Form
     {
- 
+
+        private SequenceData runningSequence = null;
 
         int repeatCount = 1;
 
@@ -402,7 +403,7 @@ namespace WordGenerator
                     addMessageLogText(this, new MessageEvent("Unable to lock lists. Aborting run. See the Variables tab."));
 
                     setStatus(RunFormStatus.FinishedRun);
-                    listCouldBeLocked = false;
+                    return;
                 }
                 addMessageLogText(this, new MessageEvent("Lists locked successfully."));
             }
