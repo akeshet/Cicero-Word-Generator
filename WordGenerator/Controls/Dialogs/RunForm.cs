@@ -148,6 +148,10 @@ namespace WordGenerator
                             runAgainButton.Enabled = true;
                         }
                         abortAfterThis.Enabled = false;
+                        if (userAborted && this.isBackgroundRunform)
+                        {
+                            this.Close();
+                        }
                         break;
 
                     case RunFormStatus.Running:
@@ -358,31 +362,37 @@ namespace WordGenerator
             {
                 if (!calibrationShot)
                 {
-                    string title = "Running iteration ";
-                    switch (runType)
+                    string title;
+                    if (this.isBackgroundRunform)
+                        title = "Background loop running...";
+                    else
                     {
-                        case RunType.Run_Iteration_Zero:
-                            title += "0.";
-                            break;
-                        case RunType.Run_Current_Iteration:
-                            title += runningSequence.ListIterationNumber.ToString() + ".";
-                            break;
-                        case RunType.Run_Full_List:
-                            title += runningSequence.ListIterationNumber.ToString() + "/" + (runningSequence.Lists.iterationsCount() - 1) + ".";
-                            break;
-                        case RunType.Run_Continue_List:
-                            title += runningSequence.ListIterationNumber.ToString() + "/" + (runningSequence.Lists.iterationsCount() - 1) + ".";
-                            break;
-                        case RunType.Run_Random_Order_List:
-                            title += runningSequence.ListIterationNumber.ToString() + "/" + (runningSequence.Lists.iterationsCount() - 1) + " (random run #" + random_order_run_iteration_number + ").";
-                            break;
+                        title = "Running iteration ";
+                        switch (runType)
+                        {
+                            case RunType.Run_Iteration_Zero:
+                                title += "0.";
+                                break;
+                            case RunType.Run_Current_Iteration:
+                                title += runningSequence.ListIterationNumber.ToString() + ".";
+                                break;
+                            case RunType.Run_Full_List:
+                                title += runningSequence.ListIterationNumber.ToString() + "/" + (runningSequence.Lists.iterationsCount() - 1) + ".";
+                                break;
+                            case RunType.Run_Continue_List:
+                                title += runningSequence.ListIterationNumber.ToString() + "/" + (runningSequence.Lists.iterationsCount() - 1) + ".";
+                                break;
+                            case RunType.Run_Random_Order_List:
+                                title += runningSequence.ListIterationNumber.ToString() + "/" + (runningSequence.Lists.iterationsCount() - 1) + " (random run #" + random_order_run_iteration_number + ").";
+                                break;
+                        }
+
+                        if (runRepeat)
+                            title += " Repeat #" + repeatCount;
                     }
-
-                    if (runRepeat)
-                        title += " Repeat #" + repeatCount;
                     this.Text = title;
-
                 }
+
                 else
                 {
                     this.Text = "Running calibration shot.";
@@ -614,6 +624,15 @@ namespace WordGenerator
 
                 lic_chk();
 
+                if (RunForm.backgroundIsRunning() && !this.isBackgroundRunform)
+                {
+                    addMessageLogText(this, new MessageEvent("A background run is still running. Waiting for it to terminate..."));
+                    RunForm.abortAtEndOfNextBackgroundRun();
+                    while (RunForm.backgroundIsRunning())
+                    {
+                        Thread.Sleep(50);
+                    }
+                }
 
                 addMessageLogText(this, new MessageEvent("Starting Run."));
 
@@ -1010,7 +1029,7 @@ namespace WordGenerator
                     addMessageLogText(this, new MessageEvent("Log not written! Perhaps a file with this name already exists?"));
                     ErrorDetected = true;
                 }
-                setStatus(RunFormStatus.FinishedRun);
+
 
 
 
@@ -1023,7 +1042,13 @@ namespace WordGenerator
                 repeatCount++;
 
                 if (abortAfterThis.Checked)
+                {
+                    userAborted = true;
+                    setStatus(RunFormStatus.FinishedRun);
                     return false;
+                }
+
+                setStatus(RunFormStatus.FinishedRun);
             }
 
 
@@ -1107,6 +1132,14 @@ namespace WordGenerator
         {
             base.OnClosed(e);
             WordGenerator.mainClientForm.instance.suppressHotkeys = false;
+            if (this.isBackgroundRunform)
+            {
+                RunForm.backgroundRunningRunform = null;
+                if (this.backgroundRunUpdated != null)
+                {
+                    this.backgroundRunUpdated(this, null);
+                }
+            }
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -1116,6 +1149,7 @@ namespace WordGenerator
 
         private void stopButton_Click(object sender, EventArgs e)
         {
+            userAborted = true;
             foreach (Socket theSocket in CameraPCsSocketList)
             {
                 try
@@ -1136,11 +1170,15 @@ namespace WordGenerator
 
             if (this.runningThread != null)
                 runningThread.Abort();
-            this.setStatus(RunFormStatus.FinishedRun);
             addMessageLogText(this, new MessageEvent("Run aborting."));
             Storage.settingsData.serverManager.stopAllServers(addMessageLogText);
             addMessageLogText(this, new MessageEvent("Run aborted."));
-            TimeStep step = runningSequence.dwellWord();
+            
+            TimeStep step;
+            if (isBackgroundRunform)
+                step = Storage.sequenceData.dwellWord();
+            else
+                step = runningSequence.dwellWord();
             if (step != null)
             {
                 addMessageLogText(this, new MessageEvent("Attempting to output the dwell timestep."));
@@ -1161,6 +1199,7 @@ namespace WordGenerator
                     ErrorDetected = true;
                 }
             }
+            this.setStatus(RunFormStatus.FinishedRun);
         }
 
         private void runAgainButton_Click(object sender, EventArgs e)
@@ -1334,5 +1373,48 @@ namespace WordGenerator
             variablePreviewForm = null;
             showVariablePreviewCheckbox.Checked = false;
         }
+
+
+        #region Background running
+        private static RunForm backgroundRunningRunform = null;
+        private bool isBackgroundRunform = false;
+        private event EventHandler backgroundRunUpdated;
+        private bool userAborted = false;
+        public static void beginBackgroundRunAsLoop(SequenceData sequenceToRun, RunType runtype, bool runRepeat, EventHandler updateCallback) {
+            backgroundRunningRunform = new RunForm(sequenceToRun, runtype, runRepeat);
+            backgroundRunningRunform.isBackgroundRunform = true;
+            backgroundRunningRunform.backgroundRunUpdated += updateCallback;
+            backgroundRunningRunform.Show();
+        }
+
+        public static bool backgroundIsRunning()
+        {
+            return RunForm.backgroundRunningRunform != null;
+        }
+
+        public static void bringBackgroundRunFormToFront()
+        {
+            if (RunForm.backgroundRunningRunform != null)
+            {
+                RunForm.backgroundRunningRunform.BringToFront();
+                RunForm.backgroundRunningRunform.Focus();
+            }
+        }
+
+        public static void abortAtEndOfNextBackgroundRun()
+        {
+            if (backgroundRunningRunform!=null && backgroundRunningRunform.InvokeRequired)
+            {
+                backgroundRunningRunform.BeginInvoke(new voidVoidDelegate(abortAtEndOfNextBackgroundRun));
+            }
+            else
+            {
+                if (backgroundRunningRunform != null)
+                {
+                    backgroundRunningRunform.abortAfterThis.Checked = true;
+                }
+            }
+        }
+        #endregion
     }
 }

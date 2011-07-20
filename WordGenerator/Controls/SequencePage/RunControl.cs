@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using DataStructures;
 
 namespace WordGenerator.Controls
 {
@@ -115,6 +116,50 @@ namespace WordGenerator.Controls
             RunForm runform = new RunForm(Storage.sequenceData, RunForm.RunType.Run_Iteration_Zero, repeatCheckBox.Checked, false);
             runform.ShowDialog();
             runform.Dispose();
+        }
+
+
+        private SequenceData queuedNextSequence = null;
+
+        private void bgRunButton_Click(object sender, EventArgs e)
+        {
+            SequenceData sequenceCopy = (SequenceData)HelperFunctions.createDeepCopyBySerialization(Storage.sequenceData);
+            if (RunForm.backgroundIsRunning())
+            {
+                RunForm.bringBackgroundRunFormToFront();
+                queuedNextSequence = sequenceCopy;
+                RunForm.abortAtEndOfNextBackgroundRun();
+            }
+            else
+            {
+                RunForm.beginBackgroundRunAsLoop(sequenceCopy, RunForm.RunType.Run_Iteration_Zero, true, new EventHandler(backgroundRunUpdated));
+            }
+            backgroundRunUpdated(this, null);
+        }
+
+        private void backgroundRunUpdated(object o, EventArgs e)
+        {
+            if (!RunForm.backgroundIsRunning() && queuedNextSequence != null)
+            {
+                RunForm.beginBackgroundRunAsLoop(queuedNextSequence, RunForm.RunType.Run_Iteration_Zero, true, new EventHandler(backgroundRunUpdated));
+                queuedNextSequence = null;
+                backgroundRunUpdated(this, null);
+                return;
+            }
+
+            if (this.InvokeRequired)
+                this.BeginInvoke(new EventHandler(backgroundRunUpdated), new object[] {this, null});
+            else
+            {
+                if (RunForm.backgroundIsRunning())
+                {
+                    bgRunButton.Text = "Queue as Loop in Background";
+                }
+                else
+                {
+                    bgRunButton.Text = "Run as Loop in Background";
+                }
+            }
         }
 
 

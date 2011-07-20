@@ -41,6 +41,7 @@ namespace WordGenerator.Controls
             this.RunNoSave = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.bgRunButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.iterationSelector)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -64,8 +65,8 @@ namespace WordGenerator.Controls
             this.runCurrentButton.TabIndex = 4;
             this.runCurrentButton.Text = "Run Current Iteration";
             this.runCurrentButton.UseVisualStyleBackColor = true;
-            this.runCurrentButton.Paint += new System.Windows.Forms.PaintEventHandler(this.runCurrentButton_Paint);
             this.runCurrentButton.Click += new System.EventHandler(this.runCurrentButton_Click);
+            this.runCurrentButton.Paint += new System.Windows.Forms.PaintEventHandler(this.runCurrentButton_Paint);
             // 
             // runListButton
             // 
@@ -151,11 +152,12 @@ namespace WordGenerator.Controls
             this.flowLayoutPanel1.Controls.Add(this.runRandomList);
             this.flowLayoutPanel1.Controls.Add(this.panel1);
             this.flowLayoutPanel1.Controls.Add(this.runCurrentButton);
+            this.flowLayoutPanel1.Controls.Add(this.bgRunButton);
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(119, 355);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(119, 400);
             this.flowLayoutPanel1.TabIndex = 10;
             // 
             // panel1
@@ -167,13 +169,23 @@ namespace WordGenerator.Controls
             this.panel1.Size = new System.Drawing.Size(115, 56);
             this.panel1.TabIndex = 11;
             // 
+            // bgRunButton
+            // 
+            this.bgRunButton.Location = new System.Drawing.Point(3, 356);
+            this.bgRunButton.Name = "bgRunButton";
+            this.bgRunButton.Size = new System.Drawing.Size(110, 39);
+            this.bgRunButton.TabIndex = 12;
+            this.bgRunButton.Text = "Run as Loop in Background";
+            this.bgRunButton.UseVisualStyleBackColor = true;
+            this.bgRunButton.Click += new System.EventHandler(this.bgRunButton_Click);
+            // 
             // RunControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.flowLayoutPanel1);
             this.Name = "RunControl";
-            this.Size = new System.Drawing.Size(119, 355);
+            this.Size = new System.Drawing.Size(119, 402);
             ((System.ComponentModel.ISupportInitialize)(this.iterationSelector)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
@@ -196,5 +208,6 @@ namespace WordGenerator.Controls
         public System.Windows.Forms.Button RunNoSave;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button bgRunButton;
     }
 }
