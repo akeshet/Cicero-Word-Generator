@@ -393,7 +393,14 @@ namespace WordGenerator.Controls
                 Storage.sequenceData.calibrationShotsInfo.CalibrationShotSequence = Storage.SaveAndLoad.LoadSequenceWithFileDialog();
                 if (Storage.sequenceData.calibrationShotsInfo.CalibrationShotSequence != null)
                 {
-                    Storage.sequenceData.calibrationShotsInfo.CalibrationShotSequence.CalibrationShot = true;
+                    if (!Storage.sequenceData.calibrationShotsInfo.CalibrationShotSequence.Lists.ListLocked)
+                    {
+                        MessageBox.Show("The sequence file you have specified for use as a calibration shot does not have its lists locked, and therefore will not be usable as a calibration shot. To use this file as a calibration shot, please re-save it with its lists locked.", "Unable to use calibration shot with unlocked lists.");
+                        Storage.sequenceData.calibrationShotsInfo.CalibrationShotSequence = null;
+                        
+                    }
+                    else
+                        Storage.sequenceData.calibrationShotsInfo.CalibrationShotSequence.CalibrationShot = true;
                 }
                 layoutCalibrationUI();
             }
