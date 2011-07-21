@@ -123,6 +123,11 @@ namespace WordGenerator.Controls
 
         private void bgRunButton_Click(object sender, EventArgs e)
         {
+            if (!Storage.sequenceData.Lists.ListLocked)
+            {
+                MessageBox.Show("The current sequence does not have its lists locked, and thus cannot be run in the background. Please lock the lists (in the Variables tab).", "Lists not locked, unable to run in background.");
+                return;
+            }
             SequenceData sequenceCopy = (SequenceData)HelperFunctions.createDeepCopyBySerialization(Storage.sequenceData);
             if (RunForm.backgroundIsRunning())
             {
