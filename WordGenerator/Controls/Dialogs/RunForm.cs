@@ -38,7 +38,7 @@ namespace WordGenerator
         private delegate bool boolVoidDelegate();
 
         // this enum should enumerate the steps that should happen in sequence
-        private enum RunFormStatus { Inactive, StartingRun, Running, FinishedRun };
+        private enum RunFormStatus { Inactive, StartingRun, Running, FinishedRun, ClosableOnly };
         private RunFormStatus runFormStatus;
 
         private DateTime formCreationTime;
@@ -160,6 +160,14 @@ namespace WordGenerator
                         progressBar.Enabled = true;
                         runAgainButton.Enabled = false;
                         abortAfterThis.Enabled = true;
+                        break;
+
+                    case RunFormStatus.ClosableOnly:
+                        stopButton.Enabled = false;
+                        closeButton.Enabled = true;
+                        progressBar.Enabled = false;
+                        runAgainButton.Enabled = false;
+                        abortAfterThis.Enabled = false;
                         break;
                 }
             }
@@ -331,7 +339,10 @@ namespace WordGenerator
 
                 WordGenerator.mainClientForm.instance.handleMessageEvent(sender, e);
                 MessageEvent message = (MessageEvent)e;
-                this.textBox1.AppendText(message.myTime.ToString() + " " + message.ToString() + "\r\n");
+                if (!this.IsDisposed)
+                {
+                    this.textBox1.AppendText(message.myTime.ToString() + " " + message.ToString() + "\r\n");
+                }
             }
         }
 
@@ -626,12 +637,23 @@ namespace WordGenerator
 
                 if (RunForm.backgroundIsRunning() && !this.isBackgroundRunform)
                 {
-                    addMessageLogText(this, new MessageEvent("A background run is still running. Waiting for it to terminate..."));
+                    addMessageLogText(this, new MessageEvent("A background run is still running. Waiting for it to terminate..."));                    
                     RunForm.abortAtEndOfNextBackgroundRun();
+                    setStatus(RunFormStatus.ClosableOnly);
                     while (RunForm.backgroundIsRunning())
                     {
                         Thread.Sleep(50);
                     }
+
+                    if (this.IsDisposed)
+                    {
+                        addMessageLogText(this, new MessageEvent("Foreground run form was closed before background run terminated. Aborting foreground run."));
+                        return false;
+                    }
+
+
+                    setStatus(RunFormStatus.StartingRun);
+                        
                 }
 
                 addMessageLogText(this, new MessageEvent("Starting Run."));
@@ -1354,17 +1376,20 @@ namespace WordGenerator
 
         private void showVariablePreviewCheckbox_CheckedChanged(object sender, EventArgs e)
         {
-            if (showVariablePreviewCheckbox.Checked)
+            if (!this.isBackgroundRunform)
             {
-                variablePreviewForm = new Controls.VariablePreviewEditorForm(runningSequence.Variables);
-                variablePreviewForm.FormClosed += new FormClosedEventHandler(variablePreviewForm_FormClosed);
-                variablePreviewForm.Show();
-            }
-            else
-            {
-                if (variablePreviewForm != null)
-                    variablePreviewForm.Close();
-                variablePreviewForm = null;
+                if (showVariablePreviewCheckbox.Checked)
+                {
+                    variablePreviewForm = new Controls.VariablePreviewEditorForm(runningSequence.Variables);
+                    variablePreviewForm.FormClosed += new FormClosedEventHandler(variablePreviewForm_FormClosed);
+                    variablePreviewForm.Show();
+                }
+                else
+                {
+                    if (variablePreviewForm != null)
+                        variablePreviewForm.Close();
+                    variablePreviewForm = null;
+                }
             }
         }
 
@@ -1383,6 +1408,7 @@ namespace WordGenerator
         public static void beginBackgroundRunAsLoop(SequenceData sequenceToRun, RunType runtype, bool runRepeat, EventHandler updateCallback) {
             backgroundRunningRunform = new RunForm(sequenceToRun, runtype, runRepeat);
             backgroundRunningRunform.isBackgroundRunform = true;
+            backgroundRunningRunform.showVariablePreviewCheckbox.Visible = false;
             backgroundRunningRunform.backgroundRunUpdated += updateCallback;
             backgroundRunningRunform.Show();
         }
