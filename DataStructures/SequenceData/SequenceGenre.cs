@@ -30,6 +30,19 @@ namespace DataStructures
             return ModeName;
         }
 
+        private string modeDescription;
+
+        public string ModeDescription
+        {
+            get {
+                if (modeDescription == null)
+                    modeDescription = "";
+                return modeDescription; 
+            }
+            set { modeDescription = value; }
+        }
+
+
         [Serializable, TypeConverter(typeof(ExpandableObjectConverter))]
         public class ModeEntry {
             private bool stepEnabled;
