@@ -60,6 +60,7 @@ namespace WordGenerator.Controls
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.digitalGridPanel = new System.Windows.Forms.Panel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.beginHintLabel = new System.Windows.Forms.Label();
             this.runControl1 = new WordGenerator.Controls.RunControl();
             this.analogChannelLabelsPanel1 = new WordGenerator.Controls.AnalogChannelLabelsPanel();
             this.analogPreviewPane1 = new WordGenerator.Controls.AnalogPreviewPane();
@@ -99,12 +100,12 @@ namespace WordGenerator.Controls
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addNewTimestepToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(175, 26);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(176, 26);
             // 
             // addNewTimestepToolStripMenuItem
             // 
             this.addNewTimestepToolStripMenuItem.Name = "addNewTimestepToolStripMenuItem";
-            this.addNewTimestepToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.addNewTimestepToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.addNewTimestepToolStripMenuItem.Text = "Add New Timestep";
             this.addNewTimestepToolStripMenuItem.Click += new System.EventHandler(this.addNewTimestepToolStripMenuItem_Click);
             // 
@@ -134,6 +135,7 @@ namespace WordGenerator.Controls
             // 
             this.timeStepsPanel.AutoScroll = true;
             this.timeStepsPanel.ContextMenuStrip = this.contextMenuStrip1;
+            this.timeStepsPanel.Controls.Add(this.beginHintLabel);
             this.timeStepsPanel.Controls.Add(this.timeStepsFlowPanel);
             this.timeStepsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.timeStepsPanel.Location = new System.Drawing.Point(130, 0);
@@ -427,6 +429,16 @@ namespace WordGenerator.Controls
             this.timer1.Interval = 250;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // beginHintLabel
+            // 
+            this.beginHintLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.beginHintLabel.Location = new System.Drawing.Point(0, 0);
+            this.beginHintLabel.Name = "beginHintLabel";
+            this.beginHintLabel.Size = new System.Drawing.Size(188, 175);
+            this.beginHintLabel.TabIndex = 0;
+            this.beginHintLabel.Text = "To begin, create a new Timestep by right clicking here.";
+            this.beginHintLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
             // runControl1
             // 
             this.runControl1.IsRunNoSaveEnabled = true;
@@ -458,8 +470,8 @@ namespace WordGenerator.Controls
             this.analogPreviewPane1.Size = new System.Drawing.Size(539, 147);
             this.analogPreviewPane1.TabIndex = 6;
             this.analogPreviewPane1.TabStop = false;
-            this.analogPreviewPane1.Click += new System.EventHandler(this.analogPreviewPane1_Click);
             this.analogPreviewPane1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.analogPreviewPane1_Scroll);
+            this.analogPreviewPane1.Click += new System.EventHandler(this.analogPreviewPane1_Click);
             // 
             // digitalChannelLabelsPanel1
             // 
@@ -493,9 +505,9 @@ namespace WordGenerator.Controls
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "SequencePage";
             this.Size = new System.Drawing.Size(800, 600);
+            this.SizeChanged += new System.EventHandler(this.SequencePage_SizeChanged);
             this.Click += new System.EventHandler(this.SequencePage_Click);
             this.Enter += new System.EventHandler(this.SequencePage_Enter);
-            this.SizeChanged += new System.EventHandler(this.SequencePage_SizeChanged);
             this.contextMenuStrip1.ResumeLayout(false);
             this.timeStepsPanel.ResumeLayout(false);
             this.timeStepsPanel.PerformLayout();
@@ -556,5 +568,6 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.Button storeMode;
         private System.Windows.Forms.TextBox modeTextBox;
         public System.Windows.Forms.ComboBox modeBox;
+        private System.Windows.Forms.Label beginHintLabel;
     }
 }

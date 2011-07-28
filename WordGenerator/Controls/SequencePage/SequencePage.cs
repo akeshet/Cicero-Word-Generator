@@ -352,6 +352,8 @@ namespace WordGenerator.Controls
 
             int count = 0;
 
+           
+
             List<TimeStep> timeSteps = Storage.sequenceData.TimeSteps;
             List<TimestepEditor> timestepEditors = new List<TimestepEditor>();
             for (int i = 0; i < timeSteps.Count; i++)
@@ -401,6 +403,15 @@ namespace WordGenerator.Controls
 
             foreach (Control con in this.timeStepsFlowPanel.Controls)
                 con.ResumeLayout();
+
+            if (count == 0)
+            {
+                beginHintLabel.Visible = true;
+            }
+            else
+            {
+                beginHintLabel.Visible = false;
+            }
 
         }
 
