@@ -577,7 +577,11 @@ namespace WordGenerator.Controls
                 if (step.DigitalData.ContainsKey(channelID))
                     return step.DigitalData[channelID];
                 else
-                    return null;
+                {
+                    DigitalDataPoint newPoint = new DigitalDataPoint();
+                    step.DigitalData.Add(channelID, newPoint);
+                    return newPoint;
+                }
             }
             else return null;
         }

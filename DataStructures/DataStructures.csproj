@@ -102,7 +102,7 @@
     <Compile Include="SequenceData\RS232Group.cs" />
     <Compile Include="SequenceData\SequenceComparer.cs" />
     <Compile Include="SequenceData\SequenceData.cs" />
-    <Compile Include="SequenceData\SequenceGenre.cs" />
+    <Compile Include="SequenceData\SequenceMode.cs" />
     <Compile Include="SequenceData\SingleOutputFrame.cs" />
     <Compile Include="SequenceData\StringParameterString.cs" />
     <Compile Include="SequenceData\TimeStep.cs" />
