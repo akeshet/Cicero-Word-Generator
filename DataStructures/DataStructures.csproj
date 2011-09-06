@@ -50,6 +50,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MySql.Data">
+      <HintPath>..\MySql\v2.0\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NationalInstruments.Common, Version=8.5.20.149, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
@@ -90,6 +94,7 @@
     </Compile>
     <Compile Include="RunLog\RunLog.cs" />
     <Compile Include="RunLog\RunLogAnnotation.cs" />
+    <Compile Include="RunLog\RunLogDatabase.cs" />
     <Compile Include="SequenceData\DimensionedParameter.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="SequenceData\Parameter.cs" />
