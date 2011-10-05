@@ -9,12 +9,12 @@ using System.Windows.Forms;
 
 namespace DataStructures
 {
-    public class MySQLHandler
+    public class MySqlRunlogDatabaseHandler
     {
 
         public MySqlConnection conn;
 
-        public MySQLHandler()
+        public MySqlRunlogDatabaseHandler()
         {
             string connStr = "server=bec2.mit.edu;user=root;database=filelist;port=3306;password=password;";
             this.conn = new MySqlConnection(connStr);
