@@ -37,6 +37,18 @@ namespace AtticusServer
 
                 AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
+                try
+                {
+                    NationalInstruments.NI4882.Address testObject = new NationalInstruments.NI4882.Address();
+                    NationalInstruments.DAQmx.CouplingTypes testObject2 = new NationalInstruments.DAQmx.CouplingTypes();
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Unable to load National Instruments DAQmx libraries. You may have an older version of these libraries installed. Please install the latest version of DAQmx. Press OK to see the detailed exception.", "Unable to load DAQmx libraries.");
+                    throw;
+                }
+
+
 
                 // Maximum server uptime: 1000 days. Lets see if this solves some of those "disconnection" issues we had
                 System.Runtime.Remoting.Lifetime.LifetimeServices.LeaseTime = new TimeSpan(1000, 0, 0, 0, 0);

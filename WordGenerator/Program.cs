@@ -72,6 +72,30 @@ namespace WordGenerator
                 {
                 }
 
+                // Test if certain important libraries are installed correctly.
+
+                try
+                {
+                    NationalInstruments.NI4882.Address testObject = new NationalInstruments.NI4882.Address();
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Unable to load National Instruments DAQmx libraries. You may have an older version of these libraries installed. Please install the latest version of DAQmx. Press OK to see the detailed exception.", "Unable to load DAQmx libraries.");
+                    throw;
+                }
+
+                try
+                {
+                    NationalInstruments.UI.WaveformPlot testObject = new NationalInstruments.UI.WaveformPlot();
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Unable to load National Instruments User Interface libraries. You may have an older version of these libraries installed, or your copy of Cicero may have been compiled on a Visual Studio installation without a working Measurement Studio license. Press OK to see the detailed exception.", "Unable to load National Instruments UI libraries.");
+                    throw;
+                }
+
+
+
                 if (runLog == null)
                 {
                     Application.Run(new mainClientForm());
