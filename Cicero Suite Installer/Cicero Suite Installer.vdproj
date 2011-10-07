@@ -21,6 +21,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_0A5859D08D0D452C9A12FC2D10EC637A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_0C2D3C8CA0F1A4C24CD821080896C00A"
         "OwnerKey" = "8:_F7F37FDA376B471AA660FFB8D4F33F0F"
         "MsmSig" = "8:_UNDEFINED"
@@ -466,6 +472,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0A5859D08D0D452C9A12FC2D10EC637A"
+            {
+            "SourcePath" = "8:..\\WordGenerator\\Resources\\CiceroSplash.jpg"
+            "TargetName" = "8:CiceroSplash.jpg"
+            "Tag" = "8:"
+            "Folder" = "8:_F66EA05552CF4137BB26A2DE183F0424"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_0C2D3C8CA0F1A4C24CD821080896C00A"
             {
             "AssemblyRegister" = "3:1"
@@ -473,11 +499,6 @@
             "AssemblyAsmDisplayName" = "8:WordGenerator, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_0C2D3C8CA0F1A4C24CD821080896C00A"
-                    {
-                    "Name" = "8:WordGenerator.exe"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:WordGenerator.exe"
             "TargetName" = "8:"
@@ -564,11 +585,6 @@
             "AssemblyAsmDisplayName" = "8:DataStructures, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_91EF1596B5D3964D75DA02507A4552DF"
-                    {
-                    "Name" = "8:DataStructures.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:DataStructures.dll"
             "TargetName" = "8:"
@@ -657,11 +673,6 @@
             "AssemblyAsmDisplayName" = "8:dotMath, Version=1.0.4296.31292, Culture=neutral, PublicKeyToken=46d64e25ca3bf2f7, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_A2F1297D5DC7FE5C7ACDEFEF7293F657"
-                    {
-                    "Name" = "8:dotMath.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:dotMath.dll"
             "TargetName" = "8:"
@@ -776,6 +787,17 @@
                     "Property" = "8:_AF33E86F7130476C97A6241F77B07F45"
                         "Folders"
                         {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_F66EA05552CF4137BB26A2DE183F0424"
+                            {
+                            "Name" = "8:Resources"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_C788CF9677784C1DB87A7C41316A264B"
+                                "Folders"
+                                {
+                                }
+                            }
                         }
                     }
                 }
@@ -820,7 +842,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Cicero Suite"
         "ProductCode" = "8:{9A9DAA17-2F32-45E2-9C54-C30B21F49255}"
-        "PackageCode" = "8:{AE56E242-FB14-4FA1-8055-00E6DC4D3A3F}"
+        "PackageCode" = "8:{ABE7C921-D1E2-4D12-9CE9-36F6BA4127F4}"
         "UpgradeCode" = "8:{121CF466-DD76-4794-A435-F8A0770BC068}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -1300,7 +1322,7 @@
                 {
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_3267D1AE62CA418ABAA7DA144FB0DF65"
                     {
-                    "Sequence" = "3:300"
+                    "Sequence" = "3:200"
                     "DisplayName" = "8:Confirm Installation"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
@@ -1322,7 +1344,7 @@
                     }
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_62C1DC88BE224FCA9F90CDF1C73E0ADF"
                     {
-                    "Sequence" = "3:100"
+                    "Sequence" = "3:110"
                     "DisplayName" = "8:Welcome"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
@@ -1362,8 +1384,44 @@
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
                             "Setting" = "3:2"
-                            "Value" = "8:This installer will install the Cicero Suite Version 1.5 on your computer. The software will be installed on your Desktop, in the Cicero Suite folder."
+                            "Value" = "8:This installer will install the Cicero Suite Version 1.52 on your computer. The software will be installed on your Desktop, in the Cicero Suite folder."
                             "DefaultValue" = "8:#1203"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                        }
+                    }
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_D429030C8098465BA53AAEA3F884A27F"
+                    {
+                    "Sequence" = "3:100"
+                    "DisplayName" = "8:Splash"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdSplashDlg.wid"
+                        "Properties"
+                        {
+                            "SplashBitmap"
+                            {
+                            "Name" = "8:SplashBitmap"
+                            "DisplayName" = "8:#1013"
+                            "Description" = "8:#1113"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:_0A5859D08D0D452C9A12FC2D10EC637A"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Sunken"
+                            {
+                            "Name" = "8:Sunken"
+                            "DisplayName" = "8:#1007"
+                            "Description" = "8:#1107"
+                            "Type" = "3:5"
+                            "ContextData" = "8:4;True=4;False=0"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:0"
+                            "Value" = "3:4"
+                            "DefaultValue" = "3:4"
                             "UsePlugInResources" = "11:TRUE"
                             }
                         }
