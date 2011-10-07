@@ -18,7 +18,7 @@
     <GenerateManifests>true</GenerateManifests>
     <SignManifests>true</SignManifests>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -47,6 +47,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -55,28 +56,27 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="libFrontPanel-csharp, Version=1.0.2719.19705, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Opal Kelly\libFrontPanel-csharp.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.Common, Version=8.5.20.149, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=MSIL">
+    <Reference Include="NationalInstruments.Common, Version=9.0.40.610, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\National Instruments\MeasurementStudioVS2010\DotNET\Assemblies\Current\NationalInstruments.Common.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.DAQmx, Version=8.6.20.15, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=x86">
+    <Reference Include="NationalInstruments.Common.Native, Version=9.0.40.610, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\National Instruments\MeasurementStudioVS2010\DotNET\Assemblies\Current\NationalInstruments.Common.Native.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.NI4882, Version=8.1.20.119, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=x86">
+    <Reference Include="NationalInstruments.DAQmx, Version=9.3.40.219, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\National Instruments\MeasurementStudioVS2010\DotNET\Assemblies\Current\NationalInstruments.DAQmx.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.VisaNS, Version=8.1.20.222, Culture=neutral, PublicKeyToken=4544464cdeaab541, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
-    </Reference>
+    <Reference Include="NationalInstruments.NI4882, Version=9.0.40.157, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=MSIL" />
+    <Reference Include="NationalInstruments.VisaNS, Version=9.0.40.156, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />

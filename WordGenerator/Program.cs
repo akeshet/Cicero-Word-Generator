@@ -80,7 +80,7 @@ namespace WordGenerator
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show("Unable to load National Instruments DAQmx libraries. You may have an older version of these libraries installed. Please install the latest version of DAQmx. Press OK to see the detailed exception.", "Unable to load DAQmx libraries.");
+                    MessageBox.Show("Unable to load National Instruments DAQmx, VISA-NS, or 488.2 libraries. You may have an older version of these libraries installed. Please install the latest version, as described in installnote.rtf. Press OK to see the detailed exception.", "Unable to load driver libraries.");
                     throw;
                 }
 
