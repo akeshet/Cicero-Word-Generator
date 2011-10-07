@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotMath", "dotmath\dotMath.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleServer", "ExampleServer\ExampleServer.csproj", "{E87C4F05-BCED-47F5-8A02-637A5A669E38}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupProject", "SetupProject\SetupProject.vdproj", "{C799A644-9B2A-42DF-A59F-3A2D8C69213F}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Cicero Suite Installer", "Cicero Suite Installer\Cicero Suite Installer.vdproj", "{3F096AC6-A4AB-4F92-A78E-F3AD9FA73883}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -97,12 +97,12 @@ Global
 		{E87C4F05-BCED-47F5-8A02-637A5A669E38}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E87C4F05-BCED-47F5-8A02-637A5A669E38}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E87C4F05-BCED-47F5-8A02-637A5A669E38}.Release|Win32.ActiveCfg = Release|Any CPU
-		{C799A644-9B2A-42DF-A59F-3A2D8C69213F}.Debug|Any CPU.ActiveCfg = Debug
-		{C799A644-9B2A-42DF-A59F-3A2D8C69213F}.Debug|Mixed Platforms.ActiveCfg = Debug
-		{C799A644-9B2A-42DF-A59F-3A2D8C69213F}.Debug|Win32.ActiveCfg = Debug
-		{C799A644-9B2A-42DF-A59F-3A2D8C69213F}.Release|Any CPU.ActiveCfg = Release
-		{C799A644-9B2A-42DF-A59F-3A2D8C69213F}.Release|Mixed Platforms.ActiveCfg = Release
-		{C799A644-9B2A-42DF-A59F-3A2D8C69213F}.Release|Win32.ActiveCfg = Release
+		{3F096AC6-A4AB-4F92-A78E-F3AD9FA73883}.Debug|Any CPU.ActiveCfg = Debug
+		{3F096AC6-A4AB-4F92-A78E-F3AD9FA73883}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{3F096AC6-A4AB-4F92-A78E-F3AD9FA73883}.Debug|Win32.ActiveCfg = Debug
+		{3F096AC6-A4AB-4F92-A78E-F3AD9FA73883}.Release|Any CPU.ActiveCfg = Release
+		{3F096AC6-A4AB-4F92-A78E-F3AD9FA73883}.Release|Mixed Platforms.ActiveCfg = Release
+		{3F096AC6-A4AB-4F92-A78E-F3AD9FA73883}.Release|Win32.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
