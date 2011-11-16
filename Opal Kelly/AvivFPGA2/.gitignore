@@ -30,3 +30,12 @@ AvivFPGA2_par.xrpt
 AvivFPGA2_summary.xml
 AvivFPGA2_usage.xml
 AvivFPGA2_xst.xrpt
+_ngo/
+_xmsgs/map.xmsgs
+_xmsgs/ngdbuild.xmsgs
+_xmsgs/par.xmsgs
+_xmsgs/trce.xmsgs
+_xmsgs/xst.xmsgs
+webtalk_pn.xml
+xlnx_auto_0_xdb/cst.xbcd
+xst/
