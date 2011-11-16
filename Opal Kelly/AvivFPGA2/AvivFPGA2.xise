@@ -9,10 +9,10 @@
     <!-- along with the project source files, is sufficient to open and    -->
     <!-- implement in ISE Project Navigator.                               -->
     <!--                                                                   -->
-    <!-- Copyright (c) 1995-2009 Xilinx, Inc.  All rights reserved. -->
+    <!-- Copyright (c) 1995-2010 Xilinx, Inc.  All rights reserved. -->
   </header>
 
-  <version xil_pn:ise_version="11.1" xil_pn:schema_version="2"/>
+  <version xil_pn:ise_version="12.2" xil_pn:schema_version="2"/>
 
   <files>
     <file xil_pn:name="TestFifo.xco" xil_pn:type="FILE_COREGEN">
@@ -33,35 +33,47 @@
   </files>
 
   <properties>
-    <property xil_pn:name="Allow Unmatched LOC Constraints" xil_pn:value="true"/>
-    <property xil_pn:name="Auto Implementation Top" xil_pn:value="false"/>
-    <property xil_pn:name="Constraints Entry" xil_pn:value="Constraints Editor"/>
-    <property xil_pn:name="Device" xil_pn:value="xc3s400"/>
-    <property xil_pn:name="Device Family" xil_pn:value="Spartan3"/>
-    <property xil_pn:name="Fitter Report Format" xil_pn:value="HTML"/>
-    <property xil_pn:name="Implementation Top" xil_pn:value="Module|AvivFPGA2"/>
-    <property xil_pn:name="Implementation Top Instance Path" xil_pn:value="/AvivFPGA2"/>
-    <property xil_pn:name="Overwrite Compiled Libraries" xil_pn:value="true"/>
-    <property xil_pn:name="PROP_BehavioralSimTop" xil_pn:value="Module|AvivFPGA2"/>
-    <property xil_pn:name="PROP_DesignName" xil_pn:value="AvivFPGA2"/>
-    <property xil_pn:name="Package" xil_pn:value="pq208"/>
-    <property xil_pn:name="Preferred Language" xil_pn:value="Verilog"/>
-    <property xil_pn:name="Report Fastest Path(s) in Each Constraint" xil_pn:value="false"/>
-    <property xil_pn:name="Report Fastest Path(s) in Each Constraint Post Trace" xil_pn:value="false"/>
-    <property xil_pn:name="Simulator" xil_pn:value="ISim (VHDL/Verilog)"/>
-    <property xil_pn:name="Speed Grade" xil_pn:value="-4"/>
-    <property xil_pn:name="Synthesis Tool" xil_pn:value="XST (VHDL/Verilog)"/>
-    <property xil_pn:name="Top-Level Source Type" xil_pn:value="HDL"/>
-    <property xil_pn:name="Use Synthesis Constraints File" xil_pn:value="false"/>
-    <property xil_pn:name="Verbose Property Persistence" xil_pn:value="false"/>
+    <property xil_pn:name="Allow Unmatched LOC Constraints" xil_pn:value="true" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Auto Implementation Top" xil_pn:value="false" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Device" xil_pn:value="xc3s400" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Device Family" xil_pn:value="Spartan3" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Implementation Top" xil_pn:value="Module|AvivFPGA2" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Implementation Top File" xil_pn:value="AvivFPGA2.v" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Implementation Top Instance Path" xil_pn:value="/AvivFPGA2" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Overwrite Compiled Libraries" xil_pn:value="true" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Package" xil_pn:value="pq208" xil_pn:valueState="default"/>
+    <property xil_pn:name="Preferred Language" xil_pn:value="Verilog" xil_pn:valueState="default"/>
+    <property xil_pn:name="Property Specification in Project File" xil_pn:value="Store all values" xil_pn:valueState="default"/>
+    <property xil_pn:name="Report Fastest Path(s) in Each Constraint" xil_pn:value="false" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Report Fastest Path(s) in Each Constraint Post Trace" xil_pn:value="false" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Simulator" xil_pn:value="ISim (VHDL/Verilog)" xil_pn:valueState="default"/>
+    <property xil_pn:name="Speed Grade" xil_pn:value="-4" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Synthesis Tool" xil_pn:value="XST (VHDL/Verilog)" xil_pn:valueState="default"/>
+    <property xil_pn:name="Top-Level Source Type" xil_pn:value="HDL" xil_pn:valueState="default"/>
+    <property xil_pn:name="Use Synthesis Constraints File" xil_pn:value="false" xil_pn:valueState="non-default"/>
+    <!--                                                                                  -->
+    <!-- The following properties are for internal use only. These should not be modified.-->
+    <!--                                                                                  -->
+    <property xil_pn:name="PROP_BehavioralSimTop" xil_pn:value="Module|AvivFPGA2" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="PROP_DesignName" xil_pn:value="AvivFPGA2" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="PROP_DevFamilyPMName" xil_pn:value="spartan3" xil_pn:valueState="default"/>
+    <property xil_pn:name="PROP_intProjectCreationTimestamp" xil_pn:value="2011-11-16T17:09:33" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="PROP_intWbtProjectID" xil_pn:value="5B52EE1396F241BB9CE62517CA667CBB" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="PROP_intWorkingDirLocWRTProjDir" xil_pn:value="Same" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="PROP_intWorkingDirUsed" xil_pn:value="No" xil_pn:valueState="non-default"/>
   </properties>
 
   <bindings/>
 
   <libraries/>
 
-  <partitions>
-    <partition xil_pn:name="/AvivFPGA2"/>
-  </partitions>
+  <autoManagedFiles>
+    <!-- The following files are identified by `include statements in verilog -->
+    <!-- source files and are automatically managed by Project Navigator.     -->
+    <!--                                                                      -->
+    <!-- Do not hand-edit this section, as it will be overwritten when the    -->
+    <!-- project is analyzed based on files automatically identified as       -->
+    <!-- include files.                                                       -->
+  </autoManagedFiles>
 
 </project>
