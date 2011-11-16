@@ -1,6 +1,0 @@
-CommandLine
-C:\Xilinx\10.1\ISE\bin\nt\unwrapped\reportgen.exe -ise C:/Documents and Settings/Aviv Keshet/My Documents/FPGA/AvivFPGA2/AvivFPGA2.ise -intstyle ise -delay -o AvivFPGA2 AvivFPGA2.ncd
-s
-FormatString
-reportgen [-intstyle ise|xflow|silent] [-delay] [-clock_regions] [-unrouted_nets] [--dirt] [-pad [-padfmt pad|csv|text|all] [-padcolsort <displaystr>]] [-o <outfile>] <infile[.ncd]> [<constraintsfile[.pcf]>]
-s
