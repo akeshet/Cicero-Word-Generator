@@ -37,8 +37,8 @@ wire [16:0]  ok2;            // Opal Kelly bus 2
 
 // the mapping to clk1 is temporary. Eventually, we will map the refclk to an input pin.
 wire refclk;
-//assign refclk = clk1;      // ********************** UNCOMMENT THIS LINE TO USE INTERNAL CLOCK
-assign refclk = yclk1;   // ********************** UNCOMMENT THIS LINE TO USE EXTERNAL CLOCK
+assign refclk = clk1;      // ********************** UNCOMMENT THIS LINE TO USE INTERNAL CLOCK
+//assign refclk = yclk1;   // ********************** UNCOMMENT THIS LINE TO USE EXTERNAL CLOCK
 
 
 // Pipe related wires
@@ -184,8 +184,10 @@ always @(posedge refclk) begin
 			toggler<=0;
 
 			if (soft_generate_trig_in==1) begin
-				state<=s_preparing_to_generate; 
-				fifo_read_enable<=1;               // read the first list item from the FIFO before starting generation
+				if (fifo_read_enable==0) begin
+					state<=s_preparing_to_generate; 
+					fifo_read_enable<=1;               // read the first list item from the FIFO before starting generation
+				end
 			end
 		end
 		
@@ -200,12 +202,14 @@ always @(posedge refclk) begin
 				fifo_reset<=1;							// reset FIFO
 				output_clock<=0;						// and clock
 			end
-			else if (clock_data_from_fifo==0) begin // clock_data_from_fifo == 0 is a special code for
+			else if (clock_data_from_fifo==0) begin 
+																	// clock_data_from_fifo == 0 is a special code for
 																	// putting the FPGA into "wait for retrigger" mode
 																	
 																	// wait for the retrigger input to go high, then move on in the fifo
-				if (retriggerIN) begin
+				if (retriggerIN && fifo_read_enable==0) begin
 					fifo_read_enable<=1;
+					nSegsGenerated<=nSegsGenerated+1;
 				end
 			end
 			else begin		
@@ -236,8 +240,10 @@ always @(posedge refclk) begin
 						else begin											// otherwise
 							repeat_counter<=0;							// reset the repeat counter
 							if (empty==0) begin							// and if there is data left in the FIFO
-								fifo_read_enable<=1;						// read the next frame
-								nSegsGenerated<=nSegsGenerated+1;
+								if (fifo_read_enable==0) begin
+									fifo_read_enable<=1;						// read the next frame
+									nSegsGenerated<=nSegsGenerated+1;
+								end
 							end
 							else begin										// no data in the FIFO?
 								state<=s_idle;								// then we are done. go back to idle
