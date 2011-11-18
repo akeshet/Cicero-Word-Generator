@@ -179,27 +179,27 @@ namespace WordGenerator
 
             public static void LoadClientStartupSettings(string path)
             {
-                string targetFile;
+                //string targetFile;
                 clientStartupSettings = Load(path) as ClientStartupSettings;
                 
-                while (clientStartupSettings == null) // Failed to load ClientStartupSettings in the first pass
+                if (clientStartupSettings == null) // Failed to load ClientStartupSettings in the first pass. Probably file doesn't exist.
                 {
-                    targetFile =
+                   /* targetFile =
                         PromptOpenFileDialog("ClientStartupSettings", DefaultNames.Extensions.ClientStartupSettings);
 
-                    if (targetFile == null) // Null return indicates that user has opted for 'Cancel' i.e. default state
-                    {
-                        MessageBox.Show("Proceeding with default ClientStartupSettings!");
+                    //if (targetFile == null) // Null return indicates that user has opted for 'Cancel' i.e. default state
+                    //{
+                      MessageBox.Show("Proceeding with default ClientStartupSettings!"); */
                         clientStartupSettings = new ClientStartupSettings();
 
                         // Also, give it the default name
                         clientStartupSettingsFileName = DefaultNames.ClientStartupSettingsFile;
-                    }
+                    /*}
                     else
                     {
                         clientStartupSettings = Load(targetFile) as ClientStartupSettings;
                         clientStartupSettingsFileName = targetFile;
-                    }
+                    }*/
                 }
             }
 
