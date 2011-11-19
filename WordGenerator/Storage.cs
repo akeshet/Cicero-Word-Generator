@@ -50,9 +50,11 @@ namespace WordGenerator
                 if (path == null)
                     return null;
 
+                FileStream fs=null;
+
                 try
                 {
-                    FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
+                    fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
                     result = b.Deserialize(fs);
                     fs.Close();
                 }
@@ -68,9 +70,32 @@ namespace WordGenerator
                 {
                     Console.WriteLine("SaveAndLoad.Load(), ArgumentNullException: " + e.Message);
                 }
+                catch (System.ArgumentException e)
+                {
+                    // Cludgey fix to incompatability in serialization between different version of NI4882.Address. 
+                    // Temporarily modify HardwareChannel so that gpibAddress is marked as nonserlialized. This allows us to deserialize
+                    // most of the settings object, but we lose the gpibaddress information.
+                    if (e.Message.Contains("NationalInstruments.NI4882.Address"))
+                    {
+
+
+
+                        fs.Close();
+                        fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
+                        b = new BinaryFormatter();
+                        b.Binder = new HardwareChannel.GpibBinderFix();
+                        result = b.Deserialize(fs);
+                        fs.Close();
+
+                    }
+                    else
+                        throw;
+                }
 
                 return result;
             }
+
+
 
             /// <summary>
             /// Saves an object to the specified path using the .NET BinaryFormatter. In contrast to the Load(string path)
