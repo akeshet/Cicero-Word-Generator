@@ -1,3 +1,5 @@
+This file provides an extremely simple and brief explanation of card synchronization. For a much more complete description, refer to the manual for Cicero.
+
 How to synchronize two cards:
 
 In this example, Dev1 is a digital output card, and Dev 2 in an analog output card. 
