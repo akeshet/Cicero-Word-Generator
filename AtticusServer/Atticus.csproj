@@ -229,7 +229,7 @@
     <PostBuildEvent>Copy "$(SolutionDir)Opal Kelly\variable_timebase_fpga_internal.bit"  "$(TargetDir)"
 Copy "$(SolutionDir)Opal Kelly\variable_timebase_fpga_external.bit"  "$(TargetDir)"
 if $(ConfigurationName) == Debug Copy "$(SolutionDir)Opal Kelly\Opal Kelly 4.0.8\API-32\Csharp\libFrontPanel-pinv.dll" "$(TargetDir)"
-if $(ConfigurationName) == Release-x86 Copy "$(SolutionDir)Opal Kelly\Opal Kelly 4.0.8\API-64\Csharp\libFrontPanel-pinv.dll" "$(TargetDir)"
+if $(ConfigurationName) == Release-x86 Copy "$(SolutionDir)Opal Kelly\Opal Kelly 4.0.8\API-32\Csharp\libFrontPanel-pinv.dll" "$(TargetDir)"
 if $(ConfigurationName) == Release-x64 Copy "$(SolutionDir)Opal Kelly\Opal Kelly 4.0.8\API-64\Csharp\libFrontPanel-pinv.dll" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
