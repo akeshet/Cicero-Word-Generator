@@ -62,7 +62,7 @@ namespace AtticusServer
         /// <summary>
         /// List of opal kelly devices in use.
         /// </summary>
-        private List<com.opalkelly.frontpanel.okCUsbFrontPanel> opalKellyDevices;
+        private List<com.opalkelly.frontpanel.okCFrontPanel> opalKellyDevices;
 
         private List<string> opalKellyDeviceNames;
 
@@ -2617,10 +2617,10 @@ namespace AtticusServer
             {
 
                 System.Console.WriteLine("Scanning for Opal Kelly FPGA devices...");
-                opalKellyDevices = new List<com.opalkelly.frontpanel.okCUsbFrontPanel>();
+                opalKellyDevices = new List<com.opalkelly.frontpanel.okCFrontPanel>();
                 opalKellyDeviceNames = new List<string>();
 
-                com.opalkelly.frontpanel.okCUsbFrontPanel ok = new com.opalkelly.frontpanel.okCUsbFrontPanel();
+                com.opalkelly.frontpanel.okCFrontPanel ok = new com.opalkelly.frontpanel.okCFrontPanel();
                 int fpgaDeviceCount = ok.GetDeviceCount();
 
                 System.Console.WriteLine("Found " + fpgaDeviceCount + " fpga device(s).");
@@ -2628,14 +2628,14 @@ namespace AtticusServer
                 for (int i = 0; i < fpgaDeviceCount; i++)
                 {
                     string name = ok.GetDeviceListSerial(i);
-                    com.opalkelly.frontpanel.okCUsbFrontPanel fpgaDevice = new com.opalkelly.frontpanel.okCUsbFrontPanel();
+                    com.opalkelly.frontpanel.okCFrontPanel fpgaDevice = new com.opalkelly.frontpanel.okCFrontPanel();
 
-                    com.opalkelly.frontpanel.okCUsbFrontPanel.BoardModel boardModel;
-                    com.opalkelly.frontpanel.okCUsbFrontPanel.ErrorCode errorCode;
+                    com.opalkelly.frontpanel.okCFrontPanel.BoardModel boardModel;
+                    com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode;
 
                     errorCode = fpgaDevice.OpenBySerial(name);
 
-                    if (errorCode != com.opalkelly.frontpanel.okCUsbFrontPanel.ErrorCode.NoError)
+                    if (errorCode != com.opalkelly.frontpanel.okCFrontPanel.ErrorCode.NoError)
                     {
                         System.Console.WriteLine("Unable to open FPGA device " + name + " due to error code " + errorCode.ToString());
                         continue;
@@ -2674,7 +2674,7 @@ namespace AtticusServer
                                 errorCode = fpgaDevice.ConfigureFPGA("variable_timebase_fpga_external.bit");
                             }
 
-                            if (errorCode == com.opalkelly.frontpanel.okCUsbFrontPanel.ErrorCode.NoError)
+                            if (errorCode == com.opalkelly.frontpanel.okCFrontPanel.ErrorCode.NoError)
                             {
 
                                 System.Console.WriteLine("Programmed fpga device " + name + ". Used fpga code version based on sample clock source " + myServerSettings.myDevicesSettings[name].MySampleClockSource.ToString());

@@ -57,6 +57,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Atticus-x86|AnyCPU'">
+    <OutputPath>bin\Atticus-x86\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="NationalInstruments.Common, Version=9.1.35.159, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
       <Private>True</Private>

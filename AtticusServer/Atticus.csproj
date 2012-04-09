@@ -55,11 +55,12 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="libFrontPanel-csharp, Version=1.0.2719.19705, Culture=neutral">
+    <Reference Include="libFrontPanel-csharp, Version=1.0.4414.30471, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Opal Kelly\libFrontPanel-csharp.dll</HintPath>
+      <HintPath>..\Opal Kelly\Opal Kelly 4.0.8\API-32\Csharp\libFrontPanel-csharp.dll</HintPath>
     </Reference>
     <Reference Include="NationalInstruments.Common, Version=9.1.35.159, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -217,7 +218,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>Copy "$(SolutionDir)Opal Kelly\libFrontPanel-pinv.dll"  "$(TargetDir)"
+    <PostBuildEvent>Copy "$(SolutionDir)Opal Kelly\Opal Kelly 4.0.8\API-32\Csharp\libFrontPanel-pinv.dll"  "$(TargetDir)"
 Copy "$(SolutionDir)Opal Kelly\variable_timebase_fpga_internal.bit"  "$(TargetDir)"
 Copy "$(SolutionDir)Opal Kelly\variable_timebase_fpga_external.bit"  "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>

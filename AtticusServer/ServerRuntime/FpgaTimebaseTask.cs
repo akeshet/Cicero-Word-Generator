@@ -13,7 +13,9 @@ namespace AtticusServer
     class FpgaTimebaseTask
     {
 
-        okCUsbFrontPanel opalKellyDevice;
+        okCFrontPanel opalKellyDevice;
+
+        
 
         private struct ListItem
         {
@@ -158,9 +160,9 @@ namespace AtticusServer
             return ans;
         }
 
-        public FpgaTimebaseTask(DeviceSettings deviceSettings, okCUsbFrontPanel opalKellyDevice, SequenceData sequence, double masterClockPeriod, out int nSegments, bool useRfModulation, bool assymetric)
+        public FpgaTimebaseTask(DeviceSettings deviceSettings, okCFrontPanel opalKellyDevice, SequenceData sequence, double masterClockPeriod, out int nSegments, bool useRfModulation, bool assymetric)
         {
-            com.opalkelly.frontpanel.okCUsbFrontPanel.ErrorCode errorCode;
+            com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode;
 
             this.opalKellyDevice = opalKellyDevice;
 
@@ -171,7 +173,7 @@ namespace AtticusServer
 
             // Send the device an abort trigger.
             errorCode = opalKellyDevice.ActivateTriggerIn(0x40, 1);
-            if (errorCode != okCUsbFrontPanel.ErrorCode.NoError)
+            if (errorCode != okCFrontPanel.ErrorCode.NoError)
             {
                 throw new Exception("Unable to set abort trigger to FPGA device. Error code " + errorCode.ToString());
             }
@@ -189,7 +191,7 @@ namespace AtticusServer
 
             errorCode = opalKellyDevice.SetWireInValue(0x00, wireInValue);
 
-            if (errorCode != okCUsbFrontPanel.ErrorCode.NoError)
+            if (errorCode != okCFrontPanel.ErrorCode.NoError)
             {
                 throw new Exception("Unable to send a wire in value to FPGA device. Error code " + errorCode.ToString());
             }
@@ -216,8 +218,8 @@ namespace AtticusServer
         public void Start()
         {
             // Send the device a start trigger.
-            com.opalkelly.frontpanel.okCUsbFrontPanel.ErrorCode errorCode = opalKellyDevice.ActivateTriggerIn(0x40, 0);
-            if (errorCode != okCUsbFrontPanel.ErrorCode.NoError)
+            com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode = opalKellyDevice.ActivateTriggerIn(0x40, 0);
+            if (errorCode != okCFrontPanel.ErrorCode.NoError)
             {
                 throw new Exception("Unable to send software start trigger to FPGA device. " + errorCode.ToString());
             }
@@ -229,8 +231,8 @@ namespace AtticusServer
             int highWord;
             int lowWord;
 
-            lowWord = opalKellyDevice.GetWireOutValue(0x20);
-            highWord = opalKellyDevice.GetWireOutValue(0x21);
+            lowWord = (int) opalKellyDevice.GetWireOutValue(0x20);
+            highWord = (int) opalKellyDevice.GetWireOutValue(0x21);
 
             int ans = highWord;
             ans = ans << 16;
@@ -241,10 +243,10 @@ namespace AtticusServer
 
         public void Stop()
         {
-            com.opalkelly.frontpanel.okCUsbFrontPanel.ErrorCode errorCode;
+            com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode;
             // Send the device an abort trigger.
             errorCode = opalKellyDevice.ActivateTriggerIn(0x40, 1);
-            if (errorCode != okCUsbFrontPanel.ErrorCode.NoError)
+            if (errorCode != okCFrontPanel.ErrorCode.NoError)
             {
                 throw new Exception("Unable to send software stop trigger to FPGA device. " + errorCode.ToString());
             }
