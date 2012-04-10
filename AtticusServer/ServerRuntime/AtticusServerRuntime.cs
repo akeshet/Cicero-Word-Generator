@@ -2615,83 +2615,120 @@ namespace AtticusServer
 
             if (this.serverSettings.UseOpalKellyFPGA)
             {
-
-                System.Console.WriteLine("Scanning for Opal Kelly FPGA devices...");
-                opalKellyDevices = new List<com.opalkelly.frontpanel.okCFrontPanel>();
-                opalKellyDeviceNames = new List<string>();
-
-                com.opalkelly.frontpanel.okCFrontPanel ok = new com.opalkelly.frontpanel.okCFrontPanel();
-                int fpgaDeviceCount = ok.GetDeviceCount();
-
-                System.Console.WriteLine("Found " + fpgaDeviceCount + " fpga device(s).");
-
-                for (int i = 0; i < fpgaDeviceCount; i++)
+                try
                 {
-                    string name = ok.GetDeviceListSerial(i);
-                    com.opalkelly.frontpanel.okCFrontPanel fpgaDevice = new com.opalkelly.frontpanel.okCFrontPanel();
+                    System.Console.WriteLine("Scanning for Opal Kelly FPGA devices...");
 
-                    com.opalkelly.frontpanel.okCFrontPanel.BoardModel boardModel;
-                    com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode;
+                    opalKellyDevices = new List<com.opalkelly.frontpanel.okCFrontPanel>();
+                    opalKellyDeviceNames = new List<string>();
 
-                    errorCode = fpgaDevice.OpenBySerial(name);
+                    com.opalkelly.frontpanel.okCFrontPanel ok = new com.opalkelly.frontpanel.okCFrontPanel();
+                    int fpgaDeviceCount = ok.GetDeviceCount();
 
-                    if (errorCode != com.opalkelly.frontpanel.okCFrontPanel.ErrorCode.NoError)
+                    System.Console.WriteLine("Found " + fpgaDeviceCount + " fpga device(s).");
+
+                    for (int i = 0; i < fpgaDeviceCount; i++)
                     {
-                        System.Console.WriteLine("Unable to open FPGA device " + name + " due to error code " + errorCode.ToString());
-                        continue;
-                    }
+                        string name = ok.GetDeviceListSerial(i);
+                        com.opalkelly.frontpanel.okCFrontPanel fpgaDevice = new com.opalkelly.frontpanel.okCFrontPanel();
 
-                    if (!this.detectedDevices.Contains(name))
-                    {
-                        this.detectedDevices.Add(name);
-                    }
+                        com.opalkelly.frontpanel.okCFrontPanel.BoardModel boardModel;
+                        com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode;
 
-                    if (!myServerSettings.myDevicesSettings.ContainsKey(name))
-                    {
-                        DeviceSettings newSettings = new DeviceSettings(name, "Opal Kelly FPGA Device");
-                        newSettings.deviceConnected = true;
-                        newSettings.isFPGADevice = true;
-                        myServerSettings.myDevicesSettings.Add(name, newSettings);
-                    }
-                    else
-                    {
-                        myServerSettings.myDevicesSettings[name].deviceConnected = true;
-                    }
+                        errorCode = fpgaDevice.OpenBySerial(name);
 
-                    bool deviceProgrammed = false;
-
-                    if (myServerSettings.myDevicesSettings[name].DeviceEnabled)
-                    {
-                        if (myServerSettings.myDevicesSettings[name].UsingVariableTimebase)
+                        if (errorCode != com.opalkelly.frontpanel.okCFrontPanel.ErrorCode.NoError)
                         {
-                            deviceProgrammed = true;
-                            if (myServerSettings.myDevicesSettings[name].MySampleClockSource == DeviceSettings.SampleClockSource.DerivedFromMaster)
-                            {
-                                errorCode = fpgaDevice.ConfigureFPGA("variable_timebase_fpga_internal.bit");
-                            }
-                            else
-                            {
-                                errorCode = fpgaDevice.ConfigureFPGA("variable_timebase_fpga_external.bit");
-                            }
+                            System.Console.WriteLine("Unable to open FPGA device " + name + " due to error code " + errorCode.ToString());
+                            continue;
+                        }
 
-                            if (errorCode == com.opalkelly.frontpanel.okCFrontPanel.ErrorCode.NoError)
-                            {
+                        if (!this.detectedDevices.Contains(name))
+                        {
+                            this.detectedDevices.Add(name);
+                        }
 
-                                System.Console.WriteLine("Programmed fpga device " + name + ". Used fpga code version based on sample clock source " + myServerSettings.myDevicesSettings[name].MySampleClockSource.ToString());
+                        if (!myServerSettings.myDevicesSettings.ContainsKey(name))
+                        {
+                            DeviceSettings newSettings = new DeviceSettings(name, "Opal Kelly FPGA Device");
+                            newSettings.deviceConnected = true;
+                            newSettings.isFPGADevice = true;
+                            myServerSettings.myDevicesSettings.Add(name, newSettings);
+                        }
+                        else
+                        {
+                            myServerSettings.myDevicesSettings[name].deviceConnected = true;
+                        }
 
-                                opalKellyDeviceNames.Add(name);
-                                opalKellyDevices.Add(fpgaDevice);
-                            }
-                            else
+                        bool deviceProgrammed = false;
+
+                        if (myServerSettings.myDevicesSettings[name].DeviceEnabled)
+                        {
+                            if (myServerSettings.myDevicesSettings[name].UsingVariableTimebase)
                             {
-                                System.Console.WriteLine("Error when attempting to program fpga device, error code " + errorCode.ToString());
+                                deviceProgrammed = true;
+                                if (myServerSettings.myDevicesSettings[name].MySampleClockSource == DeviceSettings.SampleClockSource.DerivedFromMaster)
+                                {
+                                    errorCode = fpgaDevice.ConfigureFPGA("variable_timebase_fpga_internal.bit");
+                                }
+                                else
+                                {
+                                    errorCode = fpgaDevice.ConfigureFPGA("variable_timebase_fpga_external.bit");
+                                }
+
+                                if (errorCode == com.opalkelly.frontpanel.okCFrontPanel.ErrorCode.NoError)
+                                {
+
+                                    System.Console.WriteLine("Programmed fpga device " + name + ". Used fpga code version based on sample clock source " + myServerSettings.myDevicesSettings[name].MySampleClockSource.ToString());
+
+                                    opalKellyDeviceNames.Add(name);
+                                    opalKellyDevices.Add(fpgaDevice);
+                                }
+                                else
+                                {
+                                    System.Console.WriteLine("Error when attempting to program fpga device, error code " + errorCode.ToString());
+                                }
                             }
                         }
+                        if (!deviceProgrammed)
+                            System.Console.WriteLine("Fpga device " + name + " not programmed, as it is not enable or varible timebase on that device is not enabled.");
+
+
                     }
-                    if (!deviceProgrammed)
-                        System.Console.WriteLine("Fpga device " + name + " not programmed, as it is not enable or varible timebase on that device is not enabled.");
-
-
+                }
+                catch (System.TypeInitializationException e)
+                {
+                    if (e.InnerException != null && e.InnerException.InnerException != null)
+                    {
+                        Exception innerInner = e.InnerException.InnerException;
+                        if (innerInner is System.BadImageFormatException)
+                        {
+                            MessageBox.Show("You are probably running the wrong build of Atticus. Atticus now comes in a 64-bit or 32-bit versions (in the bin\\Release-x64 and bin\\Release-x86 subdirectories respectively). These builds make use of different versions of the Opal Kelly Frontpanel libraries. Please ensure you are using the correct Atticus build. The exception which gave rise to this error will now be displayed.", "Wrong build of Atticus?");
+                            DataStructures.ExceptionViewerDialog dial = new ExceptionViewerDialog(e);
+                            dial.ShowDialog();
+                        }
+                        else if (innerInner is System.DllNotFoundException)
+                        {
+                            MessageBox.Show("Atticus is now built to use the 4.0.8 version of the Opal Kelly Frontpanel libraries/drivers. Perhaps you have the wrong version of the libraries installed? You can find a driver-only installer for 4.0.8 in the \\Opal Kelly\\Opal Kelly 4.0.8\\ directory of the Cicero distribution. Please install the newer drivers from there, or contact Opal Kelly to receive a CD with the newest full Frontpanel distribution. The exception which gave rise to this error will now be displayed.", "Wrong version of FrontPanel drivers installed?");
+                            DataStructures.ExceptionViewerDialog dial = new ExceptionViewerDialog(e);
+                            dial.ShowDialog();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                            MessageBox.Show("An unrecognized exception was encountered when scanning for Opal Kelly FPGA devices. The exception will now be displayed.", "Unrecognized exception.");
+                            DataStructures.ExceptionViewerDialog dial = new ExceptionViewerDialog(e);
+                            dial.ShowDialog();
+                }
+                finally
+                {
+                    System.Console.WriteLine("Caught exceptions when attempting to scan for Opal Kelly FPGA devices. Aborted FPGA scan.");
+                    opalKellyDevices=null;
                 }
             }
             else
