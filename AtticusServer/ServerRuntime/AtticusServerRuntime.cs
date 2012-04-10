@@ -2696,7 +2696,7 @@ namespace AtticusServer
 
                     }
                 }
-                catch (System.TypeInitializationException e)
+                catch (Exception e)
                 {
                     if (e.InnerException != null && e.InnerException.InnerException != null)
                     {
@@ -2715,20 +2715,21 @@ namespace AtticusServer
                         }
                         else
                         {
-                            throw;
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
                             MessageBox.Show("An unrecognized exception was encountered when scanning for Opal Kelly FPGA devices. The exception will now be displayed.", "Unrecognized exception.");
                             DataStructures.ExceptionViewerDialog dial = new ExceptionViewerDialog(e);
                             dial.ShowDialog();
-                }
-                finally
-                {
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("An unrecognized exception was encountered when scanning for Opal Kelly FPGA devices. The exception will now be displayed.", "Unrecognized exception.");
+                        DataStructures.ExceptionViewerDialog dial = new ExceptionViewerDialog(e);
+                        dial.ShowDialog();
+                    }
+
                     System.Console.WriteLine("Caught exceptions when attempting to scan for Opal Kelly FPGA devices. Aborted FPGA scan.");
-                    opalKellyDevices=null;
+                    opalKellyDevices = null;
+
                 }
             }
             else
