@@ -55,15 +55,41 @@ namespace AtticusServer
 
                 BinaryFormatter b = new BinaryFormatter();
                 ServerSettings serverSettings;
-
+                FileStream fs = null; 
 
                 try
                 {
-                    FileStream fs = new FileStream(serverSettingsFileName, FileMode.Open, FileAccess.Read, FileShare.None);
+                    fs = new FileStream(serverSettingsFileName, FileMode.Open, FileAccess.Read, FileShare.None);
                     serverSettings = (ServerSettings)b.Deserialize(fs);
                     fs.Close();
                 }
-                catch (Exception)
+                catch (System.ArgumentException e)
+                {
+                    // Cludgey fix to incompatability in serialization between different version of NI4882.Address. 
+                    // Temporarily modify HardwareChannel so that gpibAddress is marked as nonserlialized. This allows us to deserialize
+                    // most of the settings object, but we lose the gpibaddress information.
+                    if (e.Message.Contains("NationalInstruments.NI4882.Address"))
+                    {
+
+
+                        if (fs != null)
+                            try
+                            {
+                                fs.Close();
+                            }
+                            catch (Exception) { };
+
+                        fs = new FileStream(serverSettingsFileName, FileMode.Open, FileAccess.Read, FileShare.None);
+                        b = new BinaryFormatter();
+                        b.Binder = new HardwareChannel.GpibBinderFix();
+                        serverSettings = (ServerSettings)b.Deserialize(fs);
+                        fs.Close();
+
+                    }
+                    else
+                        throw;
+                }
+                catch (Exception e)
                 {
                     Console.WriteLine("Exception when attempting to load server settings.");
                     Console.WriteLine("Proceeding with blank settings.");
