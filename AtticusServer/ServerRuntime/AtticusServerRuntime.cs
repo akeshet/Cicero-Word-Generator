@@ -2632,7 +2632,6 @@ namespace AtticusServer
                         string name = ok.GetDeviceListSerial(i);
                         com.opalkelly.frontpanel.okCFrontPanel fpgaDevice = new com.opalkelly.frontpanel.okCFrontPanel();
 
-                        com.opalkelly.frontpanel.okCFrontPanel.BoardModel boardModel;
                         com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode;
 
                         errorCode = fpgaDevice.OpenBySerial(name);
