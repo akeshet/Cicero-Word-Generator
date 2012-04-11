@@ -2708,7 +2708,7 @@ namespace AtticusServer
                         }
                         else if (innerInner is System.DllNotFoundException)
                         {
-                            MessageBox.Show("As of version 1.56, Atticus is now built to use the 4.0.8 version of the Opal Kelly Frontpanel libraries/drivers. Perhaps you have the wrong version of the libraries installed? You can find a driver-only installer for 4.0.8 in the \\Opal Kelly\\Opal Kelly 4.0.8\\ directory of the Cicero distribution. Please install the newer drivers from there, or contact Opal Kelly to receive a CD with the newest full Frontpanel distribution. The exception which gave rise to this error will now be displayed.", "Wrong version of FrontPanel drivers installed?");
+                            MessageBox.Show("As of version 1.56, Atticus is now built to use the 4.0.8 version of the Opal Kelly Frontpanel libraries/drivers. Perhaps you have the wrong version of the libraries installed? You can find a driver-only installer for 4.0.8 in the \\Opal Kelly\\Opal Kelly 4.0.8\\ directory of the Cicero distribution. Please install the newer drivers from there, or contact Opal Kelly to receive a CD with the newest full Frontpanel distribution. You may also need to plug an Opal Kelly device into this computer during installation of the drivers, to insure that the WINUSB windows subsystem gets installed. The exception which gave rise to this error will now be displayed.", "Wrong version of FrontPanel drivers installed?");
                             DataStructures.ExceptionViewerDialog dial = new ExceptionViewerDialog(e);
                             dial.ShowDialog();
                         }
