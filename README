@@ -18,6 +18,9 @@ Elgin/
 ExampleServer/
    Skeleton code for you to right a cicero "server", much like Atticus, with whatever functionality you want.
 
+DeprecatedCode/
+   Includes code no longer in use, development, or maintenance (Virgil hdf5 exporter, Simplicio log server, HDF5DotNet library).
+
 HDF5dotNet/
    No longer in use, library for exporting to hdf5 files.
 
