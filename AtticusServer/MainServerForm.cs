@@ -396,12 +396,12 @@ namespace AtticusServer
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Server settings cannot be loaded while server is running. To specify a settings file, replace the file " + AtticusServer.serverSettingsFileName + " in Atticus's home directory with the desired settings file.");
+            MessageBox.Show("Server settings cannot be loaded while server is running. To specify a settings file, replace the file " + FileNameStrings.DefaultServerSettingsDataFile + " in Atticus's home directory with the desired settings file.");
         }
 
         private void saveAsDefaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AtticusServer.saveServerSettings(AppDomain.CurrentDomain.BaseDirectory +  AtticusServer.serverSettingsFileName, AtticusServer.server.serverSettings);
+            AtticusServer.saveServerSettings(AppDomain.CurrentDomain.BaseDirectory +  FileNameStrings.DefaultServerSettingsDataFile, AtticusServer.server.serverSettings);
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)

@@ -234,7 +234,7 @@ namespace WordGenerator
             if (runLog == null)
             {
                 // Identify the clientStartupSettingsFile
-                clientStartupSettingsFile = FileNameStrings.ClientStartupSettingsFile;
+                clientStartupSettingsFile = FileNameStrings.DefaultClientStartupSettingsFile;
 
                 // Load all necessary data into Storage
                 Storage.SaveAndLoad.LoadAllSubclasses(clientStartupSettingsFile);
@@ -554,7 +554,7 @@ namespace WordGenerator
 
         private void loadDefaultSettings_Click(object sender, EventArgs e)
         {
-            if (Storage.SaveAndLoad.LoadSettingsData(FileNameStrings.SettingsDataFile))
+            if (Storage.SaveAndLoad.LoadSettingsData(FileNameStrings.DefaultClientSettingsDataFile))
             {
 
 
@@ -565,7 +565,7 @@ namespace WordGenerator
 
         private void saveDefaultSettings_Click(object sender, EventArgs e)
         {
-            Storage.SaveAndLoad.SaveSettingsData(AppDomain.CurrentDomain.BaseDirectory + FileNameStrings.SettingsDataFile);
+            Storage.SaveAndLoad.SaveSettingsData(AppDomain.CurrentDomain.BaseDirectory + FileNameStrings.DefaultClientSettingsDataFile);
         }
 
         private void mainClientForm_Load(object sender, EventArgs e)

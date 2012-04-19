@@ -13,7 +13,6 @@ namespace AtticusServer
     {
 
         public static AtticusServerCommunicator server;
-        public static string serverSettingsFileName = "AtticusServerSettings.set";
 
 
 
@@ -59,7 +58,7 @@ namespace AtticusServer
 
                 try
                 {
-                    fs = new FileStream(serverSettingsFileName, FileMode.Open, FileAccess.Read, FileShare.None);
+                    fs = new FileStream(FileNameStrings.DefaultServerSettingsDataFile, FileMode.Open, FileAccess.Read, FileShare.None);
                     serverSettings = (ServerSettings)b.Deserialize(fs);
                     fs.Close();
                 }
@@ -79,7 +78,7 @@ namespace AtticusServer
                             }
                             catch (Exception) { };
 
-                        fs = new FileStream(serverSettingsFileName, FileMode.Open, FileAccess.Read, FileShare.None);
+                        fs = new FileStream(FileNameStrings.DefaultServerSettingsDataFile, FileMode.Open, FileAccess.Read, FileShare.None);
                         b = new BinaryFormatter();
                         b.Binder = new HardwareChannel.GpibBinderFix();
                         serverSettings = (ServerSettings)b.Deserialize(fs);
@@ -112,7 +111,7 @@ namespace AtticusServer
 
                 Application.Run(form);
 
-                saveServerSettings(AppDomain.CurrentDomain.BaseDirectory +  serverSettingsFileName, serverSettings);
+                saveServerSettings(AppDomain.CurrentDomain.BaseDirectory +  FileNameStrings.DefaultServerSettingsDataFile, serverSettings);
             }
             catch (Exception e)
             {

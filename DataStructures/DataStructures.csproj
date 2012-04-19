@@ -131,7 +131,7 @@
     <Compile Include="Communication\ServerManager\ServerInfo.cs" />
     <Compile Include="Communication\ServerManager\ServerManager.cs" />
     <Compile Include="Constants\CommunicationConstants.cs" />
-    <Compile Include="Constants\DefaultNames.cs" />
+    <Compile Include="Constants\FileNameStrings.cs" />
     <Compile Include="Constants\GUIConstants.cs" />
     <Compile Include="EnumWrapperTypeConverter.cs" />
     <Compile Include="ExpandableStructConverter.cs" />

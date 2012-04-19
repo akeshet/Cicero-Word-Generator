@@ -197,7 +197,7 @@ namespace WordGenerator
                         clientStartupSettings = new ClientStartupSettings();
 
                         // Also, give it the default name
-                        clientStartupSettingsFileName = FileNameStrings.ClientStartupSettingsFile;
+                        clientStartupSettingsFileName = FileNameStrings.DefaultClientStartupSettingsFile;
                     /*}
                     else
                     {
@@ -222,7 +222,7 @@ namespace WordGenerator
                 else
                 {
                     path =
-                        SharedForms.PromptOpenFileDialog(FileNameStrings.FriendlyNames.SettingsData, FileNameStrings.Extensions.SettingsData);
+                        SharedForms.PromptOpenFileDialog(FileNameStrings.FriendlyNames.ClientSettingsData, FileNameStrings.Extensions.ClientSettingsData);
 
                     loadMe = Load(path) as SettingsData;
                 }
@@ -299,7 +299,7 @@ namespace WordGenerator
 
                 if (path == null)
                 {
-                    path = SharedForms.PromptSaveFile(FileNameStrings.FriendlyNames.SettingsData, FileNameStrings.Extensions.SettingsData);
+                    path = SharedForms.PromptSaveFile(FileNameStrings.FriendlyNames.ClientSettingsData, FileNameStrings.Extensions.ClientSettingsData);
                     if (path != null)
                     {
                         Save(path, settingsData);
