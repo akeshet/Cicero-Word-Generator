@@ -1,0 +1,4 @@
+1.56
+-----
+Use new version of FrontPanel API. This comes in both x86 and x64 flavors,
+so there are now two flavors of the Atticus binary.
