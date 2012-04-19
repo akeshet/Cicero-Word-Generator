@@ -554,7 +554,7 @@ namespace WordGenerator
 
         private void loadDefaultSettings_Click(object sender, EventArgs e)
         {
-            if (Storage.SaveAndLoad.LoadSettingsData(DefaultNames.FileNames.SettingsData))
+            if (Storage.SaveAndLoad.LoadSettingsData(DefaultNames.SettingsDataFile))
             {
 
 
@@ -565,7 +565,7 @@ namespace WordGenerator
 
         private void saveDefaultSettings_Click(object sender, EventArgs e)
         {
-            Storage.SaveAndLoad.SaveSettingsData(AppDomain.CurrentDomain.BaseDirectory + DefaultNames.FileNames.SettingsData);
+            Storage.SaveAndLoad.SaveSettingsData(AppDomain.CurrentDomain.BaseDirectory + DefaultNames.SettingsDataFile);
         }
 
         private void mainClientForm_Load(object sender, EventArgs e)

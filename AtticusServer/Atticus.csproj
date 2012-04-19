@@ -107,11 +107,11 @@
     <Compile Include="DaqmxBrowser.Designer.cs">
       <DependentUpon>DaqmxBrowser.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form1.cs">
+    <Compile Include="MainServerForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="MainServerForm.Designer.cs">
+      <DependentUpon>MainServerForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AtticusServer.cs" />
     <Compile Include="HardwareChannelsBrowser.cs">
@@ -129,9 +129,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>DaqmxBrowser.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
+    <EmbeddedResource Include="MainServerForm.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>Form1.cs</DependentUpon>
+      <DependentUpon>MainServerForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="HardwareChannelsBrowser.resx">
       <SubType>Designer</SubType>

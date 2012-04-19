@@ -13,7 +13,7 @@ namespace DataStructures
             public const string SequenceData = "seq";
         }
 
-        public class FileNames
+        private class FileNames
         {
             public const string ClientStartupSettings = "StartupSettings";
             public const string SettingsData = "SettingsData";
