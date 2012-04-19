@@ -77,21 +77,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CiceroUtilityFunctions.cs" />
     <Compile Include="ClientStartupSettings.cs" />
     <Compile Include="Communication\ServerSettingsInterface.cs" />
-    <Compile Include="ExceptionViewerDialog.cs">
+    <Compile Include="Forms\ExceptionViewerDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ExceptionViewerDialog.Designer.cs">
+    <Compile Include="Forms\ExceptionViewerDialog.Designer.cs">
       <DependentUpon>ExceptionViewerDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="HelperFunctions.cs" />
     <Compile Include="Information.cs" />
-    <Compile Include="LicenseInfoForm.cs">
+    <Compile Include="Forms\LicenseInfoForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LicenseInfoForm.Designer.cs">
+    <Compile Include="Forms\LicenseInfoForm.Designer.cs">
       <DependentUpon>LicenseInfoForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
@@ -138,18 +136,17 @@
     <Compile Include="ExpandableStructConverter.cs" />
     <Compile Include="MessageEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TransparentLabel.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="UtilityClasses\CiceroUtilityFunctions.cs" />
+    <Compile Include="UtilityClasses\HelperFunctions.cs" />
     <Compile Include="UtilityClasses\NamingFunctions.cs" />
     <Compile Include="UtilityClasses\WaveformParser.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ExceptionViewerDialog.resx">
+    <EmbeddedResource Include="Forms\ExceptionViewerDialog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ExceptionViewerDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LicenseInfoForm.resx">
+    <EmbeddedResource Include="Forms\LicenseInfoForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>LicenseInfoForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -158,10 +155,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dotmath\dotMath.csproj">
