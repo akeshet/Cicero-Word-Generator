@@ -204,7 +204,6 @@
     <None Include="Resources\AtticusV1BetaSplash.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Atticus_TemporaryKey.pfx" />
     <None Include="Resources\AtticusSplash.jpg" />
   </ItemGroup>
   <ItemGroup>
