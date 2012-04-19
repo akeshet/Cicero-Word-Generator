@@ -40,8 +40,8 @@ namespace DataStructures
 
         public ClientStartupSettings()
         {
-            settingsDataFileName = DefaultNames.SettingsDataFile;
-            sequenceDataFileName = DefaultNames.SequenceDataFile;
+            settingsDataFileName = FileNameStrings.SettingsDataFile;
+            sequenceDataFileName = FileNameStrings.SequenceDataFile;
 
             ClearRecentFiles();
         }

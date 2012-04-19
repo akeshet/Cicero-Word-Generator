@@ -117,8 +117,8 @@ namespace WordGenerator
                     if (File.Exists(path)) // Does our target already exist?
                     {
                         // Make sure that the backup folder exists
-                        if (!Directory.Exists(DefaultNames.BackupFolder))
-                            Directory.CreateDirectory(DefaultNames.BackupFolder);
+                        if (!Directory.Exists(FileNameStrings.BackupFolder))
+                            Directory.CreateDirectory(FileNameStrings.BackupFolder);
 
                         // We'll use the current time to generate a unique file name. Unfortunately, the standard
                         // ToString methods associated with the DateTime class generate strings incompatible for filenames.
@@ -142,7 +142,7 @@ namespace WordGenerator
                     fileNameOnly = split[split.Length - 1];
                     #endregion
 
-                        string backupFileName = DefaultNames.BackupFolder + fileNameOnly + "." + timestamp + "." + "backup";
+                        string backupFileName = FileNameStrings.BackupFolder + fileNameOnly + "." + timestamp + "." + "backup";
 
                         File.Copy(path, backupFileName, true); // We allow overwrite, in the off chance that the user requests
                                                                // two consecutive saves within the same second, and generates a 
@@ -197,7 +197,7 @@ namespace WordGenerator
                         clientStartupSettings = new ClientStartupSettings();
 
                         // Also, give it the default name
-                        clientStartupSettingsFileName = DefaultNames.ClientStartupSettingsFile;
+                        clientStartupSettingsFileName = FileNameStrings.ClientStartupSettingsFile;
                     /*}
                     else
                     {
@@ -222,7 +222,7 @@ namespace WordGenerator
                 else
                 {
                     path =
-                        SharedForms.PromptOpenFileDialog(DefaultNames.FriendlyNames.SettingsData, DefaultNames.Extensions.SettingsData);
+                        SharedForms.PromptOpenFileDialog(FileNameStrings.FriendlyNames.SettingsData, FileNameStrings.Extensions.SettingsData);
 
                     loadMe = Load(path) as SettingsData;
                 }
@@ -242,7 +242,7 @@ namespace WordGenerator
             public static SequenceData LoadSequenceWithFileDialog()
             {
                     string path =
-                        SharedForms.PromptOpenFileDialog(DefaultNames.FriendlyNames.SequenceData, DefaultNames.Extensions.SequenceData);
+                        SharedForms.PromptOpenFileDialog(FileNameStrings.FriendlyNames.SequenceData, FileNameStrings.Extensions.SequenceData);
 
                     return  Load(path) as SequenceData;
             }
@@ -259,7 +259,7 @@ namespace WordGenerator
                 else
                 {
                     path =
-                        SharedForms.PromptOpenFileDialog(DefaultNames.FriendlyNames.SequenceData, DefaultNames.Extensions.SequenceData);
+                        SharedForms.PromptOpenFileDialog(FileNameStrings.FriendlyNames.SequenceData, FileNameStrings.Extensions.SequenceData);
 
                     loadMe = Load(path) as SequenceData;
                 }
@@ -299,7 +299,7 @@ namespace WordGenerator
 
                 if (path == null)
                 {
-                    path = SharedForms.PromptSaveFile(DefaultNames.FriendlyNames.SettingsData, DefaultNames.Extensions.SettingsData);
+                    path = SharedForms.PromptSaveFile(FileNameStrings.FriendlyNames.SettingsData, FileNameStrings.Extensions.SettingsData);
                     if (path != null)
                     {
                         Save(path, settingsData);
@@ -323,7 +323,7 @@ namespace WordGenerator
             {
                 if (path == null)
                 {
-                    path = SharedForms.PromptSaveFile(DefaultNames.FriendlyNames.SequenceData, DefaultNames.Extensions.SequenceData);
+                    path = SharedForms.PromptSaveFile(FileNameStrings.FriendlyNames.SequenceData, FileNameStrings.Extensions.SequenceData);
                 }
 
                 if (path != null)

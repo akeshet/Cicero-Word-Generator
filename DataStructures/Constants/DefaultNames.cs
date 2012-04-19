@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DataStructures
 {
-    public class DefaultNames
+    public class FileNameStrings
     {
         public class Extensions
         {
@@ -22,9 +22,9 @@ namespace DataStructures
 
         public class FriendlyNames
         {
-            public const string ClientStartupSettings = "Cicero Startup File";
-            public const string SettingsData = "Cicero Settings File";
-            public const string SequenceData = "Cicero Sequence File";
+            public const string ClientStartupSettings = "Cicero Startup";
+            public const string SettingsData = "Cicero Settings";
+            public const string SequenceData = "Cicero Sequence";
         }
 
         // Default save locations and file names

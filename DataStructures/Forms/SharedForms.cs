@@ -19,7 +19,7 @@ namespace DataStructures
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
             openFileDialog.Title = "Open " + userfriendlyName;
-            openFileDialog.Filter = DefaultNames.fileDialogFilterString(userfriendlyName, fileExtension);
+            openFileDialog.Filter = FileNameStrings.fileDialogFilterString(userfriendlyName, fileExtension);
 
             openFileDialog.FilterIndex = 1;
 
@@ -40,7 +40,7 @@ namespace DataStructures
         {
             SaveFileDialog sf = new SaveFileDialog();
             sf.DefaultExt = fileExtension;
-            sf.Filter = DefaultNames.fileDialogFilterString(fileKind, fileExtension);
+            sf.Filter = FileNameStrings.fileDialogFilterString(fileKind, fileExtension);
             sf.FilterIndex = 1;
             sf.AddExtension = true;
 
