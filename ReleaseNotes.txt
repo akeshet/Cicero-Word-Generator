@@ -8,7 +8,7 @@ so there are now two flavors of the Atticus binary.
 1.57
 -----
 
-(in progress) Code cleanup.
+Code cleanup.
 Renamed AtticusServerRuntime to AtticusServerCommunicator.
 Created some subdirectories in DataStructures for organizational purposes.
 Variety of small code changes, renames, deletions.
