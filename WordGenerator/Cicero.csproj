@@ -91,7 +91,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\AlternateFlowLayoutPanel.cs">
+    <Compile Include="Controls\Shared\AlternateFlowLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\Dialogs\FormulaHelpDialog.cs">
@@ -106,86 +106,86 @@
     <Compile Include="Controls\Dialogs\VariablePreviewEditorForm.Designer.cs">
       <DependentUpon>VariablePreviewEditorForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\OverridePage\Analog Override.cs">
+    <Compile Include="Controls\OverrideTab\Analog Override.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\OverridePage\Analog Override.Designer.cs">
+    <Compile Include="Controls\OverrideTab\Analog Override.Designer.cs">
       <DependentUpon>Analog Override.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ChannelManager\AddDevice.cs">
+    <Compile Include="Controls\Dialogs\ChannelManager\AddDevice.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Controls\ChannelManager\AddDevice.Designer.cs">
+    <Compile Include="Controls\Dialogs\ChannelManager\AddDevice.Designer.cs">
       <DependentUpon>AddDevice.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ChannelManager\ChannelManager.cs">
+    <Compile Include="Controls\Dialogs\ChannelManager\ChannelManager.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Controls\ChannelManager\ChannelManager.Designer.cs">
+    <Compile Include="Controls\Dialogs\ChannelManager\ChannelManager.Designer.cs">
       <DependentUpon>ChannelManager.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ChannelManager\EditDevice.cs">
+    <Compile Include="Controls\Dialogs\ChannelManager\EditDevice.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Controls\ChannelManager\EditDevice.Designer.cs">
+    <Compile Include="Controls\Dialogs\ChannelManager\EditDevice.Designer.cs">
       <DependentUpon>EditDevice.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ChannelManager\SelectedDevice.cs" />
+    <Compile Include="Controls\Dialogs\ChannelManager\SelectedDevice.cs" />
     <Compile Include="Controls\Dialogs\LogAnnotator.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controls\Dialogs\LogAnnotator.Designer.cs">
       <DependentUpon>LogAnnotator.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\OverridePage\DigitalOverride.cs">
+    <Compile Include="Controls\OverrideTab\DigitalOverride.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\OverridePage\DigitalOverride.Designer.cs">
+    <Compile Include="Controls\OverrideTab\DigitalOverride.Designer.cs">
       <DependentUpon>DigitalOverride.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\OverridePage\OverridePage.cs">
+    <Compile Include="Controls\OverrideTab\OverridePage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\OverridePage\OverridePage.Designer.cs">
+    <Compile Include="Controls\OverrideTab\OverridePage.Designer.cs">
       <DependentUpon>OverridePage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\PermanentVariablesEditor.cs">
+    <Compile Include="Controls\VariablesTab\PermanentVariablesEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Controls\PermanentVariablesEditor.Designer.cs">
+    <Compile Include="Controls\VariablesTab\PermanentVariablesEditor.Designer.cs">
       <DependentUpon>PermanentVariablesEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\PropertyGridForm.cs">
+    <Compile Include="Controls\Shared\PropertyGridForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Controls\PropertyGridForm.Designer.cs">
+    <Compile Include="Controls\Shared\PropertyGridForm.Designer.cs">
       <DependentUpon>PropertyGridForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\PulseEditor.cs">
+    <Compile Include="Controls\PulsesTab\PulseEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\PulseEditor.Designer.cs">
+    <Compile Include="Controls\PulsesTab\PulseEditor.Designer.cs">
       <DependentUpon>PulseEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\PulsesPage.cs">
+    <Compile Include="Controls\PulsesTab\PulsesPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\PulsesPage.Designer.cs">
+    <Compile Include="Controls\PulsesTab\PulsesPage.Designer.cs">
       <DependentUpon>PulsesPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SequenceDifferencesForm.cs">
+    <Compile Include="Controls\Dialogs\SequenceDifferencesForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Controls\SequenceDifferencesForm.Designer.cs">
+    <Compile Include="Controls\Dialogs\SequenceDifferencesForm.Designer.cs">
       <DependentUpon>SequenceDifferencesForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SequencePage\AnalogChannelLabelsPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\AnalogGroup\AnalogGroupEditor.cs">
+    <Compile Include="Controls\AnalogGroupTab\AnalogGroupEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\AnalogGroup\AnalogGroupEditor.designer.cs">
+    <Compile Include="Controls\AnalogGroupTab\AnalogGroupEditor.designer.cs">
       <DependentUpon>AnalogGroupEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SequencePage\AnalogPreviewPane.cs">
@@ -200,22 +200,22 @@
     <Compile Include="Controls\Dialogs\CiceroSplashForm.Designer.cs">
       <DependentUpon>CiceroSplashForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\CommonWaveformEditor.cs">
+    <Compile Include="Controls\OtherTabs\CommonWaveformEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\CommonWaveformEditor.Designer.cs">
+    <Compile Include="Controls\OtherTabs\CommonWaveformEditor.Designer.cs">
       <DependentUpon>CommonWaveformEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\RS232Group\RS232GroupChannelSelection.cs">
+    <Compile Include="Controls\RS232GroupTab\RS232GroupChannelSelection.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\RS232Group\RS232GroupChannelSelection.Designer.cs">
+    <Compile Include="Controls\RS232GroupTab\RS232GroupChannelSelection.Designer.cs">
       <DependentUpon>RS232GroupChannelSelection.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\RS232Group\RS232GroupEditor.cs">
+    <Compile Include="Controls\RS232GroupTab\RS232GroupEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\RS232Group\RS232GroupEditor.designer.cs">
+    <Compile Include="Controls\RS232GroupTab\RS232GroupEditor.designer.cs">
       <DependentUpon>RS232GroupEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SequencePage\DigitalChannelLabelsPanel.cs">
@@ -224,43 +224,43 @@
     <Compile Include="Controls\SequencePage\DigitalChannelLabelsPanel.Designer.cs">
       <DependentUpon>DigitalChannelLabelsPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\GPIBGroup\GpibGroupChannelSelection.cs">
+    <Compile Include="Controls\GPIBGroupTab\GpibGroupChannelSelection.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\GPIBGroup\GpibGroupChannelSelection.Designer.cs">
+    <Compile Include="Controls\GPIBGroupTab\GpibGroupChannelSelection.Designer.cs">
       <DependentUpon>GpibGroupChannelSelection.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\GPIBGroup\GpibGroupEditor.cs">
+    <Compile Include="Controls\GPIBGroupTab\GpibGroupEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\GPIBGroup\GpibGroupEditor.designer.cs">
+    <Compile Include="Controls\GPIBGroupTab\GpibGroupEditor.designer.cs">
       <DependentUpon>GpibGroupEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SequencePage\DigitalGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\AnalogGroup\GroupChannelSelection.cs">
+    <Compile Include="Controls\AnalogGroupTab\GroupChannelSelection.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\AnalogGroup\GroupChannelSelection.Designer.cs">
+    <Compile Include="Controls\AnalogGroupTab\GroupChannelSelection.Designer.cs">
       <DependentUpon>GroupChannelSelection.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\HorizontalParameterEditor.cs">
+    <Compile Include="Controls\Shared\HorizontalParameterEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\HorizontalParameterEditor.Designer.cs">
+    <Compile Include="Controls\Shared\HorizontalParameterEditor.Designer.cs">
       <DependentUpon>HorizontalParameterEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\IParameterEditor.cs">
+    <Compile Include="Controls\Shared\IParameterEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\IParameterEditor.Designer.cs">
+    <Compile Include="Controls\Shared\IParameterEditor.Designer.cs">
       <DependentUpon>IParameterEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ListEditorPanel.cs">
+    <Compile Include="Controls\VariablesTab\ListEditorPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\ListEditorPanel.Designer.cs">
+    <Compile Include="Controls\VariablesTab\ListEditorPanel.Designer.cs">
       <DependentUpon>ListEditorPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SequencePage\RunControl.cs">
@@ -287,70 +287,70 @@
     <Compile Include="Controls\SequencePage\TimestepEditor.Designer.cs">
       <DependentUpon>TimestepEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\StringParameterStringEditor.cs">
+    <Compile Include="Controls\Shared\StringParameterStringEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\StringParameterStringEditor.Designer.cs">
+    <Compile Include="Controls\Shared\StringParameterStringEditor.Designer.cs">
       <DependentUpon>StringParameterStringEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ToolStripNumericOrVariableEditor.cs">
+    <Compile Include="Controls\Shared\ToolStripNumericOrVariableEditor.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\ToolStripNumericUpDown.cs">
+    <Compile Include="Controls\Shared\ToolStripNumericUpDown.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\VariableComboBox.cs">
+    <Compile Include="Controls\Shared\VariableComboBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\VariableComboBox.Designer.cs">
+    <Compile Include="Controls\Shared\VariableComboBox.Designer.cs">
       <DependentUpon>VariableComboBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\VariableEditor.cs">
+    <Compile Include="Controls\VariablesTab\VariableEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\VariableEditor.Designer.cs">
+    <Compile Include="Controls\VariablesTab\VariableEditor.Designer.cs">
       <DependentUpon>VariableEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\VariablePreviewEditor.cs">
+    <Compile Include="Controls\Shared\VariablePreviewEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\VariablePreviewEditor.Designer.cs">
+    <Compile Include="Controls\Shared\VariablePreviewEditor.Designer.cs">
       <DependentUpon>VariablePreviewEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\VariableRelevanceEditor.cs">
+    <Compile Include="Controls\Dialogs\VariableRelevanceEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Controls\VariableRelevanceEditor.Designer.cs">
+    <Compile Include="Controls\Dialogs\VariableRelevanceEditor.Designer.cs">
       <DependentUpon>VariableRelevanceEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\VariablesAndListPage.cs">
+    <Compile Include="Controls\VariablesTab\VariablesAndListPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\VariablesAndListPage.Designer.cs">
+    <Compile Include="Controls\VariablesTab\VariablesAndListPage.Designer.cs">
       <DependentUpon>VariablesAndListPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\VerticalParameterEditor.cs">
+    <Compile Include="Controls\Shared\VerticalParameterEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\VerticalParameterEditor.Designer.cs">
+    <Compile Include="Controls\Shared\VerticalParameterEditor.Designer.cs">
       <DependentUpon>VerticalParameterEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\WaveformEditor.cs">
+    <Compile Include="Controls\Shared\WaveformEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\WaveformEditor.Designer.cs">
+    <Compile Include="Controls\Shared\WaveformEditor.Designer.cs">
       <DependentUpon>WaveformEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\WaveformGraph.cs">
+    <Compile Include="Controls\Shared\WaveformGraph.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\WaveformGraph.Designer.cs">
+    <Compile Include="Controls\Shared\WaveformGraph.Designer.cs">
       <DependentUpon>WaveformGraph.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\WaveformGraphCollection.cs">
+    <Compile Include="Controls\Shared\WaveformGraphCollection.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\WaveformGraphCollection.Designer.cs">
+    <Compile Include="Controls\Shared\WaveformGraphCollection.Designer.cs">
       <DependentUpon>WaveformGraphCollection.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\MainClientForm.cs">
@@ -361,15 +361,15 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Controls\ChannelManager\AddDevice.resx">
+    <EmbeddedResource Include="Controls\Dialogs\ChannelManager\AddDevice.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AddDevice.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ChannelManager\ChannelManager.resx">
+    <EmbeddedResource Include="Controls\Dialogs\ChannelManager\ChannelManager.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ChannelManager.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ChannelManager\EditDevice.resx">
+    <EmbeddedResource Include="Controls\Dialogs\ChannelManager\EditDevice.resx">
       <SubType>Designer</SubType>
       <DependentUpon>EditDevice.cs</DependentUpon>
     </EmbeddedResource>
@@ -384,35 +384,35 @@
     <EmbeddedResource Include="Controls\Dialogs\VariablePreviewEditorForm.resx">
       <DependentUpon>VariablePreviewEditorForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\OverridePage\Analog Override.resx">
+    <EmbeddedResource Include="Controls\OverrideTab\Analog Override.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Analog Override.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\OverridePage\DigitalOverride.resx">
+    <EmbeddedResource Include="Controls\OverrideTab\DigitalOverride.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DigitalOverride.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\OverridePage\OverridePage.resx">
+    <EmbeddedResource Include="Controls\OverrideTab\OverridePage.resx">
       <SubType>Designer</SubType>
       <DependentUpon>OverridePage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\PermanentVariablesEditor.resx">
+    <EmbeddedResource Include="Controls\VariablesTab\PermanentVariablesEditor.resx">
       <SubType>Designer</SubType>
       <DependentUpon>PermanentVariablesEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\PropertyGridForm.resx">
+    <EmbeddedResource Include="Controls\Shared\PropertyGridForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>PropertyGridForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\PulseEditor.resx">
+    <EmbeddedResource Include="Controls\PulsesTab\PulseEditor.resx">
       <SubType>Designer</SubType>
       <DependentUpon>PulseEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\PulsesPage.resx">
+    <EmbeddedResource Include="Controls\PulsesTab\PulsesPage.resx">
       <SubType>Designer</SubType>
       <DependentUpon>PulsesPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\SequenceDifferencesForm.resx">
+    <EmbeddedResource Include="Controls\Dialogs\SequenceDifferencesForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SequenceDifferencesForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -420,7 +420,7 @@
       <SubType>Designer</SubType>
       <DependentUpon>AnalogChannelLabelsPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\AnalogGroup\AnalogGroupEditor.resx">
+    <EmbeddedResource Include="Controls\AnalogGroupTab\AnalogGroupEditor.resx">
       <DependentUpon>AnalogGroupEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -428,15 +428,15 @@
       <SubType>Designer</SubType>
       <DependentUpon>CiceroSplashForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\CommonWaveformEditor.resx">
+    <EmbeddedResource Include="Controls\OtherTabs\CommonWaveformEditor.resx">
       <SubType>Designer</SubType>
       <DependentUpon>CommonWaveformEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\RS232Group\RS232GroupChannelSelection.resx">
+    <EmbeddedResource Include="Controls\RS232GroupTab\RS232GroupChannelSelection.resx">
       <DependentUpon>RS232GroupChannelSelection.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\RS232Group\RS232GroupEditor.resx">
+    <EmbeddedResource Include="Controls\RS232GroupTab\RS232GroupEditor.resx">
       <DependentUpon>RS232GroupEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -448,27 +448,27 @@
       <SubType>Designer</SubType>
       <DependentUpon>DigitalChannelLabelsPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\GPIBGroup\GpibGroupChannelSelection.resx">
+    <EmbeddedResource Include="Controls\GPIBGroupTab\GpibGroupChannelSelection.resx">
       <DependentUpon>GpibGroupChannelSelection.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\GPIBGroup\GpibGroupEditor.resx">
+    <EmbeddedResource Include="Controls\GPIBGroupTab\GpibGroupEditor.resx">
       <DependentUpon>GpibGroupEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\AnalogGroup\GroupChannelSelection.resx">
+    <EmbeddedResource Include="Controls\AnalogGroupTab\GroupChannelSelection.resx">
       <DependentUpon>GroupChannelSelection.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\HorizontalParameterEditor.resx">
+    <EmbeddedResource Include="Controls\Shared\HorizontalParameterEditor.resx">
       <DependentUpon>HorizontalParameterEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\IParameterEditor.resx">
+    <EmbeddedResource Include="Controls\Shared\IParameterEditor.resx">
       <DependentUpon>IParameterEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ListEditorPanel.resx">
+    <EmbeddedResource Include="Controls\VariablesTab\ListEditorPanel.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ListEditorPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -492,42 +492,42 @@
       <SubType>Designer</SubType>
       <DependentUpon>TimestepEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\StringParameterStringEditor.resx">
+    <EmbeddedResource Include="Controls\Shared\StringParameterStringEditor.resx">
       <SubType>Designer</SubType>
       <DependentUpon>StringParameterStringEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\VariableComboBox.resx">
+    <EmbeddedResource Include="Controls\Shared\VariableComboBox.resx">
       <DependentUpon>VariableComboBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\VariableEditor.resx">
+    <EmbeddedResource Include="Controls\VariablesTab\VariableEditor.resx">
       <SubType>Designer</SubType>
       <DependentUpon>VariableEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\VariablePreviewEditor.resx">
+    <EmbeddedResource Include="Controls\Shared\VariablePreviewEditor.resx">
       <DependentUpon>VariablePreviewEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\VariableRelevanceEditor.resx">
+    <EmbeddedResource Include="Controls\Dialogs\VariableRelevanceEditor.resx">
       <SubType>Designer</SubType>
       <DependentUpon>VariableRelevanceEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\VariablesAndListPage.resx">
+    <EmbeddedResource Include="Controls\VariablesTab\VariablesAndListPage.resx">
       <SubType>Designer</SubType>
       <DependentUpon>VariablesAndListPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\VerticalParameterEditor.resx">
+    <EmbeddedResource Include="Controls\Shared\VerticalParameterEditor.resx">
       <DependentUpon>VerticalParameterEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\WaveformEditor.resx">
+    <EmbeddedResource Include="Controls\Shared\WaveformEditor.resx">
       <DependentUpon>WaveformEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\WaveformGraph.resx">
+    <EmbeddedResource Include="Controls\Shared\WaveformGraph.resx">
       <DependentUpon>WaveformGraph.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\WaveformGraphCollection.resx">
+    <EmbeddedResource Include="Controls\Shared\WaveformGraphCollection.resx">
       <DependentUpon>WaveformGraphCollection.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
