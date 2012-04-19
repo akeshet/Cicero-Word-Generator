@@ -734,6 +734,8 @@ namespace DataStructures
             // Alas, this is a bit confusing and not particularly transparent, which is why I have
             // created this note.
 
+            // -- Aviv Keshet
+
             temp.armTasks();
             temp.generateBuffers(0);
             temp.generateTrigger();
