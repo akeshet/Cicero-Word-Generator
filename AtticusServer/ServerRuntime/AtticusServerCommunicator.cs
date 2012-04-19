@@ -21,7 +21,7 @@ namespace AtticusServer
 {
 
     [TypeConverter(typeof(ExpandableObjectConverter))]
-    public class AtticusServerRuntime : ServerCommunicator
+    public class AtticusServerCommunicator : ServerCommunicator
     {
 
         private void displayError()
@@ -179,7 +179,7 @@ namespace AtticusServer
         private Dictionary<int, HardwareChannel> usedRS232Channels;
 
         #region Constructors
-        public AtticusServerRuntime(ServerSettings settings)
+        public AtticusServerCommunicator(ServerSettings settings)
         {
 
             System.Console.WriteLine("Running AtticusServerRuntime constructor...");

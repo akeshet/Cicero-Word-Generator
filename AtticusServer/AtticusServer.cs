@@ -12,7 +12,7 @@ namespace AtticusServer
     static class AtticusServer
     {
 
-        public static AtticusServerRuntime server;
+        public static AtticusServerCommunicator server;
         public static string serverSettingsFileName = "AtticusServerSettings.set";
 
 
@@ -98,7 +98,7 @@ namespace AtticusServer
 
                 Console.WriteLine("Creating AtticusServerRuntime object...");
 
-                server = new AtticusServerRuntime(serverSettings);
+                server = new AtticusServerCommunicator(serverSettings);
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
