@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace DataStructures.UtilitiyClasses
+namespace DataStructures.UtilityClasses
 {
 
     /// <summary>

@@ -4,7 +4,7 @@ using System.Text;
 using System.Globalization;
 using System.Threading;
 
-namespace DataStructures
+namespace DataStructures.UtilityClasses
 {
     /// <summary>
     /// Contains functions used to obtain the directory and name where files are saved.

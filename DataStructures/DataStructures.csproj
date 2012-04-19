@@ -94,7 +94,6 @@
     <Compile Include="LicenseInfoForm.Designer.cs">
       <DependentUpon>LicenseInfoForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="NamingFunctions.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -142,6 +141,7 @@
     <Compile Include="TransparentLabel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UtilityClasses\NamingFunctions.cs" />
     <Compile Include="UtilityClasses\WaveformParser.cs" />
   </ItemGroup>
   <ItemGroup>

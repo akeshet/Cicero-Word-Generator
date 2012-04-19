@@ -10,6 +10,7 @@ using System.Threading;
 using System.Runtime.InteropServices;
 using System.Net;
 using System.Net.Sockets;
+using DataStructures.UtilityClasses;
 
 namespace WordGenerator
 {

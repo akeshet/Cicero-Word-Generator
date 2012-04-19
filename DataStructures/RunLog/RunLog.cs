@@ -7,6 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Globalization;
 using System.Threading;
+using DataStructures.UtilityClasses;
 
 namespace DataStructures
 {

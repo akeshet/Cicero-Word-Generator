@@ -752,7 +752,7 @@ namespace WordGenerator.Controls
                     Waveform tempwaveform = new Waveform();
                     //to parse each line in the file at either space or comma seperator
                     //trimming each line of white space at the beginning and end
-                    DataStructures.UtilitiyClasses.WaveformParser p = new  DataStructures.UtilitiyClasses.WaveformParser(sr, @"[,\s]\s*", delegate(string s) { return s.Trim(); });
+                    DataStructures.UtilityClasses.WaveformParser p = new  DataStructures.UtilityClasses.WaveformParser(sr, @"[,\s]\s*", delegate(string s) { return s.Trim(); });
                  
                     double[] values;
                     while ((values = p.ReadFloats()) != null)
