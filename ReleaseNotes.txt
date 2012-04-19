@@ -7,3 +7,4 @@ so there are now two flavors of the Atticus binary.
 -----
 
 (in progress) Code cleanup.
+Renamed AtticusServerRuntime to AtticusServerCommunicator.
