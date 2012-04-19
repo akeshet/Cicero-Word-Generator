@@ -142,6 +142,7 @@
     <Compile Include="TransparentLabel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UtilityClasses\WaveformParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ExceptionViewerDialog.resx">

@@ -359,7 +359,6 @@
     <Compile Include="Controls\MainClientForm.Designer.cs">
       <DependentUpon>MainClientForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Controls\ChannelManager\AddDevice.resx">

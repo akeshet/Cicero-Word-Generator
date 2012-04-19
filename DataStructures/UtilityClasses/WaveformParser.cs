@@ -2,14 +2,14 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace WordGenerator
+namespace DataStructures.UtilitiyClasses
 {
 
     /// <summary>
     /// Class for parsing text files
     /// REO 10/2008
     /// </summary>
-    class Parser
+    public class WaveformParser
     {
         TextReader rdr;
         static Regex separator;
@@ -19,12 +19,12 @@ namespace WordGenerator
 
         processStringDelegate processString;
 
-        public Parser(TextReader rdr, String regexString)
+        public WaveformParser(TextReader rdr, String regexString)
             : this(rdr, regexString, delegate(string s) {return s;})
         {
         }
 
-        public Parser(TextReader rdr, String regexString, processStringDelegate processString)
+        public WaveformParser(TextReader rdr, String regexString, processStringDelegate processString)
         {
             this.rdr = rdr;
             separator = new Regex(regexString);

@@ -160,9 +160,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ServerRuntime\AnalogInLogTime.cs" />
-    <Compile Include="ServerRuntime\AtticusServerRuntime.cs" />
     <Compile Include="ServerRuntime\AnalogInChannels.cs" />
     <Compile Include="ServerRuntime\AnalogInNames.cs" />
+    <Compile Include="ServerRuntime\AtticusServerCommunicator.cs" />
     <Compile Include="ServerRuntime\DataTableHelper.cs" />
     <Compile Include="ServerRuntime\FpgaTimebaseTask.cs" />
     <Compile Include="ServerRuntime\RfsgTask.cs" />
