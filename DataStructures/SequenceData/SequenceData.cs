@@ -661,7 +661,7 @@ namespace DataStructures
         }
 
         /// <summary>
-        /// Get's the Nth timestep which is not hidden
+        /// Gets the Nth timestep which is not hidden
         /// </summary>
         /// <param name="N"></param>
         /// <returns></returns>
@@ -676,7 +676,7 @@ namespace DataStructures
         }
 
         /// <summary>
-        /// Get's the id of the Nth timestep which is not hidden
+        /// Gets the id of the Nth timestep which is not hidden
         /// </summary>
         /// <param name="N"></param>
         /// <returns></returns>
