@@ -159,29 +159,8 @@ namespace WordGenerator
                 fs.Close();
             }
 
-            /// <summary>
-            /// Prompts the user with an OpenFileDialog with the appropriate message
-            /// </summary>
-            /// <param name="subclassType">Description of file type requested, e.g. "ClientStartupSettings"</param>
-            /// <param name="subclassExtension">The appropriate extension for the requested file type</param>
-            /// <returns>The path of the selected file, or null if user chooses 'Cancel'</returns>
-            public static string PromptOpenFileDialog(string subclassType, string subclassExtension)
-            {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
 
-                openFileDialog.Title = "Open " + subclassType;
-                openFileDialog.Filter =
-                 subclassType + " files (*" + subclassExtension + ")|*" + subclassExtension +
-                 "|All files (*.*)|*.*";
-                openFileDialog.FilterIndex = 1;
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                    return openFileDialog.FileName;
-                else
-                    return null;
-            }
             
-
             /// <summary>
             /// The LoadAllSubclasses(string clientStartupSettingsFileNameParam) method will set ALL subclasses of 
             /// the Storage container based on the information given in the clientStartupSettings file.
@@ -243,7 +222,7 @@ namespace WordGenerator
                 else
                 {
                     path =
-                        PromptOpenFileDialog("Settings", DefaultNames.Extensions.SettingsData);
+                        SharedForms.PromptOpenFileDialog(DefaultNames.FriendlyNames.SettingsData, DefaultNames.Extensions.SettingsData);
 
                     loadMe = Load(path) as SettingsData;
                 }
@@ -263,7 +242,7 @@ namespace WordGenerator
             public static SequenceData LoadSequenceWithFileDialog()
             {
                     string path =
-                        PromptOpenFileDialog("Sequence", DefaultNames.Extensions.SequenceData);
+                        SharedForms.PromptOpenFileDialog(DefaultNames.FriendlyNames.SequenceData, DefaultNames.Extensions.SequenceData);
 
                     return  Load(path) as SequenceData;
             }
@@ -280,7 +259,7 @@ namespace WordGenerator
                 else
                 {
                     path =
-                        PromptOpenFileDialog("Sequence", DefaultNames.Extensions.SequenceData);
+                        SharedForms.PromptOpenFileDialog(DefaultNames.FriendlyNames.SequenceData, DefaultNames.Extensions.SequenceData);
 
                     loadMe = Load(path) as SequenceData;
                 }
@@ -320,7 +299,7 @@ namespace WordGenerator
 
                 if (path == null)
                 {
-                    path = PromptSaveFile("Settings", DefaultNames.Extensions.SettingsData);
+                    path = SharedForms.PromptSaveFile(DefaultNames.FriendlyNames.SettingsData, DefaultNames.Extensions.SettingsData);
                     if (path != null)
                     {
                         Save(path, settingsData);
@@ -334,20 +313,7 @@ namespace WordGenerator
                 }
             }
 
-            public static string PromptSaveFile(string fileKind, string fileExtension)
-            {
-                SaveFileDialog sf = new SaveFileDialog();
-                sf.DefaultExt = fileExtension;
-                sf.Filter = fileKind + " files (*."+fileExtension+") |*." + fileExtension + "|All files (*.*)|*.*";
-                sf.FilterIndex = 1;
-                sf.AddExtension = true;
-            
-                sf.Title = "Save " + fileKind;
-                DialogResult dr = sf.ShowDialog();
-                if (dr == DialogResult.OK)
-                    return sf.FileName;
-                return null;
-            }
+
 
             public static void SaveSequenceData(string path) {
                 SaveSequenceData(path, Storage.sequenceData);
@@ -357,7 +323,7 @@ namespace WordGenerator
             {
                 if (path == null)
                 {
-                    path = PromptSaveFile("Sequence", "seq");
+                    path = SharedForms.PromptSaveFile(DefaultNames.FriendlyNames.SequenceData, DefaultNames.Extensions.SequenceData);
                 }
 
                 if (path != null)
