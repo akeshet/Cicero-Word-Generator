@@ -91,7 +91,7 @@ namespace DataStructures
         private bool useCameras;
 
         [Description("If true, instructions are sent to cameras."),
-        Category("Cameras")]
+        Category("Paris-fork options")]
         public bool UseCameras
         {
             get {return useCameras; }
@@ -154,7 +154,7 @@ namespace DataStructures
         }
 
         [Description("List of the IP Adresses where the cameras are."),
-        Category("Cameras")]
+        Category("Paris-fork options")]
         public List<IPAdresses> CameraPCs
         {
             get
@@ -213,6 +213,20 @@ namespace DataStructures
         }
 
 
+
+        private List<Database.RunLogDatabaseSettings> runlogDatabaseSettings;
+
+        [Description("Run log database MySql servers to connect to, if any.")]
+        public List<Database.RunLogDatabaseSettings> RunlogDatabaseSettings
+        {
+            get
+            {
+                if (runlogDatabaseSettings == null)
+                    runlogDatabaseSettings = new List<Database.RunLogDatabaseSettings>();
+                return runlogDatabaseSettings;
+            }
+            set { runlogDatabaseSettings = value; }
+        }
 
         public SettingsData()
         {
