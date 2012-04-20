@@ -16,3 +16,9 @@ Variety of small code changes, renames, deletions.
 Fix to minor bugs regarding naming of default settings file in Cicero (inconsistent presence
 or absence of the .set file extension). NOTE: You may need to copy your default settings file to SettingsData.set
 when migrating from a previous version.
+
+
+1.58
+-----
+
+(In progress) Integrating MySql database support for Cicero. (Run information can be exported to a MySql database?)
