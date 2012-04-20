@@ -15,12 +15,12 @@ namespace DataStructures.Database
     /// This class can be used to export run log information into a MySql database.
     /// 
     /// </summary>
-    public class MySqlRunlogDatabaseHandler
+    public class RunlogDatabaseHandler
     {
 
         public MySqlConnection conn = null;
 
-        public MySqlRunlogDatabaseHandler(RunLogDatabaseSettings databaseSettings)
+        public RunlogDatabaseHandler(RunLogDatabaseSettings databaseSettings)
         {
             if (conn != null)
             {
@@ -43,7 +43,7 @@ namespace DataStructures.Database
             }            
         }
 
-        ~MySqlRunlogDatabaseHandler()
+        ~RunlogDatabaseHandler()
         {
             closeConnection();
         }

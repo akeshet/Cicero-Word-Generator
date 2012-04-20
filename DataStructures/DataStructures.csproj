@@ -107,7 +107,7 @@
     </Compile>
     <Compile Include="RunLog\RunLog.cs" />
     <Compile Include="RunLog\RunLogAnnotation.cs" />
-    <Compile Include="Database\RunLogDatabase.cs" />
+    <Compile Include="Database\RunLogDatabaseHandler.cs" />
     <Compile Include="SequenceData\DimensionedParameter.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="SequenceData\Parameter.cs" />

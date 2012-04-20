@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.Net;
 using System.Net.Sockets;
 using DataStructures.UtilityClasses;
+using DataStructures.Database;
 
 namespace WordGenerator
 {
@@ -1052,6 +1053,40 @@ namespace WordGenerator
                     addMessageLogText(this, new MessageEvent("Log not written! Perhaps a file with this name already exists?"));
                     ErrorDetected = true;
                 }
+
+                foreach (RunLogDatabaseSettings rset in Storage.settingsData.RunlogDatabaseSettings)
+                {
+
+                    if (rset.Enabled)
+                    {
+                        RunlogDatabaseHandler handler = null;
+                        try
+                        {
+                            handler = new RunlogDatabaseHandler(rset);
+                            handler.addRunLog(fileName, runLog);
+                            addMessageLogText(this, new MessageEvent("Run log added to mysql database at url " + rset.Url + " successfully."));
+                        }
+                        catch (RunLogDatabaseException e)
+                        {
+                            addMessageLogText(this, new MessageEvent("Caught exception when attempting to add runlog to mysqldatabase at " + rset.Url + "."));
+                            if (rset.VerboseErrorReporting)
+                            {
+                                addMessageLogText(this, new MessageEvent("Displaying runlogdatabase exception. To disable this display, turn off verbose error reporting for this runlog database in Cicero settings (under Advanced->Settings Explorer)"));
+                                ExceptionViewerDialog ev = new ExceptionViewerDialog(e);
+                                ev.ShowDialog();
+                            }
+                            else
+                            {
+                                addMessageLogText(this, new MessageEvent("Exception was " + e.Message + ". For more detailed information, turn on verbose error reporting for this runlog database in Cicero settings (under Advanced->Settings Explorer)"));
+                            }
+                        }
+
+                        if (handler != null)
+                            handler.closeConnection();
+                    }
+                }
+                    
+            
 
 
 
