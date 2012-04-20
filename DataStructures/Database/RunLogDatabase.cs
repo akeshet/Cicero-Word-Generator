@@ -7,16 +7,27 @@ using MySql.Data.MySqlClient;
 using MySql.Data.Types;
 using System.Windows.Forms;
 
-namespace DataStructures
+namespace DataStructures.Database
 {
+    
+    /// <summary>
+    /// Initial author: Edward Su
+    /// This class can be used to export run log information into a MySql database.
+    /// 
+    /// </summary>
     public class MySqlRunlogDatabaseHandler
     {
 
-        public MySqlConnection conn;
+        public MySqlConnection conn = null;
 
-        public MySqlRunlogDatabaseHandler()
+        public MySqlRunlogDatabaseHandler(RunLogDatabaseSettings databaseSettings)
         {
-            string connStr = "server=bec2.mit.edu;user=root;database=filelist;port=3306;password=password;";
+            if (conn != null)
+            {
+                throw new RunLogDatabaseException("Attempted to re-open a database connection without first closing the same handle.");
+            }
+
+            string connStr = databaseSettings.getConnectionString();
             this.conn = new MySqlConnection(connStr);
             try
             {
@@ -24,18 +35,33 @@ namespace DataStructures
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Unable to open database connection due to exception: " + ex.Message + ex.StackTrace);
-            }
+                try { conn.Close(); } catch(Exception) {};
 
-            
-
-            
+                conn = null;
+                RunLogDatabaseException newex = new RunLogDatabaseException("Unable to open database due to exception: " + ex.Message, ex);
+                throw newex;
+            }            
         }
-        public void CloseConnection()
+
+        ~MySqlRunlogDatabaseHandler()
         {
-            conn.Close();
+            closeConnection();
         }
-        public void ExecuteNonQuery(string sql)
+
+        /// <summary>
+        /// If database connection is open, close it. Otherwise do nothing, harmlessly.
+        /// </summary>
+        public void closeConnection()
+        {
+            if (conn == null)
+                return;
+
+            conn.Close();
+            conn = null;
+        }
+
+
+        private void ExecuteNonQuery(string sql)
         {
             MySqlCommand cmd = new MySqlCommand(sql, this.conn);
             try
@@ -44,13 +70,24 @@ namespace DataStructures
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Unable to execute command due to exception: " + ex.Message + ex.StackTrace);
+                throw new RunLogDatabaseException("Exception when attempting to execute sql query: " + ex.Message, ex);
             }
         }
-        public void addRunLog(string fileName, RunLog log)
+
+        /// <summary>
+        /// Add run log to database.
+        /// </summary>
+        /// <param name="runLogFileName"></param>
+        /// <param name="log"></param>
+        public void addRunLog(string runLogFileName, RunLog log)
         {
+            if (conn == null)
+            {
+                throw new RunLogDatabaseException("Handler not connected to database, unable to add run log.");
+            }
+
             MySqlCommand cmdq = new MySqlCommand(@"SELECT path FROM filelist_runloginfo WHERE path=@path", this.conn);
-            cmdq.Parameters.AddWithValue("@path", fileName);
+            cmdq.Parameters.AddWithValue("@path", runLogFileName);
 
             object result = cmdq.ExecuteScalar();
 
@@ -60,7 +97,7 @@ namespace DataStructures
                          (path, loc_key, time, sequencepath, listiterationnumber, liststarttime, sequenceduration, description) 
                          VALUES (@path, @loc_key, @time, @sequencepath, @listiterationnumber, @liststarttime, @sequenceduration, @description)", this.conn);
 
-                cmd.Parameters.AddWithValue("@path", fileName);
+                cmd.Parameters.AddWithValue("@path", runLogFileName);
                 cmd.Parameters.AddWithValue("@loc_key", "default");
                 cmd.Parameters.AddWithValue("@time", log.RunTime);
                 cmd.Parameters.AddWithValue("@sequencepath", log.SequenceFileName);
@@ -71,10 +108,12 @@ namespace DataStructures
 
                 cmd.ExecuteNonQuery();
 
-                this.addVariables(fileName, log);
+                this.addVariables(runLogFileName, log);
             }
         }
-        public void addVariables(string fileName, RunLog log)
+
+
+        private void addVariables(string fileName, RunLog log)
         {
             foreach (Variable var in log.RunSequence.Variables)
             {
@@ -89,5 +128,6 @@ namespace DataStructures
                 cmd.ExecuteNonQuery();
             }
         }
+
     }
 }

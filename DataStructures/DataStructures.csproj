@@ -84,6 +84,8 @@
   <ItemGroup>
     <Compile Include="ClientStartupSettings.cs" />
     <Compile Include="Communication\ServerSettingsInterface.cs" />
+    <Compile Include="Database\RunLogDatabaseException.cs" />
+    <Compile Include="Database\RunLogDatabaseSettings.cs" />
     <Compile Include="Forms\ExceptionViewerDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -105,7 +107,7 @@
     </Compile>
     <Compile Include="RunLog\RunLog.cs" />
     <Compile Include="RunLog\RunLogAnnotation.cs" />
-    <Compile Include="RunLog\RunLogDatabase.cs" />
+    <Compile Include="Database\RunLogDatabase.cs" />
     <Compile Include="SequenceData\DimensionedParameter.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="SequenceData\Parameter.cs" />
