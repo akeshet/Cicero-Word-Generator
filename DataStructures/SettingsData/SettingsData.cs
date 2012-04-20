@@ -169,7 +169,8 @@ namespace DataStructures
 
         private bool freezeTimeVariableUnit;
 
-        [Description("If true, time variables will all be used in ms.")]
+        [Description("If true, time variables will all be used in ms."),
+        Category("Paris-fork options")]
         public bool FreezeTimeVariableUnit
         {
             get { return freezeTimeVariableUnit; }
@@ -180,7 +181,7 @@ namespace DataStructures
         private string savePath;
 
         [Description("Sets the path in which any file produced should be saved"),
-        Category("Saving")]
+        Category("Paris-fork options")]
         public string SavePath
         {
             get {
@@ -195,7 +196,7 @@ namespace DataStructures
         bool useParisStyleFileTimestamps;
 
         [Description("If false, original MIT-style file timestamps will be used. If true, Paris-style file ."),
-        Category("Saving"),DefaultValue(false)]
+        Category("Paris-fork options"),DefaultValue(false)]
         public bool UseParisStyleFileTimestamps
         {
             get { return useParisStyleFileTimestamps; }
@@ -210,6 +211,8 @@ namespace DataStructures
             get { return myServerManager; }
             set { myServerManager = value; }
         }
+
+
 
         public SettingsData()
         {
