@@ -73,6 +73,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SharedSolutionInfo.cs">
+      <Link>Properties\SharedSolutionInfo.cs</Link>
+    </Compile>
     <Compile Include="ElginSplash.cs">
       <SubType>Form</SubType>
     </Compile>
