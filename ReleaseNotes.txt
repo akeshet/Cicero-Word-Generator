@@ -25,3 +25,10 @@ when migrating from a previous version.
 
 Recategorizing some Cicero Settings fields in the UI as part of the "Paris fork" (these are features that are unsupported and not well integrated,
 but left in for compatability purposes.
+
+
+1.59
+-----
+
+(In progress) Improvements to version number system (autoincrement?). Version migration messages in Cicero during startup up. 
+Version information stored in settings and sequence files
