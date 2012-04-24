@@ -37,3 +37,5 @@ Simplicio/
 Virgil/
    Code for a server that generates hdf5 logs out of runs. Currently deprecated code, project is not actively developed.
 
+clinamen/
+   A MySql-database for runlogs, along with a python web interface for viewing them. Written by Ed Joe Su. Provided for completeness and as a reference for those using Cicero's RunLog MySQL support.
