@@ -21,7 +21,7 @@ when migrating from a previous version.
 1.58
 -----
 
-(In progress) Integrating MySql database support for Cicero. (Run information can be exported to a MySql database?)
+(In progress) Integrating MySql database support for Cicero. (Run information can be exported to a MySql database?). Reference implementation of the database is in the clinamen/ directory, written by Ed Joe Su.
 
 Recategorizing some Cicero Settings fields in the UI as part of the "Paris fork" (these are features that are unsupported and not well integrated,
 but left in for compatability purposes.
