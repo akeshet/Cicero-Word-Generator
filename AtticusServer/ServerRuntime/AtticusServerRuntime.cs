@@ -2301,433 +2301,443 @@ namespace AtticusServer
 
             System.Console.WriteLine("Running refreshHardwareLists()...");
 
-
-            // Set all the devices to disconnected. They will be set back to connected if they are detecter later in this method.
-            foreach (DeviceSettings ds in serverSettings.myDevicesSettings.Values)
-                ds.deviceConnected = false;
-
-
-
-            myHardwareChannels = new List<HardwareChannel>();
-
-            //List of string identifiers for all devices detected in the process.
-            detectedDevices = new List<string>();
-
-            Dictionary<string, string> myDeviceDescriptions = new Dictionary<string, string>();
-
-            // Detect National Instruments analog and digital channels.
-
-            #region detect NI analog and digital  (daqMx)
-
-
-            System.Console.WriteLine("Accessing DaqSystem devices list...");
-
-            DaqSystem daqSystem = DaqSystem.Local;
-            string[] devices = daqSystem.Devices;
-
-
-            System.Console.WriteLine("...done.");
-
-            System.Console.WriteLine("Found " + devices.Length.ToString() + " devices.");
-
-            bool niDaqDevicesExistThatAreNotNamedDevSomething = false;
-
-            for (int i = 0; i < devices.Length; i++)
+            try
             {
-                if (!devices[i].ToUpper().Contains("DEV"))
-                {
-                    niDaqDevicesExistThatAreNotNamedDevSomething = true;
-                }
-
-                System.Console.WriteLine("Querying device " + i + "...");
-
-                detectedDevices.Add(devices[i]);
-
-                Device device = daqSystem.LoadDevice(devices[i]);
 
 
-                myDeviceDescriptions.Add(devices[i], device.ProductType);
-                string[] analogs = device.AOPhysicalChannels;
-                string[] digitalLines = device.DOLines;
-
-                if (!serverSettings.myDevicesSettings.ContainsKey(devices[i]))
-                {
-                    serverSettings.myDevicesSettings.Add(devices[i], new DeviceSettings(devices[i], myDeviceDescriptions[devices[i]]));
-                }
-
-                // Special case: 6259 cards use 32-bit wide ports instead of 16 bit wide.
-                if (myDeviceDescriptions[devices[i]].Contains("6259"))
-                {
-                    serverSettings.myDevicesSettings[devices[i]].use32BitDigitalPorts = true;
-                }
+                // Set all the devices to disconnected. They will be set back to connected if they are detecter later in this method.
+                foreach (DeviceSettings ds in serverSettings.myDevicesSettings.Values)
+                    ds.deviceConnected = false;
 
 
-                // Add all the analog channels, but only if the device settings say this card is enabled
 
-                if (serverSettings.myDevicesSettings.ContainsKey(devices[i]) && serverSettings.myDevicesSettings[devices[i]].DeviceEnabled)
-                {
+                myHardwareChannels = new List<HardwareChannel>();
 
-                    if (serverSettings.myDevicesSettings[devices[i]].AnalogChannelsEnabled)
-                    {
-                        for (int j = 0; j < analogs.Length; j++)
-                        {
-                            string channelName = justTheChannelName(analogs[j], devices[i]);
-                            HardwareChannel hc = new HardwareChannel(this.myServerSettings.ServerName, devices[i], channelName, HardwareChannel.HardwareConstants.ChannelTypes.analog);
-                            if (!serverSettings.ExcludedChannels.Contains(hc))
-                            {
-                                myHardwareChannels.Add(hc);
-                            }
-                        }
-                    }
+                //List of string identifiers for all devices detected in the process.
+                detectedDevices = new List<string>();
 
-                    if (serverSettings.myDevicesSettings[devices[i]].DigitalChannelsEnabled)
-                    {
-                        for (int j = 0; j < digitalLines.Length; j++)
-                        {
-                            string channelName = justTheChannelName(digitalLines[j], devices[i]);
-                            HardwareChannel hc = new HardwareChannel(this.myServerSettings.ServerName, devices[i], channelName, HardwareChannel.HardwareConstants.ChannelTypes.digital);
-                            if (!serverSettings.ExcludedChannels.Contains(hc))
-                            {
-                                myHardwareChannels.Add(hc);
-                            }
-                        }
-                    }
-                }
+                Dictionary<string, string> myDeviceDescriptions = new Dictionary<string, string>();
+
+                // Detect National Instruments analog and digital channels.
+
+                #region detect NI analog and digital  (daqMx)
+
+
+                System.Console.WriteLine("Accessing DaqSystem devices list...");
+
+                DaqSystem daqSystem = DaqSystem.Local;
+                string[] devices = daqSystem.Devices;
+
 
                 System.Console.WriteLine("...done.");
 
-            }
+                System.Console.WriteLine("Found " + devices.Length.ToString() + " devices.");
 
-            #endregion
+                bool niDaqDevicesExistThatAreNotNamedDevSomething = false;
 
-            #region "detect" RFSG cards
-
-            foreach (ServerSettings.rfsgDeviceName rfsgDevName in serverSettings.RfsgDeviceNames)
-            {
-
-                System.Console.WriteLine("Querying RFSG devices...");
-
-                string devName = rfsgDevName.DeviceName;
-                HardwareChannel hc = new HardwareChannel(serverSettings.ServerName, devName, "rf_out", HardwareChannel.HardwareConstants.ChannelTypes.gpib);
-                hc.gpibMasquerade = true;
-                hc.myGpibMasqueradeType = HardwareChannel.GpibMasqueradeType.RFSG;
-
-                myHardwareChannels.Add(hc);
-
-                if (!serverSettings.myDevicesSettings.ContainsKey(devName))
+                for (int i = 0; i < devices.Length; i++)
                 {
-                    DeviceSettings devSettings = new DeviceSettings(devName, "RFSG driver library signal generator");
-                    serverSettings.myDevicesSettings.Add(devName, devSettings);
-                }
-
-                System.Console.WriteLine("...done.");
-
-            }
-
-            #endregion
-
-            #region detect NI GBIB
-
-            // try a maxumimum of 10 GPIB boards... this is a totally arbitrary number.
-            for (int i = 0; i < 10; i++)
-            {
-
-                System.Console.WriteLine("Querying or detecting GPIB Board Number " + i + "...");
-
-                try
-                {
-                    NationalInstruments.NI4882.Board board = new NationalInstruments.NI4882.Board(i);
-                    board.SendInterfaceClear();
-                    //              board.BecomeActiveController(false);
-                    NationalInstruments.NI4882.AddressCollection listeners = board.FindListeners();
-
-
-                    if (listeners.Count != 0)
+                    if (!devices[i].ToUpper().Contains("DEV"))
                     {
-                        foreach (NationalInstruments.NI4882.Address address in listeners)
+                        niDaqDevicesExistThatAreNotNamedDevSomething = true;
+                    }
+
+                    System.Console.WriteLine("Querying device " + i + "...");
+
+                    detectedDevices.Add(devices[i]);
+
+                    Device device = daqSystem.LoadDevice(devices[i]);
+
+
+                    myDeviceDescriptions.Add(devices[i], device.ProductType);
+                    string[] analogs = device.AOPhysicalChannels;
+                    string[] digitalLines = device.DOLines;
+
+                    if (!serverSettings.myDevicesSettings.ContainsKey(devices[i]))
+                    {
+                        serverSettings.myDevicesSettings.Add(devices[i], new DeviceSettings(devices[i], myDeviceDescriptions[devices[i]]));
+                    }
+
+                    // Special case: 6259 cards use 32-bit wide ports instead of 16 bit wide.
+                    if (myDeviceDescriptions[devices[i]].Contains("6259"))
+                    {
+                        serverSettings.myDevicesSettings[devices[i]].use32BitDigitalPorts = true;
+                    }
+
+
+                    // Add all the analog channels, but only if the device settings say this card is enabled
+
+                    if (serverSettings.myDevicesSettings.ContainsKey(devices[i]) && serverSettings.myDevicesSettings[devices[i]].DeviceEnabled)
+                    {
+
+                        if (serverSettings.myDevicesSettings[devices[i]].AnalogChannelsEnabled)
                         {
-
-
-                            int wait_delay = 100;
-
-                            try
+                            for (int j = 0; j < analogs.Length; j++)
                             {
-                                NationalInstruments.NI4882.Device dev = new NationalInstruments.NI4882.Device(i, address);
-                                dev.Clear();
-
-                                // ask the device for its identity
-                                gpibWriteDelegate writeDelegate = new gpibWriteDelegate(dev.Write);
-                                IAsyncResult result = writeDelegate.BeginInvoke("*IDN?\n", null, null);
-                                result.AsyncWaitHandle.WaitOne(wait_delay, true);
-
-                                if (!result.IsCompleted)
-                                {
-                                    messageLog(this, new MessageEvent("GPIB device took longer than " + wait_delay + " ms to respond to id request. Aborting."));
-                                    dev.AbortAsynchronousIO();
-                                    continue;
-                                }
-
-                                string deviceDescription = dev.ReadString();
-
-                                string deviceName = "GPIB" + i + "/" + HardwareChannel.gpibAddressToShortString(address);
-                                detectedDevices.Add(deviceName);
-
-                                myDeviceDescriptions.Add(deviceName, deviceDescription);
-
-
-                                HardwareChannel.HardwareConstants.GPIBDeviceType gpibDeviceType = new HardwareChannel.HardwareConstants.GPIBDeviceType();
-
-                                // VERY IMPORTANT!!!!!!!!!!
-                                // *******************  THIS IS WHERE YOU ADD DEVICE-DETECTION CODE FOR NEW GPIB DEVICES *********************/
-                                // detect the gpib device type
-                                if (deviceDescription.Contains("ESG-4000B"))
-                                {
-                                    gpibDeviceType = HardwareChannel.HardwareConstants.GPIBDeviceType.Agilent_ESG_SIG_Generator;
-                                }
-                                // place any other device type detection code here as else ifs.
-                                else if (deviceDescription.Contains("N5181"))
-                                {
-                                    gpibDeviceType = HardwareChannel.HardwareConstants.GPIBDeviceType.Agilent_ESG_SIG_Generator;
-                                }
-                                else
-                                {
-                                    gpibDeviceType = HardwareChannel.HardwareConstants.GPIBDeviceType.Unknown;
-                                }
-
-
-                                HardwareChannel hc = new HardwareChannel(this.myServerSettings.ServerName,
-                                    deviceName,
-                                    HardwareChannel.gpibAddressToShortString(address),
-                                    deviceDescription,
-                                    HardwareChannel.HardwareConstants.ChannelTypes.gpib, address, gpibDeviceType);
+                                string channelName = justTheChannelName(analogs[j], devices[i]);
+                                HardwareChannel hc = new HardwareChannel(this.myServerSettings.ServerName, devices[i], channelName, HardwareChannel.HardwareConstants.ChannelTypes.analog);
                                 if (!serverSettings.ExcludedChannels.Contains(hc))
                                 {
                                     myHardwareChannels.Add(hc);
                                 }
                             }
-                            catch (Exception e)
+                        }
+
+                        if (serverSettings.myDevicesSettings[devices[i]].DigitalChannelsEnabled)
+                        {
+                            for (int j = 0; j < digitalLines.Length; j++)
                             {
-                                messageLog(this, new MessageEvent("Exception when attempting to communicate with GPIB device " + "GPIB" + i + "/" + HardwareChannel.gpibAddressToShortString(address) + ". " + e.Message + "\n" + e.StackTrace));
+                                string channelName = justTheChannelName(digitalLines[j], devices[i]);
+                                HardwareChannel hc = new HardwareChannel(this.myServerSettings.ServerName, devices[i], channelName, HardwareChannel.HardwareConstants.ChannelTypes.digital);
+                                if (!serverSettings.ExcludedChannels.Contains(hc))
+                                {
+                                    myHardwareChannels.Add(hc);
+                                }
                             }
                         }
                     }
+
+                    System.Console.WriteLine("...done.");
+
                 }
-                catch (Exception)
+
+                #endregion
+
+                #region "detect" RFSG cards
+
+                foreach (ServerSettings.rfsgDeviceName rfsgDevName in serverSettings.RfsgDeviceNames)
                 {
-                    // throw e;
+
+                    System.Console.WriteLine("Querying RFSG devices...");
+
+                    string devName = rfsgDevName.DeviceName;
+                    HardwareChannel hc = new HardwareChannel(serverSettings.ServerName, devName, "rf_out", HardwareChannel.HardwareConstants.ChannelTypes.gpib);
+                    hc.gpibMasquerade = true;
+                    hc.myGpibMasqueradeType = HardwareChannel.GpibMasqueradeType.RFSG;
+
+                    myHardwareChannels.Add(hc);
+
+                    if (!serverSettings.myDevicesSettings.ContainsKey(devName))
+                    {
+                        DeviceSettings devSettings = new DeviceSettings(devName, "RFSG driver library signal generator");
+                        serverSettings.myDevicesSettings.Add(devName, devSettings);
+                    }
+
+                    System.Console.WriteLine("...done.");
+
                 }
 
-                System.Console.WriteLine("...done.");
+                #endregion
 
-            }
+                #region detect NI GBIB
 
-            /*
-            NationalInstruments.NI4882.Board board = new NationalInstruments.NI4882.Board();
-            board.FindListeners(
-            */
-
-            #endregion
-
-            #region Detect NI RS232 ports
-
-            System.Console.WriteLine("Querying NI VisaNS Serial Resources...");
-
-            string[] resourceNames = null;
-            NationalInstruments.VisaNS.ResourceManager VisaRescources = null;
-
-            System.Console.WriteLine("...done.");
-
-
-
-            try
-            {
-                VisaRescources = NationalInstruments.VisaNS.ResourceManager.GetLocalManager();
-                resourceNames = VisaRescources.FindResources("/?*");
-            }
-            catch (Exception e)
-            {
-                if (messageLog != null)
+                // try a maxumimum of 10 GPIB boards... this is a totally arbitrary number.
+                for (int i = 0; i < 10; i++)
                 {
-                    messageLog(this, new MessageEvent("Caught exception when attempting to detect serial ports: " + e.Message + e.StackTrace));
-                }
-                else
-                {
-                    MessageBox.Show("Caught exception when attempting to detect serial ports: " + e.Message + e.StackTrace);
-                }
-            }
 
-
-            if (resourceNames != null)
-            {
-
-
-
-                foreach (string s in resourceNames)
-                {
+                    System.Console.WriteLine("Querying or detecting GPIB Board Number " + i + "...");
 
                     try
                     {
+                        NationalInstruments.NI4882.Board board = new NationalInstruments.NI4882.Board(i);
+                        board.SendInterfaceClear();
+                        //              board.BecomeActiveController(false);
+                        NationalInstruments.NI4882.AddressCollection listeners = board.FindListeners();
 
-                        System.Console.WriteLine("Querying Resource " + s);
 
-                        NationalInstruments.VisaNS.HardwareInterfaceType hType;
-                        short chanNum;
-                        VisaRescources.ParseResource(s, out hType, out chanNum);
-                        if (hType == NationalInstruments.VisaNS.HardwareInterfaceType.Serial)
+                        if (listeners.Count != 0)
                         {
-                            NationalInstruments.VisaNS.SerialSession ss = (NationalInstruments.VisaNS.SerialSession)NationalInstruments.VisaNS.ResourceManager.GetLocalManager().Open(s);
-
-
-
-
-                            string description = ss.HardwareInterfaceName;
-
-                            HardwareChannel hc = new HardwareChannel(this.serverSettings.ServerName, "Serial", s, description, HardwareChannel.HardwareConstants.ChannelTypes.rs232);
-                            if (!serverSettings.ExcludedChannels.Contains(hc))
+                            foreach (NationalInstruments.NI4882.Address address in listeners)
                             {
-                                MyHardwareChannels.Add(hc);
+
+
+                                int wait_delay = 100;
+
+                                try
+                                {
+                                    NationalInstruments.NI4882.Device dev = new NationalInstruments.NI4882.Device(i, address);
+                                    dev.Clear();
+
+                                    // ask the device for its identity
+                                    gpibWriteDelegate writeDelegate = new gpibWriteDelegate(dev.Write);
+                                    IAsyncResult result = writeDelegate.BeginInvoke("*IDN?\n", null, null);
+                                    result.AsyncWaitHandle.WaitOne(wait_delay, true);
+
+                                    if (!result.IsCompleted)
+                                    {
+                                        messageLog(this, new MessageEvent("GPIB device took longer than " + wait_delay + " ms to respond to id request. Aborting."));
+                                        dev.AbortAsynchronousIO();
+                                        continue;
+                                    }
+
+                                    string deviceDescription = dev.ReadString();
+
+                                    string deviceName = "GPIB" + i + "/" + HardwareChannel.gpibAddressToShortString(address);
+                                    detectedDevices.Add(deviceName);
+
+                                    myDeviceDescriptions.Add(deviceName, deviceDescription);
+
+
+                                    HardwareChannel.HardwareConstants.GPIBDeviceType gpibDeviceType = new HardwareChannel.HardwareConstants.GPIBDeviceType();
+
+                                    // VERY IMPORTANT!!!!!!!!!!
+                                    // *******************  THIS IS WHERE YOU ADD DEVICE-DETECTION CODE FOR NEW GPIB DEVICES *********************/
+                                    // detect the gpib device type
+                                    if (deviceDescription.Contains("ESG-4000B"))
+                                    {
+                                        gpibDeviceType = HardwareChannel.HardwareConstants.GPIBDeviceType.Agilent_ESG_SIG_Generator;
+                                    }
+                                    // place any other device type detection code here as else ifs.
+                                    else if (deviceDescription.Contains("N5181"))
+                                    {
+                                        gpibDeviceType = HardwareChannel.HardwareConstants.GPIBDeviceType.Agilent_ESG_SIG_Generator;
+                                    }
+                                    else
+                                    {
+                                        gpibDeviceType = HardwareChannel.HardwareConstants.GPIBDeviceType.Unknown;
+                                    }
+
+
+                                    HardwareChannel hc = new HardwareChannel(this.myServerSettings.ServerName,
+                                        deviceName,
+                                        HardwareChannel.gpibAddressToShortString(address),
+                                        deviceDescription,
+                                        HardwareChannel.HardwareConstants.ChannelTypes.gpib, address, gpibDeviceType);
+                                    if (!serverSettings.ExcludedChannels.Contains(hc))
+                                    {
+                                        myHardwareChannels.Add(hc);
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    messageLog(this, new MessageEvent("Exception when attempting to communicate with GPIB device " + "GPIB" + i + "/" + HardwareChannel.gpibAddressToShortString(address) + ". " + e.Message + "\n" + e.StackTrace));
+                                }
                             }
-                            if (!detectedDevices.Contains("Serial"))
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        // throw e;
+                    }
+
+                    System.Console.WriteLine("...done.");
+
+                }
+
+                /*
+                NationalInstruments.NI4882.Board board = new NationalInstruments.NI4882.Board();
+                board.FindListeners(
+                */
+
+                #endregion
+
+                #region Detect NI RS232 ports
+
+                System.Console.WriteLine("Querying NI VisaNS Serial Resources...");
+
+                string[] resourceNames = null;
+                NationalInstruments.VisaNS.ResourceManager VisaRescources = null;
+
+                System.Console.WriteLine("...done.");
+
+
+
+                try
+                {
+                    VisaRescources = NationalInstruments.VisaNS.ResourceManager.GetLocalManager();
+                    resourceNames = VisaRescources.FindResources("/?*");
+                }
+                catch (Exception e)
+                {
+                    if (messageLog != null)
+                    {
+                        messageLog(this, new MessageEvent("Caught exception when attempting to detect serial ports: " + e.Message + e.StackTrace));
+                    }
+                    else
+                    {
+                        MessageBox.Show("Caught exception when attempting to detect serial ports: " + e.Message + e.StackTrace);
+                    }
+                }
+
+
+                if (resourceNames != null)
+                {
+
+
+
+                    foreach (string s in resourceNames)
+                    {
+
+                        try
+                        {
+
+                            System.Console.WriteLine("Querying Resource " + s);
+
+                            NationalInstruments.VisaNS.HardwareInterfaceType hType;
+                            short chanNum;
+                            VisaRescources.ParseResource(s, out hType, out chanNum);
+                            if (hType == NationalInstruments.VisaNS.HardwareInterfaceType.Serial)
                             {
-                                detectedDevices.Add("Serial");
-                                myDeviceDescriptions.Add("Serial", "All local RS232 devices.");
+                                NationalInstruments.VisaNS.SerialSession ss = (NationalInstruments.VisaNS.SerialSession)NationalInstruments.VisaNS.ResourceManager.GetLocalManager().Open(s);
+
+
+
+
+                                string description = ss.HardwareInterfaceName;
+
+                                HardwareChannel hc = new HardwareChannel(this.serverSettings.ServerName, "Serial", s, description, HardwareChannel.HardwareConstants.ChannelTypes.rs232);
+                                if (!serverSettings.ExcludedChannels.Contains(hc))
+                                {
+                                    MyHardwareChannels.Add(hc);
+                                }
+                                if (!detectedDevices.Contains("Serial"))
+                                {
+                                    detectedDevices.Add("Serial");
+                                    myDeviceDescriptions.Add("Serial", "All local RS232 devices.");
+                                }
+
+                                ss.Dispose();
+
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            System.Console.WriteLine("Caught exception when attempting to query serial resource named " + s + ". Displaying exception and then skipping this device.");
+                            ExceptionViewerDialog ev = new ExceptionViewerDialog(e);
+                            ev.ShowDialog();
+
+                        }
+
+                        System.Console.WriteLine("...done.");
+                    }
+                }
+
+
+
+                #endregion
+
+                // If necessary, add DeviceSettings entries for devices.
+                foreach (string device in detectedDevices)
+                {
+                    // If this device does not already have a settings object...
+                    if (!myServerSettings.myDevicesSettings.ContainsKey(device))
+                    {
+                        myServerSettings.myDevicesSettings.Add(device,
+                            new DeviceSettings(device, myDeviceDescriptions[device]));
+                    }
+                    else
+                    {
+                        myServerSettings.myDevicesSettings[device].deviceConnected = true;
+                    }
+                }
+
+                #region FPGA Detection and configuration
+
+                if (this.serverSettings.UseOpalKellyFPGA)
+                {
+                    try
+                    {
+                        System.Console.WriteLine("Scanning for Opal Kelly FPGA devices...");
+
+                        opalKellyDevices = new List<com.opalkelly.frontpanel.okCFrontPanel>();
+                        opalKellyDeviceNames = new List<string>();
+
+                        com.opalkelly.frontpanel.okCFrontPanel ok = new com.opalkelly.frontpanel.okCFrontPanel();
+                        int fpgaDeviceCount = ok.GetDeviceCount();
+
+                        System.Console.WriteLine("Found " + fpgaDeviceCount + " fpga device(s).");
+
+                        for (int i = 0; i < fpgaDeviceCount; i++)
+                        {
+                            string name = ok.GetDeviceListSerial(i);
+                            com.opalkelly.frontpanel.okCFrontPanel fpgaDevice = new com.opalkelly.frontpanel.okCFrontPanel();
+
+                            com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode;
+
+                            errorCode = fpgaDevice.OpenBySerial(name);
+
+                            if (errorCode != com.opalkelly.frontpanel.okCFrontPanel.ErrorCode.NoError)
+                            {
+                                System.Console.WriteLine("Unable to open FPGA device " + name + " due to error code " + errorCode.ToString());
+                                continue;
                             }
 
-                            ss.Dispose();
+                            if (!this.detectedDevices.Contains(name))
+                            {
+                                this.detectedDevices.Add(name);
+                            }
+
+                            if (!myServerSettings.myDevicesSettings.ContainsKey(name))
+                            {
+                                DeviceSettings newSettings = new DeviceSettings(name, "Opal Kelly FPGA Device");
+                                newSettings.deviceConnected = true;
+                                newSettings.isFPGADevice = true;
+                                myServerSettings.myDevicesSettings.Add(name, newSettings);
+                            }
+                            else
+                            {
+                                myServerSettings.myDevicesSettings[name].deviceConnected = true;
+                            }
+
+                            bool deviceProgrammed = false;
+
+                            if (myServerSettings.myDevicesSettings[name].DeviceEnabled)
+                            {
+                                if (myServerSettings.myDevicesSettings[name].UsingVariableTimebase)
+                                {
+                                    deviceProgrammed = true;
+                                    if (myServerSettings.myDevicesSettings[name].MySampleClockSource == DeviceSettings.SampleClockSource.DerivedFromMaster)
+                                    {
+                                        errorCode = fpgaDevice.ConfigureFPGA("variable_timebase_fpga_internal.bit");
+                                    }
+                                    else
+                                    {
+                                        errorCode = fpgaDevice.ConfigureFPGA("variable_timebase_fpga_external.bit");
+                                    }
+
+                                    if (errorCode == com.opalkelly.frontpanel.okCFrontPanel.ErrorCode.NoError)
+                                    {
+
+                                        System.Console.WriteLine("Programmed fpga device " + name + ". Used fpga code version based on sample clock source " + myServerSettings.myDevicesSettings[name].MySampleClockSource.ToString());
+
+                                        opalKellyDeviceNames.Add(name);
+                                        opalKellyDevices.Add(fpgaDevice);
+                                    }
+                                    else
+                                    {
+                                        System.Console.WriteLine("Error when attempting to program fpga device, error code " + errorCode.ToString());
+                                    }
+                                }
+                            }
+                            if (!deviceProgrammed)
+                                System.Console.WriteLine("Fpga device " + name + " not programmed, as it is not enable or varible timebase on that device is not enabled.");
+
 
                         }
                     }
                     catch (Exception e)
                     {
-                        System.Console.WriteLine("Caught exception when attempting to query serial resource named " + s + ". Displaying exception and then skipping this device.");
-                        ExceptionViewerDialog ev = new ExceptionViewerDialog(e);
-                        ev.ShowDialog();
-
-                    }
-
-                    System.Console.WriteLine("...done.");
-                }
-            }
-
-            
-
-            #endregion
-
-            // If necessary, add DeviceSettings entries for devices.
-            foreach (string device in detectedDevices)
-            {
-                // If this device does not already have a settings object...
-                if (!myServerSettings.myDevicesSettings.ContainsKey(device))
-                {
-                    myServerSettings.myDevicesSettings.Add(device,
-                        new DeviceSettings(device, myDeviceDescriptions[device]));
-                }
-                else
-                {
-                    myServerSettings.myDevicesSettings[device].deviceConnected = true;
-                }
-            }
-
-            #region FPGA Detection and configuration
-
-            if (this.serverSettings.UseOpalKellyFPGA)
-            {
-                try
-                {
-                    System.Console.WriteLine("Scanning for Opal Kelly FPGA devices...");
-
-                    opalKellyDevices = new List<com.opalkelly.frontpanel.okCFrontPanel>();
-                    opalKellyDeviceNames = new List<string>();
-
-                    com.opalkelly.frontpanel.okCFrontPanel ok = new com.opalkelly.frontpanel.okCFrontPanel();
-                    int fpgaDeviceCount = ok.GetDeviceCount();
-
-                    System.Console.WriteLine("Found " + fpgaDeviceCount + " fpga device(s).");
-
-                    for (int i = 0; i < fpgaDeviceCount; i++)
-                    {
-                        string name = ok.GetDeviceListSerial(i);
-                        com.opalkelly.frontpanel.okCFrontPanel fpgaDevice = new com.opalkelly.frontpanel.okCFrontPanel();
-
-                        com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode;
-
-                        errorCode = fpgaDevice.OpenBySerial(name);
-
-                        if (errorCode != com.opalkelly.frontpanel.okCFrontPanel.ErrorCode.NoError)
+                        if (e.InnerException != null && e.InnerException.InnerException != null)
                         {
-                            System.Console.WriteLine("Unable to open FPGA device " + name + " due to error code " + errorCode.ToString());
-                            continue;
-                        }
-
-                        if (!this.detectedDevices.Contains(name))
-                        {
-                            this.detectedDevices.Add(name);
-                        }
-
-                        if (!myServerSettings.myDevicesSettings.ContainsKey(name))
-                        {
-                            DeviceSettings newSettings = new DeviceSettings(name, "Opal Kelly FPGA Device");
-                            newSettings.deviceConnected = true;
-                            newSettings.isFPGADevice = true;
-                            myServerSettings.myDevicesSettings.Add(name, newSettings);
-                        }
-                        else
-                        {
-                            myServerSettings.myDevicesSettings[name].deviceConnected = true;
-                        }
-
-                        bool deviceProgrammed = false;
-
-                        if (myServerSettings.myDevicesSettings[name].DeviceEnabled)
-                        {
-                            if (myServerSettings.myDevicesSettings[name].UsingVariableTimebase)
+                            Exception innerInner = e.InnerException.InnerException;
+                            if (innerInner is System.BadImageFormatException)
                             {
-                                deviceProgrammed = true;
-                                if (myServerSettings.myDevicesSettings[name].MySampleClockSource == DeviceSettings.SampleClockSource.DerivedFromMaster)
-                                {
-                                    errorCode = fpgaDevice.ConfigureFPGA("variable_timebase_fpga_internal.bit");
-                                }
-                                else
-                                {
-                                    errorCode = fpgaDevice.ConfigureFPGA("variable_timebase_fpga_external.bit");
-                                }
-
-                                if (errorCode == com.opalkelly.frontpanel.okCFrontPanel.ErrorCode.NoError)
-                                {
-
-                                    System.Console.WriteLine("Programmed fpga device " + name + ". Used fpga code version based on sample clock source " + myServerSettings.myDevicesSettings[name].MySampleClockSource.ToString());
-
-                                    opalKellyDeviceNames.Add(name);
-                                    opalKellyDevices.Add(fpgaDevice);
-                                }
-                                else
-                                {
-                                    System.Console.WriteLine("Error when attempting to program fpga device, error code " + errorCode.ToString());
-                                }
+                                MessageBox.Show("You are probably running the wrong build of Atticus. As of version 1.56 Atticus now comes in a 64-bit or 32-bit versions (in the bin\\Release-x64 and bin\\Release-x86 subdirectories respectively). These builds make use of different versions of the Opal Kelly Frontpanel libraries. Please ensure you are using the correct Atticus build. The exception which gave rise to this error will now be displayed.", "Wrong build of Atticus?");
+                                DataStructures.ExceptionViewerDialog dial = new ExceptionViewerDialog(e);
+                                dial.ShowDialog();
                             }
-                        }
-                        if (!deviceProgrammed)
-                            System.Console.WriteLine("Fpga device " + name + " not programmed, as it is not enable or varible timebase on that device is not enabled.");
-
-
-                    }
-                }
-                catch (Exception e)
-                {
-                    if (e.InnerException != null && e.InnerException.InnerException != null)
-                    {
-                        Exception innerInner = e.InnerException.InnerException;
-                        if (innerInner is System.BadImageFormatException)
-                        {
-                            MessageBox.Show("You are probably running the wrong build of Atticus. As of version 1.56 Atticus now comes in a 64-bit or 32-bit versions (in the bin\\Release-x64 and bin\\Release-x86 subdirectories respectively). These builds make use of different versions of the Opal Kelly Frontpanel libraries. Please ensure you are using the correct Atticus build. The exception which gave rise to this error will now be displayed.", "Wrong build of Atticus?");
-                            DataStructures.ExceptionViewerDialog dial = new ExceptionViewerDialog(e);
-                            dial.ShowDialog();
-                        }
-                        else if (innerInner is System.DllNotFoundException)
-                        {
-                            MessageBox.Show("As of version 1.56, Atticus is now built to use the 4.0.8 version of the Opal Kelly Frontpanel libraries/drivers. Perhaps you have the wrong version of the libraries installed? You can find a driver-only installer for 4.0.8 in the \\Opal Kelly\\Opal Kelly 4.0.8\\ directory of the Cicero distribution. Please install the newer drivers from there, or contact Opal Kelly to receive a CD with the newest full Frontpanel distribution (or go to the download section of github page for the Cicero Word generator, and download and install Opal-Kelly-CD-4.0.8.zip. You may also need to plug an Opal Kelly device into this computer during installation of the drivers, to insure that the WINUSB windows subsystem gets installed. The exception which gave rise to this error will now be displayed.", "Wrong version of FrontPanel drivers installed?");
-                            DataStructures.ExceptionViewerDialog dial = new ExceptionViewerDialog(e);
-                            dial.ShowDialog();
+                            else if (innerInner is System.DllNotFoundException)
+                            {
+                                MessageBox.Show("As of version 1.56, Atticus is now built to use the 4.0.8 version of the Opal Kelly Frontpanel libraries/drivers. Perhaps you have the wrong version of the libraries installed? You can find a driver-only installer for 4.0.8 in the \\Opal Kelly\\Opal Kelly 4.0.8\\ directory of the Cicero distribution. Please install the newer drivers from there, or contact Opal Kelly to receive a CD with the newest full Frontpanel distribution (or go to the download section of github page for the Cicero Word generator, and download and install Opal-Kelly-CD-4.0.8.zip. You may also need to plug an Opal Kelly device into this computer during installation of the drivers, to insure that the WINUSB windows subsystem gets installed. The exception which gave rise to this error will now be displayed.", "Wrong version of FrontPanel drivers installed?");
+                                DataStructures.ExceptionViewerDialog dial = new ExceptionViewerDialog(e);
+                                dial.ShowDialog();
+                            }
+                            else
+                            {
+                                MessageBox.Show("An unrecognized exception was encountered when scanning for Opal Kelly FPGA devices. The exception will now be displayed.", "Unrecognized exception.");
+                                DataStructures.ExceptionViewerDialog dial = new ExceptionViewerDialog(e);
+                                dial.ShowDialog();
+                            }
                         }
                         else
                         {
@@ -2735,34 +2745,36 @@ namespace AtticusServer
                             DataStructures.ExceptionViewerDialog dial = new ExceptionViewerDialog(e);
                             dial.ShowDialog();
                         }
-                    }
-                    else
-                    {
-                        MessageBox.Show("An unrecognized exception was encountered when scanning for Opal Kelly FPGA devices. The exception will now be displayed.", "Unrecognized exception.");
-                        DataStructures.ExceptionViewerDialog dial = new ExceptionViewerDialog(e);
-                        dial.ShowDialog();
-                    }
 
-                    System.Console.WriteLine("Caught exceptions when attempting to scan for Opal Kelly FPGA devices. Aborted FPGA scan.");
-                    opalKellyDevices = null;
+                        System.Console.WriteLine("Caught exceptions when attempting to scan for Opal Kelly FPGA devices. Aborted FPGA scan.");
+                        opalKellyDevices = null;
 
+                    }
                 }
+                else
+                {
+                    System.Console.WriteLine("Opal Kelly FPGA not enabled, so not scanning for them.");
+                    opalKellyDevices = null;
+                }
+
+
+                #endregion
+
+                System.Console.WriteLine("...done running refreshHardwareLists().");
+
+                if (niDaqDevicesExistThatAreNotNamedDevSomething)
+                {
+                    System.Console.WriteLine("!! NOTE !! Some NI devices were detected whose name does not follow the Dev1, Dev2, Dev3, naming convention. This will cause problems.");
+                    MessageBox.Show("National Instruments cards were detected whose names do not corresponding to the Dev1, Dev2, Dev3, etc. naming convention. This convention is relied upon by Atticus. Not following this convention will cause problems when attempting to run sequences on these devices. Please use MAX (the NI-supplied program) to rename your NI devices to follow the convention.", "Invalid niDaq Device Names");
+                }
+
             }
-            else
+            catch (Exception e)
             {
-                System.Console.WriteLine("Opal Kelly FPGA not enabled, so not scanning for them.");
-                opalKellyDevices = null;
-            }
-
-
-            #endregion
-
-            System.Console.WriteLine("...done running refreshHardwareLists().");
-
-            if (niDaqDevicesExistThatAreNotNamedDevSomething)
-            {
-                System.Console.WriteLine("!! NOTE !! Some NI devices were detected whose name does not follow the Dev1, Dev2, Dev3, naming convention. This will cause problems.");
-                MessageBox.Show("National Instruments cards were detected whose names do not corresponding to the Dev1, Dev2, Dev3, etc. naming convention. This convention is relied upon by Atticus. Not following this convention will cause problems when attempting to run sequences on these devices. Please use MAX (the NI-supplied program) to rename your NI devices to follow the convention.", "Invalid niDaq Device Names");
+                System.Console.WriteLine("Unhandled exception when scanning connected hardware. Displaying exception, and then continuing to attempt to start Atticus.");
+                ExceptionViewerDialog ev = new ExceptionViewerDialog(e);
+                ev.ShowDialog();
+                MessageBox.Show("Atticus encountered an unhandled exception when scanning for connected hardware. Atticus will continue to run. It is unlikely to function correctly for driving outputs, but will allow you to edit your settings to disable whatever is causing the unhandled exception.");
             }
         }
 
