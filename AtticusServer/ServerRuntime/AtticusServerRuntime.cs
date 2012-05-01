@@ -2556,43 +2556,60 @@ namespace AtticusServer
                 }
             }
 
+
             if (resourceNames != null)
             {
+
+
 
                 foreach (string s in resourceNames)
                 {
 
-                    System.Console.WriteLine("Querying Resource " + s);
-
-                    NationalInstruments.VisaNS.HardwareInterfaceType hType;
-                    short chanNum;
-                    VisaRescources.ParseResource(s, out hType, out chanNum);
-                    if (hType == NationalInstruments.VisaNS.HardwareInterfaceType.Serial)
+                    try
                     {
-                        NationalInstruments.VisaNS.SerialSession ss = (NationalInstruments.VisaNS.SerialSession)NationalInstruments.VisaNS.ResourceManager.GetLocalManager().Open(s);
 
+                        System.Console.WriteLine("Querying Resource " + s);
 
-
-
-                        string description = ss.HardwareInterfaceName;
-
-                        HardwareChannel hc = new HardwareChannel(this.serverSettings.ServerName, "Serial", s, description, HardwareChannel.HardwareConstants.ChannelTypes.rs232);
-                        if (!serverSettings.ExcludedChannels.Contains(hc))
+                        NationalInstruments.VisaNS.HardwareInterfaceType hType;
+                        short chanNum;
+                        VisaRescources.ParseResource(s, out hType, out chanNum);
+                        if (hType == NationalInstruments.VisaNS.HardwareInterfaceType.Serial)
                         {
-                            MyHardwareChannels.Add(hc);
-                        }
-                        if (!detectedDevices.Contains("Serial"))
-                        {
-                            detectedDevices.Add("Serial");
-                            myDeviceDescriptions.Add("Serial", "All local RS232 devices.");
-                        }
+                            NationalInstruments.VisaNS.SerialSession ss = (NationalInstruments.VisaNS.SerialSession)NationalInstruments.VisaNS.ResourceManager.GetLocalManager().Open(s);
 
-                        ss.Dispose();
+
+
+
+                            string description = ss.HardwareInterfaceName;
+
+                            HardwareChannel hc = new HardwareChannel(this.serverSettings.ServerName, "Serial", s, description, HardwareChannel.HardwareConstants.ChannelTypes.rs232);
+                            if (!serverSettings.ExcludedChannels.Contains(hc))
+                            {
+                                MyHardwareChannels.Add(hc);
+                            }
+                            if (!detectedDevices.Contains("Serial"))
+                            {
+                                detectedDevices.Add("Serial");
+                                myDeviceDescriptions.Add("Serial", "All local RS232 devices.");
+                            }
+
+                            ss.Dispose();
+
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        System.Console.WriteLine("Caught exception when attempting to query serial resource named " + s + ". Displaying exception and then skipping this device.");
+                        ExceptionViewerDialog ev = new ExceptionViewerDialog(e);
+                        ev.ShowDialog();
+
                     }
 
                     System.Console.WriteLine("...done.");
                 }
             }
+
+            
 
             #endregion
 
