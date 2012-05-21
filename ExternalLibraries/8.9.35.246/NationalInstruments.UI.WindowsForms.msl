@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<DotNETComponent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ToolBoxPriority>1</ToolBoxPriority>
+  <Visible>true</Visible>
+  <SupportedProjectTypes>
+    <string>CppCLI2008</string>
+    <string>WindowsFormsApplication2008</string>
+  </SupportedProjectTypes>
+  <SelectedByDefault>true</SelectedByDefault>
+  <Title>Windows Forms User Interface Control Library</Title>
+  <Description>Contains the Measurement Studio Windows Forms user interface controls.</Description>
+  <Name2008>NationalInstruments.UI.WindowsForms</Name2008>
+  <Licensed>true</Licensed>
+  <Dependencies>
+    <DotNETAssembly>
+      <Name>NationalInstruments.UI</Name>
+    </DotNETAssembly>
+  </Dependencies>
+  <Namespaces>
+    <string>NationalInstruments.UI.WindowsForms</string>
+  </Namespaces>
+  <ToolBoxItems>
+    <string>NationalInstruments.UI.WindowsForms.WaveformGraph</string>
+    <string>NationalInstruments.UI.WindowsForms.ScatterGraph</string>
+    <string>NationalInstruments.UI.WindowsForms.DigitalWaveformGraph</string>
+    <string>NationalInstruments.UI.WindowsForms.ComplexGraph</string>
+    <string>NationalInstruments.UI.WindowsForms.Legend</string>
+    <string>NationalInstruments.UI.WindowsForms.Gauge</string>
+    <string>NationalInstruments.UI.WindowsForms.Knob</string>
+    <string>NationalInstruments.UI.WindowsForms.Meter</string>
+    <string>NationalInstruments.UI.WindowsForms.Slide</string>
+    <string>NationalInstruments.UI.WindowsForms.Tank</string>
+    <string>NationalInstruments.UI.WindowsForms.Thermometer</string>
+    <string>NationalInstruments.UI.WindowsForms.NumericEdit</string>
+    <string>NationalInstruments.UI.WindowsForms.Switch</string>
+    <string>NationalInstruments.UI.WindowsForms.Led</string>
+    <string>NationalInstruments.UI.WindowsForms.NumericEditArray</string>
+    <string>NationalInstruments.UI.WindowsForms.SwitchArray</string>
+    <string>NationalInstruments.UI.WindowsForms.LedArray</string>
+    <string>NationalInstruments.UI.WindowsForms.PropertyEditor</string>
+    <string>NationalInstruments.UI.WindowsForms.InstrumentControlStrip</string>
+  </ToolBoxItems>
+</DotNETComponent>
