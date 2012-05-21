@@ -4,6 +4,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CEEFAE9A-6E13-4ADF-9C16-F36806A136BC}"
 	ProjectSection(SolutionItems) = preProject
 		Code Overview.htm = Code Overview.htm
+		LibraryVersions.txt = LibraryVersions.txt
 		ReleaseNotes.txt = ReleaseNotes.txt
 		Syncronization.txt = Syncronization.txt
 		Troubleshooting.txt = Troubleshooting.txt
