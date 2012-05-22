@@ -169,7 +169,7 @@ namespace WordGenerator.Controls
                 foreach (WaveformGraph graph in waveformGraphs)
                     waveformEditor.updateGraph += graph.updateGraph;
 
-            waveformEditor.setWaveform(wg.waveform);
+            waveformEditor.setWaveform(wg.getWaveform());
 
             if (WordGenerator.mainClientForm.instance != null)
                 WordGenerator.mainClientForm.instance.cursorWaitRelease();

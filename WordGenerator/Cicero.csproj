@@ -150,6 +150,9 @@
     <Compile Include="Controls\OverrideTab\OverridePage.Designer.cs">
       <DependentUpon>OverridePage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Shared\WaveformGraph2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\VariablesTab\PermanentVariablesEditor.cs">
       <SubType>Form</SubType>
     </Compile>
