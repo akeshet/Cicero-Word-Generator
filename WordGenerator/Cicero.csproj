@@ -79,12 +79,6 @@
     <Reference Include="NationalInstruments.NI4882, Version=9.0.35.157, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
-    <Reference Include="NationalInstruments.UI, Version=8.9.35.246, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NationalInstruments.UI.WindowsForms, Version=8.9.35.246, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -345,12 +339,12 @@
     <Compile Include="Controls\Shared\WaveformEditor.Designer.cs">
       <DependentUpon>WaveformEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Shared\WaveformGraph.cs">
+    <None Include="Controls\Shared\WaveformGraph.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\Shared\WaveformGraph.Designer.cs">
+    </None>
+    <None Include="Controls\Shared\WaveformGraph.Designer.cs">
       <DependentUpon>WaveformGraph.cs</DependentUpon>
-    </Compile>
+    </None>
     <Compile Include="Controls\Shared\WaveformGraphCollection.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -527,10 +521,10 @@
       <DependentUpon>WaveformEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Shared\WaveformGraph.resx">
+    <None Include="Controls\Shared\WaveformGraph.resx">
       <DependentUpon>WaveformGraph.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
+    </None>
     <EmbeddedResource Include="Controls\Shared\WaveformGraphCollection.resx">
       <DependentUpon>WaveformGraphCollection.cs</DependentUpon>
       <SubType>Designer</SubType>
