@@ -1,0 +1,6 @@
+[submodule "Related Projects/clinamen"]
+	path = Related Projects/clinamen
+	url = git://github.com/edjoesu/clinamen.git
+[submodule "Related Projects/Simplicio"]
+	path = Related Projects/Simplicio
+	url = git://github.com/atsommer/Simplicio.git
