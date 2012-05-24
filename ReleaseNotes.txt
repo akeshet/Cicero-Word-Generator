@@ -25,3 +25,14 @@ Integrating MySql database support for Cicero. (Run information can be exported 
 
 Recategorizing some Cicero Settings fields in the UI as part of the "Paris fork" (these are features that are unsupported and not well integrated,
 but left in for compatability purposes.
+
+
+
+1.59
+-----
+
+Eliminated a large number of unnecessary NI dependencies in Cicero and DataStructures projects, which will make
+compiling and running this suite substantially easier.
+
+Cicero no longer uses NI WaveformGraph, thus no licensed copy of Measurement Studio is required to compile it.
+DataStructures no longer references NI GPIB Address structure, but rather a new clone of the same functionality.
