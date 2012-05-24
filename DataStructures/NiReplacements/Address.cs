@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.ComponentModel;
 
 namespace DataStructures.Gpib
 {
+    [Serializable, TypeConverter(typeof(ExpandableStructConverter))]
     public struct Address
     {
 
