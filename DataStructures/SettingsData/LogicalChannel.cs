@@ -42,7 +42,13 @@ namespace DataStructures
             set { description = value; }
         }
 
-        public HardwareChannel hardwareChannel;
+        private HardwareChannel hardwareChannel;
+
+        public HardwareChannel HardwareChannel
+        {
+            get { return hardwareChannel; }
+            set { hardwareChannel = value; }
+        }
 
         /// <summary>
         /// True if this channel will actually be a toggling channel... ie when the buffer is generated, it will oscillate between 0 and 1.

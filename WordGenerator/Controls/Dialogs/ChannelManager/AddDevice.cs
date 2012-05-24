@@ -108,9 +108,9 @@ namespace WordGenerator.ChannelManager
             lc.TogglingChannel = togglingCheck.Checked;
 
             if (this.availableHardwareChanCombo.SelectedItem is HardwareChannel)
-                lc.hardwareChannel = (HardwareChannel)this.availableHardwareChanCombo.SelectedItem;
+                lc.HardwareChannel = (HardwareChannel)this.availableHardwareChanCombo.SelectedItem;
             else
-                lc.hardwareChannel = HardwareChannel.Unassigned;
+                lc.HardwareChannel = HardwareChannel.Unassigned;
 
             // Add to the appropriate collection
             selectedChannelCollection.AddChannel(lc);

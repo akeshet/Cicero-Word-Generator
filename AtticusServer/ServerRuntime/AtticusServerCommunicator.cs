@@ -2178,14 +2178,14 @@ namespace AtticusServer
             this.usedDaqMxDevices = new List<string>();
             foreach (int analogID in usedAnalogChannels.Keys)
             {
-                HardwareChannel hc = settings.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.analog].Channels[analogID].hardwareChannel;
+                HardwareChannel hc = settings.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.analog].Channels[analogID].HardwareChannel;
 
                 if (!usedDaqMxDevices.Contains(hc.DeviceName))
                     usedDaqMxDevices.Add(hc.DeviceName);
             }
             foreach (int digitalID in usedDigitalChannels.Keys)
             {
-                HardwareChannel hc = settings.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.digital].Channels[digitalID].hardwareChannel;
+                HardwareChannel hc = settings.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.digital].Channels[digitalID].HardwareChannel;
                 if (!usedDaqMxDevices.Contains(hc.DeviceName))
                     usedDaqMxDevices.Add(hc.DeviceName);
             }
@@ -2202,15 +2202,15 @@ namespace AtticusServer
             foreach (int id in collection.Channels.Keys)
             {
                 LogicalChannel logical = collection.Channels[id];
-                if (logical.hardwareChannel != null)
+                if (logical.HardwareChannel != null)
                 {
-                    if (!logical.hardwareChannel.isUnAssigned)
+                    if (!logical.HardwareChannel.isUnAssigned)
                     {
-                        if (logical.hardwareChannel.ServerName == this.myServerSettings.ServerName)
+                        if (logical.HardwareChannel.ServerName == this.myServerSettings.ServerName)
                         {
-                            if (this.MyHardwareChannels.Contains(logical.hardwareChannel))
+                            if (this.MyHardwareChannels.Contains(logical.HardwareChannel))
                             {
-                                channelMap.Add(id, logical.hardwareChannel);
+                                channelMap.Add(id, logical.HardwareChannel);
                             }
                             else
                             {

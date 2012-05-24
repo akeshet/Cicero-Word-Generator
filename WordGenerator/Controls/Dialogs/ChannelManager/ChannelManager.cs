@@ -85,7 +85,7 @@ namespace WordGenerator.ChannelManager
                              logicalID.ToString(), 
                              lc.Name,
                              lc.Description,
-                             lc.hardwareChannel.ToString() };
+                             lc.HardwareChannel.ToString() };
             logicalDevicesDataGridView.Rows.Add(row);
         }
 

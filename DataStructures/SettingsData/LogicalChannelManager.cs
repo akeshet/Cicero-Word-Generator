@@ -27,8 +27,8 @@ namespace DataStructures
                 {
                     foreach (LogicalChannel logicalChannel in channelCollection.Channels.Values)
                     {
-                        if (logicalChannel.hardwareChannel != HardwareChannel.Unassigned)
-                            ans.Add(logicalChannel.hardwareChannel);
+                        if (logicalChannel.HardwareChannel != HardwareChannel.Unassigned)
+                            ans.Add(logicalChannel.HardwareChannel);
                     }
                 }
                 return ans;
@@ -46,10 +46,10 @@ namespace DataStructures
             {
                 foreach (LogicalChannel lc in coll.Channels.Values)
                 {
-                    if (lc.hardwareChannel != HardwareChannel.Unassigned)
+                    if (lc.HardwareChannel != HardwareChannel.Unassigned)
                     {
-                        if (!ans.Contains(lc.hardwareChannel.ServerName))
-                            ans.Add(lc.hardwareChannel.ServerName);
+                        if (!ans.Contains(lc.HardwareChannel.ServerName))
+                            ans.Add(lc.HardwareChannel.ServerName);
                     }
                 }
             }

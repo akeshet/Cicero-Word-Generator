@@ -25,8 +25,8 @@ namespace WordGenerator.ChannelManager
 
             this.availableHardwareChanCombo.Items.Clear();
             this.availableHardwareChanCombo.Items.Add(HardwareChannel.Unassigned);
-            if (sd.lc.hardwareChannel!=null) 
-                this.availableHardwareChanCombo.Items.Add(sd.lc.hardwareChannel);
+            if (sd.lc.HardwareChannel!=null) 
+                this.availableHardwareChanCombo.Items.Add(sd.lc.HardwareChannel);
             
             // Fill the availableHardwareChanCombo with relevant items
             foreach (HardwareChannel hc in cm.knownHardwareChannels)
@@ -34,7 +34,7 @@ namespace WordGenerator.ChannelManager
                     if (!Storage.settingsData.logicalChannelManager.AssignedHardwareChannels.Contains(hc))
                         this.availableHardwareChanCombo.Items.Add(hc);
 
-            this.availableHardwareChanCombo.SelectedItem = sd.lc.hardwareChannel;
+            this.availableHardwareChanCombo.SelectedItem = sd.lc.HardwareChannel;
 
             togglingCheck.Checked = sd.lc.TogglingChannel;
 
@@ -68,9 +68,9 @@ namespace WordGenerator.ChannelManager
             sd.lc.AnalogChannelOutputNowUsesDwellWord = checkBox1.Checked;
             
             if (this.availableHardwareChanCombo.SelectedItem is HardwareChannel)
-                sd.lc.hardwareChannel = (HardwareChannel) this.availableHardwareChanCombo.SelectedItem;
+                sd.lc.HardwareChannel = (HardwareChannel) this.availableHardwareChanCombo.SelectedItem;
             else
-                sd.lc.hardwareChannel = HardwareChannel.Unassigned;
+                sd.lc.HardwareChannel = HardwareChannel.Unassigned;
 
             // Visual feedback
             cm.RefreshLogicalDeviceDataGrid();

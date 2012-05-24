@@ -42,7 +42,7 @@ namespace DataStructures.Gpib
 
         public override string ToString()
         {
-            return primaryAddress.ToString() + ", " + secondaryAddress.ToString();
+            return "Address: PrimaryAddress="+primaryAddress.ToString() + ", SecondaryAddress=" + secondaryAddress.ToString();
         }
 
     }
