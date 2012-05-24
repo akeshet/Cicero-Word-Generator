@@ -91,6 +91,10 @@ namespace WordGenerator
                     else
                         throw;
                 }
+                catch (DirectoryNotFoundException e)
+                {
+                    Console.WriteLine("SaveAndLoad.Load(), DirectoryNotFoundException: " + e.Message);
+                }
 
                 return result;
             }
@@ -171,7 +175,7 @@ namespace WordGenerator
                 clientStartupSettingsFileName = clientStartupSettingsFileNameParam;
 
                 LoadClientStartupSettings(clientStartupSettingsFileName);
-                LoadSettingsData(clientStartupSettings.settingsDataFileName);
+                LoadSettingsData(clientStartupSettings.settingsDataFileName);                
                 LoadSequenceDataToStorage(clientStartupSettings.sequenceDataFileName);
 
                 if (Storage.settingsData == null)

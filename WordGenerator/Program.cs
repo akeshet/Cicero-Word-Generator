@@ -84,6 +84,7 @@ namespace WordGenerator
                     throw;
                 }
 
+                /*
                 try
                 {
                     NationalInstruments.UI.WaveformPlot testObject = new NationalInstruments.UI.WaveformPlot();
@@ -94,6 +95,7 @@ namespace WordGenerator
                     throw;
                 }
 
+                */
 
 
                 if (runLog == null)

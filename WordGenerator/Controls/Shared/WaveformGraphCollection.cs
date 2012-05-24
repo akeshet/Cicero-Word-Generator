@@ -11,7 +11,7 @@ namespace WordGenerator.Controls
 {
     public partial class WaveformGraphCollection : UserControl
     {
-        private List<WaveformGraph> waveformGraphs;
+        private List<WaveformGraph2> waveformGraphs;
 
         private WaveformEditor waveformEditor;
 
@@ -26,7 +26,7 @@ namespace WordGenerator.Controls
             InitializeComponent();
             this.AutoScroll = true;
             this.VScroll = true;
-            waveformGraphs = new List<WaveformGraph>();
+            waveformGraphs = new List<WaveformGraph2>();
             waveformEditor = new WaveformEditor();
         }
 
@@ -34,7 +34,7 @@ namespace WordGenerator.Controls
         {
             try
             {
-                foreach (WaveformGraph gr in waveformGraphs)
+                foreach (WaveformGraph2 gr in waveformGraphs)
                 {
                     gr.updateGraph(this, null);
                 }
@@ -48,7 +48,7 @@ namespace WordGenerator.Controls
         public void setWaveformEditor(WaveformEditor waveformEditor)
         {
             this.waveformEditor = waveformEditor;
-            foreach (WaveformGraph wg in waveformGraphs)
+            foreach (WaveformGraph2 wg in waveformGraphs)
             {
                 wg.setWaveformEditor(waveformEditor);
             }
@@ -57,7 +57,7 @@ namespace WordGenerator.Controls
         public void deactivateAllGraphs()
         {
             this.SuspendLayout();
-            foreach (WaveformGraph wg in waveformGraphs)
+            foreach (WaveformGraph2 wg in waveformGraphs)
             {
                 wg.Deactivate();
             }
@@ -89,11 +89,11 @@ namespace WordGenerator.Controls
             if (WordGenerator.mainClientForm.instance!=null)
                 WordGenerator.mainClientForm.instance.cursorWait();
 
-            List<WaveformGraph> graphsToAdd = new List<WaveformGraph>();
+            List<WaveformGraph2> graphsToAdd = new List<WaveformGraph2>();
 
             if (waveformGraphs != null)
             {
-                foreach (WaveformGraph wg in waveformGraphs)
+                foreach (WaveformGraph2 wg in waveformGraphs)
                 {
                     this.flowLayoutPanel1.Controls.Remove(wg);
                     wg.Dispose();
@@ -120,7 +120,7 @@ namespace WordGenerator.Controls
                     editable = waveformsEditable[i];
                 }
 
-                waveformGraphs.Add(new WaveformGraph(waveforms[i], waveformEditor, editable));            
+                waveformGraphs.Add(new WaveformGraph2(waveforms[i], waveformEditor, editable));            
                 waveformGraphs[i].Deactivate();
                 waveformGraphs[i].Visible = true;
                 waveformGraphs[i].gotClicked += new EventHandler(WaveformGraphCollection_gotClicked);
@@ -145,7 +145,7 @@ namespace WordGenerator.Controls
             if (WordGenerator.mainClientForm.instance != null)
                 WordGenerator.mainClientForm.instance.cursorWait();
 
-            WaveformGraph wg = sender as WaveformGraph;
+            WaveformGraph2 wg = sender as WaveformGraph2;
             if (wg == null)
             {
                 WordGenerator.mainClientForm.instance.cursorWaitRelease();
@@ -158,7 +158,7 @@ namespace WordGenerator.Controls
                 return;
             }
 
-            foreach (WaveformGraph graph in waveformGraphs)
+            foreach (WaveformGraph2 graph in waveformGraphs)
                 graph.Deactivate();
 
             wg.Activate();
@@ -166,10 +166,10 @@ namespace WordGenerator.Controls
             if (!updateAllGraphsEachTime)
                 waveformEditor.updateGraph += wg.updateGraph;
             else
-                foreach (WaveformGraph graph in waveformGraphs)
+                foreach (WaveformGraph2 graph in waveformGraphs)
                     waveformEditor.updateGraph += graph.updateGraph;
 
-            waveformEditor.setWaveform(wg.waveform);
+            waveformEditor.setWaveform(wg.getWaveform());
 
             if (WordGenerator.mainClientForm.instance != null)
                 WordGenerator.mainClientForm.instance.cursorWaitRelease();

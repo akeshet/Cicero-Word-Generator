@@ -11,7 +11,7 @@ namespace WordGenerator.Controls
 {
     public partial class WaveformGraph : UserControl
     {
-        public Waveform waveform;
+        private Waveform waveform;
         private WaveformEditor waveformEditor;
         private string channelName;
 
@@ -64,6 +64,11 @@ namespace WordGenerator.Controls
             updateGraph(this, null);
         }
 
+        public Waveform getWaveform()
+        {
+            return this.waveform;
+        }
+
         public void setWaveformEditor(WaveformEditor waveformEditor)
         {
             this.waveformEditor = waveformEditor;
@@ -82,6 +87,12 @@ namespace WordGenerator.Controls
             waveformGraph1.PlotX(new double[] { 0 });
         }
 
+        /// <summary>
+        /// When called, WaveformGraph will attempt to update the graph of a waveform it is displaying.
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void updateGraph(Object sender, EventArgs e)
         {
             try
