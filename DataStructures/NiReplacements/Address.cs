@@ -1,0 +1,47 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace DataStructures.Gpib
+{
+    public struct Address
+    {
+
+        public Address(byte primaryAddress)
+        {
+            this.primaryAddress = primaryAddress;
+            this.secondaryAddress = 0;
+        }
+
+        public Address(byte primaryAddress, byte secondaryAddress)
+        {
+            this.primaryAddress = primaryAddress;
+            this.secondaryAddress = secondaryAddress;
+        }
+
+
+        private byte primaryAddress;
+
+        public byte PrimaryAddress
+        {
+            get { return primaryAddress; }
+            set { primaryAddress = value; }
+        }
+
+
+        private byte secondaryAddress;
+
+        public byte SecondaryAddress
+        {
+            get { return secondaryAddress; }
+            set { secondaryAddress = value; }
+        }
+
+        public override string ToString()
+        {
+            return primaryAddress.ToString() + ", " + secondaryAddress.ToString();
+        }
+
+    }
+}

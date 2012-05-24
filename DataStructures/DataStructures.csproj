@@ -93,7 +93,7 @@
     <Compile Include="Forms\LicenseInfoForm.Designer.cs">
       <DependentUpon>LicenseInfoForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="NiReplacements\GpibAddress.cs" />
+    <Compile Include="NiReplacements\Address.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

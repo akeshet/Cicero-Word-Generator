@@ -152,11 +152,11 @@ namespace DataStructures
             get { return channelDescription; }
         }
 
-        private GpibAddress gpibAddress;
+        private DataStructures.Gpib.Address gpibAddress;
 
         [Description("Applies only to GPIB devices. Specifies the gpib address of the channel."),
         Category("GPIB")]
-        public GpibAddress GpibAddress
+        public DataStructures.Gpib.Address GpibAddress
         {
             get { return gpibAddress; }
         }
@@ -188,11 +188,11 @@ namespace DataStructures
             this.channelDescription = channelDescription;
             this.channelType = ct;
             this.isUnAssigned = false;
-            this.gpibAddress = new NationalInstruments.NI4882.Address();
+            this.gpibAddress = new DataStructures.Gpib.Address();
             this.gpibDeviceType = HardwareConstants.GPIBDeviceType.Unknown;
         }
 
-        public HardwareChannel(string serverName, string deviceName, string channelName, string channelDescription, HardwareChannel.HardwareConstants.ChannelTypes ct, GpibAddress gpibAddress, HardwareChannel.HardwareConstants.GPIBDeviceType gpibDeviceType)
+        public HardwareChannel(string serverName, string deviceName, string channelName, string channelDescription, HardwareChannel.HardwareConstants.ChannelTypes ct, DataStructures.Gpib.Address gpibAddress, HardwareChannel.HardwareConstants.GPIBDeviceType gpibDeviceType)
             : this(serverName, deviceName, channelName,channelDescription, ct)
         {
             if (this.ChannelType != HardwareConstants.ChannelTypes.gpib)
@@ -256,11 +256,6 @@ namespace DataStructures
         public override int GetHashCode()
         {
             return this.ToString().GetHashCode();
-        }
-
-        public static string gpibAddressToShortString(GpibAddress address)
-        {
-            return address.PrimaryAddress.ToString() + "," + address.SecondaryAddress.ToString();
         }
 
         public int gpibBoardNumber()
@@ -367,7 +362,7 @@ namespace DataStructures
 
                 if (typeName == "NationalInstruments.NI4882.Address")
                 {
-                    return typeof(NationalInstruments.NI4882.Address);
+                    return typeof(DataStructures.Gpib.Address);
                 }
                 else
                     return Type.GetType(typeName);

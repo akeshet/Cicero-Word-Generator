@@ -720,7 +720,8 @@ namespace AtticusServer
                             messageLog(this, new MessageEvent("Generating gpib buffer for gpib ID " + gpibID));
 
                             NationalInstruments.NI4882.Device gpibDevice = new NationalInstruments.NI4882.Device(
-                                gpibChannel.gpibBoardNumber(), gpibChannel.GpibAddress);
+                                gpibChannel.gpibBoardNumber(), 
+                                new NationalInstruments.NI4882.Address(gpibChannel.GpibAddress.PrimaryAddress, gpibChannel.GpibAddress.SecondaryAddress));
                             GpibTask gpibTask = new GpibTask(gpibDevice);
                             gpibTask.generateBuffer(sequence, myServerSettings.myDevicesSettings[gpibChannel.DeviceName],
                                 gpibChannel, gpibID, myServerSettings.GpibRampConverters);
@@ -1238,14 +1239,14 @@ namespace AtticusServer
                             GPIBGroupChannelData channelData = gpibGroup.ChannelDatas[channelID];
                             if (channelData.DataType == GPIBGroupChannelData.GpibChannelDataType.raw_string)
                             {
-                                NationalInstruments.NI4882.Device gpibDevice = new NationalInstruments.NI4882.Device(hc.gpibBoardNumber(), hc.GpibAddress);
+                                NationalInstruments.NI4882.Device gpibDevice = new NationalInstruments.NI4882.Device(hc.gpibBoardNumber(), niAddress(hc.GpibAddress));
                                 gpibDevice.Write(
                                     GpibTask.AddNewlineCharacters(channelData.RawString));
                                 messageLog(this, new MessageEvent("Wrote GPIB data : " + channelData.RawString));
                             }
                             else if (channelData.DataType == GPIBGroupChannelData.GpibChannelDataType.string_param_string)
                             {
-                                NationalInstruments.NI4882.Device gpibDevice = new NationalInstruments.NI4882.Device(hc.gpibBoardNumber(), hc.GpibAddress);
+                                NationalInstruments.NI4882.Device gpibDevice = new NationalInstruments.NI4882.Device(hc.gpibBoardNumber(), niAddress(hc.GpibAddress));
                                 if (channelData.StringParameterStrings != null)
                                 {
                                     foreach (StringParameterString sps in channelData.StringParameterStrings)
@@ -2473,7 +2474,7 @@ namespace AtticusServer
 
                                     string deviceDescription = dev.ReadString();
 
-                                    string deviceName = "GPIB" + i + "/" + HardwareChannel.gpibAddressToShortString(address);
+                                    string deviceName = "GPIB" + i + "/" + gpibAddressToShortString(address);
                                     detectedDevices.Add(deviceName);
 
                                     myDeviceDescriptions.Add(deviceName, deviceDescription);
@@ -2501,9 +2502,9 @@ namespace AtticusServer
 
                                     HardwareChannel hc = new HardwareChannel(this.myServerSettings.ServerName,
                                         deviceName,
-                                        HardwareChannel.gpibAddressToShortString(address),
+                                        gpibAddressToShortString(address),
                                         deviceDescription,
-                                        HardwareChannel.HardwareConstants.ChannelTypes.gpib, address, gpibDeviceType);
+                                        HardwareChannel.HardwareConstants.ChannelTypes.gpib, dsAddress(address), gpibDeviceType);
                                     if (!serverSettings.ExcludedChannels.Contains(hc))
                                     {
                                         myHardwareChannels.Add(hc);
@@ -2511,7 +2512,7 @@ namespace AtticusServer
                                 }
                                 catch (Exception e)
                                 {
-                                    messageLog(this, new MessageEvent("Exception when attempting to communicate with GPIB device " + "GPIB" + i + "/" + HardwareChannel.gpibAddressToShortString(address) + ". " + e.Message + "\n" + e.StackTrace));
+                                    messageLog(this, new MessageEvent("Exception when attempting to communicate with GPIB device " + "GPIB" + i + "/" + gpibAddressToShortString(address) + ". " + e.Message + "\n" + e.StackTrace));
                                 }
                             }
                         }
@@ -2810,6 +2811,21 @@ namespace AtticusServer
 
 
         #region  Trivial Helper methods
+
+        private NationalInstruments.NI4882.Address niAddress(DataStructures.Gpib.Address address)
+        {
+            return new NationalInstruments.NI4882.Address(address.PrimaryAddress, address.SecondaryAddress);
+        }
+
+        private DataStructures.Gpib.Address dsAddress(NationalInstruments.NI4882.Address address)
+        {
+            return new DataStructures.Gpib.Address(address.PrimaryAddress, address.SecondaryAddress);
+        }
+
+        private string gpibAddressToShortString(NationalInstruments.NI4882.Address address)
+        {
+            return address.PrimaryAddress.ToString() + "," + address.SecondaryAddress.ToString();
+        }
 
         private string ReplaceCommonEscapeSequences(string s)
         {
