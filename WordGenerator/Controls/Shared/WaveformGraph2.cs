@@ -45,6 +45,8 @@ namespace WordGenerator.Controls
         //End margins
 
         //Scale tick locations and spacings
+        //These are all doubles which are type-cast into int when they are used to draw. The reason for this is to
+        //minimize roundoff error in drawing.
         private double g_y_tick_bottom;
         private double g_y_tick_top;
         private double g_x_tick_spacing;
@@ -58,7 +60,7 @@ namespace WordGenerator.Controls
         private double x_label_max;
 
 
-        private static readonly int g_ticksize=3;
+        private static readonly int g_ticksize=5;
         //Waveform in pixels
         private Point [] g_waveform;
         
@@ -140,7 +142,7 @@ namespace WordGenerator.Controls
         {
             if (editable)
             {
-                this.BackColor = Color.Snow;
+                this.BackColor = Color.Tan;
             }
         }
 
@@ -148,7 +150,7 @@ namespace WordGenerator.Controls
         {
             if (editable)
             {
-                this.BackColor = Color.SlateGray;
+                this.BackColor = Color.White;
             }
         }
 
@@ -194,7 +196,7 @@ namespace WordGenerator.Controls
             if (waveform!=null)
                 {
                     this.waveFormNameLabel.Text = waveform.WaveformName;
-                    this.channelLabel.Text = "placeholder";
+                    //this.channelLabel.Text = "placeholder";
 
                     //This I should probably keep over the two crap lines above
                     //his.waveFormNameLabel.Text = waveform.WaveformName;
@@ -320,10 +322,10 @@ namespace WordGenerator.Controls
             // e.Graphics.DrawLine(Pens.Bisque,0,0,this.Size.Width,this.Size.Height);
            
            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+           drawBorder(e);
            drawAxes(e);
            drawWaveform(e); 
-
-            base.OnPaint(e);
+           base.OnPaint(e);
         }
 
         private void drawAxes(PaintEventArgs e)
@@ -333,6 +335,7 @@ namespace WordGenerator.Controls
            
             //Draw x axis
             Pen axisDrawer=new Pen(Color.Black,1.4F);
+            Pen tickDrawer=new Pen(Color.White, 1.5F);
             e.Graphics.DrawLine(axisDrawer,g_mar_x_left,this.Size.Height-g_mar_y_bottom,this.Size.Width-g_mar_x_right,this.Size.Height-g_mar_y_bottom);
             //Draw y axis
             e.Graphics.DrawLine(axisDrawer, g_mar_x_left, g_mar_y_top, g_mar_x_left, this.Size.Height -g_mar_y_bottom);
@@ -350,7 +353,7 @@ namespace WordGenerator.Controls
                  if (tick_mark<g_mar_y_top)
                     break;
 
-                e.Graphics.DrawLine(axisDrawer, g_mar_x_left+g_x_plot_mar, tick_mark, g_mar_x_left+g_x_plot_mar-g_ticksize, tick_mark);
+                 e.Graphics.DrawLine(tickDrawer, g_mar_x_left + g_x_plot_mar, tick_mark, g_mar_x_left + g_x_plot_mar + g_ticksize, tick_mark);
                 Font scaleFont = new Font("Arial", 10);
                 SolidBrush scaleBrush= new SolidBrush(Color.Black);
 
@@ -374,7 +377,7 @@ namespace WordGenerator.Controls
                 if (tick_mark > this.Size.Width-g_mar_x_right)
                     break;
 
-                e.Graphics.DrawLine(axisDrawer, tick_mark, this.Size.Height - g_mar_y_bottom, tick_mark, this.Size.Height - g_mar_y_bottom+g_ticksize);
+                e.Graphics.DrawLine(tickDrawer, tick_mark, this.Size.Height - g_mar_y_bottom, tick_mark, this.Size.Height - g_mar_y_bottom - g_ticksize);
                 Font scaleFont = new Font("Arial", 10);
                 SolidBrush scaleBrush = new SolidBrush(Color.Black);
 
@@ -389,10 +392,19 @@ namespace WordGenerator.Controls
         private void drawWaveform(PaintEventArgs e)
         {
              
-            Pen plotDrawer = new Pen(Color.Blue,1.5F);
+            Pen plotDrawer = new Pen(Color.Chartreuse,1.5F);
             //Draw Waveform
             e.Graphics.DrawLines(plotDrawer, g_waveform);
         }
 
+        private void drawBorder(PaintEventArgs e)
+        {
+
+            
+            //Draws the black rectangle for the plot
+            System.Drawing.SolidBrush boxDrawer = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
+            e.Graphics.FillRectangle(boxDrawer, g_mar_x_left, g_mar_y_top, g_active_width, g_active_height);
+            boxDrawer.Dispose();
+        }
     }
 }
