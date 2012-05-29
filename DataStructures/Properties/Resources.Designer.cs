@@ -70,7 +70,7 @@ namespace DataStructures.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Apr 19, 2012.
+        ///   Looks up a localized string similar to May 29, 2012.
         /// </summary>
         internal static string BuildDateString {
             get {
@@ -79,7 +79,7 @@ namespace DataStructures.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tony Kim (MIT), Ryan Olf (Berkeley), Emmanuel Mimoun (ENS Paris).
+        ///   Looks up a localized string similar to Tony Kim (MIT), Ryan Olf (Berkeley), Emmanuel Mimoun (ENS Paris), Timur Rvachov (MIT).
         /// </summary>
         internal static string ContribsString {
             get {
@@ -88,7 +88,7 @@ namespace DataStructures.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1.57.
+        ///   Looks up a localized string similar to 1.59.
         /// </summary>
         internal static string VersionString {
             get {

@@ -1,19 +1,6 @@
 This file gives, for reference purposes, the version numbers of various libraries that 
 Projects in this solution are bound to, and known to work with.
 
-Cicero:
-NationalInstruments.UI.WindowsForms 8.9.35.246
-NationalInstruments.UI 8.9.35.246
-NationalInstruments.NI4882 9.0.35.157
-NationalInstruments.Common 9.1.35.159
-
-
-
-DataStructures:
-NationalInstruments.Common 9.1.20.159
-NationalInstruments.NI4882 9.0.35.157
-
-
 
 Atticus:
 NationalInstruments.Common 9.1.35.159

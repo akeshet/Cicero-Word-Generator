@@ -139,7 +139,7 @@
       <DependentUpon>OverridePage.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\Shared\NiceScale.cs" />
-    <Compile Include="Controls\Shared\WaveformGraph2.cs">
+    <Compile Include="Controls\Shared\WaveformGraph.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\VariablesTab\PermanentVariablesEditor.cs">
@@ -334,12 +334,6 @@
     <Compile Include="Controls\Shared\WaveformEditor.Designer.cs">
       <DependentUpon>WaveformEditor.cs</DependentUpon>
     </Compile>
-    <None Include="Controls\Shared\WaveformGraph.cs">
-      <SubType>UserControl</SubType>
-    </None>
-    <None Include="Controls\Shared\WaveformGraph.Designer.cs">
-      <DependentUpon>WaveformGraph.cs</DependentUpon>
-    </None>
     <Compile Include="Controls\Shared\WaveformGraphCollection.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -516,10 +510,6 @@
       <DependentUpon>WaveformEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="Controls\Shared\WaveformGraph.resx">
-      <DependentUpon>WaveformGraph.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </None>
     <EmbeddedResource Include="Controls\Shared\WaveformGraphCollection.resx">
       <DependentUpon>WaveformGraphCollection.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -528,7 +518,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>MainClientForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
