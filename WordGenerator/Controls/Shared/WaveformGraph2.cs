@@ -97,7 +97,7 @@ namespace WordGenerator.Controls
             this.channelLabel.Name = "channelLabel";
             this.channelLabel.Size = new System.Drawing.Size(104, 20);
             this.channelLabel.TabIndex = 2;
-            this.channelLabel.Text = "channelLabel";
+            this.channelLabel.Text = "";
             this.channelLabel.Click += new EventHandler(clicked);
             
             // 
