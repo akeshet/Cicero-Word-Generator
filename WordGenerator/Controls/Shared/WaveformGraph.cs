@@ -16,7 +16,7 @@ namespace WordGenerator.Controls
     /// 
     /// Some placeholder code included here, indicating what parts of the object need to get written.
     /// </summary>
-    public class WaveformGraph2 : UserControl
+    public class WaveformGraph : UserControl
     {
         private System.Windows.Forms.Label waveFormNameLabel;
         private System.Windows.Forms.Label channelLabel;
@@ -69,7 +69,7 @@ namespace WordGenerator.Controls
         private static readonly int NumSamples =2*(g_control_size - g_mar_x_right - g_mar_x_left);
         
 
-        public WaveformGraph2()
+        public WaveformGraph()
         {
             // Copied, with adaptations, from old WaveformGraph.Designer InitializeComponent
             #region InitializeComponent
@@ -129,7 +129,7 @@ namespace WordGenerator.Controls
             x_label_min=0;
         }
 
-        public WaveformGraph2(Waveform waveform, WaveformEditor waveformEditor, bool waveformEditable)
+        public WaveformGraph(Waveform waveform, WaveformEditor waveformEditor, bool waveformEditable)
             : this()
         {
             // TODO: Write this function.

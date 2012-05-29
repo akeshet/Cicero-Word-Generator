@@ -139,7 +139,7 @@
       <DependentUpon>OverridePage.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\Shared\NiceScale.cs" />
-    <Compile Include="Controls\Shared\WaveformGraph2.cs">
+    <Compile Include="Controls\Shared\WaveformGraph.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\VariablesTab\PermanentVariablesEditor.cs">

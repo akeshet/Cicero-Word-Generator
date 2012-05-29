@@ -11,7 +11,7 @@ namespace WordGenerator.Controls
 {
     public partial class WaveformGraphCollection : UserControl
     {
-        private List<WaveformGraph2> waveformGraphs;
+        private List<WaveformGraph> waveformGraphs;
 
         private WaveformEditor waveformEditor;
 
@@ -26,7 +26,7 @@ namespace WordGenerator.Controls
             InitializeComponent();
             this.AutoScroll = true;
             this.VScroll = true;
-            waveformGraphs = new List<WaveformGraph2>();
+            waveformGraphs = new List<WaveformGraph>();
             waveformEditor = new WaveformEditor();
         }
 
@@ -34,7 +34,7 @@ namespace WordGenerator.Controls
         {
             try
             {
-                foreach (WaveformGraph2 gr in waveformGraphs)
+                foreach (WaveformGraph gr in waveformGraphs)
                 {
                     gr.updateGraph(this, null);
                 }
@@ -48,7 +48,7 @@ namespace WordGenerator.Controls
         public void setWaveformEditor(WaveformEditor waveformEditor)
         {
             this.waveformEditor = waveformEditor;
-            foreach (WaveformGraph2 wg in waveformGraphs)
+            foreach (WaveformGraph wg in waveformGraphs)
             {
                 wg.setWaveformEditor(waveformEditor);
             }
@@ -57,7 +57,7 @@ namespace WordGenerator.Controls
         public void deactivateAllGraphs()
         {
             this.SuspendLayout();
-            foreach (WaveformGraph2 wg in waveformGraphs)
+            foreach (WaveformGraph wg in waveformGraphs)
             {
                 wg.Deactivate();
             }
@@ -89,11 +89,11 @@ namespace WordGenerator.Controls
             if (WordGenerator.mainClientForm.instance!=null)
                 WordGenerator.mainClientForm.instance.cursorWait();
 
-            List<WaveformGraph2> graphsToAdd = new List<WaveformGraph2>();
+            List<WaveformGraph> graphsToAdd = new List<WaveformGraph>();
 
             if (waveformGraphs != null)
             {
-                foreach (WaveformGraph2 wg in waveformGraphs)
+                foreach (WaveformGraph wg in waveformGraphs)
                 {
                     this.flowLayoutPanel1.Controls.Remove(wg);
                     wg.Dispose();
@@ -120,7 +120,7 @@ namespace WordGenerator.Controls
                     editable = waveformsEditable[i];
                 }
 
-                waveformGraphs.Add(new WaveformGraph2(waveforms[i], waveformEditor, editable));            
+                waveformGraphs.Add(new WaveformGraph(waveforms[i], waveformEditor, editable));            
                 waveformGraphs[i].Deactivate();
                 waveformGraphs[i].Visible = true;
                 waveformGraphs[i].gotClicked += new EventHandler(WaveformGraphCollection_gotClicked);
@@ -145,7 +145,7 @@ namespace WordGenerator.Controls
             if (WordGenerator.mainClientForm.instance != null)
                 WordGenerator.mainClientForm.instance.cursorWait();
 
-            WaveformGraph2 wg = sender as WaveformGraph2;
+            WaveformGraph wg = sender as WaveformGraph;
             if (wg == null)
             {
                 WordGenerator.mainClientForm.instance.cursorWaitRelease();
@@ -158,7 +158,7 @@ namespace WordGenerator.Controls
                 return;
             }
 
-            foreach (WaveformGraph2 graph in waveformGraphs)
+            foreach (WaveformGraph graph in waveformGraphs)
                 graph.Deactivate();
 
             wg.Activate();
@@ -166,7 +166,7 @@ namespace WordGenerator.Controls
             if (!updateAllGraphsEachTime)
                 waveformEditor.updateGraph += wg.updateGraph;
             else
-                foreach (WaveformGraph2 graph in waveformGraphs)
+                foreach (WaveformGraph graph in waveformGraphs)
                     waveformEditor.updateGraph += graph.updateGraph;
 
             waveformEditor.setWaveform(wg.getWaveform());
