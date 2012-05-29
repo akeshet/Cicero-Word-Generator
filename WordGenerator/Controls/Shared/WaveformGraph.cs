@@ -143,6 +143,8 @@ namespace WordGenerator.Controls
             if (editable)
             {
                 this.BackColor = Color.Tan;
+                this.channelLabel.BackColor = Color.Tomato;
+                this.waveFormNameLabel.BackColor = Color.Tomato;
             }
         }
 
@@ -151,6 +153,8 @@ namespace WordGenerator.Controls
             if (editable)
             {
                 this.BackColor = Color.White;
+                this.channelLabel.BackColor = Color.White;
+                this.waveFormNameLabel.BackColor = Color.White;
             }
         }
 
