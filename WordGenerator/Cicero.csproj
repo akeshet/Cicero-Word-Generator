@@ -58,9 +58,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Atticus-x86|AnyCPU'">
-    <OutputPath>bin\Atticus-x86\</OutputPath>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-x64|AnyCPU'">
     <OutputPath>bin\Release-x64\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
