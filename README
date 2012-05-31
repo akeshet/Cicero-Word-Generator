@@ -39,3 +39,6 @@ Virgil/
 
 clinamen/
    A MySql-database for runlogs, along with a python web interface for viewing them. Written by Ed Joe Su. Provided for completeness and as a reference for those using Cicero's RunLog MySQL support.
+
+ ReleaseBuilds/
+	Post-build scripts in Visual Studio are used to copy the output release builds of various projects into this directory. This directory is then suitable for zipping up and distributing to those who are interested in the binaries only without source code.
