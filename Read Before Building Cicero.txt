@@ -9,6 +9,18 @@ Visual Studio's "run" button).
 
 Recommended steps to workaround this bug when building Cicero for distribution:
 
-1) Select "Release" as the current Solution Configuration.
-2) Select Build -> Batch Build -> Select all Release or Release-x86 or 
-Release-x64 -> Rebuild.
+ -- Optional Pre-Build-Cleanup --
+1) Ensure that you do not have any important files within the Cicero directory
+structure that are not being track by the git repository (they will get deleted
+with the following command!).
+
+2) At the git command prompt, from the top level of the Cicero git repository,
+run "git -f -x -d"
+
+-- Building --
+[note -- the order of steps 4 and 5 doesn't matter, but they must come after
+step 3]
+
+3) Select "Release" as the current configuration and select Build -> Build Solution
+4) Select "Atticus-Release-x86" and then Build -> Build Solution
+5) Select "Atticus-Release-x64" and then Build -> Build Solution
