@@ -26,3 +26,9 @@ run "git -f -x -d"
 Select "Release" as the current configuration and select Build -> Build Solution
 5) Select "Atticus-Release-x86" and then Build -> Build Solution
 6) Select "Atticus-Release-x64" and then Build -> Build Solution
+
+
+
+Release build outputs are copied by post-build scripts to the ReleaseBuilds
+directory in the main solution directory. This ReleaseBuilds directory can
+then be zipped up for distribution.

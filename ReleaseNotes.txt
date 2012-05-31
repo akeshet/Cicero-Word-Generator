@@ -13,26 +13,40 @@ Renamed AtticusServerRuntime to AtticusServerCommunicator.
 Created some subdirectories in DataStructures for organizational purposes.
 Variety of small code changes, renames, deletions.
 
-Fix to minor bugs regarding naming of default settings file in Cicero (inconsistent presence
-or absence of the .set file extension). NOTE: You may need to copy your default settings file to SettingsData.set
-when migrating from a previous version.
+Fix to minor bugs regarding naming of default settings file in Cicero 
+(inconsistent presence or absence of the .set file extension). NOTE: You may 
+need to copy your default settings file to SettingsData.set when migrating 
+from a previous version.
 
 
 1.58
 -----
 
-Integrating MySql database support for Cicero. (Run information can be exported to a MySql database?). Reference implementation of the database is in the clinamen/ directory, written by Ed Joe Su.
+Integrating MySql database support for Cicero. (Run information can be exported
+to a MySql database?). Reference implementation of the database is in the 
+clinamen/ directory, written by Ed Joe Su.
 
-Recategorizing some Cicero Settings fields in the UI as part of the "Paris fork" (these are features that are unsupported and not well integrated,
-but left in for compatability purposes.
-
+Recategorizing some Cicero Settings fields in the UI as part of the "Paris fork"
+(these are features that are unsupported and not well integrated, but left in 
+for compatability purposes.
 
 
 1.59
 -----
 
-Eliminated a large number of unnecessary NI dependencies in Cicero and DataStructures projects, which will make
-compiling and running this suite substantially easier.
+Eliminated a large number of unnecessary NI dependencies in Cicero and 
+DataStructures projects, which will make compiling and running this suite 
+substantially easier.
 
-Cicero no longer uses NI WaveformGraph, thus no licensed copy of Measurement Studio is required to compile it.
-DataStructures no longer references NI GPIB Address structure, but rather a new clone of the same functionality.
+Cicero no longer uses NI WaveformGraph, thus no licensed copy of Measurement 
+Studio is required to compile it.
+
+DataStructures no longer references NI GPIB Address structure, but rather a 
+new clone of the same functionality.
+
+
+1.60
+-----
+
+Streamlined the build-for-distribution process, which will help avoid future
+errors in producing a working Cicero build.
