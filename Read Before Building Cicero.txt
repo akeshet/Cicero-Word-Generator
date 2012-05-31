@@ -1,0 +1,14 @@
+Visual Studio 2010 has a serious bug which Microsoft refuses to fix:
+
+https://connect.microsoft.com/VisualStudio/feedback/details/556158/batch-build-links-to-wrong-referenced-projects
+
+In essence, building Cicero by using Build -> Batch Build can produce bizarre
+and unpredictable broken builds, depending on which Solution configuration is
+selected when performing the build (this is the drop-down selection next to
+Visual Studio's "run" button).
+
+Recommended steps to workaround this bug when building Cicero for distribution:
+
+1) Select "Release" as the current Solution Configuration.
+2) Select Build -> Batch Build -> Select all Release or Release-x86 or 
+Release-x64 -> Rebuild.
