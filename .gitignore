@@ -12,3 +12,5 @@ obj/
 *.exe
 *.exe.config
 *.suo
+*.pdb
+*.vshost.exe.manifest
