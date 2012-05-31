@@ -596,6 +596,8 @@
 
 echo "Copying files to ReleaseBuilds directory"
 Copy "$(TargetDir)*.*" "$(SolutionDir)ReleaseBuilds\$(ProjectName)\"
+Copy "$(SolutionDir)ReleaseNotes.txt"  "$(SolutionDir)ReleaseBuilds\
+Copy "$(SolutionDir)Cicero Technical and User Manual.doc"  "$(SolutionDir)ReleaseBuilds\
 
 :end
 echo "Ran post-build script for $(ProjectName)"</PostBuildEvent>

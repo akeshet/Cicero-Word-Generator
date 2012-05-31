@@ -241,11 +241,15 @@ if $(ConfigurationName) == Release-x64 goto :x64
 :x86
 echo "Copying x86 dlls"
 Copy "$(SolutionDir)Opal Kelly\Opal Kelly 4.0.8\API-32\Csharp\libFrontPanel-pinv.dll" "$(TargetDir)"
+echo "Copying files to ReleaseBuilds directory"
+Copy "$(TargetDir)*.*" "$(SolutionDir)ReleaseBuilds\$(ProjectName)\x86\"
 goto :end
 
 :x64
 echo "Copying x64 dlls"
 Copy "$(SolutionDir)Opal Kelly\Opal Kelly 4.0.8\API-64\Csharp\libFrontPanel-pinv.dll" "$(TargetDir)"
+echo "Copying files to ReleaseBuilds directory"
+Copy "$(TargetDir)*.*" "$(SolutionDir)ReleaseBuilds\$(ProjectName)\x64\"
 goto :end
 
 :end
