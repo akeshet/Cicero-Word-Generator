@@ -570,7 +570,6 @@
     <None Include="Resources\Fortunes.txt" />
     <None Include="Resources\PulseIcon.ico" />
     <BaseApplicationManifest Include="Properties\app.manifest" />
-    <None Include="Properties\DataSources\DataStructures.Pulse.datasource" />
     <None Include="Resources\WordGeneratorV1BetaSplash.jpg" />
   </ItemGroup>
   <ItemGroup>
