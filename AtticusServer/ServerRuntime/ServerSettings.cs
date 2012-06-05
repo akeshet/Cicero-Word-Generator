@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using DataStructures;
 using System.ComponentModel;
+using System.Runtime.Serialization;
 
 namespace AtticusServer
 {
@@ -355,7 +356,35 @@ namespace AtticusServer
             this.aILogTimes = new List<AnalogInLogTime>();
             this.aIChannels = new List<AnalogInChannels>();
             this.aINames = new List<AnalogInNames>();
+            this.versionNumberAtFirstCreation = DataStructuresVersionNumber.CurrentVersion;
+            this.versionNumberAtLastSerialization = DataStructuresVersionNumber.CurrentVersion;
         }
+
+
+        #region Version Number Tracking
+
+        private DataStructuresVersionNumber versionNumberAtFirstCreation;
+
+        public DataStructuresVersionNumber VersionNumberAtFirstCreation
+        {
+            get { return versionNumberAtFirstCreation; }
+        }
+
+
+        private DataStructuresVersionNumber versionNumberAtLastSerialization;
+
+        public DataStructuresVersionNumber VersionNumberAtLastSerialization
+        {
+            get { return versionNumberAtLastSerialization; }
+        }
+
+        [OnSerializing]
+        private void setSerializationVersionNumber(StreamingContext sc)
+        {
+            this.versionNumberAtLastSerialization = DataStructuresVersionNumber.CurrentVersion;
+        }
+
+        #endregion
 
     }
 }
