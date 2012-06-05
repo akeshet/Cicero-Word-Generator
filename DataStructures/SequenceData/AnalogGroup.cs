@@ -59,7 +59,7 @@ namespace DataStructures
                 }
             }
 
-            if (timeResolution.myParameter.variable != null)
+            if (TimeResolution.myParameter.variable != null)
             {
                 ans.Add(timeResolution.myParameter.variable, "Time resolution.");
             }
