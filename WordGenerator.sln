@@ -5,10 +5,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		Code Overview.htm = Code Overview.htm
 		LibraryVersions.txt = LibraryVersions.txt
+		Local.testsettings = Local.testsettings
 		Read Before Building Cicero.txt = Read Before Building Cicero.txt
 		ReleaseNotes.txt = ReleaseNotes.txt
 		Syncronization.txt = Syncronization.txt
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 		Troubleshooting.txt = Troubleshooting.txt
+		WordGenerator.vsmdi = WordGenerator.vsmdi
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cicero", "WordGenerator\Cicero.csproj", "{AA55BBAF-9C99-4CC8-9FE3-D8F6A8B7EBA8}"
@@ -23,10 +26,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotMath", "dotmath\dotMath.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleServer", "ExampleServer\ExampleServer.csproj", "{E87C4F05-BCED-47F5-8A02-637A5A669E38}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CiceroSuiteUnitTests", "CiceroSuiteUnitTests\CiceroSuiteUnitTests.csproj", "{2C5EAE42-1165-4350-A549-A13F5F50C874}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
 		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = WordGenerator.vsmdi
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Atticus-Release-x64|Any CPU = Atticus-Release-x64|Any CPU
@@ -147,6 +155,26 @@ Global
 		{E87C4F05-BCED-47F5-8A02-637A5A669E38}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E87C4F05-BCED-47F5-8A02-637A5A669E38}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E87C4F05-BCED-47F5-8A02-637A5A669E38}.Release|Win32.ActiveCfg = Release|Any CPU
+		{2C5EAE42-1165-4350-A549-A13F5F50C874}.Atticus-Release-x64|Any CPU.ActiveCfg = Release|Any CPU
+		{2C5EAE42-1165-4350-A549-A13F5F50C874}.Atticus-Release-x64|Any CPU.Build.0 = Release|Any CPU
+		{2C5EAE42-1165-4350-A549-A13F5F50C874}.Atticus-Release-x64|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2C5EAE42-1165-4350-A549-A13F5F50C874}.Atticus-Release-x64|Mixed Platforms.Build.0 = Release|Any CPU
+		{2C5EAE42-1165-4350-A549-A13F5F50C874}.Atticus-Release-x64|Win32.ActiveCfg = Release|Any CPU
+		{2C5EAE42-1165-4350-A549-A13F5F50C874}.Atticus-Release-x86|Any CPU.ActiveCfg = Release|Any CPU
+		{2C5EAE42-1165-4350-A549-A13F5F50C874}.Atticus-Release-x86|Any CPU.Build.0 = Release|Any CPU
+		{2C5EAE42-1165-4350-A549-A13F5F50C874}.Atticus-Release-x86|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2C5EAE42-1165-4350-A549-A13F5F50C874}.Atticus-Release-x86|Mixed Platforms.Build.0 = Release|Any CPU
+		{2C5EAE42-1165-4350-A549-A13F5F50C874}.Atticus-Release-x86|Win32.ActiveCfg = Release|Any CPU
+		{2C5EAE42-1165-4350-A549-A13F5F50C874}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C5EAE42-1165-4350-A549-A13F5F50C874}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C5EAE42-1165-4350-A549-A13F5F50C874}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2C5EAE42-1165-4350-A549-A13F5F50C874}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2C5EAE42-1165-4350-A549-A13F5F50C874}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{2C5EAE42-1165-4350-A549-A13F5F50C874}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C5EAE42-1165-4350-A549-A13F5F50C874}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C5EAE42-1165-4350-A549-A13F5F50C874}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2C5EAE42-1165-4350-A549-A13F5F50C874}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2C5EAE42-1165-4350-A549-A13F5F50C874}.Release|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

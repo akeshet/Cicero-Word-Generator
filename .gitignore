@@ -14,3 +14,4 @@ obj/
 *.suo
 *.pdb
 *.vshost.exe.manifest
+TestResults/

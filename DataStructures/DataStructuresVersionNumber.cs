@@ -53,7 +53,14 @@ namespace DataStructures
         {
             get { return getCurrentVersion(); }
         }
-        
+
+        public bool isValid()
+        {
+            if (versionNumber == VERSION_NUMBER_PARSE_ERROR)
+                return false;
+
+            return true;
+        }
 
     }
 }
