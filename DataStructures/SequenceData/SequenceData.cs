@@ -23,6 +23,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using System.Text;
 using DataStructures;
+using System.Runtime.Serialization;
 
 namespace DataStructures
 {
@@ -30,6 +31,7 @@ namespace DataStructures
     public class SequenceData
     {
         #region Members and Properties
+
 
         private SequenceMode currentMode;
 
@@ -539,6 +541,7 @@ namespace DataStructures
             gpibGroups.Add(new GPIBGroup("Unnamed"));
             variables = new List<Variable>();
             lists = new ListData();
+            versionNumberAtFirstCreation = DataStructuresVersionNumber.CurrentVersion;
         }
 
         /// <summary>
@@ -2768,5 +2771,30 @@ namespace DataStructures
                 }
             }
         }
+
+        #region Version Number Tracking
+
+        private DataStructuresVersionNumber versionNumberAtFirstCreation;
+
+        public DataStructuresVersionNumber VersionNumberAtFirstCreation
+        {
+            get { return versionNumberAtFirstCreation; }
+        }
+
+
+        private DataStructuresVersionNumber versionNumberAtLastSerialization;
+
+        public DataStructuresVersionNumber VersionNumberAtLastSerialization
+        {
+            get { return versionNumberAtLastSerialization; }
+        }
+
+        [OnSerializing]
+        private void setSerializationVersionNumber(StreamingContext sc)
+        {
+            this.versionNumberAtFirstCreation = DataStructuresVersionNumber.CurrentVersion;
+        }
+
+        #endregion
     }
 }

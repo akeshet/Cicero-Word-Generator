@@ -5,6 +5,7 @@ using System.Text;
 
 namespace DataStructures
 {
+    [Serializable]
     public struct DataStructuresVersionNumber
     {
         private const double FIRST_TRACKED_VERSION = 1.6;
@@ -34,7 +35,7 @@ namespace DataStructures
                 return "<=1.60";
         }
 
-        private static DataStructuresVersionNumber getCurrentVersion()
+        public static DataStructuresVersionNumber getCurrentVersion()
         {
             string versionNumberString = DataStructures.Properties.Resources.VersionString;
             double number = 0;
@@ -52,7 +53,6 @@ namespace DataStructures
         {
             get { return getCurrentVersion(); }
         }
-
         
 
     }
