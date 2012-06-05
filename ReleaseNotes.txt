@@ -50,3 +50,12 @@ new clone of the same functionality.
 
 Streamlined the build-for-distribution process, which will help avoid future
 errors in producing a working Cicero build.
+
+
+1.61
+-----
+
+Internal changes -- version number tracking in saved Sequence and Settings
+files. This will allow for future improvements to backward compatibility
+should it be necessary to make radical changes to these objects which
+would break compatability without special conversion attention.
