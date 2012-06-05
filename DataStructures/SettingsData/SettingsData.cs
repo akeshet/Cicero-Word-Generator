@@ -234,6 +234,7 @@ namespace DataStructures
             myServerManager = new ServerManager();
             cameraPCs = new List<IPAdresses>();
             versionNumberAtFirstCreation = DataStructuresVersionNumber.CurrentVersion;
+            versionNumberAtLastSerialization = DataStructuresVersionNumber.CurrentVersion;
         }
 
         #region Version Number Tracking

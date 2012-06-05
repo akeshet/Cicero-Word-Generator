@@ -30,7 +30,7 @@ namespace DataStructures
             if (versionNumber == VERSION_NUMBER_PARSE_ERROR)
                 return "Error parsing version number string!";
             else if (versionNumber > FIRST_TRACKED_VERSION)
-                return versionNumber.ToString("{0.00}");
+                return versionNumber.ToString("0.00");
             else
                 return "<=1.60";
         }

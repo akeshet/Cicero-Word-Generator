@@ -542,6 +542,7 @@ namespace DataStructures
             variables = new List<Variable>();
             lists = new ListData();
             versionNumberAtFirstCreation = DataStructuresVersionNumber.CurrentVersion;
+            versionNumberAtLastSerialization = DataStructuresVersionNumber.CurrentVersion;
         }
 
         /// <summary>
