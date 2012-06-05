@@ -1,6 +1,7 @@
 ﻿using DataStructures;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 
 namespace CiceroSuiteUnitTests
 {
@@ -75,6 +76,30 @@ namespace CiceroSuiteUnitTests
                 "Invalid/unparseable version number in DataStructures. Please" +
                 " ensure DataStructures version number string is of the form" +
                 " X.YZ");
+        }
+
+        /// <summary>
+        ///A test for usedVariables
+        ///</summary>
+        [TestMethod()]
+        public void usedVariablesTest()
+        {
+            SequenceData target = new SequenceData(); // TODO: Initialize to an appropriate value
+            Assert.AreEqual(0, target.usedVariables().Count);
+
+            target.Variables.Add(new Variable());
+            target.Variables[0].VariableName = "Variable Name";
+            Assert.AreEqual(0, target.usedVariables().Count); // Unused variables in variable list should still not appear
+
+            target.TimeSteps.Add(new TimeStep());
+            target.TimeSteps[0].StepDuration.parameter.variable = target.Variables[0];
+            Assert.AreEqual(1, target.usedVariables().Count); // Unused variables in variable list should still not appear
+
+            target.TimeSteps.Add(new TimeStep());
+            target.TimeSteps[1].StepDuration.parameter.variable = target.Variables[0];
+            Assert.AreEqual(1, target.usedVariables().Count); // Variables should not appear duplicate times even if used in several places
+
+
         }
     }
 }
