@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SequenceDataTest.cs" />
+    <Compile Include="Storage_SaveAndLoadTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataStructures\DataStructures.csproj">
@@ -64,8 +65,19 @@
       <Project>{B2EBEDE8-441A-4CC2-80FF-5F290D528919}</Project>
       <Name>dotMath</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WordGenerator\Cicero.csproj">
+      <Project>{AA55BBAF-9C99-4CC8-9FE3-D8F6A8B7EBA8}</Project>
+      <Name>Cicero</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Shadow Include="Test References\WordGenerator.accessor" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
