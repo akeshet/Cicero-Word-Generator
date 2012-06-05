@@ -88,7 +88,7 @@ namespace DataStructures.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1.60.
+        ///   Looks up a localized string similar to 1.61.
         /// </summary>
         internal static string VersionString {
             get {
