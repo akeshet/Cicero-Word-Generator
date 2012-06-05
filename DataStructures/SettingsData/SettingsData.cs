@@ -257,7 +257,7 @@ namespace DataStructures
         [OnSerializing]
         private void setSerializationVersionNumber(StreamingContext sc)
         {
-            this.versionNumberAtFirstCreation = DataStructuresVersionNumber.CurrentVersion;
+            this.versionNumberAtLastSerialization = DataStructuresVersionNumber.CurrentVersion;
         }
 
         #endregion
