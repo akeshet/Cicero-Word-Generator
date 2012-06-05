@@ -233,6 +233,32 @@ namespace DataStructures
             myLogicalChannelManager = new LogicalChannelManager();
             myServerManager = new ServerManager();
             cameraPCs = new List<IPAdresses>();
+            versionNumberAtFirstCreation = DataStructuresVersionNumber.CurrentVersion;
         }
+
+        #region Version Number Tracking
+
+        private DataStructuresVersionNumber versionNumberAtFirstCreation;
+
+        public DataStructuresVersionNumber VersionNumberAtFirstCreation
+        {
+            get { return versionNumberAtFirstCreation; }
+        }
+
+
+        private DataStructuresVersionNumber versionNumberAtLastSerialization;
+
+        public DataStructuresVersionNumber VersionNumberAtLastSerialization
+        {
+            get { return versionNumberAtLastSerialization; }
+        }
+
+        [OnSerializing]
+        private void setSerializationVersionNumber(StreamingContext sc)
+        {
+            this.versionNumberAtFirstCreation = DataStructuresVersionNumber.CurrentVersion;
+        }
+
+        #endregion
     }
 }
