@@ -1153,8 +1153,10 @@ namespace DataStructures
         {
             int nSamples = this.nSamples(timestepSize);
 
-
             ans[0] = dwellWord().getDigitalValue(digitalID, TimeSteps, 0);
+
+            if (nSamples == 1)
+                return;
 
             int currentSample = 0;
             int currentStep = findNextEnabledTimestep(-1);
