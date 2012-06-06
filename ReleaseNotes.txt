@@ -60,4 +60,4 @@ files. This will allow for future improvements to backward compatibility
 should it be necessary to make radical changes to these objects which
 would break compatability without special conversion attention.
 
-Significant UI Optimizations when adding or removing variables.
+Significant UI Optimizations when adding or removing variables or pulses.
