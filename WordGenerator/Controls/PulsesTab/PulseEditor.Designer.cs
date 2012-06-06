@@ -48,7 +48,7 @@ namespace WordGenerator.Controls
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.pulseValue = new System.Windows.Forms.CheckBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.deleteButton = new System.Windows.Forms.Button();
             this.validityLabel = new System.Windows.Forms.Label();
             this.upButton = new System.Windows.Forms.Button();
             this.downButton = new System.Windows.Forms.Button();
@@ -268,13 +268,13 @@ namespace WordGenerator.Controls
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(494, 240);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(99, 23);
-            this.button1.TabIndex = 10;
-            this.button1.Text = "Delete Pulse";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.deleteButton.Location = new System.Drawing.Point(494, 240);
+            this.deleteButton.Name = "button1";
+            this.deleteButton.Size = new System.Drawing.Size(99, 23);
+            this.deleteButton.TabIndex = 10;
+            this.deleteButton.Text = "Delete Pulse";
+            this.deleteButton.UseVisualStyleBackColor = true;
+            this.deleteButton.Click += new System.EventHandler(this.deletebutton_Click);
             // 
             // validityLabel
             // 
@@ -358,7 +358,7 @@ namespace WordGenerator.Controls
             this.Controls.Add(this.downButton);
             this.Controls.Add(this.upButton);
             this.Controls.Add(this.validityLabel);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.deleteButton);
             this.Controls.Add(this.pulseValue);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.pulseDuration);
@@ -402,7 +402,7 @@ namespace WordGenerator.Controls
         private HorizontalParameterEditor pulseDuration;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.CheckBox pulseValue;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button deleteButton;
         private System.Windows.Forms.Label validityLabel;
         private System.Windows.Forms.Button upButton;
         private System.Windows.Forms.Button downButton;

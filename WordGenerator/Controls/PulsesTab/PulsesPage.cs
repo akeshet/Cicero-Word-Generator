@@ -22,6 +22,12 @@ namespace WordGenerator.Controls
         public void layout()
         {
             this.flowPanel1.SuspendLayout();
+            discardAndRefreshAllPulseEditors();
+            this.flowPanel1.ResumeLayout();
+        }
+
+        private void discardAndRefreshAllPulseEditors()
+        {
             foreach (PulseEditor pe in pulseEditors)
             {
                 this.flowPanel1.Controls.Remove(pe);
@@ -36,14 +42,13 @@ namespace WordGenerator.Controls
             foreach (Pulse pulse in Storage.sequenceData.DigitalPulses)
             {
                 PulseEditor pe = new PulseEditor(pulse);
-                pe.Location = new Point( pulseEditorPlaceholder.Location.X,
-                    pulseEditorPlaceholder.Location.Y + i * (5+pulseEditorPlaceholder.Height));
+                pe.Location = new Point(pulseEditorPlaceholder.Location.X,
+                    pulseEditorPlaceholder.Location.Y + i * (5 + pulseEditorPlaceholder.Height));
                 pulseEditors.Add(pe);
                 i++;
-               
+
             }
             flowPanel1.Controls.AddRange(pulseEditors.ToArray());
-            this.flowPanel1.ResumeLayout();
         }
 
         private void createPulse_Click(object sender, EventArgs e)

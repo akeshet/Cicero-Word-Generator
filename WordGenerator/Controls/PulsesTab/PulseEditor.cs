@@ -195,7 +195,7 @@ namespace WordGenerator.Controls
             updateElements();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void deletebutton_Click(object sender, EventArgs e)
         {
             foreach (TimeStep step in Storage.sequenceData.TimeSteps)
             {
