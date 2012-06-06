@@ -113,6 +113,62 @@ namespace WordGenerator.Controls
         {
             this.variablesPanel.SuspendLayout();
 
+            if (Storage.sequenceData == null || Storage.sequenceData.Variables == null)
+                discardAndRefreshAllVariableEditors();
+            else
+            {
+                //Count how many variable editors need to be shown
+                int shownVariables = 0;
+                foreach (Variable var in Storage.sequenceData.Variables)
+                {
+                    if (!var.IsSpecialVariable)
+                        shownVariables++;
+                }
+
+                // if more than we currently have, add some
+                if (shownVariables > variableEditors.Count)
+                {
+                    int extras = shownVariables - variableEditors.Count;
+                    for (int i = 0; i < extras; i++)
+                    {
+                        variablesPanel.Controls.Add(createAndRegisterNewVariableEditor(null));
+                    }
+                }
+                // if less than we currently have, remove some
+                else if (shownVariables < variableEditors.Count)
+                {
+                    int extras = variableEditors.Count - shownVariables;
+                    for (int i = 0; i < extras; i++)
+                    {
+                        variablesPanel.Controls.Remove(variableEditors[0]);
+                        variableEditors.RemoveAt(0);
+                    }
+                }
+
+                // now we have the correct number of variable editors, lets update them to point at
+                // the correct variables
+                int j = 0;
+                foreach (Variable var in Storage.sequenceData.Variables)
+                {
+                    if (!var.IsSpecialVariable)
+                    {
+                        variableEditors[j].setVariable(var);
+                        j++;
+                    }
+                }
+
+            }
+    
+
+            this.variablesPanel.ResumeLayout();
+
+        }
+
+        /// <summary>
+        /// Somewhat slow but guaranteed to work layout of variable editors.
+        /// </summary>
+        private void discardAndRefreshAllVariableEditors()
+        {
             foreach (VariableEditor ved in variableEditors)
             {
                 this.variablesPanel.Controls.Remove(ved);
@@ -121,29 +177,33 @@ namespace WordGenerator.Controls
 
             variableEditors.Clear();
 
-            if (Storage.sequenceData == null) return;
-            if (Storage.sequenceData.Variables == null) return;
-
-            foreach (Variable var in Storage.sequenceData.Variables)
+            if (Storage.sequenceData != null && Storage.sequenceData.Variables != null)
             {
-                if (!var.IsSpecialVariable)
+                foreach (Variable var in Storage.sequenceData.Variables)
                 {
-                    VariableEditor ved = new VariableEditor();
-                    ved.setVariable(var);
+                    if (!var.IsSpecialVariable)
+                    {
+                        createAndRegisterNewVariableEditor(var);
+                    }
+                }
+
+
+                this.variablesPanel.Controls.AddRange(variableEditors.ToArray());
+            }
+        }
+
+        private VariableEditor createAndRegisterNewVariableEditor(Variable var)
+        {
+            VariableEditor ved = new VariableEditor();
+            ved.setVariable(var);
             /*        int x = variableEditorPlaceholder.Location.X;
                     int y = variableEditorPlaceholder.Location.Y + variableEditors.Count * (variableEditorPlaceholder.Height + 5);
                     ved.Location = new Point(x, y);*/
-                    ved.variableDeleted += new EventHandler(ved_variableDeleted);
-              //      ved.SizeChanged += new EventHandler(ved_SizeChanged);
-                    ved.valueChanged += new EventHandler(ved_valueChanged);
-                    variableEditors.Add(ved);
-                }
-            }
-            
-            this.variablesPanel.Controls.AddRange(variableEditors.ToArray());
-
-            this.variablesPanel.ResumeLayout();
-
+            ved.variableDeleted += new EventHandler(ved_variableDeleted);
+            //      ved.SizeChanged += new EventHandler(ved_SizeChanged);
+            ved.valueChanged += new EventHandler(ved_valueChanged);
+            variableEditors.Add(ved);
+            return ved;
         }
 
         public void ved_valueChanged(object sender, EventArgs e)

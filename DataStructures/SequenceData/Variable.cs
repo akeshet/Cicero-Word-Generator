@@ -357,6 +357,11 @@ namespace DataStructures
 
         private bool isSpecialVariable;
 
+        /// <summary>
+        /// Special variables are NOT user-editable, and should not be
+        /// displayed in the variable editor list. They are computed internally
+        /// by Cicero.
+        /// </summary>
         public bool IsSpecialVariable
         {
             get { return isSpecialVariable; }

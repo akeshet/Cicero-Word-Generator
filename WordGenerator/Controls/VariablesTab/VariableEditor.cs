@@ -60,6 +60,10 @@ namespace WordGenerator.Controls
 
         public void setVariable(Variable var)
         {
+            if (this.variable == var)
+                return; // if the variable is already set appropriately,
+                        // do nothing and return immediately
+
             this.variable = var;
             if (this.variable.ListDriven) {
                 this.listSelector.Visible = true;
@@ -298,62 +302,9 @@ namespace WordGenerator.Controls
                     this.Size = new Size(220, 104);
                     this.BorderStyle = BorderStyle.FixedSingle;
 
-
-                    /*    foreach (DimensionedParameter dp in variable.CombinedValues)
-                        {
-                            HorizontalParameterEditor hpe = new HorizontalParameterEditor(dp);
-                            hpe.setUnitSelectorVisibility(false);
-                            combinedValues.Add(hpe);
-                            hpe.updateGUI += new EventHandler(hpe_updateGUI);
-                        }
-                        for (int i = 0; i < variable.Combiners.Count; i++)
-                        {
-                            ComboBox box = new ComboBox();
-                            box.Items.AddRange(Variable.combinerOperators);
-                            box.DropDownStyle = ComboBoxStyle.DropDownList;
-                            box.Width = 50;
-                            combineOperators.Add(box);
-                            combineOperatorsIndexMapping.Add(box, i);
-                    
-                            box.SelectedItem = variable.Combiners[i];
-                            box.SelectedIndexChanged += new EventHandler(box_SelectedIndexChanged);
-                        }
-
-                        // layout the component positions
-
-                        int y = this.valueSelector.Height + 5;
-
-                        for (int i=0; i<combinedValues.Count; i++) 
-                        {
-                            HorizontalParameterEditor hpe = combinedValues[i];
-                            hpe.Location = new Point(20, y);
-                            y += hpe.Height + 5;
-                            if (combineOperators.Count > i)
-                            {
-                                combineOperators[i].Location = new Point(20, y);
-                                y += combineOperators[i].Height + 5;
-                            }
-                        }
-
-                        derivedValueLabel.Location = new Point(5, y);
-                        derivedValueLabel.Visible = true;
-                        y += derivedValueLabel.Height;
-
-                        this.upButton.Location = new Point(upButton.Location.X, y);
-                        this.downButton.Location = new Point(downButton.Location.X, y);
-                        y += upButton.Height + 5;
-
-                        upButton.Visible = true;
-                        downButton.Visible = true;
-
-                        this.BorderStyle = BorderStyle.FixedSingle;
+                    updateDerivedValue();
 
 
-                        this.Size = new Size(220, y);
-                        this.Controls.AddRange(combinedValues.ToArray());
-                        this.Controls.AddRange(combineOperators.ToArray());
-
-                        updateDerivedValue();*/
                 }
             }
         }
