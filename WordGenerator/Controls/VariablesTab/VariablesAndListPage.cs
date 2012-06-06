@@ -111,6 +111,8 @@ namespace WordGenerator.Controls
 
         private void layoutVariables()
         {
+            this.variablesPanel.SuspendLayout();
+
             foreach (VariableEditor ved in variableEditors)
             {
                 this.variablesPanel.Controls.Remove(ved);
@@ -139,6 +141,8 @@ namespace WordGenerator.Controls
             }
             
             this.variablesPanel.Controls.AddRange(variableEditors.ToArray());
+
+            this.variablesPanel.ResumeLayout();
 
         }
 
