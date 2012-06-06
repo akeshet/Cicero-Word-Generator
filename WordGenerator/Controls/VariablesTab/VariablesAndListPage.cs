@@ -219,7 +219,19 @@ namespace WordGenerator.Controls
 
         void ved_variableDeleted(object sender, EventArgs e)
         {
-            this.layout();
+            if (sender is VariableEditor)
+            {
+                VariableEditor ved = (VariableEditor)sender;
+                // faster way to delete this variable from UI,
+                // if we know which specific editor it was
+                variableEditors.Remove(ved);
+                variablesPanel.Controls.Remove(ved);
+
+            }
+            else
+            {
+                this.layout();
+            }
         }
 
         private void addButton_Click(object sender, EventArgs e)
