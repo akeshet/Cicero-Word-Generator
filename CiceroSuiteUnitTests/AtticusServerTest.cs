@@ -75,6 +75,13 @@ namespace CiceroSuiteUnitTests
             ServerSettings result = AtticusServer_Accessor.loadServerSettings(filename);
             Assert.AreEqual(result.ServerName, "FermiServer", "Deserialized server settings object had incorrect name.");
             Assert.IsTrue(result.myDevicesSettings.ContainsKey("VdqjfUGLEm"), "Deserialized server settings object was missing a device.");
+
+            result = AtticusServer_Accessor.loadServerSettings("AtticusServerSettings-2.set");
+            Assert.AreEqual(result.ServerName, "Samwise", "Deserialized server settings object had incorrect name.");
+            Assert.IsTrue(result.myDevicesSettings.ContainsKey("GPIB0/19,0"), "Deserialized server was missing a GPIB device settings object.");
+            Assert.AreEqual(result.myDevicesSettings["GPIB0/19,0"].DeviceDescription, "Agilent Technologies,33250A,0,1.05-1.01-1.00-03-1\n",
+                "Deserialized server had wrong GPIB device description.");
+
         }
     }
 }
