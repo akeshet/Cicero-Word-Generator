@@ -28,27 +28,27 @@ namespace WordGenerator.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            this.flowPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.pulseEditorsFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.pulseEditorPlaceholder = new WordGenerator.Controls.PulseEditor();
             this.createPulse = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.cleanPulsesButton = new System.Windows.Forms.Button();
-            this.flowPanel1.SuspendLayout();
+            this.pulseEditorsFlowPanel.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // flowPanel1
             // 
-            this.flowPanel1.AutoScroll = true;
-            this.flowPanel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.flowPanel1.Controls.Add(this.pulseEditorPlaceholder);
-            this.flowPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowPanel1.Location = new System.Drawing.Point(183, 3);
-            this.flowPanel1.Name = "flowPanel1";
-            this.flowPanel1.Size = new System.Drawing.Size(898, 854);
-            this.flowPanel1.TabIndex = 0;
+            this.pulseEditorsFlowPanel.AutoScroll = true;
+            this.pulseEditorsFlowPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pulseEditorsFlowPanel.Controls.Add(this.pulseEditorPlaceholder);
+            this.pulseEditorsFlowPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pulseEditorsFlowPanel.Location = new System.Drawing.Point(183, 3);
+            this.pulseEditorsFlowPanel.Name = "flowPanel1";
+            this.pulseEditorsFlowPanel.Size = new System.Drawing.Size(898, 854);
+            this.pulseEditorsFlowPanel.TabIndex = 0;
             // 
             // pulseEditorPlaceholder
             // 
@@ -74,7 +74,7 @@ namespace WordGenerator.Controls
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.flowPanel1, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.pulseEditorsFlowPanel, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -111,7 +111,7 @@ namespace WordGenerator.Controls
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "PulsesPage";
             this.Size = new System.Drawing.Size(1084, 860);
-            this.flowPanel1.ResumeLayout(false);
+            this.pulseEditorsFlowPanel.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -120,7 +120,7 @@ namespace WordGenerator.Controls
 
         #endregion
 
-        private System.Windows.Forms.FlowLayoutPanel flowPanel1;
+        private System.Windows.Forms.FlowLayoutPanel pulseEditorsFlowPanel;
         private PulseEditor pulseEditorPlaceholder;
         private System.Windows.Forms.Button createPulse;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;

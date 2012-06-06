@@ -21,34 +21,90 @@ namespace WordGenerator.Controls
 
         public void layout()
         {
-            this.flowPanel1.SuspendLayout();
-            discardAndRefreshAllPulseEditors();
-            this.flowPanel1.ResumeLayout();
+            this.pulseEditorsFlowPanel.SuspendLayout();
+
+            if (Storage.sequenceData == null || Storage.sequenceData.DigitalPulses == null)
+                discardAndRefreshAllPulseEditors(); // the slow way
+            else
+            { // the fast way
+                if (pulseEditors.Count < Storage.sequenceData.DigitalPulses.Count)
+                {
+                    int extras = Storage.sequenceData.DigitalPulses.Count - pulseEditors.Count;
+                    for (int i = 0; i < extras; i++)
+                    {
+                        
+                        pulseEditorsFlowPanel.Controls.Add(createAndRegisterPulseEditor(null));
+                    }
+                }
+                else if (pulseEditors.Count > Storage.sequenceData.DigitalPulses.Count)
+                {
+                    int extras = pulseEditors.Count - Storage.sequenceData.DigitalPulses.Count;
+                    for (int i = 0; i < extras; i++)
+                    {
+                        pulseEditorsFlowPanel.Controls.Remove(pulseEditors[0]);
+                        pulseEditors.RemoveAt(0);
+                    }
+                }
+
+                for (int i = 0; i < pulseEditors.Count; i++)
+                {
+                    pulseEditors[i].setPulse(Storage.sequenceData.DigitalPulses[i]);
+                }
+
+                arrangePulseEditorLocations();
+            }
+
+            this.pulseEditorsFlowPanel.ResumeLayout();
+        }
+
+        private void arrangePulseEditorLocations()
+        {
+            for (int i = 0; i < pulseEditors.Count; i++)
+            {
+                pulseEditors[i].Location = new Point(pulseEditorPlaceholder.Location.X,
+                    pulseEditorPlaceholder.Location.Y + i * (5 + pulseEditorPlaceholder.Height));
+            }
         }
 
         private void discardAndRefreshAllPulseEditors()
         {
             foreach (PulseEditor pe in pulseEditors)
             {
-                this.flowPanel1.Controls.Remove(pe);
+                this.pulseEditorsFlowPanel.Controls.Remove(pe);
                 pe.Dispose();
             }
             pulseEditors.Clear();
 
-            this.flowPanel1.ResumeLayout();
-            this.flowPanel1.SuspendLayout();
+            this.pulseEditorsFlowPanel.ResumeLayout();
+            this.pulseEditorsFlowPanel.SuspendLayout();
 
-            int i = 0;
+          
             foreach (Pulse pulse in Storage.sequenceData.DigitalPulses)
             {
-                PulseEditor pe = new PulseEditor(pulse);
-                pe.Location = new Point(pulseEditorPlaceholder.Location.X,
-                    pulseEditorPlaceholder.Location.Y + i * (5 + pulseEditorPlaceholder.Height));
-                pulseEditors.Add(pe);
-                i++;
-
+                createAndRegisterPulseEditor(pulse);  
             }
-            flowPanel1.Controls.AddRange(pulseEditors.ToArray());
+
+            arrangePulseEditorLocations();
+
+            pulseEditorsFlowPanel.Controls.AddRange(pulseEditors.ToArray());
+        }
+
+        private PulseEditor createAndRegisterPulseEditor(Pulse pulse)
+        {
+            PulseEditor pe = new PulseEditor(pulse);
+            pulseEditors.Add(pe);
+            pe.pulseDeleted += new EventHandler(pe_pulseDeleted);
+            return pe;
+        }
+
+        void pe_pulseDeleted(object sender, EventArgs e)
+        {
+            if (sender is PulseEditor)
+            {
+                PulseEditor pe = sender as PulseEditor;
+                pulseEditors.Remove(pe);
+                pulseEditorsFlowPanel.Controls.Remove(pe);
+            }
         }
 
         private void createPulse_Click(object sender, EventArgs e)

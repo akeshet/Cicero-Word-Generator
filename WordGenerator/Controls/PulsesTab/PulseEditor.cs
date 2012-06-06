@@ -12,6 +12,7 @@ namespace WordGenerator.Controls
     public partial class PulseEditor : UserControl
     {
         public Pulse pulse;
+        public event EventHandler pulseDeleted;
 
         public PulseEditor()
         {
@@ -30,6 +31,14 @@ namespace WordGenerator.Controls
         public PulseEditor(Pulse pulse)
             : this()
         {
+            setPulse(pulse);
+        }
+
+        public void setPulse(Pulse pulse)
+        {
+            if (this.pulse == pulse)
+                return; // if already set corrently, return immediately
+
             if (pulse != null)
             {
                 this.pulse = pulse;
@@ -210,7 +219,10 @@ namespace WordGenerator.Controls
             }
 
             Storage.sequenceData.DigitalPulses.Remove(pulse);
-            WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+            if (pulseDeleted == null)
+                WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData); // the slow way to delete pulse from UI
+            else
+                pulseDeleted(this, null);   // the fast way, if the hook exists.
         }
 
         private void upButton_Click(object sender, EventArgs e)
