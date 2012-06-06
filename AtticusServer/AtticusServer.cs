@@ -52,41 +52,13 @@ namespace AtticusServer
                 // Maximum server uptime: 1000 days. Lets see if this solves some of those "disconnection" issues we had
                 System.Runtime.Remoting.Lifetime.LifetimeServices.LeaseTime = new TimeSpan(1000, 0, 0, 0, 0);
 
-                BinaryFormatter b = new BinaryFormatter();
+
                 ServerSettings serverSettings;
-                FileStream fs = null; 
+                String serverSettingsFilesName = FileNameStrings.DefaultServerSettingsDataFile;
 
                 try
                 {
-                    fs = new FileStream(FileNameStrings.DefaultServerSettingsDataFile, FileMode.Open, FileAccess.Read, FileShare.None);
-                    serverSettings = (ServerSettings)b.Deserialize(fs);
-                    fs.Close();
-                }
-                catch (System.ArgumentException e)
-                {
-                    // Cludgey fix to incompatability in serialization between different version of NI4882.Address. 
-                    // Temporarily modify HardwareChannel so that gpibAddress is marked as nonserlialized. This allows us to deserialize
-                    // most of the settings object, but we lose the gpibaddress information.
-                    if (e.Message.Contains("NationalInstruments.NI4882.Address"))
-                    {
-
-
-                        if (fs != null)
-                            try
-                            {
-                                fs.Close();
-                            }
-                            catch (Exception) { };
-
-                        fs = new FileStream(FileNameStrings.DefaultServerSettingsDataFile, FileMode.Open, FileAccess.Read, FileShare.None);
-                        b = new BinaryFormatter();
-                        b.Binder = new HardwareChannel.GpibBinderFix();
-                        serverSettings = (ServerSettings)b.Deserialize(fs);
-                        fs.Close();
-
-                    }
-                    else
-                        throw;
+                    serverSettings = loadServerSettings(serverSettingsFilesName);
                 }
                 catch (Exception e)
                 {
@@ -94,6 +66,7 @@ namespace AtticusServer
                     Console.WriteLine("Proceeding with blank settings.");
                     serverSettings = new ServerSettings();
                 }
+                
 
                 Console.WriteLine("Creating AtticusServerRuntime object...");
 
@@ -117,6 +90,59 @@ namespace AtticusServer
             {
                 display_unhandled_exception(e);
             }
+        }
+
+        /// <summary>
+        /// Attempts to load server settings object. If one of the fixable System.ArgumentException
+        /// arises, due to a naming incompatability between GPIB Address objects, attempts to fix that
+        /// and continues loading. If any other exception occurs, the exception is rethrown.
+        /// 
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns>loaded server settings object</returns>
+        private static ServerSettings loadServerSettings(string filename)
+        {
+
+            BinaryFormatter b = new BinaryFormatter();
+            FileStream fs = null;
+            ServerSettings serverSettings = null;
+
+            try
+            {
+                fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.None);
+                serverSettings = (ServerSettings)b.Deserialize(fs);
+                fs.Close();
+                return serverSettings;
+            }
+            catch (System.ArgumentException e)
+            {
+                // Cludgey fix to incompatability in serialization between different version of NI4882.Address. 
+                // Temporarily modify HardwareChannel so that gpibAddress is marked as nonserlialized. This allows us to deserialize
+                // most of the settings object, but we lose the gpibaddress information.
+                if (e.Message.Contains("NationalInstruments.NI4882.Address"))
+                {
+
+
+                    if (fs != null)
+                        try
+                        {
+                            fs.Close();
+                        }
+                        catch (Exception) { };
+
+                    fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.None);
+                    b = new BinaryFormatter();
+                    b.Binder = new HardwareChannel.GpibBinderFix();
+                    serverSettings = (ServerSettings)b.Deserialize(fs);
+                    fs.Close();
+
+                    return serverSettings;
+
+                }
+                else
+                    throw;
+            }
+            
         }
 
         public static void saveServerSettings(string fileName, ServerSettings serverSettings)
