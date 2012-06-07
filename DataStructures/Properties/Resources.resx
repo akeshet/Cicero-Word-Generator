@@ -132,6 +132,6 @@
   </data>
   <data name="VersionString" xml:space="preserve">
     <value>1.61</value>
-    <comment>Must be of the form X.YY</comment>
+    <comment>Must be of the form X.YZ</comment>
   </data>
 </root>

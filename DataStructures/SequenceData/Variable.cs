@@ -9,6 +9,8 @@ namespace DataStructures
     [Serializable, TypeConverter(typeof(ExpandableObjectConverter))]
     public class Variable
     {
+        public static readonly string EQUATION_ERROR_RECURSIVE = "Recursive variable reference detected.";
+
         /// <summary>
         /// This field is to be used only in very limited circumstances. When it is set to null, it makes no difference
         /// to the usual behavior of the variable. When it is non-null, it will cause this variable to get its value from the 
@@ -86,17 +88,29 @@ namespace DataStructures
             set { variableFormula = value; }
         }
 
-        
+        /// <summary>
+        /// If variable's DerivedVariable flag is set to true, evaluates the
+        /// equation in VariableFormula and stores the result in VariableValue. 
+        /// 
+        /// In case of an error (such as recursive variable references, or
+        /// references to variables that don't exist, or parse errors) returns a user-comprehensible
+        /// string description of the problem.
+        /// 
+        /// Returns null if successfull with no errors.
+        /// </summary>
+        /// <param name="allVariables">List of all other variable objects, in order to track down 
+        /// values of other referenced variables.</param>
+        /// <returns></returns>
         public string parseVariableFormula(List<Variable> allVariables) 
         {
             return parseVariableFormula(allVariables, new List<Variable>());
         }
 
-        public string parseVariableFormula(List<Variable> allVariables, List<Variable> treeVariables)
+        private string parseVariableFormula(List<Variable> allVariables, List<Variable> treeVariables)
         {
 
             if (treeVariables.Contains(this))
-                return "Recursive variable reference detected.";
+                return EQUATION_ERROR_RECURSIVE;
 
             treeVariables.Add(this);
 
@@ -127,39 +141,38 @@ namespace DataStructures
 
             if (usedVariables != null)
             {
-                if (usedVariables.Length != 0)
+
+
+                for (int i = 0; i < usedVariables.Length; i++)
                 {
 
-                    for (int i = 0; i < usedVariables.Length; i++)
+                    if (!variableNames.ContainsKey(usedVariables[i]))
                     {
-
-                        if (!variableNames.ContainsKey(usedVariables[i]))
-                        {
-                            VariableValue = 0;
-                            return "Unable to parse formula. There is no variable named " + usedVariables[i] + ".";
-                        }
-
-                        if (variableNames[usedVariables[i]] == null)
-                        {
-                            VariableValue = 0;
-                            return "Unable to parse formula. There are multiple variables named " + usedVariables[i] + ".";
-                        }
-
-                        Variable currentVar = variableNames[usedVariables[i]];
-
-                        if (currentVar.DerivedVariable)
-                        {
-                            string err = currentVar.parseVariableFormula(allVariables, treeVariables);
-                            if (err != null)
-                            {
-                                VariableValue = 0;
-                                return err;
-                            }
-                        }
-
-                        eq.SetVariable(usedVariables[i], currentVar.VariableValue);
+                        VariableValue = 0;
+                        return "Unable to parse formula. There is no variable named " + usedVariables[i] + ".";
                     }
+
+                    if (variableNames[usedVariables[i]] == null)
+                    {
+                        VariableValue = 0;
+                        return "Unable to parse formula. There are multiple variables named " + usedVariables[i] + ".";
+                    }
+
+                    Variable currentVar = variableNames[usedVariables[i]];
+
+                    if (currentVar.DerivedVariable)
+                    {
+                        string err = currentVar.parseVariableFormula(allVariables, treeVariables);
+                        if (err != null)
+                        {
+                            VariableValue = 0;
+                            return err;
+                        }
+                    }
+
+                    eq.SetVariable(usedVariables[i], currentVar.VariableValue);
                 }
+
             }
 
             try
@@ -232,7 +245,12 @@ namespace DataStructures
         [Description("The name of this variable.")]
         public string VariableName
         {
-            get { return variableName; }
+            get
+            {
+                if (variableName == null)
+                    variableName = "";
+                return variableName;
+            }
             set { variableName = value; }
         }
 

@@ -73,6 +73,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SequenceDataTest.cs" />
     <Compile Include="Storage_SaveAndLoadTest.cs" />
+    <Compile Include="VariableTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AtticusServer\Atticus.csproj">
