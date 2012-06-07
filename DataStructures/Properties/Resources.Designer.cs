@@ -88,6 +88,15 @@ namespace DataStructures.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to unreleased.
+        /// </summary>
+        internal static string RevisionString {
+            get {
+                return ResourceManager.GetString("RevisionString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 1.61.
         /// </summary>
         internal static string VersionString {

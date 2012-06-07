@@ -8,6 +8,8 @@ namespace DataStructures
     [Serializable]
     public struct DataStructuresVersionNumber
     {
+
+
         private const double FIRST_TRACKED_VERSION = 1.6;
         private const double VERSION_NUMBER_PARSE_ERROR = -1;
         private const double VERSION_NUMBER_UNASSIGNED = 0;
