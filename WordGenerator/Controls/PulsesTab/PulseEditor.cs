@@ -34,13 +34,21 @@ namespace WordGenerator.Controls
             setPulse(pulse);
         }
 
+        // flag used to silence user-action event handlers from firing
+        private bool updatingPulse = false;
+
         public void setPulse(Pulse pulse)
         {
             if (this.pulse == pulse)
                 return; // if already set corrently, return immediately
 
+            
+
             if (pulse != null)
             {
+
+                updatingPulse = true;
+
                 this.pulse = pulse;
 
                 this.startDelayTime.setParameterData(pulse.startDelay);
@@ -63,15 +71,37 @@ namespace WordGenerator.Controls
 
                 this.getValueFromVariableCheckBox.Checked = pulse.ValueFromVariable;
 
+                this.autoNameCheckBox.Checked = pulse.AutoName;
+
+                updatingPulse = false;
+
             }
 
             updateElements();
+
         }
 
         private void updateElements()
         {
+            updatingPulse = true;
+
             if (pulse != null)
             {
+
+
+                // TODO: TIMUR
+                // Read and understand this if-else code,
+                // then delete this comment.
+                if (pulse.AutoName)
+                {
+                    pulseNameTextBox.Enabled = false;
+                    pulseNameTextBox.Text = pulse.PulseName;
+                }
+                else
+                {
+                    pulseNameTextBox.Enabled = true;
+                }
+
                 if (pulse.startCondition == Pulse.PulseTimingCondition.Duration)
                 {
                     this.startDelayTime.Enabled = false;
@@ -145,63 +175,88 @@ namespace WordGenerator.Controls
                     con.Enabled = false;
                 }
             }
+
+            updatingPulse = false;
         }
 
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void pulseNameTextBox_TextChanged(object sender, EventArgs e)
         {
-            pulse.PulseName = pulseNameTextBox.Text;
+            if (!updatingPulse)
+            {
+                pulse.PulseName = pulseNameTextBox.Text;
+            }
         }
 
         private void pulseDescriptionTextBox_TextChanged(object sender, EventArgs e)
         {
-            pulse.PulseDescription = pulseDescriptionTextBox.Text;
+            if (!updatingPulse)
+            {
+                pulse.PulseDescription = pulseDescriptionTextBox.Text;
+            }
         }
 
         private void startCondition_SelectedIndexChanged(object sender, EventArgs e)
         {
-            pulse.startCondition = (Pulse.PulseTimingCondition) startCondition.SelectedItem;
-            updateElements();
+            if (!updatingPulse)
+            {
+                pulse.startCondition = (Pulse.PulseTimingCondition)startCondition.SelectedItem;
+                updateElements();
+            }
         }
 
         private void startDelayEnabled_CheckedChanged(object sender, EventArgs e)
         {
-            pulse.startDelayEnabled = startDelayEnabled.Checked;
-            updateElements();
+            if (!updatingPulse)
+            {
+                pulse.startDelayEnabled = startDelayEnabled.Checked;
+                updateElements();
+            }
         }
 
         private void startDelayed_CheckedChanged(object sender, EventArgs e)
         {
-            pulse.startDelayed = startDelayed.Checked;
-            updateElements();
+            if (!updatingPulse)
+            {
+                pulse.startDelayed = startDelayed.Checked;
+                updateElements();
+            }
         }
 
         private void endCondition_SelectedIndexChanged(object sender, EventArgs e)
         {
-            pulse.endCondition = (Pulse.PulseTimingCondition) endCondition.SelectedItem;
-            updateElements();
+            if (!updatingPulse)
+            {
+                pulse.endCondition = (Pulse.PulseTimingCondition)endCondition.SelectedItem;
+                updateElements();
+            }
         }
 
         private void endDelayEnabled_CheckedChanged(object sender, EventArgs e)
         {
-            pulse.endDelayEnabled = endDelayEnabled.Checked;
-            updateElements();
+            if (!updatingPulse)
+            {
+                pulse.endDelayEnabled = endDelayEnabled.Checked;
+                updateElements();
+            }
         }
 
         private void endDelayed_CheckedChanged(object sender, EventArgs e)
         {
-            pulse.endDelayed = endDelayed.Checked;
-            updateElements();
+            if (!updatingPulse)
+            {
+                pulse.endDelayed = endDelayed.Checked;
+                updateElements();
+            }
         }
 
         private void pulseValue_CheckedChanged(object sender, EventArgs e)
         {
-            pulse.PulseValue = pulseValue.Checked;
-            updateElements();
+            if (!updatingPulse)
+            {
+                pulse.PulseValue = pulseValue.Checked;
+                updateElements();
+            }
         }
 
         private void deletebutton_Click(object sender, EventArgs e)
@@ -257,40 +312,48 @@ namespace WordGenerator.Controls
             WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
         }
 
-        private bool ignoreValueVariableComboBoxEvents = false;
+        /// <summary>
+        /// Flag indicating that variables list in the combo box is 
+        /// in the process of being updated, used to silence
+        /// events from being triggered
+        /// </summary>
+        private bool updatingVariables = false;
 
         private void getValueFromVariableCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            this.pulse.ValueFromVariable = getValueFromVariableCheckBox.Checked;
-
-            if (this.pulse.ValueFromVariable)
+            if (!updatingPulse)
             {
+                this.pulse.ValueFromVariable = getValueFromVariableCheckBox.Checked;
 
-
-                populateValueVariableComboBox();
-
-                if (pulse.ValueVariable != null)
+                if (this.pulse.ValueFromVariable)
                 {
-                    valueVariableComboBox.SelectedItem = pulse.ValueVariable;
-                }
 
-                valueVariableComboBox.Visible = true;
-            }
-            else
-            {
-                valueVariableComboBox.Visible = false;
+
+                    populateValueVariableComboBox();
+
+                    if (pulse.ValueVariable != null)
+                    {
+                        valueVariableComboBox.SelectedItem = pulse.ValueVariable;
+                    }
+
+                    valueVariableComboBox.Visible = true;
+                }
+                else
+                {
+                    valueVariableComboBox.Visible = false;
+                }
             }
         }
 
         private void populateValueVariableComboBox()
         {
-            ignoreValueVariableComboBoxEvents = true;
+            updatingVariables = true;
             valueVariableComboBox.Items.Clear();
             foreach (Variable var in Storage.sequenceData.Variables)
             {
                 valueVariableComboBox.Items.Add(var);
             }
-            ignoreValueVariableComboBoxEvents = false;
+            updatingVariables = false;
         }
 
         private void valueVariableComboBox_DropDown(object sender, EventArgs e)
@@ -300,9 +363,22 @@ namespace WordGenerator.Controls
 
         private void valueVariableComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!ignoreValueVariableComboBoxEvents)
+            if (!updatingVariables && !updatingPulse)
             {
                 pulse.ValueVariable = valueVariableComboBox.SelectedItem as Variable;
+            }
+        }
+
+        private void autoNameCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            // TODO: TIMUR
+            // Read and understand this code,
+            // then delete this comment.
+            if (!updatingPulse)
+            {
+                if (pulse != null)
+                    pulse.AutoName = autoNameCheckBox.Checked;
+                updateElements();
             }
         }
 

@@ -10,6 +10,33 @@ namespace DataStructures
     public class Pulse
     {
 
+        private bool autoName;
+
+        public bool AutoName
+        {
+            get { return autoName; }
+            set
+            {
+                autoName = value;
+                if (AutoName)
+                    updateAutoName();
+            }
+        }
+
+        public void updateAutoName()
+        {
+            if (AutoName)
+            {
+                string automaticName = "automatic name";
+                // TODO: TIMUR
+                // Calculate what the automatic name should be
+                // 
+                //
+                this.PulseName = automaticName;
+            }
+        }
+
+
         public static bool Equivalent(Pulse a, Pulse b)
         {
             if (a.endCondition != b.endCondition)
@@ -55,6 +82,14 @@ namespace DataStructures
                 {
                     ValueVariable = null;
                 }
+
+                // TODO: TIMUR
+                // Put these auto-name-update hooks into the 
+                // settors for other properties in the pulse
+                // that might affect the name
+                // (pretty much all of them)
+                if (AutoName)
+                    updateAutoName();
             }
         }
         private Variable valueVariable;
@@ -79,6 +114,7 @@ namespace DataStructures
             this.startDelay = new DimensionedParameter(copyMe.startDelay);
             this.startDelayed = copyMe.startDelayed;
             this.startDelayEnabled = copyMe.startDelayEnabled;
+            this.autoName = copyMe.autoName;
         }
 
         private string pulseName;
@@ -91,7 +127,13 @@ namespace DataStructures
                     pulseName = "";
                 }
                 return pulseName; }
-            set { pulseName = value; }
+            set { 
+                // TODO: TIMUR
+                // Pulse should not be renameable if autoName is set to true
+                // so the following line should not run in that case
+                pulseName = value; 
+            
+            }
         }
         private string pulseDescription;
 

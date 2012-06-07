@@ -56,6 +56,7 @@ namespace WordGenerator.Controls
             this.getValueFromVariableCheckBox = new System.Windows.Forms.CheckBox();
             this.valueVariableComboBox = new System.Windows.Forms.ComboBox();
             this.pulseDuration = new WordGenerator.Controls.HorizontalParameterEditor();
+            this.autoNameCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -168,7 +169,6 @@ namespace WordGenerator.Controls
             this.label3.Size = new System.Drawing.Size(54, 13);
             this.label3.TabIndex = 0;
             this.label3.Text = "Condition:";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // groupBox2
             // 
@@ -266,10 +266,10 @@ namespace WordGenerator.Controls
             this.pulseValue.UseVisualStyleBackColor = true;
             this.pulseValue.CheckedChanged += new System.EventHandler(this.pulseValue_CheckedChanged);
             // 
-            // button1
+            // deleteButton
             // 
             this.deleteButton.Location = new System.Drawing.Point(494, 240);
-            this.deleteButton.Name = "button1";
+            this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(99, 23);
             this.deleteButton.TabIndex = 10;
             this.deleteButton.Text = "Delete Pulse";
@@ -336,8 +336,8 @@ namespace WordGenerator.Controls
             this.valueVariableComboBox.Size = new System.Drawing.Size(110, 21);
             this.valueVariableComboBox.TabIndex = 16;
             this.valueVariableComboBox.Visible = false;
-            this.valueVariableComboBox.SelectedIndexChanged += new System.EventHandler(this.valueVariableComboBox_SelectedIndexChanged);
             this.valueVariableComboBox.DropDown += new System.EventHandler(this.valueVariableComboBox_DropDown);
+            this.valueVariableComboBox.SelectedIndexChanged += new System.EventHandler(this.valueVariableComboBox_SelectedIndexChanged);
             // 
             // pulseDuration
             // 
@@ -347,11 +347,23 @@ namespace WordGenerator.Controls
             this.pulseDuration.TabIndex = 7;
             this.pulseDuration.UnitSelectorVisibility = true;
             // 
+            // autoNameCheckBox
+            // 
+            this.autoNameCheckBox.AutoSize = true;
+            this.autoNameCheckBox.Location = new System.Drawing.Point(177, 5);
+            this.autoNameCheckBox.Name = "autoNameCheckBox";
+            this.autoNameCheckBox.Size = new System.Drawing.Size(77, 17);
+            this.autoNameCheckBox.TabIndex = 17;
+            this.autoNameCheckBox.Text = "Auto-name";
+            this.autoNameCheckBox.UseVisualStyleBackColor = true;
+            this.autoNameCheckBox.CheckedChanged += new System.EventHandler(this.autoNameCheckBox_CheckedChanged);
+            // 
             // PulseEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.autoNameCheckBox);
             this.Controls.Add(this.valueVariableComboBox);
             this.Controls.Add(this.getValueFromVariableCheckBox);
             this.Controls.Add(this.duplicateButton);
@@ -409,5 +421,6 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.Button duplicateButton;
         private System.Windows.Forms.CheckBox getValueFromVariableCheckBox;
         private System.Windows.Forms.ComboBox valueVariableComboBox;
+        private System.Windows.Forms.CheckBox autoNameCheckBox;
     }
 }
