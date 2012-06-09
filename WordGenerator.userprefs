@@ -1,0 +1,17 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Disassembly">
+    <Files>
+      <File FileName="AtticusServer/ServerRuntime/AtticusServerCommunicator.cs" Line="10" Column="7" />
+      <File FileName="WordGenerator/Controls/MainClientForm.cs" Line="343" Column="21" />
+      <File FileName="WordGenerator/Program.cs" Line="79" Column="1" />
+      <File FileName="Disassembly" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/akeshet/Documents/Software/Cicero-Word-Generator/WordGenerator/Program.cs" line="79" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
