@@ -265,34 +265,34 @@ namespace WordGenerator
             */
 
             // bind F11 hotkey to server manager:
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F11);
+            SafeRegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F11);
             hotKeyBindings.Add(this.serverManagerButton);
 
 
             // bind F1 to F8 to appropriate tab pages
 
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F1);
+            SafeRegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F1);
             hotKeyBindings.Add(this.sequencePage);
 
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F2);
+            SafeRegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F2);
             hotKeyBindings.Add(this.overrideTab);
 
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F3);
+            SafeRegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F3);
             hotKeyBindings.Add(this.analogPage);
 
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F4);
+            SafeRegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F4);
             hotKeyBindings.Add(this.gpibPage);
 
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F5);
+            SafeRegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F5);
             hotKeyBindings.Add(this.rs232Tab);
 
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F6);
+            SafeRegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F6);
             hotKeyBindings.Add(this.commonWaveformPage);
 
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F7);
+            SafeRegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F7);
             hotKeyBindings.Add(this.variablesPage);
 
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F8);
+            SafeRegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F8);
             hotKeyBindings.Add(this.pulsesTab);
 
 
@@ -649,7 +649,7 @@ namespace WordGenerator
 
         //API Imports
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern bool RegisterHotKey(
+        private static extern bool RegisterHotKey(
             IntPtr hWnd, // handle to window    
             int id, // hot key identifier    
             KeyModifiers fsModifiers, // key-modifier options    
@@ -657,11 +657,47 @@ namespace WordGenerator
             );
 
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern bool UnregisterHotKey(
+        private static extern bool UnregisterHotKey(
             IntPtr hWnd, // handle to window    
         int id      // hot key identifier    
             );
-
+		
+		private static bool skipHotkeyBinding = false;
+		
+		private static bool SafeRegisterHotKey(
+            IntPtr hWnd, // handle to window    
+            int id, // hot key identifier    
+            KeyModifiers fsModifiers, // key-modifier options    
+            Keys vk    // virtual-key code    
+            ) {
+			if (!skipHotkeyBinding) {
+				try {
+					return RegisterHotKey(hWnd, id, fsModifiers, vk);
+				}
+				catch (System.DllNotFoundException e) {
+					MessageBox.Show("You seem to be running Cicero on a non-Windows platform. Unable to bind/unbind hotkeys.");
+					skipHotkeyBinding = true;
+				}	
+			}
+			return false;
+		}
+		
+        private static bool SafeUnregisterHotKey(
+            IntPtr hWnd, // handle to window    
+       	 	int id      // hot key identifier    
+            ) {
+			if (!skipHotkeyBinding) {
+				try {
+					return UnregisterHotKey(hWnd, id);
+				}
+				catch (System.DllNotFoundException e) {
+					MessageBox.Show("You seem to be running Cicero on a non-Windows platform. Unable to bind/unbind hotkeys.");
+					skipHotkeyBinding = true;
+				}
+			}
+			return false;
+		}
+		
 
         const int WM_HOTKEY = 0x0312;
 
@@ -729,7 +765,7 @@ namespace WordGenerator
 
             Keys myKey = (Keys)Enum.Parse(typeof(Keys), keyStr);
 
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.Control, myKey);
+            SafeRegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.Control, myKey);
             hotKeyBindings.Add(hotkeyObject);
         }
 
@@ -761,7 +797,7 @@ namespace WordGenerator
 
             Keys myKey = (Keys)Enum.Parse(typeof(Keys), keyStr);
 
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.Control | KeyModifiers.Alt, myKey);
+            SafeRegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.Control | KeyModifiers.Alt, myKey);
             hotKeyBindings.Add(hotkeyObject);
         }
 
