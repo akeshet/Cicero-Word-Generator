@@ -76,6 +76,8 @@ namespace WordGenerator.Controls
             this.gpibPictureBox = new System.Windows.Forms.PictureBox();
             this.rs232PictureBox = new System.Windows.Forms.PictureBox();
             this.timestepGroupLoopIndicatorLabel = new System.Windows.Forms.Label();
+            this.insertLeft = new System.Windows.Forms.Label();
+            this.insertRight = new System.Windows.Forms.Label();
             this.durationEditor = new WordGenerator.Controls.VerticalParameterEditor();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.analogPictureBox)).BeginInit();
@@ -230,7 +232,6 @@ namespace WordGenerator.Controls
             // 
             // hotkeyEntryTextBox
             // 
-            this.hotkeyEntryTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.hotkeyEntryTextBox.Name = "hotkeyEntryTextBox";
             this.hotkeyEntryTextBox.Size = new System.Drawing.Size(100, 23);
             this.hotkeyEntryTextBox.TextChanged += new System.EventHandler(this.hotkeyEntryTextBox_TextChanged);
@@ -271,7 +272,6 @@ namespace WordGenerator.Controls
             // 
             // descriptionTextBox
             // 
-            this.descriptionTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.descriptionTextBox.Name = "descriptionTextBox";
             this.descriptionTextBox.Size = new System.Drawing.Size(100, 23);
             this.descriptionTextBox.TextChanged += new System.EventHandler(this.descriptionTextChanged);
@@ -492,6 +492,32 @@ namespace WordGenerator.Controls
             this.timestepGroupLoopIndicatorLabel.TabIndex = 15;
             this.timestepGroupLoopIndicatorLabel.Text = "L";
             // 
+            // insertLeft
+            // 
+            this.insertLeft.AutoSize = true;
+            this.insertLeft.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.insertLeft.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.insertLeft.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.insertLeft.Location = new System.Drawing.Point(0, 66);
+            this.insertLeft.Name = "insertLeft";
+            this.insertLeft.Size = new System.Drawing.Size(87, 16);
+            this.insertLeft.TabIndex = 16;
+            this.insertLeft.Text = "<- Insert Here";
+            this.insertLeft.Visible = false;
+            // 
+            // insertRight
+            // 
+            this.insertRight.AutoSize = true;
+            this.insertRight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.insertRight.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.insertRight.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.insertRight.Location = new System.Drawing.Point(0, 66);
+            this.insertRight.Name = "insertRight";
+            this.insertRight.Size = new System.Drawing.Size(87, 16);
+            this.insertRight.TabIndex = 17;
+            this.insertRight.Text = "Insert Here ->";
+            this.insertRight.Visible = false;
+            // 
             // durationEditor
             // 
             this.durationEditor.Location = new System.Drawing.Point(3, 90);
@@ -504,14 +530,16 @@ namespace WordGenerator.Controls
             // 
             // TimestepEditor
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ContextMenuStrip = this.contextMenuStrip1;
+            this.Controls.Add(this.insertRight);
+            this.Controls.Add(this.insertLeft);
             this.Controls.Add(this.timestepGroupLoopIndicatorLabel);
             this.Controls.Add(this.timestepGroupIndicatorLabel);
             this.Controls.Add(this.waitLabel);
             this.Controls.Add(this.pulseIndicator);
-            this.Controls.Add(this.showHideButton);
             this.Controls.Add(this.analogSelector);
             this.Controls.Add(this.rs232Selector);
             this.Controls.Add(this.gpibSelector);
@@ -522,12 +550,19 @@ namespace WordGenerator.Controls
             this.Controls.Add(this.analogPictureBox);
             this.Controls.Add(this.gpibPictureBox);
             this.Controls.Add(this.rs232PictureBox);
+            this.Controls.Add(this.showHideButton);
             this.DoubleBuffered = true;
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "TimestepEditor";
             this.Size = new System.Drawing.Size(86, 219);
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.TimestepEditor_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.TimestepEditor_DragEnter);
+            this.DragOver += new System.Windows.Forms.DragEventHandler(this.TimestepEditor_DragOver);
+            this.DragLeave += new System.EventHandler(this.TimestepEditor_DragLeave);
+            this.GiveFeedback += new System.Windows.Forms.GiveFeedbackEventHandler(this.TimestepEditor_GiveFeedback);
             this.Enter += new System.EventHandler(this.TimestepEditor_Enter);
             this.Layout += new System.Windows.Forms.LayoutEventHandler(this.TimestepEditor_Layout);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TimestepEditor_MouseDown);
             this.contextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.analogPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gpibPictureBox)).EndInit();
@@ -587,5 +622,7 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripMenuItem setDigitalsToContinue;
         private System.Windows.Forms.Label timestepGroupLoopIndicatorLabel;
+        private System.Windows.Forms.Label insertLeft;
+        private System.Windows.Forms.Label insertRight;
     }
 }

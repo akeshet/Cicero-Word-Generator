@@ -867,6 +867,90 @@ namespace WordGenerator.Controls
             }
         }
 
+        private void TimestepEditor_MouseDown(object sender, MouseEventArgs e)
+        {
+            DragDropEffects effect =  this.DoDragDrop(this, DragDropEffects.Move);
+            return;
+        }
+
+        private void TimestepEditor_GiveFeedback(object sender, GiveFeedbackEventArgs e)
+        {
+        }
+
+        private void TimestepEditor_DragEnter(object sender, DragEventArgs e)
+        {
+            
+            TimestepEditor otherEditor = (e.Data.GetData(typeof(TimestepEditor))) as TimestepEditor;
+            if (otherEditor != null && otherEditor != this)
+            {
+                e.Effect = DragDropEffects.Move;
+                bool rightHalf = dragToRightHalf(e);
+
+                // exclude drags that don't actually move the object
+                int myIndex = this.StepNumber;
+                int otherIndex = otherEditor.StepNumber;
+                if ((myIndex == otherIndex + 1) && !rightHalf)
+                {
+                    e.Effect = DragDropEffects.None;
+                    return;
+                }
+                if ((myIndex == otherIndex - 1) && rightHalf)
+                {
+                    e.Effect = DragDropEffects.None;
+                    return;
+                }
+
+                if (rightHalf)
+                {
+                    insertRight.Visible = true;
+                    insertLeft.Visible = false;
+                }
+                else
+                {
+                    insertRight.Visible = false;
+                    insertLeft.Visible = true;
+                }
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private bool dragToRightHalf(DragEventArgs e)
+        {
+            Point dropPoint = PointToClient(new Point(e.X, e.Y));
+            bool rightHalf = false;
+            if (dropPoint.X > (this.Width / 2))
+            {
+                rightHalf = true;
+            }
+
+            return rightHalf;
+        }
+
+        private void TimestepEditor_DragDrop(object sender, DragEventArgs e)
+        {
+            TimestepEditor otherEditor = (e.Data.GetData(typeof(TimestepEditor))) as TimestepEditor;
+            
+
+        }
+
+        private void TimestepEditor_DragLeave(object sender, EventArgs e)
+        {
+            insertRight.Visible = false;
+            insertLeft.Visible = false;
+        }
+
+        private void TimestepEditor_DragOver(object sender, DragEventArgs e)
+        {
+            TimestepEditor_DragEnter(sender, e);
+        }
+
+        
+
+       
+
 
     }
 }
