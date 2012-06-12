@@ -106,11 +106,20 @@ namespace WordGenerator
             /// method, Save(...) does NOT internally catch any exceptions. Furthermore, If a file already exists at the target 
             /// path, the method will create a backup.
             /// </summary>
-            private static void Save(string path, object obj)
+            public static void Save(string path, object obj)
             {
                 Save(path, obj, true);
             }
-            private static void Save(string path, object obj, bool saveOldFile)
+
+            /// <summary>
+            /// Saves an object to the specified path using the .NET BinaryFormatter. In contrast to the Load(string path)
+            /// method, Save(...) does NOT internally catch any exceptions. If a file already exists at the target 
+            /// path, the method will create a backup only if saveOld File is set to true
+            /// </summary>
+            /// <param name="path"></param>
+            /// <param name="obj"></param>
+            /// <param name="saveOldFile"></param>
+            public static void Save(string path, object obj, bool saveOldFile)
             {
                 BinaryFormatter b = new BinaryFormatter();
                 

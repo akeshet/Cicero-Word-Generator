@@ -109,6 +109,8 @@ namespace WordGenerator
             this.eventLogPage = new System.Windows.Forms.TabPage();
             this.messageLogTextBox = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.createBufferSnapshotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableDebugMenuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sequencePage1 = new WordGenerator.Controls.SequencePage();
             this.overridePage1 = new WordGenerator.OverridePage();
             this.analogGroupEditor1 = new WordGenerator.Controls.AnalogGroupEditor();
@@ -436,7 +438,8 @@ namespace WordGenerator
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.editLogicalDevicesToolStripMenuItem,
             this.editServerManagerToolStripMenuItem,
-            this.populateSequenceWithNewChannelsToolStripMenuItem});
+            this.populateSequenceWithNewChannelsToolStripMenuItem,
+            this.enableDebugMenuToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
@@ -542,7 +545,8 @@ namespace WordGenerator
             this.inspectVariableTimebaseToolStripMenuItem,
             this.calculateVariableTimebaseAnalogBufferToolStripMenuItem,
             this.calculateVariableTimebaseDigitalBufferToolStripMenuItem,
-            this.stToolStripMenuItem});
+            this.stToolStripMenuItem,
+            this.createBufferSnapshotToolStripMenuItem});
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
             this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.debugToolStripMenuItem.Text = "Debug";
@@ -580,6 +584,7 @@ namespace WordGenerator
             this.stToolStripMenuItem.Name = "stToolStripMenuItem";
             this.stToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
             this.stToolStripMenuItem.Text = "Student Edition";
+            this.stToolStripMenuItem.Visible = false;
             this.stToolStripMenuItem.Click += new System.EventHandler(this.stToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
@@ -810,6 +815,20 @@ namespace WordGenerator
             this.toolTip1.UseAnimation = false;
             this.toolTip1.UseFading = false;
             // 
+            // createBufferSnapshotToolStripMenuItem
+            // 
+            this.createBufferSnapshotToolStripMenuItem.Name = "createBufferSnapshotToolStripMenuItem";
+            this.createBufferSnapshotToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
+            this.createBufferSnapshotToolStripMenuItem.Text = "Create buffer snapshot";
+            this.createBufferSnapshotToolStripMenuItem.Click += new System.EventHandler(this.createBufferSnapshotToolStripMenuItem_Click);
+            // 
+            // enableDebugMenuToolStripMenuItem
+            // 
+            this.enableDebugMenuToolStripMenuItem.Name = "enableDebugMenuToolStripMenuItem";
+            this.enableDebugMenuToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.enableDebugMenuToolStripMenuItem.Text = "Enable Debug Menu";
+            this.enableDebugMenuToolStripMenuItem.Click += new System.EventHandler(this.enableDebugMenuToolStripMenuItem_Click);
+            // 
             // sequencePage1
             // 
             this.sequencePage1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1000,6 +1019,8 @@ namespace WordGenerator
         private System.Windows.Forms.ToolStripMenuItem stToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem doNothingToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem createBufferSnapshotToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enableDebugMenuToolStripMenuItem;
 
     }
 }

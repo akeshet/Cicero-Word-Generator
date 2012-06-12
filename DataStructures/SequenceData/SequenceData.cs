@@ -1239,7 +1239,8 @@ namespace DataStructures
 
       
         /// <summary>
-        /// Computer digital output buffer for a given channel, using a variable timebase described by timebaseSegments
+        /// Computer digital output buffer for a given channel, using a variable timebase described by timebaseSegments.
+        /// Stores result in ans
         /// </summary>
         /// <param name="digitalID"></param>
         /// <param name="masterTimebaseSampleDuration"></param>
@@ -2802,6 +2803,57 @@ namespace DataStructures
         private void setSerializationVersionNumber(StreamingContext sc)
         {
             this.versionNumberAtLastSerialization = DataStructuresVersionNumber.CurrentVersion;
+        }
+
+        #endregion
+
+        #region Test Buffer Creation
+
+        public Dictionary<int, bool[]> _testCalculateAllDigitalBuffersFixedFrequency(SettingsData settings, double masterTimestepSize)
+        {
+            Dictionary<int, bool[]> ans = new Dictionary<int, bool[]>();
+            foreach (int digitalChannelId in settings.logicalChannelManager.Digitals.Keys) {
+                ans.Add(digitalChannelId, this.computeDigitalBuffer(digitalChannelId, masterTimestepSize));
+            }
+            return ans;
+        }
+
+        public Dictionary<int, double[]> _testCalculateAllAnalogBuffersFixedFrequenct(SettingsData settings, double masterTimestepSize)
+        {
+            Dictionary<int, double[]> ans = new Dictionary<int, double[]>();
+            foreach (int analogId in settings.logicalChannelManager.Analogs.Keys)
+            {
+                ans.Add(analogId, this.computeAnalogBuffer(analogId, masterTimestepSize));
+            }
+            return ans;
+        }
+
+        public Dictionary<int, bool[]> _testCalculateAllDigitalBuffersVariableFrequency(SettingsData settings, double masterTimestepSize)
+        {
+            Dictionary<int, bool[]> ans = new Dictionary<int, bool[]>();
+            TimestepTimebaseSegmentCollection varbase = this.generateVariableTimebaseSegments(VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, masterTimestepSize);
+            int nSamples = varbase.nSegmentSamples() +1;
+            foreach (int digitalChannelId in settings.logicalChannelManager.Digitals.Keys)
+            {
+                bool[] chanBuff = new bool[nSamples];
+                this.computeDigitalBuffer(digitalChannelId, masterTimestepSize, chanBuff, varbase);
+                ans.Add(digitalChannelId, chanBuff);
+            }
+            return ans;
+        }
+
+        public Dictionary<int, double[]> _testCalculateAllAnalogBuffersVariableFrequency(SettingsData settings, double masterTimestepSize)
+        {
+            Dictionary<int, double[]> ans = new Dictionary<int, double[]>();
+            TimestepTimebaseSegmentCollection varbase = this.generateVariableTimebaseSegments(VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, masterTimestepSize);
+            int nSamples = varbase.nSegmentSamples()+1;
+            foreach (int analogId in settings.logicalChannelManager.Analogs.Keys)
+            {
+                double[] chanBuff = new double[nSamples];
+                this.computeAnalogBuffer(analogId, masterTimestepSize, chanBuff, varbase);
+                ans.Add(analogId, chanBuff);
+            }
+            return ans;
         }
 
         #endregion

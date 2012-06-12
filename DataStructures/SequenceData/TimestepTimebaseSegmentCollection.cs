@@ -76,6 +76,14 @@ namespace DataStructures
             return ans;
         }
 
+        /// <summary>
+        /// The total number of positive edges that the variable timebase produces.
+        /// This is the "base" number of samples for buffer generation.
+        /// 
+        /// Typical buffers produced by DaqMxTaskGenerator for instance have at least 1 more sample at the end of the buffer
+        /// to repeat the starting value, so that the sequence ends with the starting "dwell" value
+        /// </summary>
+        /// <returns></returns>
         public int nSegmentSamples()
         {
             int ans = 0;
