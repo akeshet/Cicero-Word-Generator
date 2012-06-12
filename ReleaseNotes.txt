@@ -61,3 +61,8 @@ should it be necessary to make radical changes to these objects which
 would break compatability without special conversion attention.
 
 Significant UI Optimizations when adding or removing variables or pulses.
+
+Bug fix to floating point numbers in equations. When Cicero was installed
+on computers in French language mode, neither "," nor "." worked as decimal
+seperators in floating numbers (ie 1.34). Now, when parsing equations,
+we default to US-style seperators and ONLY "." will work.
