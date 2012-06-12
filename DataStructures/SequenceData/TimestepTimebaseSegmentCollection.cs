@@ -27,27 +27,7 @@ namespace DataStructures
         }
     }
 
-    public class TimeStepOccurance
-    {
-        public TimeStep timeStep;
-        public int occurance;
-        public TimeStepOccurance(TimeStep timeStep, int occurance)
-        {
-            this.timeStep = timeStep;
-            this.occurance = occurance;
-        }
-
-        public override bool Equals(object obj)
-        {
-            TimeStepOccurance other = obj as TimeStepOccurance;
-            if (obj == null)
-                return false;
-            if (this.occurance == other.occurance)
-                if (this.timeStep == other.timeStep)
-                    return true;
-            return false;
-        }
-    }
+ 
 
     public class TimestepTimebaseSegmentCollection : Dictionary<TimeStep, VariableTimebaseSegmentCollection>
     {

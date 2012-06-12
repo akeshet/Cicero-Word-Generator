@@ -1237,8 +1237,9 @@ namespace DataStructures
             return false;
         }
 
+      
         /// <summary>
-        /// Computes 
+        /// Computer digital output buffer for a given channel, using a variable timebase described by timebaseSegments
         /// </summary>
         /// <param name="digitalID"></param>
         /// <param name="masterTimebaseSampleDuration"></param>
@@ -1879,6 +1880,11 @@ namespace DataStructures
         }
 
 
+        /// <summary>
+        /// This class descibes a single "segment" of a variable timebase clock.
+        /// A "segment" is some number of samples (nSegmentSamples) repeated with a constant frequency
+        /// determined by MasterSamplesPerSegmentSample
+        /// </summary>
         [TypeConverter(typeof(ExpandableObjectConverter))]
         public class VariableTimebaseSegment
         {
