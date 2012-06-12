@@ -2304,7 +2304,7 @@ namespace DataStructures
 
 
         /// <summary>
-        /// Similar tp usedVariables(), but for waveforms
+        /// Similar to usedVariables(), but for waveforms
         /// </summary>
         /// <returns></returns>
         public Dictionary<Waveform, string> usedWaveforms()
