@@ -101,5 +101,47 @@ namespace CiceroSuiteUnitTests
 
 
         }
+
+        /// <summary>
+        ///A test for _createBufferSnapshot
+        ///</summary>
+        [TestMethod()]
+        public void _createBufferSnapshotTest()
+        {
+            
+
+        }
+
+        private void testSnapshot(string path)
+        {
+            BufferTestSnapshot snapshot = (BufferTestSnapshot) Shared.loadTestFile(path, typeof(BufferTestSnapshot));
+
+            BufferTestSnapshot newShapshot = snapshot.Sequence._createBufferSnapshot(snapshot.Settings, snapshot.MasterTimebaseSampleDuration);
+
+            // compare digital buffers
+            foreach (int digitalId in snapshot.Settings.logicalChannelManager.Digitals.Keys)
+            {
+                for (int i = 0; i < snapshot.DigitalFixed[digitalId].Length; i++)
+                    Assert.AreEqual(snapshot.DigitalFixed[digitalId][i], newShapshot.DigitalFixed[digitalId][i],
+                        "Snapshots differ at Digital Fixed, channel id " + digitalId + " sample " + i);
+
+                for (int i = 0; i < snapshot.DigitalVar[digitalId].Length; i++)
+                    Assert.AreEqual(snapshot.DigitalVar[digitalId][i], newShapshot.DigitalVar[digitalId][i],
+                        "Snapshots differ at Digital Var, channel id " + digitalId + " sample " + i);
+            }
+
+            // compare analog buffers
+            foreach (int analogId in snapshot.Settings.logicalChannelManager.Analogs.Keys)
+            {
+                for (int i = 0; i < snapshot.AnalogFixed[analogId].Length; i++)
+                    Assert.AreEqual(snapshot.AnalogFixed[analogId][i], newShapshot.AnalogFixed[analogId][i],
+                        "Snapshots differ at Analog Fixed, channel id " + analogId + " sample " + i);
+
+                for (int i = 0; i < snapshot.AnalogVar[analogId].Length; i++)
+                    Assert.AreEqual(snapshot.AnalogVar[analogId][i], newShapshot.AnalogVar[analogId][i],
+                        "Snapshots differ at Analog Var, channel id " + analogId + " sample " + i);
+            }
+        }
+
     }
 }
