@@ -108,8 +108,7 @@ namespace CiceroSuiteUnitTests
         [TestMethod()]
         public void _createBufferSnapshotTest()
         {
-            
-
+            testSnapshot("bufferGenTest1.buf");
         }
 
         private void testSnapshot(string path)
