@@ -1430,14 +1430,7 @@ namespace WordGenerator
 
         private void createBufferSnapshotToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            BufferTestSnapshot snap = new BufferTestSnapshot();
-            double masterSamp = 0.000005;
-            snap.Sequence = Storage.sequenceData;
-            snap.Settings = Storage.settingsData;
-            snap.AnalogFixed = snap.Sequence._testCalculateAllAnalogBuffersFixedFrequenct(snap.Settings, masterSamp);
-            snap.AnalogVar = snap.Sequence._testCalculateAllAnalogBuffersVariableFrequency(snap.Settings, masterSamp);
-            snap.DigitalFixed = snap.Sequence._testCalculateAllDigitalBuffersFixedFrequency(snap.Settings, masterSamp);
-            snap.DigitalVar = snap.Sequence._testCalculateAllDigitalBuffersVariableFrequency(snap.Settings, masterSamp);
+            BufferTestSnapshot snap = Storage.sequenceData._createBufferSnapshot(Storage.settingsData, 0.000001);
 
             string path = SharedForms.PromptSaveFile("Buffer snapshot", ".buf");
             Storage.SaveAndLoad.Save(path, snap, false);

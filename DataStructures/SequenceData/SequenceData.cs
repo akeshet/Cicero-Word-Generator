@@ -2730,6 +2730,13 @@ namespace DataStructures
         }
 
 
+        /// <summary>
+        /// This function should be run prior to buffer generation, if Timestep loops are enabled.
+        /// 
+        /// This will create temporary "loop copies" of timesteps.
+        /// 
+        /// Call cleanupLoopCopies() after buffers are generated.
+        /// </summary>
         public void createLoopCopies()
         {
             foreach (TimestepGroup tsg in this.TimestepGroups)
@@ -2854,6 +2861,31 @@ namespace DataStructures
                 ans.Add(analogId, chanBuff);
             }
             return ans;
+        }
+
+        /// <summary>
+        /// Used for automated testing purposes only. Creates a buffer snapshot object which can be archived, or 
+        /// compared to archived versions, to verify that buffer generation code doesn't change behavior with
+        /// new releases.
+        /// </summary>
+        /// <param name="settings"></param>
+        /// <param name="masterSamp"></param>
+        /// <returns></returns>
+        public BufferTestSnapshot _createBufferSnapshot(SettingsData settings, double masterSamp)
+        {
+            BufferTestSnapshot snap = new BufferTestSnapshot();
+            snap.MasterTimebaseSampleDuration = masterSamp;
+            snap.Sequence = this;
+            snap.Settings = settings;
+
+            this.createLoopCopies();
+            snap.AnalogFixed = _testCalculateAllAnalogBuffersFixedFrequenct(snap.Settings, masterSamp);
+            snap.AnalogVar = _testCalculateAllAnalogBuffersVariableFrequency(snap.Settings, masterSamp);
+            snap.DigitalFixed = _testCalculateAllDigitalBuffersFixedFrequency(snap.Settings, masterSamp);
+            snap.DigitalVar = _testCalculateAllDigitalBuffersVariableFrequency(snap.Settings, masterSamp);
+            this.cleanupLoopCopies();
+
+            return snap;
         }
 
         #endregion
