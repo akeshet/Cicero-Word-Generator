@@ -118,25 +118,38 @@ namespace CiceroSuiteUnitTests
 
             BufferTestSnapshot newShapshot = snapshot.Sequence._createBufferSnapshot(snapshot.Settings, snapshot.MasterTimebaseSampleDuration);
 
+
             // compare digital buffers
+            Assert.AreEqual(snapshot.DigitalFixed.Count, newShapshot.DigitalFixed.Count,
+                "Number of digital channels differ.");
             foreach (int digitalId in snapshot.Settings.logicalChannelManager.Digitals.Keys)
             {
+                Assert.AreEqual(snapshot.DigitalFixed[digitalId].Length, newShapshot.DigitalFixed[digitalId].Length,
+                    "Digital fixed buffer lengths differ.");
                 for (int i = 0; i < snapshot.DigitalFixed[digitalId].Length; i++)
                     Assert.AreEqual(snapshot.DigitalFixed[digitalId][i], newShapshot.DigitalFixed[digitalId][i],
                         "Snapshots differ at Digital Fixed, channel id " + digitalId + " sample " + i);
 
+                Assert.AreEqual(snapshot.DigitalVar[digitalId].Length, newShapshot.DigitalVar[digitalId].Length,
+                    "Digital var buffer lengths differ.");
                 for (int i = 0; i < snapshot.DigitalVar[digitalId].Length; i++)
                     Assert.AreEqual(snapshot.DigitalVar[digitalId][i], newShapshot.DigitalVar[digitalId][i],
                         "Snapshots differ at Digital Var, channel id " + digitalId + " sample " + i);
             }
 
             // compare analog buffers
+            Assert.AreEqual(snapshot.AnalogFixed.Count, newShapshot.AnalogFixed.Count,
+                "Number of analog channels differ.");
             foreach (int analogId in snapshot.Settings.logicalChannelManager.Analogs.Keys)
             {
+                Assert.AreEqual(snapshot.AnalogFixed[analogId].Length, newShapshot.AnalogFixed[analogId].Length,
+                    "Analog fixed buffer lengths differ.");
                 for (int i = 0; i < snapshot.AnalogFixed[analogId].Length; i++)
                     Assert.AreEqual(snapshot.AnalogFixed[analogId][i], newShapshot.AnalogFixed[analogId][i],
                         "Snapshots differ at Analog Fixed, channel id " + analogId + " sample " + i);
 
+                Assert.AreEqual(snapshot.AnalogVar[analogId].Length, newShapshot.AnalogVar[analogId].Length,
+                    "Analog var buffer lengths differ.");
                 for (int i = 0; i < snapshot.AnalogVar[analogId].Length; i++)
                     Assert.AreEqual(snapshot.AnalogVar[analogId][i], newShapshot.AnalogVar[analogId][i],
                         "Snapshots differ at Analog Var, channel id " + analogId + " sample " + i);
