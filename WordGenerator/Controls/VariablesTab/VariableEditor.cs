@@ -338,7 +338,7 @@ namespace WordGenerator.Controls
 
         public void updateDerivedValue()
         {
-            if (variable.DerivedVariable)
+            if (variable!=null && variable.DerivedVariable)
             {
                 string sanity = variable.parseVariableFormula(Storage.sequenceData.Variables);
                 if (sanity != null)
