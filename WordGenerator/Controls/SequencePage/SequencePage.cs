@@ -83,9 +83,9 @@ namespace WordGenerator.Controls
 
             this.digitalChannelLabelsPanel1.rowHeight = 18;
 
-            analogPreviewPane1.colWidth = TimestepEditor.TimestepEditorWidth;
-            analogPreviewPane1.rowHeight = 50;
-            analogPreviewPane1.enable();
+            analogPreviewPane.colWidth = TimestepEditor.TimestepEditorWidth;
+            analogPreviewPane.rowHeight = 50;
+            analogPreviewPane.enable();
 
 
             digitalGrid1.ContainerSize = digitalGridPanel.Size;
@@ -246,8 +246,8 @@ namespace WordGenerator.Controls
 
             this.runControl1.layout();
 
-            this.analogPreviewPane1.redrawBuffer();
-            this.analogPreviewPane1.Invalidate();
+            this.analogPreviewPane.redrawBuffer();
+            this.analogPreviewPane.Invalidate();
 
             modeBoxBeingChanged = true;
 
@@ -424,8 +424,8 @@ namespace WordGenerator.Controls
         {
             if (analogPreviewAutoUpdate.Checked)
             {
-                analogPreviewPane1.redrawBuffer();
-                analogPreviewPane1.Invalidate();
+                analogPreviewPane.redrawBuffer();
+                analogPreviewPane.Invalidate();
 
 
                 //WordGenerator.mainClientForm.instance.analogGroupEditor1.updateRunOrderPanel();
@@ -563,7 +563,7 @@ namespace WordGenerator.Controls
                 {
                     scrollToFrac(frac, digitalGridPanel.HorizontalScroll);
                     scrollToFrac(frac, timeStepsPanel.HorizontalScroll);
-                    scrollToFrac(frac, analogPreviewPane1.HorizontalScroll);
+                    scrollToFrac(frac, analogPreviewPane.HorizontalScroll);
                 }
                 catch (Exception ex)
                 {
@@ -629,12 +629,12 @@ namespace WordGenerator.Controls
         {
             if (e.ScrollOrientation == ScrollOrientation.HorizontalScroll)
             {
-                double frac = getScrollFraction(e, analogPreviewPane1.HorizontalScroll);
+                double frac = getScrollFraction(e, analogPreviewPane.HorizontalScroll);
                 handleHorizScroll(frac);
             }
             else
             {
-                double frac = getScrollFraction(e, analogPreviewPane1.VerticalScroll);
+                double frac = getScrollFraction(e, analogPreviewPane.VerticalScroll);
                 handleAnalogVerticalScroll(frac);
             }
         }
@@ -668,20 +668,20 @@ namespace WordGenerator.Controls
                     }
                 }
 
-                if (!analogPreviewPane1.VerticalScroll.Visible)
+                if (!analogPreviewPane.VerticalScroll.Visible)
                 {
-                    if (analogPreviewPane1.Margin.Right != scrollbarSize)
+                    if (analogPreviewPane.Margin.Right != scrollbarSize)
                     {
-                        analogPreviewPane1.Margin = new Padding(0, 0, scrollbarSize, 0);
-                        analogPreviewPane1.Refresh();
+                        analogPreviewPane.Margin = new Padding(0, 0, scrollbarSize, 0);
+                        analogPreviewPane.Refresh();
                     }
                 }
                 else
                 {
-                    if (analogPreviewPane1.Margin.Right != 0)
+                    if (analogPreviewPane.Margin.Right != 0)
                     {
-                        analogPreviewPane1.Margin = new Padding(0, 0, 0, 0);
-                        analogPreviewPane1.Refresh();
+                        analogPreviewPane.Margin = new Padding(0, 0, 0, 0);
+                        analogPreviewPane.Refresh();
                     }
                 }
             }
@@ -693,10 +693,10 @@ namespace WordGenerator.Controls
                     timeStepsPanel.Refresh();
                 }
 
-                if (analogPreviewPane1.Margin.Right != 0)
+                if (analogPreviewPane.Margin.Right != 0)
                 {
-                    analogPreviewPane1.Margin = new Padding(0, 0, 0, 0);
-                    analogPreviewPane1.Refresh();
+                    analogPreviewPane.Margin = new Padding(0, 0, 0, 0);
+                    analogPreviewPane.Refresh();
                 }
 
                 if (digitalGridPanel.Margin.Right != 0)
@@ -731,7 +731,7 @@ namespace WordGenerator.Controls
 
         private void repairAnalogMargin()
         {
-            if (analogPreviewPane1.HorizontalScroll.Visible)
+            if (analogPreviewPane.HorizontalScroll.Visible)
             {
                 if (analogChannelLabelsPanel1.Margin.Bottom != scrollbarSize)
                 {
@@ -765,8 +765,8 @@ namespace WordGenerator.Controls
 
         private void analogPreviewUpdate_Click(object sender, EventArgs e)
         {
-            this.analogPreviewPane1.redrawBuffer();
-            this.analogPreviewPane1.Invalidate();
+            this.analogPreviewPane.redrawBuffer();
+            this.analogPreviewPane.Invalidate();
             //WordGenerator.mainClientForm.instance.analogGroupEditor1.updateRunOrderPanel();
         }
 
@@ -789,7 +789,7 @@ namespace WordGenerator.Controls
                 try
                 {
                     scrollToFrac(frac, analogChannelLabelsPanel1.VerticalScroll);
-                    scrollToFrac(frac, analogPreviewPane1.VerticalScroll);
+                    scrollToFrac(frac, analogPreviewPane.VerticalScroll);
                 }
                 catch (Exception)
                 {
