@@ -247,7 +247,7 @@ namespace WordGenerator.Controls
             this.runControl1.layout();
 
             this.analogPreviewPane.redrawBuffer();
-            this.analogPreviewPane.Invalidate();
+            this.analogPreviewPane.Refresh();
 
             modeBoxBeingChanged = true;
 

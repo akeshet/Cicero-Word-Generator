@@ -180,11 +180,15 @@ namespace WordGenerator.Controls
                 int xSize = nDisplayedSteps * colWidth;
                 int ySize = rowHeight * Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.analog].Channels.Count;
 
-                if ((xSize == 0) || (ySize == 0))
+                /*if ((xSize == 0) || (ySize == 0))
                 {
                     WordGenerator.MainClientForm.instance.cursorWaitRelease();
                     return;
-                }
+                }*/
+                if (xSize == 0)
+                    xSize = 1;
+                if (ySize == 0)
+                    ySize = 1;
 
                 Graphics gc;
 
