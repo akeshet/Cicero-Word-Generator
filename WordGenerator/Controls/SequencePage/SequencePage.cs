@@ -329,7 +329,21 @@ namespace WordGenerator.Controls
         /// A 100-timestep long sequence will take ~8 seconds to run this function.
         /// Avoid calling it unnecessarily.
         /// </summary>
-        private void layoutTimestepEditors() 
+        private void layoutTimestepEditors()
+        {
+            SequenceData seq = Storage.sequenceData;
+
+          //  if (seq == null || seq.TimeSteps == null)
+                removeAndRefreshAllTimestepEditors();
+
+            /*if (seq.TimeSteps.Count > timestepEditors.Count)
+            {
+                int extras = timestepEditors.Count - seq.TimeSteps.Count;
+                for (int i=0; i<extras)
+            }*/
+        }
+
+        private void removeAndRefreshAllTimestepEditors()
         {
             this.SuspendLayout();
 
@@ -347,7 +361,7 @@ namespace WordGenerator.Controls
 
             int count = 0;
 
-           
+
 
             List<TimeStep> timeSteps = Storage.sequenceData.TimeSteps;
             timestepEditors = new List<TimestepEditor>();
@@ -384,14 +398,14 @@ namespace WordGenerator.Controls
 
             this.ResumeLayout();
 
-            foreach (Control con in this.timeStepsFlowPanel.Controls) 
+            foreach (Control con in this.timeStepsFlowPanel.Controls)
                 con.SuspendLayout();
 
             this.Invalidate();
             timeStepsFlowPanel.ResumeLayout();
             timeStepsPanel.AutoScroll = false;
             timeStepsFlowPanel.AutoSize = false;
-            timeStepsFlowPanel.Visible = true; 
+            timeStepsFlowPanel.Visible = true;
             timeStepsFlowPanel.AutoSize = true;
             timeStepsPanel.AutoScroll = true;
 
@@ -406,7 +420,6 @@ namespace WordGenerator.Controls
             {
                 beginHintLabel.Visible = false;
             }
-
         }
 
         public void registerTimestepEditorEvents(TimestepEditor editor)
