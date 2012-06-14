@@ -60,6 +60,8 @@ namespace AtticusServer
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splashScreenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.licenseInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openHomePageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openGitRepositoryPageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -195,8 +197,8 @@ namespace AtticusServer
             this.button1.TabIndex = 0;
             this.button1.Text = "Refresh Hardware";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Paint += new System.Windows.Forms.PaintEventHandler(this.button1_Paint);
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Paint += new System.Windows.Forms.PaintEventHandler(this.button1_Paint);
             // 
             // groupBox2
             // 
@@ -228,8 +230,8 @@ namespace AtticusServer
             this.connectButton.TabIndex = 5;
             this.connectButton.Text = "DummyText";
             this.connectButton.UseVisualStyleBackColor = true;
-            this.connectButton.Paint += new System.Windows.Forms.PaintEventHandler(this.connectButton_Paint);
             this.connectButton.Click += new System.EventHandler(this.connectButton_Click);
+            this.connectButton.Paint += new System.Windows.Forms.PaintEventHandler(this.connectButton_Paint);
             // 
             // connectionStatusLabel
             // 
@@ -297,7 +299,7 @@ namespace AtticusServer
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1004, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(996, 24);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -309,32 +311,32 @@ namespace AtticusServer
             this.toolStripSeparator1,
             this.loadToolStripMenuItem});
             this.serverSettingsToolStripMenuItem.Name = "serverSettingsToolStripMenuItem";
-            this.serverSettingsToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
+            this.serverSettingsToolStripMenuItem.Size = new System.Drawing.Size(96, 20);
             this.serverSettingsToolStripMenuItem.Text = "Server Settings";
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.saveToolStripMenuItem.Text = "Save...";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsDefaultToolStripMenuItem
             // 
             this.saveAsDefaultToolStripMenuItem.Name = "saveAsDefaultToolStripMenuItem";
-            this.saveAsDefaultToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.saveAsDefaultToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.saveAsDefaultToolStripMenuItem.Text = "Save As Default";
             this.saveAsDefaultToolStripMenuItem.Click += new System.EventHandler(this.saveAsDefaultToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(159, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(152, 6);
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.loadToolStripMenuItem.Text = "Load...";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
@@ -342,30 +344,46 @@ namespace AtticusServer
             // 
             this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.splashScreenToolStripMenuItem,
-            this.licenseInformationToolStripMenuItem});
+            this.licenseInformationToolStripMenuItem,
+            this.openHomePageToolStripMenuItem,
+            this.openGitRepositoryPageToolStripMenuItem});
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.aboutToolStripMenuItem.Text = "About";
             // 
             // splashScreenToolStripMenuItem
             // 
             this.splashScreenToolStripMenuItem.Name = "splashScreenToolStripMenuItem";
-            this.splashScreenToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.splashScreenToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.splashScreenToolStripMenuItem.Text = "Splash Screen";
             this.splashScreenToolStripMenuItem.Click += new System.EventHandler(this.splashScreenToolStripMenuItem_Click);
             // 
             // licenseInformationToolStripMenuItem
             // 
             this.licenseInformationToolStripMenuItem.Name = "licenseInformationToolStripMenuItem";
-            this.licenseInformationToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.licenseInformationToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.licenseInformationToolStripMenuItem.Text = "License Information";
             this.licenseInformationToolStripMenuItem.Click += new System.EventHandler(this.licenseInformationToolStripMenuItem_Click);
+            // 
+            // openHomePageToolStripMenuItem
+            // 
+            this.openHomePageToolStripMenuItem.Name = "openHomePageToolStripMenuItem";
+            this.openHomePageToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.openHomePageToolStripMenuItem.Text = "Open Home Page";
+            this.openHomePageToolStripMenuItem.Click += new System.EventHandler(this.openHomePageToolStripMenuItem_Click);
+            // 
+            // openGitRepositoryPageToolStripMenuItem
+            // 
+            this.openGitRepositoryPageToolStripMenuItem.Name = "openGitRepositoryPageToolStripMenuItem";
+            this.openGitRepositoryPageToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.openGitRepositoryPageToolStripMenuItem.Text = "Open Git Repository Page";
+            this.openGitRepositoryPageToolStripMenuItem.Click += new System.EventHandler(this.openGitRepositoryPageToolStripMenuItem_Click);
             // 
             // MainServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1004, 746);
+            this.ClientSize = new System.Drawing.Size(996, 742);
             this.Controls.Add(this.verboseCheckBox);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
@@ -377,8 +395,8 @@ namespace AtticusServer
             this.MinimumSize = new System.Drawing.Size(1012, 780);
             this.Name = "MainServerForm";
             this.Text = "Atticus Server 1.0 Beta";
-            this.Load += new System.EventHandler(this.MainServerForm_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainServerForm_FormClosing);
+            this.Load += new System.EventHandler(this.MainServerForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -425,6 +443,8 @@ namespace AtticusServer
         private System.Windows.Forms.ToolStripMenuItem splashScreenToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem licenseInformationToolStripMenuItem;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.ToolStripMenuItem openHomePageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openGitRepositoryPageToolStripMenuItem;
 
     }
 }

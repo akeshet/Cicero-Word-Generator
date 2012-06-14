@@ -463,6 +463,18 @@ namespace AtticusServer
             this.DisplayError = false;
         }
 
+        private void openHomePageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://akeshet.github.com/Cicero-Word-Generator/");
+        }
+
+        private void openGitRepositoryPageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/akeshet/Cicero-Word-Generator");
+        }
+
+
+
 
     }
 }
