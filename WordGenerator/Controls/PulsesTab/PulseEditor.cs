@@ -73,6 +73,7 @@ namespace WordGenerator.Controls
 
                 this.autoNameCheckBox.Checked = pulse.AutoName;
 
+            
                 updatingPulse = false;
 
             }
@@ -95,6 +96,7 @@ namespace WordGenerator.Controls
                 if (pulse.AutoName)
                 {
                     pulseNameTextBox.Enabled = false;
+                    pulse.updateAutoName();
                     pulseNameTextBox.Text = pulse.PulseName;
                 }
                 else

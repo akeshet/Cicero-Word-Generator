@@ -28,12 +28,57 @@ namespace DataStructures
             if (AutoName)
             {
                 string automaticName = "automatic name";
-                // TODO: TIMUR
-                // Calculate what the automatic name should be
-                // 
-                //
-                this.PulseName = automaticName;
+                string first_half="";
+                string second_half=""; 
+              
+                
+         
+                //Name the start condition
+                if (this.startCondition==PulseTimingCondition.TimestepStart)
+                    first_half="S";
+                else if (this.startCondition==PulseTimingCondition.TimestepEnd)
+                    first_half="E";
+                else if (this.startCondition==PulseTimingCondition.Duration)
+                    first_half = this.pulseDuration.parameter.Value.ToString() + this.pulseDuration.units.ToString() + "_D";
+
+                if (this.startDelayEnabled && this.startCondition != PulseTimingCondition.Duration)
+                {
+                    if(this.startDelayed)
+                        first_half="del"+first_half;
+                    else
+                        first_half="pre"+first_half;
+
+                     //could use the ToString function here, but it outputs a space and I don't want that
+                    first_half = this.startDelay.parameter.Value.ToString() + this.startDelay.units.ToString() + "_"+first_half;
+                }
+
+
+
+                //Name the end condition
+                if (this.endCondition == PulseTimingCondition.TimestepStart)
+                    second_half = "S";
+                else if (this.endCondition == PulseTimingCondition.TimestepEnd)
+                    second_half = "E";
+                else if (this.endCondition == PulseTimingCondition.Duration)
+                    second_half = this.pulseDuration.parameter.Value.ToString()+this.pulseDuration.units.ToString()+"_D";
+
+                if (this.endDelayEnabled && this.endCondition != PulseTimingCondition.Duration)
+                {
+                    if (this.endDelayed)
+                        second_half = "del" + second_half;
+                    else
+                        second_half = "pre" + second_half;
+
+                    second_half = this.endDelay.parameter.Value.ToString() + this.endDelay.units.ToString() + "_" + second_half;
+                }
+
+
+                automaticName = first_half+":"+second_half;
+
+                this.pulseName = automaticName;
+                
             }
+           // return automaticName;
         }
 
 
@@ -97,7 +142,11 @@ namespace DataStructures
         public Variable ValueVariable
         {
             get { return valueVariable; }
-            set { valueVariable = value; }
+            set { valueVariable = value;
+            
+            if (AutoName)
+               updateAutoName();
+            }
         }
 
         public Pulse(Pulse copyMe)
@@ -131,7 +180,10 @@ namespace DataStructures
                 // TODO: TIMUR
                 // Pulse should not be renameable if autoName is set to true
                 // so the following line should not run in that case
-                pulseName = value; 
+                if (!autoName)
+                {
+                    pulseName = value; 
+                }
             
             }
         }
@@ -233,7 +285,10 @@ namespace DataStructures
                     return false;
                 }
             }
-            set { pulseValue = value; }
+            set { pulseValue = value;
+            if (AutoName)
+                updateAutoName();
+             }
         }
 
         public Pulse()
