@@ -200,5 +200,14 @@ namespace DataStructures
         {
             return this.parameter.Value.ToString() + " " + this.units.ToString();
         }
+
+        /// <summary>
+        /// Same as ToString, but without the space character
+        /// </summary>
+        /// <returns></returns>
+        public string ToShortString()
+        {
+            return this.parameter.Value.ToString() + this.units.ToString();
+        }
     }
 }
