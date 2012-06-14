@@ -197,8 +197,8 @@ namespace WordGenerator.Controls
         {
             waveformEditor1.setWaveform(null);
 
-            if (WordGenerator.mainClientForm.instance!=null)
-                WordGenerator.mainClientForm.instance.cursorWait();
+            if (WordGenerator.MainClientForm.instance!=null)
+                WordGenerator.MainClientForm.instance.cursorWait();
         
             List<Waveform> waveformsToDisplay = new List<Waveform>();
             List<string> channelNamesToDisplay = new List<string>();
@@ -230,8 +230,8 @@ namespace WordGenerator.Controls
             waveformGraphCollection1.setChannelNames(channelNamesToDisplay);
             waveformGraphCollection1.setWaveformEditor(waveformEditor1);
 
-            if (WordGenerator.mainClientForm.instance!=null)
-                WordGenerator.mainClientForm.instance.cursorWaitRelease();
+            if (WordGenerator.MainClientForm.instance!=null)
+                WordGenerator.MainClientForm.instance.cursorWaitRelease();
 
         }
 
@@ -405,7 +405,7 @@ namespace WordGenerator.Controls
                     if (result == DialogResult.Yes)
                     {
                         Storage.sequenceData.replaceAnalogGroup(analogGroup, replacementGroup);
-                        WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+                        WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
                     }
                 }
             }
@@ -437,7 +437,7 @@ namespace WordGenerator.Controls
                 }
 
                 Storage.sequenceData.AnalogGroups = usedGroups;
-                WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+                WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
             }
         }
 

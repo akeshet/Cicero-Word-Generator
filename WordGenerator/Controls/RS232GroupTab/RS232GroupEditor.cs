@@ -90,8 +90,8 @@ namespace WordGenerator.Controls.Temporary
 
         private void layoutGraphCollection()
         {
-            if (WordGenerator.mainClientForm.instance != null)
-                WordGenerator.mainClientForm.instance.cursorWait();
+            if (WordGenerator.MainClientForm.instance != null)
+                WordGenerator.MainClientForm.instance.cursorWait();
 
             List<Waveform> waveformsToDisplay = new List<Waveform>();
             List<string> channelNamesToDisplay = new List<string>();
@@ -118,8 +118,8 @@ namespace WordGenerator.Controls.Temporary
             waveformGraphCollection1.setChannelNames(channelNamesToDisplay);
             waveformGraphCollection1.setWaveformEditor(waveformEditor1);
 
-            if (WordGenerator.mainClientForm.instance != null)
-                WordGenerator.mainClientForm.instance.cursorWaitRelease();
+            if (WordGenerator.MainClientForm.instance != null)
+                WordGenerator.MainClientForm.instance.cursorWaitRelease();
 
         }
 
@@ -365,7 +365,7 @@ namespace WordGenerator.Controls.Temporary
                     if (result == DialogResult.Yes)
                     {
                         Storage.sequenceData.replaceRS232Group(rs232Group, replacementGroup);
-                        WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+                        WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
                     }
                 }
             }
@@ -397,7 +397,7 @@ namespace WordGenerator.Controls.Temporary
                 }
 
                 Storage.sequenceData.RS232Groups = usedGroups;
-                WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+                WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
             }
 
         }

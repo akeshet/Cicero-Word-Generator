@@ -37,7 +37,7 @@ namespace WordGenerator.Controls
         /// <param name="e"></param>
         protected override void OnMouseClick(MouseEventArgs e)
         {
-            if (!WordGenerator.mainClientForm.instance.lockDigitalCheckBox.Checked)
+            if (!WordGenerator.MainClientForm.instance.lockDigitalCheckBox.Checked)
             {
 
                 //         base.OnMouseClick(e);
@@ -100,13 +100,13 @@ namespace WordGenerator.Controls
             pulseSelectorTarget = null;
 
             this.Invalidate();
-            WordGenerator.mainClientForm.instance.sequencePage.updateAllPulseIndicators();
+            WordGenerator.MainClientForm.instance.sequencePage.updateAllPulseIndicators();
 
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            if (!WordGenerator.mainClientForm.instance.lockDigitalCheckBox.Checked)
+            if (!WordGenerator.MainClientForm.instance.lockDigitalCheckBox.Checked)
             {
                 //        base.OnMouseDown(e);
 
@@ -126,7 +126,7 @@ namespace WordGenerator.Controls
        
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            if (!WordGenerator.mainClientForm.instance.lockDigitalCheckBox.Checked)
+            if (!WordGenerator.MainClientForm.instance.lockDigitalCheckBox.Checked)
             {
 
                 //         base.OnMouseMove(e);
@@ -238,7 +238,7 @@ namespace WordGenerator.Controls
                 }
 
                 TimestepEditor te = 
-                WordGenerator.mainClientForm.instance.sequencePage.getTimestepEditor(
+                WordGenerator.MainClientForm.instance.sequencePage.getTimestepEditor(
                    Storage.sequenceData.getNthDisplayedTimeStep(temp.X));
 
              /*   Label chanLab = WordGenerator.mainClientForm.instance.sequencePage1.digitalChannelLabelsPanel1.channelLabels[temp.Y*2];
@@ -277,7 +277,7 @@ namespace WordGenerator.Controls
 
         protected override void OnMouseLeave(EventArgs e)
         {
-            if (!WordGenerator.mainClientForm.instance.lockDigitalCheckBox.Checked)
+            if (!WordGenerator.MainClientForm.instance.lockDigitalCheckBox.Checked)
             {
 
                 //        base.OnMouseLeave(e);
@@ -333,7 +333,7 @@ namespace WordGenerator.Controls
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            if (!WordGenerator.mainClientForm.instance.lockDigitalCheckBox.Checked)
+            if (!WordGenerator.MainClientForm.instance.lockDigitalCheckBox.Checked)
             {
                 //          base.OnMouseUp(e);
 
@@ -764,7 +764,7 @@ namespace WordGenerator.Controls
                 p = paintPulse(g, p, dp);
             }
 
-            if (WordGenerator.mainClientForm.instance.studentEdition)
+            if (WordGenerator.MainClientForm.instance.studentEdition)
             {
                 paintCell(g, p, seb, null);
             }

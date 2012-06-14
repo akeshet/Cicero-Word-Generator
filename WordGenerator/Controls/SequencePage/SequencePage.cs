@@ -83,9 +83,9 @@ namespace WordGenerator.Controls
 
             this.digitalChannelLabelsPanel1.rowHeight = 18;
 
-            analogPreviewPane1.colWidth = TimestepEditor.TimestepEditorWidth;
-            analogPreviewPane1.rowHeight = 50;
-            analogPreviewPane1.enable();
+            analogPreviewPane.colWidth = TimestepEditor.TimestepEditorWidth;
+            analogPreviewPane.rowHeight = 50;
+            analogPreviewPane.enable();
 
 
             digitalGrid1.ContainerSize = digitalGridPanel.Size;
@@ -126,7 +126,6 @@ namespace WordGenerator.Controls
 
         public void removeTimestepEditor(TimestepEditor editor)
         {
-            editor.unRegsiterHotkey();
             timeStepsFlowPanel.Controls.Remove(editor);
             editor.Dispose();
             updateTimestepEditorNumbers();
@@ -236,19 +235,19 @@ namespace WordGenerator.Controls
                 this.analogPreviewUpdate.Visible = true;
             }
 
-            if (WordGenerator.mainClientForm.instance != null)
-                WordGenerator.mainClientForm.instance.cursorWait();
+            if (WordGenerator.MainClientForm.instance != null)
+                WordGenerator.MainClientForm.instance.cursorWait();
 
             digitalGrid1.updateSize();
-            if (WordGenerator.mainClientForm.instance != null)
-                WordGenerator.mainClientForm.instance.cursorWaitRelease();
+            if (WordGenerator.MainClientForm.instance != null)
+                WordGenerator.MainClientForm.instance.cursorWaitRelease();
 
             repairAllMargins(this, null);
 
             this.runControl1.layout();
 
-            this.analogPreviewPane1.redrawBuffer();
-            this.analogPreviewPane1.Invalidate();
+            this.analogPreviewPane.redrawBuffer();
+            this.analogPreviewPane.Refresh();
 
             modeBoxBeingChanged = true;
 
@@ -341,18 +340,6 @@ namespace WordGenerator.Controls
 
 
             List<Control> temp = new List<Control>();
-            foreach (Control con in timeStepsFlowPanel.Controls)
-            {
-                temp.Add(con);
-            }
-            foreach (Control con in temp) {
-                TimestepEditor ed = con as TimestepEditor;
-                if (ed != null)
-                {
-                    ed.unRegsiterHotkey();
-                    ed.Dispose();
-                }
-            }
 
             timeStepsFlowPanel.Controls.Clear();
 
@@ -377,7 +364,6 @@ namespace WordGenerator.Controls
                     registerTimestepEditorEvents(editor);
                     //this.timeStepsPanel.BufferedControls.Add(editor);
 
-                    editor.registerHotkey();
                     count++;
 
                     if (hideHiddenTimesteps)
@@ -438,8 +424,8 @@ namespace WordGenerator.Controls
         {
             if (analogPreviewAutoUpdate.Checked)
             {
-                analogPreviewPane1.redrawBuffer();
-                analogPreviewPane1.Invalidate();
+                analogPreviewPane.redrawBuffer();
+                analogPreviewPane.Invalidate();
 
 
                 //WordGenerator.mainClientForm.instance.analogGroupEditor1.updateRunOrderPanel();
@@ -577,7 +563,7 @@ namespace WordGenerator.Controls
                 {
                     scrollToFrac(frac, digitalGridPanel.HorizontalScroll);
                     scrollToFrac(frac, timeStepsPanel.HorizontalScroll);
-                    scrollToFrac(frac, analogPreviewPane1.HorizontalScroll);
+                    scrollToFrac(frac, analogPreviewPane.HorizontalScroll);
                 }
                 catch (Exception ex)
                 {
@@ -604,7 +590,7 @@ namespace WordGenerator.Controls
         /// </summary>
         public void showOrHideHiddenTimestepEditors()
         {
-            WordGenerator.mainClientForm.instance.cursorWait();
+            WordGenerator.MainClientForm.instance.cursorWait();
             timeStepsFlowPanel.SuspendLayout();
             foreach (Control con in timeStepsFlowPanel.Controls)
             {
@@ -626,7 +612,7 @@ namespace WordGenerator.Controls
             }
             timeStepsFlowPanel.ResumeLayout();
             
-            WordGenerator.mainClientForm.instance.cursorWaitRelease();
+            WordGenerator.MainClientForm.instance.cursorWaitRelease();
         }
 
         private void addNewTimestepToolStripMenuItem_Click(object sender, EventArgs e)
@@ -635,7 +621,7 @@ namespace WordGenerator.Controls
             if (Storage.sequenceData != null)
             {
                 Storage.sequenceData.TimeSteps.Add(new TimeStep("New Timestep"));
-                WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+                WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
             }
         }
 
@@ -643,12 +629,12 @@ namespace WordGenerator.Controls
         {
             if (e.ScrollOrientation == ScrollOrientation.HorizontalScroll)
             {
-                double frac = getScrollFraction(e, analogPreviewPane1.HorizontalScroll);
+                double frac = getScrollFraction(e, analogPreviewPane.HorizontalScroll);
                 handleHorizScroll(frac);
             }
             else
             {
-                double frac = getScrollFraction(e, analogPreviewPane1.VerticalScroll);
+                double frac = getScrollFraction(e, analogPreviewPane.VerticalScroll);
                 handleAnalogVerticalScroll(frac);
             }
         }
@@ -682,20 +668,20 @@ namespace WordGenerator.Controls
                     }
                 }
 
-                if (!analogPreviewPane1.VerticalScroll.Visible)
+                if (!analogPreviewPane.VerticalScroll.Visible)
                 {
-                    if (analogPreviewPane1.Margin.Right != scrollbarSize)
+                    if (analogPreviewPane.Margin.Right != scrollbarSize)
                     {
-                        analogPreviewPane1.Margin = new Padding(0, 0, scrollbarSize, 0);
-                        analogPreviewPane1.Refresh();
+                        analogPreviewPane.Margin = new Padding(0, 0, scrollbarSize, 0);
+                        analogPreviewPane.Refresh();
                     }
                 }
                 else
                 {
-                    if (analogPreviewPane1.Margin.Right != 0)
+                    if (analogPreviewPane.Margin.Right != 0)
                     {
-                        analogPreviewPane1.Margin = new Padding(0, 0, 0, 0);
-                        analogPreviewPane1.Refresh();
+                        analogPreviewPane.Margin = new Padding(0, 0, 0, 0);
+                        analogPreviewPane.Refresh();
                     }
                 }
             }
@@ -707,10 +693,10 @@ namespace WordGenerator.Controls
                     timeStepsPanel.Refresh();
                 }
 
-                if (analogPreviewPane1.Margin.Right != 0)
+                if (analogPreviewPane.Margin.Right != 0)
                 {
-                    analogPreviewPane1.Margin = new Padding(0, 0, 0, 0);
-                    analogPreviewPane1.Refresh();
+                    analogPreviewPane.Margin = new Padding(0, 0, 0, 0);
+                    analogPreviewPane.Refresh();
                 }
 
                 if (digitalGridPanel.Margin.Right != 0)
@@ -745,7 +731,7 @@ namespace WordGenerator.Controls
 
         private void repairAnalogMargin()
         {
-            if (analogPreviewPane1.HorizontalScroll.Visible)
+            if (analogPreviewPane.HorizontalScroll.Visible)
             {
                 if (analogChannelLabelsPanel1.Margin.Bottom != scrollbarSize)
                 {
@@ -779,8 +765,8 @@ namespace WordGenerator.Controls
 
         private void analogPreviewUpdate_Click(object sender, EventArgs e)
         {
-            this.analogPreviewPane1.redrawBuffer();
-            this.analogPreviewPane1.Invalidate();
+            this.analogPreviewPane.redrawBuffer();
+            this.analogPreviewPane.Invalidate();
             //WordGenerator.mainClientForm.instance.analogGroupEditor1.updateRunOrderPanel();
         }
 
@@ -803,7 +789,7 @@ namespace WordGenerator.Controls
                 try
                 {
                     scrollToFrac(frac, analogChannelLabelsPanel1.VerticalScroll);
-                    scrollToFrac(frac, analogPreviewPane1.VerticalScroll);
+                    scrollToFrac(frac, analogPreviewPane.VerticalScroll);
                 }
                 catch (Exception)
                 {
@@ -852,8 +838,8 @@ namespace WordGenerator.Controls
             if (Storage.sequenceData != null)
             {
                 Storage.sequenceData.SequenceName = seqNameBox.Text;
-                if (WordGenerator.mainClientForm.instance!=null)
-                    WordGenerator.mainClientForm.instance.updateFormTitle();
+                if (WordGenerator.MainClientForm.instance!=null)
+                    WordGenerator.MainClientForm.instance.updateFormTitle();
             }
         }
 

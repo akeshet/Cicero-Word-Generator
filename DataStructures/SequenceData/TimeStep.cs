@@ -82,6 +82,9 @@ namespace DataStructures
         // 0 for unassigned
         private char hotKeyCharacter;
 
+        /// <summary>
+        /// 0 indicates unassigned
+        /// </summary>
         public char HotKeyCharacter
         {
             get { return hotKeyCharacter; }

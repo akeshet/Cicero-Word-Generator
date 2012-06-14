@@ -714,7 +714,7 @@ namespace WordGenerator.Controls
         {
             Waveform copy = new Waveform(currentWaveform);
             Storage.sequenceData.CommonWaveforms.Add(copy);
-            WordGenerator.mainClientForm.instance.commonWaveformEditor.setCommonWaveforms(Storage.sequenceData.CommonWaveforms);
+            WordGenerator.MainClientForm.instance.commonWaveformEditor.setCommonWaveforms(Storage.sequenceData.CommonWaveforms);
         }
 
         //REO 10/2008

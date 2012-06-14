@@ -182,8 +182,8 @@ namespace WordGenerator.ChannelManager
 
         private void ChannelManager_FormClosing(object sender, FormClosingEventArgs e)
         {
-            mainClientForm.instance.RefreshSettingsDataToUI(Storage.settingsData);
-            mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+            MainClientForm.instance.RefreshSettingsDataToUI(Storage.settingsData);
+            MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
           //  mainClientForm.instance.Enabled = true;
         }
  
