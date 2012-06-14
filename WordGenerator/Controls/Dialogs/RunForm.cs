@@ -1231,7 +1231,7 @@ namespace WordGenerator
             addMessageLogText(this, new MessageEvent("Run aborting."));
             Storage.settingsData.serverManager.stopAllServers(addMessageLogText);
             addMessageLogText(this, new MessageEvent("Run aborted."));
-            
+
             TimeStep step;
             if (isBackgroundRunform)
                 step = Storage.sequenceData.dwellWord();
@@ -1240,12 +1240,10 @@ namespace WordGenerator
             if (step != null)
             {
                 addMessageLogText(this, new MessageEvent("Attempting to output the dwell timestep."));
-                WordGenerator.Controls.TimestepEditor editor = WordGenerator.MainClientForm.instance.sequencePage.getTimestepEditor(step);
                 bool success = false;
-                if (editor != null)
-                {
-                    success = editor.outputTimestepNow(false, false);
-                }
+
+                success = ClientRunner.instance.outputTimestepNow(step, false, false);
+
 
                 if (success)
                 {

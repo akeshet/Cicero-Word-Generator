@@ -122,19 +122,7 @@ namespace WordGenerator
         {
             if (currentlyOutputtingTimestep != null)
             {
-                // this isn't maybe the most elegant way to do this, but it re-uses the dwell code that I already 
-                // wrote in timestepeditor, so that's how it will be
-                foreach (Control con in sequencePage.timeStepsFlowPanel.Controls)
-                {
-                    TimestepEditor te = con as TimestepEditor;
-                    if (te != null)
-                    {
-                        if (te.StepData == currentlyOutputtingTimestep)
-                        {
-                            return te.outputTimestepNow(false, true);
-                        }
-                    }
-                }
+                ClientRunner.instance.outputTimestepNow(currentlyOutputtingTimestep, false, true);
             }
             return false;
         }
@@ -690,10 +678,10 @@ namespace WordGenerator
 
                             int id = (int)m.WParam;
                             object hotkeyObj = hotKeyBindings[id];
-                            if (hotkeyObj is TimestepEditor)
+                            if (hotkeyObj is TimeStep)
                             {
-                                TimestepEditor te = (TimestepEditor)hotkeyObj;
-                                te.outputTimestepNow();
+                                TimeStep step = (TimeStep)hotkeyObj;
+                                ClientRunner.instance.outputTimestepNow(step, false, true);
                             }
                             else if (hotkeyObj is Button)
                             {

@@ -801,23 +801,22 @@ namespace DataStructures
             return null;
         }
 
-        public SingleOutputFrame getSingleOutputFrameAtEndOfTimestep(int timeStep, SettingsData settings, bool outputAnalogDwellValues)
+        public SingleOutputFrame getSingleOutputFrameAtEndOfTimestep(TimeStep step, SettingsData settings, bool outputAnalogDwellValues)
         {
-            if (TimeSteps == null)
-                return null;
-            if (timeStep>=TimeSteps.Count)
-                return null;
-
-            TimeStep step = TimeSteps[timeStep];
-            int analogStep;
+         
+            int analogStepID;
             if (outputAnalogDwellValues)
             {
-                analogStep = TimeSteps.IndexOf(dwellWord());
+                analogStepID = TimeSteps.IndexOf(dwellWord());
             }
             else
             {
-                analogStep = timeStep;
+                analogStepID = TimeSteps.IndexOf(step);
             }
+
+            TimeStep analogStep = TimeSteps[analogStepID];
+
+            int timeStepID = TimeSteps.IndexOf(step);
 
             SingleOutputFrame ans = new SingleOutputFrame();
 
@@ -839,7 +838,7 @@ namespace DataStructures
                     }
                     else
                     {
-                        ans.analogValues.Add(analogID, getAnalogValueAtEndOfTimestep(analogStep, analogID, Variables));
+                        ans.analogValues.Add(analogID, getAnalogValueAtEndOfTimestep(analogStepID, analogID, Variables));
                     }
                 }
             }
@@ -856,17 +855,17 @@ namespace DataStructures
                 }
                 else
                 {
-                    if (TimeSteps[timeStep].DigitalData.ContainsKey(digitalID))
+                    if (step.DigitalData.ContainsKey(digitalID))
                     {
-                        DigitalDataPoint dp = TimeSteps[timeStep].DigitalData[digitalID];
+                        DigitalDataPoint dp = step.DigitalData[digitalID];
                         if (!dp.DigitalContinue)
                         {
-                            val = TimeSteps[timeStep].DigitalData[digitalID].getValue();
+                            val = step.DigitalData[digitalID].getValue();
                         }
                         else  // this digital value is a "continue" value, so, we have to go backwards in time until we find 
                         // what value to continue from
                         {
-                            int checkStep = timeStep - 1;
+                            int checkStep = timeStepID - 1;
                             val = false; // if we hunt all the way to the first timestep with no answer, the default answer is false
                             while (checkStep >= 0)
                             {

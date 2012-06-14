@@ -370,9 +370,7 @@ namespace WordGenerator.Controls
 
         private void outputNowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-            outputTimestepNow(false, true);
-
+            ClientRunner.instance.outputTimestepNow(StepData, false, true);
         }
 
         public void unRegsiterHotkey()
@@ -410,79 +408,7 @@ namespace WordGenerator.Controls
 
         }
 
-        public bool outputTimestepNow()
-        {
-            return outputTimestepNow(false, false);
-        }
-
-        /// <summary>
-        /// outputs the editor's timestep. set silent to true if no message logs should be generated.
-        /// </summary>
-        /// <param name="silent"></param>
-        /// <returns></returns>
-        public bool outputTimestepNow(bool silent, bool showErrorDialog)
-        {
-            List<string> unconnectedServers = Storage.settingsData.unconnectedRequiredServers();
-
-            if (!Storage.sequenceData.Lists.ListLocked)
-            {
-                WordGenerator.MainClientForm.instance.variablesEditor.tryLockLists();
-            }
-            if (!Storage.sequenceData.Lists.ListLocked)
-            {
-                if (!silent)
-                    messageLog(this, new MessageEvent("Unable to output timestep, lists not locked."));
-                if (showErrorDialog)
-                {
-                    MessageBox.Show("Unable to output timestep, lists not locked.");
-                }
-                return false;
-            }
-
-            if (unconnectedServers.Count == 0)
-            {
-
-                WordGenerator.MainClientForm.instance.cursorWait();
-
-
-
-                ServerManager.ServerActionStatus actionStatus = Storage.settingsData.serverManager.outputSingleTimestepOnConnectedServers(
-                    Storage.settingsData,
-                    Storage.sequenceData.getSingleOutputFrameAtEndOfTimestep(this.stepNumber - 1, Storage.settingsData, Storage.settingsData.OutputAnalogDwellValuesOnOutputNow),
-                    messageLog);
-
-                WordGenerator.MainClientForm.instance.cursorWaitRelease();
-
-                if (actionStatus == ServerManager.ServerActionStatus.Success)
-                {
-                    if (!silent)
-                        messageLog(this, new MessageEvent("Successfully output timestep " + stepData.ToString()));
-                    WordGenerator.MainClientForm.instance.CurrentlyOutputtingTimestep = this.stepData;
-                    return true;
-                }
-                else
-                {
-                   
-                    if (!silent)
-                        messageLog(this, new MessageEvent("Communication or server error attempting to output this timestep: " + actionStatus.ToString()));
-                    if (showErrorDialog)
-                    {
-                        MessageBox.Show("Communication or server error attempting to output this timestep: " + actionStatus.ToString());
-                    }
-                }
-            }
-            else
-            {
-                string missingServerList = ServerManager.convertListOfServersToOneString(unconnectedServers);
-                if (!silent)
-                    messageLog(this, new MessageEvent("Unable to output this timestep. The following required servers are not connected: " + missingServerList));
-            
-                if (showErrorDialog) {
-                    MessageBox.Show("Unable to output this timestep. The following required servers are not connected: " + missingServerList);
-                }
-            }
-            return false;
-        }
+        
 
         private void insertTimestepBeforeToolStripMenuItem_Click(object sender, EventArgs e)
         {
