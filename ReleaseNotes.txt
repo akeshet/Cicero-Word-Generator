@@ -78,4 +78,13 @@ hotkey handling. New buffer snapshot testing to ensure that any future
 cleanups of buffer generation code do not affect behavior.
 
 Visible changes: Bug fix to analog preview pane not always being correctly
-cleared.
+cleareda.
+
+Bug fix to RFSG tasks -- Initiate is no longer called on each run even if
+AutoInitiate for that device is set to true. Instead, an internal flag is
+used to keep track of whether the given RFSG device is supposed to be in 
+Iniated mode already. This should fix a previous bug in which calling
+Initiate if the card was already initiated was actually DISABLING the card. 
+hopefully it does not introduce a new Issue, though if the state of this
+internal flag gets invalidly set to true, it may require a reset of Atticus
+to have Initiate called again.
