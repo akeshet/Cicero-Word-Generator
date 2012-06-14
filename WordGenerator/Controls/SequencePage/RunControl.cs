@@ -93,9 +93,9 @@ namespace WordGenerator.Controls
         {
             Storage.sequenceData.ListIterationNumber = (int) this.iterationSelector.Value;
             this.Refresh();
-            WordGenerator.mainClientForm.instance.sequencePage1.refreshAnalogPreviewIfAutomatic();
-            WordGenerator.mainClientForm.instance.variablesEditor1.ved_valueChanged(this, null);
-            WordGenerator.mainClientForm.instance.sequencePage1.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
+            WordGenerator.mainClientForm.instance.sequencePage.refreshAnalogPreviewIfAutomatic();
+            WordGenerator.mainClientForm.instance.variablesEditor.ved_valueChanged(this, null);
+            WordGenerator.mainClientForm.instance.sequencePage.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
         }
 
         private void runCurrentButton_Paint(object sender, PaintEventArgs e)

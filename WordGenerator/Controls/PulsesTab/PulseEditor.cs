@@ -233,7 +233,7 @@ namespace WordGenerator.Controls
                 int newIndex = currentIndex - 1;
                 Storage.sequenceData.DigitalPulses.Remove(this.pulse);
                 Storage.sequenceData.DigitalPulses.Insert(newIndex, this.pulse);
-                WordGenerator.mainClientForm.instance.pulsesPage1.layout();
+                WordGenerator.mainClientForm.instance.pulsesPage.layout();
             }
         }
 
@@ -245,7 +245,7 @@ namespace WordGenerator.Controls
                 int newIndex = currentIndex + 1;
                 Storage.sequenceData.DigitalPulses.Remove(this.pulse);
                 Storage.sequenceData.DigitalPulses.Insert(newIndex, pulse);
-                WordGenerator.mainClientForm.instance.pulsesPage1.layout();
+                WordGenerator.mainClientForm.instance.pulsesPage.layout();
             }
         }
 

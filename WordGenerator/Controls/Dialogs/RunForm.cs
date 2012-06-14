@@ -429,7 +429,7 @@ namespace WordGenerator
 
                 addMessageLogText(this, new MessageEvent("Lists not locked, attempting to lock them..."));
 
-                WordGenerator.mainClientForm.instance.variablesEditor1.tryLockLists();
+                WordGenerator.mainClientForm.instance.variablesEditor.tryLockLists();
 
                 if (!runningSequence.Lists.ListLocked)
                 {
@@ -699,7 +699,7 @@ namespace WordGenerator
 
                     addMessageLogText(this, new MessageEvent("Lists not locked, attempting to lock them..."));
 
-                    WordGenerator.mainClientForm.instance.variablesEditor1.tryLockLists();
+                    WordGenerator.mainClientForm.instance.variablesEditor.tryLockLists();
 
                     if (!sequence.Lists.ListLocked)
                     {
@@ -775,7 +775,7 @@ namespace WordGenerator
                                 if (runningSequence == Storage.sequenceData)
                                 {
                                     addMessageLogText(this, new MessageEvent("Settings sequence to sequence mode " + mode.ModeName + "."));
-                                    WordGenerator.mainClientForm.instance.sequencePage1.setMode(mode);
+                                    WordGenerator.mainClientForm.instance.sequencePage.setMode(mode);
                                 }
                                 else
                                 {
@@ -1240,7 +1240,7 @@ namespace WordGenerator
             if (step != null)
             {
                 addMessageLogText(this, new MessageEvent("Attempting to output the dwell timestep."));
-                WordGenerator.Controls.TimestepEditor editor = WordGenerator.mainClientForm.instance.sequencePage1.getTimestepEditor(step);
+                WordGenerator.Controls.TimestepEditor editor = WordGenerator.mainClientForm.instance.sequencePage.getTimestepEditor(step);
                 bool success = false;
                 if (editor != null)
                 {

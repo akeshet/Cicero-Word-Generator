@@ -100,7 +100,7 @@ namespace WordGenerator.Controls
             pulseSelectorTarget = null;
 
             this.Invalidate();
-            WordGenerator.mainClientForm.instance.sequencePage1.updateAllPulseIndicators();
+            WordGenerator.mainClientForm.instance.sequencePage.updateAllPulseIndicators();
 
         }
 
@@ -238,7 +238,7 @@ namespace WordGenerator.Controls
                 }
 
                 TimestepEditor te = 
-                WordGenerator.mainClientForm.instance.sequencePage1.getTimestepEditor(
+                WordGenerator.mainClientForm.instance.sequencePage.getTimestepEditor(
                    Storage.sequenceData.getNthDisplayedTimeStep(temp.X));
 
              /*   Label chanLab = WordGenerator.mainClientForm.instance.sequencePage1.digitalChannelLabelsPanel1.channelLabels[temp.Y*2];

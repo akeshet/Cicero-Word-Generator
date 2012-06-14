@@ -281,8 +281,8 @@ namespace WordGenerator.Controls
 
             if (Storage.sequenceData.stepHidingEnabled)
             {
-                WordGenerator.mainClientForm.instance.sequencePage1.showOrHideHiddenTimestepEditors();
-                WordGenerator.mainClientForm.instance.sequencePage1.layoutTheRest();
+                WordGenerator.mainClientForm.instance.sequencePage.showOrHideHiddenTimestepEditors();
+                WordGenerator.mainClientForm.instance.sequencePage.layoutTheRest();
             }
         }
 
@@ -426,7 +426,7 @@ namespace WordGenerator.Controls
 
             if (!Storage.sequenceData.Lists.ListLocked)
             {
-                WordGenerator.mainClientForm.instance.variablesEditor1.tryLockLists();
+                WordGenerator.mainClientForm.instance.variablesEditor.tryLockLists();
             }
             if (!Storage.sequenceData.Lists.ListLocked)
             {
@@ -493,7 +493,7 @@ namespace WordGenerator.Controls
 
             TimestepEditor te = new TimestepEditor(newStep, stepNumber);
 
-            WordGenerator.mainClientForm.instance.sequencePage1.insertTimestepEditor(te, stepNumber - 1);
+            WordGenerator.mainClientForm.instance.sequencePage.insertTimestepEditor(te, stepNumber - 1);
 
 
         //    WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
@@ -507,7 +507,7 @@ namespace WordGenerator.Controls
             Storage.sequenceData.populateWithChannels(Storage.settingsData);
             Storage.sequenceData.timestepsInsertedOrMoved();
 
-            WordGenerator.mainClientForm.instance.sequencePage1.insertTimestepEditor(
+            WordGenerator.mainClientForm.instance.sequencePage.insertTimestepEditor(
                 new TimestepEditor(newStep, stepNumber + 1), stepNumber);
  
 
@@ -519,7 +519,7 @@ namespace WordGenerator.Controls
             Storage.sequenceData.TimeSteps.Insert(stepNumber, newStep);
             Storage.sequenceData.timestepsInsertedOrMoved();
 
-            WordGenerator.mainClientForm.instance.sequencePage1.insertTimestepEditor(
+            WordGenerator.mainClientForm.instance.sequencePage.insertTimestepEditor(
                 new TimestepEditor(newStep, stepNumber + 1), stepNumber);
 
         }
@@ -528,7 +528,7 @@ namespace WordGenerator.Controls
         {
             Storage.sequenceData.TimeSteps.RemoveAt(stepNumber-1);
 
-            WordGenerator.mainClientForm.instance.sequencePage1.removeTimestepEditor(this);
+            WordGenerator.mainClientForm.instance.sequencePage.removeTimestepEditor(this);
         }
 
         private void durationEditor_updateGUI(object sender, EventArgs e)
@@ -678,7 +678,7 @@ namespace WordGenerator.Controls
                     Storage.sequenceData.TimeSteps.Insert(destinationIndex, this.stepData);
                     Storage.sequenceData.timestepsInsertedOrMoved();
 
-                    WordGenerator.mainClientForm.instance.sequencePage1.moveTimestepEditor(currentIndex, destinationIndex);
+                    WordGenerator.mainClientForm.instance.sequencePage.moveTimestepEditor(currentIndex, destinationIndex);
 
                 }
             }
@@ -732,8 +732,8 @@ namespace WordGenerator.Controls
             // scrolled to, but a scroll event would not be raised by stupid stupid windows, causing the 
             // horizontal scroll bars on the sequence page to become out of sync.
 
-            WordGenerator.mainClientForm.instance.sequencePage1.timeStepsPanel.ScrollControlIntoView(this);
-            WordGenerator.mainClientForm.instance.sequencePage1.forceUpdateAllScrollbars();
+            WordGenerator.mainClientForm.instance.sequencePage.timeStepsPanel.ScrollControlIntoView(this);
+            WordGenerator.mainClientForm.instance.sequencePage.forceUpdateAllScrollbars();
         }
 
         private void mark_Click(object sender, EventArgs e)
@@ -748,12 +748,12 @@ namespace WordGenerator.Controls
 
         private void markall_Click(object sender, EventArgs e)
         {
-            WordGenerator.mainClientForm.instance.sequencePage1.markAllTimesteps();
+            WordGenerator.mainClientForm.instance.sequencePage.markAllTimesteps();
         }
 
         private void unmarkall_Click(object sender, EventArgs e)
         {
-            WordGenerator.mainClientForm.instance.sequencePage1.unmarkAllTimesteps();
+            WordGenerator.mainClientForm.instance.sequencePage.unmarkAllTimesteps();
         }
 
         private void waitForRetriggerMenuItem_Click(object sender, EventArgs e)
@@ -796,7 +796,7 @@ namespace WordGenerator.Controls
         private void timestepGroupComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             stepData.MyTimestepGroup = timestepGroupComboBox.SelectedItem as TimestepGroup;
-            WordGenerator.mainClientForm.instance.sequencePage1.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
+            WordGenerator.mainClientForm.instance.sequencePage.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
         }
 
         private void TimestepEditor_Layout(object sender, LayoutEventArgs e)
@@ -863,7 +863,7 @@ namespace WordGenerator.Controls
                 {
                     dp.DigitalContinue = true;
                 }
-                WordGenerator.mainClientForm.instance.sequencePage1.digitalGrid1.forceRepaint();
+                WordGenerator.mainClientForm.instance.sequencePage.digitalGrid1.forceRepaint();
             }
         }
 

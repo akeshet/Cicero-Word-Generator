@@ -73,7 +73,7 @@ namespace WordGenerator
 
         private void updateOverride()
         {
-            WordGenerator.mainClientForm.instance.sequencePage1.updateOverrideCount();
+            WordGenerator.mainClientForm.instance.sequencePage.updateOverrideCount();
 
             if (WordGenerator.mainClientForm.instance != null)
             {

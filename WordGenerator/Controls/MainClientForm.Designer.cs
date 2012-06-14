@@ -32,7 +32,7 @@ namespace WordGenerator
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainClientForm));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.settingsFileLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newSequence = new System.Windows.Forms.ToolStripMenuItem();
@@ -101,9 +101,9 @@ namespace WordGenerator
             this.sequenceTab = new System.Windows.Forms.TabPage();
             this.waitForReady = new System.Windows.Forms.CheckBox();
             this.lockDigitalCheckBox = new System.Windows.Forms.CheckBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.rs232GroupsLabel = new System.Windows.Forms.Label();
+            this.gpibGroupsLabel = new System.Windows.Forms.Label();
+            this.analogGroupsLabel = new System.Windows.Forms.Label();
             this.serverManagerButton = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.mainTab = new System.Windows.Forms.TabControl();
@@ -113,14 +113,14 @@ namespace WordGenerator
             this.eventLogTab = new System.Windows.Forms.TabPage();
             this.messageLogTextBox = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.sequencePage1 = new WordGenerator.Controls.SequencePage();
-            this.overridePage1 = new WordGenerator.OverridePage();
-            this.analogGroupEditor1 = new WordGenerator.Controls.AnalogGroupEditor();
-            this.gpibGroupEditor1 = new WordGenerator.Controls.GpibGroupEditor();
-            this.rS232GroupEditor1 = new WordGenerator.Controls.Temporary.RS232GroupEditor();
-            this.commonWaveformEditor1 = new WordGenerator.Controls.CommonWaveformEditor();
-            this.variablesEditor1 = new WordGenerator.Controls.VariablesAndListPage();
-            this.pulsesPage1 = new WordGenerator.Controls.PulsesPage();
+            this.sequencePage = new WordGenerator.Controls.SequencePage();
+            this.overridePage = new WordGenerator.OverridePage();
+            this.analogGroupEditor = new WordGenerator.Controls.AnalogGroupEditor();
+            this.gpibGroupEditor = new WordGenerator.Controls.GpibGroupEditor();
+            this.rS232GroupEditor = new WordGenerator.Controls.Temporary.RS232GroupEditor();
+            this.commonWaveformEditor = new WordGenerator.Controls.CommonWaveformEditor();
+            this.variablesEditor = new WordGenerator.Controls.VariablesAndListPage();
+            this.pulsesPage = new WordGenerator.Controls.PulsesPage();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.variablesTab.SuspendLayout();
@@ -139,7 +139,7 @@ namespace WordGenerator
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settingsFileLabel,
-            this.toolStripStatusLabel1});
+            this.toolStripStatusLabel});
             this.statusStrip.Location = new System.Drawing.Point(0, 946);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(1272, 22);
@@ -152,9 +152,9 @@ namespace WordGenerator
             // 
             // toolStripStatusLabel1
             // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(111, 17);
-            this.toolStripStatusLabel1.Text = "Welcome to Cicero!";
+            this.toolStripStatusLabel.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(111, 17);
+            this.toolStripStatusLabel.Text = "Welcome to Cicero!";
             // 
             // menuStrip
             // 
@@ -645,7 +645,7 @@ namespace WordGenerator
             // 
             // variablesTab
             // 
-            this.variablesTab.Controls.Add(this.variablesEditor1);
+            this.variablesTab.Controls.Add(this.variablesEditor);
             this.variablesTab.Location = new System.Drawing.Point(4, 22);
             this.variablesTab.Name = "variablesTab";
             this.variablesTab.Padding = new System.Windows.Forms.Padding(3);
@@ -656,7 +656,7 @@ namespace WordGenerator
             // 
             // commonWaveformTab
             // 
-            this.commonWaveformTab.Controls.Add(this.commonWaveformEditor1);
+            this.commonWaveformTab.Controls.Add(this.commonWaveformEditor);
             this.commonWaveformTab.Location = new System.Drawing.Point(4, 22);
             this.commonWaveformTab.Name = "commonWaveformTab";
             this.commonWaveformTab.Padding = new System.Windows.Forms.Padding(3);
@@ -667,7 +667,7 @@ namespace WordGenerator
             // 
             // gpibTab
             // 
-            this.gpibTab.Controls.Add(this.gpibGroupEditor1);
+            this.gpibTab.Controls.Add(this.gpibGroupEditor);
             this.gpibTab.Location = new System.Drawing.Point(4, 22);
             this.gpibTab.Name = "gpibTab";
             this.gpibTab.Padding = new System.Windows.Forms.Padding(3);
@@ -678,7 +678,7 @@ namespace WordGenerator
             // 
             // analogTab
             // 
-            this.analogTab.Controls.Add(this.analogGroupEditor1);
+            this.analogTab.Controls.Add(this.analogGroupEditor);
             this.analogTab.Location = new System.Drawing.Point(4, 22);
             this.analogTab.Name = "analogTab";
             this.analogTab.Padding = new System.Windows.Forms.Padding(3);
@@ -691,12 +691,12 @@ namespace WordGenerator
             // 
             this.sequenceTab.Controls.Add(this.waitForReady);
             this.sequenceTab.Controls.Add(this.lockDigitalCheckBox);
-            this.sequenceTab.Controls.Add(this.label3);
-            this.sequenceTab.Controls.Add(this.label2);
-            this.sequenceTab.Controls.Add(this.label1);
+            this.sequenceTab.Controls.Add(this.rs232GroupsLabel);
+            this.sequenceTab.Controls.Add(this.gpibGroupsLabel);
+            this.sequenceTab.Controls.Add(this.analogGroupsLabel);
             this.sequenceTab.Controls.Add(this.serverManagerButton);
             this.sequenceTab.Controls.Add(this.button2);
-            this.sequenceTab.Controls.Add(this.sequencePage1);
+            this.sequenceTab.Controls.Add(this.sequencePage);
             this.sequenceTab.Location = new System.Drawing.Point(4, 22);
             this.sequenceTab.Name = "sequenceTab";
             this.sequenceTab.Padding = new System.Windows.Forms.Padding(3);
@@ -729,30 +729,30 @@ namespace WordGenerator
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(178, 200);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(75, 13);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "RS232 Group:";
+            this.rs232GroupsLabel.AutoSize = true;
+            this.rs232GroupsLabel.Location = new System.Drawing.Point(178, 200);
+            this.rs232GroupsLabel.Name = "label3";
+            this.rs232GroupsLabel.Size = new System.Drawing.Size(75, 13);
+            this.rs232GroupsLabel.TabIndex = 7;
+            this.rs232GroupsLabel.Text = "RS232 Group:";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(186, 174);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 13);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "GPIB Group:";
+            this.gpibGroupsLabel.AutoSize = true;
+            this.gpibGroupsLabel.Location = new System.Drawing.Point(186, 174);
+            this.gpibGroupsLabel.Name = "label2";
+            this.gpibGroupsLabel.Size = new System.Drawing.Size(67, 13);
+            this.gpibGroupsLabel.TabIndex = 6;
+            this.gpibGroupsLabel.Text = "GPIB Group:";
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(179, 148);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(75, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Analog Group:";
+            this.analogGroupsLabel.AutoSize = true;
+            this.analogGroupsLabel.Location = new System.Drawing.Point(179, 148);
+            this.analogGroupsLabel.Name = "label1";
+            this.analogGroupsLabel.Size = new System.Drawing.Size(75, 13);
+            this.analogGroupsLabel.TabIndex = 5;
+            this.analogGroupsLabel.Text = "Analog Group:";
             // 
             // serverManagerButton
             // 
@@ -794,7 +794,7 @@ namespace WordGenerator
             // 
             // overrideTab
             // 
-            this.overrideTab.Controls.Add(this.overridePage1);
+            this.overrideTab.Controls.Add(this.overridePage);
             this.overrideTab.Location = new System.Drawing.Point(4, 22);
             this.overrideTab.Name = "overrideTab";
             this.overrideTab.Size = new System.Drawing.Size(1264, 896);
@@ -804,7 +804,7 @@ namespace WordGenerator
             // 
             // rs232Tab
             // 
-            this.rs232Tab.Controls.Add(this.rS232GroupEditor1);
+            this.rs232Tab.Controls.Add(this.rS232GroupEditor);
             this.rs232Tab.Location = new System.Drawing.Point(4, 22);
             this.rs232Tab.Name = "rs232Tab";
             this.rs232Tab.Size = new System.Drawing.Size(1264, 896);
@@ -814,7 +814,7 @@ namespace WordGenerator
             // 
             // pulsesTab
             // 
-            this.pulsesTab.Controls.Add(this.pulsesPage1);
+            this.pulsesTab.Controls.Add(this.pulsesPage);
             this.pulsesTab.Location = new System.Drawing.Point(4, 22);
             this.pulsesTab.Name = "pulsesTab";
             this.pulsesTab.Size = new System.Drawing.Size(1264, 896);
@@ -848,69 +848,69 @@ namespace WordGenerator
             this.toolTip1.UseAnimation = false;
             this.toolTip1.UseFading = false;
             // 
-            // sequencePage1
+            // sequencePage
             // 
-            this.sequencePage1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sequencePage1.Location = new System.Drawing.Point(3, 3);
-            this.sequencePage1.Name = "sequencePage1";
-            this.sequencePage1.Size = new System.Drawing.Size(1258, 890);
-            this.sequencePage1.TabIndex = 0;
-            this.sequencePage1.TimestepEditors = null;
-            this.sequencePage1.messageLog += new System.EventHandler(this.handleMessageEvent);
-            this.sequencePage1.Load += new System.EventHandler(this.sequencePage1_Load);
+            this.sequencePage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sequencePage.Location = new System.Drawing.Point(3, 3);
+            this.sequencePage.Name = "sequencePage";
+            this.sequencePage.Size = new System.Drawing.Size(1258, 890);
+            this.sequencePage.TabIndex = 0;
+            this.sequencePage.TimestepEditors = null;
+            this.sequencePage.messageLog += new System.EventHandler(this.handleMessageEvent);
+            this.sequencePage.Load += new System.EventHandler(this.sequencePage1_Load);
             // 
             // overridePage1
             // 
-            this.overridePage1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.overridePage1.Location = new System.Drawing.Point(0, 0);
-            this.overridePage1.Name = "overridePage1";
-            this.overridePage1.Size = new System.Drawing.Size(1264, 896);
-            this.overridePage1.TabIndex = 0;
+            this.overridePage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.overridePage.Location = new System.Drawing.Point(0, 0);
+            this.overridePage.Name = "overridePage1";
+            this.overridePage.Size = new System.Drawing.Size(1264, 896);
+            this.overridePage.TabIndex = 0;
             // 
             // analogGroupEditor1
             // 
-            this.analogGroupEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.analogGroupEditor1.Location = new System.Drawing.Point(3, 3);
-            this.analogGroupEditor1.Name = "analogGroupEditor1";
-            this.analogGroupEditor1.Size = new System.Drawing.Size(1258, 890);
-            this.analogGroupEditor1.TabIndex = 0;
+            this.analogGroupEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.analogGroupEditor.Location = new System.Drawing.Point(3, 3);
+            this.analogGroupEditor.Name = "analogGroupEditor1";
+            this.analogGroupEditor.Size = new System.Drawing.Size(1258, 890);
+            this.analogGroupEditor.TabIndex = 0;
             // 
             // gpibGroupEditor1
             // 
-            this.gpibGroupEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gpibGroupEditor1.Location = new System.Drawing.Point(3, 3);
-            this.gpibGroupEditor1.Name = "gpibGroupEditor1";
-            this.gpibGroupEditor1.Size = new System.Drawing.Size(1258, 890);
-            this.gpibGroupEditor1.TabIndex = 0;
+            this.gpibGroupEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gpibGroupEditor.Location = new System.Drawing.Point(3, 3);
+            this.gpibGroupEditor.Name = "gpibGroupEditor1";
+            this.gpibGroupEditor.Size = new System.Drawing.Size(1258, 890);
+            this.gpibGroupEditor.TabIndex = 0;
             // 
             // rS232GroupEditor1
             // 
-            this.rS232GroupEditor1.Location = new System.Drawing.Point(3, 3);
-            this.rS232GroupEditor1.Name = "rS232GroupEditor1";
-            this.rS232GroupEditor1.Size = new System.Drawing.Size(1264, 918);
-            this.rS232GroupEditor1.TabIndex = 0;
+            this.rS232GroupEditor.Location = new System.Drawing.Point(3, 3);
+            this.rS232GroupEditor.Name = "rS232GroupEditor1";
+            this.rS232GroupEditor.Size = new System.Drawing.Size(1264, 918);
+            this.rS232GroupEditor.TabIndex = 0;
             // 
             // commonWaveformEditor1
             // 
-            this.commonWaveformEditor1.Location = new System.Drawing.Point(3, 3);
-            this.commonWaveformEditor1.Name = "commonWaveformEditor1";
-            this.commonWaveformEditor1.Size = new System.Drawing.Size(1252, 844);
-            this.commonWaveformEditor1.TabIndex = 0;
+            this.commonWaveformEditor.Location = new System.Drawing.Point(3, 3);
+            this.commonWaveformEditor.Name = "commonWaveformEditor1";
+            this.commonWaveformEditor.Size = new System.Drawing.Size(1252, 844);
+            this.commonWaveformEditor.TabIndex = 0;
             // 
             // variablesEditor1
             // 
-            this.variablesEditor1.Location = new System.Drawing.Point(0, 0);
-            this.variablesEditor1.Name = "variablesEditor1";
-            this.variablesEditor1.Size = new System.Drawing.Size(1264, 918);
-            this.variablesEditor1.TabIndex = 0;
+            this.variablesEditor.Location = new System.Drawing.Point(0, 0);
+            this.variablesEditor.Name = "variablesEditor1";
+            this.variablesEditor.Size = new System.Drawing.Size(1264, 918);
+            this.variablesEditor.TabIndex = 0;
             // 
             // pulsesPage1
             // 
-            this.pulsesPage1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pulsesPage1.Location = new System.Drawing.Point(0, 0);
-            this.pulsesPage1.Name = "pulsesPage1";
-            this.pulsesPage1.Size = new System.Drawing.Size(1264, 896);
-            this.pulsesPage1.TabIndex = 0;
+            this.pulsesPage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pulsesPage.Location = new System.Drawing.Point(0, 0);
+            this.pulsesPage.Name = "pulsesPage1";
+            this.pulsesPage.Size = new System.Drawing.Size(1264, 896);
+            this.pulsesPage.TabIndex = 0;
             // 
             // mainClientForm
             // 
@@ -981,21 +981,21 @@ namespace WordGenerator
         private System.Windows.Forms.TabPage variablesTab;
         private System.Windows.Forms.TabPage commonWaveformTab;
         private System.Windows.Forms.TabPage gpibTab;
-        private WordGenerator.Controls.GpibGroupEditor gpibGroupEditor1;
+        private WordGenerator.Controls.GpibGroupEditor gpibGroupEditor;
         private System.Windows.Forms.TabPage analogTab;
         private System.Windows.Forms.TabPage sequenceTab;
-        public WordGenerator.Controls.SequencePage sequencePage1;
+        public WordGenerator.Controls.SequencePage sequencePage;
         private System.Windows.Forms.TabControl mainTab;
         private System.Windows.Forms.TabPage rs232Tab;
-        private WordGenerator.Controls.Temporary.RS232GroupEditor rS232GroupEditor1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private WordGenerator.Controls.Temporary.RS232GroupEditor rS232GroupEditor;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
         private System.Windows.Forms.TabPage eventLogTab;
         private System.Windows.Forms.TextBox messageLogTextBox;
         private System.Windows.Forms.ToolStripMenuItem newSequence;
         private System.Windows.Forms.Button serverManagerButton;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TabPage overrideTab;
-        private OverridePage overridePage1;
+        private OverridePage overridePage;
         private System.Windows.Forms.ToolStripMenuItem inspectVariableTimebaseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem calculateVariableTimebaseAnalogBufferToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem calculateVariableTimebaseDigitalBufferToolStripMenuItem;
@@ -1007,13 +1007,13 @@ namespace WordGenerator
         private System.Windows.Forms.ToolStripMenuItem runListInRandomOrderToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel settingsFileLabel;
         private System.Windows.Forms.TabPage pulsesTab;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
-        public WordGenerator.Controls.AnalogGroupEditor analogGroupEditor1;
-        public WordGenerator.Controls.PulsesPage pulsesPage1;
-        public WordGenerator.Controls.VariablesAndListPage variablesEditor1;
-        public WordGenerator.Controls.CommonWaveformEditor commonWaveformEditor1;
+        private System.Windows.Forms.Label rs232GroupsLabel;
+        private System.Windows.Forms.Label gpibGroupsLabel;
+        private System.Windows.Forms.Label analogGroupsLabel;
+        public WordGenerator.Controls.AnalogGroupEditor analogGroupEditor;
+        public WordGenerator.Controls.PulsesPage pulsesPage;
+        public WordGenerator.Controls.VariablesAndListPage variablesEditor;
+        public WordGenerator.Controls.CommonWaveformEditor commonWaveformEditor;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem licenseToolStripMenuItem;
