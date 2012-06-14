@@ -72,6 +72,7 @@ namespace WordGenerator
             this.editLogicalDevicesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editServerManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.populateSequenceWithNewChannelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableDebugMenuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sequenceExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -87,6 +88,7 @@ namespace WordGenerator
             this.calculateVariableTimebaseAnalogBufferToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.calculateVariableTimebaseDigitalBufferToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createBufferSnapshotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.licenseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -109,8 +111,7 @@ namespace WordGenerator
             this.eventLogPage = new System.Windows.Forms.TabPage();
             this.messageLogTextBox = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.createBufferSnapshotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.enableDebugMenuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openHomePageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sequencePage1 = new WordGenerator.Controls.SequencePage();
             this.overridePage1 = new WordGenerator.OverridePage();
             this.analogGroupEditor1 = new WordGenerator.Controls.AnalogGroupEditor();
@@ -119,6 +120,7 @@ namespace WordGenerator
             this.commonWaveformEditor1 = new WordGenerator.Controls.CommonWaveformEditor();
             this.variablesEditor1 = new WordGenerator.Controls.VariablesAndListPage();
             this.pulsesPage1 = new WordGenerator.Controls.PulsesPage();
+            this.openGitRepositoryPageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.variablesPage.SuspendLayout();
@@ -468,6 +470,13 @@ namespace WordGenerator
                 "mpatible with old settings files.\r\n";
             this.populateSequenceWithNewChannelsToolStripMenuItem.Click += new System.EventHandler(this.populateSequenceWithNewChannelsToolStripMenuItem_Click);
             // 
+            // enableDebugMenuToolStripMenuItem
+            // 
+            this.enableDebugMenuToolStripMenuItem.Name = "enableDebugMenuToolStripMenuItem";
+            this.enableDebugMenuToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.enableDebugMenuToolStripMenuItem.Text = "Enable Debug Menu";
+            this.enableDebugMenuToolStripMenuItem.Click += new System.EventHandler(this.enableDebugMenuToolStripMenuItem_Click);
+            // 
             // advancedToolStripMenuItem
             // 
             this.advancedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -587,11 +596,20 @@ namespace WordGenerator
             this.stToolStripMenuItem.Visible = false;
             this.stToolStripMenuItem.Click += new System.EventHandler(this.stToolStripMenuItem_Click);
             // 
+            // createBufferSnapshotToolStripMenuItem
+            // 
+            this.createBufferSnapshotToolStripMenuItem.Name = "createBufferSnapshotToolStripMenuItem";
+            this.createBufferSnapshotToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
+            this.createBufferSnapshotToolStripMenuItem.Text = "Create buffer snapshot";
+            this.createBufferSnapshotToolStripMenuItem.Click += new System.EventHandler(this.createBufferSnapshotToolStripMenuItem_Click);
+            // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem1,
-            this.licenseToolStripMenuItem});
+            this.licenseToolStripMenuItem,
+            this.openHomePageToolStripMenuItem,
+            this.openGitRepositoryPageToolStripMenuItem});
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.aboutToolStripMenuItem.Text = "About";
@@ -599,14 +617,14 @@ namespace WordGenerator
             // aboutToolStripMenuItem1
             // 
             this.aboutToolStripMenuItem1.Name = "aboutToolStripMenuItem1";
-            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(146, 22);
+            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(209, 22);
             this.aboutToolStripMenuItem1.Text = "Splash Screen";
             this.aboutToolStripMenuItem1.Click += new System.EventHandler(this.aboutToolStripMenuItem1_Click);
             // 
             // licenseToolStripMenuItem
             // 
             this.licenseToolStripMenuItem.Name = "licenseToolStripMenuItem";
-            this.licenseToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.licenseToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.licenseToolStripMenuItem.Text = "License";
             this.licenseToolStripMenuItem.Click += new System.EventHandler(this.licenseToolStripMenuItem_Click);
             // 
@@ -815,19 +833,12 @@ namespace WordGenerator
             this.toolTip1.UseAnimation = false;
             this.toolTip1.UseFading = false;
             // 
-            // createBufferSnapshotToolStripMenuItem
+            // openHomePageToolStripMenuItem
             // 
-            this.createBufferSnapshotToolStripMenuItem.Name = "createBufferSnapshotToolStripMenuItem";
-            this.createBufferSnapshotToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
-            this.createBufferSnapshotToolStripMenuItem.Text = "Create buffer snapshot";
-            this.createBufferSnapshotToolStripMenuItem.Click += new System.EventHandler(this.createBufferSnapshotToolStripMenuItem_Click);
-            // 
-            // enableDebugMenuToolStripMenuItem
-            // 
-            this.enableDebugMenuToolStripMenuItem.Name = "enableDebugMenuToolStripMenuItem";
-            this.enableDebugMenuToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.enableDebugMenuToolStripMenuItem.Text = "Enable Debug Menu";
-            this.enableDebugMenuToolStripMenuItem.Click += new System.EventHandler(this.enableDebugMenuToolStripMenuItem_Click);
+            this.openHomePageToolStripMenuItem.Name = "openHomePageToolStripMenuItem";
+            this.openHomePageToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.openHomePageToolStripMenuItem.Text = "Open Home Page";
+            this.openHomePageToolStripMenuItem.Click += new System.EventHandler(this.openHomePageToolStripMenuItem_Click);
             // 
             // sequencePage1
             // 
@@ -891,6 +902,13 @@ namespace WordGenerator
             this.pulsesPage1.Name = "pulsesPage1";
             this.pulsesPage1.Size = new System.Drawing.Size(1264, 896);
             this.pulsesPage1.TabIndex = 0;
+            // 
+            // openGitRepositoryPageToolStripMenuItem
+            // 
+            this.openGitRepositoryPageToolStripMenuItem.Name = "openGitRepositoryPageToolStripMenuItem";
+            this.openGitRepositoryPageToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.openGitRepositoryPageToolStripMenuItem.Text = "Open Git Repository Page";
+            this.openGitRepositoryPageToolStripMenuItem.Click += new System.EventHandler(this.openGitRepositoryPageToolStripMenuItem_Click);
             // 
             // mainClientForm
             // 
@@ -1021,6 +1039,8 @@ namespace WordGenerator
         private System.Windows.Forms.ToolStripMenuItem doNothingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createBufferSnapshotToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enableDebugMenuToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openHomePageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openGitRepositoryPageToolStripMenuItem;
 
     }
 }
