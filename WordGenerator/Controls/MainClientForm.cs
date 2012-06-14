@@ -250,6 +250,10 @@ namespace WordGenerator
 
             InitializeComponent();
 
+#if DEBUG
+            debugToolStripMenuItem.Visible = true;
+#endif
+
             CiceroSplashForm splash = new CiceroSplashForm();
 
             splash.Show();
@@ -1444,6 +1448,11 @@ namespace WordGenerator
         private void openGitRepositoryPageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("https://github.com/akeshet/Cicero-Word-Generator");
+        }
+
+        private void doNothingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
 
     }
