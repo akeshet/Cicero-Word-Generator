@@ -365,53 +365,55 @@ namespace WordGenerator
         /// </summary>
         public void RefreshSequenceDataToUI(SequenceData sequenceData)
         {
-            
-                WordGenerator.MainClientForm.instance.cursorWait();
 
-                lic_chk();
+            WordGenerator.MainClientForm.instance.cursorWait();
 
-                
-                this.commonWaveformEditor.setCommonWaveforms(Storage.sequenceData.CommonWaveforms);
+            lic_chk();
 
-                if (sequenceData.AnalogGroups.Count != 0)
-                    this.analogGroupEditor.setAnalogGroup(sequenceData.AnalogGroups[0]);
-                else
-                    this.analogGroupEditor.setAnalogGroup(null);
 
-                
-                this.sequencePage.layoutAll();
+            this.commonWaveformEditor.setCommonWaveforms(Storage.sequenceData.CommonWaveforms);
 
-                this.variablesEditor.layout();
+            if (sequenceData.AnalogGroups.Count != 0)
+                this.analogGroupEditor.setAnalogGroup(sequenceData.AnalogGroups[0]);
+            else
+                this.analogGroupEditor.setAnalogGroup(null);
 
-                if (sequenceData.GpibGroups.Count != 0)
-                    this.gpibGroupEditor.setGpibGroup(sequenceData.GpibGroups[0]);
-                else
-                    this.gpibGroupEditor.setGpibGroup(null);
 
-                if (sequenceData.RS232Groups.Count != 0)
-                    this.rS232GroupEditor.setRS232Group(sequenceData.RS232Groups[0]);
-                else
-                    this.rS232GroupEditor.setRS232Group(null);
+            this.sequencePage.layoutAll();
 
-                this.analogGroupEditor.updateRunOrderPanel();
-                this.gpibGroupEditor.updateRunOrderPanel();
+            this.variablesEditor.layout();
 
-                updateFormTitle();
+            if (sequenceData.GpibGroups.Count != 0)
+                this.gpibGroupEditor.setGpibGroup(sequenceData.GpibGroups[0]);
+            else
+                this.gpibGroupEditor.setGpibGroup(null);
 
-                if (!Storage.sequenceData.TimeSteps.Contains(CurrentlyOutputtingTimestep))
-                {
-                    CurrentlyOutputtingTimestep = null;
-                }
+            if (sequenceData.RS232Groups.Count != 0)
+                this.rS232GroupEditor.setRS232Group(sequenceData.RS232Groups[0]);
+            else
+                this.rS232GroupEditor.setRS232Group(null);
 
-                pulsesPage.layout();
+            this.analogGroupEditor.updateRunOrderPanel();
+            this.gpibGroupEditor.updateRunOrderPanel();
 
-                sequencePage.forceUpdateAllScrollbars();
+            updateFormTitle();
 
-                setTimestepEditorBackgrounds();
+            if (!Storage.sequenceData.TimeSteps.Contains(CurrentlyOutputtingTimestep))
+            {
+                CurrentlyOutputtingTimestep = null;
+            }
 
-                waitForReady.Checked = Storage.sequenceData.WaitForReady;
+            pulsesPage.layout();
 
-                WordGenerator.MainClientForm.instance.cursorWaitRelease();
+            sequencePage.forceUpdateAllScrollbars();
+
+            setTimestepEditorBackgrounds();
+
+            waitForReady.Checked = Storage.sequenceData.WaitForReady;
+
+            this.refreshAllTimestepHotkeys();
+
+            WordGenerator.MainClientForm.instance.cursorWaitRelease();
 
         }
 
@@ -775,11 +777,11 @@ namespace WordGenerator
 
         public void unregisterAllTimestepHotkeys()
         {
-            foreach (object hotkeyObj in hotKeyBindings)
+            for (int i = 0; i < hotKeyBindings.Count; i++ )
             {
-                if (hotkeyObj is TimeStep)
+                if (hotKeyBindings[i] is TimeStep)
                 {
-                    unregisterHotkey(hotkeyObj);
+                    unregisterHotkey(hotKeyBindings[i]);
                 }
             }
         }
