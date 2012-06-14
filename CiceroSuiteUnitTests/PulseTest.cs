@@ -65,9 +65,7 @@ namespace CiceroSuiteUnitTests
 
 
         /// <summary>
-        ///A test for Pulse deserialization, ensuring that 
-        ///deserialized pulses from before startDelay and endDelay were
-        ///folded into their own properties still work.
+        /// Test that pulse parameters are deserialized properly
         ///</summary>
         [TestMethod()]
         public void PulseDeserializationTest()
