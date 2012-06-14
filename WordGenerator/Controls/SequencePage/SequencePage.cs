@@ -236,12 +236,12 @@ namespace WordGenerator.Controls
                 this.analogPreviewUpdate.Visible = true;
             }
 
-            if (WordGenerator.mainClientForm.instance != null)
-                WordGenerator.mainClientForm.instance.cursorWait();
+            if (WordGenerator.MainClientForm.instance != null)
+                WordGenerator.MainClientForm.instance.cursorWait();
 
             digitalGrid1.updateSize();
-            if (WordGenerator.mainClientForm.instance != null)
-                WordGenerator.mainClientForm.instance.cursorWaitRelease();
+            if (WordGenerator.MainClientForm.instance != null)
+                WordGenerator.MainClientForm.instance.cursorWaitRelease();
 
             repairAllMargins(this, null);
 
@@ -604,7 +604,7 @@ namespace WordGenerator.Controls
         /// </summary>
         public void showOrHideHiddenTimestepEditors()
         {
-            WordGenerator.mainClientForm.instance.cursorWait();
+            WordGenerator.MainClientForm.instance.cursorWait();
             timeStepsFlowPanel.SuspendLayout();
             foreach (Control con in timeStepsFlowPanel.Controls)
             {
@@ -626,7 +626,7 @@ namespace WordGenerator.Controls
             }
             timeStepsFlowPanel.ResumeLayout();
             
-            WordGenerator.mainClientForm.instance.cursorWaitRelease();
+            WordGenerator.MainClientForm.instance.cursorWaitRelease();
         }
 
         private void addNewTimestepToolStripMenuItem_Click(object sender, EventArgs e)
@@ -635,7 +635,7 @@ namespace WordGenerator.Controls
             if (Storage.sequenceData != null)
             {
                 Storage.sequenceData.TimeSteps.Add(new TimeStep("New Timestep"));
-                WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+                WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
             }
         }
 
@@ -852,8 +852,8 @@ namespace WordGenerator.Controls
             if (Storage.sequenceData != null)
             {
                 Storage.sequenceData.SequenceName = seqNameBox.Text;
-                if (WordGenerator.mainClientForm.instance!=null)
-                    WordGenerator.mainClientForm.instance.updateFormTitle();
+                if (WordGenerator.MainClientForm.instance!=null)
+                    WordGenerator.MainClientForm.instance.updateFormTitle();
             }
         }
 

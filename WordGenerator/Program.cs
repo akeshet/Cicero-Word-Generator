@@ -76,11 +76,11 @@ namespace WordGenerator
 
                 if (runLog == null)
                 {
-                    Application.Run(new mainClientForm());
+                    Application.Run(new MainClientForm());
                 }
                 else
                 {
-                    Application.Run(new mainClientForm(runLog));
+                    Application.Run(new MainClientForm(runLog));
                 }
             }
             catch (Exception e)

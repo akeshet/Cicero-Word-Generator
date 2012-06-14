@@ -73,13 +73,13 @@ namespace WordGenerator
 
         private void updateOverride()
         {
-            WordGenerator.mainClientForm.instance.sequencePage.updateOverrideCount();
+            WordGenerator.MainClientForm.instance.sequencePage.updateOverrideCount();
 
-            if (WordGenerator.mainClientForm.instance != null)
+            if (WordGenerator.MainClientForm.instance != null)
             {
-                if (WordGenerator.mainClientForm.instance.reDwell())
+                if (WordGenerator.MainClientForm.instance.reDwell())
                 {
-                    WordGenerator.mainClientForm.instance.handleMessageEvent(this, new MessageEvent("Re-output current timestep due to change in override value."));
+                    WordGenerator.MainClientForm.instance.handleMessageEvent(this, new MessageEvent("Re-output current timestep due to change in override value."));
                 }
             }
         }
@@ -118,7 +118,7 @@ namespace WordGenerator
                     unRegsiterHotkey();
                 channel.hotkeyChar = hChar;
 
-                WordGenerator.mainClientForm.instance.RefreshSettingsDataToUI(Storage.settingsData);
+                WordGenerator.MainClientForm.instance.RefreshSettingsDataToUI(Storage.settingsData);
             }
         }
 
@@ -140,7 +140,7 @@ namespace WordGenerator
                     unRegsiterHotkey();
                 channel.overrideHotkeyChar = hChar;
 
-                WordGenerator.mainClientForm.instance.RefreshSettingsDataToUI(Storage.settingsData);
+                WordGenerator.MainClientForm.instance.RefreshSettingsDataToUI(Storage.settingsData);
             }
         }
 
@@ -152,7 +152,7 @@ namespace WordGenerator
             {
                 unRegsiterHotkey();
                 channel.hotkeyChar = (char) 0;
-                WordGenerator.mainClientForm.instance.RefreshSettingsDataToUI(Storage.settingsData);
+                WordGenerator.MainClientForm.instance.RefreshSettingsDataToUI(Storage.settingsData);
             }
         }
 
@@ -161,12 +161,12 @@ namespace WordGenerator
         {
             if ( channel.hotkeyChar != 0)
             {
-                WordGenerator.mainClientForm.instance.unregisterHotkey(channel.hotkeyChar, valueBox);
+                WordGenerator.MainClientForm.instance.unregisterHotkey(channel.hotkeyChar, valueBox);
             }
 
             if (channel.overrideHotkeyChar != 0)
             {
-                WordGenerator.mainClientForm.instance.unregisterHotkey(channel.overrideHotkeyChar, overrideCheck);
+                WordGenerator.MainClientForm.instance.unregisterHotkey(channel.overrideHotkeyChar, overrideCheck);
             }
         }
 
@@ -174,12 +174,12 @@ namespace WordGenerator
         {
             if (channel.hotkeyChar != 0)
             {
-                WordGenerator.mainClientForm.instance.registerToggleHotkey(channel.hotkeyChar, valueBox);
+                WordGenerator.MainClientForm.instance.registerToggleHotkey(channel.hotkeyChar, valueBox);
             }
 
             if (channel.overrideHotkeyChar != 0)
             {
-                WordGenerator.mainClientForm.instance.registerToggleHotkey(channel.overrideHotkeyChar, overrideCheck);
+                WordGenerator.MainClientForm.instance.registerToggleHotkey(channel.overrideHotkeyChar, overrideCheck);
             }
         }
 
@@ -212,7 +212,7 @@ namespace WordGenerator
             {
                 unRegsiterHotkey();
                 channel.overrideHotkeyChar = (char)0;
-                WordGenerator.mainClientForm.instance.RefreshSettingsDataToUI(Storage.settingsData);
+                WordGenerator.MainClientForm.instance.RefreshSettingsDataToUI(Storage.settingsData);
             }
         }
 

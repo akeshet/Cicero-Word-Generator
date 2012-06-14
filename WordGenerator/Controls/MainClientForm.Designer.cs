@@ -1,6 +1,6 @@
 namespace WordGenerator
 {
-    partial class mainClientForm
+    partial class MainClientForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@ namespace WordGenerator
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainClientForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainClientForm));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.settingsFileLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();

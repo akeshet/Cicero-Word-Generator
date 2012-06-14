@@ -12,9 +12,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace WordGenerator
 {
-    public partial class mainClientForm : Form
+    public partial class MainClientForm : Form
     {
-        public static mainClientForm instance;
+        public static MainClientForm instance;
 
         /// <summary>
         /// This is the timestep that is currently being output. This applies only during "dwell" times, not during run times.
@@ -215,7 +215,7 @@ namespace WordGenerator
         /// runLog will contain the log that we intent to browse.
         /// </summary>
         /// <param name="runLog"></param>
-        public mainClientForm(RunLog runLog)
+        public MainClientForm(RunLog runLog)
         {
             #region Singleton
             if (instance != null)
@@ -309,7 +309,7 @@ namespace WordGenerator
 
 
 
-        public mainClientForm()
+        public MainClientForm()
             : this(null)
         {
 
@@ -378,7 +378,7 @@ namespace WordGenerator
         public void RefreshSequenceDataToUI(SequenceData sequenceData)
         {
             
-                WordGenerator.mainClientForm.instance.cursorWait();
+                WordGenerator.MainClientForm.instance.cursorWait();
 
                 lic_chk();
 
@@ -423,7 +423,7 @@ namespace WordGenerator
 
                 waitForReady.Checked = Storage.sequenceData.WaitForReady;
 
-                WordGenerator.mainClientForm.instance.cursorWaitRelease();
+                WordGenerator.MainClientForm.instance.cursorWaitRelease();
 
         }
 
@@ -449,7 +449,7 @@ namespace WordGenerator
 
         public void RefreshSettingsDataToUI(SettingsData settingsData)
         {
-            WordGenerator.mainClientForm.instance.cursorWait();
+            WordGenerator.MainClientForm.instance.cursorWait();
 
             this.analogGroupEditor.setChannelCollection(settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.analog]);
             this.gpibGroupEditor.setChannelCollection(settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.gpib]);
@@ -460,7 +460,7 @@ namespace WordGenerator
 
             setTimestepEditorBackgrounds();
 
-            WordGenerator.mainClientForm.instance.cursorWaitRelease();
+            WordGenerator.MainClientForm.instance.cursorWaitRelease();
         }
 
 
@@ -774,7 +774,7 @@ namespace WordGenerator
         private void newSequence_Click(object sender, EventArgs e)
         {
             Storage.sequenceData = new SequenceData();
-            WordGenerator.mainClientForm.instance.OpenSequenceFileName = null;
+            WordGenerator.MainClientForm.instance.OpenSequenceFileName = null;
             RefreshSequenceDataToUI(Storage.sequenceData);
         }
 
@@ -1124,9 +1124,9 @@ namespace WordGenerator
                 fs.Close();
 
                 Storage.settingsData = log.RunSettings;
-                WordGenerator.mainClientForm.instance.OpenSettingsFileName = fileName;
+                WordGenerator.MainClientForm.instance.OpenSettingsFileName = fileName;
                 Storage.sequenceData = log.RunSequence;                
-                WordGenerator.mainClientForm.instance.OpenSequenceFileName = fileName;
+                WordGenerator.MainClientForm.instance.OpenSequenceFileName = fileName;
 
                 this.RefreshSequenceDataToUI(Storage.sequenceData);
                 this.handleMessageEvent(this, new MessageEvent("Loaded sequence file " + fileName));
@@ -1413,7 +1413,7 @@ namespace WordGenerator
 
         private void stToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            WordGenerator.mainClientForm.instance.studentEdition = true;
+            WordGenerator.MainClientForm.instance.studentEdition = true;
 
         }
 

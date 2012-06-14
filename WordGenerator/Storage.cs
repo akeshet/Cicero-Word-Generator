@@ -243,7 +243,7 @@ namespace WordGenerator
                 if (loadMe != null)
                 {
                     Storage.settingsData = loadMe;
-                    WordGenerator.mainClientForm.instance.OpenSettingsFileName = path;
+                    WordGenerator.MainClientForm.instance.OpenSettingsFileName = path;
                     return true;
                 }
                 else
@@ -281,7 +281,7 @@ namespace WordGenerator
                 {
                     Storage.sequenceData = loadMe;
                     clientStartupSettings.AddNewFile(path);
-                    WordGenerator.mainClientForm.instance.OpenSequenceFileName = path;
+                    WordGenerator.MainClientForm.instance.OpenSequenceFileName = path;
                     return true;
                 }
                 else
@@ -316,13 +316,13 @@ namespace WordGenerator
                     if (path != null)
                     {
                         Save(path, settingsData);
-                        WordGenerator.mainClientForm.instance.OpenSettingsFileName = path;
+                        WordGenerator.MainClientForm.instance.OpenSettingsFileName = path;
                     }
                 }
                 if (path != null)
                 {
                     Save(path, settingsData);
-                    WordGenerator.mainClientForm.instance.OpenSettingsFileName = path;
+                    WordGenerator.MainClientForm.instance.OpenSettingsFileName = path;
                 }
             }
 
@@ -343,7 +343,7 @@ namespace WordGenerator
                 {
                     Save(path, sequence);
                     if (sequence == sequenceData)
-                        WordGenerator.mainClientForm.instance.OpenSequenceFileName = path;
+                        WordGenerator.MainClientForm.instance.OpenSequenceFileName = path;
                     clientStartupSettings.AddNewFile(path);
                 }
             }

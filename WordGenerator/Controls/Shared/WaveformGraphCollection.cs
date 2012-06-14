@@ -86,8 +86,8 @@ namespace WordGenerator.Controls
             }
 
             this.SuspendLayout();
-            if (WordGenerator.mainClientForm.instance!=null)
-                WordGenerator.mainClientForm.instance.cursorWait();
+            if (WordGenerator.MainClientForm.instance!=null)
+                WordGenerator.MainClientForm.instance.cursorWait();
 
             List<WaveformGraph> graphsToAdd = new List<WaveformGraph>();
 
@@ -103,8 +103,8 @@ namespace WordGenerator.Controls
             waveformGraphs.Clear();
             if (waveforms == null || waveforms.Count == 0)
             {
-                if (WordGenerator.mainClientForm.instance!=null)
-                    WordGenerator.mainClientForm.instance.cursorWaitRelease();
+                if (WordGenerator.MainClientForm.instance!=null)
+                    WordGenerator.MainClientForm.instance.cursorWaitRelease();
                 return;
             }
 
@@ -136,25 +136,25 @@ namespace WordGenerator.Controls
             
             this.Refresh();
 
-            WordGenerator.mainClientForm.instance.cursorWaitRelease();
+            WordGenerator.MainClientForm.instance.cursorWaitRelease();
 
         }
 
         void WaveformGraphCollection_gotClicked(object sender, EventArgs e)
         {
-            if (WordGenerator.mainClientForm.instance != null)
-                WordGenerator.mainClientForm.instance.cursorWait();
+            if (WordGenerator.MainClientForm.instance != null)
+                WordGenerator.MainClientForm.instance.cursorWait();
 
             WaveformGraph wg = sender as WaveformGraph;
             if (wg == null)
             {
-                WordGenerator.mainClientForm.instance.cursorWaitRelease();
+                WordGenerator.MainClientForm.instance.cursorWaitRelease();
                 return;
             }
 
             if (!waveformGraphs.Contains(wg))
             {
-                WordGenerator.mainClientForm.instance.cursorWaitRelease();
+                WordGenerator.MainClientForm.instance.cursorWaitRelease();
                 return;
             }
 
@@ -171,8 +171,8 @@ namespace WordGenerator.Controls
 
             waveformEditor.setWaveform(wg.getWaveform());
 
-            if (WordGenerator.mainClientForm.instance != null)
-                WordGenerator.mainClientForm.instance.cursorWaitRelease();
+            if (WordGenerator.MainClientForm.instance != null)
+                WordGenerator.MainClientForm.instance.cursorWaitRelease();
 
 
         }

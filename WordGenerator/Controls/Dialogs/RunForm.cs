@@ -180,7 +180,7 @@ namespace WordGenerator
         public RunForm(SequenceData sequenceToRun)
         {
             this.runningSequence = sequenceToRun;
-            if (WordGenerator.mainClientForm.instance.studentEdition)
+            if (WordGenerator.MainClientForm.instance.studentEdition)
             {
                 MessageBox.Show("Your Cicero Professional Edition (C) License expired on March 31. You are now running a temporary 24 hour STUDENT EDITION license. Please see http://web.mit.edu/~akeshet/www/Cicero/apr1.html for license renewal information.", "License expired -- temporary STUDENT EDITION license.");
             }
@@ -231,7 +231,7 @@ namespace WordGenerator
                 getConfirmationThread.Start();
             }
             // Supress hotkeys in main form when this form is runnings. This will be cleared when the run form closes.
-            WordGenerator.mainClientForm.instance.suppressHotkeys = true;
+            WordGenerator.MainClientForm.instance.suppressHotkeys = true;
 
             InitializeComponent();
             runFormStatus = RunFormStatus.Inactive;
@@ -242,9 +242,9 @@ namespace WordGenerator
 
 
             // fortune cookie
-            if (WordGenerator.mainClientForm.instance.fortunes != null)
+            if (WordGenerator.MainClientForm.instance.fortunes != null)
             {
-                List<string> forts = WordGenerator.mainClientForm.instance.fortunes;
+                List<string> forts = WordGenerator.MainClientForm.instance.fortunes;
                 Random rand = new Random();
                 fortuneCookieLabel.Text = forts[rand.Next(forts.Count - 1)];
             }
@@ -339,7 +339,7 @@ namespace WordGenerator
             else
             {
 
-                WordGenerator.mainClientForm.instance.handleMessageEvent(sender, e);
+                WordGenerator.MainClientForm.instance.handleMessageEvent(sender, e);
                 MessageEvent message = (MessageEvent)e;
                 if (!this.IsDisposed)
                 {
@@ -429,7 +429,7 @@ namespace WordGenerator
 
                 addMessageLogText(this, new MessageEvent("Lists not locked, attempting to lock them..."));
 
-                WordGenerator.mainClientForm.instance.variablesEditor.tryLockLists();
+                WordGenerator.MainClientForm.instance.variablesEditor.tryLockLists();
 
                 if (!runningSequence.Lists.ListLocked)
                 {
@@ -629,7 +629,7 @@ namespace WordGenerator
             bool keepGoing = true;
             while (keepGoing)
             {
-                mainClientForm.instance.CurrentlyOutputtingTimestep = null;
+                MainClientForm.instance.CurrentlyOutputtingTimestep = null;
 
 
 
@@ -699,7 +699,7 @@ namespace WordGenerator
 
                     addMessageLogText(this, new MessageEvent("Lists not locked, attempting to lock them..."));
 
-                    WordGenerator.mainClientForm.instance.variablesEditor.tryLockLists();
+                    WordGenerator.MainClientForm.instance.variablesEditor.tryLockLists();
 
                     if (!sequence.Lists.ListLocked)
                     {
@@ -775,7 +775,7 @@ namespace WordGenerator
                                 if (runningSequence == Storage.sequenceData)
                                 {
                                     addMessageLogText(this, new MessageEvent("Settings sequence to sequence mode " + mode.ModeName + "."));
-                                    WordGenerator.mainClientForm.instance.sequencePage.setMode(mode);
+                                    WordGenerator.MainClientForm.instance.sequencePage.setMode(mode);
                                 }
                                 else
                                 {
@@ -1022,7 +1022,7 @@ namespace WordGenerator
                     //EndInvoke(res);
                 }
 
-                mainClientForm.instance.CurrentlyOutputtingTimestep = sequence.dwellWord();
+                MainClientForm.instance.CurrentlyOutputtingTimestep = sequence.dwellWord();
 
 
 
@@ -1041,7 +1041,7 @@ namespace WordGenerator
 
 
                 addMessageLogText(this, new MessageEvent("Finished run. Writing log file..."));
-                RunLog runLog = new RunLog(runStartTime, formCreationTime, sequence, Storage.settingsData, WordGenerator.mainClientForm.instance.OpenSequenceFileName, WordGenerator.mainClientForm.instance.OpenSettingsFileName);
+                RunLog runLog = new RunLog(runStartTime, formCreationTime, sequence, Storage.settingsData, WordGenerator.MainClientForm.instance.OpenSequenceFileName, WordGenerator.MainClientForm.instance.OpenSettingsFileName);
                 string fileName = runLog.WriteLogFile();
 
                 if (fileName != null)
@@ -1115,7 +1115,7 @@ namespace WordGenerator
 
         private void lic_chk()
         {
-            if (WordGenerator.mainClientForm.instance.studentEdition)
+            if (WordGenerator.MainClientForm.instance.studentEdition)
                 addMessageLogText(this, new MessageEvent("Your Cicero Professional Edition (C) License expired on March 31. You are now running a temporary 24 hour STUDENT EDITION license. Please see http://web.mit.edu/~akeshet/www/Cicero/apr1.html for license renewal information."));
         }
 
@@ -1128,9 +1128,9 @@ namespace WordGenerator
                 if (step != null)
                 {
                     if (!step.LoopCopy)
-                        mainClientForm.instance.CurrentlyOutputtingTimestep = step;
+                        MainClientForm.instance.CurrentlyOutputtingTimestep = step;
                     else
-                        mainClientForm.instance.CurrentlyOutputtingTimestep = step.loopOriginalCopy;
+                        MainClientForm.instance.CurrentlyOutputtingTimestep = step.loopOriginalCopy;
                 }
                 string stepName = "";
                 if (step != null)
@@ -1189,7 +1189,7 @@ namespace WordGenerator
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
-            WordGenerator.mainClientForm.instance.suppressHotkeys = false;
+            WordGenerator.MainClientForm.instance.suppressHotkeys = false;
             if (this.isBackgroundRunform)
             {
                 RunForm.backgroundRunningRunform = null;
@@ -1240,7 +1240,7 @@ namespace WordGenerator
             if (step != null)
             {
                 addMessageLogText(this, new MessageEvent("Attempting to output the dwell timestep."));
-                WordGenerator.Controls.TimestepEditor editor = WordGenerator.mainClientForm.instance.sequencePage.getTimestepEditor(step);
+                WordGenerator.Controls.TimestepEditor editor = WordGenerator.MainClientForm.instance.sequencePage.getTimestepEditor(step);
                 bool success = false;
                 if (editor != null)
                 {

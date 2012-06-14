@@ -38,7 +38,7 @@ namespace WordGenerator
         {
             channel.overridden = checkBox1.Checked;
             this.numericUpDown1.Enabled = checkBox1.Checked;
-            WordGenerator.mainClientForm.instance.sequencePage.updateOverrideCount();
+            WordGenerator.MainClientForm.instance.sequencePage.updateOverrideCount();
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)

@@ -115,7 +115,7 @@ namespace WordGenerator.Controls
 
         private void cleanPulsesButton_Click(object sender, EventArgs e)
         {
-            WordGenerator.mainClientForm.instance.cursorWait();
+            WordGenerator.MainClientForm.instance.cursorWait();
 
             bool replacedPulses = false;
 
@@ -140,10 +140,10 @@ namespace WordGenerator.Controls
 
             if (replacedPulses)
             {
-                WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+                WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
             }
 
-            WordGenerator.mainClientForm.instance.cursorWaitRelease();
+            WordGenerator.MainClientForm.instance.cursorWaitRelease();
         }
     }
 }
