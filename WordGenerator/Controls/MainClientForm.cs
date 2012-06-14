@@ -276,25 +276,25 @@ namespace WordGenerator
             // bind F1 to F8 to appropriate tab pages
 
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F1);
-            hotKeyBindings.Add(this.sequencePage);
+            hotKeyBindings.Add(this.sequenceTab);
 
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F2);
             hotKeyBindings.Add(this.overrideTab);
 
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F3);
-            hotKeyBindings.Add(this.analogPage);
+            hotKeyBindings.Add(this.analogTab);
 
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F4);
-            hotKeyBindings.Add(this.gpibPage);
+            hotKeyBindings.Add(this.gpibTab);
 
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F5);
             hotKeyBindings.Add(this.rs232Tab);
 
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F6);
-            hotKeyBindings.Add(this.commonWaveformPage);
+            hotKeyBindings.Add(this.commonWaveformTab);
 
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F7);
-            hotKeyBindings.Add(this.variablesPage);
+            hotKeyBindings.Add(this.variablesTab);
 
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F8);
             hotKeyBindings.Add(this.pulsesTab);
