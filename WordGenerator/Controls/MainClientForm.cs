@@ -706,15 +706,27 @@ namespace WordGenerator
             base.WndProc(ref m);
         }
 
+        private List<char> usedTimestepHotkeys;
+
         /// <summary>
-        /// used to register timestep hotkeys. Ctrl + key.
+        /// Used to register timestep hotkeys. Ctrl + key.
+        /// 
+        /// returns true if successful,
+        /// false if key was already in use
         /// </summary>
         /// <param name="key"></param>
         /// <param name="timeStep"></param>
-        public void registerTimestepHotkey(char key, TimeStep timeStep)
+        public bool registerTimestepHotkey(char key, TimeStep timeStep)
         {
             if (hotKeyBindings == null)
                 hotKeyBindings = new List<object>();
+
+            if (usedTimestepHotkeys == null)
+                usedTimestepHotkeys = new List<char>();
+
+            if (usedTimestepHotkeys.Contains(key))
+                return false;
+
 
             // convert the character to a Keys enum element. This is weird but necessary.
             string keyStr = "" + char.ToUpper(key);
@@ -723,6 +735,8 @@ namespace WordGenerator
 
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.Control, myKey);
             hotKeyBindings.Add(timeStep);
+
+            return false;
         }
 
         public void unregisterHotkey(object hotkeyObject)
@@ -738,6 +752,26 @@ namespace WordGenerator
             }
         }
 
+        public bool refreshAllTimestepHotkeys()
+        {
+            unregisterAllTimestepHotkeys();
+            return registerAllTimestepHotkeys();
+        }
+
+        public bool registerAllTimestepHotkeys()
+        {
+            bool allSuccess = true;
+
+            foreach (TimeStep step in Storage.sequenceData.TimeSteps)
+            {
+                if (step.HotKeyCharacter != 0)
+                {
+                    allSuccess &= registerTimestepHotkey(step.HotKeyCharacter, step);
+                }
+            }
+
+            return allSuccess;
+        }
 
         public void unregisterAllTimestepHotkeys()
         {

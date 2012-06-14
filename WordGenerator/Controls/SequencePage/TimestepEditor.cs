@@ -468,12 +468,9 @@ namespace WordGenerator.Controls
         private void removeTimestepHotkeyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (stepData.HotKeyCharacter != 0)
-            {
-                /// TODO:
-                /// Finish this!
-                
+            {                
                 stepData.HotKeyCharacter = (char) 0;
-                WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+                WordGenerator.MainClientForm.instance.refreshAllTimestepHotkeys();
             }
         }
 
@@ -539,10 +536,6 @@ namespace WordGenerator.Controls
 
         private void setHotkeyChar(char hChar)
         {
-            // TODO: 
-            // FINISH or REWRITE THIS
-
-            /*
             if (hChar != 0)
             {
                 foreach (TimeStep step in Storage.sequenceData.TimeSteps)
@@ -554,12 +547,9 @@ namespace WordGenerator.Controls
                     }
                 }
 
-                if (stepData.HotKeyCharacter != 0)
-                    unRegsiterHotkey();
-
                 stepData.HotKeyCharacter = hChar;
-                WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
-            }*/
+                WordGenerator.MainClientForm.instance.refreshAllTimestepHotkeys();
+            }
         }
 
         private void moveToTimestepCombobox_DropDown(object sender, EventArgs e)
