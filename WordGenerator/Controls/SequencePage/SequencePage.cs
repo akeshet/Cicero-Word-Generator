@@ -75,24 +75,24 @@ namespace WordGenerator.Controls
         {
             InitializeComponent();
             timeStepsPanel.HorizontalScroll.SmallChange = TimestepEditor.TimestepEditorWidth;
-            digitalGrid1.ColWidth = TimestepEditor.TimestepEditorWidth;
-            digitalGrid1.RowHeight = 18;
+            digitalGrid.ColWidth = TimestepEditor.TimestepEditorWidth;
+            digitalGrid.RowHeight = 18;
             created = true;
 
             timeStepsPanel.MouseWheel += new MouseEventHandler(timeStepsPanel_MouseWheel);
 
-            this.digitalChannelLabelsPanel1.rowHeight = 18;
+            this.digitalChannelLabelsPanel.rowHeight = 18;
 
             analogPreviewPane.colWidth = TimestepEditor.TimestepEditorWidth;
             analogPreviewPane.rowHeight = 50;
             analogPreviewPane.enable();
 
 
-            digitalGrid1.ContainerSize = digitalGridPanel.Size;
+            digitalGrid.ContainerSize = digitalGridPanel.Size;
 
           
 
-            this.analogChannelLabelsPanel1.rowHeight = 50;
+            this.analogChannelLabelsPanel.rowHeight = 50;
 
 
             toolTip1.SetToolTip(analogPreviewUpdate, "Re-draw the analog previous pane.");
@@ -209,8 +209,8 @@ namespace WordGenerator.Controls
 
         public void layoutSettingsData()
         {
-            this.digitalChannelLabelsPanel1.layout();
-            this.analogChannelLabelsPanel1.layout();
+            this.digitalChannelLabelsPanel.layout();
+            this.analogChannelLabelsPanel.layout();
         }
 
         private bool modeBoxBeingChanged = false;
@@ -220,17 +220,17 @@ namespace WordGenerator.Controls
             this.seqDescBox.Text = Storage.sequenceData.SequenceDescription;
             this.seqNameBox.Text = Storage.sequenceData.SequenceName;
 
-            this.checkBox1.Checked = Storage.sequenceData.stepHidingEnabled;
+            this.hideHiddenTimestepsCheckbox.Checked = Storage.sequenceData.stepHidingEnabled;
 
             if (Storage.sequenceData.TimeSteps.Count == 0)
             {
                 this.analogPreviewUpdate.Visible = false;
-                this.checkBox1.Visible = false;
+                this.hideHiddenTimestepsCheckbox.Visible = false;
                 this.analogPreviewAutoUpdate.Visible = false;
             }
             else
             {
-                this.checkBox1.Visible = true;
+                this.hideHiddenTimestepsCheckbox.Visible = true;
                 this.analogPreviewAutoUpdate.Visible = true;
                 this.analogPreviewUpdate.Visible = true;
             }
@@ -238,7 +238,7 @@ namespace WordGenerator.Controls
             if (WordGenerator.MainClientForm.instance != null)
                 WordGenerator.MainClientForm.instance.cursorWait();
 
-            digitalGrid1.updateSize();
+            digitalGrid.updateSize();
             if (WordGenerator.MainClientForm.instance != null)
                 WordGenerator.MainClientForm.instance.cursorWaitRelease();
 
@@ -470,16 +470,16 @@ namespace WordGenerator.Controls
                 handleHorizScroll(frac);
             }
 
-            if (digitalChannelLabelsPanel1 != null)
+            if (digitalChannelLabelsPanel != null)
             {
-                ScrollProperties prop = digitalChannelLabelsPanel1.VerticalScroll;
+                ScrollProperties prop = digitalChannelLabelsPanel.VerticalScroll;
                 double frac = ((double)(prop.Value - prop.Minimum)) / ((double)(prop.Maximum - prop.Minimum - prop.LargeChange));
                 handleDigitalVerticalScroll(frac);
             }
 
-            if (analogChannelLabelsPanel1 != null)
+            if (analogChannelLabelsPanel != null)
             {
-                ScrollProperties prop = analogChannelLabelsPanel1.VerticalScroll;
+                ScrollProperties prop = analogChannelLabelsPanel.VerticalScroll;
                 double frac = ((double)(prop.Value - prop.Minimum)) / ((double)(prop.Maximum - prop.Minimum - prop.LargeChange));
                 handleAnalogVerticalScroll(frac);
 
@@ -543,12 +543,12 @@ namespace WordGenerator.Controls
         {
             if (e.ScrollOrientation == ScrollOrientation.HorizontalScroll)
             {
-                double frac = getScrollFraction(e, digitalGrid1.HorizontalScroll);
+                double frac = getScrollFraction(e, digitalGrid.HorizontalScroll);
                 handleHorizScroll(frac);
             }
             else
             {
-                double frac = getScrollFraction(e, digitalGrid1.VerticalScroll);
+                double frac = getScrollFraction(e, digitalGrid.VerticalScroll);
                 handleDigitalVerticalScroll(frac);
             }
         }
@@ -576,8 +576,8 @@ namespace WordGenerator.Controls
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            this.hideHiddenTimesteps = checkBox1.Checked;
-            Storage.sequenceData.stepHidingEnabled = checkBox1.Checked;
+            this.hideHiddenTimesteps = hideHiddenTimestepsCheckbox.Checked;
+            Storage.sequenceData.stepHidingEnabled = hideHiddenTimestepsCheckbox.Checked;
 
             showOrHideHiddenTimestepEditors();
 
@@ -643,7 +643,7 @@ namespace WordGenerator.Controls
 
         private void repairRightMargin()
         {
-            if (digitalGridPanel.VerticalScroll.Visible || analogChannelLabelsPanel1.VerticalScroll.Visible)
+            if (digitalGridPanel.VerticalScroll.Visible || analogChannelLabelsPanel.VerticalScroll.Visible)
             {
                 if (timeStepsPanel.Margin.Right != scrollbarSize)
                 {
@@ -713,18 +713,18 @@ namespace WordGenerator.Controls
         {
             if (digitalGridPanel.HorizontalScroll.Visible)
             {
-                if (digitalChannelLabelsPanel1.Margin.Bottom != scrollbarSize)
+                if (digitalChannelLabelsPanel.Margin.Bottom != scrollbarSize)
                 {
-                    digitalChannelLabelsPanel1.Margin = new Padding(0, 0, 0, scrollbarSize);
-                    digitalChannelLabelsPanel1.Refresh();
+                    digitalChannelLabelsPanel.Margin = new Padding(0, 0, 0, scrollbarSize);
+                    digitalChannelLabelsPanel.Refresh();
                 }
             }
             else
             {
-                if (digitalChannelLabelsPanel1.Margin.Bottom != 0)
+                if (digitalChannelLabelsPanel.Margin.Bottom != 0)
                 {
-                    digitalChannelLabelsPanel1.Margin = new Padding(0, 0, 0, 0);
-                    digitalChannelLabelsPanel1.Refresh();
+                    digitalChannelLabelsPanel.Margin = new Padding(0, 0, 0, 0);
+                    digitalChannelLabelsPanel.Refresh();
                 }
             }
         }
@@ -733,18 +733,18 @@ namespace WordGenerator.Controls
         {
             if (analogPreviewPane.HorizontalScroll.Visible)
             {
-                if (analogChannelLabelsPanel1.Margin.Bottom != scrollbarSize)
+                if (analogChannelLabelsPanel.Margin.Bottom != scrollbarSize)
                 {
-                    analogChannelLabelsPanel1.Margin = new Padding(0, 0, 0, scrollbarSize);
-                    analogChannelLabelsPanel1.Refresh();
+                    analogChannelLabelsPanel.Margin = new Padding(0, 0, 0, scrollbarSize);
+                    analogChannelLabelsPanel.Refresh();
                 }
             }
             else
             {
-                if (analogChannelLabelsPanel1.Margin.Bottom != 0)
+                if (analogChannelLabelsPanel.Margin.Bottom != 0)
                 {
-                    analogChannelLabelsPanel1.Margin = new Padding(0, 0, 0, 0);
-                    analogChannelLabelsPanel1.Refresh();
+                    analogChannelLabelsPanel.Margin = new Padding(0, 0, 0, 0);
+                    analogChannelLabelsPanel.Refresh();
                 }
             }
         }
@@ -775,7 +775,7 @@ namespace WordGenerator.Controls
         {
             if (e.ScrollOrientation == ScrollOrientation.VerticalScroll)
             {
-                double frac = getScrollFraction(e, analogChannelLabelsPanel1.VerticalScroll);
+                double frac = getScrollFraction(e, analogChannelLabelsPanel.VerticalScroll);
                 handleAnalogVerticalScroll(frac);
             }
         }
@@ -788,7 +788,7 @@ namespace WordGenerator.Controls
                 verticalScrollingEventsCalled = true;
                 try
                 {
-                    scrollToFrac(frac, analogChannelLabelsPanel1.VerticalScroll);
+                    scrollToFrac(frac, analogChannelLabelsPanel.VerticalScroll);
                     scrollToFrac(frac, analogPreviewPane.VerticalScroll);
                 }
                 catch (Exception)
@@ -803,7 +803,7 @@ namespace WordGenerator.Controls
         {
             if (e.ScrollOrientation == ScrollOrientation.VerticalScroll)
             {
-                double frac = getScrollFraction(e, digitalChannelLabelsPanel1.VerticalScroll);
+                double frac = getScrollFraction(e, digitalChannelLabelsPanel.VerticalScroll);
                 handleDigitalVerticalScroll(frac);
             }
         }
@@ -818,7 +818,7 @@ namespace WordGenerator.Controls
                 try
                 {
                     scrollToFrac(frac, digitalGridPanel.VerticalScroll);
-                    scrollToFrac(frac, digitalChannelLabelsPanel1.VerticalScroll);
+                    scrollToFrac(frac, digitalChannelLabelsPanel.VerticalScroll);
                 }
                 catch (Exception)
                 {

@@ -771,7 +771,7 @@ namespace WordGenerator.Controls
                 {
                     dp.DigitalContinue = true;
                 }
-                WordGenerator.MainClientForm.instance.sequencePage.digitalGrid1.forceRepaint();
+                WordGenerator.MainClientForm.instance.sequencePage.digitalGrid.forceRepaint();
             }
         }
 
