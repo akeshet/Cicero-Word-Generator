@@ -162,7 +162,7 @@ namespace WordGenerator.Controls
                 }
                 else
                 {
-                    bgRunButton.Text = "Run as Loop in Background";
+                    bgRunButton.Text = "Run as Loop in Background (^F9)";
                 }
             }
         }

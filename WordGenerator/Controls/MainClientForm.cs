@@ -287,7 +287,8 @@ namespace WordGenerator
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F8);
             hotKeyBindings.Add(this.pulsesTab);
 
-
+            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.Control, Keys.F9);
+            hotKeyBindings.Add(this.sequencePage.runControl1.bgRunButton);
 
 
             RefreshRecentFiles();
