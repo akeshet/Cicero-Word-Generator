@@ -338,18 +338,22 @@ namespace WordGenerator.Controls
 
         public void updateDerivedValue()
         {
-            if (variable!=null && variable.DerivedVariable)
+
+            if (variable != null && variable.DerivedVariable)
             {
-                string sanity = variable.parseVariableFormula(Storage.sequenceData.Variables);
-                if (sanity != null)
+                if (variable.DerivedVariable)
                 {
-                    derivedValueLabel.BackColor = Color.Red;
-                    derivedValueLabel.Text = sanity;
-                }
-                else
-                {
-                    derivedValueLabel.BackColor = Color.Transparent;
-                    derivedValueLabel.Text = "Value: " + variable.VariableValue;
+                    string sanity = variable.parseVariableFormula(Storage.sequenceData.Variables);
+                    if (sanity != null)
+                    {
+                        derivedValueLabel.BackColor = Color.Red;
+                        derivedValueLabel.Text = sanity;
+                    }
+                    else
+                    {
+                        derivedValueLabel.BackColor = Color.Transparent;
+                        derivedValueLabel.Text = "Value: " + variable.VariableValue;
+                    }
                 }
             }
         }
