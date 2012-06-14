@@ -246,8 +246,8 @@ namespace DataStructures
         public PulseTimingCondition endCondition;
 
         /// <summary>
-        /// True is startDelay means start in advance.
-        /// False is startDelay means start delayed.
+        /// startDelay TRUE: start delayed
+        /// startDelay FALSE: start in advance
         /// </summary>
         public bool startDelayed;
 
@@ -256,8 +256,8 @@ namespace DataStructures
         public DimensionedParameter startDelay;
 
         /// <summary>
-        /// True if startDelay means start in advance.
-        /// False is startDelay means start delayed.
+        /// endDelay TRUE:  end delayed
+        /// endDelay FALSE: end in advance
         /// </summary>
         /// 
         public bool endDelayed;
