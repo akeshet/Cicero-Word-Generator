@@ -333,14 +333,37 @@ namespace WordGenerator.Controls
         {
             SequenceData seq = Storage.sequenceData;
 
-          //  if (seq == null || seq.TimeSteps == null)
+            if (seq == null || seq.TimeSteps == null || timestepEditors == null)
                 removeAndRefreshAllTimestepEditors();
 
-            /*if (seq.TimeSteps.Count > timestepEditors.Count)
+            if (seq.TimeSteps.Count > timestepEditors.Count)
+            {
+                int extras = seq.TimeSteps.Count - timestepEditors.Count;
+                for (int i = 0; i < extras; i++)
+                    timestepEditors.Add(new TimestepEditor());
+            }
+            if (seq.TimeSteps.Count < timestepEditors.Count)
             {
                 int extras = timestepEditors.Count - seq.TimeSteps.Count;
-                for (int i=0; i<extras)
-            }*/
+                for (int i = 0; i < extras; i++)
+                    timestepEditors.RemoveAt(0);
+            }
+
+            for (int i = 0; i < seq.TimeSteps.Count; i++)
+                timestepEditors[i].setTimestep(seq.TimeSteps[i], i + 1);
+
+            this.SuspendLayout();
+            foreach (TimestepEditor ed in timestepEditors)
+            {
+                if (!timeStepsFlowPanel.Controls.Contains(ed))
+                    timeStepsFlowPanel.Controls.Add(ed);
+            }
+            for (int i = timeStepsFlowPanel.Controls.Count - 1; i >= 0; i--)
+            {
+                if (!timestepEditors.Contains(timeStepsFlowPanel.Controls[i] as TimestepEditor))
+                    timeStepsFlowPanel.Controls.RemoveAt(i);
+            }
+            this.ResumeLayout();
         }
 
         private void removeAndRefreshAllTimestepEditors()

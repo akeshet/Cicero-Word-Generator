@@ -139,14 +139,8 @@ namespace WordGenerator.Controls
         {
             InitializeComponent();
             stepData = new TimeStep();
-            analogSelector.Items.Add("Continue");
-            analogSelector.SelectedItem = "Continue";
 
-            gpibSelector.Items.Add("Continue");
-            gpibSelector.SelectedItem = "Continue";
-
-            rs232Selector.Items.Add("Continue");
-            rs232Selector.SelectedItem = "Continue";
+            refreshDropdownItems();
 
             // If we are using Windows 7,
             // then the combo boxes must have a non-default
@@ -165,10 +159,35 @@ namespace WordGenerator.Controls
 
         }
 
+        private void refreshDropdownItems() {
+            analogSelector.Items.Clear();
+            gpibSelector.Items.Clear();
+            rs232Selector.Items.Clear();
+
+            analogSelector.Items.Add("Continue");
+            analogSelector.SelectedItem = "Continue";
+
+            gpibSelector.Items.Add("Continue");
+            gpibSelector.SelectedItem = "Continue";
+
+            rs232Selector.Items.Add("Continue");
+            rs232Selector.SelectedItem = "Continue";
+
+            if (Storage.sequenceData != null)
+            {
+                analogSelector.Items.AddRange(Storage.sequenceData.AnalogGroups.ToArray());
+                gpibSelector.Items.AddRange(Storage.sequenceData.GpibGroups.ToArray());
+                rs232Selector.Items.AddRange(Storage.sequenceData.RS232Groups.ToArray());
+            }
+        }
+
         private bool updatingElements = false;
         public void setTimestep(TimeStep timeStep, int timeStepNumber)
         {
             updatingElements = true;
+
+            refreshDropdownItems();
+
             if (this.stepData != null)
                 this.stepData = timeStep;
 
@@ -229,15 +248,7 @@ namespace WordGenerator.Controls
 
         public TimestepEditor(TimeStep stepData, int timeStepNumber) : this()
         {
-
-
-            analogSelector.Items.AddRange(Storage.sequenceData.AnalogGroups.ToArray());
-            gpibSelector.Items.AddRange(Storage.sequenceData.GpibGroups.ToArray());
-            rs232Selector.Items.AddRange(Storage.sequenceData.RS232Groups.ToArray());
-
             this.setTimestep(stepData, timeStepNumber);
-
-
         }
 
         private void redrawStepNumberLabel()
@@ -262,11 +273,14 @@ namespace WordGenerator.Controls
 
         private void enabledButton_Click(object sender, EventArgs e)
         {
-            stepData.StepEnabled = !stepData.StepEnabled;
+            if (!updatingElements)
+            {
+                stepData.StepEnabled = !stepData.StepEnabled;
 
-            layoutEnableButton();
-            if (updateGUI != null)
-                updateGUI(sender, e);
+                layoutEnableButton();
+                if (updateGUI != null)
+                    updateGUI(sender, e);
+            }
         }
 
         private void layoutEnableButton()
@@ -323,52 +337,58 @@ namespace WordGenerator.Controls
 
         private void analogSelector_SelectedValueChanged(object sender, EventArgs e)
         {
-            if (analogSelector.SelectedItem.ToString() == "Continue")
+            if (!updatingElements)
             {
-                analogSelector.BackColor = Color.Green;
-                toolTip1.SetToolTip(analogSelector, "Continue previous analog group.");
-            }
-            else
-                analogSelector.BackColor = Color.White;
-
-            if (stepData != null)
-            {
-                AnalogGroup ag = analogSelector.SelectedItem as AnalogGroup;
-                stepData.AnalogGroup = ag;
-                if (updateGUI != null)
+                if (analogSelector.SelectedItem.ToString() == "Continue")
                 {
-                    updateGUI(sender, e);
+                    analogSelector.BackColor = Color.Green;
+                    toolTip1.SetToolTip(analogSelector, "Continue previous analog group.");
                 }
-                if (ag != null)
-                    toolTip1.SetToolTip(analogSelector, ag.GroupDescription);
+                else
+                    analogSelector.BackColor = Color.White;
 
+                if (stepData != null)
+                {
+                    AnalogGroup ag = analogSelector.SelectedItem as AnalogGroup;
+                    stepData.AnalogGroup = ag;
+                    if (updateGUI != null)
+                    {
+                        updateGUI(sender, e);
+                    }
+                    if (ag != null)
+                        toolTip1.SetToolTip(analogSelector, ag.GroupDescription);
+
+                }
+                analogSelectorBackupItem = analogSelector.SelectedItem;
             }
-            analogSelectorBackupItem = analogSelector.SelectedItem;
         }
 
         private object gpibSelectorBackupItem;
 
         private void gpibSelector_SelectedValueChanged(object sender, EventArgs e)
         {
-            if (gpibSelector.SelectedItem.ToString() == "Continue")
+            if (!updatingElements)
             {
-                gpibSelector.BackColor = Color.Green;
-                toolTip1.SetToolTip(gpibSelector, "Continue previous GPIB group.");
-            }
-            else
-                gpibSelector.BackColor = Color.White;
+                if (gpibSelector.SelectedItem.ToString() == "Continue")
+                {
+                    gpibSelector.BackColor = Color.Green;
+                    toolTip1.SetToolTip(gpibSelector, "Continue previous GPIB group.");
+                }
+                else
+                    gpibSelector.BackColor = Color.White;
 
-            if (stepData != null)
-            {
-                GPIBGroup gg = gpibSelector.SelectedItem as GPIBGroup;
-                stepData.GpibGroup = gg;
-                if (updateGUI != null)
-                    updateGUI(sender, e);
-                if (gg != null)
-                    toolTip1.SetToolTip(gpibSelector, gg.GroupDescription);
-            }
+                if (stepData != null)
+                {
+                    GPIBGroup gg = gpibSelector.SelectedItem as GPIBGroup;
+                    stepData.GpibGroup = gg;
+                    if (updateGUI != null)
+                        updateGUI(sender, e);
+                    if (gg != null)
+                        toolTip1.SetToolTip(gpibSelector, gg.GroupDescription);
+                }
 
-            gpibSelectorBackupItem = gpibSelector.SelectedItem;
+                gpibSelectorBackupItem = gpibSelector.SelectedItem;
+            }
         }
 
         private void gpibSelector_DropDown(object sender, EventArgs e)
@@ -502,27 +522,30 @@ namespace WordGenerator.Controls
 
         private void rs232Selector_SelectedValueChanged(object sender, EventArgs e)
         {
-            if (rs232Selector.SelectedItem.ToString() == "Continue")
-            {
-                rs232Selector.BackColor = Color.Green;
-                toolTip1.SetToolTip(rs232Selector, "Continue previous RS232 group.");
-            }
-            else
-                rs232Selector.BackColor = Color.White;
-
             if (!updatingElements)
             {
-                if (stepData != null)
+                if (rs232Selector.SelectedItem.ToString() == "Continue")
                 {
-                    RS232Group gg = rs232Selector.SelectedItem as RS232Group;
-                    stepData.rs232Group = gg;
-                    if (updateGUI != null)
-                        updateGUI(sender, e);
-                    if (gg != null)
-                        toolTip1.SetToolTip(rs232Selector, gg.GroupDescription);
+                    rs232Selector.BackColor = Color.Green;
+                    toolTip1.SetToolTip(rs232Selector, "Continue previous RS232 group.");
                 }
+                else
+                    rs232Selector.BackColor = Color.White;
 
-                rs232SelectorBackupItem = rs232Selector.SelectedItem;
+                if (!updatingElements)
+                {
+                    if (stepData != null)
+                    {
+                        RS232Group gg = rs232Selector.SelectedItem as RS232Group;
+                        stepData.rs232Group = gg;
+                        if (updateGUI != null)
+                            updateGUI(sender, e);
+                        if (gg != null)
+                            toolTip1.SetToolTip(rs232Selector, gg.GroupDescription);
+                    }
+
+                    rs232SelectorBackupItem = rs232Selector.SelectedItem;
+                }
             }
         }
 
