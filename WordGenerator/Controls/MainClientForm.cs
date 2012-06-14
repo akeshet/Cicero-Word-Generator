@@ -710,8 +710,8 @@ namespace WordGenerator
         /// used to register timestep hotkeys. Ctrl + key.
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="hotkeyObject"></param>
-        public void registerTimestepHotkey(char key, TimestepEditor hotkeyObject)
+        /// <param name="timeStep"></param>
+        public void registerTimestepHotkey(char key, TimeStep timeStep)
         {
             if (hotKeyBindings == null)
                 hotKeyBindings = new List<object>();
@@ -722,10 +722,10 @@ namespace WordGenerator
             Keys myKey = (Keys)Enum.Parse(typeof(Keys), keyStr);
 
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.Control, myKey);
-            hotKeyBindings.Add(hotkeyObject);
+            hotKeyBindings.Add(timeStep);
         }
 
-        public void unregisterHotkey(char key, object hotkeyObject)
+        public void unregisterHotkey(object hotkeyObject)
         {
             if (hotKeyBindings == null)
                 hotKeyBindings = new List<object>();
@@ -735,6 +735,18 @@ namespace WordGenerator
                 int id = hotKeyBindings.IndexOf(hotkeyObject);
                 UnregisterHotKey(Handle, id);
                 hotKeyBindings[id] = null;
+            }
+        }
+
+
+        public void unregisterAllTimestepHotkeys()
+        {
+            foreach (object hotkeyObj in hotKeyBindings)
+            {
+                if (hotkeyObj is TimeStep)
+                {
+                    unregisterHotkey(hotkeyObj);
+                }
             }
         }
 
@@ -1402,16 +1414,6 @@ namespace WordGenerator
         private void stToolStripMenuItem_Click(object sender, EventArgs e)
         {
             WordGenerator.MainClientForm.instance.studentEdition = true;
-
-        }
-
-        private void sequencePage1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void placeholderGroupClickerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
 
         }
 

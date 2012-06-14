@@ -398,7 +398,6 @@ namespace WordGenerator
             this.placeholderGroupClickerToolStripMenuItem.Size = new System.Drawing.Size(270, 22);
             this.placeholderGroupClickerToolStripMenuItem.Text = "Placeholder Group Clicker";
             this.placeholderGroupClickerToolStripMenuItem.Visible = false;
-            this.placeholderGroupClickerToolStripMenuItem.Click += new System.EventHandler(this.placeholderGroupClickerToolStripMenuItem_Click);
             // 
             // timestepGroupMenuSeparator
             // 
@@ -857,7 +856,6 @@ namespace WordGenerator
             this.sequencePage.TabIndex = 0;
             this.sequencePage.TimestepEditors = null;
             this.sequencePage.messageLog += new System.EventHandler(this.handleMessageEvent);
-            this.sequencePage.Load += new System.EventHandler(this.sequencePage1_Load);
             // 
             // overridePage1
             // 

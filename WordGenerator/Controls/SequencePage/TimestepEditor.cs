@@ -373,21 +373,6 @@ namespace WordGenerator.Controls
             ClientRunner.instance.outputTimestepNow(StepData, false, true);
         }
 
-        public void unRegsiterHotkey()
-        {
-            if (stepData.HotKeyCharacter != 0)
-            {
-                WordGenerator.MainClientForm.instance.unregisterHotkey(stepData.HotKeyCharacter, this);
-            }
-        }
-
-        public void registerHotkey()
-        {
-            if (stepData.HotKeyCharacter != 0)
-            {
-                WordGenerator.MainClientForm.instance.registerTimestepHotkey(stepData.HotKeyCharacter, this);
-            }
-        }
 
         public void updatePulsesIndicator()
         {
@@ -484,7 +469,9 @@ namespace WordGenerator.Controls
         {
             if (stepData.HotKeyCharacter != 0)
             {
-                unRegsiterHotkey();
+                /// TODO:
+                /// Finish this!
+                
                 stepData.HotKeyCharacter = (char) 0;
                 WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
             }
@@ -552,6 +539,10 @@ namespace WordGenerator.Controls
 
         private void setHotkeyChar(char hChar)
         {
+            // TODO: 
+            // FINISH or REWRITE THIS
+
+            /*
             if (hChar != 0)
             {
                 foreach (TimeStep step in Storage.sequenceData.TimeSteps)
@@ -568,7 +559,7 @@ namespace WordGenerator.Controls
 
                 stepData.HotKeyCharacter = hChar;
                 WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
-            }
+            }*/
         }
 
         private void moveToTimestepCombobox_DropDown(object sender, EventArgs e)

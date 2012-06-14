@@ -126,7 +126,6 @@ namespace WordGenerator.Controls
 
         public void removeTimestepEditor(TimestepEditor editor)
         {
-            editor.unRegsiterHotkey();
             timeStepsFlowPanel.Controls.Remove(editor);
             editor.Dispose();
             updateTimestepEditorNumbers();
@@ -341,18 +340,6 @@ namespace WordGenerator.Controls
 
 
             List<Control> temp = new List<Control>();
-            foreach (Control con in timeStepsFlowPanel.Controls)
-            {
-                temp.Add(con);
-            }
-            foreach (Control con in temp) {
-                TimestepEditor ed = con as TimestepEditor;
-                if (ed != null)
-                {
-                    ed.unRegsiterHotkey();
-                    ed.Dispose();
-                }
-            }
 
             timeStepsFlowPanel.Controls.Clear();
 
@@ -377,7 +364,6 @@ namespace WordGenerator.Controls
                     registerTimestepEditorEvents(editor);
                     //this.timeStepsPanel.BufferedControls.Add(editor);
 
-                    editor.registerHotkey();
                     count++;
 
                     if (hideHiddenTimesteps)

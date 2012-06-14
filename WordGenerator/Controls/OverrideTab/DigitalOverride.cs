@@ -161,12 +161,12 @@ namespace WordGenerator
         {
             if ( channel.hotkeyChar != 0)
             {
-                WordGenerator.MainClientForm.instance.unregisterHotkey(channel.hotkeyChar, valueBox);
+                WordGenerator.MainClientForm.instance.unregisterHotkey(valueBox);
             }
 
             if (channel.overrideHotkeyChar != 0)
             {
-                WordGenerator.MainClientForm.instance.unregisterHotkey(channel.overrideHotkeyChar, overrideCheck);
+                WordGenerator.MainClientForm.instance.unregisterHotkey(overrideCheck);
             }
         }
 
