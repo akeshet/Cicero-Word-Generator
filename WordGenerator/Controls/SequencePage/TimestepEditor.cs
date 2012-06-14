@@ -122,7 +122,7 @@ namespace WordGenerator.Controls
             set
             {
                 stepNumber = value;
-                redrawStepNumberLabel(stepData, stepNumber);
+                redrawStepNumberLabel();
                 
             }
         }
@@ -178,7 +178,7 @@ namespace WordGenerator.Controls
             timestepName.Text = stepData.StepName;
 
             this.durationEditor.setParameterData(stepData.StepDuration);
-            redrawStepNumberLabel(stepData, timeStepNumber);
+            redrawStepNumberLabel();
 
             analogSelector.Items.AddRange(Storage.sequenceData.AnalogGroups.ToArray());
             gpibSelector.Items.AddRange(Storage.sequenceData.GpibGroups.ToArray());
@@ -229,9 +229,9 @@ namespace WordGenerator.Controls
             updateWaitForRetriggerIndicator();
         }
 
-        private void redrawStepNumberLabel(TimeStep stepData, int timeStepNumber)
+        private void redrawStepNumberLabel()
         {
-            this.timeStepNumber.Text = timeStepNumber.ToString();
+            this.timeStepNumber.Text = this.stepNumber.ToString();
 
             if (stepData.HotKeyCharacter != 0)
                 this.timeStepNumber.Text += " {" + char.ToUpper(stepData.HotKeyCharacter) + "}";
@@ -549,6 +549,7 @@ namespace WordGenerator.Controls
 
                 stepData.HotKeyCharacter = hChar;
                 WordGenerator.MainClientForm.instance.refreshAllTimestepHotkeys();
+                redrawStepNumberLabel();
             }
         }
 
