@@ -74,6 +74,7 @@
     <Compile Include="AtticusServerTest.cs" />
     <Compile Include="EqCompilerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PulseTest.cs" />
     <Compile Include="SequenceDataTest.cs" />
     <Compile Include="Shared.cs" />
     <Compile Include="Storage_SaveAndLoadTest.cs" />
