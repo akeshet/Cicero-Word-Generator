@@ -165,24 +165,21 @@ namespace WordGenerator.Controls
 
         }
 
-        public TimestepEditor(TimeStep stepData, int timeStepNumber) : this()
+        private bool updatingElements = false;
+        public void setTimestep(TimeStep timeStep, int timeStepNumber)
         {
-            if (stepData!=null)
-                this.stepData = stepData;
+            updatingElements = true;
+            if (this.stepData != null)
+                this.stepData = timeStep;
+
+            this.stepNumber = timeStepNumber;
+            timestepName.Text = stepData.StepName;
 
             updateDescriptionTooltip(stepData);
             descriptionTextBox.Text = stepData.Description;
 
-            this.stepNumber = timeStepNumber;
-
-            timestepName.Text = stepData.StepName;
-
             this.durationEditor.setParameterData(stepData.StepDuration);
             redrawStepNumberLabel(stepData, timeStepNumber);
-
-            analogSelector.Items.AddRange(Storage.sequenceData.AnalogGroups.ToArray());
-            gpibSelector.Items.AddRange(Storage.sequenceData.GpibGroups.ToArray());
-            rs232Selector.Items.AddRange(Storage.sequenceData.RS232Groups.ToArray());
 
             if (stepData.AnalogGroup != null)
             {
@@ -221,12 +218,26 @@ namespace WordGenerator.Controls
                 rs232Selector.BackColor = Color.Green;
             }
 
-
             layoutEnableButton();
             layoutShowhideButton();
             updatePulsesIndicator();
             layoutGroupIndicatorLabel();
             updateWaitForRetriggerIndicator();
+
+            updatingElements = false;
+        }
+
+        public TimestepEditor(TimeStep stepData, int timeStepNumber) : this()
+        {
+
+
+            analogSelector.Items.AddRange(Storage.sequenceData.AnalogGroups.ToArray());
+            gpibSelector.Items.AddRange(Storage.sequenceData.GpibGroups.ToArray());
+            rs232Selector.Items.AddRange(Storage.sequenceData.RS232Groups.ToArray());
+
+            this.setTimestep(stepData, timeStepNumber);
+
+
         }
 
         private void redrawStepNumberLabel(TimeStep stepData, int timeStepNumber)
@@ -495,9 +506,6 @@ namespace WordGenerator.Controls
 
             WordGenerator.mainClientForm.instance.sequencePage.insertTimestepEditor(te, stepNumber - 1);
 
-
-        //    WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
-        //    WordGenerator.mainClientForm.instance.sequencePage1.scrollToTimestep(newStep);
         }
 
         private void insertTimestepAfterToolStripMenuItem_Click(object sender, EventArgs e)
@@ -592,17 +600,20 @@ namespace WordGenerator.Controls
             else
                 rs232Selector.BackColor = Color.White;
 
-            if (stepData != null)
+            if (!updatingElements)
             {
-                RS232Group gg = rs232Selector.SelectedItem as RS232Group;
-                stepData.rs232Group = gg;
-                if (updateGUI != null)
-                    updateGUI(sender, e);
-                if (gg != null)
-                    toolTip1.SetToolTip(rs232Selector, gg.GroupDescription);
-            }
+                if (stepData != null)
+                {
+                    RS232Group gg = rs232Selector.SelectedItem as RS232Group;
+                    stepData.rs232Group = gg;
+                    if (updateGUI != null)
+                        updateGUI(sender, e);
+                    if (gg != null)
+                        toolTip1.SetToolTip(rs232Selector, gg.GroupDescription);
+                }
 
-            rs232SelectorBackupItem = rs232Selector.SelectedItem;
+                rs232SelectorBackupItem = rs232Selector.SelectedItem;
+            }
         }
 
         private void hotkeyEntryTextBox_TextChanged(object sender, EventArgs e)
@@ -710,8 +721,11 @@ namespace WordGenerator.Controls
 
         private void descriptionTextChanged(object sender, EventArgs e)
         {
-            stepData.Description = descriptionTextBox.Text;
-            updateDescriptionTooltip(stepData);
+            if (!updatingElements)
+            {
+                stepData.Description = descriptionTextBox.Text;
+                updateDescriptionTooltip(stepData);
+            }
         }
 
         private void viewDescMenuItem_Click(object sender, EventArgs e)
@@ -795,8 +809,11 @@ namespace WordGenerator.Controls
 
         private void timestepGroupComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            stepData.MyTimestepGroup = timestepGroupComboBox.SelectedItem as TimestepGroup;
-            WordGenerator.mainClientForm.instance.sequencePage.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
+            if (!updatingElements)
+            {
+                stepData.MyTimestepGroup = timestepGroupComboBox.SelectedItem as TimestepGroup;
+                WordGenerator.mainClientForm.instance.sequencePage.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
+            }
         }
 
         private void TimestepEditor_Layout(object sender, LayoutEventArgs e)
