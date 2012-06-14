@@ -2604,7 +2604,7 @@ namespace DataStructures
         }
 
         /// <summary>
-        /// Replaces all occurences in sequence of analog gropu ReplaceMe with group Withme, then
+        /// Replaces all occurences in sequence of analog group ReplaceMe with group Withme, then
         /// removes ReplaceMe from list of groups.
         /// </summary>
         /// <param name="replaceMe"></param>
@@ -2624,7 +2624,7 @@ namespace DataStructures
         }
 
         /// <summary>
-        /// Replaces all occurences in sequence of GPIB gropu ReplaceMe with group Withme, then
+        /// Replaces all occurences in sequence of GPIB group ReplaceMe with group Withme, then
         /// removes ReplaceMe from list of groups.
         /// </summary>
         /// <param name="replaceMe"></param>
@@ -2645,7 +2645,7 @@ namespace DataStructures
 
 
         /// <summary>
-        /// Replaces all occurences in sequence of RS232 gropu ReplaceMe with group Withme, then
+        /// Replaces all occurences in sequence of RS232 group ReplaceMe with group Withme, then
         /// removes ReplaceMe from list of groups.
         /// </summary>
         /// <param name="replaceMe"></param>
