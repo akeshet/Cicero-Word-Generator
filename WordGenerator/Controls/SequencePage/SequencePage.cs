@@ -316,6 +316,14 @@ namespace WordGenerator.Controls
                 layoutTheRest();
         }
 
+        private List<TimestepEditor> timestepEditors;
+
+        public List<TimestepEditor> TimestepEditors
+        {
+            get { return timestepEditors; }
+            set { timestepEditors = value; }
+        }
+
 
         /// <summary>
         /// This function is somewhat time consuming, especially with long sequence files.
@@ -355,7 +363,7 @@ namespace WordGenerator.Controls
            
 
             List<TimeStep> timeSteps = Storage.sequenceData.TimeSteps;
-            List<TimestepEditor> timestepEditors = new List<TimestepEditor>();
+            timestepEditors = new List<TimestepEditor>();
             for (int i = 0; i < timeSteps.Count; i++)
             {
 
