@@ -78,7 +78,7 @@ hotkey handling. New buffer snapshot testing to ensure that any future
 cleanups of buffer generation code do not affect behavior.
 
 Visible changes: Bug fix to analog preview pane not always being correctly
-cleareda.
+cleared.
 
 Bug fix to RFSG tasks -- Initiate is no longer called on each run even if
 AutoInitiate for that device is set to true. Instead, an internal flag is
@@ -91,3 +91,6 @@ to have Initiate called again.
 
 Pulse autonaming feature -- helps you to enforce a Pulse naming convention
 by coming up with descriptive Pulse names for you.
+
+Timestep drag&drop support. Individual timesteps can be dragged and dropped
+to reorder them.
