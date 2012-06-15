@@ -887,14 +887,14 @@ namespace WordGenerator.Controls
                 bool rightHalf = dragToRightHalf(e);
 
                 // exclude drags that don't actually move the object
-                int myIndex = this.StepNumber;
-                int otherIndex = otherEditor.StepNumber;
-                if ((myIndex == otherIndex + 1) && !rightHalf)
+                int myNumber = this.StepNumber;
+                int otherNumber = otherEditor.StepNumber;
+                if ((myNumber == otherNumber + 1) && !rightHalf)
                 {
                     e.Effect = DragDropEffects.None;
                     return;
                 }
-                if ((myIndex == otherIndex - 1) && rightHalf)
+                if ((myNumber == otherNumber - 1) && rightHalf)
                 {
                     e.Effect = DragDropEffects.None;
                     return;
@@ -917,6 +917,19 @@ namespace WordGenerator.Controls
             }
         }
 
+        private void clearTimestepInsertLabels()
+        {
+            insertLeft.Visible = false;
+            insertRight.Visible = false;
+        }
+
+        /// <summary>
+        /// Determines if a Drag Event entails the item being dragged over the Right half
+        /// or Left half of the timestep editor. This will determine whether
+        /// the inserted timestep goes before or after the current one.
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
         private bool dragToRightHalf(DragEventArgs e)
         {
             Point dropPoint = PointToClient(new Point(e.X, e.Y));
@@ -932,8 +945,35 @@ namespace WordGenerator.Controls
         private void TimestepEditor_DragDrop(object sender, DragEventArgs e)
         {
             TimestepEditor otherEditor = (e.Data.GetData(typeof(TimestepEditor))) as TimestepEditor;
-            
+            if (otherEditor == null)
+            {
+                clearTimestepInsertLabels();
+                return;
+            }
 
+            bool rightHalf = dragToRightHalf(e);
+
+            int myNumber = this.StepNumber;
+            int otherNumber = otherEditor.StepNumber;
+            if ((otherNumber == myNumber - 1 && !rightHalf)
+                || (otherNumber == myNumber + 1 && rightHalf)
+                || (otherNumber == myNumber))
+            {
+                clearTimestepInsertLabels();
+                return;
+            }
+
+            SequenceData seq = Storage.sequenceData;
+            TimeStep otherStep = otherEditor.stepData;
+            seq.TimeSteps.Remove(otherStep);
+            int insertIndex = seq.TimeSteps.IndexOf(StepData);
+            if (rightHalf)
+                insertIndex++;
+            seq.TimeSteps.Insert(insertIndex, otherStep);
+
+            seq.timestepsInsertedOrMoved();
+
+            mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
         }
 
         private void TimestepEditor_DragLeave(object sender, EventArgs e)
