@@ -95,9 +95,13 @@ namespace WordGenerator
             this.openHomePageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openGitRepositoryPageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.variablesTab = new System.Windows.Forms.TabPage();
+            this.variablesEditor = new WordGenerator.Controls.VariablesAndListPage();
             this.commonWaveformTab = new System.Windows.Forms.TabPage();
+            this.commonWaveformEditor = new WordGenerator.Controls.CommonWaveformEditor();
             this.gpibTab = new System.Windows.Forms.TabPage();
+            this.gpibGroupEditor = new WordGenerator.Controls.GpibGroupEditor();
             this.analogTab = new System.Windows.Forms.TabPage();
+            this.analogGroupEditor = new WordGenerator.Controls.AnalogGroupEditor();
             this.sequenceTab = new System.Windows.Forms.TabPage();
             this.waitForReady = new System.Windows.Forms.CheckBox();
             this.lockDigitalCheckBox = new System.Windows.Forms.CheckBox();
@@ -106,21 +110,17 @@ namespace WordGenerator
             this.analogGroupsLabel = new System.Windows.Forms.Label();
             this.serverManagerButton = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.sequencePage = new WordGenerator.Controls.SequencePage();
             this.mainTab = new System.Windows.Forms.TabControl();
             this.overrideTab = new System.Windows.Forms.TabPage();
+            this.overridePage = new WordGenerator.OverridePage();
             this.rs232Tab = new System.Windows.Forms.TabPage();
+            this.rS232GroupEditor = new WordGenerator.Controls.Temporary.RS232GroupEditor();
             this.pulsesTab = new System.Windows.Forms.TabPage();
+            this.pulsesPage = new WordGenerator.Controls.PulsesPage();
             this.eventLogTab = new System.Windows.Forms.TabPage();
             this.messageLogTextBox = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.sequencePage = new WordGenerator.Controls.SequencePage();
-            this.overridePage = new WordGenerator.OverridePage();
-            this.analogGroupEditor = new WordGenerator.Controls.AnalogGroupEditor();
-            this.gpibGroupEditor = new WordGenerator.Controls.GpibGroupEditor();
-            this.rS232GroupEditor = new WordGenerator.Controls.Temporary.RS232GroupEditor();
-            this.commonWaveformEditor = new WordGenerator.Controls.CommonWaveformEditor();
-            this.variablesEditor = new WordGenerator.Controls.VariablesAndListPage();
-            this.pulsesPage = new WordGenerator.Controls.PulsesPage();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.variablesTab.SuspendLayout();
@@ -140,7 +140,7 @@ namespace WordGenerator
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settingsFileLabel,
             this.toolStripStatusLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 946);
+            this.statusStrip.Location = new System.Drawing.Point(0, 860);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(1272, 22);
             this.statusStrip.TabIndex = 1;
@@ -150,9 +150,9 @@ namespace WordGenerator
             this.settingsFileLabel.Name = "settingsFileLabel";
             this.settingsFileLabel.Size = new System.Drawing.Size(0, 17);
             // 
-            // toolStripStatusLabel1
+            // toolStripStatusLabel
             // 
-            this.toolStripStatusLabel.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
             this.toolStripStatusLabel.Size = new System.Drawing.Size(111, 17);
             this.toolStripStatusLabel.Text = "Welcome to Cicero!";
             // 
@@ -653,6 +653,13 @@ namespace WordGenerator
             this.variablesTab.Text = "Variables (F7)";
             this.variablesTab.UseVisualStyleBackColor = true;
             // 
+            // variablesEditor
+            // 
+            this.variablesEditor.Location = new System.Drawing.Point(0, 0);
+            this.variablesEditor.Name = "variablesEditor";
+            this.variablesEditor.Size = new System.Drawing.Size(1264, 918);
+            this.variablesEditor.TabIndex = 0;
+            // 
             // commonWaveformTab
             // 
             this.commonWaveformTab.Controls.Add(this.commonWaveformEditor);
@@ -663,6 +670,13 @@ namespace WordGenerator
             this.commonWaveformTab.TabIndex = 3;
             this.commonWaveformTab.Text = "Common Waveform (F6)";
             this.commonWaveformTab.UseVisualStyleBackColor = true;
+            // 
+            // commonWaveformEditor
+            // 
+            this.commonWaveformEditor.Location = new System.Drawing.Point(3, 3);
+            this.commonWaveformEditor.Name = "commonWaveformEditor";
+            this.commonWaveformEditor.Size = new System.Drawing.Size(1252, 844);
+            this.commonWaveformEditor.TabIndex = 0;
             // 
             // gpibTab
             // 
@@ -675,6 +689,14 @@ namespace WordGenerator
             this.gpibTab.Text = "GPIB (F4)";
             this.gpibTab.UseVisualStyleBackColor = true;
             // 
+            // gpibGroupEditor
+            // 
+            this.gpibGroupEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gpibGroupEditor.Location = new System.Drawing.Point(3, 3);
+            this.gpibGroupEditor.Name = "gpibGroupEditor";
+            this.gpibGroupEditor.Size = new System.Drawing.Size(1258, 890);
+            this.gpibGroupEditor.TabIndex = 0;
+            // 
             // analogTab
             // 
             this.analogTab.Controls.Add(this.analogGroupEditor);
@@ -685,6 +707,14 @@ namespace WordGenerator
             this.analogTab.TabIndex = 1;
             this.analogTab.Text = "Analog (F3)";
             this.analogTab.UseVisualStyleBackColor = true;
+            // 
+            // analogGroupEditor
+            // 
+            this.analogGroupEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.analogGroupEditor.Location = new System.Drawing.Point(3, 3);
+            this.analogGroupEditor.Name = "analogGroupEditor";
+            this.analogGroupEditor.Size = new System.Drawing.Size(1258, 890);
+            this.analogGroupEditor.TabIndex = 0;
             // 
             // sequenceTab
             // 
@@ -699,7 +729,7 @@ namespace WordGenerator
             this.sequenceTab.Location = new System.Drawing.Point(4, 22);
             this.sequenceTab.Name = "sequenceTab";
             this.sequenceTab.Padding = new System.Windows.Forms.Padding(3);
-            this.sequenceTab.Size = new System.Drawing.Size(1264, 896);
+            this.sequenceTab.Size = new System.Drawing.Size(1264, 810);
             this.sequenceTab.TabIndex = 0;
             this.sequenceTab.Text = "Sequence (F1)";
             this.sequenceTab.ToolTipText = "Testing";
@@ -726,29 +756,29 @@ namespace WordGenerator
             this.lockDigitalCheckBox.Text = "Lock Digital Panel";
             this.lockDigitalCheckBox.UseVisualStyleBackColor = true;
             // 
-            // label3
+            // rs232GroupsLabel
             // 
             this.rs232GroupsLabel.AutoSize = true;
             this.rs232GroupsLabel.Location = new System.Drawing.Point(178, 200);
-            this.rs232GroupsLabel.Name = "label3";
+            this.rs232GroupsLabel.Name = "rs232GroupsLabel";
             this.rs232GroupsLabel.Size = new System.Drawing.Size(75, 13);
             this.rs232GroupsLabel.TabIndex = 7;
             this.rs232GroupsLabel.Text = "RS232 Group:";
             // 
-            // label2
+            // gpibGroupsLabel
             // 
             this.gpibGroupsLabel.AutoSize = true;
             this.gpibGroupsLabel.Location = new System.Drawing.Point(186, 174);
-            this.gpibGroupsLabel.Name = "label2";
+            this.gpibGroupsLabel.Name = "gpibGroupsLabel";
             this.gpibGroupsLabel.Size = new System.Drawing.Size(67, 13);
             this.gpibGroupsLabel.TabIndex = 6;
             this.gpibGroupsLabel.Text = "GPIB Group:";
             // 
-            // label1
+            // analogGroupsLabel
             // 
             this.analogGroupsLabel.AutoSize = true;
             this.analogGroupsLabel.Location = new System.Drawing.Point(179, 148);
-            this.analogGroupsLabel.Name = "label1";
+            this.analogGroupsLabel.Name = "analogGroupsLabel";
             this.analogGroupsLabel.Size = new System.Drawing.Size(75, 13);
             this.analogGroupsLabel.TabIndex = 5;
             this.analogGroupsLabel.Text = "Analog Group:";
@@ -773,6 +803,16 @@ namespace WordGenerator
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.editLogicalDevicesToolStripMenuItem_Click);
             // 
+            // sequencePage
+            // 
+            this.sequencePage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sequencePage.Location = new System.Drawing.Point(3, 3);
+            this.sequencePage.Name = "sequencePage";
+            this.sequencePage.Size = new System.Drawing.Size(1258, 804);
+            this.sequencePage.TabIndex = 0;
+            this.sequencePage.TimestepEditors = null;
+            this.sequencePage.messageLog += new System.EventHandler(this.handleMessageEvent);
+            // 
             // mainTab
             // 
             this.mainTab.Controls.Add(this.sequenceTab);
@@ -788,7 +828,7 @@ namespace WordGenerator
             this.mainTab.Location = new System.Drawing.Point(0, 24);
             this.mainTab.Name = "mainTab";
             this.mainTab.SelectedIndex = 0;
-            this.mainTab.Size = new System.Drawing.Size(1272, 922);
+            this.mainTab.Size = new System.Drawing.Size(1272, 836);
             this.mainTab.TabIndex = 2;
             // 
             // overrideTab
@@ -801,6 +841,14 @@ namespace WordGenerator
             this.overrideTab.Text = "Override (F2)";
             this.overrideTab.UseVisualStyleBackColor = true;
             // 
+            // overridePage
+            // 
+            this.overridePage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.overridePage.Location = new System.Drawing.Point(0, 0);
+            this.overridePage.Name = "overridePage";
+            this.overridePage.Size = new System.Drawing.Size(1264, 896);
+            this.overridePage.TabIndex = 0;
+            // 
             // rs232Tab
             // 
             this.rs232Tab.Controls.Add(this.rS232GroupEditor);
@@ -811,6 +859,13 @@ namespace WordGenerator
             this.rs232Tab.Text = "RS232 (F5)";
             this.rs232Tab.UseVisualStyleBackColor = true;
             // 
+            // rS232GroupEditor
+            // 
+            this.rS232GroupEditor.Location = new System.Drawing.Point(3, 3);
+            this.rS232GroupEditor.Name = "rS232GroupEditor";
+            this.rS232GroupEditor.Size = new System.Drawing.Size(1264, 918);
+            this.rS232GroupEditor.TabIndex = 0;
+            // 
             // pulsesTab
             // 
             this.pulsesTab.Controls.Add(this.pulsesPage);
@@ -820,6 +875,14 @@ namespace WordGenerator
             this.pulsesTab.TabIndex = 8;
             this.pulsesTab.Text = "Pulses (F8)";
             this.pulsesTab.UseVisualStyleBackColor = true;
+            // 
+            // pulsesPage
+            // 
+            this.pulsesPage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pulsesPage.Location = new System.Drawing.Point(0, 0);
+            this.pulsesPage.Name = "pulsesPage";
+            this.pulsesPage.Size = new System.Drawing.Size(1264, 896);
+            this.pulsesPage.TabIndex = 0;
             // 
             // eventLogTab
             // 
@@ -847,81 +910,18 @@ namespace WordGenerator
             this.toolTip1.UseAnimation = false;
             this.toolTip1.UseFading = false;
             // 
-            // sequencePage
-            // 
-            this.sequencePage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sequencePage.Location = new System.Drawing.Point(3, 3);
-            this.sequencePage.Name = "sequencePage";
-            this.sequencePage.Size = new System.Drawing.Size(1258, 890);
-            this.sequencePage.TabIndex = 0;
-            this.sequencePage.TimestepEditors = null;
-            this.sequencePage.messageLog += new System.EventHandler(this.handleMessageEvent);
-            // 
-            // overridePage1
-            // 
-            this.overridePage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.overridePage.Location = new System.Drawing.Point(0, 0);
-            this.overridePage.Name = "overridePage1";
-            this.overridePage.Size = new System.Drawing.Size(1264, 896);
-            this.overridePage.TabIndex = 0;
-            // 
-            // analogGroupEditor1
-            // 
-            this.analogGroupEditor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.analogGroupEditor.Location = new System.Drawing.Point(3, 3);
-            this.analogGroupEditor.Name = "analogGroupEditor1";
-            this.analogGroupEditor.Size = new System.Drawing.Size(1258, 890);
-            this.analogGroupEditor.TabIndex = 0;
-            // 
-            // gpibGroupEditor1
-            // 
-            this.gpibGroupEditor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gpibGroupEditor.Location = new System.Drawing.Point(3, 3);
-            this.gpibGroupEditor.Name = "gpibGroupEditor1";
-            this.gpibGroupEditor.Size = new System.Drawing.Size(1258, 890);
-            this.gpibGroupEditor.TabIndex = 0;
-            // 
-            // rS232GroupEditor1
-            // 
-            this.rS232GroupEditor.Location = new System.Drawing.Point(3, 3);
-            this.rS232GroupEditor.Name = "rS232GroupEditor1";
-            this.rS232GroupEditor.Size = new System.Drawing.Size(1264, 918);
-            this.rS232GroupEditor.TabIndex = 0;
-            // 
-            // commonWaveformEditor1
-            // 
-            this.commonWaveformEditor.Location = new System.Drawing.Point(3, 3);
-            this.commonWaveformEditor.Name = "commonWaveformEditor1";
-            this.commonWaveformEditor.Size = new System.Drawing.Size(1252, 844);
-            this.commonWaveformEditor.TabIndex = 0;
-            // 
-            // variablesEditor1
-            // 
-            this.variablesEditor.Location = new System.Drawing.Point(0, 0);
-            this.variablesEditor.Name = "variablesEditor1";
-            this.variablesEditor.Size = new System.Drawing.Size(1264, 918);
-            this.variablesEditor.TabIndex = 0;
-            // 
-            // pulsesPage1
-            // 
-            this.pulsesPage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pulsesPage.Location = new System.Drawing.Point(0, 0);
-            this.pulsesPage.Name = "pulsesPage1";
-            this.pulsesPage.Size = new System.Drawing.Size(1264, 896);
-            this.pulsesPage.TabIndex = 0;
-            // 
-            // mainClientForm
+            // MainClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1272, 968);
+            this.ClientSize = new System.Drawing.Size(1272, 882);
             this.Controls.Add(this.mainTab);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.menuStrip);
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(10000, 10000);
-            this.Name = "mainClientForm";
+            this.Name = "MainClientForm";
             this.Text = "Cicero Word Generator 1.0 Beta";
             this.Activated += new System.EventHandler(this.mainClientForm_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.mainClientForm_FormClosing);

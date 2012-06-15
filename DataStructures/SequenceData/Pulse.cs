@@ -44,9 +44,9 @@ namespace DataStructures
                 if (this.startDelayEnabled && this.startCondition != PulseTimingCondition.Duration)
                 {
                     if (this.startDelayed)
-                        first_half = "del" + first_half;
+                        first_half = "d" + first_half;
                     else
-                        first_half = "pre" + first_half;
+                        first_half = "p" + first_half;
 
                     //could use the ToString function here, but it outputs a space and I don't want that
                     first_half = this.startDelay.ToShortString() + "_" + first_half;
@@ -65,9 +65,9 @@ namespace DataStructures
                 if (this.endDelayEnabled && this.endCondition != PulseTimingCondition.Duration)
                 {
                     if (this.endDelayed)
-                        second_half = "del" + second_half;
+                        second_half = "d" + second_half;
                     else
-                        second_half = "pre" + second_half;
+                        second_half = "p" + second_half;
 
                     second_half = this.endDelay.ToShortString() + "_" + second_half;
                 }

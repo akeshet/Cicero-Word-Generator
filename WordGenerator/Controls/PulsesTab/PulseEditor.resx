@@ -117,4 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <metadata name="autoNameGlossaryToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="autoNameCheckBox.ToolTip" xml:space="preserve">
+    <value>Autoname Format:
+[Pulse Start condition]:[Pulse End condition]
+where each condition is one of...
+S-Start of Word
+E-End of Word
+D-Duration
+p-pretrigger, i.e. trigger X seconds before S or E
+d-delayed trigger, i.e. trigger X second after S or E
+</value>
+  </data>
 </root>
