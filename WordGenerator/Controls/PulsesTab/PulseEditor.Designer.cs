@@ -57,6 +57,7 @@ namespace WordGenerator.Controls
             this.valueVariableComboBox = new System.Windows.Forms.ComboBox();
             this.pulseDuration = new WordGenerator.Controls.HorizontalParameterEditor();
             this.autoNameCheckBox = new System.Windows.Forms.CheckBox();
+            this.autoNameRefButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -141,6 +142,7 @@ namespace WordGenerator.Controls
             this.startDelayTime.Size = new System.Drawing.Size(150, 22);
             this.startDelayTime.TabIndex = 3;
             this.startDelayTime.UnitSelectorVisibility = true;
+            this.startDelayTime.updateGUI+=new System.EventHandler(updateAutoName);
             // 
             // label4
             // 
@@ -216,6 +218,7 @@ namespace WordGenerator.Controls
             this.endDelayTime.Size = new System.Drawing.Size(150, 22);
             this.endDelayTime.TabIndex = 3;
             this.endDelayTime.UnitSelectorVisibility = true;
+            this.endDelayTime.updateGUI += new System.EventHandler(updateAutoName);
             // 
             // label5
             // 
@@ -346,6 +349,9 @@ namespace WordGenerator.Controls
             this.pulseDuration.Size = new System.Drawing.Size(150, 22);
             this.pulseDuration.TabIndex = 7;
             this.pulseDuration.UnitSelectorVisibility = true;
+            this.pulseDuration.updateGUI += new System.EventHandler(updateAutoName);
+            //this.pulseNameTextBox.TextChanged += new System.EventHandler(this.pulseNameTextBox_TextChanged);
+
             // 
             // autoNameCheckBox
             // 
@@ -358,11 +364,21 @@ namespace WordGenerator.Controls
             this.autoNameCheckBox.UseVisualStyleBackColor = true;
             this.autoNameCheckBox.CheckedChanged += new System.EventHandler(this.autoNameCheckBox_CheckedChanged);
             // 
+            // autoNameRefButton
+            // 
+            this.autoNameRefButton.Location = new System.Drawing.Point(260, 3);
+            this.autoNameRefButton.Name = "autoNameRefButton";
+            this.autoNameRefButton.Size = new System.Drawing.Size(119, 23);
+            this.autoNameRefButton.TabIndex = 18;
+            this.autoNameRefButton.Text = "Naming Reference";
+            this.autoNameRefButton.UseVisualStyleBackColor = true;
+            // 
             // PulseEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.autoNameRefButton);
             this.Controls.Add(this.autoNameCheckBox);
             this.Controls.Add(this.valueVariableComboBox);
             this.Controls.Add(this.getValueFromVariableCheckBox);
@@ -389,6 +405,16 @@ namespace WordGenerator.Controls
             this.ResumeLayout(false);
             this.PerformLayout();
 
+        }
+
+        void updateAutoName(object sender, System.EventArgs e)
+        {
+            if (pulse.AutoName)
+            {
+                pulse.updateAutoName();
+                pulseNameTextBox.Text = pulse.PulseName;
+            }
+            
         }
 
         #endregion
@@ -422,5 +448,6 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.CheckBox getValueFromVariableCheckBox;
         private System.Windows.Forms.ComboBox valueVariableComboBox;
         private System.Windows.Forms.CheckBox autoNameCheckBox;
+        private System.Windows.Forms.Button autoNameRefButton;
     }
 }
