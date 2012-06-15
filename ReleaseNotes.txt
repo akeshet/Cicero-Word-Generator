@@ -28,7 +28,7 @@ clinamen/ directory, written by Ed Joe Su.
 
 Recategorizing some Cicero Settings fields in the UI as part of the "Paris fork"
 (these are features that are unsupported and not well integrated, but left in 
-for compatability purposes.
+for compatability purposes).
 
 
 1.59
