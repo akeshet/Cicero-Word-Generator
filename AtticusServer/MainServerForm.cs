@@ -299,7 +299,7 @@ namespace AtticusServer
                 //button1.Enabled = false;
             }
             else
-              button1.Enabled = true;
+              refreshHardwareButton.Enabled = true;
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -438,7 +438,7 @@ namespace AtticusServer
             form.ShowDialog();
         }
 
-        private void button2_Click_1(object sender, EventArgs e)
+        private void deleteSelectedDeviceButtonClick(object sender, EventArgs e)
         {
             if (AtticusServer.server.serverSettings.myDevicesSettings.ContainsValue(listBox1.SelectedItem as DeviceSettings)) {
                 string str = "";
