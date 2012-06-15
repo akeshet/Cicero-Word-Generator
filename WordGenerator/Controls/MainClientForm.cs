@@ -292,8 +292,8 @@ namespace WordGenerator
 
 
             RefreshRecentFiles();
-            this.RefreshSettingsDataToUI(Storage.settingsData);
-            this.RefreshSequenceDataToUI(Storage.sequenceData);
+            this.RefreshSettingsDataToUI();
+            this.RefreshSequenceDataToUI();
         }
 
 
@@ -354,7 +354,7 @@ namespace WordGenerator
 
             if (Storage.SaveAndLoad.LoadSequenceDataToStorage(ts.Text))
             {
-                RefreshSequenceDataToUI(Storage.sequenceData);
+                RefreshSequenceDataToUI();
                 this.handleMessageEvent(this, new MessageEvent("Loaded sequence file " + this.openSequenceFileName));
             }
         }
@@ -364,8 +364,9 @@ namespace WordGenerator
         /// This is a slow function, it effectively causes all of the controls which lay themselves out based on SequenceData
         /// to be re-drawn. Thus, it should not be called unnecessarily.
         /// </summary>
-        public void RefreshSequenceDataToUI(SequenceData sequenceData)
+        public void RefreshSequenceDataToUI()
         {
+            SequenceData sequenceData = Storage.sequenceData;
 
             WordGenerator.MainClientForm.instance.cursorWait();
 
@@ -438,8 +439,9 @@ namespace WordGenerator
             }
         }
 
-        public void RefreshSettingsDataToUI(SettingsData settingsData)
+        public void RefreshSettingsDataToUI()
         {
+            SettingsData settingsData = Storage.settingsData;
             WordGenerator.MainClientForm.instance.cursorWait();
 
             this.analogGroupEditor.setChannelCollection(settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.analog]);
@@ -501,7 +503,7 @@ namespace WordGenerator
         private void populateSequenceWithNewChannelsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Storage.sequenceData.populateWithChannels(Storage.settingsData);
-            this.RefreshSequenceDataToUI(Storage.sequenceData);
+            this.RefreshSequenceDataToUI();
 
         }
 
@@ -521,7 +523,7 @@ namespace WordGenerator
             if (Storage.SaveAndLoad.LoadSequenceDataToStorage(null))
             {
                 RefreshRecentFiles();
-                this.RefreshSequenceDataToUI(Storage.sequenceData);
+                this.RefreshSequenceDataToUI();
                 this.handleMessageEvent(this, new MessageEvent("Loaded sequence file " + this.openSequenceFileName));
             }
 
@@ -537,7 +539,7 @@ namespace WordGenerator
         {
             if (Storage.SaveAndLoad.LoadSettingsData(null))
             {
-                RefreshSettingsDataToUI(Storage.settingsData);
+                RefreshSettingsDataToUI();
                 this.handleMessageEvent(this, new MessageEvent("Loaded settings file " + this.openSettingsFileName));
             }
         }
@@ -553,7 +555,7 @@ namespace WordGenerator
             {
 
 
-                RefreshSettingsDataToUI(Storage.settingsData);
+                RefreshSettingsDataToUI();
                 this.handleMessageEvent(this, new MessageEvent("Loaded default settings from " + this.openSettingsFileName));
             }
         }
@@ -812,7 +814,7 @@ namespace WordGenerator
         {
             Storage.sequenceData = new SequenceData();
             WordGenerator.MainClientForm.instance.OpenSequenceFileName = null;
-            RefreshSequenceDataToUI(Storage.sequenceData);
+            RefreshSequenceDataToUI();
         }
 
 
@@ -1127,7 +1129,7 @@ namespace WordGenerator
 
 
 
-                RefreshSequenceDataToUI(Storage.sequenceData);
+                RefreshSequenceDataToUI();
             }
 
         }
@@ -1165,7 +1167,7 @@ namespace WordGenerator
                 Storage.sequenceData = log.RunSequence;                
                 WordGenerator.MainClientForm.instance.OpenSequenceFileName = fileName;
 
-                this.RefreshSequenceDataToUI(Storage.sequenceData);
+                this.RefreshSequenceDataToUI();
                 this.handleMessageEvent(this, new MessageEvent("Loaded sequence file " + fileName));
 
             }
@@ -1335,7 +1337,7 @@ namespace WordGenerator
                     }
 
                     Storage.sequenceData.TimestepGroups.Remove(tsg);
-                    RefreshSequenceDataToUI(Storage.sequenceData);
+                    RefreshSequenceDataToUI();
                     MessageBox.Show("Timestep group and member timesteps deleted.");
                 }
                 else

@@ -885,7 +885,7 @@ namespace WordGenerator.Controls
 
             seq.timestepsInsertedOrMoved();
 
-            MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+            MainClientForm.instance.RefreshSequenceDataToUI();
         }
 
         private void TimestepEditor_DragLeave(object sender, EventArgs e)

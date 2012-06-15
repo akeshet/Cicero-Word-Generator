@@ -405,7 +405,7 @@ namespace WordGenerator.Controls
                     if (result == DialogResult.Yes)
                     {
                         Storage.sequenceData.replaceAnalogGroup(analogGroup, replacementGroup);
-                        WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+                        WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI();
                     }
                 }
             }
@@ -437,7 +437,7 @@ namespace WordGenerator.Controls
                 }
 
                 Storage.sequenceData.AnalogGroups = usedGroups;
-                WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+                WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI();
             }
         }
 

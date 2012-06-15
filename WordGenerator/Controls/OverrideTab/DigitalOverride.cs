@@ -118,7 +118,7 @@ namespace WordGenerator
                     unRegsiterHotkey();
                 channel.hotkeyChar = hChar;
 
-                WordGenerator.MainClientForm.instance.RefreshSettingsDataToUI(Storage.settingsData);
+                WordGenerator.MainClientForm.instance.RefreshSettingsDataToUI();
             }
         }
 
@@ -140,7 +140,7 @@ namespace WordGenerator
                     unRegsiterHotkey();
                 channel.overrideHotkeyChar = hChar;
 
-                WordGenerator.MainClientForm.instance.RefreshSettingsDataToUI(Storage.settingsData);
+                WordGenerator.MainClientForm.instance.RefreshSettingsDataToUI();
             }
         }
 
@@ -152,7 +152,7 @@ namespace WordGenerator
             {
                 unRegsiterHotkey();
                 channel.hotkeyChar = (char) 0;
-                WordGenerator.MainClientForm.instance.RefreshSettingsDataToUI(Storage.settingsData);
+                WordGenerator.MainClientForm.instance.RefreshSettingsDataToUI();
             }
         }
 
@@ -212,7 +212,7 @@ namespace WordGenerator
             {
                 unRegsiterHotkey();
                 channel.overrideHotkeyChar = (char)0;
-                WordGenerator.MainClientForm.instance.RefreshSettingsDataToUI(Storage.settingsData);
+                WordGenerator.MainClientForm.instance.RefreshSettingsDataToUI();
             }
         }
 

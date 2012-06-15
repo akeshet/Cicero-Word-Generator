@@ -140,7 +140,7 @@ namespace WordGenerator.Controls
 
             if (replacedPulses)
             {
-                WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+                WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI();
             }
 
             WordGenerator.MainClientForm.instance.cursorWaitRelease();

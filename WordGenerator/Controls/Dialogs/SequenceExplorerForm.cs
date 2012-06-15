@@ -23,7 +23,7 @@ namespace WordGenerator.Controls
 
         private void SequenceExplorerForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+            WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI();
  //           WordGenerator.mainClientForm.instance.Enabled = true;
         }
     }

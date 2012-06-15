@@ -25,7 +25,7 @@ namespace WordGenerator
         {
             // Insert a call to refresh mainclientform's sequence data.
   //          WordGenerator.mainClientForm.instance.Enabled = true;
-            MainClientForm.instance.RefreshSettingsDataToUI(Storage.settingsData);
+            MainClientForm.instance.RefreshSettingsDataToUI();
         }
 
 

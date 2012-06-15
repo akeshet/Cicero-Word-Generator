@@ -402,7 +402,7 @@ namespace WordGenerator.Controls
                     if (result == DialogResult.Yes)
                     {
                         Storage.sequenceData.replaceGPIBGroup(gpibGroup, replacementGroup);
-                        WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+                        WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI();
                     }
                 }
             }
@@ -434,7 +434,7 @@ namespace WordGenerator.Controls
                 }
 
                 Storage.sequenceData.GpibGroups = usedGroups;
-                WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+                WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI();
             }
 
         }

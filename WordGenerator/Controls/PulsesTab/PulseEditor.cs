@@ -277,7 +277,7 @@ namespace WordGenerator.Controls
 
             Storage.sequenceData.DigitalPulses.Remove(pulse);
             if (pulseDeleted == null)
-                WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData); // the slow way to delete pulse from UI
+                WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(); // the slow way to delete pulse from UI
             else
                 pulseDeleted(this, null);   // the fast way, if the hook exists.
         }
@@ -311,7 +311,7 @@ namespace WordGenerator.Controls
             Pulse newPulse = new Pulse(pulse);
             int currentIndex = Storage.sequenceData.DigitalPulses.IndexOf(pulse);
             Storage.sequenceData.DigitalPulses.Insert(currentIndex + 1, newPulse);
-            WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+            WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI();
         }
 
         /// <summary>

@@ -621,7 +621,7 @@ namespace WordGenerator.Controls
             if (Storage.sequenceData != null)
             {
                 Storage.sequenceData.TimeSteps.Add(new TimeStep("New Timestep"));
-                WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+                WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI();
             }
         }
 

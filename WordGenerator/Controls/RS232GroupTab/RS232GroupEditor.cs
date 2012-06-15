@@ -365,7 +365,7 @@ namespace WordGenerator.Controls.Temporary
                     if (result == DialogResult.Yes)
                     {
                         Storage.sequenceData.replaceRS232Group(rs232Group, replacementGroup);
-                        WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+                        WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI();
                     }
                 }
             }
@@ -397,7 +397,7 @@ namespace WordGenerator.Controls.Temporary
                 }
 
                 Storage.sequenceData.RS232Groups = usedGroups;
-                WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+                WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI();
             }
 
         }
