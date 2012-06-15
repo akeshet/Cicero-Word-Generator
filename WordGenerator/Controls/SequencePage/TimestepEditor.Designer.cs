@@ -94,6 +94,7 @@ namespace WordGenerator.Controls
             this.timeStepNumber.TabIndex = 0;
             this.timeStepNumber.Text = "#";
             this.timeStepNumber.Visible = false;
+            this.timeStepNumber.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TimestepEditor_MouseDown);
             // 
             // timestepName
             // 
@@ -419,6 +420,7 @@ namespace WordGenerator.Controls
             this.pulseIndicator.TabIndex = 9;
             this.pulseIndicator.Text = "P";
             this.pulseIndicator.Visible = false;
+            this.pulseIndicator.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TimestepEditor_MouseDown);
             // 
             // waitLabel
             // 
@@ -431,6 +433,7 @@ namespace WordGenerator.Controls
             this.waitLabel.Size = new System.Drawing.Size(14, 12);
             this.waitLabel.TabIndex = 10;
             this.waitLabel.Text = "W";
+            this.waitLabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TimestepEditor_MouseDown);
             // 
             // timestepGroupIndicatorLabel
             // 
@@ -443,6 +446,7 @@ namespace WordGenerator.Controls
             this.timestepGroupIndicatorLabel.Size = new System.Drawing.Size(12, 12);
             this.timestepGroupIndicatorLabel.TabIndex = 11;
             this.timestepGroupIndicatorLabel.Text = "G";
+            this.timestepGroupIndicatorLabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TimestepEditor_MouseDown);
             // 
             // analogPictureBox
             // 
@@ -491,6 +495,7 @@ namespace WordGenerator.Controls
             this.timestepGroupLoopIndicatorLabel.Size = new System.Drawing.Size(10, 12);
             this.timestepGroupLoopIndicatorLabel.TabIndex = 15;
             this.timestepGroupLoopIndicatorLabel.Text = "L";
+            this.timestepGroupLoopIndicatorLabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TimestepEditor_MouseDown);
             // 
             // insertLeft
             // 
