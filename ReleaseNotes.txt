@@ -88,3 +88,6 @@ Initiate if the card was already initiated was actually DISABLING the card.
 hopefully it does not introduce a new Issue, though if the state of this
 internal flag gets invalidly set to true, it may require a reset of Atticus
 to have Initiate called again.
+
+Pulse autonaming feature -- helps you to enforce a Pulse naming convention
+by coming up with descriptive Pulse names for you.
