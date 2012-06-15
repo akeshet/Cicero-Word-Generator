@@ -384,5 +384,20 @@ namespace WordGenerator.Controls
             }
         }
 
+        void updateAutoName(object sender, System.EventArgs e)
+        {
+            if (pulse.AutoName)
+            {
+                pulse.updateAutoName();
+                pulseNameTextBox.Text = pulse.PulseName;
+            }
+
+        }
+
+        private void toolTip1_Popup(object sender, PopupEventArgs e)
+        {
+
+        }
+
     }
 }
