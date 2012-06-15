@@ -775,6 +775,134 @@ namespace WordGenerator.Controls
             }
         }
 
+        private void TimestepEditor_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                DragDropEffects effect = this.DoDragDrop(this, DragDropEffects.Move);
+                return;
+            }
+            
+        }
+
+        private void TimestepEditor_GiveFeedback(object sender, GiveFeedbackEventArgs e)
+        {
+        }
+
+        private void TimestepEditor_DragEnter(object sender, DragEventArgs e)
+        {
+            
+            TimestepEditor otherEditor = (e.Data.GetData(typeof(TimestepEditor))) as TimestepEditor;
+            if (otherEditor != null && otherEditor != this)
+            {
+                e.Effect = DragDropEffects.Move;
+                bool rightHalf = dragToRightHalf(e);
+
+                // exclude drags that don't actually move the object
+                int myNumber = this.StepNumber;
+                int otherNumber = otherEditor.StepNumber;
+                if ((myNumber == otherNumber + 1) && !rightHalf)
+                {
+                    e.Effect = DragDropEffects.None;
+                    return;
+                }
+                if ((myNumber == otherNumber - 1) && rightHalf)
+                {
+                    e.Effect = DragDropEffects.None;
+                    return;
+                }
+
+                if (rightHalf)
+                {
+                    insertRight.Visible = true;
+                    insertLeft.Visible = false;
+                }
+                else
+                {
+                    insertRight.Visible = false;
+                    insertLeft.Visible = true;
+                }
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void clearTimestepInsertLabels()
+        {
+            insertLeft.Visible = false;
+            insertRight.Visible = false;
+        }
+
+        /// <summary>
+        /// Determines if a Drag Event entails the item being dragged over the Right half
+        /// or Left half of the timestep editor. This will determine whether
+        /// the inserted timestep goes before or after the current one.
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        private bool dragToRightHalf(DragEventArgs e)
+        {
+            Point dropPoint = PointToClient(new Point(e.X, e.Y));
+            bool rightHalf = false;
+            if (dropPoint.X > (this.Width / 2))
+            {
+                rightHalf = true;
+            }
+
+            return rightHalf;
+        }
+
+        private void TimestepEditor_DragDrop(object sender, DragEventArgs e)
+        {
+            TimestepEditor otherEditor = (e.Data.GetData(typeof(TimestepEditor))) as TimestepEditor;
+            if (otherEditor == null)
+            {
+                clearTimestepInsertLabels();
+                return;
+            }
+
+            bool rightHalf = dragToRightHalf(e);
+
+            int myNumber = this.StepNumber;
+            int otherNumber = otherEditor.StepNumber;
+            if ((otherNumber == myNumber - 1 && !rightHalf)
+                || (otherNumber == myNumber + 1 && rightHalf)
+                || (otherNumber == myNumber))
+            {
+                clearTimestepInsertLabels();
+                return;
+            }
+
+            SequenceData seq = Storage.sequenceData;
+            TimeStep otherStep = otherEditor.stepData;
+            seq.TimeSteps.Remove(otherStep);
+            int insertIndex = seq.TimeSteps.IndexOf(StepData);
+            if (rightHalf)
+                insertIndex++;
+            seq.TimeSteps.Insert(insertIndex, otherStep);
+
+            seq.timestepsInsertedOrMoved();
+
+            mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+        }
+
+        private void TimestepEditor_DragLeave(object sender, EventArgs e)
+        {
+            insertRight.Visible = false;
+            insertLeft.Visible = false;
+        }
+
+        private void TimestepEditor_DragOver(object sender, DragEventArgs e)
+        {
+            TimestepEditor_DragEnter(sender, e);
+        }
+
+        
+
+       
+
 
     }
 }
