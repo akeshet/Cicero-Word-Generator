@@ -869,8 +869,12 @@ namespace WordGenerator.Controls
 
         private void TimestepEditor_MouseDown(object sender, MouseEventArgs e)
         {
-            DragDropEffects effect =  this.DoDragDrop(this, DragDropEffects.Move);
-            return;
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                DragDropEffects effect = this.DoDragDrop(this, DragDropEffects.Move);
+                return;
+            }
+            
         }
 
         private void TimestepEditor_GiveFeedback(object sender, GiveFeedbackEventArgs e)
