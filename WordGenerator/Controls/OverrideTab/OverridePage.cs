@@ -21,8 +21,8 @@ namespace WordGenerator
 
         public void setSettings(SettingsData settings)
         {
-            if (mainClientForm.instance != null)
-                mainClientForm.instance.cursorWait();
+            if (MainClientForm.instance != null)
+                MainClientForm.instance.cursorWait();
             if (digitalOverrides == null)
             {
                 digitalOverrides = new List<DigitalOverride>();
@@ -73,8 +73,8 @@ namespace WordGenerator
             }
             analogOverridePanel.Controls.AddRange(analogOverrides.ToArray());
 
-            if (mainClientForm.instance != null)
-                mainClientForm.instance.cursorWaitRelease();
+            if (MainClientForm.instance != null)
+                MainClientForm.instance.cursorWaitRelease();
 
 
 
@@ -82,10 +82,10 @@ namespace WordGenerator
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (mainClientForm.instance.reDwell())
-                mainClientForm.instance.handleMessageEvent(this, new MessageEvent("Re-output dwelling timestep."));
+            if (MainClientForm.instance.reDwell())
+                MainClientForm.instance.handleMessageEvent(this, new MessageEvent("Re-output dwelling timestep."));
             else
-                mainClientForm.instance.handleMessageEvent(this, new MessageEvent("Re-output of dwelling timestep failed."));
+                MainClientForm.instance.handleMessageEvent(this, new MessageEvent("Re-output of dwelling timestep failed."));
         }
     }
 }

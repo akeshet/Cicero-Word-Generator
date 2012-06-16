@@ -10,7 +10,11 @@ namespace DataStructures
         {
             get
             {
-                return DataStructures.Properties.Resources.VersionString;
+                if (DataStructures.Properties.Resources.RevisionString != null)
+                    return DataStructures.Properties.Resources.VersionString + DataStructures.Properties.Resources.RevisionString;
+
+                else
+                    return DataStructures.Properties.Resources.VersionString;
             }
         }
 

@@ -59,7 +59,7 @@ namespace WordGenerator
 
         public void addMessageLogText(object sender, EventArgs e)
         {
-            WordGenerator.mainClientForm.instance.handleMessageEvent(sender, e);
+            WordGenerator.MainClientForm.instance.handleMessageEvent(sender, e);
 
             if (this.InvokeRequired)
             {

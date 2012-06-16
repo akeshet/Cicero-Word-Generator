@@ -161,14 +161,14 @@ namespace WordGenerator.Controls
             try
             {
                 drawCursor = false;
-                if (WordGenerator.mainClientForm.instance != null)
-                    WordGenerator.mainClientForm.instance.cursorWait();
+                if (WordGenerator.MainClientForm.instance != null)
+                    WordGenerator.MainClientForm.instance.cursorWait();
 
 
                 if (Storage.sequenceData == null)
                 {
-                    if (WordGenerator.mainClientForm.instance != null)
-                        WordGenerator.mainClientForm.instance.cursorWaitRelease();
+                    if (WordGenerator.MainClientForm.instance != null)
+                        WordGenerator.MainClientForm.instance.cursorWaitRelease();
                     return;
                 }
 
@@ -180,11 +180,15 @@ namespace WordGenerator.Controls
                 int xSize = nDisplayedSteps * colWidth;
                 int ySize = rowHeight * Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.analog].Channels.Count;
 
-                if ((xSize == 0) || (ySize == 0))
+                /*if ((xSize == 0) || (ySize == 0))
                 {
-                    WordGenerator.mainClientForm.instance.cursorWaitRelease();
+                    WordGenerator.MainClientForm.instance.cursorWaitRelease();
                     return;
-                }
+                }*/
+                if (xSize == 0)
+                    xSize = 1;
+                if (ySize == 0)
+                    ySize = 1;
 
                 Graphics gc;
 
@@ -248,7 +252,7 @@ namespace WordGenerator.Controls
                             }
                             catch (InterpolationException)
                             {
-                                WordGenerator.mainClientForm.instance.cursorWaitRelease();
+                                WordGenerator.MainClientForm.instance.cursorWaitRelease();
                                 return;
                             }
                         }
@@ -348,8 +352,8 @@ namespace WordGenerator.Controls
                     maxValues[analogID] = maxValue;
                     minValues[analogID] = minValue;
                 }
-                if (WordGenerator.mainClientForm.instance != null)
-                    WordGenerator.mainClientForm.instance.cursorWaitRelease();
+                if (WordGenerator.MainClientForm.instance != null)
+                    WordGenerator.MainClientForm.instance.cursorWaitRelease();
             }
             catch (Exception ex)
             {

@@ -410,7 +410,7 @@ namespace dotMath
 			/// <param name="sValue">string/text representation of a number</param>
 			public CNumber( string sValue )
 			{
-				m_dValue = Convert.ToDouble(sValue);
+                m_dValue = Convert.ToDouble(sValue, System.Globalization.CultureInfo.InvariantCulture);
 			}
 
 			/// <summary>

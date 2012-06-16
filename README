@@ -20,7 +20,7 @@ Elgin/
    Code for "Elgin", the run log viewer.
 
 ExampleServer/
-   Skeleton code for you to right a cicero "server", much like Atticus, with whatever functionality you want.
+   Skeleton code for you to write a cicero "server", much like Atticus, with whatever functionality you want.
 
 DeprecatedCode/
    Includes code no longer in use, development, or maintenance (Virgil hdf5 exporter, Simplicio log server, HDF5DotNet library).

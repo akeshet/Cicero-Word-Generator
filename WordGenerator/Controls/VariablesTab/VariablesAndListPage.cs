@@ -48,8 +48,8 @@ namespace WordGenerator.Controls
 
         public void layout()
         {
-            if (mainClientForm.instance != null)
-                mainClientForm.instance.cursorWait();
+            if (MainClientForm.instance != null)
+                MainClientForm.instance.cursorWait();
 
             for (int i = 0; i < ListData.NLists; i++)
             {
@@ -75,8 +75,8 @@ namespace WordGenerator.Controls
             layoutCalibrationUI();
 
 
-            if (mainClientForm.instance != null)
-                mainClientForm.instance.cursorWaitRelease();
+            if (MainClientForm.instance != null)
+                MainClientForm.instance.cursorWaitRelease();
         }
 
         private void layoutCalibrationUI()

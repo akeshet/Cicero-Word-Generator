@@ -30,18 +30,18 @@ namespace AtticusServer
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainServerForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.deleteSelectedDeviceButton = new System.Windows.Forms.Button();
+            this.excludeChannelsButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.hcGrid = new System.Windows.Forms.PropertyGrid();
             this.hcList = new System.Windows.Forms.ListBox();
-            this.button5 = new System.Windows.Forms.Button();
+            this.resetDevicesButton = new System.Windows.Forms.Button();
             this.HardwareChannelCount = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.deviceSettingsPropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.listBox1 = new System.Windows.Forms.ListBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.clearDeviceSettingsButton = new System.Windows.Forms.Button();
+            this.refreshHardwareButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.serverSettingsPropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.connectButton = new System.Windows.Forms.Button();
@@ -60,6 +60,8 @@ namespace AtticusServer
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splashScreenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.licenseInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openHomePageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openGitRepositoryPageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -68,18 +70,18 @@ namespace AtticusServer
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.button2);
-            this.groupBox1.Controls.Add(this.button4);
+            this.groupBox1.Controls.Add(this.deleteSelectedDeviceButton);
+            this.groupBox1.Controls.Add(this.excludeChannelsButton);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.hcGrid);
             this.groupBox1.Controls.Add(this.hcList);
-            this.groupBox1.Controls.Add(this.button5);
+            this.groupBox1.Controls.Add(this.resetDevicesButton);
             this.groupBox1.Controls.Add(this.HardwareChannelCount);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.deviceSettingsPropertyGrid);
             this.groupBox1.Controls.Add(this.listBox1);
-            this.groupBox1.Controls.Add(this.button3);
-            this.groupBox1.Controls.Add(this.button1);
+            this.groupBox1.Controls.Add(this.clearDeviceSettingsButton);
+            this.groupBox1.Controls.Add(this.refreshHardwareButton);
             this.groupBox1.Location = new System.Drawing.Point(12, 27);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(509, 524);
@@ -87,25 +89,25 @@ namespace AtticusServer
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Hardware Settings";
             // 
-            // button2
+            // deleteSelectedDeviceButton
             // 
-            this.button2.Location = new System.Drawing.Point(16, 69);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(93, 37);
-            this.button2.TabIndex = 13;
-            this.button2.Text = "Delete Selected Device";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click_1);
+            this.deleteSelectedDeviceButton.Location = new System.Drawing.Point(16, 69);
+            this.deleteSelectedDeviceButton.Name = "deleteSelectedDeviceButton";
+            this.deleteSelectedDeviceButton.Size = new System.Drawing.Size(93, 37);
+            this.deleteSelectedDeviceButton.TabIndex = 13;
+            this.deleteSelectedDeviceButton.Text = "Delete Selected Device";
+            this.deleteSelectedDeviceButton.UseVisualStyleBackColor = true;
+            this.deleteSelectedDeviceButton.Click += new System.EventHandler(this.deleteSelectedDeviceButtonClick);
             // 
-            // button4
+            // excludeChannelsButton
             // 
-            this.button4.Location = new System.Drawing.Point(115, 302);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(105, 32);
-            this.button4.TabIndex = 12;
-            this.button4.Text = "Exclude channel(s)";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click_1);
+            this.excludeChannelsButton.Location = new System.Drawing.Point(115, 302);
+            this.excludeChannelsButton.Name = "excludeChannelsButton";
+            this.excludeChannelsButton.Size = new System.Drawing.Size(105, 32);
+            this.excludeChannelsButton.TabIndex = 12;
+            this.excludeChannelsButton.Text = "Exclude channel(s)";
+            this.excludeChannelsButton.UseVisualStyleBackColor = true;
+            this.excludeChannelsButton.Click += new System.EventHandler(this.button4_Click_1);
             // 
             // label3
             // 
@@ -133,15 +135,15 @@ namespace AtticusServer
             this.hcList.TabIndex = 9;
             this.hcList.SelectedValueChanged += new System.EventHandler(this.hcList_SelectedValueChanged);
             // 
-            // button5
+            // resetDevicesButton
             // 
-            this.button5.Location = new System.Drawing.Point(18, 158);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(88, 34);
-            this.button5.TabIndex = 8;
-            this.button5.Text = "Reset Devices";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.resetDevicesButton.Location = new System.Drawing.Point(18, 158);
+            this.resetDevicesButton.Name = "resetDevicesButton";
+            this.resetDevicesButton.Size = new System.Drawing.Size(88, 34);
+            this.resetDevicesButton.TabIndex = 8;
+            this.resetDevicesButton.Text = "Reset Devices";
+            this.resetDevicesButton.UseVisualStyleBackColor = true;
+            this.resetDevicesButton.Click += new System.EventHandler(this.button5_Click);
             // 
             // HardwareChannelCount
             // 
@@ -177,26 +179,26 @@ namespace AtticusServer
             this.listBox1.TabIndex = 4;
             this.listBox1.SelectedValueChanged += new System.EventHandler(this.listBox1_SelectedValueChanged);
             // 
-            // button3
+            // clearDeviceSettingsButton
             // 
-            this.button3.Location = new System.Drawing.Point(16, 112);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(93, 40);
-            this.button3.TabIndex = 2;
-            this.button3.Text = "Clear Device Settings";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.clearDeviceSettingsButton.Location = new System.Drawing.Point(16, 112);
+            this.clearDeviceSettingsButton.Name = "clearDeviceSettingsButton";
+            this.clearDeviceSettingsButton.Size = new System.Drawing.Size(93, 40);
+            this.clearDeviceSettingsButton.TabIndex = 2;
+            this.clearDeviceSettingsButton.Text = "Clear Device Settings";
+            this.clearDeviceSettingsButton.UseVisualStyleBackColor = true;
+            this.clearDeviceSettingsButton.Click += new System.EventHandler(this.button3_Click);
             // 
-            // button1
+            // refreshHardwareButton
             // 
-            this.button1.Location = new System.Drawing.Point(16, 28);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(93, 35);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Refresh Hardware";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Paint += new System.Windows.Forms.PaintEventHandler(this.button1_Paint);
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.refreshHardwareButton.Location = new System.Drawing.Point(16, 28);
+            this.refreshHardwareButton.Name = "refreshHardwareButton";
+            this.refreshHardwareButton.Size = new System.Drawing.Size(93, 35);
+            this.refreshHardwareButton.TabIndex = 0;
+            this.refreshHardwareButton.Text = "Refresh Hardware";
+            this.refreshHardwareButton.UseVisualStyleBackColor = true;
+            this.refreshHardwareButton.Click += new System.EventHandler(this.button1_Click);
+            this.refreshHardwareButton.Paint += new System.Windows.Forms.PaintEventHandler(this.button1_Paint);
             // 
             // groupBox2
             // 
@@ -228,8 +230,8 @@ namespace AtticusServer
             this.connectButton.TabIndex = 5;
             this.connectButton.Text = "DummyText";
             this.connectButton.UseVisualStyleBackColor = true;
-            this.connectButton.Paint += new System.Windows.Forms.PaintEventHandler(this.connectButton_Paint);
             this.connectButton.Click += new System.EventHandler(this.connectButton_Click);
+            this.connectButton.Paint += new System.Windows.Forms.PaintEventHandler(this.connectButton_Paint);
             // 
             // connectionStatusLabel
             // 
@@ -297,7 +299,7 @@ namespace AtticusServer
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1004, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(996, 24);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -309,32 +311,32 @@ namespace AtticusServer
             this.toolStripSeparator1,
             this.loadToolStripMenuItem});
             this.serverSettingsToolStripMenuItem.Name = "serverSettingsToolStripMenuItem";
-            this.serverSettingsToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
+            this.serverSettingsToolStripMenuItem.Size = new System.Drawing.Size(96, 20);
             this.serverSettingsToolStripMenuItem.Text = "Server Settings";
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.saveToolStripMenuItem.Text = "Save...";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsDefaultToolStripMenuItem
             // 
             this.saveAsDefaultToolStripMenuItem.Name = "saveAsDefaultToolStripMenuItem";
-            this.saveAsDefaultToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.saveAsDefaultToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.saveAsDefaultToolStripMenuItem.Text = "Save As Default";
             this.saveAsDefaultToolStripMenuItem.Click += new System.EventHandler(this.saveAsDefaultToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(159, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(152, 6);
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.loadToolStripMenuItem.Text = "Load...";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
@@ -342,30 +344,46 @@ namespace AtticusServer
             // 
             this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.splashScreenToolStripMenuItem,
-            this.licenseInformationToolStripMenuItem});
+            this.licenseInformationToolStripMenuItem,
+            this.openHomePageToolStripMenuItem,
+            this.openGitRepositoryPageToolStripMenuItem});
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.aboutToolStripMenuItem.Text = "About";
             // 
             // splashScreenToolStripMenuItem
             // 
             this.splashScreenToolStripMenuItem.Name = "splashScreenToolStripMenuItem";
-            this.splashScreenToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.splashScreenToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.splashScreenToolStripMenuItem.Text = "Splash Screen";
             this.splashScreenToolStripMenuItem.Click += new System.EventHandler(this.splashScreenToolStripMenuItem_Click);
             // 
             // licenseInformationToolStripMenuItem
             // 
             this.licenseInformationToolStripMenuItem.Name = "licenseInformationToolStripMenuItem";
-            this.licenseInformationToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.licenseInformationToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.licenseInformationToolStripMenuItem.Text = "License Information";
             this.licenseInformationToolStripMenuItem.Click += new System.EventHandler(this.licenseInformationToolStripMenuItem_Click);
+            // 
+            // openHomePageToolStripMenuItem
+            // 
+            this.openHomePageToolStripMenuItem.Name = "openHomePageToolStripMenuItem";
+            this.openHomePageToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.openHomePageToolStripMenuItem.Text = "Open Home Page";
+            this.openHomePageToolStripMenuItem.Click += new System.EventHandler(this.openHomePageToolStripMenuItem_Click);
+            // 
+            // openGitRepositoryPageToolStripMenuItem
+            // 
+            this.openGitRepositoryPageToolStripMenuItem.Name = "openGitRepositoryPageToolStripMenuItem";
+            this.openGitRepositoryPageToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.openGitRepositoryPageToolStripMenuItem.Text = "Open Git Repository Page";
+            this.openGitRepositoryPageToolStripMenuItem.Click += new System.EventHandler(this.openGitRepositoryPageToolStripMenuItem_Click);
             // 
             // MainServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1004, 746);
+            this.ClientSize = new System.Drawing.Size(996, 742);
             this.Controls.Add(this.verboseCheckBox);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
@@ -377,8 +395,8 @@ namespace AtticusServer
             this.MinimumSize = new System.Drawing.Size(1012, 780);
             this.Name = "MainServerForm";
             this.Text = "Atticus Server 1.0 Beta";
-            this.Load += new System.EventHandler(this.MainServerForm_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainServerForm_FormClosing);
+            this.Load += new System.EventHandler(this.MainServerForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -401,19 +419,19 @@ namespace AtticusServer
         private System.Windows.Forms.Label connectionStatusLabel;
         private System.Windows.Forms.TextBox eventLogTextBox;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button refreshHardwareButton;
         private System.Windows.Forms.Button connectButton;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button clearDeviceSettingsButton;
         private System.Windows.Forms.PropertyGrid deviceSettingsPropertyGrid;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label HardwareChannelCount;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button resetDevicesButton;
         private System.Windows.Forms.PropertyGrid serverSettingsPropertyGrid;
         private System.Windows.Forms.PropertyGrid hcGrid;
         private System.Windows.Forms.ListBox hcList;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button excludeChannelsButton;
         public System.Windows.Forms.CheckBox verboseCheckBox;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem serverSettingsToolStripMenuItem;
@@ -424,7 +442,9 @@ namespace AtticusServer
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem splashScreenToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem licenseInformationToolStripMenuItem;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button deleteSelectedDeviceButton;
+        private System.Windows.Forms.ToolStripMenuItem openHomePageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openGitRepositoryPageToolStripMenuItem;
 
     }
 }

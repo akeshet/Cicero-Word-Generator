@@ -10,6 +10,7 @@ namespace AtticusServer
     class RfsgTask
     {
         private static Dictionary<string, niRFSG> rfsgDevices;
+        private static Dictionary<niRFSG, bool> rfsgDeviceInitiated;
         private niRFSG rfsgDevice;
         private List<RFSGCommand> commandBuffer;
         public event NationalInstruments.DAQmx.TaskDoneEventHandler Done;
@@ -206,6 +207,7 @@ namespace AtticusServer
             if (rfsgDevices == null)
             {
                 rfsgDevices = new Dictionary<string, niRFSG>();
+                rfsgDeviceInitiated = new Dictionary<niRFSG, bool>();
             }
 
             if (rfsgDevices.ContainsKey(rfsgDeviceName))
@@ -224,6 +226,7 @@ namespace AtticusServer
                     throw new InvalidDataException("Caught exception when attempting to instantiate an rfsg device named " + rfsgDeviceName + ". Maybe a device by this name does not exist? Exception message: " + e.Message);
                 }
                 rfsgDevices.Add(rfsgDeviceName, rfsgDevice);
+                rfsgDeviceInitiated.Add(rfsgDevice, false);
             }
 
 
@@ -357,7 +360,7 @@ namespace AtticusServer
                         if (success)
                             AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to enable output"));
                         else
-                            AtticusServer.server.messageLog(this, new MessageEvent("RSG command to enable output gave error. output probably already enabled."));
+                            AtticusServer.server.messageLog(this, new MessageEvent("RSG command to enable output gave error. Output probably already enabled."));
                     }
                     break;
 
@@ -381,7 +384,14 @@ namespace AtticusServer
 
                 case RFSGCommand.CommandType.Initiate:
                     {
-                        
+
+                        if (rfsgDeviceInitiated[rfsgDevice])
+                        {
+                            if (MainServerForm.instance.verboseCheckBox.Checked)
+                                AtticusServer.server.messageLog(this, new MessageEvent("RFSG device believed to be initiated already. Skipping initiate command."));
+                            break;
+                        }
+
                         try
                         {
                             rfsgDevice.Initiate();
@@ -391,9 +401,14 @@ namespace AtticusServer
                         {
                         }
 
+                        if (success)
+                            rfsgDeviceInitiated[rfsgDevice] = true;
+                        else
+                            rfsgDeviceInitiated[rfsgDevice] = false;
+
                         if (MainServerForm.instance.verboseCheckBox.Checked)
                         {
-                            if (success)
+                            if (success) 
                                 AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to initiate output (enter committed state)"));
                             else
                                 AtticusServer.server.messageLog(this, new MessageEvent("RFSG command to initiate device gave error. Device probably already initiated."));
@@ -410,6 +425,7 @@ namespace AtticusServer
                     {
                         AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to abort output (enter configuration state)"));
                     }
+                    rfsgDeviceInitiated[rfsgDevice] = false;
                     break;
             }
         }

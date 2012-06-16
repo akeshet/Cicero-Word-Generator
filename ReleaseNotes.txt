@@ -61,3 +61,36 @@ should it be necessary to make radical changes to these objects which
 would break compatability without special conversion attention.
 
 Significant UI Optimizations when adding or removing variables or pulses.
+
+Bug fix to floating point numbers in equations. When Cicero was installed
+on computers in French language mode, neither "," nor "." worked as decimal
+seperators in floating numbers (ie 1.34). Now, when parsing equations,
+we default to US-style seperators and ONLY "." will work.
+
+
+1.62
+-----
+
+Internal changes / code improvements: better seperation of Timestep Editor
+UI element from the mechanics of outputting a single timestep. Many name 
+changes of objects to improve code readability. Changes to timestep
+hotkey handling. New buffer snapshot testing to ensure that any future
+cleanups of buffer generation code do not affect behavior.
+
+Visible changes: Bug fix to analog preview pane not always being correctly
+cleared.
+
+Bug fix to RFSG tasks -- Initiate is no longer called on each run even if
+AutoInitiate for that device is set to true. Instead, an internal flag is
+used to keep track of whether the given RFSG device is supposed to be in 
+Iniated mode already. This should fix a previous bug in which calling
+Initiate if the card was already initiated was actually DISABLING the card. 
+hopefully it does not introduce a new Issue, though if the state of this
+internal flag gets invalidly set to true, it may require a reset of Atticus
+to have Initiate called again.
+
+Pulse autonaming feature -- helps you to enforce a Pulse naming convention
+by coming up with descriptive Pulse names for you.
+
+Timestep drag&drop support. Individual timesteps can be dragged and dropped
+to reorder them.

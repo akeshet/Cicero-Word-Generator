@@ -93,9 +93,9 @@ namespace WordGenerator.Controls
         {
             Storage.sequenceData.ListIterationNumber = (int) this.iterationSelector.Value;
             this.Refresh();
-            WordGenerator.mainClientForm.instance.sequencePage1.refreshAnalogPreviewIfAutomatic();
-            WordGenerator.mainClientForm.instance.variablesEditor1.ved_valueChanged(this, null);
-            WordGenerator.mainClientForm.instance.sequencePage1.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
+            WordGenerator.MainClientForm.instance.sequencePage.refreshAnalogPreviewIfAutomatic();
+            WordGenerator.MainClientForm.instance.variablesEditor.ved_valueChanged(this, null);
+            WordGenerator.MainClientForm.instance.sequencePage.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
         }
 
         private void runCurrentButton_Paint(object sender, PaintEventArgs e)
@@ -162,7 +162,7 @@ namespace WordGenerator.Controls
                 }
                 else
                 {
-                    bgRunButton.Text = "Run as Loop in Background";
+                    bgRunButton.Text = "Run as Loop in Background (^F9)";
                 }
             }
         }
