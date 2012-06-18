@@ -37,8 +37,8 @@ wire [16:0]  ok2;            // Opal Kelly bus 2
 
 // the mapping to clk1 is temporary. Eventually, we will map the refclk to an input pin.
 wire refclk;
-//assign refclk = clk1;      // ********************** UNCOMMENT THIS LINE TO USE INTERNAL CLOCK
-assign refclk = yclk1;   // ********************** UNCOMMENT THIS LINE TO USE EXTERNAL CLOCK
+assign refclk = clk1;      // ********************** UNCOMMENT THIS LINE TO USE INTERNAL CLOCK
+//assign refclk = yclk1;   // ********************** UNCOMMENT THIS LINE TO USE EXTERNAL CLOCK
 
 
 // Pipe related wires
@@ -184,6 +184,7 @@ always @(posedge refclk) begin
 			repeat_counter<=0;
 			nSegsGenerated<=0;
 			nSamplesGenerated<=0;
+			masterSamplesGenerated<=0;
 			toggler<=0;
 
 			if (soft_generate_trig_in==1) begin
