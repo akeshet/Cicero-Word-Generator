@@ -10,7 +10,7 @@ namespace AtticusServer
     /// <summary>
     /// Task that generated a variable timebase using an OpalKelly FPGA.
     /// </summary>
-    class FpgaTimebaseTask
+    class FpgaTimebaseTask : IDisposable
     {
 
         okCFrontPanel opalKellyDevice;
@@ -210,9 +210,26 @@ namespace AtticusServer
 
         }
 
-        public void triggerMonitoringProc()
+        private Thread masterPollingThread;
+        private int pollingProcSleepTime = 100; // in ms
+        public void masterSamplePollingProc()
         {
+            Thread.Sleep(pollingProcSleepTime);
+            UInt32 mTime = getMasterSamplesGenerated();
+            MainServerForm.instance.addMessageLogText(this, new MessageEvent("FPGA master sample: " + mTime));
 
+        }
+
+        private UInt32 getMasterSamplesGenerated()
+        {
+            UInt32 lowWord = opalKellyDevice.GetWireOutValue(0x22);
+            UInt32 highWord = opalKellyDevice.GetWireOutValue(0x23);
+
+            UInt32 ans = highWord;
+            ans = ans << 16;
+            ans = ans + lowWord;
+
+            return ans;
         }
 
         public void Start()
@@ -223,6 +240,13 @@ namespace AtticusServer
             {
                 throw new Exception("Unable to send software start trigger to FPGA device. " + errorCode.ToString());
             }
+
+            if (masterPollingThread != null)
+            {
+                masterPollingThread.Abort();
+            }
+            masterPollingThread = new Thread(new ThreadStart(masterSamplePollingProc));
+            masterPollingThread.Start();
         }
 
         public int getMistriggerStatus()
@@ -250,6 +274,16 @@ namespace AtticusServer
             {
                 throw new Exception("Unable to send software stop trigger to FPGA device. " + errorCode.ToString());
             }
+
+            masterPollingThread.Abort();
+            masterPollingThread = null;
         }
+
+        public void Dispose()
+        {
+            if (masterPollingThread != null)
+                masterPollingThread.Abort();
+        }
+        
     }
 }
