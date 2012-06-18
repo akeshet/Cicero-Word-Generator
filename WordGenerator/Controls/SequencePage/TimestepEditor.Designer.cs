@@ -78,6 +78,7 @@ namespace WordGenerator.Controls
             this.timestepGroupLoopIndicatorLabel = new System.Windows.Forms.Label();
             this.insertLeft = new System.Windows.Forms.Label();
             this.insertRight = new System.Windows.Forms.Label();
+            this.waitTimeoutLabel = new System.Windows.Forms.ToolStripMenuItem();
             this.durationEditor = new WordGenerator.Controls.VerticalParameterEditor();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.analogPictureBox)).BeginInit();
@@ -113,6 +114,7 @@ namespace WordGenerator.Controls
             this.outputNowToolStripMenuItem,
             this.toolStripSeparator4,
             this.waitForRetriggerMenuItem,
+            this.waitTimeoutLabel,
             this.toolStripSeparator2,
             this.insertTimestepBeforeToolStripMenuItem,
             this.insertTimestepAfterToolStripMenuItem,
@@ -135,7 +137,8 @@ namespace WordGenerator.Controls
             this.toolStripSeparator5,
             this.timestepGroupToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(258, 420);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(258, 464);
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // outputNowToolStripMenuItem
             // 
@@ -523,6 +526,12 @@ namespace WordGenerator.Controls
             this.insertRight.Text = "Insert Here ->";
             this.insertRight.Visible = false;
             // 
+            // waitTimeoutLabel
+            // 
+            this.waitTimeoutLabel.Name = "waitTimeoutLabel";
+            this.waitTimeoutLabel.Size = new System.Drawing.Size(257, 22);
+            this.waitTimeoutLabel.Text = "Wait timeout:  (0 = none)";
+            // 
             // durationEditor
             // 
             this.durationEditor.Location = new System.Drawing.Point(3, 90);
@@ -629,5 +638,6 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.Label timestepGroupLoopIndicatorLabel;
         private System.Windows.Forms.Label insertLeft;
         private System.Windows.Forms.Label insertRight;
+        private System.Windows.Forms.ToolStripMenuItem waitTimeoutLabel;
     }
 }
