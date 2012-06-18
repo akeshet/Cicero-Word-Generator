@@ -602,7 +602,7 @@ namespace AtticusServer
 					//First we determine if an analog in task should be created
                     foreach (DeviceSettings ds in AtticusServer.server.serverSettings.myDevicesSettings.Values)
                     {
-                        analogInCardDetected |= ds.DeviceDescription.Contains("6259") && ds.AnalogInEnabled;
+                        analogInCardDetected |= (ds.DeviceDescription.Contains("6259") || ds.DeviceDescription.Contains("6363")) && ds.AnalogInEnabled; // program will also support PXIe-6363 cards
                     }
 
                     if (analogInCardDetected)
@@ -611,72 +611,114 @@ namespace AtticusServer
                         analogS7ReadTask = new Task();
                         analogS7ReadTask.SynchronizeCallbacks = false;
                         analog_in_names = new List<string>();
-                        bool isUsed;
+                        // bool isUsed; // adareau : now obsolete
 
+                        #region Old Code
+                       // // Obtains a list of the analog in channels to be included in the task, and their name
+                       // AnalogInChannels the_channels = AtticusServer.server.serverSettings.AIChannels[0];
+                       // AnalogInNames the_names = AtticusServer.server.serverSettings.AINames[0];
 
-                       // Obtains a list of the analog in channels to be included in the task, and their name
-                        AnalogInChannels the_channels = AtticusServer.server.serverSettings.AIChannels[0];
-                        AnalogInNames the_names = AtticusServer.server.serverSettings.AINames[0];
+                       //// We use part of the channels as single ended, and part as differential. He channels are added here. The task is created on Slot 7. This shouldn't be hard coded and will be changed.
+                       // #region Single ended
+                       // for (int analog_index = 0; analog_index < 10; analog_index++)
+                       // {
+                       //     PropertyInfo the_channel = the_channels.GetType().GetProperty("AS" + analog_index.ToString());
+                       //     isUsed = (bool)the_channel.GetValue(the_channels, null);
+                       //     if (isUsed)
+                       //     {
+                       //         if (analog_index < 5)
+                       //         {
+                       //             analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + analog_index.ToString(), "",
+                       //                 AITerminalConfiguration.Nrse, -10, 10, AIVoltageUnits.Volts);
+                       //         }
+                       //         else
+                       //         {
+                       //             analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 3).ToString(), "",
+                       //                 AITerminalConfiguration.Nrse, -10, 10, AIVoltageUnits.Volts);
+                       //         }
+                       //         string theName = (string)(the_names.GetType().GetProperty("AS" + analog_index.ToString()).GetValue(the_names, null));
+                       //         if (theName == "")
+                       //             analog_in_names.Add("AIS" + analog_index.ToString());
+                       //         else
+                       //             analog_in_names.Add(theName);
+                       //     }
+                       // }
+                       // #endregion
 
-                       // We use part of the channels as single ended, and part as differential. He channels are added here. The task is created on Slot 7. This shouldn't be hard coded and will be changed.
-                        #region Single ended
-                        for (int analog_index = 0; analog_index < 10; analog_index++)
+                       // #region Differential
+                       // for (int analog_index = 0; analog_index < 11; analog_index++)
+                       // {
+                       //     PropertyInfo the_channel = the_channels.GetType().GetProperty("AD" + NamingFunctions.number_to_string(analog_index, 2));
+                       //     isUsed = (bool)the_channel.GetValue(the_channels, null);
+
+                       //     if (isUsed)
+                       //     {
+                       //         if (analog_index < 3)
+                       //         {
+                       //             analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 5).ToString(), "",
+                       //                 AITerminalConfiguration.Differential, -10, 10, AIVoltageUnits.Volts);
+                       //         }
+                       //         else
+                       //         {
+                       //             analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 13).ToString(), "",
+                       //                 AITerminalConfiguration.Differential, -10, 10, AIVoltageUnits.Volts);
+                       //         }
+                       //         string theName = (string)(the_names.GetType().GetProperty("AD" + NamingFunctions.number_to_string(analog_index, 2)).GetValue(the_names, null));
+                       //         if (theName == "")
+                       //             analog_in_names.Add("AID" + analog_index.ToString());
+                       //         else
+                       //             analog_in_names.Add(theName);
+                       //     }
+                       // }
+                       // #endregion
+
+                        #endregion 
+
+                        #region New Code
+
+                        List<AnalogInChannels> channels_list = AtticusServer.server.serverSettings.AIChannels;
+
+                        foreach (AnalogInChannels aiChannel in channels_list)
                         {
-                            PropertyInfo the_channel = the_channels.GetType().GetProperty("AS" + analog_index.ToString());
-                            isUsed = (bool)the_channel.GetValue(the_channels, null);
-                            if (isUsed)
+                            if (aiChannel.UseChannel)
                             {
-                                if (analog_index < 5)
+                                if (aiChannel.AnalogInChannelType == AnalogInChannels.AnalogInChannelTypeList.SingleEnded)
                                 {
-                                    analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + analog_index.ToString(), "",
-                                        AITerminalConfiguration.Nrse, -10, 10, AIVoltageUnits.Volts);
+                                    analogS7ReadTask.AIChannels.CreateVoltageChannel(AtticusServer.server.serverSettings.AIDev + "/" + aiChannel.ChannelName, "",
+                                      AITerminalConfiguration.Nrse, -10, 10, AIVoltageUnits.Volts);
                                 }
-                                else
+
+                                else if (aiChannel.AnalogInChannelType == AnalogInChannels.AnalogInChannelTypeList.Differential)
                                 {
-                                    analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 3).ToString(), "",
-                                        AITerminalConfiguration.Nrse, -10, 10, AIVoltageUnits.Volts);
+                                    analogS7ReadTask.AIChannels.CreateVoltageChannel(AtticusServer.server.serverSettings.AIDev + "/" + aiChannel.ChannelName, "",
+                                     AITerminalConfiguration.Differential, -10, 10, AIVoltageUnits.Volts);
                                 }
-                                string theName = (string)(the_names.GetType().GetProperty("AS" + analog_index.ToString()).GetValue(the_names, null));
-                                if (theName == "")
-                                    analog_in_names.Add("AIS" + analog_index.ToString());
-                                else
-                                    analog_in_names.Add(theName);
+
+                                string theName = aiChannel.SaveName;
+                                analog_in_names.Add(theName);
+
                             }
+
+
                         }
+
                         #endregion
 
-                        #region Differential
-                        for (int analog_index = 0; analog_index < 11; analog_index++)
-                        {
-                            PropertyInfo the_channel = the_channels.GetType().GetProperty("AD" + NamingFunctions.number_to_string(analog_index, 2));
-                            isUsed = (bool)the_channel.GetValue(the_channels, null);
 
-                            if (isUsed)
-                            {
-                                if (analog_index < 3)
-                                {
-                                    analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 5).ToString(), "",
-                                        AITerminalConfiguration.Differential, -10, 10, AIVoltageUnits.Volts);
-                                }
-                                else
-                                {
-                                    analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 13).ToString(), "",
-                                        AITerminalConfiguration.Differential, -10, 10, AIVoltageUnits.Volts);
-                                }
-                                string theName = (string)(the_names.GetType().GetProperty("AD" + NamingFunctions.number_to_string(analog_index, 2)).GetValue(the_names, null));
-                                if (theName == "")
-                                    analog_in_names.Add("AID" + analog_index.ToString());
-                                else
-                                    analog_in_names.Add(theName);
-                            }
-                        }
-                        #endregion
-                        
                         // Configure timing specs of the analog In task. Again these things shouldn't be hard coded and will be changed    
                         analogS7ReadTask.Timing.ConfigureSampleClock("", (double)(AtticusServer.server.serverSettings.AIFrequency), SampleClockActiveEdge.Rising,
                             SampleQuantityMode.FiniteSamples, sequence.nSamples(1 / ((double)(AtticusServer.server.serverSettings.AIFrequency))));
 
-                        analogS7ReadTask.Timing.ReferenceClockSource = "/PXI1Slot7/PXI_Trig7";
+                        //analogS7ReadTask.Timing.ReferenceClockSource = "/PXI1Slot7/PXI_Trig7"; // adareau : with my configuration, declaring a ReferenceClockSource was generating errors. I remove this for now...
+                        
+                        if (AtticusServer.server.serverSettings.UseAITaskTriggering) //AD
+                        {
+
+                            DigitalEdgeStartTriggerEdge triggerEdge = DigitalEdgeStartTriggerEdge.Rising;  // AD : see below
+                            analogS7ReadTask.Triggers.StartTrigger.ConfigureDigitalEdgeTrigger(AtticusServer.server.serverSettings.AITriggerSource, triggerEdge); // AD : to fix synchronization problem between analog in and output tasks, I trigger
+                                                                                                                                                                 //  the analog in task, using the variable timebase source signal (available on PXI_Trig0)
+                                                                                                                                                                 // the task starts with the first signal sent by the VT source...
+                        }
                         analogS7ReadTask.Timing.ReferenceClockRate = 20000000;
                         analogS7ReadTask.Stream.Timeout = Convert.ToInt32(sequence.SequenceDuration * 1000) + 10000;
 
