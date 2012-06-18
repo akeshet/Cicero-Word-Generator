@@ -214,14 +214,17 @@ namespace AtticusServer
         private int pollingProcSleepTime = 100; // in ms
         public void masterSamplePollingProc()
         {
-            Thread.Sleep(pollingProcSleepTime);
-            UInt32 mTime = getMasterSamplesGenerated();
-            MainServerForm.instance.addMessageLogText(this, new MessageEvent("FPGA master sample: " + mTime));
-
+            while (true)
+            {
+                UInt32 mTime = getMasterSamplesGenerated();
+                MainServerForm.instance.addMessageLogText(this, new MessageEvent("FPGA master sample: " + mTime));
+                Thread.Sleep(pollingProcSleepTime);
+            }
         }
 
         private UInt32 getMasterSamplesGenerated()
         {
+            opalKellyDevice.UpdateWireOuts();
             UInt32 lowWord = opalKellyDevice.GetWireOutValue(0x22);
             UInt32 highWord = opalKellyDevice.GetWireOutValue(0x23);
 
@@ -275,8 +278,9 @@ namespace AtticusServer
                 throw new Exception("Unable to send software stop trigger to FPGA device. " + errorCode.ToString());
             }
 
-            masterPollingThread.Abort();
-            masterPollingThread = null;
+            if (masterPollingThread!=null)
+                masterPollingThread.Abort();
+                masterPollingThread = null;
         }
 
         public void Dispose()
