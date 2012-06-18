@@ -191,10 +191,6 @@ namespace AtticusServer
 
             communicatorStatus = ServerStructures.ServerCommunicatorStatus.Disconnected;
 
-            // marshal the serverCommunicator if the start up settings say to do so.
-            if (settings.ConnectOnStartup)
-                reachMarshalStatus(ServerStructures.ServerCommunicatorStatus.Connected);
-
 
 
             System.Console.WriteLine("... done running AtticusServerRuntime constructor.");
