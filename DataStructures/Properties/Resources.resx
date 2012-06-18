@@ -131,7 +131,7 @@
     <comment>[Optional] eg: rev2. Will be displayed in UI, but not tracked in serialized Sequence, Settings, or ServerSettings files.</comment>
   </data>
   <data name="VersionString" xml:space="preserve">
-    <value>1.62</value>
+    <value>1.63</value>
     <comment>Must be of the form X.YZ</comment>
   </data>
 </root>
