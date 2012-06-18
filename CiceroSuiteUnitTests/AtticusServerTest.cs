@@ -83,17 +83,18 @@ namespace CiceroSuiteUnitTests
                 "Deserialized server had wrong GPIB device description.");
 
             // Ensure that old-style Analog In settings are deserializing correctly.
+            // New style adopted as of commit # 0df279b235b5c9aa91cf05bfc9400a01d7a021e0
             result = AtticusServer_Accessor.loadServerSettings("AtticusServerSettings-AnalogIn-Old.set");
             Assert.AreEqual("Hal", result.ServerName);
             Assert.AreEqual(1, result.AIChannels.Count);
             Assert.AreEqual(1, result.AILogTimes.Count);
-            Assert.AreEqual(1, result.AINames.Count);
+            //Assert.AreEqual(1, result.AINames.Count); // field no longer exists 
             Assert.IsNotNull(result.AIChannels[0]);
             Assert.IsNotNull(result.AILogTimes[0]);
-            Assert.IsNotNull(result.AINames[0]);
-            Assert.IsTrue(result.AIChannels[0].AD00);
-            Assert.IsFalse(result.AIChannels[0].AD01);
-            Assert.AreEqual("Name1", result.AINames[0].AD00);
+            //Assert.IsNotNull(result.AINames[0]); // field no longer exists
+            //Assert.IsTrue(result.AIChannels[0].AD00); // field no longer exists
+            //Assert.IsFalse(result.AIChannels[0].AD01); // field no longer exists
+            //Assert.AreEqual("Name1", result.AINames[0].AD00); // field no longer exists
             Assert.AreEqual(8, result.AILogTimes[0].TimeStep);
             Assert.AreEqual(4, result.AILogTimes[0].TimeBefore);
 
