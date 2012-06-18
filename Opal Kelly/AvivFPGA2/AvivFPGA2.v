@@ -87,6 +87,11 @@ parameter s_idle = 1,
 reg [4:0] state; // this is 4 bits wide even though only 2 bits are used. I think the compiler shrinks it to 2 anyway.
 
 
+// 1-bit register used to keep track of if we are actively waiting for retrigger
+// 32-bit register used to count how long we have waited for
+reg waitingForRetrigger;
+reg [31:0] waitedCounts;
+
 
 reg [3:0] nSegsGenerated; // used only to drive LEDs
 
@@ -185,6 +190,8 @@ always @(posedge refclk) begin
 			nSegsGenerated<=0;
 			nSamplesGenerated<=0;
 			masterSamplesGenerated<=0;
+			waitingForRetrigger<=0;
+			waitedCounts<=0;
 			toggler<=0;
 
 			if (soft_generate_trig_in==1) begin
@@ -206,15 +213,28 @@ always @(posedge refclk) begin
 				fifo_reset<=1;							// reset FIFO
 				output_clock<=0;						// and clock
 			end
-			else if (clock_data_from_fifo==0) begin 
-																	// clock_data_from_fifo == 0 is a special code for
+			else if (repeat_counts==0) begin
+																	// repeat_counts == 0 is a special code for
 																	// putting the FPGA into "wait for retrigger" mode
-																	
-																	// wait for the retrigger input to go high, then move on in the fifo
-				if (retriggerIN && fifo_read_enable==0) begin
-					fifo_read_enable<=1;
-					nSegsGenerated<=nSegsGenerated+1;
+																	// in this mode, if on_counts!=0, then on_counts 
+																	// is actually the wait timeout, after which we should 
+																	// continue even if we don't receieve the retrigger signal
+				if (waitingForRetrigger) begin
+					waitedCounts<=waitedCounts+1;
+					if ((retriggerIN && fifo_read_enable==0) // wait for the retrigger input to go high 
+					|| (on_counts!=0 && waitedCounts==on_counts))  //or for the wait to timeout, then move on in the fifo
+					begin		
+						fifo_read_enable<=1;
+						nSegsGenerated<=nSegsGenerated+1;
+						waitingForRetrigger<=0;
+					end
 				end
+				else begin
+					waitingForRetrigger<=1;
+					waitedCounts<=0;
+				end
+																	
+
 			end
 			else begin		
 				masterSamplesGenerated<=masterSamplesGenerated+1; // increment the master sample counter
