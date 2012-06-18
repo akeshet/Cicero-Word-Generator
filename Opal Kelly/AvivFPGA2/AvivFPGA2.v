@@ -37,8 +37,8 @@ wire [16:0]  ok2;            // Opal Kelly bus 2
 
 // the mapping to clk1 is temporary. Eventually, we will map the refclk to an input pin.
 wire refclk;
-assign refclk = clk1;      // ********************** UNCOMMENT THIS LINE TO USE INTERNAL CLOCK
-//assign refclk = yclk1;   // ********************** UNCOMMENT THIS LINE TO USE EXTERNAL CLOCK
+//assign refclk = clk1;      // ********************** UNCOMMENT THIS LINE TO USE INTERNAL CLOCK
+assign refclk = yclk1;   // ********************** UNCOMMENT THIS LINE TO USE EXTERNAL CLOCK
 
 
 // Pipe related wires
@@ -65,6 +65,8 @@ assign ybus[23] = output_clock;
 assign ybus[22] = output_clock;
 
 assign ybus[26] = ~output_clock;
+
+reg [31:0] masterSamplesGenerated;
 
 
 		// register inputs from computer
@@ -131,6 +133,7 @@ initial begin
 	repeat_counter<=0;
 	nSegsGenerated<=0;
 	mistriggerDetected<=0;
+	masterSamplesGenerated<=0;
 end
 
 // triggering logic
@@ -213,6 +216,7 @@ always @(posedge refclk) begin
 				end
 			end
 			else begin		
+				masterSamplesGenerated<=masterSamplesGenerated+1; // increment the master sample counter
 				if (main_counter<on_counts) begin   // if the counter indicates our output should be high
 					if (output_clock==0) begin          // then if it is low
 						output_clock<=1;					 	// make it high
@@ -277,6 +281,10 @@ okWireIn wireIn00 (.ok1(ok1), .ok2(ok2),
 // Wire outs for mistrigger detection
 okWireOut wire20 (.ok1(ok1), .ok2(ok2), .ep_addr(8'h20), .ep_datain(mistriggerDetected[15:0]));
 okWireOut wire21 (.ok1(ok1), .ok2(ok2), .ep_addr(8'h21), .ep_datain(mistriggerDetected[31:16]));
+
+// Wire outs for Atticus polling of FPGA's master sample count
+okWireOut wire22 (.ok1(ok1), .ok2(ok2), .ep_addr(8'h22), .ep_datain(masterSamplesGenerated[15:0]));
+okWireOut wire23 (.ok1(ok1), .ok2(ok2), .ep_addr(8'h23), .ep_datain(masterSamplesGenerated[31:16]));
 
 // Create the FIFO for storing data from computer
 // write clock comes from Opal Kelly Host Interface
