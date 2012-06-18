@@ -13,8 +13,23 @@ namespace AtticusServer
     class FpgaTimebaseTask : IDisposable
     {
 
+
+        /// <summary>
+        /// 
+        /// Format of data streamed to FPGA
+        /// 
+        /// 
+        /// 
+        /// 
+        /// 
+        /// </summary>
+
         okCFrontPanel opalKellyDevice;
 
+        public class FpgaTimebaseGenerationException : Exception
+        {
+
+        }
         
 
         private struct ListItem
@@ -49,8 +64,11 @@ namespace AtticusServer
                 {
                     if (sequence.TimeSteps[stepID].WaitForRetrigger)
                     {
-                        listItems.Add(new ListItem(0, 0, 0)); // 0,0,0 list item is code for "wait for retrigger
-                                                              // FPGA knows how to handle this
+                        int waitTime = (int) (sequence.TimeSteps[stepID].RetriggerTimeout.getBaseValue() / masterClockPeriod);
+                        listItems.Add(new ListItem(waitTime, 0, 0)); // counts = 0 is a special signal for WAIT_FOR_RETRIGGER mode
+                                                                    // in this mode, FPGA waits a maximum of on_counts master samples
+                                                                    // before moving on anyway.
+                                                                    // (unless on_counts = 0, in which case it never artificially retriggers)
                     }
 
                     List<SequenceData.VariableTimebaseSegment> stepSegments = segments[sequence.TimeSteps[stepID]];
@@ -116,6 +134,8 @@ namespace AtticusServer
             // the data is a little shuffled because
             // of the details of the byte order in 
             // piping data to the fpga.
+            
+            // Each list item takes up 16 bytes in the output FIFO.
             for (int i = 0; i < listItems.Count; i++)
             {
                 ListItem item = listItems[i];

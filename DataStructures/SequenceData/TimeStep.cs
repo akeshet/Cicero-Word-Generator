@@ -143,6 +143,19 @@ namespace DataStructures
             set { waitForRetrigger = value; }
         }
 
+        private DimensionedParameter retriggerTimeout;
+
+        public DimensionedParameter RetriggerTimeout
+        {
+            get
+            {
+                if (retriggerTimeout == null)
+                    retriggerTimeout = new DimensionedParameter(Units.s, 0);
+                return retriggerTimeout;
+            }
+            set { retriggerTimeout = value; }
+        }
+
         private AnalogGroup myAnalogGroup;
 
         [Category("Groups"), Description("The analog group started in this timestep, if any.")]
