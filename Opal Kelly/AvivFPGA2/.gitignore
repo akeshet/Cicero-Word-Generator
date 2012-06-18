@@ -40,3 +40,10 @@ webtalk_pn.xml
 xlnx_auto_0_xdb/cst.xbcd
 xst/
 *.html
+AvivFPGA2.ut
+AvivFPGA2_bitgen.xwbt
+_xmsgs/bitgen.xmsgs
+_xmsgs/pn_parser.xmsgs
+avivfpga2.bgn
+avivfpga2.drc
+webtalk.log
