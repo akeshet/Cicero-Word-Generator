@@ -94,3 +94,10 @@ by coming up with descriptive Pulse names for you.
 
 Timestep drag&drop support. Individual timesteps can be dragged and dropped
 to reorder them.
+
+1.63
+-----
+
+Changes to Analog Input channel configuration. Note -- your old Atticus
+settings will no longer correctly configure your analog inputs (if you
+are using this feature).
