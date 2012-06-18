@@ -189,6 +189,44 @@ namespace AtticusServer
             set { connections = value; }
         }
 
+        //<AD>
+
+        private string aIDev;
+
+        [Description("Device to use for the analog in task. Ex: if the analog in ports are situated on 'Dev6/ai', set this field to 'Dev6'"),
+        Category("Analog In")]
+        public string AIDev
+        {
+            get { return aIDev; }
+            set { aIDev = value; }
+        }
+
+        /// <summary>
+        /// When set to true, the Analog In task will be triggered by a physical signal. The source of this signal is set with the 'AITriggerSource' field. This is useful if you want to synchronize the input task when using Variable Timebase, since the generation of the VariableTimebase source can take some time and jeopardize tasks synchronization.
+        /// </summary>
+        private bool useAITaskTriggering = false;
+
+        [Description("When set to true, the Analog In task will be triggered by a physical signal. The source of this signal is set with the 'AITriggerSource' field. This is useful if you want to synchronize the input task when using Variable Timebase, since the generation of the VariableTimebase source can take some time and jeopardize tasks synchronization."),
+        Category("Analog In")]
+        public bool UseAITaskTriggering
+        {
+            get { return useAITaskTriggering; }
+            set { useAITaskTriggering = value; }
+        }
+
+
+        private string aITriggerSource;
+
+        [Description("Source for triggering the analog in task (if UseAITaskTriggering set to true). Ex: 'PXI_Trig0'. NB : you can use the variable timebase source as a trigger. The task will be triggered by he rising edge at the beginning of the sequence, and will ignore the other edges until the sequence is over."),
+        Category("Analog In")]
+        public string AITriggerSource
+        {
+            get { return aITriggerSource; }
+            set { aITriggerSource = value; }
+        }
+
+        //</AD>
+
         private int aIFrequency=1000;
 
         [Description("Sampling frequency for the Analog In channels"),
@@ -209,15 +247,17 @@ namespace AtticusServer
             set { aIChannels = value; }
         }
 
-        private List<AnalogInNames> aINames;
+        //<AD>
+        //private List<AnalogInNames> aINames;   // adareau : this is now obsolete
 
-        [Description("Custom names for the Analog In channels"),
-        Category("Analog In")]
-        public List<AnalogInNames> AINames
-        {
-            get { return aINames; }
-            set { aINames = value; }
-        }
+        //[Description("Custom names for the Analog In channels"),
+        //Category("Analog In")]
+        //public List<AnalogInNames> AINames
+        //{
+        //    get { return aINames; }
+        //    set { aINames = value; }
+        //}
+        //</AD>
 
         private List<AnalogInLogTime> aILogTimes;
 
@@ -355,7 +395,7 @@ namespace AtticusServer
             this.connections = new List<TerminalPair>();
             this.aILogTimes = new List<AnalogInLogTime>();
             this.aIChannels = new List<AnalogInChannels>();
-            this.aINames = new List<AnalogInNames>();
+            //this.aINames = new List<AnalogInNames>(); // now obsolete
             this.versionNumberAtFirstCreation = DataStructuresVersionNumber.CurrentVersion;
             this.versionNumberAtLastSerialization = DataStructuresVersionNumber.CurrentVersion;
         }
