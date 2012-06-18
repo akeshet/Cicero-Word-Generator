@@ -82,6 +82,21 @@ namespace CiceroSuiteUnitTests
             Assert.AreEqual(result.myDevicesSettings["GPIB0/19,0"].DeviceDescription, "Agilent Technologies,33250A,0,1.05-1.01-1.00-03-1\n",
                 "Deserialized server had wrong GPIB device description.");
 
+            // Ensure that old-style Analog In settings are deserializing correctly.
+            result = AtticusServer_Accessor.loadServerSettings("AtticusServerSettings-AnalogIn-Old.set");
+            Assert.AreEqual("Hal", result.ServerName);
+            Assert.AreEqual(1, result.AIChannels.Count);
+            Assert.AreEqual(1, result.AILogTimes.Count);
+            Assert.AreEqual(1, result.AINames.Count);
+            Assert.IsNotNull(result.AIChannels[0]);
+            Assert.IsNotNull(result.AILogTimes[0]);
+            Assert.IsNotNull(result.AINames[0]);
+            Assert.IsTrue(result.AIChannels[0].AD00);
+            Assert.IsFalse(result.AIChannels[0].AD01);
+            Assert.AreEqual("Name1", result.AINames[0].AD00);
+            Assert.AreEqual(8, result.AILogTimes[0].TimeStep);
+            Assert.AreEqual(4, result.AILogTimes[0].TimeBefore);
+
         }
     }
 }
