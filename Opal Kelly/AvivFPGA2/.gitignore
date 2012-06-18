@@ -39,3 +39,4 @@ _xmsgs/xst.xmsgs
 webtalk_pn.xml
 xlnx_auto_0_xdb/cst.xbcd
 xst/
+*.html
