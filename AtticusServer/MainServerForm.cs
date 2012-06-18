@@ -191,6 +191,7 @@ namespace AtticusServer
             serverSettingsPropertyGrid.SelectedObject = AtticusServer.server.serverSettings;
 
             updateHardwareChannelCount();
+
         }
 
         public void updateGUI(object sender, EventArgs e)
@@ -331,7 +332,11 @@ namespace AtticusServer
 
         private void MainServerForm_Load(object sender, EventArgs e)
         {
-           
+
+            // marshal the serverCommunicator if the start up settings say to do so.
+            if (AtticusServer.server.serverSettings.ConnectOnStartup)
+                AtticusServer.server.reachMarshalStatus(ServerStructures.ServerCommunicatorStatus.Connected);
+
             try
             {
                 status = niSync_init("PXI1Slot2", true, true, out session);
