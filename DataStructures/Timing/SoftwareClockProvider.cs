@@ -129,6 +129,8 @@ namespace DataStructures.Timing
 
             elapsedTime_ms = time_ms;
             waitHandle.Set();
+            Thread.Sleep(1); // without this, occasionally the waiting threads seem unable to catch the Set signal fast enough
+                            // to react to it
             waitHandle.Reset();
             if (runningThreads == 0)
                 return false;
@@ -161,6 +163,7 @@ namespace DataStructures.Timing
             while (keepGoing)
             {
                 waitHandle.WaitOne(); // Wait for the next clock signal to arrive
+
                 
                 uint thisPoll = elapsedTime_ms;
                 if ((thisPoll - lastPoll) < minPollingPeriod_ms)
