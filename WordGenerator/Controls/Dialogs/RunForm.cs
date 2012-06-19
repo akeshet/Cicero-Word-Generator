@@ -12,11 +12,14 @@ using System.Net;
 using System.Net.Sockets;
 using DataStructures.UtilityClasses;
 using DataStructures.Database;
+using DataStructures.Timing;
 
 namespace WordGenerator
 {
     public partial class RunForm : Form, DataStructures.Timing.SoftwareClockSubscriber
     {
+
+        private DataStructures.Timing.SoftwareClockProvider softwareClockProvider;
 
         private SequenceData runningSequence = null;
 
@@ -968,9 +971,15 @@ namespace WordGenerator
 
                 // arm tasks.
 
-                DataStructures.Timing.ComputerClockSoftwareClockProvider softwareClock = new DataStructures.Timing.ComputerClockSoftwareClockProvider(10);
-                softwareClock.addSubscriber(this, 100);
-                softwareClock.Arm();
+                if (softwareClockProvider != null)
+                {
+                    addMessageLogText(this, new MessageEvent("A software clock provider already exists, unespectedly. Aborting."));
+                    return false;
+                }
+
+                softwareClockProvider = new ComputerClockSoftwareClockProvider(5);
+                softwareClockProvider.addSubscriber(this, 50);
+                softwareClockProvider.Arm();
 
                 addMessageLogText(this, new MessageEvent("Arming tasks."));
                 actionStatus = Storage.settingsData.serverManager.armTasksOnConnectedServers(addMessageLogText);
@@ -1002,25 +1011,23 @@ namespace WordGenerator
                 progressBarInitDelegate pbid = new progressBarInitDelegate(initializeProgressBar);
                 Invoke(pbid, new object[] { sequence.SequenceDuration });
 
-                // start software clock
-                softwareClock.Start();
 
                 double duration = sequence.SequenceDuration;
                 addMessageLogText(this, new MessageEvent("Sequence duration " + duration + " s. Running."));
 
 
+                // start software clock
+                softwareClockProvider.Start();
 
-                // Update the progress bar.
-                long startTicks = DateTime.Now.Ticks;
                 while (true)
                 {
-                    if (softwareClock.getElapsedTime() >= (200 + duration * 1000.0))
+                    if (softwareClockProvider.getElapsedTime() >= (200 + duration * 1000.0))
                         break;
                     Thread.Sleep(100);
                 }
 
-                softwareClock.Abort();
-                softwareClock = null;
+                softwareClockProvider.Abort();
+                softwareClockProvider = null;
 
                 MainClientForm.instance.CurrentlyOutputtingTimestep = sequence.dwellWord();
 
@@ -1120,7 +1127,7 @@ namespace WordGenerator
         }
 
         public bool reachedTime(UInt32 elapsedTime) {
-            this.Invoke(new progressBarUpdateDelegate(this.updateProgressBar), new object[] { (int)elapsedTime, runningSequence });
+            BeginInvoke(new progressBarUpdateDelegate(this.updateProgressBar), new object[] { (int)elapsedTime, runningSequence });                        
             return true;
         }
 
@@ -1191,14 +1198,16 @@ namespace WordGenerator
             timeLabel.Text = "0 s";
         }
 
-        private void progressBar1_Click(object sender, EventArgs e)
-        {
-
-        }
 
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
+            if (softwareClockProvider != null)
+            {
+                softwareClockProvider.Abort();
+                softwareClockProvider = null;
+            }
+
             WordGenerator.MainClientForm.instance.suppressHotkeys = false;
             if (this.isBackgroundRunform)
             {
@@ -1208,6 +1217,7 @@ namespace WordGenerator
                     this.backgroundRunUpdated(this, null);
                 }
             }
+            
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -1236,11 +1246,19 @@ namespace WordGenerator
             idleTimer.Elapsed += new System.Timers.ElapsedEventHandler(idleTimer_Elapsed);
             idleTimer.Start();
 
+            if (softwareClockProvider != null)
+            {
+                softwareClockProvider.Abort();
+                softwareClockProvider = null;
+            }
+
             if (this.runningThread != null)
                 runningThread.Abort();
             addMessageLogText(this, new MessageEvent("Run aborting."));
             Storage.settingsData.serverManager.stopAllServers(addMessageLogText);
             addMessageLogText(this, new MessageEvent("Run aborted."));
+
+
 
             TimeStep step;
             if (isBackgroundRunform)
@@ -1274,11 +1292,6 @@ namespace WordGenerator
         }
 
 
-
-        private void RunForm_Load(object sender, EventArgs e)
-        {
-
-        }
 
 
         [DllImport("user32.dll", SetLastError = true)]
