@@ -312,6 +312,7 @@ namespace AtticusServer
         private delegate void voidObjDel(object o);
 
         private Task variableTimebaseClockTask;
+        private bool separateSoftwareClockStart = false;
 
         /// <summary>
         /// This method should be run after setSettings and setSequence to ensure sane data.
@@ -745,8 +746,22 @@ namespace AtticusServer
 
                     #endregion
 
+                    DataStructures.Timing.SoftwareClockProvider softwareClockProvider;
 
-                    this.softwareClockProvider = new DataStructures.Timing.ComputerClockSoftwareClockProvider(100);
+                    if (fpgaTasks.Count != 0)
+                    {
+                        IEnumerator<string> e = fpgaTasks.Keys.GetEnumerator();
+                        e.MoveNext();
+                        string key = e.Current;
+                        softwareClockProvider = fpgaTasks[key];
+                        messageLog(this, new MessageEvent("Using FPGA task on device " + key + " as software clock source."));
+                    }
+                    else
+                    {
+                        this.computerClockProvider = new DataStructures.Timing.ComputerClockSoftwareClockProvider(5);
+                        softwareClockProvider = computerClockProvider;
+                        messageLog(this, new MessageEvent("Using computer clock as software clock source."));
+                    }
 
 
                     #region GPIB device and masquerading gpib channels (like rfsg channels)
@@ -1394,7 +1409,6 @@ namespace AtticusServer
         /// 
         private object softwareTriggeringTaskLock = new object();
 
-        private DataStructures.Timing.SoftwareClockProvider softwareClockProvider;
 
         /// <summary>
         /// Start hardware triggered tasks, and software triggerred tasks which run off an external sample clock. This function also
@@ -1648,6 +1662,7 @@ namespace AtticusServer
             messageLog(this, new MessageEvent("Shutdown complete."));
         }
 
+        private DataStructures.Timing.ComputerClockSoftwareClockProvider computerClockProvider;
 
         /// <summary>
         /// Start internally clocked software triggered tasks, software timed tasks (like gpib tasks), and tasks which act as clocks for other tasks.
@@ -1813,8 +1828,12 @@ namespace AtticusServer
                         // triggered through a triggering task. (see the armTasks function for more info).
                         if (softwareTriggeringTask == null)
                         {
-                            softwareClockProvider.Arm();
-                            softwareClockProvider.Start();
+                            if (computerClockProvider != null)
+                            {
+                                computerClockProvider.Arm();
+                                computerClockProvider.Start();
+                            }
+                            
 
                             foreach (RfsgTask rftask in rfsgTasksToTrigger)
                             {
@@ -1869,8 +1888,11 @@ namespace AtticusServer
                         // triggered through a triggering task. (see the armTasks function for more info).
                         if (softwareTriggeringTask == null)
                         {
-                            softwareClockProvider.Arm();
-                            softwareClockProvider.Start();
+                            if (computerClockProvider != null)
+                            {
+                                computerClockProvider.Arm();
+                                computerClockProvider.Start();
+                            }
 
                             foreach (RfsgTask rftask in rfsgTasksToTrigger)
                             {
@@ -2064,9 +2086,9 @@ namespace AtticusServer
                 }
 
                 
-                if (softwareClockProvider!=null)   
-                    softwareClockProvider.Abort();
-                softwareClockProvider = null;
+                if (computerClockProvider!=null)   
+                    computerClockProvider.Abort();
+                computerClockProvider = null;
 
                 if (gpibTasks == null)
                 {

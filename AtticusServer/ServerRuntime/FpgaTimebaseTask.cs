@@ -173,6 +173,7 @@ namespace AtticusServer
         }
 
         public FpgaTimebaseTask(DeviceSettings deviceSettings, okCFrontPanel opalKellyDevice, SequenceData sequence, double masterClockPeriod, out int nSegments, bool useRfModulation, bool assymetric)
+            : base()
         {
             com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode;
 
@@ -307,17 +308,25 @@ namespace AtticusServer
 
         protected override void timerThreadProc()
         {
-            uint lastTime = 0;
-            while (true)
+            uint lastmSamp=0;
+            bool keepGoing = true;
+            int rollovers = 0;
+            uint rolloverTime = (uint)(UInt32.MaxValue * this.masterClockPeriod * 1000.0);
+            while (keepGoing)
             {
                 uint mSamp = getMasterSamplesGenerated();
-                uint nowTime = (uint)((mSamp * this.masterClockPeriod) / 1000);
-                if (nowTime < lastTime)
-                    throw new SoftwareClockProviderException("FPGA master sample counter appeared to go back in time!");
-                if (nowTime == lastTime)
+                if (mSamp < lastmSamp) // this may occur for very long sequences (about 429 seconds at least, if FPGA running at 10Mhz)
+                {
+                    rollovers++;
+                }
+                if (mSamp == lastmSamp)
                     continue;
-                nowTime = lastTime;
-                reachTime(nowTime);
+                lastmSamp = mSamp;
+
+                uint nowTime = (uint)(mSamp * this.masterClockPeriod * 1000.0) + (uint)(rollovers * rolloverTime);
+
+                keepGoing = reachTime(nowTime);
+                Thread.Sleep(5);
             }
         }
 

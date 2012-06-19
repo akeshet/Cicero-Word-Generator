@@ -35,13 +35,15 @@ namespace DataStructures.Timing
         protected override sealed void timerThreadProc()
         {
             uint lastTime = 0;
-            while (true)
+            bool keepGoing = true;
+            while (keepGoing)
             {
                 Thread.Sleep((int)pollingPeriod_ms);
                 uint nowTime = Shared.TicksToMilliseconds(DateTime.Now.Ticks - startTicks);
                 if (nowTime > lastTime)
                 {
-                    reachTime(nowTime);
+                    lastTime = nowTime;
+                    keepGoing = reachTime(nowTime);
                 }
             }
         }

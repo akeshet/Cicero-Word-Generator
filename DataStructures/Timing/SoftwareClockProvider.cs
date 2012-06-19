@@ -64,6 +64,7 @@ namespace DataStructures.Timing
                     subscriberThreads.Add(sub, thread);
                     thread.Start(new SubscriberThreadParameters(sub, subscriberPollingPeriods_ms[sub]));
                 }
+                runningThreads = subscriberThreads.Count;
                 threadsRunning = true;
             }
         }
@@ -74,6 +75,7 @@ namespace DataStructures.Timing
         protected abstract void armTimer();
         protected abstract void startTimer();
 
+        private int runningThreads;
 
         public void Abort()
         {
@@ -96,13 +98,18 @@ namespace DataStructures.Timing
 
         
 
-        protected void reachTime(uint time_ms) {
+        // Returns true if clock should keep running (there are still subscribers listening)
+        // false otherwise
+        protected bool reachTime(uint time_ms) {
             if (time_ms < elapsedTime_ms)
                 throw new SoftwareClockProviderException("Attempted to go back in time!");
 
             elapsedTime_ms = time_ms;
             waitHandle.Set();
             waitHandle.Reset();
+            if (runningThreads == 0)
+                return false;
+            return true;
         }
 
         private class SubscriberThreadParameters
@@ -144,9 +151,13 @@ namespace DataStructures.Timing
                 catch (Exception e)
                 {
                     if (!subscriber.handleExceptionOnClockThread(e))
+                    {
+                        runningThreads--;
                         throw;
+                    }
                 }
             }
+            runningThreads--;
         }
     }
 }
