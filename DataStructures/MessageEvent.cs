@@ -4,26 +4,64 @@ using System.Text;
 
 namespace DataStructures
 {
+
     public class MessageEvent : EventArgs
     {
-        public string myString;
+        private string myString;
 
-        public DateTime myTime;
+        public string MyString
+        {
+            get { return myString; }
+        }
+
+        private DateTime myTime;
+
+        public DateTime MyTime
+        {
+            get { return myTime; }
+        }
+
+        private int verbosity;
+
+        public int Verbosity
+        {
+            get { return verbosity; }
+        }
+
+        public enum MessageTypes { Routine, Warning, Error, Log };
+        private MessageTypes messageType;
+
+        public MessageTypes MessageType
+        {
+            get { return messageType; }
+        }
+
+        public enum MessageCategories { Unspecified, GPIB, Serial, RFSG };
+        private MessageCategories messageCategory;
+
+        public MessageCategories MessageCategory
+        {
+            get { return messageCategory; }
+        }
 
         public override string ToString()
         {
             return myString;
         }
-        public MessageEvent(string aString)
+
+        public MessageEvent(String messageString, DateTime messageTime, int messageVerbosity = 0,
+            MessageTypes messageType = MessageTypes.Routine, MessageCategories messageCategory = MessageCategories.Unspecified)
         {
-            myString = aString;
-            myTime = DateTime.Now;
+            myString = messageString;
+            myTime = messageTime;
+            verbosity = messageVerbosity;
+            this.messageType = messageType;
+            this.messageCategory = messageCategory;
         }
 
-        public MessageEvent(string aString, DateTime eventTime)
-        {
-            myString = aString;
-            myTime = eventTime;
-        }
+        public MessageEvent(String messageString, int messageVerbosity = 0,
+            MessageTypes messageType = MessageTypes.Routine, MessageCategories messageCategory = MessageCategories.Unspecified) :
+            this(messageString, DateTime.Now, messageVerbosity, messageType, messageCategory) { }
+
     }
 }

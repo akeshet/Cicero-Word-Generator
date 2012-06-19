@@ -153,7 +153,7 @@ namespace AtticusServer
             }
             else
             {
-                eventLogTextBox.AppendText(e.myTime.ToString() + " " + sender.ToString() + ": " + e.ToString() + "\r\n");
+                eventLogTextBox.AppendText(e.MyTime.ToString() + " " + sender.ToString() + ": " + e.ToString() + "\r\n");
             }
         }
 

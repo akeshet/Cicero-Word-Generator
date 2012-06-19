@@ -12,11 +12,11 @@ namespace WordGenerator
     public partial class ServerManagerForm : Form
     {
 
-        delegate void MessageEventHandler(object sender, MessageEvent message);
+   //     delegate void MessageEventHandler(object sender, MessageEvent message);
 
-        delegate bool boolMessageLogDelegate (EventHandler messageLog) ;
+        delegate bool boolMessageLogDelegate (EventHandler<MessageEvent> messageLog) ;
         
-        delegate void MessageEventCallDelegate(object sender, EventArgs message);
+   //     delegate void MessageEventCallDelegate(object sender, EventArgs message);
 
         public ServerManagerForm()
         {
@@ -57,13 +57,13 @@ namespace WordGenerator
         }
 
 
-        public void addMessageLogText(object sender, EventArgs e)
+        public void addMessageLogText(object sender, MessageEvent e)
         {
             WordGenerator.MainClientForm.instance.handleMessageEvent(sender, e);
 
             if (this.InvokeRequired)
             {
-                MessageEventCallDelegate ev = new MessageEventCallDelegate(addMessageLogText);
+                EventHandler<MessageEvent> ev = new EventHandler<MessageEvent>(addMessageLogText);
                 this.BeginInvoke(ev, new object[] { sender, e });
             }
             else
@@ -71,7 +71,7 @@ namespace WordGenerator
                 MessageEvent message = e as MessageEvent;
                 if (message != null)
                 {
-                    textBox1.AppendText(message.myTime.ToString() + " " + sender.ToString() + ": " + message.ToString() + "\r\n");
+                    textBox1.AppendText(message.MyTime.ToString() + " " + sender.ToString() + ": " + message.ToString() + "\r\n");
                 }
                 else
                 {

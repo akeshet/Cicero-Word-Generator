@@ -57,7 +57,7 @@ namespace Virgil
             }
             else
             {
-                this.textBox1.AppendText(e.myTime.ToString() + " " + sender.ToString() + ": " + e.ToString() + "\r\n");
+                this.textBox1.AppendText(e.MyTime.ToString() + " " + sender.ToString() + ": " + e.ToString() + "\r\n");
             }
         }
 

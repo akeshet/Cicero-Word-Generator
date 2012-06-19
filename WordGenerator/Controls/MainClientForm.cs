@@ -604,7 +604,7 @@ namespace WordGenerator
             }
         }
 
-        public void handleMessageEvent(object sender, EventArgs e)
+        public void handleMessageEvent(object sender, MessageEvent e)
         {
             addStatusText(sender, e);
             addMessageLogText(sender, e);
@@ -622,7 +622,7 @@ namespace WordGenerator
                 if (e is MessageEvent)
                 {
                     MessageEvent message = (MessageEvent)e;
-                    this.messageLogTextBox.AppendText(message.myTime.ToString() + " " + message.ToString() + "\r\n");
+                    this.messageLogTextBox.AppendText(message.MyTime.ToString() + " " + message.ToString() + "\r\n");
                 }
                 else
                 {

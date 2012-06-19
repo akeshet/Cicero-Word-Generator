@@ -811,7 +811,7 @@ namespace WordGenerator
             this.sequencePage.Size = new System.Drawing.Size(1258, 804);
             this.sequencePage.TabIndex = 0;
             this.sequencePage.TimestepEditors = null;
-            this.sequencePage.messageLog += new System.EventHandler(this.handleMessageEvent);
+            this.sequencePage.messageLog += new System.EventHandler<DataStructures.MessageEvent>(this.handleMessageEvent);
             // 
             // mainTab
             // 
@@ -909,8 +909,6 @@ namespace WordGenerator
             this.toolTip1.AutomaticDelay = 0;
             this.toolTip1.UseAnimation = false;
             this.toolTip1.UseFading = false;
-            // 
-            // MainClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
