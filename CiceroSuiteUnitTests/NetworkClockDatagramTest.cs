@@ -73,7 +73,7 @@ namespace CiceroSuiteUnitTests
             Random rnd = new Random();
             for (int i = 0; i < 30; i++)
             {
-                NetworkClockDatagram testGram = new NetworkClockDatagram((uint)rnd.Next(), (uint)rnd.Next());
+                NetworkClockDatagram testGram = new NetworkClockDatagram((uint)rnd.Next(), (uint)rnd.Next(), (uint)rnd.Next());
                 byte []bytes = testGram.toByteStream();
                 NetworkClockDatagram resultGram = new NetworkClockDatagram(bytes);
                 Assert.AreEqual(testGram, resultGram);
