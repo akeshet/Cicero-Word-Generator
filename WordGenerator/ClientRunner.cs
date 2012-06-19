@@ -9,7 +9,7 @@ namespace WordGenerator
 {
     public class ClientRunner
     {
-        public event EventHandler messageLog;
+        public event EventHandler<MessageEvent> messageLog;
         public static ClientRunner instance;
 
         public ClientRunner()
