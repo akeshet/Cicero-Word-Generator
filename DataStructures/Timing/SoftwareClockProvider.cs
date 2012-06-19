@@ -115,7 +115,11 @@ namespace DataStructures.Timing
             }
         }
 
-        
+
+        public UInt32 getElapsedTime()
+        {
+            return elapsedTime_ms;
+        }
 
         // Returns true if clock should keep running (there are still subscribers listening)
         // false otherwise

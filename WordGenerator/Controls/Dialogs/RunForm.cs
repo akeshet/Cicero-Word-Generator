@@ -15,7 +15,7 @@ using DataStructures.Database;
 
 namespace WordGenerator
 {
-    public partial class RunForm : Form
+    public partial class RunForm : Form, DataStructures.Timing.SoftwareClockSubscriber
     {
 
         private SequenceData runningSequence = null;
@@ -968,6 +968,10 @@ namespace WordGenerator
 
                 // arm tasks.
 
+                DataStructures.Timing.ComputerClockSoftwareClockProvider softwareClock = new DataStructures.Timing.ComputerClockSoftwareClockProvider(10);
+                softwareClock.addSubscriber(this, 100);
+                softwareClock.Arm();
+
                 addMessageLogText(this, new MessageEvent("Arming tasks."));
                 actionStatus = Storage.settingsData.serverManager.armTasksOnConnectedServers(addMessageLogText);
                 if (actionStatus != ServerManager.ServerActionStatus.Success)
@@ -991,36 +995,32 @@ namespace WordGenerator
                 }
 
                 setStatus(RunFormStatus.Running);
+                
+                
+                // async call to progress bar initialization
+
+                progressBarInitDelegate pbid = new progressBarInitDelegate(initializeProgressBar);
+                Invoke(pbid, new object[] { sequence.SequenceDuration });
+
+                // start software clock
+                softwareClock.Start();
 
                 double duration = sequence.SequenceDuration;
                 addMessageLogText(this, new MessageEvent("Sequence duration " + duration + " s. Running."));
 
-                // async call to progress bar initialization
 
-                progressBarInitDelegate pbid = new progressBarInitDelegate(initializeProgressBar);
-                progressBarUpdateDelegate pbud = new progressBarUpdateDelegate(updateProgressBar);
-
-                IAsyncResult res = BeginInvoke(pbid, new object[] { duration });
-                EndInvoke(res);
 
                 // Update the progress bar.
                 long startTicks = DateTime.Now.Ticks;
                 while (true)
                 {
-                    int elapsed_milliseconds = (int)((DateTime.Now.Ticks - startTicks) / 10000);
-                    // progressBarUpdateDelegate pbud = new progressBarUpdateDelegate(updateProgressBar);
-                    //res = BeginInvoke(pbud, new object[] { elapsed_milliseconds });
-
-
-
-                    this.Invoke(pbud, new object[] { elapsed_milliseconds, sequence });
-
-
-                    if (elapsed_milliseconds >= (200 + duration * 1000.0))
+                    if (softwareClock.getElapsedTime() >= (200 + duration * 1000.0))
                         break;
                     Thread.Sleep(100);
-                    //EndInvoke(res);
                 }
+
+                softwareClock.Abort();
+                softwareClock = null;
 
                 MainClientForm.instance.CurrentlyOutputtingTimestep = sequence.dwellWord();
 
@@ -1117,6 +1117,16 @@ namespace WordGenerator
         {
             if (WordGenerator.MainClientForm.instance.studentEdition)
                 addMessageLogText(this, new MessageEvent("Your Cicero Professional Edition (C) License expired on March 31. You are now running a temporary 24 hour STUDENT EDITION license. Please see http://web.mit.edu/~akeshet/www/Cicero/apr1.html for license renewal information."));
+        }
+
+        public bool reachedTime(UInt32 elapsedTime) {
+            this.Invoke(new progressBarUpdateDelegate(this.updateProgressBar), new object[] { (int)elapsedTime, runningSequence });
+            return true;
+        }
+
+        public bool handleExceptionOnClockThread(Exception e)
+        {
+            return false;
         }
 
         private void updateProgressBar(int elapsed_milliseconds, SequenceData sequence)
