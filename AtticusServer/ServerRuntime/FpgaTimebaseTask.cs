@@ -298,8 +298,6 @@ namespace AtticusServer
             {
                 throw new Exception("Unable to send software stop trigger to FPGA device. " + errorCode.ToString());
             }
-
-            Abort();
         }
 
         protected override void armTimerThread()

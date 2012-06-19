@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using DataStructures;
 using System.Threading;
+using DataStructures.Timing;
 
 namespace AtticusServer
 {
@@ -11,7 +12,7 @@ namespace AtticusServer
     /// This is where all of the gpib-device-specific code is stored.
     /// This class also deals with software pseudo-realtiming of gpib commands.
     /// </summary>
-    public class GpibTask
+    public class GpibTask : DataStructures.Timing.SoftwareClockSubscriber
     {
 
         public event NationalInstruments.DAQmx.TaskDoneEventHandler Done;
@@ -99,14 +100,14 @@ namespace AtticusServer
 
                if (currentStep.GpibGroup == null || !currentStep.GpibGroup.channelEnabled(logicalChannelID))
                {
-                   currentTime += seconds_to_ticks(currentStep.StepDuration.getBaseValue());
+                   currentTime += Shared.SecondsToTicks(currentStep.StepDuration.getBaseValue());
                    continue;
                }
 
                // determine the index of the next step in which this channel has an action
                int nextEnabledStepIndex = sequence.findNextGpibChannelEnabledTimestep(currentStepIndex, logicalChannelID);
 
-               long groupDuration = seconds_to_ticks(sequence.timeBetweenSteps(currentStepIndex, nextEnabledStepIndex));
+               long groupDuration = Shared.SecondsToTicks(sequence.timeBetweenSteps(currentStepIndex, nextEnabledStepIndex));
 
                // now take action:
 
@@ -147,11 +148,11 @@ namespace AtticusServer
                    double[] frequencyArray;
 
                    // get amplitude and frequency value arrays
-                   int nSamples = (int)(ticks_to_seconds(groupDuration) * (double)deviceSettings.SampleClockRate);
-                   double secondsPerSample = ticks_to_seconds(groupDuration) / (double) nSamples;
+                   int nSamples = (int)(Shared.TicksToSeconds(groupDuration) * (double)deviceSettings.SampleClockRate);
+                   double secondsPerSample = Shared.TicksToSeconds(groupDuration) / (double) nSamples;
 
-                   amplitudeArray = channelData.volts.getInterpolation(nSamples, 0, ticks_to_seconds(groupDuration), sequence.Variables, sequence.CommonWaveforms);
-                   frequencyArray = channelData.frequency.getInterpolation(nSamples, 0, ticks_to_seconds(groupDuration), sequence.Variables, sequence.CommonWaveforms);
+                   amplitudeArray = channelData.volts.getInterpolation(nSamples, 0, Shared.TicksToSeconds(groupDuration), sequence.Variables, sequence.CommonWaveforms);
+                   frequencyArray = channelData.frequency.getInterpolation(nSamples, 0, Shared.TicksToSeconds(groupDuration), sequence.Variables, sequence.CommonWaveforms);
 
                    List<DoubleIntPair> amplitudeIndexPairs = ConvertArrayToIndexValuePairs(amplitudeArray);
                    List<DoubleIntPair> frequencyIndexPairs = ConvertArrayToIndexValuePairs(frequencyArray);
@@ -186,7 +187,7 @@ namespace AtticusServer
                                frequencyIndex++;
                            }
 
-                           long commandTime = currentTime + seconds_to_ticks((double)i * secondsPerSample);
+                           long commandTime = currentTime + Shared.SecondsToTicks((double)i * secondsPerSample);
 
                           
                            commandBuffer.Add(new GpibCommand(command, commandTime));
@@ -209,7 +210,7 @@ namespace AtticusServer
                    }
                }
 
-               currentTime += seconds_to_ticks(currentStep.StepDuration.getBaseValue());            
+               currentTime += Shared.SecondsToTicks(currentStep.StepDuration.getBaseValue());            
            }
 
            return true;
@@ -217,122 +218,64 @@ namespace AtticusServer
 
         long taskStartTime;
         int currentCommand;
-        Timer runTimer;
-        private delegate void rundelegate();
 
-        public void stop()
+
+        public bool reachedTime(uint elasped_ms)
         {
-           /* if (runTimer != null)
-            {
-                runTimer.Dispose();
-                runTimer = null;
-            }*/
-
-            if (runThread != null)
-            {
-                runThread.Abort();
-                AtticusServer.server.messageLog(this, new MessageEvent("Aborted GPIB task running thread."));
-            }
-
+            return runTick(elasped_ms);
         }
 
-
-/*        /// <summary>
-        /// This method is to run in a separate thread (ie async), and actually runs the task.
-        /// </summary>
-        private void RunTask(object junk) 
+        public bool handleExceptionOnClockThread(Exception e)
         {
-            int currentCommand = 0;
-            while (true)
-            {
-                long elaspedTime = DateTime.Now.Ticks - taskStartTime;
+            return false;
+        }
+
+        private bool isDone = false;
+
+        public bool runTick(uint elasped_ms)
+        {
+            if (isDone)
+                return false;
+            /* try
+             {*/
+
+            long elaspedTime = DataStructures.Timing.Shared.MillisecondsToTicks(elasped_ms);
+                if (currentCommand >= commandBuffer.Count)
+                {
+                    disposeDevice();
+                    if (this.Done != null)
+                    {
+                        this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(null));
+                    }
+                    isDone = true;
+                    return false;
+                }
                 while (elaspedTime >= commandBuffer[currentCommand].commandTime)
                 {
                     device.Write(commandBuffer[currentCommand].command);
-                    Console.WriteLine("Output " + currentCommand + " at " + ticks_to_seconds(DateTime.Now.Ticks - taskStartTime));
+                    if (MainServerForm.instance.verboseCheckBox.Checked)
+                    {
+                        AtticusServer.server.messageLog(this, new MessageEvent("Wrote GPIB command " + commandBuffer[currentCommand].command));
+                    }
                     currentCommand++;
-                    if (currentCommand >= commandBuffer.Count) break;
-                }
-                // sleep until the thread is needed again.
-
-                if (currentCommand >= commandBuffer.Count) break;
-                elaspedTime = DateTime.Now.Ticks - taskStartTime;
-                long sleepTime = commandBuffer[currentCommand].commandTime - elaspedTime;
-                int sleepTimeMS = (int) (sleepTime / 10000);
-                if (sleepTimeMS>0)
-                    Thread.Sleep(sleepTimeMS); 
-            }
-
-            return;
-
-        }*/
-
-
-        Thread runThread;
-
-        public void Start()
-        {
-            
-            if (runThread != null)
-            {
-                if (runThread.ThreadState == ThreadState.Running)
-                {
-                    throw new Exception("Unable to start GPIB task, as the GPIB task running thread is already running.");
-                }
-            }
-
-            taskStartTime = DateTime.Now.Ticks;
-            currentCommand = 0;
-      /*      TimerCallback gpibTick = new TimerCallback(runTick);
-            runTimer = new Timer(gpibTick, null, 0, 10); // using 10 ms for now. This is an experiment.
-            */
-
-            runThread = new Thread(new ThreadStart(runTaskProc));
-            runThread.Start();
-
-        }
-
-        public void runTaskProc()
-        {
-            try
-            {
-                while (true)
-                {
-                    long elaspedTime = DateTime.Now.Ticks - taskStartTime;
                     if (currentCommand >= commandBuffer.Count)
+                        break;
+
+                    if (currentCommand >= commandBuffer.Count) // we've run out of new commands, so disable the timer.
                     {
                         disposeDevice();
                         if (this.Done != null)
                         {
                             this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(null));
                         }
-                        return;
+                        isDone = true;
+                        return false;
                     }
-                    while (elaspedTime >= commandBuffer[currentCommand].commandTime)
-                    {
-                        device.Write(commandBuffer[currentCommand].command);
-                        if (MainServerForm.instance.verboseCheckBox.Checked)
-                        {
-                            AtticusServer.server.messageLog(this, new MessageEvent("Wrote GPIB command " + commandBuffer[currentCommand].command));
-                        }
-                        currentCommand++;
-                        if (currentCommand >= commandBuffer.Count)
-                            break;
-
-                        if (currentCommand >= commandBuffer.Count) // we've run out of new commands, so disable the timer.
-                        {
-                            disposeDevice();
-                            if (this.Done != null)
-                            {
-                                this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(null));
-                            }
-                            return;
-                        }
-                    }
-                    Thread.Sleep(1);
                 }
-            }
-            catch (Exception e)
+                
+            
+            //}
+            /*catch (Exception e)
             {
                 if (e is ThreadAbortException)
                 {
@@ -353,7 +296,8 @@ namespace AtticusServer
                         this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(e));
                     }
                 }
-            }
+            }*/
+                return true;
         }
 
         private void disposeDevice()
@@ -365,69 +309,7 @@ namespace AtticusServer
             }
         }
 
-        /// <summary>
-        /// This method is called by the run timer, and outputs new commands when necessary. 
-        /// (REPLACED BY runTaskProc
-        /// </summary>
-        /// <param name="junk"></param>
-        private void runTick(object junk)
-        {
-            try
-            {
-                long elaspedTime = DateTime.Now.Ticks - taskStartTime;
-                if (currentCommand >= commandBuffer.Count)
-                {
-                    if (runTimer != null)
-                    {
-                        
-                        runTimer.Dispose();
-                        runTimer = null;
-                        return;
-                    }
-                }
-                lock (commandBuffer)
-                {
-                    // duplicated for threadsafety
-                    if (currentCommand >= commandBuffer.Count)
-                        return;
-                    while (elaspedTime >= commandBuffer[currentCommand].commandTime)
-                    {
-                        //      device.BeginWrite(commandBuffer[currentCommand].command);
-
-                        device.Write(commandBuffer[currentCommand].command);
-                        if (MainServerForm.instance.verboseCheckBox.Checked)
-                        {
-                            AtticusServer.server.messageLog(this, new MessageEvent("Wrote GPIB command " + commandBuffer[currentCommand].command));
-                        }
-                        currentCommand++;
-                        if (currentCommand >= commandBuffer.Count)
-                            break;
-
-                        if (currentCommand >= commandBuffer.Count) // we've run out of new commands, so disable the timer.
-                        {
-                            runTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-                            return;
-                        }
-
-                    }
-                }
-
-                if (this.Done != null)
-                {
-                    this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(null));
-                }
-            }
-            catch (Exception e)
-            {
-                AtticusServer.server.messageLog(this, new MessageEvent("Caught exception in GPIB task: " + e.Message + e.StackTrace));
-                AtticusServer.server.messageLog(this, new MessageEvent("Stopping gpib task."));
-                this.stop();
-                if (this.Done != null)
-                {
-                    this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(e));
-                }
-            }
-        }
+        
 
         private struct DoubleIntPair
         {
@@ -474,15 +356,7 @@ namespace AtticusServer
             return input.Replace("\\n", "\n").Replace("\\r", "\r");
         }
 
-        private static long seconds_to_ticks(double seconds)
-        {
-            return (long)(seconds * 10000000);
-        }
 
-        private static double ticks_to_seconds(long ticks)
-        {
-            return ((double)ticks) / 10000000.0;
-        }
 
 
         private static GpibRampCommandConverter ESG_SeriesRampConverter = new GpibRampCommandConverter(

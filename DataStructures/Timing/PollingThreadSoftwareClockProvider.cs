@@ -20,6 +20,7 @@ namespace DataStructures.Timing
 
             armTimerThread();
             timerThread.Start();
+            timerRunning = true;
         }
 
         protected override sealed void abortTimer()

@@ -127,7 +127,8 @@ namespace DataStructures.Timing
             int minPollingPeriod_ms = parameters.minPollTime_ms;
 
             uint lastPoll = elapsedTime_ms;
-            while (true)
+            bool keepGoing = true;
+            while (keepGoing)
             {
                 waitHandle.WaitOne(); // Wait for the next clock signal to arrive
                 
@@ -136,8 +137,15 @@ namespace DataStructures.Timing
                     continue;
 
                 lastPoll = thisPoll;
-                subscriber.reachedTime(thisPoll);
-                Thread.Sleep(25);
+                try
+                {
+                    keepGoing = subscriber.reachedTime(thisPoll);
+                }
+                catch (Exception e)
+                {
+                    if (!subscriber.handleExceptionOnClockThread(e))
+                        throw;
+                }
             }
         }
     }

@@ -15,16 +15,16 @@ namespace DataStructures.Timing
         private long startTicks;
         private uint pollingPeriod_ms;
 
-        public override void Start()
-        {
-            Start(100);
-        }
-
-        public void Start(uint pollingPeriod_ms)
+        public ComputerClockSoftwareClockProvider(uint pollingPeriod_ms) : base()
         {
             this.pollingPeriod_ms = pollingPeriod_ms;
+        }
+
+        public override void Start()
+        {
             startTimer();
         }
+
 
         protected override void armTimerThread()
         {
