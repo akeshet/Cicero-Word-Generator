@@ -72,8 +72,13 @@ namespace DataStructures
                     second_half = this.endDelay.ToShortString() + "_" + second_half;
                 }
 
+                //add pos or neg pulse label
 
                 automaticName = first_half + ":" + second_half;
+                if (this.pulseValue)
+                    automaticName= "high::"+automaticName;
+                else
+                    automaticName="low::"+automaticName;
 
                 this.pulseName = automaticName;
 
