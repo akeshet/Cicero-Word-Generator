@@ -10,12 +10,10 @@ namespace DataStructures.Timing
     /// The most basic default SoftwareClockProvider, works in the absence of any other hardware.
     /// Polls the Computer's clock (with user selectable polling period) on a dedicated thread.
     /// </summary>
-    public class ComputerClockSoftwareClockProvider : SoftwareClockProvider
+    public class ComputerClockSoftwareClockProvider : PollingThreadSoftwareClockProvider
     {
         private long startTicks;
         private uint pollingPeriod_ms;
-        Thread timerThread;
-        private bool timerRunning;
 
         public override void Start()
         {
@@ -24,40 +22,17 @@ namespace DataStructures.Timing
 
         public void Start(uint pollingPeriod_ms)
         {
-            if (timerRunning)
-                throw new SoftwareClockProviderException("Attempted to start timer that was already running.");
-            if (timerThread == null)
-                throw new SoftwareClockProviderException("Attempted to start timer before arming it.");
+            this.pollingPeriod_ms = pollingPeriod_ms;
+            startTimer();
+        }
 
+        protected override void armTimerThread()
+        {
             startTicks = DateTime.Now.Ticks;
-            timerThread.Start();
         }
 
-        protected override void abortTimer()
-        {
-            if (!timerRunning)
-                throw new SoftwareClockProviderException("Attempted to abort when timer was not running.");
 
-            if (timerThread == null)
-                throw new SoftwareClockProviderException("Unexpected null timer thread.");
-
-            timerThread.Abort();
-            timerThread = null;
-            timerRunning = false;
-        }
-
-        protected override void armTimer()
-        {
-            if (timerRunning)
-                throw new SoftwareClockProviderException("Attempted to arm timer while already running.");
-
-            if (timerThread != null)
-                throw new SoftwareClockProviderException("Attempted to arm timer while thread not cleared.");
-
-            timerThread = new Thread(timerThreadProc);
-        }
-
-        private void timerThreadProc()
+        protected override sealed void timerThreadProc()
         {
             uint lastTime = 0;
             while (true)

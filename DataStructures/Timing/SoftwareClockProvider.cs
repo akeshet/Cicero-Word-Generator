@@ -72,6 +72,7 @@ namespace DataStructures.Timing
 
         protected abstract void abortTimer();
         protected abstract void armTimer();
+        protected abstract void startTimer();
 
 
         public void Abort()
