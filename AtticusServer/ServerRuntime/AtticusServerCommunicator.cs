@@ -781,8 +781,9 @@ namespace AtticusServer
                                 gpibChannel, gpibID, myServerSettings.GpibRampConverters);
                             gpibTask.Done += new TaskDoneEventHandler(aTaskFinished);
                             gpibTasks.Add(gpibChannel, gpibTask);
+                            softwareClockProvider.addSubscriber(gpibTask);
                             messageLog(this, new MessageEvent("Done."));
-                            softwareClockProvider.addSubscriber(gpibTask, 0);
+                            
                         }
                         else
                         {
@@ -797,6 +798,7 @@ namespace AtticusServer
                                     RfsgTask rftask = new RfsgTask(sequence, settings, gpibID, gpibChannel.DeviceName, serverSettings.myDevicesSettings[gpibChannel.DeviceName]);
                                     rftask.Done += new TaskDoneEventHandler(aTaskFinished);
                                     rfsgTasks.Add(gpibChannel, rftask);
+                                    softwareClockProvider.addSubscriber(rftask);
                                     messageLog(this, new MessageEvent("Done."));
                                     break;
                             }
@@ -1554,13 +1556,16 @@ namespace AtticusServer
                         {
                             if (softwareTriggeringTask.Stream.TotalSamplesGeneratedPerChannel != softwareTaskTriggerPollingFunctionInitialPosition)
                             {
-                                
-                                foreach (RfsgTask rf in rfsgTasks.Values)
-                                {
-                                    rf.Start();
-                                }
 
-                                messageLog(this, new MessageEvent("Software timed tasks triggered."));
+                                if (computerClockProvider != null)
+                                {
+                                    computerClockProvider.Arm();
+                                    computerClockProvider.Start();
+                                    messageLog(this, new MessageEvent("Computer-software clock task triggered."));
+                                }
+                                
+                               
+                               
                                 softwareTaskTriggerPollingThread = null;
                                 Monitor.Exit(softTrigLock);
                                 return;
@@ -1832,14 +1837,11 @@ namespace AtticusServer
                             {
                                 computerClockProvider.Arm();
                                 computerClockProvider.Start();
+                                messageLog(this, new MessageEvent("Triggered computer-software-clock (without sync to a hardware timed task)."));
                             }
                             
 
-                            foreach (RfsgTask rftask in rfsgTasksToTrigger)
-                            {
-                                rftask.Start();
-                            }
-                            messageLog(this, new MessageEvent("Triggered software-timed task(s) (without sync to a hardware timed task)."));
+                           
                         }
                     }
 
@@ -1892,13 +1894,10 @@ namespace AtticusServer
                             {
                                 computerClockProvider.Arm();
                                 computerClockProvider.Start();
+                                messageLog(this, new MessageEvent("Triggered software-timed task(s) (without sync to a hardware timed task)."));   
                             }
 
-                            foreach (RfsgTask rftask in rfsgTasksToTrigger)
-                            {
-                                rftask.Start();
-                            }
-                              messageLog(this, new MessageEvent("Triggered software-timed task(s) (without sync to a hardware timed task)."));                        
+                     
                         }
 
                     }
@@ -2115,10 +2114,6 @@ namespace AtticusServer
                 }
                 else
                 {
-                    foreach (RfsgTask rf in rfsgTasks.Values)
-                    {
-                        rf.stop();
-                    }
                     rfsgTasks.Clear();
                 }
 
