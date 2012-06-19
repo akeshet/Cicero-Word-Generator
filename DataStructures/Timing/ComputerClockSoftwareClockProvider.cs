@@ -6,6 +6,10 @@ using System.Threading;
 
 namespace DataStructures.Timing
 {
+    /// <summary>
+    /// The most basic default SoftwareClockProvider, works in the absence of any other hardware.
+    /// Polls the Computer's clock (with user selectable polling period) on a dedicated thread.
+    /// </summary>
     public class ComputerClockSoftwareClockProvider : SoftwareClockProvider
     {
         private long startTicks;
