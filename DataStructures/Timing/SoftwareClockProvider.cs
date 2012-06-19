@@ -54,6 +54,8 @@ namespace DataStructures.Timing
         {
             lock (lockObj)
             {
+                armTimer();
+
                 elapsedTime_ms = 0;
                 waitHandle = new EventWaitHandle(false, EventResetMode.ManualReset);
                 foreach (SoftwareClockSubscriber sub in subscribers)
@@ -68,12 +70,16 @@ namespace DataStructures.Timing
 
         public abstract void Start();
 
+        protected abstract void abortTimer();
+        protected abstract void armTimer();
 
 
         public void Abort()
         {
             lock (lockObj)
             {
+                abortTimer();
+
                 foreach (Thread thread in subscriberThreads.Values)
                 {
                     thread.Abort();

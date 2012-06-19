@@ -7,6 +7,6 @@ namespace DataStructures.Timing
 {
     public interface SoftwareClockSubscriber
     {
-        public void reachedTime(uint time_ms);
+        void reachedTime(uint time_ms);
     }
 }
