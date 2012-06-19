@@ -327,7 +327,7 @@ namespace WordGenerator
                 abortAfterThis.Visible = true;
         }
 
-        public void addMessageLogText(object sender, EventArgs e)
+        public void addMessageLogText(object sender, MessageEvent e)
         {
 
 
@@ -343,7 +343,7 @@ namespace WordGenerator
                 MessageEvent message = (MessageEvent)e;
                 if (!this.IsDisposed)
                 {
-                    this.textBox1.AppendText(message.myTime.ToString() + " " + message.ToString() + "\r\n");
+                    this.textBox1.AppendText(message.MyTime.ToString() + " " + message.ToString() + "\r\n");
                 }
             }
         }

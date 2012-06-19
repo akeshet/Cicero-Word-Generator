@@ -817,7 +817,7 @@ namespace WordGenerator
             this.sequencePage1.Name = "sequencePage1";
             this.sequencePage1.Size = new System.Drawing.Size(1258, 890);
             this.sequencePage1.TabIndex = 0;
-            this.sequencePage1.messageLog += new System.EventHandler(this.handleMessageEvent);
+            this.sequencePage1.messageLog += new System.EventHandler<DataStructures.MessageEvent>(this.handleMessageEvent);
             this.sequencePage1.Load += new System.EventHandler(this.sequencePage1_Load);
             // 
             // overridePage1

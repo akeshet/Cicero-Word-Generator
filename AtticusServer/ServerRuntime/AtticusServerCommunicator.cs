@@ -76,7 +76,7 @@ namespace AtticusServer
         /// To be called to add messages to the server message log. Eventually may support logging to a file
         /// as well as to the screen.
         /// </summary>
-        public MainServerForm.MessageEventCallDelegate messageLog;
+        public EventHandler<MessageEvent> messageLog;
 
         // The next three objects are used in marshalling / unmarshalling this class
         // (ie sharing it over .NET remoting)

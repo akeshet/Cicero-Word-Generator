@@ -132,7 +132,7 @@ namespace DataStructures
             return ans;
         }
 
-        public bool connectAllEnabledServer(EventHandler messageLog)
+        public bool connectAllEnabledServer(EventHandler<MessageEvent> messageLog)
         {
             try
             {
@@ -164,7 +164,7 @@ namespace DataStructures
             }
         }
 
-        public bool connectAllStartupServers(EventHandler messageLog)
+        public bool connectAllStartupServers(EventHandler<MessageEvent> messageLog)
         {
 
             if (messageLog != null)
@@ -212,7 +212,7 @@ namespace DataStructures
 
         #region connectServer(...)
 
-        public bool connectServer(ServerInfo server, EventHandler messageLog)
+        public bool connectServer(ServerInfo server, EventHandler<MessageEvent> messageLog)
         {
 
             if (messageLog != null)
@@ -363,7 +363,7 @@ namespace DataStructures
 
         #endregion
 
-        public bool pingServer(ServerInfo server, EventHandler messageLog)
+        public bool pingServer(ServerInfo server, EventHandler<MessageEvent> messageLog)
         {
             if (!communicators.ContainsKey(server))
             {
@@ -432,7 +432,7 @@ namespace DataStructures
         /// <param name="i"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public ServerActionStatus runMethodOnServer(MethodInfo method, ServerInfo i, object[] parameters, int msTimeout, EventHandler messageLog)
+        public ServerActionStatus runMethodOnServer(MethodInfo method, ServerInfo i, object[] parameters, int msTimeout, EventHandler<MessageEvent> messageLog)
         {
             if (verifyConnection(i) == ServerActionStatus.Failed_No_Connection)
                 return ServerActionStatus.Failed_No_Connection;
@@ -536,7 +536,7 @@ namespace DataStructures
             }
         }
 
-        private delegate ServerActionStatus runMethodOnServerDelegate(MethodInfo method, ServerInfo i, object[] parameters, int msTimeout, EventHandler messageLog);
+        private delegate ServerActionStatus runMethodOnServerDelegate(MethodInfo method, ServerInfo i, object[] parameters, int msTimeout, EventHandler<MessageEvent> messageLog);
 
         /// <summary>
         /// Runs the specified method on all of the connected servers. Runs the methods in parallel if there are multiple
@@ -545,7 +545,7 @@ namespace DataStructures
         /// <param name="method"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public ServerActionStatus runMethodOnConnectedServers(MethodInfo method, object[] parameters, int msTimeout, EventHandler messageLog)
+        public ServerActionStatus runMethodOnConnectedServers(MethodInfo method, object[] parameters, int msTimeout, EventHandler<MessageEvent> messageLog)
         {
             Dictionary<IAsyncResult, runMethodOnServerDelegate> delegates = new Dictionary<IAsyncResult, runMethodOnServerDelegate>();
 
@@ -597,7 +597,7 @@ namespace DataStructures
         /// <param name="methodName"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        private ServerActionStatus runNamedMethodOnConnectedServers(string methodName, object[] parameters, int msTimeout, EventHandler messageLog)
+        private ServerActionStatus runNamedMethodOnConnectedServers(string methodName, object[] parameters, int msTimeout, EventHandler<MessageEvent> messageLog)
         {
             
 
@@ -623,57 +623,57 @@ namespace DataStructures
             return runMethodOnConnectedServers(method, parameters, msTimeout, messageLog);
         }
 
-        public ServerActionStatus setSettingsOnConnectedServers(SettingsData settings, EventHandler messageLog)
+        public ServerActionStatus setSettingsOnConnectedServers(SettingsData settings, EventHandler<MessageEvent> messageLog)
         {
             return runNamedMethodOnConnectedServers("setSettings", new object[] { settings }, 4000, messageLog);
         }
 
-        public ServerActionStatus setSequenceOnConnectedServers(SequenceData sequence, EventHandler messageLog)
+        public ServerActionStatus setSequenceOnConnectedServers(SequenceData sequence, EventHandler<MessageEvent> messageLog)
         {
             return runNamedMethodOnConnectedServers("setSequence", new object[] { sequence }, 4000, messageLog);
         }
 
-        public ServerActionStatus generateBuffersOnConnectedServers(int iterationNumber, EventHandler messageLog)
+        public ServerActionStatus generateBuffersOnConnectedServers(int iterationNumber, EventHandler<MessageEvent> messageLog)
         {
             return runNamedMethodOnConnectedServers("generateBuffers", new object[] { iterationNumber }, 20000, messageLog);
         }
 
-        public ServerActionStatus armTasksOnConnectedServers(EventHandler messageLog)
+        public ServerActionStatus armTasksOnConnectedServers(EventHandler<MessageEvent> messageLog)
         {
             return runNamedMethodOnConnectedServers("armTasks", null, 4000, messageLog);
         }
 
-        public ServerActionStatus generateTriggersOnConnectedServers(EventHandler messageLog)
+        public ServerActionStatus generateTriggersOnConnectedServers(EventHandler<MessageEvent> messageLog)
         {
             return runNamedMethodOnConnectedServers("generateTrigger", null, 4000, messageLog);
         }
 
-        public ServerActionStatus getRunSuccessOnConnectedServers(EventHandler messageLog)
+        public ServerActionStatus getRunSuccessOnConnectedServers(EventHandler<MessageEvent> messageLog)
         {
             return runNamedMethodOnConnectedServers("runSuccess", null, 4000, messageLog);
         }
 
-        public ServerActionStatus setNextRunTimestampOnConnectedServers(DateTime timeStamp, EventHandler messageLog)
+        public ServerActionStatus setNextRunTimestampOnConnectedServers(DateTime timeStamp, EventHandler<MessageEvent> messageLog)
         {
             return runNamedMethodOnConnectedServers("nextRunTimeStamp", new object[] { timeStamp }, 4000, messageLog);
         }
 
-        public ServerActionStatus stopAllServers(EventHandler messageLog)
+        public ServerActionStatus stopAllServers(EventHandler<MessageEvent> messageLog)
         {
             return runNamedMethodOnConnectedServers("stop", null, 4000, messageLog);
         }
 
-        public ServerActionStatus outputSingleTimestepOnConnectedServers(SettingsData settings, SingleOutputFrame output, EventHandler messageLog)
+        public ServerActionStatus outputSingleTimestepOnConnectedServers(SettingsData settings, SingleOutputFrame output, EventHandler<MessageEvent> messageLog)
         {
             return runNamedMethodOnConnectedServers("outputSingleTimestep", new object[] { settings, output }, 5000, messageLog);
         }
 
-        public ServerActionStatus outputGPIBGroupOnConnectedServers(GPIBGroup gpibGroup, SettingsData settings, EventHandler messageLog)
+        public ServerActionStatus outputGPIBGroupOnConnectedServers(GPIBGroup gpibGroup, SettingsData settings, EventHandler<MessageEvent> messageLog)
         {
             return runNamedMethodOnConnectedServers("outputGPIBGroup", new object[] { gpibGroup, settings }, 4000, messageLog);
         }
 
-        public ServerActionStatus outputRS232GroupOnConnectedServers(RS232Group rs232Group, SettingsData settings, EventHandler messageLog)
+        public ServerActionStatus outputRS232GroupOnConnectedServers(RS232Group rs232Group, SettingsData settings, EventHandler<MessageEvent> messageLog)
         {
             return runNamedMethodOnConnectedServers("outputRS232Group", new object[] { rs232Group, settings }, 4000, messageLog);
         }

@@ -108,7 +108,7 @@ namespace WordGenerator.Controls
 
         public event EventHandler updateGUI;
 
-        public EventHandler messageLog;
+        public EventHandler<MessageEvent> messageLog;
 
         /// <summary>
         /// This is the number DISPLAYED above the timestep. Note that the actualy timestep index is this number MINUS ONE.

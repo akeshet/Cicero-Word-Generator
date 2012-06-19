@@ -19,7 +19,7 @@ namespace WordGenerator.Controls
         private bool horizontalScrollingEventsCalled = false;
         private bool verticalScrollingEventsCalled = false;
 
-        public event EventHandler messageLog;
+        public event EventHandler<MessageEvent> messageLog;
 
         public TimestepEditor getTimestepEditor(TimeStep timeStep)
         {
