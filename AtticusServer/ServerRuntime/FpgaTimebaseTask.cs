@@ -10,19 +10,11 @@ namespace AtticusServer
     /// <summary>
     /// Task that generated a variable timebase using an OpalKelly FPGA.
     /// </summary>
-    class FpgaTimebaseTask : IDisposable
+    class FpgaTimebaseTask : DataStructures.Timing.PollingThreadSoftwareClockProvider
     {
 
 
-        /// <summary>
-        /// 
-        /// Format of data streamed to FPGA
-        /// 
-        /// 
-        /// 
-        /// 
-        /// 
-        /// </summary>
+        double masterClockPeriod;
 
         okCFrontPanel opalKellyDevice;
 
@@ -186,6 +178,8 @@ namespace AtticusServer
 
             this.opalKellyDevice = opalKellyDevice;
 
+            this.masterClockPeriod = masterClockPeriod;
+
             TimestepTimebaseSegmentCollection segments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock,
                                                         masterClockPeriod);
 
@@ -266,7 +260,7 @@ namespace AtticusServer
             return (UInt16) opalKellyDevice.GetWireOutValue(0x24);
         }
 
-        public void Start()
+        public override void Start()
         {
             // Send the device a start trigger.
             com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode = opalKellyDevice.ActivateTriggerIn(0x40, 0);
@@ -274,14 +268,10 @@ namespace AtticusServer
             {
                 throw new Exception("Unable to send software start trigger to FPGA device. " + errorCode.ToString());
             }
-
-            if (masterPollingThread != null)
-            {
-                masterPollingThread.Abort();
-            }
-            masterPollingThread = new Thread(new ThreadStart(masterSamplePollingProc));
-            masterPollingThread.Start();
+            startTimer();
         }
+
+
 
         public int getMistriggerStatus()
         {
@@ -309,16 +299,30 @@ namespace AtticusServer
                 throw new Exception("Unable to send software stop trigger to FPGA device. " + errorCode.ToString());
             }
 
-            if (masterPollingThread!=null)
-                masterPollingThread.Abort();
-                masterPollingThread = null;
+            Abort();
         }
 
-        public void Dispose()
+        protected override void armTimerThread()
         {
-            if (masterPollingThread != null)
-                masterPollingThread.Abort();
+            // nothing required
         }
+
+        protected override void timerThreadProc()
+        {
+            uint lastTime = 0;
+            while (true)
+            {
+                uint mSamp = getMasterSamplesGenerated();
+                uint nowTime = (uint)((mSamp * this.masterClockPeriod) / 1000);
+                if (nowTime < lastTime)
+                    throw new SoftwareClockProviderException("FPGA master sample counter appeared to go back in time!");
+                if (nowTime == lastTime)
+                    continue;
+                nowTime = lastTime;
+                reachTime(nowTime);
+            }
+        }
+
         
     }
 }

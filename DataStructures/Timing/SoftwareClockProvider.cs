@@ -137,6 +137,7 @@ namespace DataStructures.Timing
 
                 lastPoll = thisPoll;
                 subscriber.reachedTime(thisPoll);
+                Thread.Sleep(25);
             }
         }
     }
