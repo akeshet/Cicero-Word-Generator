@@ -25,13 +25,61 @@ namespace DataStructures
 
         public void updateAutoName()
         {
+            //if the pulse is invalid, autoname should't work. Maybe I call this method twice? Redudant? ASKAVIV
+            if (!this.dataValid())
+            {
+                this.pulseName="Invalid Pulse";
+                return;
+            }
+
             if (AutoName)
             {
-                string automaticName = "automatic name";
+                string automaticName = "You should never see this";
                 string first_half = "";
                 string second_half = "";
 
+                //true if simple pulse names will be used
+                bool simpleCheck=true;
+                //First, we determine if simple pulse names can be used
+                if (this.startDelayEnabled | this.endDelayEnabled) 
+                    simpleCheck=false;
 
+                //if a simple name is possible, make a simple name
+                if (simpleCheck)
+                {
+                    // set pulse value
+                    if (pulseValue)
+                        automaticName="H";
+                    else
+                        automaticName="L";
+
+                    // if the pulse just lasts the duration of the word, then it's name is just "H" or "L", so we return
+                    if (this.startCondition == PulseTimingCondition.TimestepStart && this.endCondition == PulseTimingCondition.TimestepEnd)
+                    {
+                        this.pulseName=automaticName;
+                        return;
+                    }                    
+                    //otherwise, we must have a duration involved (note the case of reversing TimestepStart and TimestepEnd with 
+                    //startCondition and endCondition is checked for by dataValid at the beginning of this method
+
+                    //pulse duration
+                    automaticName=this.pulseDuration.ToShortString()+" "+automaticName;
+
+                    if (this.startCondition == PulseTimingCondition.TimestepStart)
+                        automaticName=automaticName+" OnStart";
+                    else if (this.startCondition == PulseTimingCondition.TimestepEnd)
+                        automaticName=automaticName+" Post";
+                    else if (this.endCondition == PulseTimingCondition.TimestepStart)
+                        automaticName = automaticName + " Pre";
+                    else if (this.endCondition == PulseTimingCondition.TimestepEnd)
+                        automaticName = automaticName + " ToEnd";
+
+                    this.pulseName=automaticName;
+                    return;//return so that we don't generate a complicated name below
+                }
+                
+
+                //If we made it this far, then simpleCheck was false and thus we need to make a "complicated" name
 
                 //Name the start condition
                 if (this.startCondition == PulseTimingCondition.TimestepStart)
