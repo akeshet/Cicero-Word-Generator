@@ -44,10 +44,23 @@ namespace DataStructures.Timing
             subscriberPollingPeriods_ms.Clear();
         }
 
+        /// <summary>
+        /// May add a subscriber even while clock is running.
+        /// </summary>
+        /// <param name="sub"></param>
+        /// <param name="minimumPollingPerios_ms"></param>
         public void addSubscriber(SoftwareClockSubscriber sub, int minimumPollingPerios_ms = 0)
         {
-            subscribers.Add(sub);
-            subscriberPollingPeriods_ms.Add(sub, minimumPollingPerios_ms);
+            lock (lockObj)
+            {
+                subscribers.Add(sub);
+                subscriberPollingPeriods_ms.Add(sub, minimumPollingPerios_ms);
+
+                if (threadsRunning)
+                {
+                    addAndStartSubscriberThread(sub);
+                }
+            }
         }
 
         public void Arm()
@@ -60,13 +73,19 @@ namespace DataStructures.Timing
                 waitHandle = new EventWaitHandle(false, EventResetMode.ManualReset);
                 foreach (SoftwareClockSubscriber sub in subscribers)
                 {
-                    Thread thread = new Thread(new ParameterizedThreadStart(subscriberThreadProc));
-                    subscriberThreads.Add(sub, thread);
-                    thread.Start(new SubscriberThreadParameters(sub, subscriberPollingPeriods_ms[sub]));
+                    addAndStartSubscriberThread(sub);
                 }
-                runningThreads = subscriberThreads.Count;
                 threadsRunning = true;
             }
+        }
+
+        private void addAndStartSubscriberThread(SoftwareClockSubscriber sub)
+        {
+            Thread thread = new Thread(new ParameterizedThreadStart(subscriberThreadProc));
+            subscriberThreads.Add(sub, thread);
+            runningThreads++;
+            thread.Start(new SubscriberThreadParameters(sub, subscriberPollingPeriods_ms[sub]));
+            
         }
 
         public abstract void Start();

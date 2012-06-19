@@ -36,7 +36,7 @@ namespace DataStructures
             get { return messageType; }
         }
 
-        public enum MessageCategories { Unspecified, GPIB, Serial, RFSG };
+        public enum MessageCategories { Unspecified, GPIB, Serial, RFSG, SoftwareClock, Networking };
         private MessageCategories messageCategory;
 
         public MessageCategories MessageCategory
