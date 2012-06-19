@@ -386,6 +386,8 @@ namespace WordGenerator.Controls
 
         void updateAutoName(object sender, System.EventArgs e)
         {
+            if (pulse == null)
+                return;
             if (pulse.AutoName)
             {
                 pulse.updateAutoName();
