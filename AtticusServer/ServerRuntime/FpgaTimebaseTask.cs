@@ -232,12 +232,17 @@ namespace AtticusServer
 
         private Thread masterPollingThread;
         private int pollingProcSleepTime = 100; // in ms
+        /// <summary>
+        /// Debug function only. 
+        /// </summary>
         public void masterSamplePollingProc()
         {
             while (true)
             {
                 UInt32 mTime = getMasterSamplesGenerated();
                 MainServerForm.instance.addMessageLogText(this, new MessageEvent("FPGA master sample: " + mTime));
+                UInt16 skipped = getRetriggerTimeoutCount();
+                MainServerForm.instance.addMessageLogText(this, new MessageEvent("Skipped: " + skipped));
                 Thread.Sleep(pollingProcSleepTime);
             }
         }
@@ -253,6 +258,12 @@ namespace AtticusServer
             ans = ans + lowWord;
 
             return ans;
+        }
+
+        private UInt16 getRetriggerTimeoutCount()
+        {
+            opalKellyDevice.UpdateWireOuts();
+            return (UInt16) opalKellyDevice.GetWireOutValue(0x24);
         }
 
         public void Start()

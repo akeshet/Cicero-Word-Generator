@@ -91,7 +91,7 @@ reg [4:0] state; // this is 4 bits wide even though only 2 bits are used. I thin
 // 32-bit register used to count how long we have waited for
 reg waitingForRetrigger;
 reg [31:0] waitedCounts;
-
+reg [15:0] retriggerTimeoutCount;
 
 reg [3:0] nSegsGenerated; // used only to drive LEDs
 
@@ -139,6 +139,7 @@ initial begin
 	nSegsGenerated<=0;
 	mistriggerDetected<=0;
 	masterSamplesGenerated<=0;
+	retriggerTimeoutCount<=0;
 end
 
 // triggering logic
@@ -193,6 +194,7 @@ always @(posedge refclk) begin
 			waitingForRetrigger<=0;
 			waitedCounts<=0;
 			toggler<=0;
+			retriggerTimeoutCount<=0;
 
 			if (soft_generate_trig_in==1) begin
 				if (fifo_read_enable==0) begin
@@ -227,6 +229,8 @@ always @(posedge refclk) begin
 						fifo_read_enable<=1;
 						nSegsGenerated<=nSegsGenerated+1;
 						waitingForRetrigger<=0;
+						if (on_counts!=0 && waitedCounts==on_counts)
+							retriggerTimeoutCount<=retriggerTimeoutCount+1;
 					end
 				end
 				else begin
@@ -306,6 +310,9 @@ okWireOut wire21 (.ok1(ok1), .ok2(ok2), .ep_addr(8'h21), .ep_datain(mistriggerDe
 // Wire outs for Atticus polling of FPGA's master sample count
 okWireOut wire22 (.ok1(ok1), .ok2(ok2), .ep_addr(8'h22), .ep_datain(masterSamplesGenerated[15:0]));
 okWireOut wire23 (.ok1(ok1), .ok2(ok2), .ep_addr(8'h23), .ep_datain(masterSamplesGenerated[31:16]));
+
+// Wire out for Atticus polling of # of retriggers that timed out
+okWireOut wire24 (.ok1(ok1), .ok2(ok2), .ep_addr(8'h24), .ep_datain(retriggerTimeoutCount[15:0]));
 
 // Create the FIFO for storing data from computer
 // write clock comes from Opal Kelly Host Interface
