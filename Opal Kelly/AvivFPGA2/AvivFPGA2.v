@@ -96,6 +96,11 @@ reg [15:0] retriggerTimeoutCount;
 reg [3:0] nSegsGenerated; // used only to drive LEDs
 
 
+// bit 0: last run finished successfully
+// bit 1: last run was aborted
+// bits 2-15: reserved for future use
+reg[15:0] fpgaStatusOut;
+
 
 // Mistrigger detection stuff
 
@@ -140,6 +145,7 @@ initial begin
 	mistriggerDetected<=0;
 	masterSamplesGenerated<=0;
 	retriggerTimeoutCount<=0;
+	fpgaStatusOut<=0;
 end
 
 // triggering logic
@@ -190,7 +196,6 @@ always @(posedge refclk) begin
 			repeat_counter<=0;
 			nSegsGenerated<=0;
 			nSamplesGenerated<=0;
-			masterSamplesGenerated<=0;
 			waitingForRetrigger<=0;
 			waitedCounts<=0;
 			toggler<=0;
@@ -207,6 +212,8 @@ always @(posedge refclk) begin
 		s_preparing_to_generate: begin			// this state lasts for only 1 clock cycle, to allow the first frame to be read from the FIFO
 			state<=s_generating;					// and then we immediately enter the generating state.
 			mistriggerDetected<=0;  			// we also use this opportunity to reset the mistriggerDetected register.
+			fpgaStatusOut<=0;						// and reset the status flags
+			masterSamplesGenerated<=0;       // and reset the previous master sample generation count
 		end
 		
 		s_generating: begin							// generating state
@@ -214,6 +221,7 @@ always @(posedge refclk) begin
 				state<=s_idle;							// return to idle state
 				fifo_reset<=1;							// reset FIFO
 				output_clock<=0;						// and clock
+				fpgaStatusOut[1]<=1;					// And mark the status bit accordingly
 			end
 			else if (repeat_counts==0) begin
 																	// repeat_counts == 0 is a special code for
@@ -277,6 +285,7 @@ always @(posedge refclk) begin
 							else begin										// no data in the FIFO?
 								state<=s_idle;								// then we are done. go back to idle
 								fifo_reset<=1;								// this line is probably unnecessary
+								fpgaStatusOut[0]<=1; 					// Mark the status output that we are done.
 							end
 						end
 					end		
@@ -313,6 +322,9 @@ okWireOut wire23 (.ok1(ok1), .ok2(ok2), .ep_addr(8'h23), .ep_datain(masterSample
 
 // Wire out for Atticus polling of # of retriggers that timed out
 okWireOut wire24 (.ok1(ok1), .ok2(ok2), .ep_addr(8'h24), .ep_datain(retriggerTimeoutCount[15:0]));
+
+// Wire out for Atticus polling of fpga status
+okWireOut wire25 (.ok1(ok1), .ok2(ok2), .ep_addr(8'h25), .ep_datain(fpgaStatusOut[15:0]));
 
 // Create the FIFO for storing data from computer
 // write clock comes from Opal Kelly Host Interface
