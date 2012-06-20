@@ -107,7 +107,11 @@ namespace DataStructures.Timing
             while (true)
             {
                 System.Net.IPEndPoint remoteEnd = null;
-                byte[] received = udpClient.Receive(ref remoteEnd);
+                //byte[] received = udpClient.Receive(ref remoteEnd); // does not abort when thread aborts
+                //byte[] received = udpClient.b
+                IAsyncResult result = udpClient.BeginReceive(null, null);
+                byte [] received = udpClient.EndReceive(result, ref remoteEnd);
+
                 if (received.Length != NetworkClockDatagram.datagramByteLength)
                 {
                     if (messageLog != null)
