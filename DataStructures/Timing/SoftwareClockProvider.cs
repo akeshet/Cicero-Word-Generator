@@ -25,7 +25,7 @@ namespace DataStructures.Timing
         protected Dictionary<SoftwareClockSubscriber, int> subscriberPollingPeriods_ms;
         protected UInt32 elapsedTime_ms;
 
-        private EventWaitHandle waitHandle;
+        private ManualResetEvent waitHandle;
 
         protected SoftwareClockProvider()
         {
@@ -70,7 +70,7 @@ namespace DataStructures.Timing
                 armTimer();
 
                 elapsedTime_ms = 0;
-                waitHandle = new EventWaitHandle(false, EventResetMode.ManualReset);
+				waitHandle = new ManualResetEvent(false);
                 foreach (SoftwareClockSubscriber sub in subscribers)
                 {
                     addAndStartSubscriberThread(sub);
@@ -129,8 +129,9 @@ namespace DataStructures.Timing
 
             elapsedTime_ms = time_ms;
             waitHandle.Set();
-            Thread.Sleep(1); // without this, occasionally the waiting threads seem unable to catch the Set signal fast enough
-                            // to react to it
+        /*    Thread.Sleep(1); // without this, occasionally the waiting threads seem unable to catch the Set signal fast enough
+                            // to react to it*/
+			// the above line should not be required when using a ManualResetEvent
             waitHandle.Reset();
             if (runningThreads == 0)
                 return false;
