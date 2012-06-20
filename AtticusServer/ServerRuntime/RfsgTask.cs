@@ -85,6 +85,14 @@ namespace AtticusServer
                 commandBuffer.Add(com);
             }
 
+            long postRetriggerTime = 100; // corresponds to 10us.
+            // A workaround to issue when using software timed groups in 
+            // fpga-retriggered words
+
+            // the workaround: delay the software timed group by an immesurable amount
+            // if it is started in a retriggered word
+
+
             // This functionality is sort of somewhat duplicated in sequencedata.generatebuffers. It would be good
             // to come up with a more coherent framework to do these sorts of operations.
             while (true)
@@ -104,6 +112,10 @@ namespace AtticusServer
                     currentTime += seconds_to_ticks(currentStep.StepDuration.getBaseValue());
                     continue;
                 }
+
+                long postTime = 0;
+                if (currentStep.WaitForRetrigger)
+                    postTime = postRetriggerTime;
 
                 // determine the index of the next step in which this channel has an action
                 int nextEnabledStepIndex = sequence.findNextGpibChannelEnabledTimestep(currentStepIndex, channelID);
@@ -151,7 +163,7 @@ namespace AtticusServer
                             command.commandType = RFSGCommand.CommandType.AmplitudeFrequency;
                             command.frequency = currentFreq;
                             command.amplitude = Vpp_to_dBm(currentAmp);
-                            command.commandTime = (long)(currentTime + i * secondsPerSample * 10000000);
+                            command.commandTime = (long)(currentTime + i * secondsPerSample * 10000000) + postTime;
 
                             commandBuffer.Add(command);
                         }
@@ -170,7 +182,7 @@ namespace AtticusServer
                         {
                             RFSGCommand com = new RFSGCommand();
                             com.commandType = RFSGCommand.CommandType.EnableOutput;
-                            com.commandTime = currentTime;
+                            com.commandTime = currentTime + postTime;
                             commandBuffer.Add(com);
                         }
 
@@ -178,7 +190,7 @@ namespace AtticusServer
                         {
                             RFSGCommand com = new RFSGCommand();
                             com.commandType = RFSGCommand.CommandType.DisableOutput;
-                            com.commandTime = currentTime;
+                            com.commandTime = currentTime + postTime;
                             commandBuffer.Add(com);
                         }
 
@@ -186,7 +198,7 @@ namespace AtticusServer
                         {
                             RFSGCommand com = new RFSGCommand();
                             com.commandType = RFSGCommand.CommandType.Abort;
-                            com.commandTime = currentTime;
+                            com.commandTime = currentTime + postTime;
                             commandBuffer.Add(com);
                         }
 
@@ -194,7 +206,7 @@ namespace AtticusServer
                         {
                             RFSGCommand com = new RFSGCommand();
                             com.commandType = RFSGCommand.CommandType.Initiate;
-                            com.commandTime = currentTime;
+                            com.commandTime = currentTime + postTime;
                             commandBuffer.Add(com);
                         }       
                     }

@@ -73,6 +73,14 @@ namespace AtticusServer
             //measured in ticks. 1 tick = 100 ns.
             long currentTime = 0;
 
+            long postRetriggerTime = 100; // corresponds to 10us.
+                                          // A workaround to issue when using software timed groups in 
+                                          // fpga-retriggered words
+
+                                          // the workaround: delay the software timed group by an immesurable amount
+                                        // if it is started in a retriggered word
+
+
            
            // This functionality is sort of somewhat duplicated in sequencedata.generatebuffers. It would be good
            // to come up with a more coherent framework to do these sorts of operations.
@@ -87,6 +95,10 @@ namespace AtticusServer
 
                if (!currentStep.StepEnabled)
                    continue;
+
+               long postTime = 0;
+               if (currentStep.WaitForRetrigger)
+                   postTime = postRetriggerTime;
 
                if (currentStep.rs232Group == null || !currentStep.rs232Group.channelEnabled(logicalChannelID))
                {
@@ -107,7 +119,7 @@ namespace AtticusServer
                        // Raw string commands just get added 
                        string stringWithCorrectNewlines = AddNewlineCharacters(channelData.RawString);
 
-                       commandBuffer.Add(new RS232Command(  stringWithCorrectNewlines, currentTime));
+                       commandBuffer.Add(new RS232Command(  stringWithCorrectNewlines, currentTime + postTime));
                }
                else if (channelData.DataType == RS232GroupChannelData.RS232DataType.Parameter)
                {
@@ -116,7 +128,7 @@ namespace AtticusServer
                        foreach (StringParameterString srs in channelData.StringParameterStrings)
                        {
                            commandBuffer.Add(new RS232Command(
-                               AddNewlineCharacters(srs.ToString()), currentTime));
+                               AddNewlineCharacters(srs.ToString()), currentTime + postTime));
                        }
                    }
                }

@@ -49,6 +49,18 @@ namespace AtticusServer
             this.device = device;
         }
 
+
+        long postRetriggerTime = 100; // corresponds to 10us.
+        // A workaround to issue when using software timed groups in 
+        // fpga-retriggered words
+
+        // the workaround: delay the software timed group by an immesurable amount
+        // if it is started in a retriggered word
+
+
+        // This functionality is sort of somewhat duplicated in sequencedata.generatebuffers. It would be good
+        // to come up with a more coherent framework to do these sorts of operations.
+
         public bool generateBuffer(SequenceData sequence, DeviceSettings deviceSettings, HardwareChannel hc, int logicalChannelID, List<GpibRampCommandConverter> commandConverters)
         {
             this.logicalChannelID = logicalChannelID;
@@ -104,6 +116,10 @@ namespace AtticusServer
                    continue;
                }
 
+               long postTime = 0;
+               if (currentStep.WaitForRetrigger)
+                   postTime = postRetriggerTime;
+
                // determine the index of the next step in which this channel has an action
                int nextEnabledStepIndex = sequence.findNextGpibChannelEnabledTimestep(currentStepIndex, logicalChannelID);
 
@@ -117,7 +133,7 @@ namespace AtticusServer
                        // Raw string commands just get added 
                        string stringWithCorrectNewlines = AddNewlineCharacters(channelData.RawString);
 
-                       commandBuffer.Add(new GpibCommand(  stringWithCorrectNewlines, currentTime));
+                       commandBuffer.Add(new GpibCommand(  stringWithCorrectNewlines, currentTime + postTime));
                }
                else if (channelData.DataType == GPIBGroupChannelData.GpibChannelDataType.voltage_frequency_waveform)
                {
@@ -187,7 +203,7 @@ namespace AtticusServer
                                frequencyIndex++;
                            }
 
-                           long commandTime = currentTime + Shared.SecondsToTicks((double)i * secondsPerSample);
+                           long commandTime = currentTime + Shared.SecondsToTicks((double)i * secondsPerSample) + postTime;
 
                           
                            commandBuffer.Add(new GpibCommand(command, commandTime));
@@ -205,7 +221,7 @@ namespace AtticusServer
                        foreach (StringParameterString sps in channelData.StringParameterStrings)
                        {
                            string commandWithCorrectNewlines = AddNewlineCharacters(sps.ToString());
-                           commandBuffer.Add(new GpibCommand(commandWithCorrectNewlines, currentTime));
+                           commandBuffer.Add(new GpibCommand(commandWithCorrectNewlines, currentTime + postTime));
                        }
                    }
                }
