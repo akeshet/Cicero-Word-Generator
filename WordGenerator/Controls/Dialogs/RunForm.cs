@@ -979,8 +979,8 @@ namespace WordGenerator
                     return false;
                 }
 
-                softwareClockProvider = new ComputerClockSoftwareClockProvider(5);
-                softwareClockProvider.addSubscriber(this, 50);
+                softwareClockProvider = new ComputerClockSoftwareClockProvider(10);
+                softwareClockProvider.addSubscriber(this, 41);
                 softwareClockProvider.Arm();
 
                 Random rnd = new Random();
