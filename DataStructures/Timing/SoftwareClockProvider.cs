@@ -28,11 +28,24 @@ namespace DataStructures.Timing
         private EventWaitHandle subscriberWaitHandle;
         private EventWaitHandle providerWaitHandle;
 
+        private EventHandler<MessageEvent> messageLog;
+
         protected SoftwareClockProvider()
         {
             subscribers = new List<SoftwareClockSubscriber>();
             subscriberThreads = new Dictionary<SoftwareClockSubscriber,Thread>();
             subscriberPollingPeriods_ms = new Dictionary<SoftwareClockSubscriber,int>();
+        }
+
+        public void registerMessageLogHandler(EventHandler<MessageEvent> handler)
+        {
+            messageLog += handler;
+        }
+
+        protected void logMessage(MessageEvent message)
+        {
+            if (messageLog != null)
+                messageLog(this, message);
         }
 
         public void clearSubscribers()

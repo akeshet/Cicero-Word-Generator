@@ -1411,7 +1411,7 @@ namespace AtticusServer
                     DataStructures.Timing.SoftwareClockProvider softwareClockProvider;
                     
                     // chose local software clock provider...
-                    if (fpgaTasks.Count != 0)
+                    if (fpgaTasks!=null && fpgaTasks.Count != 0)
                     {
                         IEnumerator<string> e = fpgaTasks.Keys.GetEnumerator();
                         e.MoveNext();
@@ -1432,8 +1432,8 @@ namespace AtticusServer
 
                     // create a clock broadcaster (always, for now, later will be configurable)
                     if (clockBroadcaster != null)
-                        throw new Exception("Expeted clockBroadcaster to be null when it was not.");
-                    clockBroadcaster = new DataStructures.Timing.NetworkClockBroadcaster(clockID);
+                        throw new Exception("Expected clockBroadcaster to be null when it was not.");
+                    clockBroadcaster = new DataStructures.Timing.NetworkClockBroadcaster(clockID, (uint)((sequence.SequenceDuration * 1000) + 100));
 
                     // add software clock subscribers
                     foreach (RfsgTask task in this.rfsgTasks.Values)
@@ -1445,7 +1445,7 @@ namespace AtticusServer
                     foreach (RS232Task task in this.rs232Tasks.Values)
                         softwareClockProvider.addSubscriber(task, 1);
 
-                    softwareClockProvider.addSubscriber(clockBroadcaster);
+                    softwareClockProvider.addSubscriber(clockBroadcaster, 20);
 
                    
 

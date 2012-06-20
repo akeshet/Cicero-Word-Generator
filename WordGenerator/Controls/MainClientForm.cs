@@ -568,6 +568,7 @@ namespace WordGenerator
         private void mainClientForm_Load(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Maximized;
+            formOpen = true;
             /* CiceroSplashForm splash = new CiceroSplashForm();
              splash.Show();*/
         }
@@ -610,8 +611,12 @@ namespace WordGenerator
             addMessageLogText(sender, e);
         }
 
+        private bool formOpen = false;
+
         public void addMessageLogText(object sender, EventArgs e)
         {
+            if (!formOpen)
+                return;
 
             if (this.InvokeRequired)
             {
@@ -897,6 +902,7 @@ namespace WordGenerator
         private void mainClientForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Storage.SaveAndLoad.SaveClientStartupSettings();
+            formOpen = false;
         }
 
         private void calculateVariableTimebaseDigitalBufferToolStripMenuItem_Click(object sender, EventArgs e)

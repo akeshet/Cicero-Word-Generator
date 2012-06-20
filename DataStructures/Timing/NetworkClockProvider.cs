@@ -31,13 +31,21 @@ namespace DataStructures.Timing
             }  
         }
 
-        private static event EventHandler<MessageEvent> messageLog;
+        private static EventHandler<MessageEvent> staticMessageLogHandler;
+
+        private static NetworkClockProvider dummy = new NetworkClockProvider();
+
+        private static void staticLogMessage(MessageEvent e)
+        {
+            if (staticMessageLogHandler != null)
+                staticMessageLogHandler(dummy, e);
+        }
 
         private static Thread listenerThread;
 
         public static readonly int networkClockDestinationPort = 39721;
 
-        private static NetworkClockProvider dummyClockProvider;
+        
 
         private static Dictionary<uint, NetworkClockProvider> providers;
         
@@ -45,14 +53,15 @@ namespace DataStructures.Timing
         public static void startListener() {
             lock (lockObj)
             {
+                staticLogMessage(new MessageEvent("Starting network clock listener...", 0, MessageEvent.MessageTypes.Routine, MessageEvent.MessageCategories.SoftwareClock));
                 if (listenerThread != null)
                 {
                     throw new SoftwareClockProviderException("Attempted to start listener thread when already started.");
                 }
                 listenerThread = new Thread(listenerThreadProc);
                 listenerThread.Start();
-                dummyClockProvider = new NetworkClockProvider();
                 providers = new Dictionary<uint, NetworkClockProvider>();
+                staticLogMessage(new MessageEvent("...done", 0, MessageEvent.MessageTypes.Routine, MessageEvent.MessageCategories.SoftwareClock));
             }
         }
 
@@ -60,6 +69,7 @@ namespace DataStructures.Timing
         {
             lock (lockObj)
             {
+                staticLogMessage(new MessageEvent("Shutting down network clock listener.", 0, MessageEvent.MessageTypes.Routine, MessageEvent.MessageCategories.SoftwareClock));
                 if (listenerThread == null)
                 {
                     throw new SoftwareClockProviderException("Attempted to stop a listener that was not running.");
@@ -77,7 +87,7 @@ namespace DataStructures.Timing
 
                     providers = null;
                 }
-
+                staticLogMessage(new MessageEvent("...done"));
             }
         }
 
@@ -86,23 +96,23 @@ namespace DataStructures.Timing
             return (listenerThread != null);
         }
 
-        public static void registerMessageLogHandler(EventHandler<MessageEvent> handler)
+        public static void registerStaticMessageLogHandler(EventHandler<MessageEvent> handler)
         {
-            messageLog += handler;
+            staticMessageLogHandler += handler;
         }
 
         private static UdpClient udpClient;
 
         private static void listenerThreadProc()
         {
-            if (messageLog != null)
-                messageLog(dummyClockProvider, new MessageEvent("Starting Network Clock listener thread...", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.Networking));
+            
+                staticLogMessage(new MessageEvent("Starting Network Clock listener thread...", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.Networking));
 
 
             udpClient = new UdpClient(networkClockDestinationPort);
 
-            if (messageLog!=null)
-                messageLog(dummyClockProvider, new MessageEvent("...done", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.Networking));
+            
+            staticLogMessage( new MessageEvent("...done", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.Networking));
 
             while (true)
             {
@@ -110,15 +120,18 @@ namespace DataStructures.Timing
                 //byte[] received = udpClient.Receive(ref remoteEnd); // does not abort when thread aborts
                 //byte[] received = udpClient.b
                 IAsyncResult result = udpClient.BeginReceive(null, null);
-                byte [] received = udpClient.EndReceive(result, ref remoteEnd);
+                byte[] received = udpClient.EndReceive(result, ref remoteEnd);
 
                 if (received.Length != NetworkClockDatagram.datagramByteLength)
                 {
-                    if (messageLog != null)
-                        messageLog(dummyClockProvider, new MessageEvent("Received wrong sized (" + received.Length + ") datagram. Dropping.", 1, MessageEvent.MessageTypes.Error, MessageEvent.MessageCategories.Networking));
+                    staticLogMessage(new MessageEvent("Received wrong sized (" + received.Length + ") datagram. Dropping.", 1, MessageEvent.MessageTypes.Error, MessageEvent.MessageCategories.Networking));
                     continue;
                 }
                 NetworkClockDatagram ndgram = new NetworkClockDatagram(received);
+
+#if DEBUG
+                staticLogMessage(new MessageEvent("Received network clock datagram " + ndgram.ToString(), 2, MessageEvent.MessageTypes.Debug, MessageEvent.MessageCategories.Networking));
+#endif
 
                 lock (providers)
                 {

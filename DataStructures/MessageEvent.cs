@@ -28,7 +28,7 @@ namespace DataStructures
             get { return verbosity; }
         }
 
-        public enum MessageTypes { Routine, Warning, Error, Log };
+        public enum MessageTypes { Routine, Warning, Error, Log, Debug };
         private MessageTypes messageType;
 
         public MessageTypes MessageType

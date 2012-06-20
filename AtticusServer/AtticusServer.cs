@@ -80,8 +80,8 @@ namespace AtticusServer
                 server.updateGUI += form.updateGUI;
                 server.messageLog += form.addMessageLogText;
 
-                
-                
+
+                DataStructures.Timing.NetworkClockBroadcaster.registerMessageLogHandler(form.addMessageLogText);
                 DataStructures.Timing.NetworkClockBroadcaster.startBroadcaster();
                 DataStructures.Timing.NetworkClockBroadcaster.addListener("127.0.0.1");
 

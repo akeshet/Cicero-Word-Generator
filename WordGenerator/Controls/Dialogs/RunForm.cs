@@ -1026,13 +1026,16 @@ namespace WordGenerator
 
                 while (true)
                 {
-                    if (softwareClockProvider.getElapsedTime() >= (200 + duration * 1000.0))
-                        break;
+                   if (softwareClockProvider!=null && (softwareClockProvider.getElapsedTime() >= (200 + duration * 1000.0)))
+                            break;
+               
                     Thread.Sleep(100);
                 }
 
-                softwareClockProvider.Abort();
-                softwareClockProvider = null;
+             
+                    softwareClockProvider.Abort();
+                    softwareClockProvider = null;
+                
 
                 MainClientForm.instance.CurrentlyOutputtingTimestep = sequence.dwellWord();
 
@@ -1209,6 +1212,7 @@ namespace WordGenerator
             base.OnClosed(e);
             if (softwareClockProvider != null)
             {
+
                 softwareClockProvider.Abort();
                 softwareClockProvider = null;
             }

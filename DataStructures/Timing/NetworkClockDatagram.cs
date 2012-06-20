@@ -82,5 +82,10 @@ namespace DataStructures.Timing
             return true;
         }
 
+        public override string ToString()
+        {
+            return "clockID: " + String.Format("{0:X8}", clockID) + " time_ms: " + elaspedTime + " gram_num: " + this.datagramCount;
+        }
+
     }
 }
