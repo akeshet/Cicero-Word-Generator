@@ -129,6 +129,7 @@
     <Compile Include="MessageEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Timing\ComputerClockSoftwareClockProvider.cs" />
+    <Compile Include="Timing\DummySubscriber.cs" />
     <Compile Include="Timing\NetworkClockBroadcaster.cs" />
     <Compile Include="Timing\NetworkClockDatagram.cs" />
     <Compile Include="Timing\NetworkClockProvider.cs" />
