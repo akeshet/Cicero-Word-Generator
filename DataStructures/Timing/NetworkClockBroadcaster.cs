@@ -83,11 +83,13 @@ namespace DataStructures.Timing
 
         private static UInt32 ndCount = 0;
         
+        private UInt32 time = 0;
+
         public bool reachedTime(UInt32 elaspedTime_ms, int p)
         {
-            if (maxTime > 0 && elaspedTime_ms > maxTime)
+            if (elaspedTime_ms < time)
                 return false;
-
+            
             NetworkClockDatagram ndgram = new NetworkClockDatagram(elaspedTime_ms, clockID, ndCount);
             ndCount++;
             byte [] buffer = ndgram.toByteStream();
@@ -108,7 +110,15 @@ namespace DataStructures.Timing
 #endif
             }
 
+            if (maxTime > 0 && elaspedTime_ms > maxTime)
+                return false;
+
             return true;
+        }
+
+        public bool providerTimerFinished(int priority)
+        {
+            return reachedTime(maxTime, priority);
         }
 
         public bool handleExceptionOnClockThread(Exception e)

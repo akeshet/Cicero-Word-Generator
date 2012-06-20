@@ -261,6 +261,11 @@ namespace AtticusServer
             return ((double)ticks) / 10000000.0;
         }
 
+
+        public bool providerTimerFinished(int priority)
+        {
+            return true;
+        }
         
     }
 }

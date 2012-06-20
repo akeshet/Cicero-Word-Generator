@@ -316,7 +316,7 @@ namespace AtticusServer
             {
                 uint mSamp = getMasterSamplesGenerated();
                 if (mSamp < lastmSamp) // this may occur for very long sequences (about 429 seconds at least, if FPGA running at 10Mhz)
-                {
+                {                       // or if the fpga finished a run (in which case master sample will return 0)
                     rollovers++;
                 }
                 if (mSamp == lastmSamp)

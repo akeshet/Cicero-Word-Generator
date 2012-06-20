@@ -361,6 +361,10 @@ namespace AtticusServer
         private static GpibRampCommandConverter ESG_SeriesRampConverter = new GpibRampCommandConverter(
             ":POW:AMPL ", " V\n", ":FREQ ", " Hz\n", "");
 
+        public bool providerTimerFinished(int priority)
+        {
+            return true;
+        }
         
     }
 }

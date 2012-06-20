@@ -400,8 +400,11 @@ namespace AtticusServer
             }
         }
 
-        
 
+        public bool providerTimerFinished(int priority)
+        {
+            return true;
+        }
 
     }
 }

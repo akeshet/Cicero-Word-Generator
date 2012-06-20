@@ -1433,7 +1433,7 @@ namespace AtticusServer
                     // create a clock broadcaster (always, for now, later will be configurable)
                     if (clockBroadcaster != null)
                         throw new Exception("Expected clockBroadcaster to be null when it was not.");
-                    clockBroadcaster = new DataStructures.Timing.NetworkClockBroadcaster(clockID, (uint)((sequence.SequenceDuration * 1000) + 100));
+                    clockBroadcaster = new DataStructures.Timing.NetworkClockBroadcaster(clockID, (uint)((sequence.SequenceDuration * 1000.0) + 100));
 
                     // add software clock subscribers
                     foreach (RfsgTask task in this.rfsgTasks.Values)

@@ -19,7 +19,8 @@ namespace WordGenerator
     public partial class RunForm : Form, DataStructures.Timing.SoftwareClockSubscriber
     {
 
-        private DataStructures.Timing.SoftwareClockProvider softwareClockProvider;
+        private DataStructures.Timing.ComputerClockSoftwareClockProvider softwareClockProvider;
+        private DataStructures.Timing.NetworkClockProvider networkClockProvider;
 
         private SequenceData runningSequence = null;
 
@@ -644,7 +645,7 @@ namespace WordGenerator
 
                 if (RunForm.backgroundIsRunning() && !this.isBackgroundRunform)
                 {
-                    addMessageLogText(this, new MessageEvent("A background run is still running. Waiting for it to terminate..."));                    
+                    addMessageLogText(this, new MessageEvent("A background run is still running. Waiting for it to terminate..."));
                     RunForm.abortAtEndOfNextBackgroundRun();
                     setStatus(RunFormStatus.ClosableOnly);
                     while (RunForm.backgroundIsRunning())
@@ -660,7 +661,7 @@ namespace WordGenerator
 
 
                     setStatus(RunFormStatus.StartingRun);
-                        
+
                 }
 
                 addMessageLogText(this, new MessageEvent("Starting Run."));
@@ -809,7 +810,7 @@ namespace WordGenerator
                 bool useLoops = false;
                 foreach (TimestepGroup tsg in sequence.TimestepGroups)
                 {
-                    if (tsg.LoopTimestepGroup && sequence.TimestepGroupIsLoopable(tsg) && tsg.LoopCountInt>1)
+                    if (tsg.LoopTimestepGroup && sequence.TimestepGroupIsLoopable(tsg) && tsg.LoopCountInt > 1)
                     {
                         useLoops = true;
                     }
@@ -973,18 +974,26 @@ namespace WordGenerator
 
                 // arm tasks.
 
-                if (softwareClockProvider != null)
+
+                Random rnd = new Random();
+                clockID = (uint)rnd.Next();
+
+                if (softwareClockProvider != null || networkClockProvider!=null)
                 {
                     addMessageLogText(this, new MessageEvent("A software clock provider already exists, unespectedly. Aborting."));
                     return false;
                 }
 
                 softwareClockProvider = new ComputerClockSoftwareClockProvider(10);
-                softwareClockProvider.addSubscriber(this, 41);
+                softwareClockProvider.addSubscriber(this, 41, 0);
                 softwareClockProvider.Arm();
 
-                Random rnd = new Random();
-                clockID = (uint) rnd.Next();
+                networkClockProvider = new NetworkClockProvider(clockID);
+                networkClockProvider.addSubscriber(this, 41, 1);
+                networkClockProvider.Arm();
+
+                currentSoftwareclockPriority = 0;
+
 
                 addMessageLogText(this, new MessageEvent("Arming tasks."));
                 actionStatus = Storage.settingsData.serverManager.armTasksOnConnectedServers(clockID, addMessageLogText);
@@ -1009,8 +1018,8 @@ namespace WordGenerator
                 }
 
                 setStatus(RunFormStatus.Running);
-                
-                
+
+
                 // async call to progress bar initialization
 
                 progressBarInitDelegate pbid = new progressBarInitDelegate(initializeProgressBar);
@@ -1023,19 +1032,29 @@ namespace WordGenerator
 
                 // start software clock
                 softwareClockProvider.Start();
+                networkClockProvider.Start();
 
                 while (true)
                 {
-                   if (softwareClockProvider!=null && (softwareClockProvider.getElapsedTime() >= (200 + duration * 1000.0)))
+                    if (currentSoftwareclockPriority == 0)
+                    {
+                        if (softwareClockProvider != null && (softwareClockProvider.getElapsedTime() >= (200 + duration * 1000.0)))
                             break;
-               
+                    }
+                    else
+                        if (networkClockProvider != null && (networkClockProvider.getElapsedTime() >= (duration * 1000.0)))
+                            break;
+
                     Thread.Sleep(100);
                 }
 
-             
-                    softwareClockProvider.Abort();
-                    softwareClockProvider = null;
-                
+
+                softwareClockProvider.Abort();
+                softwareClockProvider = null;
+                networkClockProvider.Abort();
+                networkClockProvider = null;
+
+
 
                 MainClientForm.instance.CurrentlyOutputtingTimestep = sequence.dwellWord();
 
@@ -1100,8 +1119,8 @@ namespace WordGenerator
                             handler.closeConnection();
                     }
                 }
-                    
-            
+
+
 
 
 
@@ -1134,6 +1153,11 @@ namespace WordGenerator
                 addMessageLogText(this, new MessageEvent("Your Cicero Professional Edition (C) License expired on March 31. You are now running a temporary 24 hour STUDENT EDITION license. Please see http://web.mit.edu/~akeshet/www/Cicero/apr1.html for license renewal information."));
         }
 
+        public bool providerTimerFinished(int priority)
+        {
+            return true;
+        }
+
         private int currentSoftwareclockPriority = 0;
         public bool reachedTime(UInt32 elapsedTime, int priority) {
             if (priority >= currentSoftwareclockPriority)
@@ -1142,7 +1166,7 @@ namespace WordGenerator
                 BeginInvoke(new progressBarUpdateDelegate(this.updateProgressBar), new object[] { (int)elapsedTime, runningSequence });
                 return true;
             }
-            else
+            else 
                 return false;
         }
 
@@ -1219,9 +1243,10 @@ namespace WordGenerator
             base.OnClosed(e);
             if (softwareClockProvider != null)
             {
-
                 softwareClockProvider.Abort();
                 softwareClockProvider = null;
+                networkClockProvider.Abort();
+                networkClockProvider = null;
             }
 
             WordGenerator.MainClientForm.instance.suppressHotkeys = false;
@@ -1266,6 +1291,8 @@ namespace WordGenerator
             {
                 softwareClockProvider.Abort();
                 softwareClockProvider = null;
+                networkClockProvider.Abort();
+                networkClockProvider = null;
             }
 
             if (this.runningThread != null)

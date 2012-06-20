@@ -34,5 +34,12 @@ namespace DataStructures.Timing
         /// <param name="e"></param>
         /// <returns></returns>
         bool handleExceptionOnClockThread(Exception e);
+
+        /// <summary>
+        /// Will be possibly be called after there are no further calls
+        /// to reachedTime, if the provider has reached its maximum output time limit
+        /// </summary>
+        /// <returns></returns>
+        bool providerTimerFinished(int priority);
     }
 }
