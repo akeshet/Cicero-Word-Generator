@@ -638,9 +638,9 @@ namespace DataStructures
             return runNamedMethodOnConnectedServers("generateBuffers", new object[] { iterationNumber }, 20000, messageLog);
         }
 
-        public ServerActionStatus armTasksOnConnectedServers(EventHandler<MessageEvent> messageLog)
+        public ServerActionStatus armTasksOnConnectedServers(UInt32 clockID, EventHandler<MessageEvent> messageLog)
         {
-            return runNamedMethodOnConnectedServers("armTasks", null, 4000, messageLog);
+            return runNamedMethodOnConnectedServers("armTasks", new object[] { clockID }, 4000, messageLog);
         }
 
         public ServerActionStatus generateTriggersOnConnectedServers(EventHandler<MessageEvent> messageLog)
@@ -736,7 +736,7 @@ namespace DataStructures
 
             // -- Aviv Keshet
 
-            temp.armTasks();
+            temp.armTasks(0);
             temp.generateBuffers(0);
             temp.generateTrigger();
             temp.getHardwareChannels();

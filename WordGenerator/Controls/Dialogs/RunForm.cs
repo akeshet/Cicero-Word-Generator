@@ -626,6 +626,8 @@ namespace WordGenerator
             return do_run(iterationNumber, sequence, false);
         }
 
+        private UInt32 clockID;
+
         public bool do_run(int iterationNumber, SequenceData sequence, bool calibrationShot)
         {
             this.runningThread = Thread.CurrentThread;
@@ -981,8 +983,11 @@ namespace WordGenerator
                 softwareClockProvider.addSubscriber(this, 50);
                 softwareClockProvider.Arm();
 
+                Random rnd = new Random();
+                clockID = (uint) rnd.Next();
+
                 addMessageLogText(this, new MessageEvent("Arming tasks."));
-                actionStatus = Storage.settingsData.serverManager.armTasksOnConnectedServers(addMessageLogText);
+                actionStatus = Storage.settingsData.serverManager.armTasksOnConnectedServers(clockID, addMessageLogText);
                 if (actionStatus != ServerManager.ServerActionStatus.Success)
                 {
                     addMessageLogText(this, new MessageEvent("Unable to arm tasks. " + actionStatus.ToString()));

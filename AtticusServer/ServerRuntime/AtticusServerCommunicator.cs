@@ -746,22 +746,6 @@ namespace AtticusServer
 
                     #endregion
 
-                    DataStructures.Timing.SoftwareClockProvider softwareClockProvider;
-
-                    if (fpgaTasks.Count != 0)
-                    {
-                        IEnumerator<string> e = fpgaTasks.Keys.GetEnumerator();
-                        e.MoveNext();
-                        string key = e.Current;
-                        softwareClockProvider = fpgaTasks[key];
-                        messageLog(this, new MessageEvent("Using FPGA task on device " + key + " as software clock source."));
-                    }
-                    else
-                    {
-                        this.computerClockProvider = new DataStructures.Timing.ComputerClockSoftwareClockProvider(5);
-                        softwareClockProvider = computerClockProvider;
-                        messageLog(this, new MessageEvent("Using computer clock as software clock source."));
-                    }
 
 
                     #region GPIB device and masquerading gpib channels (like rfsg channels)
@@ -781,7 +765,6 @@ namespace AtticusServer
                                 gpibChannel, gpibID, myServerSettings.GpibRampConverters);
                             gpibTask.Done += new TaskDoneEventHandler(aTaskFinished);
                             gpibTasks.Add(gpibChannel, gpibTask);
-                            softwareClockProvider.addSubscriber(gpibTask);
                             messageLog(this, new MessageEvent("Done."));
                             
                         }
@@ -798,7 +781,6 @@ namespace AtticusServer
                                     RfsgTask rftask = new RfsgTask(sequence, settings, gpibID, gpibChannel.DeviceName, serverSettings.myDevicesSettings[gpibChannel.DeviceName]);
                                     rftask.Done += new TaskDoneEventHandler(aTaskFinished);
                                     rfsgTasks.Add(gpibChannel, rftask);
-                                    softwareClockProvider.addSubscriber(rftask);
                                     messageLog(this, new MessageEvent("Done."));
                                     break;
                             }
@@ -835,7 +817,6 @@ namespace AtticusServer
                             rs232task.Done += new TaskDoneEventHandler(aTaskFinished);
                             rs232Tasks.Add(hc, rs232task);
                             messageLog(this, new MessageEvent("Done."));
-                            softwareClockProvider.addSubscriber(rs232task, 0);
                         }
                         else
                         {
@@ -1417,7 +1398,7 @@ namespace AtticusServer
         /// sets up the software-timed task triggering mechanism, if one is in use.
         /// </summary>
         /// <returns></returns>
-        public override bool armTasks()
+        public override bool armTasks(UInt32 clockID)
         {
             lock (remoteLockObj)
             {
@@ -1426,11 +1407,55 @@ namespace AtticusServer
                     messageLog(this, new MessageEvent("Arming tasks"));
                     int armedTasks = 0;
 
+
+                    DataStructures.Timing.SoftwareClockProvider softwareClockProvider;
+                    
+                    // chose local software clock provider...
+                    if (fpgaTasks.Count != 0)
+                    {
+                        IEnumerator<string> e = fpgaTasks.Keys.GetEnumerator();
+                        e.MoveNext();
+                        string key = e.Current;
+                        softwareClockProvider = fpgaTasks[key];
+                        messageLog(this, new MessageEvent("Using FPGA task on device " + key + " as software clock source."));
+                    }
+                    else
+                    {
+                        if (computerClockProvider != null)
+                        {
+                            throw new Exception("Expected computer clock provider to be null when arming task. Aborting.");
+                        }
+                        this.computerClockProvider = new DataStructures.Timing.ComputerClockSoftwareClockProvider(5);
+                        softwareClockProvider = computerClockProvider;
+                        messageLog(this, new MessageEvent("Using computer clock as software clock source."));
+                    }
+
+                    // create a clock broadcaster (always, for now, later will be configurable)
+                    if (clockBroadcaster != null)
+                        throw new Exception("Expeted clockBroadcaster to be null when it was not.");
+                    clockBroadcaster = new DataStructures.Timing.NetworkClockBroadcaster(clockID);
+
+                    // add software clock subscribers
+                    foreach (RfsgTask task in this.rfsgTasks.Values)
+                        softwareClockProvider.addSubscriber(task, 1);
+
+                    foreach (GpibTask task in this.gpibTasks.Values)
+                        softwareClockProvider.addSubscriber(task, 1);
+
+                    foreach (RS232Task task in this.rs232Tasks.Values)
+                        softwareClockProvider.addSubscriber(task, 1);
+
+                    softwareClockProvider.addSubscriber(clockBroadcaster);
+
+                   
+
+
                     lock (softwareTriggeringTaskLock)
                     {
                         softwareTriggeringTask = null;
                     }
 
+                   
 
 
                     softwareTimedTasksTriggered = false;
@@ -1668,6 +1693,7 @@ namespace AtticusServer
         }
 
         private DataStructures.Timing.ComputerClockSoftwareClockProvider computerClockProvider;
+        private DataStructures.Timing.NetworkClockBroadcaster clockBroadcaster;
 
         /// <summary>
         /// Start internally clocked software triggered tasks, software timed tasks (like gpib tasks), and tasks which act as clocks for other tasks.
@@ -2088,6 +2114,9 @@ namespace AtticusServer
                 if (computerClockProvider!=null)   
                     computerClockProvider.Abort();
                 computerClockProvider = null;
+
+                if (clockBroadcaster != null)
+                    clockBroadcaster = null;
 
                 if (gpibTasks == null)
                 {

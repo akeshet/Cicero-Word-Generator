@@ -80,9 +80,15 @@ namespace AtticusServer
                 server.updateGUI += form.updateGUI;
                 server.messageLog += form.addMessageLogText;
 
+                
+                
+                DataStructures.Timing.NetworkClockBroadcaster.startBroadcaster();
+                DataStructures.Timing.NetworkClockBroadcaster.addListener("127.0.0.1");
 
 
                 Application.Run(form);
+
+                DataStructures.Timing.NetworkClockBroadcaster.stopBroadcaster();
 
                 saveServerSettings(AppDomain.CurrentDomain.BaseDirectory +  FileNameStrings.DefaultServerSettingsDataFile, serverSettings);
             }
