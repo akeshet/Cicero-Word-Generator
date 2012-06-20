@@ -172,6 +172,8 @@ namespace AtticusServer
             return ans;
         }
 
+        private UInt32 max_elapsedtime_ms;
+
         public FpgaTimebaseTask(DeviceSettings deviceSettings, okCFrontPanel opalKellyDevice, SequenceData sequence, double masterClockPeriod, out int nSegments, bool useRfModulation, bool assymetric)
             : base()
         {
@@ -183,6 +185,8 @@ namespace AtticusServer
 
             TimestepTimebaseSegmentCollection segments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock,
                                                         masterClockPeriod);
+
+            this.max_elapsedtime_ms = (UInt32)((sequence.SequenceDuration * 1000.0) + 100);
 
             byte[] data = FpgaTimebaseTask.createByteArray(segments, sequence, out nSegments, masterClockPeriod, assymetric );
 
@@ -227,24 +231,9 @@ namespace AtticusServer
 
         private Thread masterPollingThread;
         private int pollingProcSleepTime = 100; // in ms
-        /// <summary>
-        /// Debug function only. 
-        /// </summary>
-        public void masterSamplePollingProc()
-        {
-            while (true)
-            {
-                UInt32 mTime = getMasterSamplesGenerated();
-                MainServerForm.instance.addMessageLogText(this, new MessageEvent("FPGA master sample: " + mTime));
-                UInt16 skipped = getRetriggerTimeoutCount();
-                MainServerForm.instance.addMessageLogText(this, new MessageEvent("Skipped: " + skipped));
-                Thread.Sleep(pollingProcSleepTime);
-            }
-        }
 
         private UInt32 getMasterSamplesGenerated()
         {
-            opalKellyDevice.UpdateWireOuts();
             UInt32 lowWord = opalKellyDevice.GetWireOutValue(0x22);
             UInt32 highWord = opalKellyDevice.GetWireOutValue(0x23);
 
@@ -290,6 +279,21 @@ namespace AtticusServer
             return ans;
         }
 
+        private FpgaStatus getFpgaStatus()
+        {
+            uint statusRegister = opalKellyDevice.GetWireOutValue(0x25);
+            FpgaStatus status;
+            status.Finished = ((statusRegister & 1)!=0);
+            status.Aborted = ((statusRegister & 2)!=0);
+            return status;
+        }
+
+        private struct FpgaStatus
+        {
+            public bool Aborted;
+            public bool Finished;
+        }
+
         public void Stop()
         {
             com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode;
@@ -314,7 +318,18 @@ namespace AtticusServer
             uint rolloverTime = (uint)(UInt32.MaxValue * this.masterClockPeriod * 1000.0);
             while (keepGoing)
             {
+                opalKellyDevice.UpdateWireOuts();
                 uint mSamp = getMasterSamplesGenerated();
+                FpgaStatus status = getFpgaStatus();
+
+                if (status.Finished && lastmSamp >0)
+                {
+                    reachTime(max_elapsedtime_ms);
+                    keepGoing = false;
+                    continue;
+                }
+
+
                 if (mSamp < lastmSamp) // this may occur for very long sequences (about 429 seconds at least, if FPGA running at 10Mhz)
                 {                       // or if the fpga finished a run (in which case master sample will return 0)
                     rollovers++;

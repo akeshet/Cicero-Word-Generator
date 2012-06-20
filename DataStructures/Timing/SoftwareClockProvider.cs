@@ -28,7 +28,7 @@ namespace DataStructures.Timing
         protected UInt32 elapsedTime_ms;
 
         private EventWaitHandle subscriberWaitHandle;
-        private EventWaitHandle providerWaitHandle;
+        //private EventWaitHandle providerWaitHandle;
 
         private EventHandler<MessageEvent> messageLog;
 
@@ -96,7 +96,7 @@ namespace DataStructures.Timing
 
                 elapsedTime_ms = 0;
                 subscriberWaitHandle = new EventWaitHandle(false, EventResetMode.ManualReset);
-                providerWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset);
+                //providerWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset);
                 foreach (SoftwareClockSubscriber sub in subscribers)
                 {
                     addAndStartSubscriberThread(sub);
@@ -155,7 +155,11 @@ namespace DataStructures.Timing
 
             elapsedTime_ms = time_ms;
             subscriberWaitHandle.Set();
-            providerWaitHandle.WaitOne(10); // This ensures that if there are any threads
+            Thread.Sleep(1);
+
+            //// OBSOLETE
+            //// The original Thread.Sleep(1) workaround seems to actuall be more reliable.
+            //providerWaitHandle.WaitOne(10); // This ensures that if there are any threads
                                             // blocking on subscriberWaitHandle.WaitOne
                                             // they get a chance to be released befor the subsequent call to 
                                             // subscriberWaitHandle.Reset
@@ -168,6 +172,10 @@ namespace DataStructures.Timing
 
                                             // The 10ms timeout is to avoid deadlocks (though I think they are impossible
                                             // even without the timeout). It should be harmless.
+
+            
+
+
             subscriberWaitHandle.Reset();
             if (runningThreads == 0)
                 return false;
@@ -202,7 +210,7 @@ namespace DataStructures.Timing
             bool keepGoing = true;
             while (keepGoing)
             {
-                providerWaitHandle.Set();
+                //providerWaitHandle.Set();
                 subscriberWaitHandle.WaitOne(); // Wait for the next clock signal to arrive
                 
 
