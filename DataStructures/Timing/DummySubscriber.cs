@@ -4,7 +4,7 @@ namespace DataStructures.Timing
 {
 	public class DummySubscriber : SoftwareClockSubscriber
 	{
-		public delegate bool DummySubscriberListener (uint elaspedTime);
+		public delegate bool DummySubscriberListener (uint elaspedTime, int priority);
 		public delegate bool DummySubscriberExceptionHandler (Exception e);
 
 		private event DummySubscriberListener timerCallback;
@@ -15,8 +15,8 @@ namespace DataStructures.Timing
 			this.exceptionCallback = exceptionCallback;
 		}
 
-		public bool reachedTime(uint elaspedTime_ms) {
-			return timerCallback(elaspedTime_ms);
+		public bool reachedTime(uint elaspedTime_ms, int p) {
+			return timerCallback(elaspedTime_ms, p);
 		}
 
 		public bool handleExceptionOnClockThread(Exception e) {

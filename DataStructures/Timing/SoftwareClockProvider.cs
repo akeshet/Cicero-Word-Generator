@@ -23,6 +23,8 @@ namespace DataStructures.Timing
         protected List<SoftwareClockSubscriber> subscribers;
         protected Dictionary<SoftwareClockSubscriber, Thread> subscriberThreads;
         protected Dictionary<SoftwareClockSubscriber, int> subscriberPollingPeriods_ms;
+        protected Dictionary<SoftwareClockSubscriber, int> subscriberPritorities;
+
         protected UInt32 elapsedTime_ms;
 
         private EventWaitHandle subscriberWaitHandle;
@@ -35,6 +37,7 @@ namespace DataStructures.Timing
             subscribers = new List<SoftwareClockSubscriber>();
             subscriberThreads = new Dictionary<SoftwareClockSubscriber,Thread>();
             subscriberPollingPeriods_ms = new Dictionary<SoftwareClockSubscriber,int>();
+            subscriberPritorities = new Dictionary<SoftwareClockSubscriber, int>();
         }
 
         public void registerMessageLogHandler(EventHandler<MessageEvent> handler)
@@ -56,19 +59,27 @@ namespace DataStructures.Timing
             subscribers.Clear();
             subscriberThreads.Clear();
             subscriberPollingPeriods_ms.Clear();
+            subscriberPritorities.Clear();
         }
 
         /// <summary>
         /// May add a subscriber even while clock is running.
+        /// 
+        /// Priority is an optional integer parameter that gets passed to the subscriber in addition to the time
+        /// Subscriber may use this to decide among several clock sources.
+        /// 
+        /// Note -- it a subscriber subscribes to multiple clocks, the individual clocks are NOT guaranteed to be
+        /// on the same thread as eachother
         /// </summary>
         /// <param name="sub"></param>
         /// <param name="minimumPollingPerios_ms"></param>
-        public void addSubscriber(SoftwareClockSubscriber sub, int minimumPollingPerios_ms = 0)
+        public void addSubscriber(SoftwareClockSubscriber sub, int minimumPollingPerios_ms = 0, int priority=0)
         {
             lock (lockObj)
             {
                 subscribers.Add(sub);
                 subscriberPollingPeriods_ms.Add(sub, minimumPollingPerios_ms);
+                subscriberPritorities.Add(sub, priority);
 
                 if (threadsRunning)
                 {
@@ -99,7 +110,7 @@ namespace DataStructures.Timing
             Thread thread = new Thread(new ParameterizedThreadStart(subscriberThreadProc));
             subscriberThreads.Add(sub, thread);
             runningThreads++;
-            thread.Start(new SubscriberThreadParameters(sub, subscriberPollingPeriods_ms[sub]));
+            thread.Start(new SubscriberThreadParameters(sub, subscriberPollingPeriods_ms[sub], subscriberPritorities[sub]));
             
         }
 
@@ -167,10 +178,12 @@ namespace DataStructures.Timing
         {
             public SoftwareClockSubscriber subscriber;
             public int minPollTime_ms;
-            public SubscriberThreadParameters(SoftwareClockSubscriber sub, int minPollTime_ms)
+            public int priority;
+            public SubscriberThreadParameters(SoftwareClockSubscriber sub, int minPollTime_ms, int priority)
             {
                 this.subscriber = sub;
                 this.minPollTime_ms = minPollTime_ms;
+                this.priority = priority;
             }
         }
 
@@ -183,6 +196,7 @@ namespace DataStructures.Timing
 
             SoftwareClockSubscriber subscriber = parameters.subscriber;
             int minPollingPeriod_ms = parameters.minPollTime_ms;
+            int priority = parameters.priority;
 
             uint lastPoll = elapsedTime_ms;
             bool keepGoing = true;
@@ -200,7 +214,7 @@ namespace DataStructures.Timing
                 lastPoll = thisPoll;
                 try
                 {
-                    keepGoing = subscriber.reachedTime(thisPoll);
+                    keepGoing = subscriber.reachedTime(thisPoll, priority);
                 }
                 catch (Exception e)
                 {

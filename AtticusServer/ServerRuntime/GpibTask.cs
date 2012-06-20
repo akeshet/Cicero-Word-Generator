@@ -220,7 +220,7 @@ namespace AtticusServer
         int currentCommand;
 
 
-        public bool reachedTime(uint elasped_ms)
+        public bool reachedTime(uint elasped_ms, int priority)
         {
             return runTick(elasped_ms);
         }

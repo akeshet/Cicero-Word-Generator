@@ -24,7 +24,7 @@ namespace DataStructures.Timing
         /// </summary>
         /// <param name="time_ms"></param>
         /// <returns></returns>
-        bool reachedTime(uint time_ms);
+        bool reachedTime(uint time_ms, int priority);
 
         /// <summary>
         /// Handle an exception that occured on the clock thread. 

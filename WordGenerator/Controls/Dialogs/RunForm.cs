@@ -1134,9 +1134,16 @@ namespace WordGenerator
                 addMessageLogText(this, new MessageEvent("Your Cicero Professional Edition (C) License expired on March 31. You are now running a temporary 24 hour STUDENT EDITION license. Please see http://web.mit.edu/~akeshet/www/Cicero/apr1.html for license renewal information."));
         }
 
-        public bool reachedTime(UInt32 elapsedTime) {
-            BeginInvoke(new progressBarUpdateDelegate(this.updateProgressBar), new object[] { (int)elapsedTime, runningSequence });                        
-            return true;
+        private int currentSoftwareclockPriority = 0;
+        public bool reachedTime(UInt32 elapsedTime, int priority) {
+            if (priority >= currentSoftwareclockPriority)
+            {
+                currentSoftwareclockPriority = priority;
+                BeginInvoke(new progressBarUpdateDelegate(this.updateProgressBar), new object[] { (int)elapsedTime, runningSequence });
+                return true;
+            }
+            else
+                return false;
         }
 
         public bool handleExceptionOnClockThread(Exception e)

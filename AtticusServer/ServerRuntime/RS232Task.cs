@@ -137,7 +137,7 @@ namespace AtticusServer
         /// Implementation of SoftwareClockSubscriber
         /// </summary>
         /// <param name="elaspedTime_ms"></param>
-        public bool reachedTime(uint elaspedTime_ms)
+        public bool reachedTime(uint elaspedTime_ms, int priority)
         {
             return runTick(elaspedTime_ms);
         }

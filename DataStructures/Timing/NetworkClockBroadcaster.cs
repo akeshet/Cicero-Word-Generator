@@ -83,7 +83,7 @@ namespace DataStructures.Timing
 
         private static UInt32 ndCount = 0;
         
-        public bool reachedTime(UInt32 elaspedTime_ms)
+        public bool reachedTime(UInt32 elaspedTime_ms, int p)
         {
             if (maxTime > 0 && elaspedTime_ms > maxTime)
                 return false;

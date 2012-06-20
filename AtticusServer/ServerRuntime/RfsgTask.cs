@@ -238,7 +238,7 @@ namespace AtticusServer
         }
 
 
-        public bool reachedTime(uint time_ms)
+        public bool reachedTime(uint time_ms, int priority)
         {
             return runTick(time_ms);
         }
