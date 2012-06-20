@@ -180,10 +180,9 @@ namespace AtticusServer
 
                     device.Write(commandBuffer[currentCommand].command);
                     device.Flush(BufferTypes.OutBuffer, false);
-                    if (MainServerForm.instance.verboseCheckBox.Checked)
-                    {
-                        AtticusServer.server.messageLog(this, new MessageEvent("Output rs232 command: " + commandBuffer[currentCommand].command));
-                    }
+                  
+                   AtticusServer.server.messageLog(this, new MessageEvent("Output rs232 command: " + commandBuffer[currentCommand].command, 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.Serial));
+                    
                     currentCommand++;
                     if (currentCommand >= commandBuffer.Count)
                         break;

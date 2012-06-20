@@ -253,10 +253,9 @@ namespace AtticusServer
                 while (elaspedTime >= commandBuffer[currentCommand].commandTime)
                 {
                     device.Write(commandBuffer[currentCommand].command);
-                    if (MainServerForm.instance.verboseCheckBox.Checked)
-                    {
-                        AtticusServer.server.messageLog(this, new MessageEvent("Wrote GPIB command " + commandBuffer[currentCommand].command));
-                    }
+
+                    AtticusServer.server.messageLog(this, new MessageEvent("Wrote GPIB command " + commandBuffer[currentCommand].command, 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.GPIB));
+
                     currentCommand++;
                     if (currentCommand >= commandBuffer.Count)
                         break;

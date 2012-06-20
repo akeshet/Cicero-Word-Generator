@@ -107,7 +107,7 @@ namespace AtticusServer
             this.excludeChannelsButton.TabIndex = 12;
             this.excludeChannelsButton.Text = "Exclude channel(s)";
             this.excludeChannelsButton.UseVisualStyleBackColor = true;
-            this.excludeChannelsButton.Click += new System.EventHandler(this.button4_Click_1);
+            this.excludeChannelsButton.Click += new System.EventHandler(this.excludeChannelsButtonClick);
             // 
             // label3
             // 
@@ -143,7 +143,7 @@ namespace AtticusServer
             this.resetDevicesButton.TabIndex = 8;
             this.resetDevicesButton.Text = "Reset Devices";
             this.resetDevicesButton.UseVisualStyleBackColor = true;
-            this.resetDevicesButton.Click += new System.EventHandler(this.button5_Click);
+            this.resetDevicesButton.Click += new System.EventHandler(this.resetDevicesButtonClick);
             // 
             // HardwareChannelCount
             // 
@@ -396,6 +396,7 @@ namespace AtticusServer
             this.Name = "MainServerForm";
             this.Text = "Atticus Server 1.0 Beta";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainServerForm_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainServerForm_FormClosed);
             this.Load += new System.EventHandler(this.MainServerForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -432,7 +433,6 @@ namespace AtticusServer
         private System.Windows.Forms.ListBox hcList;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button excludeChannelsButton;
-        public System.Windows.Forms.CheckBox verboseCheckBox;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem serverSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
@@ -445,6 +445,7 @@ namespace AtticusServer
         private System.Windows.Forms.Button deleteSelectedDeviceButton;
         private System.Windows.Forms.ToolStripMenuItem openHomePageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openGitRepositoryPageToolStripMenuItem;
+        private System.Windows.Forms.CheckBox verboseCheckBox;
 
     }
 }

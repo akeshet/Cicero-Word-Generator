@@ -90,8 +90,6 @@ namespace AtticusServer
                 cursorWaitCount = 0;
         }
 
-        // This delegate enables other threads to safely update the controls in this tread.
-        public delegate void MessageEventCallDelegate (object sender, MessageEvent e);
 
         public MainServerForm()
         {
@@ -134,7 +132,7 @@ namespace AtticusServer
             // form controls. I copied it from .net documentation.
             if (this.InvokeRequired)
             {
-                MessageEventCallDelegate ev = new MessageEventCallDelegate(updateGUI);
+                EventHandler<MessageEvent> ev = new EventHandler<MessageEvent>(updateGUI);
                 this.Invoke(ev, new object[] { sender, e });
             }
             else
@@ -146,9 +144,15 @@ namespace AtticusServer
 
         public void addMessageLogText(object sender, MessageEvent e)
         {
+            if (e.Verbosity > 0 && !this.verboseCheckBox.Checked)
+                return;
+
+            if (!formLoaded)
+                return;
+
             if (this.InvokeRequired)
             {
-                MessageEventCallDelegate ev = new MessageEventCallDelegate(addMessageLogText);
+                EventHandler<MessageEvent> ev = new EventHandler<MessageEvent>(addMessageLogText);
                 this.BeginInvoke(ev, new object[] { sender, e });
             }
             else
@@ -264,9 +268,11 @@ namespace AtticusServer
             this.deviceSettingsPropertyGrid.SelectedObject = listBox1.SelectedItem;
         }
 
+        private bool formLoaded = false;
         private void MainServerForm_Load(object sender, EventArgs e)
         {
 
+            formLoaded = true;
             // marshal the serverCommunicator if the start up settings say to do so.
             if (AtticusServer.server.serverSettings.ConnectOnStartup)
                 AtticusServer.server.reachMarshalStatus(ServerStructures.ServerCommunicatorStatus.Connected);
@@ -287,15 +293,11 @@ namespace AtticusServer
             //NiSync.onClose();
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void resetDevicesButtonClick(object sender, EventArgs e)
         {
             AtticusServer.server.resetAllDevices();
         }
 
-        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
-        }
 
         private void hcList_SelectedValueChanged(object sender, EventArgs e)
         {
@@ -309,7 +311,7 @@ namespace AtticusServer
             }
         }
 
-        private void button4_Click_1(object sender, EventArgs e)
+        private void excludeChannelsButtonClick(object sender, EventArgs e)
         {
             if (hcList.SelectedItems.Count > 0)
             {
@@ -401,6 +403,11 @@ namespace AtticusServer
         private void openGitRepositoryPageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("https://github.com/akeshet/Cicero-Word-Generator");
+        }
+
+        private void MainServerForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            formLoaded = false;
         }
 
 

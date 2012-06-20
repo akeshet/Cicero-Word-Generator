@@ -317,10 +317,9 @@ namespace AtticusServer
             {
                 case RFSGCommand.CommandType.AmplitudeFrequency:
                     rfsgDevice.ConfigureRF(command.frequency, command.amplitude);
-                    if (MainServerForm.instance.verboseCheckBox.Checked)
-                    {
-                        AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to frequence(Hz)/amplitude(dBm) " + command.frequency + "/" + command.amplitude));
-                    }
+
+                    AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to frequence(Hz)/amplitude(dBm) " + command.frequency + "/" + command.amplitude, 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.RFSG));
+
                     break;
                 case RFSGCommand.CommandType.EnableOutput:
                     try
@@ -328,15 +327,14 @@ namespace AtticusServer
                         rfsgDevice.ConfigureOutputEnabled(true);
                         success = true;
                     }
-                    catch (Exception ) { }
+                    catch (Exception) { }
 
-                    if (MainServerForm.instance.verboseCheckBox.Checked)
-                    {
-                        if (success)
-                            AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to enable output"));
-                        else
-                            AtticusServer.server.messageLog(this, new MessageEvent("RSG command to enable output gave error. Output probably already enabled."));
-                    }
+
+                    if (success)
+                        AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to enable output", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.RFSG));
+                    else
+                        AtticusServer.server.messageLog(this, new MessageEvent("RSG command to enable output gave error. Output probably already enabled.", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.RFSG));
+
                     break;
 
                 case RFSGCommand.CommandType.DisableOutput:
@@ -345,16 +343,15 @@ namespace AtticusServer
                         rfsgDevice.ConfigureOutputEnabled(false);
                         success = true;
                     }
-                    catch (Exception )
+                    catch (Exception)
                     {
                     }
-                    if (MainServerForm.instance.verboseCheckBox.Checked)
-                    {
-                        if (success) 
-                           AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to disable output"));
-                        else
-                           AtticusServer.server.messageLog(this, new MessageEvent("RFSG command to disable output gave error. Output probably already disabled."));
-                    }
+
+                    if (success)
+                        AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to disable output", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.RFSG));
+                    else
+                        AtticusServer.server.messageLog(this, new MessageEvent("RFSG command to disable output gave error. Output probably already disabled.", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.RFSG));
+
                     break;
 
                 case RFSGCommand.CommandType.Initiate:
@@ -362,8 +359,8 @@ namespace AtticusServer
 
                         if (rfsgDeviceInitiated[rfsgDevice])
                         {
-                            if (MainServerForm.instance.verboseCheckBox.Checked)
-                                AtticusServer.server.messageLog(this, new MessageEvent("RFSG device believed to be initiated already. Skipping initiate command."));
+
+                            AtticusServer.server.messageLog(this, new MessageEvent("RFSG device believed to be initiated already. Skipping initiate command.", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.RFSG));
                             break;
                         }
 
@@ -372,7 +369,7 @@ namespace AtticusServer
                             rfsgDevice.Initiate();
                             success = true;
                         }
-                        catch (Exception )
+                        catch (Exception)
                         {
                         }
 
@@ -381,25 +378,23 @@ namespace AtticusServer
                         else
                             rfsgDeviceInitiated[rfsgDevice] = false;
 
-                        if (MainServerForm.instance.verboseCheckBox.Checked)
-                        {
-                            if (success) 
-                                AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to initiate output (enter committed state)"));
-                            else
-                                AtticusServer.server.messageLog(this, new MessageEvent("RFSG command to initiate device gave error. Device probably already initiated."));
-                            
-                        }
+
+                        if (success)
+                            AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to initiate output (enter committed state)", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.RFSG));
+                        else
+                            AtticusServer.server.messageLog(this, new MessageEvent("RFSG command to initiate device gave error. Device probably already initiated.", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.RFSG));
+
+
                     }
                     break;
 
 
                 case RFSGCommand.CommandType.Abort:
-                    
+
                     rfsgDevice.Abort();
-                    if (MainServerForm.instance.verboseCheckBox.Checked)
-                    {
-                        AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to abort output (enter configuration state)"));
-                    }
+
+                    AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to abort output (enter configuration state)", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.RFSG));
+
                     rfsgDeviceInitiated[rfsgDevice] = false;
                     break;
             }
