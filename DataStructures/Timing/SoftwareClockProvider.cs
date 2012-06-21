@@ -27,8 +27,7 @@ namespace DataStructures.Timing
 
         protected UInt32 elapsedTime_ms;
 
-        private EventWaitHandle subscriberWaitHandle;
-        //private EventWaitHandle providerWaitHandle;
+		private object synchronizationObject = new object();
 
         private EventHandler<MessageEvent> messageLog;
 
@@ -95,8 +94,6 @@ namespace DataStructures.Timing
                 armTimer();
 
                 elapsedTime_ms = 0;
-                subscriberWaitHandle = new EventWaitHandle(false, EventResetMode.ManualReset);
-                //providerWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset);
                 foreach (SoftwareClockSubscriber sub in subscribers)
                 {
                     addAndStartSubscriberThread(sub);
@@ -136,8 +133,6 @@ namespace DataStructures.Timing
                 
                 clearSubscribers();
 
-                subscriberWaitHandle.Close();
-                subscriberWaitHandle = null;
             }
         }
 
@@ -153,30 +148,14 @@ namespace DataStructures.Timing
             if (time_ms < elapsedTime_ms)
                 throw new SoftwareClockProviderException("Attempted to go back in time!");
 
-            elapsedTime_ms = time_ms;
-            subscriberWaitHandle.Set();
-            Thread.Sleep(1);
 
-            //// OBSOLETE
-            //// The original Thread.Sleep(1) workaround seems to actuall be more reliable.
-            //providerWaitHandle.WaitOne(10); // This ensures that if there are any threads
-                                            // blocking on subscriberWaitHandle.WaitOne
-                                            // they get a chance to be released befor the subsequent call to 
-                                            // subscriberWaitHandle.Reset
-                                            
-                                            // This is due to an apparent bug in ManualResetEvent which does
-                                            // not seem to always release blocked threads on every .Set() command
-                                            
-                                            // The previous workaround was a Thread.Sleep(1) line here,
-                                            // which seemed to work, but seemed more fragile or potentially problematic
+		
 
-                                            // The 10ms timeout is to avoid deadlocks (though I think they are impossible
-                                            // even without the timeout). It should be harmless.
+			lock(synchronizationObject) {
+				elapsedTime_ms = time_ms;
+				Monitor.PulseAll(synchronizationObject);
+			}
 
-            
-
-
-            subscriberWaitHandle.Reset();
             if (runningThreads == 0)
                 return false;
             return true;
@@ -210,9 +189,10 @@ namespace DataStructures.Timing
             bool keepGoing = true;
             while (keepGoing)
             {
-                //providerWaitHandle.Set();
-                subscriberWaitHandle.WaitOne(); // Wait for the next clock signal to arrive
-                
+
+				lock (synchronizationObject) {
+					Monitor.Wait(synchronizationObject);
+				}
 
                 
                 uint thisPoll = elapsedTime_ms;
