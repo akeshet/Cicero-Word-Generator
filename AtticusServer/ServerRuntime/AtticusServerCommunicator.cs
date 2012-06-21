@@ -333,11 +333,9 @@ namespace AtticusServer
 
         public override void nextRunTimeStamp(DateTime timeStamp)
         {
-
-
-            runTime = timeStamp;
             lock (remoteLockObj)
             {
+                runTime = timeStamp;
                 return;
             }
         }
@@ -358,8 +356,7 @@ namespace AtticusServer
             lock (remoteLockObj)
             {
                 clientFinishedRun = false;
-                if (taskFinishTimeClicks == null)
-                    taskFinishTimeClicks = new List<long>();
+
                 lock (taskFinishTimeClicks)
                 {
                     taskFinishTimeClicks.Clear();
@@ -898,7 +895,7 @@ namespace AtticusServer
         /// </summary>
         private bool taskErrorsDetected = false;
 
-        public List<long> taskFinishTimeClicks;
+        public List<long> taskFinishTimeClicks = new List<long>();
 
         /// <summary>
         /// Event handler that gets called (by a task) whenever a task finishes. If there is an error in the task, then it will get reported here.
@@ -1061,18 +1058,17 @@ namespace AtticusServer
                 }
 
                 bool earlyFinishDetected = false;
-                if (taskFinishTimeClicks != null)
+
+                lock (taskFinishTimeClicks)
                 {
-                    lock (taskFinishTimeClicks)
+                    foreach (long time in taskFinishTimeClicks)
                     {
-                        foreach (long time in taskFinishTimeClicks)
+                        if ((eventTime - time) > 10000000)
                         {
-                            if ((eventTime - time) > 10000000)
-                            {
-                                earlyFinishDetected = true;
-                            }
+                            earlyFinishDetected = true;
                         }
                     }
+
                 }
 
                 if (earlyFinishDetected)
@@ -1671,58 +1667,6 @@ namespace AtticusServer
         bool readyReaderLoopRunning = false;
         bool readyReaderLoopAbort = false;
 
-        /// <summary>
-        /// This event handler will be called when a task on this server receives a sample clock. 
-        /// We only want to consume the first such event. It will be used to start and software timed
-        /// operations on this server.
-        /// 
-        /// NOTE: This method never worked well, and is not no longer in use. Polling the buffer position with a monitoring
-        /// thread ended up working much better. See softwareTaskTriggerPollingFunction()
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void triggerSoftwareTimedTasks(object sender, SampleClockEventArgs e)
-        {
-            messageLog(this, new MessageEvent("******** triggerSoftwareTimedTasks(...) was called. This function is no longer supported. How did you get here? ********"));
-            displayError();
-            /*
-            lock (softTrigLock)
-            {
-                if (!softwareTimedTasksTriggered)
-                {
-                    lock (softwareTriggeringTaskLock)
-                    {
-                        // first order of business is to remove this event handler so it doesn't get overwhelmed
-                        softwareTriggeringTask.SampleClock -= triggerSoftwareTimedTasks;
-                    }
-
-                    softwareTimedTasksTriggered = true;
-
-                    //ok. Now trigger the tasks.
-                    foreach (GpibTask gp in gpibTasks.Values)
-                    {
-                        gp.Start();
-                    }
-                    foreach (RS232Task rs in rs232Tasks.Values)
-                    {
-                        rs.Start();
-                    }
-                    foreach (RfsgTask rf in rfsgTasks.Values)
-                    {
-                        rf.Start();
-                    }
-                    messageLog(this, new MessageEvent("Software timed tasks triggered by " + serverSettings.DeviceToSyncSoftwareTimedTasksTo));
-                }
-                else
-                {
-                    softwareTimedTriggerCount++;
-                    if (softwareTimedTriggerCount % 10 == 0)
-                    {
-                        messageLog(this, new MessageEvent("Ignored " + softwareTimedTriggerCount + " duplicate software-timed task triggers."));
-                    }
-                }
-            }*/
-        }
 
         public void shutDown()
         {

@@ -37,7 +37,7 @@ namespace AtticusServer
             }
         }
 
-        private List<RS232Command> commandBuffer;
+        private List<RS232Command> commandBuffer = new List<RS232Command>();
 
         private int logicalChannelID;
 
@@ -56,87 +56,91 @@ namespace AtticusServer
 
         public bool generateBuffer(SequenceData sequence, DeviceSettings deviceSettings, HardwareChannel hc, int logicalChannelID)
         {
-            this.logicalChannelID = logicalChannelID;
-
-            commandBuffer = new List<RS232Command>();
-         
-            if (deviceSettings.StartTriggerType != DeviceSettings.TriggerType.SoftwareTrigger)
+            lock (commandBuffer)
             {
-                throw new Exception("RS232 devices must have a software start trigger."); 
+                commandBuffer.Clear();
+                this.logicalChannelID = logicalChannelID;
+
+
+                if (deviceSettings.StartTriggerType != DeviceSettings.TriggerType.SoftwareTrigger)
+                {
+                    throw new Exception("RS232 devices must have a software start trigger.");
+                }
+
+
+                //     List<TimeStep> enabledSteps = sequence.enabledTimeSteps();
+
+                int currentStepIndex = -1;
+
+                //measured in ticks. 1 tick = 100 ns.
+                long currentTime = 0;
+
+                long postRetriggerTime = 100; // corresponds to 10us.
+                // A workaround to issue when using software timed groups in 
+                // fpga-retriggered words
+
+                // the workaround: delay the software timed group by an immesurable amount
+                // if it is started in a retriggered word
+
+
+
+                // This functionality is sort of somewhat duplicated in sequencedata.generatebuffers. It would be good
+                // to come up with a more coherent framework to do these sorts of operations.
+                while (true)
+                {
+                    currentStepIndex++;
+
+                    if (currentStepIndex >= sequence.TimeSteps.Count)
+                        break;
+
+                    TimeStep currentStep = sequence.TimeSteps[currentStepIndex];
+
+                    if (!currentStep.StepEnabled)
+                        continue;
+
+                    long postTime = 0;
+                    if (currentStep.WaitForRetrigger)
+                        postTime = postRetriggerTime;
+
+                    if (currentStep.rs232Group == null || !currentStep.rs232Group.channelEnabled(logicalChannelID))
+                    {
+                        currentTime += seconds_to_ticks(currentStep.StepDuration.getBaseValue());
+                        continue;
+                    }
+
+                    // determine the index of the next step in which this channel has an action
+                    int nextEnabledStepIndex = sequence.findNextRS232ChannelEnabledTimestep(currentStepIndex, logicalChannelID);
+
+                    long groupDuration = seconds_to_ticks(sequence.timeBetweenSteps(currentStepIndex, nextEnabledStepIndex));
+
+                    // now take action:
+
+                    RS232GroupChannelData channelData = currentStep.rs232Group.getChannelData(logicalChannelID);
+
+                    if (channelData.DataType == RS232GroupChannelData.RS232DataType.Raw)
+                    {
+                        // Raw string commands just get added 
+                        string stringWithCorrectNewlines = AddNewlineCharacters(channelData.RawString);
+
+                        commandBuffer.Add(new RS232Command(stringWithCorrectNewlines, currentTime + postTime));
+                    }
+                    else if (channelData.DataType == RS232GroupChannelData.RS232DataType.Parameter)
+                    {
+                        if (channelData.StringParameterStrings != null)
+                        {
+                            foreach (StringParameterString srs in channelData.StringParameterStrings)
+                            {
+                                commandBuffer.Add(new RS232Command(
+                                    AddNewlineCharacters(srs.ToString()), currentTime + postTime));
+                            }
+                        }
+                    }
+
+
+
+                    currentTime += seconds_to_ticks(currentStep.StepDuration.getBaseValue());
+                }
             }
-
- 
-      //     List<TimeStep> enabledSteps = sequence.enabledTimeSteps();
-
-            int currentStepIndex = -1;
-
-            //measured in ticks. 1 tick = 100 ns.
-            long currentTime = 0;
-
-            long postRetriggerTime = 100; // corresponds to 10us.
-                                          // A workaround to issue when using software timed groups in 
-                                          // fpga-retriggered words
-
-                                          // the workaround: delay the software timed group by an immesurable amount
-                                        // if it is started in a retriggered word
-
-
-           
-           // This functionality is sort of somewhat duplicated in sequencedata.generatebuffers. It would be good
-           // to come up with a more coherent framework to do these sorts of operations.
-           while (true)
-           {
-               currentStepIndex++;
-
-               if (currentStepIndex >= sequence.TimeSteps.Count)
-                   break;
-
-               TimeStep currentStep = sequence.TimeSteps[currentStepIndex];
-
-               if (!currentStep.StepEnabled)
-                   continue;
-
-               long postTime = 0;
-               if (currentStep.WaitForRetrigger)
-                   postTime = postRetriggerTime;
-
-               if (currentStep.rs232Group == null || !currentStep.rs232Group.channelEnabled(logicalChannelID))
-               {
-                   currentTime += seconds_to_ticks(currentStep.StepDuration.getBaseValue());
-                   continue;
-               }
-
-               // determine the index of the next step in which this channel has an action
-               int nextEnabledStepIndex = sequence.findNextRS232ChannelEnabledTimestep(currentStepIndex, logicalChannelID);
-
-               long groupDuration = seconds_to_ticks(sequence.timeBetweenSteps(currentStepIndex, nextEnabledStepIndex));
-
-               // now take action:
-
-               RS232GroupChannelData channelData = currentStep.rs232Group.getChannelData(logicalChannelID);
-            
-               if (channelData.DataType == RS232GroupChannelData.RS232DataType.Raw) {
-                       // Raw string commands just get added 
-                       string stringWithCorrectNewlines = AddNewlineCharacters(channelData.RawString);
-
-                       commandBuffer.Add(new RS232Command(  stringWithCorrectNewlines, currentTime + postTime));
-               }
-               else if (channelData.DataType == RS232GroupChannelData.RS232DataType.Parameter)
-               {
-                   if (channelData.StringParameterStrings != null)
-                   {
-                       foreach (StringParameterString srs in channelData.StringParameterStrings)
-                       {
-                           commandBuffer.Add(new RS232Command(
-                               AddNewlineCharacters(srs.ToString()), currentTime + postTime));
-                       }
-                   }
-               }
-               
- 
-
-               currentTime += seconds_to_ticks(currentStep.StepDuration.getBaseValue());            
-           }
 
            return true;
         }
@@ -168,40 +172,33 @@ namespace AtticusServer
             if (isDone)
                 return false;
 
-            //          try
-            //          {
-            long elaspedTime = DataStructures.Timing.Shared.MillisecondsToTicks(elaspedTime_ms);
-            if (currentCommand >= commandBuffer.Count)
-            {
-                if (this.Done != null)
-                {
-                    this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(null));
-                }
-                isDone = true;
-
-                return false;
-            }
             lock (commandBuffer)
             {
-                // duplicated for threadsafety
+                long elaspedTime = DataStructures.Timing.Shared.MillisecondsToTicks(elaspedTime_ms);
                 if (currentCommand >= commandBuffer.Count)
-                    return true;
+                {
+                    if (this.Done != null)
+                    {
+                        this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(null));
+                    }
+                    isDone = true;
+
+                    return false;
+                }
+
                 while (elaspedTime >= commandBuffer[currentCommand].commandTime)
                 {
-                    //      device.BeginWrite(commandBuffer[currentCommand].command);
 
                     device.Write(commandBuffer[currentCommand].command);
                     device.Flush(BufferTypes.OutBuffer, false);
-                  
-                   AtticusServer.server.messageLog(this, new MessageEvent("Output rs232 command: " + commandBuffer[currentCommand].command, 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.Serial));
-                    
+
+                    AtticusServer.server.messageLog(this, new MessageEvent("Output rs232 command: " + commandBuffer[currentCommand].command, 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.Serial));
+
                     currentCommand++;
                     if (currentCommand >= commandBuffer.Count)
                         break;
-
-
-
                 }
+
             }
 
             //            }

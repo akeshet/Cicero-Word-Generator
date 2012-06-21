@@ -43,7 +43,6 @@ namespace DataStructures
         public List<ServerInfo> Servers
         {
             get { return servers; }
-            set { servers = value; }
         }
 
         [NonSerialized]
@@ -114,18 +113,21 @@ namespace DataStructures
         public List<HardwareChannel> getAllHardwareChannels()
         {
             List<HardwareChannel> ans = new List<HardwareChannel>();
-            foreach (ServerInfo server in servers)
+            lock (servers)
             {
-                if (connections.ContainsKey(server) && connections[server] == ConnectionStatus.Connected)
+                foreach (ServerInfo server in servers)
                 {
-                    try
+                    if (connections.ContainsKey(server) && connections[server] == ConnectionStatus.Connected)
                     {
-                        List<HardwareChannel> temp = communicators[server].getHardwareChannels();
-                        ans.AddRange(temp);
-                    }
-                    catch (Exception)
-                    {
-                        connections[server] = ConnectionStatus.Disconnected_Error;
+                        try
+                        {
+                            List<HardwareChannel> temp = communicators[server].getHardwareChannels();
+                            ans.AddRange(temp);
+                        }
+                        catch (Exception)
+                        {
+                            connections[server] = ConnectionStatus.Disconnected_Error;
+                        }
                     }
                 }
             }
@@ -578,7 +580,7 @@ namespace DataStructures
         /// Eliminates the need for constant use of type.getMethod().
         /// </summary>
         [NonSerialized]
-        private Dictionary<string, MethodInfo> methodInfoCache;
+        private Dictionary<string, MethodInfo> methodInfoCache = new Dictionary<string,MethodInfo>();
 
         /// <summary>
         /// Used in runNamedMethodOnConnectedServers. Eliminates the need for constant use of typeof.
@@ -597,8 +599,6 @@ namespace DataStructures
         {
             
 
-            if (methodInfoCache == null)
-                methodInfoCache = new Dictionary<string, MethodInfo>();
             if (serverCommunicatorType == null)
                 serverCommunicatorType = typeof(ServerCommunicator);
 
