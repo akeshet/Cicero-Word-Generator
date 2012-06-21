@@ -568,6 +568,9 @@ namespace WordGenerator
         private void mainClientForm_Load(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Maximized;
+            formOpen = true;
+            DataStructures.Timing.NetworkClockProvider.registerStaticMessageLogHandler(addMessageLogText);
+            DataStructures.Timing.NetworkClockProvider.startListener(DataStructures.Timing.NetworkClockEndpointInfo.HostTypes.Cicero_Client);
             /* CiceroSplashForm splash = new CiceroSplashForm();
              splash.Show();*/
         }
@@ -604,14 +607,18 @@ namespace WordGenerator
             }
         }
 
-        public void handleMessageEvent(object sender, EventArgs e)
+        public void handleMessageEvent(object sender, MessageEvent e)
         {
             addStatusText(sender, e);
             addMessageLogText(sender, e);
         }
 
+        private bool formOpen = false;
+
         public void addMessageLogText(object sender, EventArgs e)
         {
+            if (!formOpen)
+                return;
 
             if (this.InvokeRequired)
             {
@@ -622,7 +629,7 @@ namespace WordGenerator
                 if (e is MessageEvent)
                 {
                     MessageEvent message = (MessageEvent)e;
-                    this.messageLogTextBox.AppendText(message.myTime.ToString() + " " + message.ToString() + "\r\n");
+                    this.messageLogTextBox.AppendText(message.MyTime.ToString() + " " + message.ToString() + "\r\n");
                 }
                 else
                 {
@@ -897,6 +904,8 @@ namespace WordGenerator
         private void mainClientForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Storage.SaveAndLoad.SaveClientStartupSettings();
+            DataStructures.Timing.NetworkClockProvider.shutDown();
+            formOpen = false;
         }
 
         private void calculateVariableTimebaseDigitalBufferToolStripMenuItem_Click(object sender, EventArgs e)

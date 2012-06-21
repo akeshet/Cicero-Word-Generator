@@ -108,7 +108,7 @@ namespace WordGenerator.Controls
 
         public event EventHandler updateGUI;
 
-        public EventHandler messageLog;
+        public EventHandler<MessageEvent> messageLog;
 
         /// <summary>
         /// This is the number DISPLAYED above the timestep. Note that the actualy timestep index is this number MINUS ONE.
@@ -897,6 +897,34 @@ namespace WordGenerator.Controls
         private void TimestepEditor_DragOver(object sender, DragEventArgs e)
         {
             TimestepEditor_DragEnter(sender, e);
+        }
+
+        private ToolStripNumericOrVariableEditor waitTimeEditor;
+        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        {
+            int indexOfWait = contextMenuStrip1.Items.IndexOf(waitTimeoutLabel);
+            if (waitTimeEditor != null)
+            {
+                if (contextMenuStrip1.Items.Contains(waitTimeEditor))
+                    contextMenuStrip1.Items.Remove(waitTimeEditor);
+                waitTimeEditor = null;
+            }
+
+            waitTimeEditor = new ToolStripNumericOrVariableEditor(StepData.RetriggerTimeout, true);
+            if (StepData.WaitForRetrigger)
+            {
+                waitTimeEditor.Enabled = true;
+                waitTimeoutLabel.Enabled = true;
+            }
+            else
+            {
+                waitTimeoutLabel.Enabled = false;
+                waitTimeEditor.Enabled = false;
+            }
+
+            contextMenuStrip1.Items.Insert(indexOfWait + 1, waitTimeEditor);
+            
+
         }
 
         

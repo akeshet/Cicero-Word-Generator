@@ -16,7 +16,7 @@ namespace Virgil
         /// To be called to add messages to the server message log. Eventually may support logging to a file
         /// as well as to the screen.
         /// </summary>
-        public MainExampleServerlForm.MessageEventCallDelegate messageLog;
+        public EventHandler<MessageEvent> messageLog;
 
         private MainExampleServerlForm exampleServerForm;
 
@@ -30,7 +30,7 @@ namespace Virgil
 
 
         #region Implementation of ServerCommunicator
-        public override bool armTasks()
+        public override bool armTasks(UInt32 clockID)
         {
             return true;
         }

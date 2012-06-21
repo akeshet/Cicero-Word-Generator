@@ -50,7 +50,6 @@ namespace WordGenerator
             this.progressBar.Step = 1;
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar.TabIndex = 0;
-            this.progressBar.Click += new System.EventHandler(this.progressBar1_Click);
             // 
             // textBox1
             // 
@@ -184,7 +183,6 @@ namespace WordGenerator
             this.Activated += new System.EventHandler(this.RunForm_Activated);
             this.Deactivate += new System.EventHandler(this.RunForm_Deactivate);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.RunForm_FormClosing);
-            this.Load += new System.EventHandler(this.RunForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

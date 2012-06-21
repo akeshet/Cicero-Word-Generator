@@ -10,11 +10,18 @@ namespace AtticusServer
     /// <summary>
     /// Task that generated a variable timebase using an OpalKelly FPGA.
     /// </summary>
-    class FpgaTimebaseTask
+    class FpgaTimebaseTask : DataStructures.Timing.PollingThreadSoftwareClockProvider
     {
+
+
+        double masterClockPeriod;
 
         okCFrontPanel opalKellyDevice;
 
+        public class FpgaTimebaseGenerationException : Exception
+        {
+
+        }
         
 
         private struct ListItem
@@ -49,8 +56,11 @@ namespace AtticusServer
                 {
                     if (sequence.TimeSteps[stepID].WaitForRetrigger)
                     {
-                        listItems.Add(new ListItem(0, 0, 0)); // 0,0,0 list item is code for "wait for retrigger
-                                                              // FPGA knows how to handle this
+                        int waitTime = (int) (sequence.TimeSteps[stepID].RetriggerTimeout.getBaseValue() / masterClockPeriod);
+                        listItems.Add(new ListItem(waitTime, 0, 0)); // counts = 0 is a special signal for WAIT_FOR_RETRIGGER mode
+                                                                    // in this mode, FPGA waits a maximum of on_counts master samples
+                                                                    // before moving on anyway.
+                                                                    // (unless on_counts = 0, in which case it never artificially retriggers)
                     }
 
                     List<SequenceData.VariableTimebaseSegment> stepSegments = segments[sequence.TimeSteps[stepID]];
@@ -116,6 +126,8 @@ namespace AtticusServer
             // the data is a little shuffled because
             // of the details of the byte order in 
             // piping data to the fpga.
+            
+            // Each list item takes up 16 bytes in the output FIFO.
             for (int i = 0; i < listItems.Count; i++)
             {
                 ListItem item = listItems[i];
@@ -160,14 +172,21 @@ namespace AtticusServer
             return ans;
         }
 
+        private UInt32 max_elapsedtime_ms;
+
         public FpgaTimebaseTask(DeviceSettings deviceSettings, okCFrontPanel opalKellyDevice, SequenceData sequence, double masterClockPeriod, out int nSegments, bool useRfModulation, bool assymetric)
+            : base()
         {
             com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode;
 
             this.opalKellyDevice = opalKellyDevice;
 
+            this.masterClockPeriod = masterClockPeriod;
+
             TimestepTimebaseSegmentCollection segments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock,
                                                         masterClockPeriod);
+
+            this.max_elapsedtime_ms = (UInt32)((sequence.SequenceDuration * 1000.0) + 100);
 
             byte[] data = FpgaTimebaseTask.createByteArray(segments, sequence, out nSegments, masterClockPeriod, assymetric );
 
@@ -210,12 +229,28 @@ namespace AtticusServer
 
         }
 
-        public void triggerMonitoringProc()
-        {
+        private Thread masterPollingThread;
+        private int pollingProcSleepTime = 100; // in ms
 
+        private UInt32 getMasterSamplesGenerated()
+        {
+            UInt32 lowWord = opalKellyDevice.GetWireOutValue(0x22);
+            UInt32 highWord = opalKellyDevice.GetWireOutValue(0x23);
+
+            UInt32 ans = highWord;
+            ans = ans << 16;
+            ans = ans + lowWord;
+
+            return ans;
         }
 
-        public void Start()
+        private UInt16 getRetriggerTimeoutCount()
+        {
+            opalKellyDevice.UpdateWireOuts();
+            return (UInt16) opalKellyDevice.GetWireOutValue(0x24);
+        }
+
+        public override void Start()
         {
             // Send the device a start trigger.
             com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode = opalKellyDevice.ActivateTriggerIn(0x40, 0);
@@ -223,7 +258,10 @@ namespace AtticusServer
             {
                 throw new Exception("Unable to send software start trigger to FPGA device. " + errorCode.ToString());
             }
+            startTimer();
         }
+
+
 
         public int getMistriggerStatus()
         {
@@ -241,6 +279,21 @@ namespace AtticusServer
             return ans;
         }
 
+        private FpgaStatus getFpgaStatus()
+        {
+            uint statusRegister = opalKellyDevice.GetWireOutValue(0x25);
+            FpgaStatus status;
+            status.Finished = ((statusRegister & 1)!=0);
+            status.Aborted = ((statusRegister & 2)!=0);
+            return status;
+        }
+
+        private struct FpgaStatus
+        {
+            public bool Aborted;
+            public bool Finished;
+        }
+
         public void Stop()
         {
             com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode;
@@ -251,5 +304,47 @@ namespace AtticusServer
                 throw new Exception("Unable to send software stop trigger to FPGA device. " + errorCode.ToString());
             }
         }
+
+        protected override void armTimerThread()
+        {
+            // nothing required
+        }
+
+        protected override void timerThreadProc()
+        {
+            uint lastmSamp=0;
+            bool keepGoing = true;
+            int rollovers = 0;
+            uint rolloverTime = (uint)(UInt32.MaxValue * this.masterClockPeriod * 1000.0);
+            while (keepGoing)
+            {
+                opalKellyDevice.UpdateWireOuts();
+                uint mSamp = getMasterSamplesGenerated();
+                FpgaStatus status = getFpgaStatus();
+
+                if (status.Finished && lastmSamp >0)
+                {
+                    reachTime(max_elapsedtime_ms);
+                    keepGoing = false;
+                    continue;
+                }
+
+
+                if (mSamp < lastmSamp) // this may occur for very long sequences (about 429 seconds at least, if FPGA running at 10Mhz)
+                {                       // or if the fpga finished a run (in which case master sample will return 0)
+                    rollovers++;
+                }
+                if (mSamp == lastmSamp)
+                    continue;
+                lastmSamp = mSamp;
+
+                uint nowTime = (uint)(mSamp * this.masterClockPeriod * 1000.0) + (uint)(rollovers * rolloverTime);
+
+                keepGoing = reachTime(nowTime);
+                Thread.Sleep(5);
+            }
+        }
+
+        
     }
 }

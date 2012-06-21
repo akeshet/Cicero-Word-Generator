@@ -14,7 +14,7 @@ namespace AtticusServer
     /// 
     /// The general structure of this class was copied from GPIBTask.
     /// </summary>
-    public class RS232Task
+    public class RS232Task : DataStructures.Timing.SoftwareClockSubscriber
     {
 
         public event NationalInstruments.DAQmx.TaskDoneEventHandler Done;
@@ -73,6 +73,14 @@ namespace AtticusServer
             //measured in ticks. 1 tick = 100 ns.
             long currentTime = 0;
 
+            long postRetriggerTime = 100; // corresponds to 10us.
+                                          // A workaround to issue when using software timed groups in 
+                                          // fpga-retriggered words
+
+                                          // the workaround: delay the software timed group by an immesurable amount
+                                        // if it is started in a retriggered word
+
+
            
            // This functionality is sort of somewhat duplicated in sequencedata.generatebuffers. It would be good
            // to come up with a more coherent framework to do these sorts of operations.
@@ -87,6 +95,10 @@ namespace AtticusServer
 
                if (!currentStep.StepEnabled)
                    continue;
+
+               long postTime = 0;
+               if (currentStep.WaitForRetrigger)
+                   postTime = postRetriggerTime;
 
                if (currentStep.rs232Group == null || !currentStep.rs232Group.channelEnabled(logicalChannelID))
                {
@@ -107,7 +119,7 @@ namespace AtticusServer
                        // Raw string commands just get added 
                        string stringWithCorrectNewlines = AddNewlineCharacters(channelData.RawString);
 
-                       commandBuffer.Add(new RS232Command(  stringWithCorrectNewlines, currentTime));
+                       commandBuffer.Add(new RS232Command(  stringWithCorrectNewlines, currentTime + postTime));
                }
                else if (channelData.DataType == RS232GroupChannelData.RS232DataType.Parameter)
                {
@@ -116,7 +128,7 @@ namespace AtticusServer
                        foreach (StringParameterString srs in channelData.StringParameterStrings)
                        {
                            commandBuffer.Add(new RS232Command(
-                               AddNewlineCharacters(srs.ToString()), currentTime));
+                               AddNewlineCharacters(srs.ToString()), currentTime + postTime));
                        }
                    }
                }
@@ -129,126 +141,81 @@ namespace AtticusServer
            return true;
         }
 
-        long taskStartTime;
         int currentCommand;
-        Timer runTimer;
-        private delegate void rundelegate();
 
-        public void stop()
+        private bool isDone = false;
+
+        /// <summary>
+        /// Implementation of SoftwareClockSubscriber
+        /// </summary>
+        /// <param name="elaspedTime_ms"></param>
+        public bool reachedTime(uint elaspedTime_ms, int priority)
         {
-            if (runTimer != null)
-            {
-                runTimer.Dispose();
-                runTimer = null;
-            }
-
+            return runTick(elaspedTime_ms);
         }
 
-
-/*        /// <summary>
-        /// This method is to run in a separate thread (ie async), and actually runs the task.
-        /// </summary>
-        private void RunTask(object junk) 
+        public bool handleExceptionOnClockThread(Exception e)
         {
-            int currentCommand = 0;
-            while (true)
-            {
-                long elaspedTime = DateTime.Now.Ticks - taskStartTime;
-                while (elaspedTime >= commandBuffer[currentCommand].commandTime)
-                {
-                    device.Write(commandBuffer[currentCommand].command);
-                    Console.WriteLine("Output " + currentCommand + " at " + ticks_to_seconds(DateTime.Now.Ticks - taskStartTime));
-                    currentCommand++;
-                    if (currentCommand >= commandBuffer.Count) break;
-                }
-                // sleep until the thread is needed again.
-
-                if (currentCommand >= commandBuffer.Count) break;
-                elaspedTime = DateTime.Now.Ticks - taskStartTime;
-                long sleepTime = commandBuffer[currentCommand].commandTime - elaspedTime;
-                int sleepTimeMS = (int) (sleepTime / 10000);
-                if (sleepTimeMS>0)
-                    Thread.Sleep(sleepTimeMS); 
-            }
-
-            return;
-
-        }*/
-
-
-
-        public void Start()
-        {
-
-            taskStartTime = DateTime.Now.Ticks;
-            currentCommand = 0;
-            TimerCallback runTimerCallback = new TimerCallback(runTick);
-            runTimer = new Timer(runTimerCallback, null, 0, 10); // using 10 ms for now. This is an experiment.
-
-
+            return false;
         }
 
         /// <summary>
-        /// This method is called by the run timer, and outputs new commands when necessary.
+        /// This method outputs new commands when necessary.
         /// </summary>
         /// <param name="junk"></param>
-        private void runTick(object junk)
+        private bool runTick(uint elaspedTime_ms)
         {
-            try
+            if (isDone)
+                return false;
+
+            //          try
+            //          {
+            long elaspedTime = DataStructures.Timing.Shared.MillisecondsToTicks(elaspedTime_ms);
+            if (currentCommand >= commandBuffer.Count)
             {
-                long elaspedTime = DateTime.Now.Ticks - taskStartTime;
-                if (currentCommand >= commandBuffer.Count)
-                {
-                    if (this.Done != null)
-                    {
-                        this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(null));
-                    }
-                    runTimer.Dispose();
-                    return;
-                }
-                lock (commandBuffer)
-                {
-                    // duplicated for threadsafety
-                    if (currentCommand >= commandBuffer.Count)
-                        return;
-                    while (elaspedTime >= commandBuffer[currentCommand].commandTime)
-                    {
-                        //      device.BeginWrite(commandBuffer[currentCommand].command);
-
-                        device.Write(commandBuffer[currentCommand].command);
-                        device.Flush(BufferTypes.OutBuffer, false);
-                        if (MainServerForm.instance.verboseCheckBox.Checked)
-                        {
-                            AtticusServer.server.messageLog(this, new MessageEvent("Output rs232 command: " + commandBuffer[currentCommand].command));
-                        }
-                        currentCommand++;
-                        if (currentCommand >= commandBuffer.Count)
-                            break;
-
-                        if (currentCommand >= commandBuffer.Count) // we've run out of new commands, so disable the timer.
-                        {
-                            runTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-                            if (this.Done != null)
-                            {
-                                this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(null));
-                            }
-                            return;
-                        }
-
-                    }
-                }
-
-            }
-            catch (Exception e)
-            {
-                AtticusServer.server.messageLog(this, new MessageEvent("Caught exception in RS232 task: " + e.Message + e.StackTrace));
-                AtticusServer.server.messageLog(this, new MessageEvent("Stopping rs232 task."));
-                this.stop();
                 if (this.Done != null)
                 {
-                    this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(e));
+                    this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(null));
+                }
+                isDone = true;
+
+                return false;
+            }
+            lock (commandBuffer)
+            {
+                // duplicated for threadsafety
+                if (currentCommand >= commandBuffer.Count)
+                    return true;
+                while (elaspedTime >= commandBuffer[currentCommand].commandTime)
+                {
+                    //      device.BeginWrite(commandBuffer[currentCommand].command);
+
+                    device.Write(commandBuffer[currentCommand].command);
+                    device.Flush(BufferTypes.OutBuffer, false);
+                  
+                   AtticusServer.server.messageLog(this, new MessageEvent("Output rs232 command: " + commandBuffer[currentCommand].command, 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.Serial));
+                    
+                    currentCommand++;
+                    if (currentCommand >= commandBuffer.Count)
+                        break;
+
+
+
                 }
             }
+
+            //            }
+            //           catch (Exception e)
+            //           {
+            //               AtticusServer.server.messageLog(this, new MessageEvent("Caught exception in RS232 task: " + e.Message + e.StackTrace));
+            //              AtticusServer.server.messageLog(this, new MessageEvent("Stopping rs232 task."));
+            //              if (this.Done != null)
+            //             {
+            //                 this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(e));
+            //                isDone = true;
+            //           }
+            //     }
+            return true;
         }
 
         private struct DoubleIntPair
@@ -306,6 +273,11 @@ namespace AtticusServer
             return ((double)ticks) / 10000000.0;
         }
 
+
+        public bool providerTimerFinished(int priority)
+        {
+            return true;
+        }
         
     }
 }

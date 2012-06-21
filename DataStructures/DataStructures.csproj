@@ -128,6 +128,16 @@
     <Compile Include="ExpandableStructConverter.cs" />
     <Compile Include="MessageEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Timing\ComputerClockSoftwareClockProvider.cs" />
+    <Compile Include="Timing\DummySubscriber.cs" />
+    <Compile Include="Timing\NetworkClockBroadcaster.cs" />
+    <Compile Include="Timing\NetworkClockDatagram.cs" />
+    <Compile Include="Timing\NetworkClockEndpointInfo.cs" />
+    <Compile Include="Timing\NetworkClockProvider.cs" />
+    <Compile Include="Timing\PollingThreadSoftwareClockProvider.cs" />
+    <Compile Include="Timing\Shared.cs" />
+    <Compile Include="Timing\SoftwareClockProvider.cs" />
+    <Compile Include="Timing\SoftwareClockSubscriber.cs" />
     <Compile Include="UtilityClasses\CiceroUtilityFunctions.cs" />
     <Compile Include="UtilityClasses\HelperFunctions.cs" />
     <Compile Include="UtilityClasses\NamingFunctions.cs" />

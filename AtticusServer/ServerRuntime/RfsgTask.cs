@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace AtticusServer
 {
-    class RfsgTask
+    class RfsgTask : DataStructures.Timing.SoftwareClockSubscriber
     {
         private static Dictionary<string, niRFSG> rfsgDevices;
         private static Dictionary<niRFSG, bool> rfsgDeviceInitiated;
@@ -85,6 +85,14 @@ namespace AtticusServer
                 commandBuffer.Add(com);
             }
 
+            long postRetriggerTime = 100; // corresponds to 10us.
+            // A workaround to issue when using software timed groups in 
+            // fpga-retriggered words
+
+            // the workaround: delay the software timed group by an immesurable amount
+            // if it is started in a retriggered word
+
+
             // This functionality is sort of somewhat duplicated in sequencedata.generatebuffers. It would be good
             // to come up with a more coherent framework to do these sorts of operations.
             while (true)
@@ -104,6 +112,10 @@ namespace AtticusServer
                     currentTime += seconds_to_ticks(currentStep.StepDuration.getBaseValue());
                     continue;
                 }
+
+                long postTime = 0;
+                if (currentStep.WaitForRetrigger)
+                    postTime = postRetriggerTime;
 
                 // determine the index of the next step in which this channel has an action
                 int nextEnabledStepIndex = sequence.findNextGpibChannelEnabledTimestep(currentStepIndex, channelID);
@@ -151,7 +163,7 @@ namespace AtticusServer
                             command.commandType = RFSGCommand.CommandType.AmplitudeFrequency;
                             command.frequency = currentFreq;
                             command.amplitude = Vpp_to_dBm(currentAmp);
-                            command.commandTime = (long)(currentTime + i * secondsPerSample * 10000000);
+                            command.commandTime = (long)(currentTime + i * secondsPerSample * 10000000) + postTime;
 
                             commandBuffer.Add(command);
                         }
@@ -170,7 +182,7 @@ namespace AtticusServer
                         {
                             RFSGCommand com = new RFSGCommand();
                             com.commandType = RFSGCommand.CommandType.EnableOutput;
-                            com.commandTime = currentTime;
+                            com.commandTime = currentTime + postTime;
                             commandBuffer.Add(com);
                         }
 
@@ -178,7 +190,7 @@ namespace AtticusServer
                         {
                             RFSGCommand com = new RFSGCommand();
                             com.commandType = RFSGCommand.CommandType.DisableOutput;
-                            com.commandTime = currentTime;
+                            com.commandTime = currentTime + postTime;
                             commandBuffer.Add(com);
                         }
 
@@ -186,7 +198,7 @@ namespace AtticusServer
                         {
                             RFSGCommand com = new RFSGCommand();
                             com.commandType = RFSGCommand.CommandType.Abort;
-                            com.commandTime = currentTime;
+                            com.commandTime = currentTime + postTime;
                             commandBuffer.Add(com);
                         }
 
@@ -194,7 +206,7 @@ namespace AtticusServer
                         {
                             RFSGCommand com = new RFSGCommand();
                             com.commandType = RFSGCommand.CommandType.Initiate;
-                            com.commandTime = currentTime;
+                            com.commandTime = currentTime + postTime;
                             commandBuffer.Add(com);
                         }       
                     }
@@ -238,101 +250,76 @@ namespace AtticusServer
         }
 
 
-        /// <summary>
-        /// This function does nothing. (device should not be disposed when task finishes, because it is a shared static object
-        /// that is reused every time the device is used.
-        /// </summary>
-        private void disposeDevice()
+        public bool reachedTime(uint time_ms, int priority)
         {
-            //rfsgDevice.Dispose();
+            return runTick(time_ms);
         }
 
-        Thread runThread;
-
-        public void Start()
+        public bool handleExceptionOnClockThread(Exception e)
         {
-
-            if (runThread != null)
-            {
-                if (runThread.ThreadState == ThreadState.Running)
-                {
-                    throw new Exception("Unable to start RFSG task, as the RFSG task running thread is already running.");
-                }
-            }
-
-            taskStartTime = DateTime.Now.Ticks;
-            currentCommand = 0;
-            /*      TimerCallback gpibTick = new TimerCallback(runTick);
-                  runTimer = new Timer(gpibTick, null, 0, 10); // using 10 ms for now. This is an experiment.
-                  */
-
-            runThread = new Thread(new ThreadStart(runTaskProc));
-            runThread.Start();
-
+            return false;
         }
-
 
         /// <summary>
         /// This function is copied from GPIBTask, with small modifications.
         /// </summary>
-        public void runTaskProc()
+        public bool runTick(uint elasped_ms)
         {
-            try
-            {
-                while (true)
-                {
-                    long elaspedTime = DateTime.Now.Ticks - taskStartTime;
-                    if (currentCommand >= commandBuffer.Count)
-                    {
-                        disposeDevice();
-                        if (this.Done != null)
-                        {
-                            this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(null));
-                        }
-                        return;
-                    }
-                    while (elaspedTime >= commandBuffer[currentCommand].commandTime)
-                    {
-                        outputRfsgCommand(commandBuffer[currentCommand]);
-                        currentCommand++;
-                        if (currentCommand >= commandBuffer.Count)
-                            break;
+            //try
+            // {
+            long elaspedTime = DataStructures.Timing.Shared.MillisecondsToTicks(elasped_ms);
 
-                        if (currentCommand >= commandBuffer.Count) // we've run out of new commands, so disable the timer.
-                        {
-                            disposeDevice();
-                            if (this.Done != null)
-                            {
-                                this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(null));
-                            }
-                            return;
-                        }
-                    }
-                    Thread.Sleep(1);
-                }
-            }
-            catch (Exception e)
+
+            if (currentCommand >= commandBuffer.Count)
             {
-                if (e is ThreadAbortException)
+                if (this.Done != null)
                 {
-                    disposeDevice();
+                    this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(null));
+                }
+                return false;
+            }
+            while (elaspedTime >= commandBuffer[currentCommand].commandTime)
+            {
+                outputRfsgCommand(commandBuffer[currentCommand]);
+                currentCommand++;
+
+                if (currentCommand >= commandBuffer.Count) // we've run out of new commands, so disable the timer.
+                {
+
                     if (this.Done != null)
                     {
                         this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(null));
                     }
-                }
-                else
-                {
-                    AtticusServer.server.messageLog(this, new MessageEvent("Caught an exception while running RFSG task for GPIB channel " + channelID + ": " + e.Message + e.StackTrace));
-                    AtticusServer.server.messageLog(this, new MessageEvent("Aborting RFSG task."));
-                    MainServerForm.instance.DisplayError = true;
-                    disposeDevice();
-                    if (this.Done != null)
-                    {
-                        this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(e));
-                    }
+                    return false;
                 }
             }
+
+            return true;
+
+
+            /* }
+             catch (Exception e)
+             {
+                 if (e is ThreadAbortException)
+                 {
+                     disposeDevice();
+                     if (this.Done != null)
+                     {
+                         this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(null));
+                     }
+                 }
+                 else
+                 {
+                     AtticusServer.server.messageLog(this, new MessageEvent("Caught an exception while running RFSG task for GPIB channel " + channelID + ": " + e.Message + e.StackTrace));
+                     AtticusServer.server.messageLog(this, new MessageEvent("Aborting RFSG task."));
+                     MainServerForm.instance.DisplayError = true;
+                     disposeDevice();
+                     if (this.Done != null)
+                     {
+                         this.Done(this, new NationalInstruments.DAQmx.TaskDoneEventArgs(e));
+                     }
+                 }
+             }*/
         }
 
         private void outputRfsgCommand(RFSGCommand command)
@@ -342,10 +329,9 @@ namespace AtticusServer
             {
                 case RFSGCommand.CommandType.AmplitudeFrequency:
                     rfsgDevice.ConfigureRF(command.frequency, command.amplitude);
-                    if (MainServerForm.instance.verboseCheckBox.Checked)
-                    {
-                        AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to frequence(Hz)/amplitude(dBm) " + command.frequency + "/" + command.amplitude));
-                    }
+
+                    AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to frequence(Hz)/amplitude(dBm) " + command.frequency + "/" + command.amplitude, 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.RFSG));
+
                     break;
                 case RFSGCommand.CommandType.EnableOutput:
                     try
@@ -353,15 +339,14 @@ namespace AtticusServer
                         rfsgDevice.ConfigureOutputEnabled(true);
                         success = true;
                     }
-                    catch (Exception ) { }
+                    catch (Exception) { }
 
-                    if (MainServerForm.instance.verboseCheckBox.Checked)
-                    {
-                        if (success)
-                            AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to enable output"));
-                        else
-                            AtticusServer.server.messageLog(this, new MessageEvent("RSG command to enable output gave error. Output probably already enabled."));
-                    }
+
+                    if (success)
+                        AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to enable output", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.RFSG));
+                    else
+                        AtticusServer.server.messageLog(this, new MessageEvent("RSG command to enable output gave error. Output probably already enabled.", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.RFSG));
+
                     break;
 
                 case RFSGCommand.CommandType.DisableOutput:
@@ -370,16 +355,15 @@ namespace AtticusServer
                         rfsgDevice.ConfigureOutputEnabled(false);
                         success = true;
                     }
-                    catch (Exception )
+                    catch (Exception)
                     {
                     }
-                    if (MainServerForm.instance.verboseCheckBox.Checked)
-                    {
-                        if (success) 
-                           AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to disable output"));
-                        else
-                           AtticusServer.server.messageLog(this, new MessageEvent("RFSG command to disable output gave error. Output probably already disabled."));
-                    }
+
+                    if (success)
+                        AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to disable output", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.RFSG));
+                    else
+                        AtticusServer.server.messageLog(this, new MessageEvent("RFSG command to disable output gave error. Output probably already disabled.", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.RFSG));
+
                     break;
 
                 case RFSGCommand.CommandType.Initiate:
@@ -387,8 +371,8 @@ namespace AtticusServer
 
                         if (rfsgDeviceInitiated[rfsgDevice])
                         {
-                            if (MainServerForm.instance.verboseCheckBox.Checked)
-                                AtticusServer.server.messageLog(this, new MessageEvent("RFSG device believed to be initiated already. Skipping initiate command."));
+
+                            AtticusServer.server.messageLog(this, new MessageEvent("RFSG device believed to be initiated already. Skipping initiate command.", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.RFSG));
                             break;
                         }
 
@@ -397,7 +381,7 @@ namespace AtticusServer
                             rfsgDevice.Initiate();
                             success = true;
                         }
-                        catch (Exception )
+                        catch (Exception)
                         {
                         }
 
@@ -406,41 +390,33 @@ namespace AtticusServer
                         else
                             rfsgDeviceInitiated[rfsgDevice] = false;
 
-                        if (MainServerForm.instance.verboseCheckBox.Checked)
-                        {
-                            if (success) 
-                                AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to initiate output (enter committed state)"));
-                            else
-                                AtticusServer.server.messageLog(this, new MessageEvent("RFSG command to initiate device gave error. Device probably already initiated."));
-                            
-                        }
+
+                        if (success)
+                            AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to initiate output (enter committed state)", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.RFSG));
+                        else
+                            AtticusServer.server.messageLog(this, new MessageEvent("RFSG command to initiate device gave error. Device probably already initiated.", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.RFSG));
+
+
                     }
                     break;
 
 
                 case RFSGCommand.CommandType.Abort:
-                    
+
                     rfsgDevice.Abort();
-                    if (MainServerForm.instance.verboseCheckBox.Checked)
-                    {
-                        AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to abort output (enter configuration state)"));
-                    }
+
+                    AtticusServer.server.messageLog(this, new MessageEvent("RFSG commanded to abort output (enter configuration state)", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.RFSG));
+
                     rfsgDeviceInitiated[rfsgDevice] = false;
                     break;
             }
         }
 
-        public void stop()
+
+        public bool providerTimerFinished(int priority)
         {
-
-            if (runThread != null)
-            {
-                runThread.Abort();
-                AtticusServer.server.messageLog(this, new MessageEvent("Aborted rfsg task running thread."));
-            }
-
+            return true;
         }
-
 
     }
 }
