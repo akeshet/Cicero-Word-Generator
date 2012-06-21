@@ -78,17 +78,15 @@ namespace AtticusServer
                 MainServerForm form = new MainServerForm();
 
                 server.updateGUI += form.updateGUI;
-                server.messageLog += form.addMessageLogText;
+                server.registerMessageEventHandler(form.addMessageLogText);
 
 
-                DataStructures.Timing.NetworkClockBroadcaster.registerMessageLogHandler(form.addMessageLogText);
-                DataStructures.Timing.NetworkClockBroadcaster.startBroadcaster();
-                DataStructures.Timing.NetworkClockBroadcaster.addListener("127.0.0.1");
+
 
 
                 Application.Run(form);
 
-                DataStructures.Timing.NetworkClockBroadcaster.stopBroadcaster();
+                
 
                 saveServerSettings(AppDomain.CurrentDomain.BaseDirectory +  FileNameStrings.DefaultServerSettingsDataFile, serverSettings);
             }

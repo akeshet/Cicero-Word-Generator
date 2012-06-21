@@ -43,17 +43,18 @@ namespace DataStructures.Timing
 
         private static Thread listenerThread;
 
-        public static readonly int networkClockDestinationPort = 39721;
+
 
         
 
         private static Dictionary<uint, NetworkClockProvider> providers;
-        
+        private static NetworkClockEndpointInfo.HostTypes myListenerType;
 
-        public static void startListener() {
+        public static void startListener(NetworkClockEndpointInfo.HostTypes listenerType) {
             lock (lockObj)
             {
                 staticLogMessage(new MessageEvent("Starting network clock listener...", 0, MessageEvent.MessageTypes.Routine, MessageEvent.MessageCategories.SoftwareClock));
+                myListenerType = listenerType;
                 if (listenerThread != null)
                 {
                     throw new SoftwareClockProviderException("Attempted to start listener thread when already started.");
@@ -109,7 +110,7 @@ namespace DataStructures.Timing
                 staticLogMessage(new MessageEvent("Starting Network Clock listener thread...", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.Networking));
 
 
-            udpClient = new UdpClient(networkClockDestinationPort);
+            udpClient = new UdpClient(NetworkClockEndpointInfo.getListenerPort(myListenerType));
 
             
             staticLogMessage( new MessageEvent("...done", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.Networking));

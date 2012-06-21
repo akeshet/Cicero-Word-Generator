@@ -132,6 +132,7 @@
     <Compile Include="Timing\DummySubscriber.cs" />
     <Compile Include="Timing\NetworkClockBroadcaster.cs" />
     <Compile Include="Timing\NetworkClockDatagram.cs" />
+    <Compile Include="Timing\NetworkClockEndpointInfo.cs" />
     <Compile Include="Timing\NetworkClockProvider.cs" />
     <Compile Include="Timing\PollingThreadSoftwareClockProvider.cs" />
     <Compile Include="Timing\Shared.cs" />

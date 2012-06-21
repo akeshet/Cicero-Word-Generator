@@ -43,6 +43,7 @@ namespace AtticusServer
             this.clearDeviceSettingsButton = new System.Windows.Forms.Button();
             this.refreshHardwareButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.resetNetworkClocksButton = new System.Windows.Forms.Button();
             this.serverSettingsPropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.connectButton = new System.Windows.Forms.Button();
             this.connectionStatusLabel = new System.Windows.Forms.Label();
@@ -202,6 +203,7 @@ namespace AtticusServer
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.resetNetworkClocksButton);
             this.groupBox2.Controls.Add(this.serverSettingsPropertyGrid);
             this.groupBox2.Controls.Add(this.connectButton);
             this.groupBox2.Controls.Add(this.connectionStatusLabel);
@@ -213,6 +215,16 @@ namespace AtticusServer
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Server Settings";
+            // 
+            // resetNetworkClocksButton
+            // 
+            this.resetNetworkClocksButton.Location = new System.Drawing.Point(236, 71);
+            this.resetNetworkClocksButton.Name = "resetNetworkClocksButton";
+            this.resetNetworkClocksButton.Size = new System.Drawing.Size(198, 35);
+            this.resetNetworkClocksButton.TabIndex = 6;
+            this.resetNetworkClocksButton.Text = "Reset Network Clock Provider";
+            this.resetNetworkClocksButton.UseVisualStyleBackColor = true;
+            this.resetNetworkClocksButton.Click += new System.EventHandler(this.resetNetworkClocksButton_Click);
             // 
             // serverSettingsPropertyGrid
             // 
@@ -446,6 +458,7 @@ namespace AtticusServer
         private System.Windows.Forms.ToolStripMenuItem openHomePageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openGitRepositoryPageToolStripMenuItem;
         private System.Windows.Forms.CheckBox verboseCheckBox;
+        private System.Windows.Forms.Button resetNetworkClocksButton;
 
     }
 }

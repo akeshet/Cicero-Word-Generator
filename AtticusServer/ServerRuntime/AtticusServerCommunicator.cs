@@ -76,7 +76,18 @@ namespace AtticusServer
         /// To be called to add messages to the server message log. Eventually may support logging to a file
         /// as well as to the screen.
         /// </summary>
-        public EventHandler<MessageEvent> messageLog;
+        private event EventHandler<MessageEvent> messageLogHandler;
+
+        public void registerMessageEventHandler(EventHandler<MessageEvent> handler)
+        {
+            messageLogHandler += handler;
+        }
+
+        public void messageLog(object sender, MessageEvent message)
+        {
+            if (messageLogHandler != null)
+                messageLogHandler(sender, message);
+        }
 
         // The next three objects are used in marshalling / unmarshalling this class
         // (ie sharing it over .NET remoting)
@@ -191,12 +202,35 @@ namespace AtticusServer
 
             communicatorStatus = ServerStructures.ServerCommunicatorStatus.Disconnected;
 
+            System.Console.WriteLine("Initializing Network clock broadcast and receiver threads.");
+
+            DataStructures.Timing.NetworkClockBroadcaster.registerMessageLogHandler(this.messageLog);
+            DataStructures.Timing.NetworkClockBroadcaster.startBroadcasterThreads();
+            resetNetworkClocks();
+
+            DataStructures.Timing.NetworkClockProvider.registerStaticMessageLogHandler(this.messageLog);
+            DataStructures.Timing.NetworkClockProvider.startListener(DataStructures.Timing.NetworkClockEndpointInfo.HostTypes.Atticus_Server);
+            
 
 
             System.Console.WriteLine("... done running AtticusServerRuntime constructor.");
 
         }
         #endregion
+
+        public void resetNetworkClocks()
+        {
+
+            messageLog(this, new MessageEvent("Resetting network clock recipients"));
+            DataStructures.Timing.NetworkClockBroadcaster.clearListeners();
+
+            if (serverSettings.BroadcastNetworkClock)
+            {
+                foreach (DataStructures.Timing.NetworkClockEndpointInfo endPoint in serverSettings.BroadcastNetworkRecipients)
+                    DataStructures.Timing.NetworkClockBroadcaster.addListener(endPoint);
+            }
+            
+        }
 
 
         #region Implementation of ServerCommunicator interface
@@ -1411,7 +1445,12 @@ namespace AtticusServer
                     DataStructures.Timing.SoftwareClockProvider softwareClockProvider;
                     
                     // chose local software clock provider...
-                    if (fpgaTasks!=null && fpgaTasks.Count != 0)
+                    if (serverSettings.ReceiveNetworkClock)
+                    {
+                        softwareClockProvider = new DataStructures.Timing.NetworkClockProvider(clockID);
+                        messageLog(this, new MessageEvent("Using network clock as software clock provider."));
+                    }
+                    else if (fpgaTasks!=null && fpgaTasks.Count != 0)
                     {
                         IEnumerator<string> e = fpgaTasks.Keys.GetEnumerator();
                         e.MoveNext();
@@ -1430,10 +1469,16 @@ namespace AtticusServer
                         messageLog(this, new MessageEvent("Using computer clock as software clock source."));
                     }
 
-                    // create a clock broadcaster (always, for now, later will be configurable)
+                    // create a clock broadcaster 
                     if (clockBroadcaster != null)
+                    {
                         throw new Exception("Expected clockBroadcaster to be null when it was not.");
-                    clockBroadcaster = new DataStructures.Timing.NetworkClockBroadcaster(clockID, (uint)((sequence.SequenceDuration * 1000.0) + 100));
+                    }
+                    if (serverSettings.BroadcastNetworkClock && ! serverSettings.ReceiveNetworkClock)
+                    {
+                        clockBroadcaster = new DataStructures.Timing.NetworkClockBroadcaster(clockID, (uint)((sequence.SequenceDuration * 1000.0) + 100));
+                        softwareClockProvider.addSubscriber(clockBroadcaster, 20);
+                    }
 
                     // add software clock subscribers
                     foreach (RfsgTask task in this.rfsgTasks.Values)
@@ -1445,7 +1490,7 @@ namespace AtticusServer
                     foreach (RS232Task task in this.rs232Tasks.Values)
                         softwareClockProvider.addSubscriber(task, 1);
 
-                    softwareClockProvider.addSubscriber(clockBroadcaster, 20);
+                    
 
                    
 
@@ -1684,6 +1729,9 @@ namespace AtticusServer
 
             messageLog(this, new MessageEvent("Stopping all tasks."));
             this.stopAndCleanupTasks();
+
+            DataStructures.Timing.NetworkClockBroadcaster.stopBroadcasterThread();
+            DataStructures.Timing.NetworkClockProvider.shutDown();
 
             // Reset devices on exit. This is so that if you close this and open the old word generator,
             // it doesn't complain on startup.
@@ -2608,9 +2656,9 @@ namespace AtticusServer
                 }
                 catch (Exception e)
                 {
-                    if (messageLog != null)
+                    if (messageLogHandler != null)
                     {
-                        messageLog(this, new MessageEvent("Caught exception when attempting to detect serial ports: " + e.Message + e.StackTrace));
+                        messageLogHandler(this, new MessageEvent("Caught exception when attempting to detect serial ports: " + e.Message + e.StackTrace));
                     }
                     else
                     {

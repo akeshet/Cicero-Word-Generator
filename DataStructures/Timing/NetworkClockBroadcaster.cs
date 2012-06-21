@@ -48,37 +48,42 @@ namespace DataStructures.Timing
         private static Dictionary<string, UdpClient> clients;
 
 
-        public static void startBroadcaster(List<String> listenerAddresses = null)
+        public static void startBroadcasterThreads(List<NetworkClockEndpointInfo> listenerAddresses = null)
         {
             logMessage(new MessageEvent("Starting Network Clock broadcaster", 0, MessageEvent.MessageTypes.Routine, MessageEvent.MessageCategories.SoftwareClock));
             clients = new Dictionary<string, UdpClient>();
 
             if (listenerAddresses != null)
-                foreach (string add in listenerAddresses)
+                foreach (NetworkClockEndpointInfo add in listenerAddresses)
                     addListener(add);
 
         }
 
-        public static void addListener(String hostname)
+        public static void addListener(NetworkClockEndpointInfo endPoint)
         {
-            logMessage(new MessageEvent("Adding network clock listener at hostname: " + hostname, 0, MessageEvent.MessageTypes.Routine, MessageEvent.MessageCategories.SoftwareClock));
-            if (!clients.ContainsKey(hostname)) {
-                UdpClient client = new UdpClient(hostname, NetworkClockProvider.networkClockDestinationPort);
-                clients.Add(hostname, client);
+            logMessage(new MessageEvent("Adding network " + endPoint.HostType.ToString() + " clock listener at hostname: " + endPoint.HostName, 0, MessageEvent.MessageTypes.Routine, MessageEvent.MessageCategories.SoftwareClock));
+            if (!clients.ContainsKey(endPoint.HostName)) {
+                UdpClient client = new UdpClient(endPoint.HostName, endPoint.getPort());
+                clients.Add(endPoint.HostName, client);
             }
             logMessage(new MessageEvent("...done", 0, MessageEvent.MessageTypes.Routine, MessageEvent.MessageCategories.SoftwareClock));
                 
         }
 
-        public static void stopBroadcaster()
+        public static void clearListeners()
         {
-            logMessage(new MessageEvent("Stopping broadcaster..."));
             List<string> hostnames = clients.Keys.ToList();
             foreach (string add in hostnames)
             {
                 clients[add].Close();
                 clients.Remove(add);
             }
+        }
+
+        public static void stopBroadcasterThread()
+        {
+            logMessage(new MessageEvent("Stopping broadcaster threads..."));
+            clearListeners();
         }
 
         private static UInt32 ndCount = 0;

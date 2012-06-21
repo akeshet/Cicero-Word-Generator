@@ -569,6 +569,8 @@ namespace WordGenerator
         {
             this.WindowState = FormWindowState.Maximized;
             formOpen = true;
+            DataStructures.Timing.NetworkClockProvider.registerStaticMessageLogHandler(addMessageLogText);
+            DataStructures.Timing.NetworkClockProvider.startListener(DataStructures.Timing.NetworkClockEndpointInfo.HostTypes.Cicero_Client);
             /* CiceroSplashForm splash = new CiceroSplashForm();
              splash.Show();*/
         }
@@ -902,6 +904,7 @@ namespace WordGenerator
         private void mainClientForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Storage.SaveAndLoad.SaveClientStartupSettings();
+            DataStructures.Timing.NetworkClockProvider.shutDown();
             formOpen = false;
         }
 

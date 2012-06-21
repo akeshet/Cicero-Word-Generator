@@ -410,6 +410,11 @@ namespace AtticusServer
             formLoaded = false;
         }
 
+        private void resetNetworkClocksButton_Click(object sender, EventArgs e)
+        {
+            AtticusServer.server.resetNetworkClocks();
+        }
+
 
 
 
