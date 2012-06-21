@@ -1564,13 +1564,14 @@ namespace AtticusServer
 
                                             }
                                         }
+
                                         lock (softwareTriggeringTaskLock)
                                         {
                                             softwareTriggeringTask = task;
+                                            softwareTaskTriggerPollingFunctionInitialPosition = task.Stream.TotalSamplesGeneratedPerChannel;
+                                            softwareTaskTriggerPollingThread = new Thread(new ThreadStart(softwareTaskTriggerPollingFunction));
+                                            softwareTaskTriggerPollingThread.Start();
                                         }
-                                        softwareTaskTriggerPollingFunctionInitialPosition = task.Stream.TotalSamplesGeneratedPerChannel;
-                                        softwareTaskTriggerPollingThread = new Thread(new ThreadStart(softwareTaskTriggerPollingFunction));
-                                        softwareTaskTriggerPollingThread.Start();
 
                                     }
                                 }
@@ -1603,7 +1604,7 @@ namespace AtticusServer
             }
         }
 
-        private Object softTrigLock = new object();
+        private Object softwareTriggerPollingFunctionLock = new object();
         private Task softwareTriggeringTask;
         private bool softwareTimedTasksTriggered;
         private int softwareTimedTriggerCount;
@@ -1618,60 +1619,51 @@ namespace AtticusServer
         /// </summary>
         private void softwareTaskTriggerPollingFunction()
         {
+
+            bool gotLock = Monitor.TryEnter(softwareTriggerPollingFunctionLock, 100);
             try
             {
-                bool entered = Monitor.TryEnter(softTrigLock, 100);
-                if (!entered)
+
+                if (!gotLock)
                 {
                     messageLog(this, new MessageEvent("******* Unable to run software task triggering polling thread, as another such thread is already running. Software timed tasks may not be triggered. *******"));
                     displayError();
                     return;
                 }
-                try
+
+                messageLog(this, new MessageEvent("Started a polling thread to trigger software timed tasks. Initial buffer write position being monitored: " + softwareTaskTriggerPollingFunctionInitialPosition));
+                lock (softwareTriggeringTaskLock)
                 {
-                    messageLog(this, new MessageEvent("Started a polling thread to trigger software timed tasks. Initial buffer write position being monitored: " + softwareTaskTriggerPollingFunctionInitialPosition));
-                    lock (softwareTriggeringTaskLock)
+                    bool keepGoing = true;
+                    while (keepGoing)
                     {
-                        while (true)
+                        Thread.Sleep(1);
+
+                        if (softwareTriggeringTask.Stream.TotalSamplesGeneratedPerChannel != softwareTaskTriggerPollingFunctionInitialPosition)
                         {
-                            if (softwareTriggeringTask.Stream.TotalSamplesGeneratedPerChannel != softwareTaskTriggerPollingFunctionInitialPosition)
+                            if (computerClockProvider != null)
                             {
-
-                                if (computerClockProvider != null)
-                                {
-                                    computerClockProvider.Arm();
-                                    computerClockProvider.Start();
-                                    messageLog(this, new MessageEvent("Computer-software clock task triggered."));
-                                }
-                                
-                               
-                               
-                                softwareTaskTriggerPollingThread = null;
-                                Monitor.Exit(softTrigLock);
-                                return;
+                                computerClockProvider.Arm();
+                                computerClockProvider.Start();
+                                messageLog(this, new MessageEvent("Computer-clock based software clock triggered."));
                             }
-
-                            Thread.Sleep(1);
+                            softwareTaskTriggerPollingThread = null;
+                            keepGoing = false;
                         }
                     }
                 }
-                catch (ThreadAbortException)
-                {
-                    Monitor.Exit(softTrigLock);
-                }
+
+
             }
             catch (Exception e)
             {
                 messageLog(this, new MessageEvent("Caught exception during software trigger polling thread: " + e.Message + e.StackTrace));
                 displayError();
-                try
-                {
-                    Monitor.Exit(softTrigLock);
-                }
-                catch (Exception)
-                {
-                    messageLog(this, new MessageEvent("Also, caught exception when attempting to release software polling thread lock. This is probably not important."));
-                }
+            }
+            finally
+            {
+                if (gotLock)
+                    Monitor.Exit(softwareTriggerPollingFunctionLock);
             }
 
         }

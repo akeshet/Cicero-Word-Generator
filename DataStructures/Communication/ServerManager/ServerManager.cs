@@ -189,8 +189,11 @@ namespace DataStructures
 
         public bool clearConnections()
         {
-
-            if (System.Threading.Monitor.TryEnter(lockObj, 100)) {
+            bool gotLock = System.Threading.Monitor.TryEnter(lockObj, 100);
+            try
+            {
+                if (!gotLock)
+                    return false;
 
                 connections.Clear();
                 communicators.Clear();
@@ -202,12 +205,13 @@ namespace DataStructures
                     }
                 }
                 connectedServerNames.Clear();
-
-                System.Threading.Monitor.Exit(lockObj);
-                return true;
             }
-            return false;
-
+            finally
+            {
+                if (gotLock)
+                    Monitor.Exit(lockObj);
+            }
+            return true;
         }
 
         #region connectServer(...)
@@ -218,22 +222,23 @@ namespace DataStructures
             if (messageLog != null)
                 messageLog(this, new MessageEvent("Attempting to connect server " + server.ToString()));
 
-
-            if (Monitor.TryEnter(lockObj, 1000))
+            bool gotLock = Monitor.TryEnter(lockObj, 1000);
+            try
             {
-                /// IMPORTANT: lockObj is now locked. Do not leave this part of the code without unlocking it
-                /// otherwise, the server manager will get permanently locked.
-
-
+                if (!gotLock)
+                {
+                    if (messageLog != null)
+                        messageLog(this, new MessageEvent("Unable to obtain lock on servermanager. Aborting attempt."));
+                    return false;
+                }
+                
                 // Cannot connect to a server that isn't is the servers list.
                 if (!servers.Contains(server))
                 {
-                    if (messageLog!=null)
+                    if (messageLog != null)
                         messageLog(this, new MessageEvent(server.ToString() + " is not on list of known servers. Aborting."));
-                    Monitor.Exit(lockObj);
                     return false;
                 }
-
 
                 // ensure that this server has a server connection status item
                 if (!connections.ContainsKey(server))
@@ -246,7 +251,6 @@ namespace DataStructures
                 {
                     if (messageLog != null)
                         messageLog(this, new MessageEvent(server.ToString() + " is not enabled. Aborting."));
-                    Monitor.Exit(lockObj);
                     return false;
                 }
 
@@ -255,7 +259,6 @@ namespace DataStructures
                 {
                     if (messageLog != null)
                         messageLog(this, new MessageEvent(server.ToString() + " is already connecting. Aborting."));
-                    Monitor.Exit(lockObj);
                     return false;
                 }
 
@@ -286,7 +289,6 @@ namespace DataStructures
                             messageLog(this, new MessageEvent("Connection took longer than 1000 ms, aborting."));
 
                         connectThread.Abort();
-                        Monitor.Exit(lockObj);
                         return false;
                     }
 
@@ -297,7 +299,6 @@ namespace DataStructures
                     if (messageLog != null)
                         messageLog(this, new MessageEvent("Caught exception when attempting to connect to server " + server.ToString() + ":" + e.Message + e.StackTrace));
                     connections[server] = ConnectionStatus.Unable_To_Connect;
-                    Monitor.Exit(lockObj);
                     return false;
                 }
 
@@ -312,14 +313,12 @@ namespace DataStructures
                         {
                             connections[server] = ConnectionStatus.Error_Name_Not_Unique;
                             communicators.Remove(server);
-                            Monitor.Exit(lockObj);
                             return false;
                         }
 
                         connectedServerNames.Add(server.ServerName);
                         connections[server] = ConnectionStatus.Connected;
                         messageLog(this, new MessageEvent("Server connected successfully."));
-                        Monitor.Exit(lockObj);
                         return true;
                     }
                     else
@@ -327,7 +326,6 @@ namespace DataStructures
                         if (messageLog != null)
                             messageLog(this, new MessageEvent("Server ping failed. Aborting."));
                         connections[server] = ConnectionStatus.Unable_To_Connect;
-                        Monitor.Exit(lockObj);
                         return false;
                     }
                 }
@@ -335,17 +333,15 @@ namespace DataStructures
                 {
                     messageLog(this, new MessageEvent("Exception when attempting to ping server: " + e.Message + e.StackTrace));
                     connections[server] = ConnectionStatus.Unable_To_Connect;
-                    Monitor.Exit(lockObj);
                     return false;
                 }
-
             }
-            else
+            finally
             {
-                if (messageLog != null)
-                    messageLog(this, new MessageEvent("Unable to obtain lock on servermanager. Aborting attempt."));
-                return false;
+                if (gotLock)
+                    Monitor.Exit(lockObj);
             }
+            return true;
         }
 
         private void server_connect_proc(object obj)
