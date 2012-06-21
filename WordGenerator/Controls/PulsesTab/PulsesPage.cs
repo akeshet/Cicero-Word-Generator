@@ -145,5 +145,11 @@ namespace WordGenerator.Controls
 
             WordGenerator.MainClientForm.instance.cursorWaitRelease();
         }
+
+        public void openAutoNameGlossary(object sender, EventArgs e)
+        {
+           AutoNameGlossaryDialog autoNameBox = new AutoNameGlossaryDialog();
+           autoNameBox.Show();
+        }
     }
 }
