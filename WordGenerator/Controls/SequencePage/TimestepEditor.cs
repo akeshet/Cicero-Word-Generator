@@ -221,6 +221,9 @@ namespace WordGenerator.Controls
                 rs232Selector.BackColor = Color.Green;
             }
 
+            this.negativeRetriggerEdgeOrValueToolStripMenuItem.Checked = stepData.RetriggerOnNegativeValueOrEdge;
+            this.edgeRetriggerToolStripMenuItem.Checked = stepData.RetriggerOnEdge;
+
 
             layoutEnableButton();
             layoutShowhideButton();
@@ -915,17 +918,33 @@ namespace WordGenerator.Controls
             {
                 waitTimeEditor.Enabled = true;
                 waitTimeoutLabel.Enabled = true;
+                negativeRetriggerEdgeOrValueToolStripMenuItem.Enabled = true;
+                edgeRetriggerToolStripMenuItem.Enabled = true;
             }
             else
             {
                 waitTimeoutLabel.Enabled = false;
                 waitTimeEditor.Enabled = false;
+                negativeRetriggerEdgeOrValueToolStripMenuItem.Enabled = false;
+                edgeRetriggerToolStripMenuItem.Enabled = false;
             }
 
             contextMenuStrip1.Items.Insert(indexOfWait + 1, waitTimeEditor);
             
 
         }
+
+        private void edgeRetriggerToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            stepData.RetriggerOnEdge = edgeRetriggerToolStripMenuItem.Checked;
+        }
+
+        private void negativeRetriggerEdgeOrValueToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            stepData.RetriggerOnNegativeValueOrEdge = negativeRetriggerEdgeOrValueToolStripMenuItem.Checked;
+        }
+
+
 
         
 

@@ -156,6 +156,22 @@ namespace DataStructures
             set { retriggerTimeout = value; }
         }
 
+        private bool retriggerOnEdge;
+
+        public bool RetriggerOnEdge
+        {
+            get { return retriggerOnEdge; }
+            set { retriggerOnEdge = value; }
+        }
+
+        private bool retriggerOnNegativeValueOrEdge;
+
+        public bool RetriggerOnNegativeValueOrEdge
+        {
+            get { return retriggerOnNegativeValueOrEdge; }
+            set { retriggerOnNegativeValueOrEdge = value; }
+        }
+
         private AnalogGroup myAnalogGroup;
 
         [Category("Groups"), Description("The analog group started in this timestep, if any.")]

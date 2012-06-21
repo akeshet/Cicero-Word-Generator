@@ -57,10 +57,20 @@ namespace AtticusServer
                     if (sequence.TimeSteps[stepID].WaitForRetrigger)
                     {
                         int waitTime = (int) (sequence.TimeSteps[stepID].RetriggerTimeout.getBaseValue() / masterClockPeriod);
-                        listItems.Add(new ListItem(waitTime, 0, 0)); // counts = 0 is a special signal for WAIT_FOR_RETRIGGER mode
-                                                                    // in this mode, FPGA waits a maximum of on_counts master samples
-                                                                    // before moving on anyway.
-                                                                    // (unless on_counts = 0, in which case it never artificially retriggers)
+                        
+                        int retriggerFlags = 0;
+                        if (sequence.TimeSteps[stepID].RetriggerOnEdge)
+                            retriggerFlags += 1;
+                        if (!sequence.TimeSteps[stepID].RetriggerOnNegativeValueOrEdge)
+                            retriggerFlags += 2;
+                        
+                        listItems.Add(new ListItem(waitTime, retriggerFlags, 0));
+                               // counts = 0 is a special signal for WAIT_FOR_RETRIGGER mode
+                               // in this mode, FPGA waits a maximum of on_counts master samples
+                               // before moving on anyway.
+                               // (unless on_counts = 0, in which case it never artificially retriggers)
+                                // retrigger flags set if the FPGA will trigger on edge or on value
+                                // and whether to trigger on positive or negative (edge or value)
                     }
 
                     List<SequenceData.VariableTimebaseSegment> stepSegments = segments[sequence.TimeSteps[stepID]];

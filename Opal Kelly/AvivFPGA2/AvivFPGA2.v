@@ -136,6 +136,7 @@ reg [32:0] repeat_counter;
 reg internal_reset;
 
 
+reg lastRetriggerIn;
 
 // Initialization of state machine
 initial begin
@@ -148,6 +149,7 @@ initial begin
 	retriggerTimeoutCount<=0;
 	retriggerWaitSamples<=0;
 	fpgaStatusOut<=0;
+	lastRetriggerIn<=0;
 end
 
 // triggering logic
@@ -165,6 +167,11 @@ wire [47:0] on_counts;				// FIFO data contains 3 important numbers
 wire [47:0] off_counts;
 wire [31:0] repeat_counts;
 
+wire edgeRetrigger = off_counts[0];
+wire retriggerValue = off_counts[1];
+
+
+
 												// divide the FIFO data correctly into those 3 numbers
 assign on_counts = clock_data_from_fifo[127:80];
 assign off_counts = clock_data_from_fifo[79:32];
@@ -177,6 +184,7 @@ assign negclk = ~refclk;
 
 
 always @(posedge refclk) begin
+	lastRetriggerIn<=retriggerIN;
 
 	// read from FIFO into local register, when required
 	if (fifo_read_enable==1) begin
@@ -235,7 +243,8 @@ always @(posedge refclk) begin
 				if (waitingForRetrigger) begin
 					waitedCounts<=waitedCounts+1;
 					 retriggerWaitSamples<=retriggerWaitSamples+1;
-					if ((retriggerIN && fifo_read_enable==0) // wait for the retrigger input to go high 
+					if ((!edgeRetrigger && retriggerIN == retriggerValue && fifo_read_enable==0) // wait for retrigger input to go to correct value
+					   ||(edgeRetrigger && retriggerIN == retriggerValue && retriggerIN!=lastRetriggerIn && fifo_read_enable==0)// or for it to have edge of correct value
 					|| (on_counts!=0 && waitedCounts==on_counts))  //or for the wait to timeout, then move on in the fifo
 					begin		
 						fifo_read_enable<=1;
