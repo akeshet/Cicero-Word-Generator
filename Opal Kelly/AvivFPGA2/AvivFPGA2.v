@@ -201,7 +201,6 @@ always @(posedge refclk) begin
 			waitingForRetrigger<=0;
 			waitedCounts<=0;
 			toggler<=0;
-			retriggerTimeoutCount<=0;
 
 			if (soft_generate_trig_in==1) begin
 				if (fifo_read_enable==0) begin
@@ -217,6 +216,7 @@ always @(posedge refclk) begin
 			fpgaStatusOut<=0;						// and reset the status flags
 			masterSamplesGenerated<=0;       // and reset the previous master sample generation count
 			retriggerWaitSamples<=0;
+			retriggerTimeoutCount<=0;
 		end
 		
 		s_generating: begin							// generating state
