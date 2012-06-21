@@ -144,10 +144,13 @@ namespace AtticusServer
 
         public void addMessageLogText(object sender, MessageEvent e)
         {
-            if (e.Verbosity > 0 && !this.verboseCheckBox.Checked)
+            if (e.Verbosity > 0 && !this.softwareTimedTaskLogTextCheckbox.Checked)
                 return;
 
             if (!formLoaded)
+                return;
+
+            if (showWarningsErrorsOnly.Checked && e.MessageType != MessageEvent.MessageTypes.Error && e.MessageType != MessageEvent.MessageTypes.Warning)
                 return;
 
             if (this.InvokeRequired)
@@ -413,6 +416,19 @@ namespace AtticusServer
         private void resetNetworkClocksButton_Click(object sender, EventArgs e)
         {
             AtticusServer.server.resetNetworkClocks();
+        }
+
+        private void showWarningsErrorsOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            if (showWarningsErrorsOnly.Checked)
+            {
+                softwareTimedTaskLogTextCheckbox.Checked = false;
+                softwareTimedTaskLogTextCheckbox.Enabled = false;
+            }
+            else
+            {
+                softwareTimedTaskLogTextCheckbox.Enabled = true;
+            }
         }
 
 

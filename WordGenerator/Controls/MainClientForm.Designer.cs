@@ -89,6 +89,7 @@ namespace WordGenerator
             this.calculateVariableTimebaseDigitalBufferToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createBufferSnapshotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showOnlyWarningsOrErrorsInEventLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.licenseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -554,7 +555,8 @@ namespace WordGenerator
             this.calculateVariableTimebaseAnalogBufferToolStripMenuItem,
             this.calculateVariableTimebaseDigitalBufferToolStripMenuItem,
             this.stToolStripMenuItem,
-            this.createBufferSnapshotToolStripMenuItem});
+            this.createBufferSnapshotToolStripMenuItem,
+            this.showOnlyWarningsOrErrorsInEventLogToolStripMenuItem});
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
             this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.debugToolStripMenuItem.Text = "Debug";
@@ -563,35 +565,35 @@ namespace WordGenerator
             // doNothingToolStripMenuItem
             // 
             this.doNothingToolStripMenuItem.Name = "doNothingToolStripMenuItem";
-            this.doNothingToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
+            this.doNothingToolStripMenuItem.Size = new System.Drawing.Size(297, 22);
             this.doNothingToolStripMenuItem.Text = "Do nothing";
             this.doNothingToolStripMenuItem.Click += new System.EventHandler(this.doNothingToolStripMenuItem_Click);
             // 
             // inspectVariableTimebaseToolStripMenuItem
             // 
             this.inspectVariableTimebaseToolStripMenuItem.Name = "inspectVariableTimebaseToolStripMenuItem";
-            this.inspectVariableTimebaseToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
+            this.inspectVariableTimebaseToolStripMenuItem.Size = new System.Drawing.Size(297, 22);
             this.inspectVariableTimebaseToolStripMenuItem.Text = "Inspect Variable Timebase";
             this.inspectVariableTimebaseToolStripMenuItem.Click += new System.EventHandler(this.inspectVariableTimebaseToolStripMenuItem_Click);
             // 
             // calculateVariableTimebaseAnalogBufferToolStripMenuItem
             // 
             this.calculateVariableTimebaseAnalogBufferToolStripMenuItem.Name = "calculateVariableTimebaseAnalogBufferToolStripMenuItem";
-            this.calculateVariableTimebaseAnalogBufferToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
+            this.calculateVariableTimebaseAnalogBufferToolStripMenuItem.Size = new System.Drawing.Size(297, 22);
             this.calculateVariableTimebaseAnalogBufferToolStripMenuItem.Text = "Calculate variable timebase analog buffer";
             this.calculateVariableTimebaseAnalogBufferToolStripMenuItem.Click += new System.EventHandler(this.calculateVariableTimebaseAnalogBufferToolStripMenuItem_Click);
             // 
             // calculateVariableTimebaseDigitalBufferToolStripMenuItem
             // 
             this.calculateVariableTimebaseDigitalBufferToolStripMenuItem.Name = "calculateVariableTimebaseDigitalBufferToolStripMenuItem";
-            this.calculateVariableTimebaseDigitalBufferToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
+            this.calculateVariableTimebaseDigitalBufferToolStripMenuItem.Size = new System.Drawing.Size(297, 22);
             this.calculateVariableTimebaseDigitalBufferToolStripMenuItem.Text = "Calculate variable timebase digital buffer";
             this.calculateVariableTimebaseDigitalBufferToolStripMenuItem.Click += new System.EventHandler(this.calculateVariableTimebaseDigitalBufferToolStripMenuItem_Click);
             // 
             // stToolStripMenuItem
             // 
             this.stToolStripMenuItem.Name = "stToolStripMenuItem";
-            this.stToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
+            this.stToolStripMenuItem.Size = new System.Drawing.Size(297, 22);
             this.stToolStripMenuItem.Text = "Student Edition";
             this.stToolStripMenuItem.Visible = false;
             this.stToolStripMenuItem.Click += new System.EventHandler(this.stToolStripMenuItem_Click);
@@ -599,9 +601,16 @@ namespace WordGenerator
             // createBufferSnapshotToolStripMenuItem
             // 
             this.createBufferSnapshotToolStripMenuItem.Name = "createBufferSnapshotToolStripMenuItem";
-            this.createBufferSnapshotToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
+            this.createBufferSnapshotToolStripMenuItem.Size = new System.Drawing.Size(297, 22);
             this.createBufferSnapshotToolStripMenuItem.Text = "Create buffer snapshot";
             this.createBufferSnapshotToolStripMenuItem.Click += new System.EventHandler(this.createBufferSnapshotToolStripMenuItem_Click);
+            // 
+            // showOnlyWarningsOrErrorsInEventLogToolStripMenuItem
+            // 
+            this.showOnlyWarningsOrErrorsInEventLogToolStripMenuItem.CheckOnClick = true;
+            this.showOnlyWarningsOrErrorsInEventLogToolStripMenuItem.Name = "showOnlyWarningsOrErrorsInEventLogToolStripMenuItem";
+            this.showOnlyWarningsOrErrorsInEventLogToolStripMenuItem.Size = new System.Drawing.Size(297, 22);
+            this.showOnlyWarningsOrErrorsInEventLogToolStripMenuItem.Text = "Show only Warnings or Errors in Event Log";
             // 
             // aboutToolStripMenuItem
             // 
@@ -648,7 +657,7 @@ namespace WordGenerator
             this.variablesTab.Location = new System.Drawing.Point(4, 22);
             this.variablesTab.Name = "variablesTab";
             this.variablesTab.Padding = new System.Windows.Forms.Padding(3);
-            this.variablesTab.Size = new System.Drawing.Size(1264, 896);
+            this.variablesTab.Size = new System.Drawing.Size(1264, 810);
             this.variablesTab.TabIndex = 4;
             this.variablesTab.Text = "Variables (F7)";
             this.variablesTab.UseVisualStyleBackColor = true;
@@ -666,7 +675,7 @@ namespace WordGenerator
             this.commonWaveformTab.Location = new System.Drawing.Point(4, 22);
             this.commonWaveformTab.Name = "commonWaveformTab";
             this.commonWaveformTab.Padding = new System.Windows.Forms.Padding(3);
-            this.commonWaveformTab.Size = new System.Drawing.Size(1264, 896);
+            this.commonWaveformTab.Size = new System.Drawing.Size(1264, 810);
             this.commonWaveformTab.TabIndex = 3;
             this.commonWaveformTab.Text = "Common Waveform (F6)";
             this.commonWaveformTab.UseVisualStyleBackColor = true;
@@ -684,7 +693,7 @@ namespace WordGenerator
             this.gpibTab.Location = new System.Drawing.Point(4, 22);
             this.gpibTab.Name = "gpibTab";
             this.gpibTab.Padding = new System.Windows.Forms.Padding(3);
-            this.gpibTab.Size = new System.Drawing.Size(1264, 896);
+            this.gpibTab.Size = new System.Drawing.Size(1264, 810);
             this.gpibTab.TabIndex = 2;
             this.gpibTab.Text = "GPIB (F4)";
             this.gpibTab.UseVisualStyleBackColor = true;
@@ -703,7 +712,7 @@ namespace WordGenerator
             this.analogTab.Location = new System.Drawing.Point(4, 22);
             this.analogTab.Name = "analogTab";
             this.analogTab.Padding = new System.Windows.Forms.Padding(3);
-            this.analogTab.Size = new System.Drawing.Size(1264, 896);
+            this.analogTab.Size = new System.Drawing.Size(1264, 810);
             this.analogTab.TabIndex = 1;
             this.analogTab.Text = "Analog (F3)";
             this.analogTab.UseVisualStyleBackColor = true;
@@ -836,7 +845,7 @@ namespace WordGenerator
             this.overrideTab.Controls.Add(this.overridePage);
             this.overrideTab.Location = new System.Drawing.Point(4, 22);
             this.overrideTab.Name = "overrideTab";
-            this.overrideTab.Size = new System.Drawing.Size(1264, 896);
+            this.overrideTab.Size = new System.Drawing.Size(1264, 810);
             this.overrideTab.TabIndex = 7;
             this.overrideTab.Text = "Override (F2)";
             this.overrideTab.UseVisualStyleBackColor = true;
@@ -854,7 +863,7 @@ namespace WordGenerator
             this.rs232Tab.Controls.Add(this.rS232GroupEditor);
             this.rs232Tab.Location = new System.Drawing.Point(4, 22);
             this.rs232Tab.Name = "rs232Tab";
-            this.rs232Tab.Size = new System.Drawing.Size(1264, 896);
+            this.rs232Tab.Size = new System.Drawing.Size(1264, 810);
             this.rs232Tab.TabIndex = 5;
             this.rs232Tab.Text = "RS232 (F5)";
             this.rs232Tab.UseVisualStyleBackColor = true;
@@ -871,7 +880,7 @@ namespace WordGenerator
             this.pulsesTab.Controls.Add(this.pulsesPage);
             this.pulsesTab.Location = new System.Drawing.Point(4, 22);
             this.pulsesTab.Name = "pulsesTab";
-            this.pulsesTab.Size = new System.Drawing.Size(1264, 896);
+            this.pulsesTab.Size = new System.Drawing.Size(1264, 810);
             this.pulsesTab.TabIndex = 8;
             this.pulsesTab.Text = "Pulses (F8)";
             this.pulsesTab.UseVisualStyleBackColor = true;
@@ -889,7 +898,7 @@ namespace WordGenerator
             this.eventLogTab.Controls.Add(this.messageLogTextBox);
             this.eventLogTab.Location = new System.Drawing.Point(4, 22);
             this.eventLogTab.Name = "eventLogTab";
-            this.eventLogTab.Size = new System.Drawing.Size(1264, 896);
+            this.eventLogTab.Size = new System.Drawing.Size(1264, 810);
             this.eventLogTab.TabIndex = 6;
             this.eventLogTab.Text = "Event Log";
             this.eventLogTab.UseVisualStyleBackColor = true;
@@ -909,6 +918,8 @@ namespace WordGenerator
             this.toolTip1.AutomaticDelay = 0;
             this.toolTip1.UseAnimation = false;
             this.toolTip1.UseFading = false;
+            // 
+            // MainClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -1039,6 +1050,7 @@ namespace WordGenerator
         private System.Windows.Forms.ToolStripMenuItem enableDebugMenuToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openHomePageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openGitRepositoryPageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showOnlyWarningsOrErrorsInEventLogToolStripMenuItem;
 
     }
 }

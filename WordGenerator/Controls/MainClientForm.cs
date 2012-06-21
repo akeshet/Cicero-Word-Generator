@@ -629,6 +629,11 @@ namespace WordGenerator
                 if (e is MessageEvent)
                 {
                     MessageEvent message = (MessageEvent)e;
+
+                    if (showOnlyWarningsOrErrorsInEventLogToolStripMenuItem.Checked)
+                        if (message.MessageType != MessageEvent.MessageTypes.Warning && message.MessageType != MessageEvent.MessageTypes.Error)
+                            return;
+                    
                     this.messageLogTextBox.AppendText(message.MyTime.ToString() + " " + message.ToString() + "\r\n");
                 }
                 else

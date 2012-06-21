@@ -232,10 +232,19 @@ namespace AtticusServer
         private Thread masterPollingThread;
         private int pollingProcSleepTime = 100; // in ms
 
+        /// <summary>
+        ///  Must call updateWireOuts before using.
+        /// </summary>
+        /// <returns></returns>
         private UInt32 getMasterSamplesGenerated()
         {
-            UInt32 lowWord = opalKellyDevice.GetWireOutValue(0x22);
-            UInt32 highWord = opalKellyDevice.GetWireOutValue(0x23);
+            return extractUInt32FromAddresses(0x22, 0x23);
+        }
+
+        private uint extractUInt32FromAddresses(Int32 lowWordAddr, Int32 highWordAddr)
+        {
+            UInt32 lowWord = opalKellyDevice.GetWireOutValue(lowWordAddr);
+            UInt32 highWord = opalKellyDevice.GetWireOutValue(highWordAddr);
 
             UInt32 ans = highWord;
             ans = ans << 16;
@@ -244,9 +253,21 @@ namespace AtticusServer
             return ans;
         }
 
+        /// <summary>
+        ///  Must call updateWireOuts before using.
+        /// </summary>
+        /// <returns></returns>
+        private UInt32 getSamplesWaitedForRetrigger()
+        {
+            return extractUInt32FromAddresses(0x26, 0x27);
+        }
+
+        /// <summary>
+        ///  Must call updateWireOuts before using.
+        /// </summary>
+        /// <returns></returns>
         private UInt16 getRetriggerTimeoutCount()
         {
-            opalKellyDevice.UpdateWireOuts();
             return (UInt16) opalKellyDevice.GetWireOutValue(0x24);
         }
 
@@ -343,6 +364,16 @@ namespace AtticusServer
                 keepGoing = reachTime(nowTime);
                 Thread.Sleep(5);
             }
+        }
+
+        public FpgaRunReport getRunReport()
+        {
+            FpgaRunReport ans = new FpgaRunReport();
+            opalKellyDevice.UpdateWireOuts();
+            ans.retriggerWaitedSamples = this.getSamplesWaitedForRetrigger();
+            ans.retriggerTimeoutCount = this.getRetriggerTimeoutCount();
+
+            return ans;
         }
 
         

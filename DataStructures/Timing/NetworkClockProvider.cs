@@ -15,6 +15,8 @@ namespace DataStructures.Timing
 
         private NetworkClockProvider() { }
 
+        private static uint lastNGramID = uint.MaxValue;
+
         public  NetworkClockProvider(uint clockID) : base()
         {
             this.clockID = clockID;
@@ -133,6 +135,11 @@ namespace DataStructures.Timing
 #if DEBUG
                 staticLogMessage(new MessageEvent("Received network clock datagram " + ndgram.ToString(), 2, MessageEvent.MessageTypes.Debug, MessageEvent.MessageCategories.Networking));
 #endif
+                if (ndgram.DatagramCount != lastNGramID + 1)
+                {
+                    staticLogMessage(new MessageEvent("Warning! Received network clock datagram #" + ndgram.DatagramCount + ", expected #" + (lastNGramID+1) + ".", 0, MessageEvent.MessageTypes.Warning, MessageEvent.MessageCategories.Networking));
+                }
+                lastNGramID = ndgram.DatagramCount;
 
                 lock (providers)
                 {

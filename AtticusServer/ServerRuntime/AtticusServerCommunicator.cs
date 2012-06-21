@@ -994,6 +994,16 @@ namespace AtticusServer
 
                 bool samplesGeneratedMismatchDetected = false;
 
+                if (fpgaTasks!=null) {
+                    if (fpgaTasks.Count>0) {
+                        IEnumerator<FpgaTimebaseTask> enumerator = fpgaTasks.Values.GetEnumerator();
+                        enumerator.MoveNext();
+                        FpgaTimebaseTask task = enumerator.Current;
+                        FpgaRunReport fpgaReport = task.getRunReport();                    
+                    }
+                }
+
+
                 foreach (string str in daqMxTasks.Keys)
                 {
                     Task task = daqMxTasks[str];
