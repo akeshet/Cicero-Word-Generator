@@ -130,14 +130,29 @@ namespace WordGenerator
         private string clientStartupSettingsFile;
 
         private int cursorWaitCount = 0;
+        private object cursorWaitLock = new object();
 
         public void cursorWait()
         {
-            if (cursorWaitCount == 0)
-                Cursor.Current = Cursors.WaitCursor;
-            cursorWaitCount++;
+            lock (cursorWaitLock)
+            {
+                if (cursorWaitCount == 0)
+                    Cursor.Current = Cursors.WaitCursor;
+                cursorWaitCount++;
+            }
         }
 
+        public void cursorWaitRelease()
+        {
+            lock (cursorWaitLock)
+            {
+                cursorWaitCount--;
+                if (cursorWaitCount == 0)
+                    Cursor.Current = Cursors.Default;
+                if (cursorWaitCount < 0)
+                    cursorWaitCount = 0;
+            }
+        }
 
         public void activateAnalogGroupEditor(AnalogGroup ag)
         {
@@ -189,14 +204,7 @@ namespace WordGenerator
             }
         }
 
-        public void cursorWaitRelease()
-        {
-            cursorWaitCount--;
-            if (cursorWaitCount == 0)
-                Cursor.Current = Cursors.Default;
-            if (cursorWaitCount < 0)
-                cursorWaitCount = 0;
-        }
+
 
         /// <summary>
         /// runLog will be null in general, when running Cicero as a standalone application. However, when Cicero is launched through Elgin,
@@ -369,53 +377,57 @@ namespace WordGenerator
             SequenceData sequenceData = Storage.sequenceData;
 
             WordGenerator.MainClientForm.instance.cursorWait();
-
-            lic_chk();
-
-
-            this.commonWaveformEditor.setCommonWaveforms(Storage.sequenceData.CommonWaveforms);
-
-            if (sequenceData.AnalogGroups.Count != 0)
-                this.analogGroupEditor.setAnalogGroup(sequenceData.AnalogGroups[0]);
-            else
-                this.analogGroupEditor.setAnalogGroup(null);
-
-
-            this.sequencePage.layoutAll();
-
-            this.variablesEditor.layout();
-
-            if (sequenceData.GpibGroups.Count != 0)
-                this.gpibGroupEditor.setGpibGroup(sequenceData.GpibGroups[0]);
-            else
-                this.gpibGroupEditor.setGpibGroup(null);
-
-            if (sequenceData.RS232Groups.Count != 0)
-                this.rS232GroupEditor.setRS232Group(sequenceData.RS232Groups[0]);
-            else
-                this.rS232GroupEditor.setRS232Group(null);
-
-            this.analogGroupEditor.updateRunOrderPanel();
-            this.gpibGroupEditor.updateRunOrderPanel();
-
-            updateFormTitle();
-
-            if (!Storage.sequenceData.TimeSteps.Contains(CurrentlyOutputtingTimestep))
+            try
             {
-                CurrentlyOutputtingTimestep = null;
+                lic_chk();
+
+
+                this.commonWaveformEditor.setCommonWaveforms(Storage.sequenceData.CommonWaveforms);
+
+                if (sequenceData.AnalogGroups.Count != 0)
+                    this.analogGroupEditor.setAnalogGroup(sequenceData.AnalogGroups[0]);
+                else
+                    this.analogGroupEditor.setAnalogGroup(null);
+
+
+                this.sequencePage.layoutAll();
+
+                this.variablesEditor.layout();
+
+                if (sequenceData.GpibGroups.Count != 0)
+                    this.gpibGroupEditor.setGpibGroup(sequenceData.GpibGroups[0]);
+                else
+                    this.gpibGroupEditor.setGpibGroup(null);
+
+                if (sequenceData.RS232Groups.Count != 0)
+                    this.rS232GroupEditor.setRS232Group(sequenceData.RS232Groups[0]);
+                else
+                    this.rS232GroupEditor.setRS232Group(null);
+
+                this.analogGroupEditor.updateRunOrderPanel();
+                this.gpibGroupEditor.updateRunOrderPanel();
+
+                updateFormTitle();
+
+                if (!Storage.sequenceData.TimeSteps.Contains(CurrentlyOutputtingTimestep))
+                {
+                    CurrentlyOutputtingTimestep = null;
+                }
+
+                pulsesPage.layout();
+
+                sequencePage.forceUpdateAllScrollbars();
+
+                setTimestepEditorBackgrounds();
+
+                waitForReady.Checked = Storage.sequenceData.WaitForReady;
+
+                this.refreshAllTimestepHotkeys();
             }
-
-            pulsesPage.layout();
-
-            sequencePage.forceUpdateAllScrollbars();
-
-            setTimestepEditorBackgrounds();
-
-            waitForReady.Checked = Storage.sequenceData.WaitForReady;
-
-            this.refreshAllTimestepHotkeys();
-
-            WordGenerator.MainClientForm.instance.cursorWaitRelease();
+            finally
+            {
+                WordGenerator.MainClientForm.instance.cursorWaitRelease();
+            }
 
         }
 
@@ -443,17 +455,21 @@ namespace WordGenerator
         {
             SettingsData settingsData = Storage.settingsData;
             WordGenerator.MainClientForm.instance.cursorWait();
+            try
+            {
+                this.analogGroupEditor.setChannelCollection(settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.analog]);
+                this.gpibGroupEditor.setChannelCollection(settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.gpib]);
+                this.rS232GroupEditor.setChannelCollection(settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.rs232]);
+                this.overridePage.setSettings(Storage.settingsData);
+                this.sequencePage.layoutSettingsData();
+                this.sequencePage.updateOverrideCount();
 
-            this.analogGroupEditor.setChannelCollection(settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.analog]);
-            this.gpibGroupEditor.setChannelCollection(settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.gpib]);
-            this.rS232GroupEditor.setChannelCollection(settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.rs232]);
-            this.overridePage.setSettings(Storage.settingsData);
-            this.sequencePage.layoutSettingsData();
-            this.sequencePage.updateOverrideCount();
-
-            setTimestepEditorBackgrounds();
-
-            WordGenerator.MainClientForm.instance.cursorWaitRelease();
+                setTimestepEditorBackgrounds();
+            }
+            finally
+            {
+                WordGenerator.MainClientForm.instance.cursorWaitRelease();
+            }
         }
 
 

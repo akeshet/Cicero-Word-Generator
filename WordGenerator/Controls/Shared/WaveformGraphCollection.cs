@@ -88,55 +88,59 @@ namespace WordGenerator.Controls
             this.SuspendLayout();
             if (WordGenerator.MainClientForm.instance!=null)
                 WordGenerator.MainClientForm.instance.cursorWait();
-
-            List<WaveformGraph> graphsToAdd = new List<WaveformGraph>();
-
-            if (waveformGraphs != null)
+            try
             {
-                foreach (WaveformGraph wg in waveformGraphs)
-                {
-                    this.flowLayoutPanel1.Controls.Remove(wg);
-                    wg.Dispose();
-                }
-            }
+                List<WaveformGraph> graphsToAdd = new List<WaveformGraph>();
 
-            waveformGraphs.Clear();
-            if (waveforms == null || waveforms.Count == 0)
-            {
-                if (WordGenerator.MainClientForm.instance!=null)
-                    WordGenerator.MainClientForm.instance.cursorWaitRelease();
-                return;
-            }
-
-            for (int i = 0; i < waveforms.Count; i++)
-            {
-                bool editable;
-                if (allEditable)
+                if (waveformGraphs != null)
                 {
-                    editable = true;
-                }
-                else
-                {
-                    editable = waveformsEditable[i];
+                    foreach (WaveformGraph wg in waveformGraphs)
+                    {
+                        this.flowLayoutPanel1.Controls.Remove(wg);
+                        wg.Dispose();
+                    }
                 }
 
-                waveformGraphs.Add(new WaveformGraph(waveforms[i], waveformEditor, editable));            
-                waveformGraphs[i].Deactivate();
-                waveformGraphs[i].Visible = true;
-                waveformGraphs[i].gotClicked += new EventHandler(WaveformGraphCollection_gotClicked);
+                waveformGraphs.Clear();
+                if (waveforms == null || waveforms.Count == 0)
+                {
+                    if (WordGenerator.MainClientForm.instance != null)
+                        WordGenerator.MainClientForm.instance.cursorWaitRelease();
+                    return;
+                }
+
+                for (int i = 0; i < waveforms.Count; i++)
+                {
+                    bool editable;
+                    if (allEditable)
+                    {
+                        editable = true;
+                    }
+                    else
+                    {
+                        editable = waveformsEditable[i];
+                    }
+
+                    waveformGraphs.Add(new WaveformGraph(waveforms[i], waveformEditor, editable));
+                    waveformGraphs[i].Deactivate();
+                    waveformGraphs[i].Visible = true;
+                    waveformGraphs[i].gotClicked += new EventHandler(WaveformGraphCollection_gotClicked);
+                }
+
+                this.flowLayoutPanel1.Controls.AddRange(waveformGraphs.ToArray());
+
+                this.setWaveformEditor(waveformEditor);
+
+                this.ResumeLayout();
+
+
+
+                this.Refresh();
             }
-
-            this.flowLayoutPanel1.Controls.AddRange(waveformGraphs.ToArray());
-
-            this.setWaveformEditor(waveformEditor);
-
-           this.ResumeLayout();
-
-     
-            
-            this.Refresh();
-
-            WordGenerator.MainClientForm.instance.cursorWaitRelease();
+            finally
+            {
+                WordGenerator.MainClientForm.instance.cursorWaitRelease();
+            }
 
         }
 
@@ -144,37 +148,39 @@ namespace WordGenerator.Controls
         {
             if (WordGenerator.MainClientForm.instance != null)
                 WordGenerator.MainClientForm.instance.cursorWait();
-
-            WaveformGraph wg = sender as WaveformGraph;
-            if (wg == null)
+            try
             {
-                WordGenerator.MainClientForm.instance.cursorWaitRelease();
-                return;
-            }
+                WaveformGraph wg = sender as WaveformGraph;
+                if (wg == null)
+                {
+                    WordGenerator.MainClientForm.instance.cursorWaitRelease();
+                    return;
+                }
 
-            if (!waveformGraphs.Contains(wg))
-            {
-                WordGenerator.MainClientForm.instance.cursorWaitRelease();
-                return;
-            }
+                if (!waveformGraphs.Contains(wg))
+                {
+                    WordGenerator.MainClientForm.instance.cursorWaitRelease();
+                    return;
+                }
 
-            foreach (WaveformGraph graph in waveformGraphs)
-                graph.Deactivate();
-
-            wg.Activate();
-            waveformEditor.clearUpdateGraphEventHandler();
-            if (!updateAllGraphsEachTime)
-                waveformEditor.updateGraph += wg.updateGraph;
-            else
                 foreach (WaveformGraph graph in waveformGraphs)
-                    waveformEditor.updateGraph += graph.updateGraph;
+                    graph.Deactivate();
 
-            waveformEditor.setWaveform(wg.getWaveform());
+                wg.Activate();
+                waveformEditor.clearUpdateGraphEventHandler();
+                if (!updateAllGraphsEachTime)
+                    waveformEditor.updateGraph += wg.updateGraph;
+                else
+                    foreach (WaveformGraph graph in waveformGraphs)
+                        waveformEditor.updateGraph += graph.updateGraph;
 
-            if (WordGenerator.MainClientForm.instance != null)
-                WordGenerator.MainClientForm.instance.cursorWaitRelease();
-
-
+                waveformEditor.setWaveform(wg.getWaveform());
+            }
+            finally
+            {
+                if (WordGenerator.MainClientForm.instance != null)
+                    WordGenerator.MainClientForm.instance.cursorWaitRelease();
+            }
         }
 
 

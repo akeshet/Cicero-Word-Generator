@@ -199,39 +199,43 @@ namespace WordGenerator.Controls
 
             if (WordGenerator.MainClientForm.instance!=null)
                 WordGenerator.MainClientForm.instance.cursorWait();
-        
-            List<Waveform> waveformsToDisplay = new List<Waveform>();
-            List<string> channelNamesToDisplay = new List<string>();
-            List<bool> waveformsEditable = new List<bool>();
-
-            // figure out what to display in the waveform graph
-            if (analogGroup != null)
+            try
             {
-                List<int> usedChannelIDs = analogGroup.getChannelIDs();
-                for (int i = 0; i < usedChannelIDs.Count; i++)
+                List<Waveform> waveformsToDisplay = new List<Waveform>();
+                List<string> channelNamesToDisplay = new List<string>();
+                List<bool> waveformsEditable = new List<bool>();
+
+                // figure out what to display in the waveform graph
+                if (analogGroup != null)
                 {
-                    int id = usedChannelIDs[i];
-                    if (analogChannelCollection.Channels.ContainsKey(id))
+                    List<int> usedChannelIDs = analogGroup.getChannelIDs();
+                    for (int i = 0; i < usedChannelIDs.Count; i++)
                     {
-                        AnalogGroupChannelData channelData = analogGroup.ChannelDatas[id];
-                        if (channelData.ChannelEnabled /*&& !channelData.ChannelWaveformIsCommon*/)
+                        int id = usedChannelIDs[i];
+                        if (analogChannelCollection.Channels.ContainsKey(id))
                         {
-                            waveformsToDisplay.Add(channelData.waveform);
-                            waveformsEditable.Add(!channelData.ChannelWaveformIsCommon);
-                            channelNamesToDisplay.Add(analogChannelCollection.Channels[id].Name);
+                            AnalogGroupChannelData channelData = analogGroup.ChannelDatas[id];
+                            if (channelData.ChannelEnabled /*&& !channelData.ChannelWaveformIsCommon*/)
+                            {
+                                waveformsToDisplay.Add(channelData.waveform);
+                                waveformsEditable.Add(!channelData.ChannelWaveformIsCommon);
+                                channelNamesToDisplay.Add(analogChannelCollection.Channels[id].Name);
+                            }
                         }
                     }
                 }
+
+                waveformGraphCollection1.deactivateAllGraphs();
+
+                waveformGraphCollection1.setWaveforms(waveformsToDisplay, waveformsEditable);
+                waveformGraphCollection1.setChannelNames(channelNamesToDisplay);
+                waveformGraphCollection1.setWaveformEditor(waveformEditor1);
             }
-
-            waveformGraphCollection1.deactivateAllGraphs();
-
-            waveformGraphCollection1.setWaveforms(waveformsToDisplay, waveformsEditable);
-            waveformGraphCollection1.setChannelNames(channelNamesToDisplay);
-            waveformGraphCollection1.setWaveformEditor(waveformEditor1);
-
-            if (WordGenerator.MainClientForm.instance!=null)
-                WordGenerator.MainClientForm.instance.cursorWaitRelease();
+            finally
+            {
+                if (WordGenerator.MainClientForm.instance != null)
+                    WordGenerator.MainClientForm.instance.cursorWaitRelease();
+            }
 
         }
 

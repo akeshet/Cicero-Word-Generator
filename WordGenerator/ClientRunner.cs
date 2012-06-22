@@ -49,15 +49,20 @@ namespace WordGenerator
             {
 
                 WordGenerator.MainClientForm.instance.cursorWait();
+                ServerManager.ServerActionStatus actionStatus;
+                try
+                {
 
 
-
-                ServerManager.ServerActionStatus actionStatus = Storage.settingsData.serverManager.outputSingleTimestepOnConnectedServers(
-                    Storage.settingsData,
-                    Storage.sequenceData.getSingleOutputFrameAtEndOfTimestep(timeStep, Storage.settingsData, Storage.settingsData.OutputAnalogDwellValuesOnOutputNow),
-                    messageLog);
-
-                WordGenerator.MainClientForm.instance.cursorWaitRelease();
+                    actionStatus = Storage.settingsData.serverManager.outputSingleTimestepOnConnectedServers(
+                        Storage.settingsData,
+                        Storage.sequenceData.getSingleOutputFrameAtEndOfTimestep(timeStep, Storage.settingsData, Storage.settingsData.OutputAnalogDwellValuesOnOutputNow),
+                        messageLog);
+                }
+                finally
+                {
+                    WordGenerator.MainClientForm.instance.cursorWaitRelease();
+                }
 
                 if (actionStatus == ServerManager.ServerActionStatus.Success)
                 {

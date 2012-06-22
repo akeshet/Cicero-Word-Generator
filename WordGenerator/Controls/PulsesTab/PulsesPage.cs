@@ -116,34 +116,38 @@ namespace WordGenerator.Controls
         private void cleanPulsesButton_Click(object sender, EventArgs e)
         {
             WordGenerator.MainClientForm.instance.cursorWait();
-
-            bool replacedPulses = false;
+            try
+            {
+                bool replacedPulses = false;
 
             repeat:
-            for (int i = 0; i < Storage.sequenceData.DigitalPulses.Count; i++)
-            {
-                for (int j = i+1; j < Storage.sequenceData.DigitalPulses.Count; j++)
+                for (int i = 0; i < Storage.sequenceData.DigitalPulses.Count; i++)
                 {
-                    Pulse a, b;
-                    a = Storage.sequenceData.DigitalPulses[i];
-                    b = Storage.sequenceData.DigitalPulses[j];
-                    if (Pulse.Equivalent(a, b))
+                    for (int j = i + 1; j < Storage.sequenceData.DigitalPulses.Count; j++)
                     {
-                        Storage.sequenceData.replacePulse(b, a);
-                        replacedPulses = true;
-                        goto repeat;            // YOU HAVE FOUND THE ONE AND ONLY "goto" statement in Cicero
-                                                // Congrats!
-                                                // Call Apogee and say Aardwolf.
+                        Pulse a, b;
+                        a = Storage.sequenceData.DigitalPulses[i];
+                        b = Storage.sequenceData.DigitalPulses[j];
+                        if (Pulse.Equivalent(a, b))
+                        {
+                            Storage.sequenceData.replacePulse(b, a);
+                            replacedPulses = true;
+                            goto repeat;            // YOU HAVE FOUND THE ONE AND ONLY "goto" statement in Cicero
+                            // Congrats!
+                            // Call Apogee and say Aardwolf.
+                        }
                     }
                 }
-            }
 
-            if (replacedPulses)
+                if (replacedPulses)
+                {
+                    WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI();
+                }
+            }
+            finally
             {
-                WordGenerator.MainClientForm.instance.RefreshSequenceDataToUI();
+                WordGenerator.MainClientForm.instance.cursorWaitRelease();
             }
-
-            WordGenerator.MainClientForm.instance.cursorWaitRelease();
         }
 
         public void openAutoNameGlossary(object sender, EventArgs e)
