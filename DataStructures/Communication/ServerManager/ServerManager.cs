@@ -580,7 +580,17 @@ namespace DataStructures
         /// Eliminates the need for constant use of type.getMethod().
         /// </summary>
         [NonSerialized]
-        private Dictionary<string, MethodInfo> methodInfoCache = new Dictionary<string,MethodInfo>();
+        private Dictionary<string, MethodInfo> methodInfoCache;
+
+        private Dictionary<string, MethodInfo> MethodInfoCache
+        {
+            get
+            {
+                if (methodInfoCache == null)
+                    methodInfoCache = new Dictionary<string, MethodInfo>();
+                return methodInfoCache;
+            }
+        }
 
         /// <summary>
         /// Used in runNamedMethodOnConnectedServers. Eliminates the need for constant use of typeof.
@@ -604,16 +614,16 @@ namespace DataStructures
 
             MethodInfo method;
 
-            lock (methodInfoCache)
+            lock (MethodInfoCache)
             {
-                if (methodInfoCache.ContainsKey(methodName))
-                    method = methodInfoCache[methodName];
+                if (MethodInfoCache.ContainsKey(methodName))
+                    method = MethodInfoCache[methodName];
                 else
                 {
                     method = serverCommunicatorType.GetMethod(methodName);
                     if (method == null)
                         throw new Exception("Unable to find a method of ServerCommunicator with name " + methodName + ". If you have recently changed ServerCommunicator.cs, did you also remember to update ServerManager.cs?");
-                    methodInfoCache.Add(methodName, method);
+                    MethodInfoCache.Add(methodName, method);
                 }
             }
             return runMethodOnConnectedServers(method, parameters, msTimeout, messageLog);

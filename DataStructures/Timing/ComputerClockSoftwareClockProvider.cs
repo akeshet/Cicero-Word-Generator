@@ -20,12 +20,7 @@ namespace DataStructures.Timing
             this.pollingPeriod_ms = pollingPeriod_ms;
         }
 
-        public override void Start()
-        {
-            startTimer();
-        }
-
-
+        
         protected override void armTimerThread()
         {
             startTicks = DateTime.Now.Ticks;

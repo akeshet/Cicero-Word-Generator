@@ -986,11 +986,11 @@ namespace WordGenerator
 
                 softwareClockProvider = new ComputerClockSoftwareClockProvider(10);
                 softwareClockProvider.addSubscriber(this, 41, 0);
-                softwareClockProvider.Arm();
+                softwareClockProvider.ArmClockProvider();
 
                 networkClockProvider = new NetworkClockProvider(clockID);
                 networkClockProvider.addSubscriber(this, 41, 1);
-                networkClockProvider.Arm();
+                networkClockProvider.ArmClockProvider();
 
                 currentSoftwareclockPriority = 0;
 
@@ -1031,8 +1031,8 @@ namespace WordGenerator
 
 
                 // start software clock
-                softwareClockProvider.Start();
-                networkClockProvider.Start();
+                softwareClockProvider.StartClockProvider();
+                networkClockProvider.StartClockProvider();
 
                 while (true)
                 {
@@ -1049,9 +1049,9 @@ namespace WordGenerator
                 }
 
 
-                softwareClockProvider.Abort();
+                softwareClockProvider.AbortClockProvider();
                 softwareClockProvider = null;
-                networkClockProvider.Abort();
+                networkClockProvider.AbortClockProvider();
                 networkClockProvider = null;
 
 
@@ -1243,9 +1243,9 @@ namespace WordGenerator
             base.OnClosed(e);
             if (softwareClockProvider != null)
             {
-                softwareClockProvider.Abort();
+                softwareClockProvider.AbortClockProvider();
                 softwareClockProvider = null;
-                networkClockProvider.Abort();
+                networkClockProvider.AbortClockProvider();
                 networkClockProvider = null;
             }
 
@@ -1289,9 +1289,9 @@ namespace WordGenerator
 
             if (softwareClockProvider != null)
             {
-                softwareClockProvider.Abort();
+                softwareClockProvider.AbortClockProvider();
                 softwareClockProvider = null;
-                networkClockProvider.Abort();
+                networkClockProvider.AbortClockProvider();
                 networkClockProvider = null;
             }
 

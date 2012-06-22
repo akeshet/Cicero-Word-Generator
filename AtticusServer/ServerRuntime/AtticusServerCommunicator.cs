@@ -1089,7 +1089,7 @@ namespace AtticusServer
                 {
                     foreach (FpgaTimebaseTask ft in fpgaTasks.Values)
                     {
-                        int ans = ft.getMistriggerStatus();
+                        int ans = (int)ft.getMistriggerStatus();
                         if (ans != 0)
                         {
                             int errorSamp = ans - 1;
@@ -1639,8 +1639,8 @@ namespace AtticusServer
                         {
                             if (computerClockProvider != null)
                             {
-                                computerClockProvider.Arm();
-                                computerClockProvider.Start();
+                                computerClockProvider.ArmClockProvider();
+                                computerClockProvider.StartClockProvider();
                                 messageLog(this, new MessageEvent("Computer-clock based software clock triggered."));
                             }
                             softwareTaskTriggerPollingThread = null;
@@ -1855,8 +1855,8 @@ namespace AtticusServer
                         {
                             if (computerClockProvider != null)
                             {
-                                computerClockProvider.Arm();
-                                computerClockProvider.Start();
+                                computerClockProvider.ArmClockProvider();
+                                computerClockProvider.StartClockProvider();
                                 messageLog(this, new MessageEvent("Triggered computer-software-clock (without sync to a hardware timed task)."));
                             }
                             
@@ -1912,8 +1912,8 @@ namespace AtticusServer
                         {
                             if (computerClockProvider != null)
                             {
-                                computerClockProvider.Arm();
-                                computerClockProvider.Start();
+                                computerClockProvider.ArmClockProvider();
+                                computerClockProvider.StartClockProvider();
                                 messageLog(this, new MessageEvent("Triggered software-timed task(s) (without sync to a hardware timed task)."));   
                             }
 
@@ -1929,7 +1929,8 @@ namespace AtticusServer
                     {
                         foreach (FpgaTimebaseTask ft in fpgaTasks.Values)
                         {
-                            ft.Arm();
+                            ft.ArmClockProvider();
+                            ft.StartClockProvider();
                             ft.Start();
                         }
                     }
@@ -2033,7 +2034,7 @@ namespace AtticusServer
                     foreach (FpgaTimebaseTask ftask in fpgaTasks.Values)
                     {
                         ftask.Stop();
-                        ftask.Abort();
+                        ftask.AbortClockProvider();
                     }
 
                     fpgaTasks.Clear();
@@ -2104,9 +2105,9 @@ namespace AtticusServer
                     GC.Collect();
                 }
 
-                
-                if (computerClockProvider!=null)   
-                    computerClockProvider.Abort();
+
+                if (computerClockProvider != null)
+                    computerClockProvider.AbortClockProvider();
                 computerClockProvider = null;
 
                 if (clockBroadcaster != null)

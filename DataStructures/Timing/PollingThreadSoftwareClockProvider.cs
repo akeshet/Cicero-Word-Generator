@@ -8,43 +8,54 @@ namespace DataStructures.Timing
 {
     public abstract class PollingThreadSoftwareClockProvider : SoftwareClockProvider
     {
-        Thread timerThread;
+        private object lockObj = new object();
+
+        private Thread timerThread;
         private bool timerRunning;
 
-        protected override sealed void startTimer()
+        protected override sealed void startClockProvider()
         {
-            if (timerRunning)
-                throw new SoftwareClockProviderException("Attempted to start timer that was already running.");
-            if (timerThread == null)
-                throw new SoftwareClockProviderException("Attempted to start timer before arming it.");
+            lock (lockObj)
+            {
+                if (timerRunning)
+                    throw new SoftwareClockProviderException("Attempted to start timer that was already running.");
+                if (timerThread == null)
+                    throw new SoftwareClockProviderException("Attempted to start timer before arming it.");
 
-            armTimerThread();
-            timerThread.Start();
-            timerRunning = true;
+                armTimerThread();
+                timerThread.Start();
+                timerRunning = true;
+            }
         }
 
-        protected override sealed void abortTimer()
+        protected override sealed void cleanupClockProvider()
         {
-            if (!timerRunning)
-                throw new SoftwareClockProviderException("Attempted to abort when timer was not running.");
+            lock (lockObj)
+            {
+                if (!timerRunning)
+                    throw new SoftwareClockProviderException("Attempted to abort when timer was not running.");
 
-            if (timerThread == null)
-                throw new SoftwareClockProviderException("Unexpected null timer thread.");
+                if (timerThread == null)
+                    throw new SoftwareClockProviderException("Unexpected null timer thread.");
 
-            timerThread.Abort();
-            timerThread = null;
-            timerRunning = false;
+                timerThread.Abort();
+                timerThread = null;
+                timerRunning = false;
+            }
         }
 
-        protected override sealed void armTimer()
+        protected override sealed void armClockProvider()
         {
-            if (timerRunning)
-                throw new SoftwareClockProviderException("Attempted to arm timer while already running.");
+            lock (lockObj)
+            {
+                if (timerRunning)
+                    throw new SoftwareClockProviderException("Attempted to arm timer while already running.");
 
-            if (timerThread != null)
-                throw new SoftwareClockProviderException("Attempted to arm timer while thread not cleared.");
+                if (timerThread != null)
+                    throw new SoftwareClockProviderException("Attempted to arm timer while thread not cleared.");
 
-            timerThread = new Thread(timerThreadProc);
+                timerThread = new Thread(timerThreadProc);
+            }
         }
 
         protected abstract void timerThreadProc();

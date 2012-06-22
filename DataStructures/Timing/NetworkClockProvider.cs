@@ -9,19 +9,20 @@ namespace DataStructures.Timing
 {
     public class NetworkClockProvider : SoftwareClockProvider
     {
-        private static object lockObj = new object();
+        private static object staticLockObj = new object();
+        private object instanceLockObj = new object();
 
         private uint clockID;
-
+        
         private NetworkClockProvider() { }
 
         private static uint lastNGramID = uint.MaxValue;
 
-        public  NetworkClockProvider(uint clockID) : base()
+        public  NetworkClockProvider(uint clockID)
         {
             this.clockID = clockID;
 
-            lock (lockObj)
+            lock (staticLockObj)
             {
                 if (listenerThread == null)
                     throw new SoftwareClockProviderException("Attempted to create a NetworkClockProvider before starting the network clock listener.");
@@ -30,7 +31,7 @@ namespace DataStructures.Timing
                     throw new SoftwareClockProviderException("Attempted to create a duplicate NetworkClockProvider with ID.");
 
                 providers.Add(clockID, this);
-            }  
+            }
         }
 
         private static EventHandler<MessageEvent> staticMessageLogHandler;
@@ -39,8 +40,9 @@ namespace DataStructures.Timing
 
         private static void staticLogMessage(MessageEvent e)
         {
-            if (staticMessageLogHandler != null)
-                staticMessageLogHandler(dummy, e);
+            lock (staticLockObj)
+                if (staticMessageLogHandler != null)
+                    staticMessageLogHandler(dummy, e);
         }
 
         private static Thread listenerThread;
@@ -49,11 +51,11 @@ namespace DataStructures.Timing
 
         
 
-        private static Dictionary<uint, NetworkClockProvider> providers;
+        private static Dictionary<uint, NetworkClockProvider> providers = new Dictionary<uint,NetworkClockProvider>();
         private static NetworkClockEndpointInfo.HostTypes myListenerType;
 
         public static void startListener(NetworkClockEndpointInfo.HostTypes listenerType) {
-            lock (lockObj)
+            lock (staticLockObj)
             {
                 staticLogMessage(new MessageEvent("Starting network clock listener...", 0, MessageEvent.MessageTypes.Routine, MessageEvent.MessageCategories.SoftwareClock));
                 myListenerType = listenerType;
@@ -70,7 +72,7 @@ namespace DataStructures.Timing
 
         public static void shutDown()
         {
-            lock (lockObj)
+            lock (staticLockObj)
             {
                 staticLogMessage(new MessageEvent("Shutting down network clock listener.", 0, MessageEvent.MessageTypes.Routine, MessageEvent.MessageCategories.SoftwareClock));
                 if (listenerThread == null)
@@ -80,48 +82,45 @@ namespace DataStructures.Timing
                 listenerThread.Abort();
                 listenerThread = null;
 
-                lock (providers)
-                {
-                    List<uint> providerIDs = providers.Keys.ToList();
-                    foreach (uint id in providerIDs)
-                    {
-                        providers[id].Abort();
-                    }
 
-                    providers = null;
+                List<uint> providerIDs = providers.Keys.ToList();
+                foreach (uint id in providerIDs)
+                {
+                    providers[id].AbortClockProvider();
                 }
+
+                providers = null;
+
                 staticLogMessage(new MessageEvent("...done"));
             }
         }
 
         public static bool listenerRunning()
         {
-            return (listenerThread != null);
+            lock (staticLockObj)
+                return (listenerThread != null);
         }
 
         public static void registerStaticMessageLogHandler(EventHandler<MessageEvent> handler)
         {
-            staticMessageLogHandler += handler;
+            lock (staticLockObj)
+                staticMessageLogHandler += handler;
         }
 
         private static UdpClient udpClient;
 
         private static void listenerThreadProc()
         {
-            
+            lock (staticLockObj)
+            {
                 staticLogMessage(new MessageEvent("Starting Network Clock listener thread...", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.Networking));
-
-
-            udpClient = new UdpClient(NetworkClockEndpointInfo.getListenerPort(myListenerType));
-
-            
-            staticLogMessage( new MessageEvent("...done", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.Networking));
+                udpClient = new UdpClient(NetworkClockEndpointInfo.getListenerPort(myListenerType));
+                staticLogMessage(new MessageEvent("...done", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.Networking));
+            }
 
             while (true)
             {
                 System.Net.IPEndPoint remoteEnd = null;
-                //byte[] received = udpClient.Receive(ref remoteEnd); // does not abort when thread aborts
-                //byte[] received = udpClient.b
                 IAsyncResult result = udpClient.BeginReceive(null, null);
                 byte[] received = udpClient.EndReceive(result, ref remoteEnd);
 
@@ -130,6 +129,7 @@ namespace DataStructures.Timing
                     staticLogMessage(new MessageEvent("Received wrong sized (" + received.Length + ") datagram. Dropping.", 1, MessageEvent.MessageTypes.Error, MessageEvent.MessageCategories.Networking));
                     continue;
                 }
+
                 NetworkClockDatagram ndgram = new NetworkClockDatagram(received);
 
 #if DEBUG
@@ -137,46 +137,55 @@ namespace DataStructures.Timing
 #endif
                 if (ndgram.DatagramCount != lastNGramID + 1)
                 {
-                    staticLogMessage(new MessageEvent("Warning! Received network clock datagram #" + ndgram.DatagramCount + ", expected #" + (lastNGramID+1) + ".", 0, MessageEvent.MessageTypes.Warning, MessageEvent.MessageCategories.Networking));
+                    staticLogMessage(new MessageEvent("Warning! Received network clock datagram #" + ndgram.DatagramCount + ", expected #" + (lastNGramID + 1) + ".", 0, MessageEvent.MessageTypes.Warning, MessageEvent.MessageCategories.Networking));
                 }
                 lastNGramID = ndgram.DatagramCount;
 
-                lock (providers)
+                lock (staticLockObj)
                 {
                     if (providers.ContainsKey(ndgram.ClockID))
                     {
-                        if (providers[ndgram.ClockID].isRunning)
+                        NetworkClockProvider pr = providers[ndgram.ClockID];
+                        if (pr == null)
+                            throw new SoftwareClockProviderException("Unexpected null network clock provider.");
+                        lock (pr.instanceLockObj)
                         {
-                            providers[ndgram.ClockID].reachTime(ndgram.ElaspedTime);
+                            if (providers[ndgram.ClockID].isRunning)
+                            {
+                                providers[ndgram.ClockID].reachTime(ndgram.ElaspedTime);
+                            }
                         }
                     }
                 }
             }
-
-
         }
 
-        protected override void abortTimer()
+        protected override void cleanupClockProvider()
         {
-            isRunning = false;
-            providers.Remove(clockID);
+            lock (instanceLockObj)
+            {
+                isRunning = false;
+            }
+
+            lock (providers)
+            {
+                providers.Remove(clockID);
+            }
         }
 
-        protected override void armTimer()
+        protected override void armClockProvider()
         {
             // nothing to do
         }
 
-        protected override void startTimer()
+        protected override void startClockProvider()
         {
-            // nothing to do
+            lock (staticLockObj)
+                isRunning = true;
         }
 
         private bool isRunning = false;
 
-        public override void Start()
-        {
-            isRunning = true;
-        }
+
     }
 }
