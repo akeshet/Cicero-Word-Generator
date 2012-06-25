@@ -88,7 +88,7 @@ namespace DataStructures.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to unreleased.
+        ///   Looks up a localized string similar to Beta.
         /// </summary>
         internal static string RevisionString {
             get {

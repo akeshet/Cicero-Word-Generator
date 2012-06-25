@@ -127,7 +127,7 @@
     <value>Tony Kim (MIT), Ryan Olf (Berkeley), Emmanuel Mimoun (ENS Paris), Timur Rvachov (MIT)</value>
   </data>
   <data name="RevisionString" xml:space="preserve">
-    <value>unreleased</value>
+    <value>Beta</value>
     <comment>[Optional] eg: rev2. Will be displayed in UI, but not tracked in serialized Sequence, Settings, or ServerSettings files.</comment>
   </data>
   <data name="VersionString" xml:space="preserve">
