@@ -101,3 +101,15 @@ to reorder them.
 Changes to Analog Input channel configuration. Note -- your old Atticus
 settings will no longer correctly configure your analog inputs (if you
 are using this feature).
+
+Major changes to FPGA feature set, and how it interacts with software-timed
+tasks:
+  a) FPGA "Wait For Retrigger" words now support a wait timeout, after which
+the sequence will continue to run even if a retrigger edge was never received.
+  b) Wait for retrigger can now retrigger on positive or negative edge or value,
+depending on user selectable flag for that word.
+  c) A much more sophisticated way of sharing software clocks allows for software
+timed tasks (ie GPIB, RFSG, RS232) to be synchronized to FPGA clock, even if there
+are long retrigger waits. The software clock can also be broadcast over the network
+to Cicero (to make the UI reflect any retrigger waits) and other Atticus servers
+(to synchronize their software tasks to the FPGA as well).
