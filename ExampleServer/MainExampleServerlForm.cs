@@ -41,18 +41,10 @@ namespace Virgil
 
 
 
-        public delegate void MessageEventCallDelegate(object sender, MessageEvent e);
         public void addMessageLogText(object sender, MessageEvent e)
         {
-            if (this.InvokeRequired)
-            {
-                MessageEventCallDelegate ev = new MessageEventCallDelegate(addMessageLogText);
-                this.BeginInvoke(ev, new object[] { sender, e });
-            }
-            else
-            {
-                this.textBox1.AppendText(e.MyTime.ToString() + " " + sender.ToString() + ": " + e.ToString() + "\r\n");
-            }
+            Action addText = () => this.textBox1.AppendText(e.MyTime.ToString() + " " + sender.ToString() + ": " + e.ToString() + "\r\n");
+            BeginInvoke(addText);
         }
 
 

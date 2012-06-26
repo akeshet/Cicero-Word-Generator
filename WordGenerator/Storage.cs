@@ -222,8 +222,6 @@ namespace WordGenerator
 
 
 
-            private delegate bool boolVoidDelegate();
-
             public static bool LoadSettingsData(string path)
             {
                 SettingsData loadMe = null;

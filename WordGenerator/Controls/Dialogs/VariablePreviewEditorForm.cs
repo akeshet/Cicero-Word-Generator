@@ -31,8 +31,6 @@ namespace WordGenerator.Controls
             }
         }
 
-        private delegate int intSeqDelegate(SequenceData s);
-
         /// <summary>
         /// Returns the number of variable values that changed.
         /// </summary>

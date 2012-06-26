@@ -455,9 +455,6 @@ namespace WordGenerator.Controls
         }
 
 
-
-        private delegate void scrollHandler(ScrollEventArgs e);
-
         /// <summary>
         /// This function is necessary because Microsoft, in all its wisdom, decided that certain scroll-causing
         /// actions do not raise a scroll event, and thus allows the multiple horiz scrollbars to get out of sync. Calling this 
@@ -949,22 +946,14 @@ namespace WordGenerator.Controls
             }
         }
 
-        private delegate void voidMode (SequenceMode mode);
-
         /// <summary>
         /// Used for thread safe changing of selected mode. Called from RunForm.
         /// </summary>
         /// <param name="mode"></param>
         public void setMode(SequenceMode mode)
         {
-            if (this.InvokeRequired)
-            {
-                this.Invoke(new voidMode(setMode), new object[] { mode });
-            }
-            else
-            {
-                modeBox.SelectedItem = mode;
-            }
+            Action setItem = () => modeBox.SelectedItem = mode;
+            Invoke(setItem);
         }
 
         private void modeBox_SelectedIndexChanged(object sender, EventArgs e)

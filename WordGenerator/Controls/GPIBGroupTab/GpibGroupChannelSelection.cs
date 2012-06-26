@@ -104,9 +104,9 @@ namespace WordGenerator.Controls
                     {
                         StringParameterStringEditor spse = new StringParameterStringEditor(sps);
 
-                        spse.insertAbove += new StringParameterStringEditor.spsEvent(spse_insertAbove);
-                        spse.insertBelow += new StringParameterStringEditor.spsEvent(spse_insertBelow);
-                        spse.delete += new StringParameterStringEditor.spsEvent(spse_delete);
+                        spse.insertAbove += new Action<StringParameterString>(spse_insertAbove);
+                        spse.insertBelow += new Action<StringParameterString>(spse_insertBelow);
+                        spse.delete += new Action<StringParameterString>(spse_delete);
 
                         spsFlowLayoutPanel.Controls.Add(spse);
                     }

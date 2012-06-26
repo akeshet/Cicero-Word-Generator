@@ -29,8 +29,6 @@ namespace AtticusServer
             }
         }
 
-        private delegate void voidVoidDelegate();
-
         private void updateDisplayError()
         {
             Action displayErrorAction = () =>
