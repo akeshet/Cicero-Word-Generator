@@ -12,11 +12,9 @@ namespace WordGenerator
     public partial class ServerManagerForm : Form
     {
 
-   //     delegate void MessageEventHandler(object sender, MessageEvent message);
 
         delegate bool boolMessageLogDelegate (EventHandler<MessageEvent> messageLog) ;
         
-   //     delegate void MessageEventCallDelegate(object sender, EventArgs message);
 
         public ServerManagerForm()
         {

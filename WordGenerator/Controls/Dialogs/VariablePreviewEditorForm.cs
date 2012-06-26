@@ -33,15 +33,14 @@ namespace WordGenerator.Controls
 
         private delegate int intSeqDelegate(SequenceData s);
 
+        /// <summary>
+        /// Returns the number of variable values that changed.
+        /// </summary>
+        /// <param name="sequence"></param>
+        /// <returns></returns>
         public int refresh(SequenceData sequence)
         {
-            if (this.InvokeRequired)
-            {
-                intSeqDelegate myDelegate = new intSeqDelegate(this.refresh);
-                IAsyncResult result = this.BeginInvoke(myDelegate, new object [] {sequence});
-                return (int) this.EndInvoke(result);
-            }
-            else
+            Func<int> refreshFunc = () =>
             {
                 int ans = 0;
                 foreach (VariablePreviewEditor ed in eds)
@@ -61,7 +60,9 @@ namespace WordGenerator.Controls
                 }
 
                 return ans;
-            }
+            };
+
+            return (int) Invoke(refreshFunc);
         }
     }
 }

@@ -71,6 +71,10 @@ namespace WordGenerator.Controls
             updateButtonColor();
         }
 
+        /// <summary>
+        /// Returns true if value was changed by this refresh.
+        /// </summary>
+        /// <returns></returns>
         public bool refresh()
         {
             bool ans = false;

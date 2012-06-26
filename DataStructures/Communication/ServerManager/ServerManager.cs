@@ -25,7 +25,6 @@ namespace DataStructures
         [NonSerialized]
         private Object lockObj;
 
-        private delegate bool boolVoidDelegate();
 
         [OnDeserialized]
         public void ensureProperDeserialization(StreamingContext sc)

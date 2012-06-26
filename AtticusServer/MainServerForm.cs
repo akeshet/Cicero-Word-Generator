@@ -33,11 +33,7 @@ namespace AtticusServer
 
         private void updateDisplayError()
         {
-            if (this.InvokeRequired)
-            {
-                this.BeginInvoke(new voidVoidDelegate(updateDisplayError));
-            }
-            else
+            Action displayErrorAction = () =>
             {
                 if (displayError)
                 {
@@ -47,7 +43,9 @@ namespace AtticusServer
                 {
                     eventLogTextBox.BackColor = this.BackColor;
                 }
-            }
+            };
+
+            BeginInvoke(displayErrorAction);            
         }
 
 
@@ -153,15 +151,10 @@ namespace AtticusServer
             if (showWarningsErrorsOnly.Checked && e.MessageType != MessageEvent.MessageTypes.Error && e.MessageType != MessageEvent.MessageTypes.Warning)
                 return;
 
-            if (this.InvokeRequired)
-            {
-                EventHandler<MessageEvent> ev = new EventHandler<MessageEvent>(addMessageLogText);
-                this.BeginInvoke(ev, new object[] { sender, e });
-            }
-            else
-            {
-                eventLogTextBox.AppendText(e.MyTime.ToString() + " " + sender.ToString() + ": " + e.ToString() + "\r\n");
-            }
+            /// This is a closure. Fancy functional makes the code cleaner.
+            Action printMessage = () => eventLogTextBox.AppendText(e.MyTime.ToString() + " " + sender.ToString() + ": " + e.ToString() + "\r\n");
+            BeginInvoke(printMessage);
+            
         }
 
         

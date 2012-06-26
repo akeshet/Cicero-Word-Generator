@@ -84,18 +84,11 @@ namespace WordGenerator
             }
         }
 
-        private delegate void voidVoidDelegate();
 
         private void setTimestepEditorBackgrounds()
         {
-            if (this.InvokeRequired)
+            Action setBackgrounds = () =>
             {
-
-                this.BeginInvoke(new voidVoidDelegate(setTimestepEditorBackgrounds));
-            }
-            else
-            {
-
                 if (this.sequencePage != null)
                 {
                     if (this.sequencePage.timeStepsFlowPanel != null)
@@ -110,7 +103,9 @@ namespace WordGenerator
                         }
                     }
                 }
-            }
+            };
+
+            this.BeginInvoke(setBackgrounds);
         }
 
 

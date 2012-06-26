@@ -32,17 +32,11 @@ namespace Virgil
             server.openConnection();
         }
 
-        public delegate void voidVoidDelegate();
 
         public void reenableConnectButton()
         {
-            if (this.InvokeRequired)
-            {
-
-                this.BeginInvoke(new voidVoidDelegate(reenableConnectButton));
-            }
-            else
-                this.connectButton.Enabled = true;
+            Action enableConnectButton = () => this.connectButton.Enabled = true;
+            BeginInvoke(enableConnectButton);
         }
 
 

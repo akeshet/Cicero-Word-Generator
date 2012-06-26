@@ -26,10 +26,6 @@ namespace WordGenerator
 
         int repeatCount = 1;
 
-        private delegate bool boolSequenceDelegate(SequenceData seq);
-        private delegate bool boolIntSequenceDelegate(int a, SequenceData seq);
-        private delegate void MessageEventCallDelegate(object o, MessageEvent e);
-        private delegate void setStatusDelegate(RunFormStatus o);
 
         Thread getConfirmationThread;
 
@@ -41,7 +37,6 @@ namespace WordGenerator
 
         DateTime runStartTime;
 
-        private delegate bool boolVoidDelegate();
 
         // this enum should enumerate the steps that should happen in sequence
         private enum RunFormStatus { Inactive, StartingRun, Running, FinishedRun, ClosableOnly };
@@ -95,15 +90,9 @@ namespace WordGenerator
         }
 
 
-        private delegate void voidVoidDelegate();
         private void updateErrorDisplay()
         {
-            if (this.InvokeRequired)
-            {
-                voidVoidDelegate callback = new voidVoidDelegate(updateErrorDisplay);
-                this.Invoke(callback);
-            }
-            else
+            Action updateDisplayAction = () =>
             {
                 if (errorDetected)
                 {
@@ -113,14 +102,16 @@ namespace WordGenerator
                 {
                     textBox1.BackColor = this.BackColor;
                 }
-            }
+            };
+
+            Invoke(updateDisplayAction);
         }
 
         private void setStatus(RunFormStatus status)
         {
             if (this.InvokeRequired)
             {
-                setStatusDelegate callback = new setStatusDelegate(setStatus);
+                Action<RunFormStatus> callback = setStatus;
                 this.Invoke(callback, new object[] { status });
             }
             else
@@ -337,7 +328,7 @@ namespace WordGenerator
 
             if (this.InvokeRequired)
             {
-                MessageEventCallDelegate ev = new MessageEventCallDelegate(addMessageLogText);
+                EventHandler<MessageEvent> ev = addMessageLogText;
                 this.BeginInvoke(ev, new object[] { sender, e });
             }
             else
@@ -367,15 +358,10 @@ namespace WordGenerator
 
         }
 
-        private delegate void voidBoolDelegate(bool calibrationShot);
 
         public void updateTitleBar(bool calibrationShot)
         {
-            if (this.InvokeRequired)
-            {
-                this.BeginInvoke(new voidBoolDelegate(updateTitleBar), new object[] { calibrationShot });
-            }
-            else
+            Action updateBar = () =>
             {
                 if (!calibrationShot)
                 {
@@ -409,12 +395,11 @@ namespace WordGenerator
                     }
                     this.Text = title;
                 }
-
                 else
-                {
                     this.Text = "Running calibration shot.";
-                }
-            }
+            };
+
+            BeginInvoke(updateBar);
         }
 
         private void startRun()
@@ -448,33 +433,28 @@ namespace WordGenerator
             switch (runType)
             {
                 case RunType.Run_Iteration_Zero:
-                    boolIntSequenceDelegate runZero = new boolIntSequenceDelegate(do_run);
+                    Func<int, SequenceData, bool> runZero = do_run;
                     runZero.BeginInvoke(0, runningSequence, null, null);
                     break;
                 case RunType.Run_Current_Iteration:
-                    boolSequenceDelegate runCurrent = new boolSequenceDelegate(do_run);
+                    Func<SequenceData, bool> runCurrent = do_run;
                     runCurrent.BeginInvoke(runningSequence, null, null);
                     break;
                 case RunType.Run_Full_List:
-                    boolVoidDelegate runList = new boolVoidDelegate(do_list_run);
+                    Func<bool> runList = do_list_run;
                     runList.BeginInvoke(null, null);
                     break;
                 case RunType.Run_Continue_List:
-                    boolVoidDelegate runContinueList = new boolVoidDelegate(do_continue_list_run);
+                    Func<bool> runContinueList = do_continue_list_run;
                     runContinueList.BeginInvoke(null, null);
                     break;
                 case RunType.Run_Random_Order_List:
-                    boolVoidDelegate runRandomList = new boolVoidDelegate(do_random_order_list_run);
+                    Func<bool> runRandomList = do_random_order_list_run;
                     runRandomList.BeginInvoke(null, null);
                     break;
             }
 
         }
-
-        private delegate void progressBarInitDelegate(double dur);
-        private delegate void progressBarUpdateDelegate(int msec, SequenceData sequence);
-
-
 
         public bool do_continue_list_run()
         {
@@ -1022,8 +1002,8 @@ namespace WordGenerator
 
                 // async call to progress bar initialization
 
-                progressBarInitDelegate pbid = new progressBarInitDelegate(initializeProgressBar);
-                Invoke(pbid, new object[] { sequence.SequenceDuration });
+                Action<double> initProgressBarAction = initializeProgressBar;
+                Invoke(initProgressBarAction, new object[] { sequence.SequenceDuration });
 
 
                 double duration = sequence.SequenceDuration;
@@ -1163,7 +1143,8 @@ namespace WordGenerator
             if (priority >= currentSoftwareclockPriority)
             {
                 currentSoftwareclockPriority = priority;
-                BeginInvoke(new progressBarUpdateDelegate(this.updateProgressBar), new object[] { (int)elapsedTime, runningSequence });
+                Action<int, SequenceData> updateAction = updateProgressBar;
+                BeginInvoke(updateAction, new object[] { (int)elapsedTime, runningSequence });
                 return true;
             }
             else 
@@ -1529,16 +1510,10 @@ namespace WordGenerator
 
         public static void abortAtEndOfNextBackgroundRun()
         {
-            if (backgroundRunningRunform!=null && backgroundRunningRunform.InvokeRequired)
+            if (backgroundRunningRunform != null)
             {
-                backgroundRunningRunform.BeginInvoke(new voidVoidDelegate(abortAtEndOfNextBackgroundRun));
-            }
-            else
-            {
-                if (backgroundRunningRunform != null)
-                {
-                    backgroundRunningRunform.abortAfterThis.Checked = true;
-                }
+                Action enableAbortCheck = () => backgroundRunningRunform.abortAfterThis.Checked = true;
+                backgroundRunningRunform.BeginInvoke(enableAbortCheck);
             }
         }
         #endregion
