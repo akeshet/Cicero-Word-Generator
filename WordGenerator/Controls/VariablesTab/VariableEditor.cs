@@ -338,7 +338,8 @@ namespace WordGenerator.Controls
 
         public void updateDerivedValue()
         {
-            if (variable != null)
+
+            if (variable != null && variable.DerivedVariable)
             {
                 if (variable.DerivedVariable)
                 {

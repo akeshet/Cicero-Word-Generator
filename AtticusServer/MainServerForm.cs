@@ -55,73 +55,7 @@ namespace AtticusServer
 
         int cursorWaitCount = 0;
 
-        #region importation des fonctions Ni-Sync
-        [DllImport(@"C://VXIPNP//WinNT//Bin//niSync.dll")]
-        private static extern bool niSync_init(string resourceName, bool idQuery, bool resetDevice, out System.IntPtr vi_session);
 
-        [DllImport(@"C://VXIPNP//WinNT//Bin//niSync.dll")]
-        private static extern bool niSync_close(System.IntPtr vi_session);
-
-        [DllImport(@"C://VXIPNP//WinNT//Bin//niSync.dll")]
-        private static extern bool niSync_ConnectClkTerminals(System.IntPtr vi_session, string sourceTerminal, string destinationTerminal);
-
-        [DllImport(@"C://VXIPNP//WinNT//Bin//niSync.dll")]
-        private static extern bool niSync_DisconnectClkTerminals(System.IntPtr vi_session, string sourceTerminal, string destinationTerminal);
-
-        [DllImport(@"C://VXIPNP//WinNT//Bin//niSync.dll")]
-        private static extern bool niSync_ConnectTrigTerminals(System.IntPtr vi_session,
-            string srcTerminal,
-            string destTerminal,
-            string syncClock,
-            int invert,
-            int updateEdge);
-
-        [DllImport(@"C://VXIPNP//WinNT//Bin//niSync.dll")]
-        private static extern bool niSync_DisconnectTrigTerminals(System.IntPtr vi,
-            string srcTerminal,
-            string destTerminal);
-
-        [DllImport(@"C://VXIPNP//WinNT//Bin//niSync.dll")]
-        private static extern bool niSync_ConnectSWTrigToTerminal(System.IntPtr vi,
-                              string srcTerminal,
-                              string destTerminal,
-                              string syncClock,
-                              int invert,
-                              int updateEdge,
-                              double delay);
-
-        [DllImport(@"C://VXIPNP//WinNT//Bin//niSync.dll")]
-        private static extern bool niSync_DisconnectSWTrigFromTerminal(System.IntPtr vi,
-            string srcTerminal,
-            string destTerminal);
-
-        [DllImport(@"C://VXIPNP//WinNT//Bin//niSync.dll")]
-        private static extern bool niSync_SendSoftwareTrigger(System.IntPtr vi,
-            string srcTerminal);
-
-        [DllImport(@"C://VXIPNP//WinNT//Bin//niSync.dll")]
-        private static extern bool niSync_SetAttributeViInt32(System.IntPtr session,
-                              string terminalName,
-                              int attribute,
-                              System.Int32 values);
-
-
-
-        [DllImport(@"C://VXIPNP//WinNT//Bin//niSync.dll")]
-        private static extern bool niSync_SetAttributeViReal64(System.IntPtr session,
-            string terminalName,
-            int attribute,
-            double values);
-
-        [DllImport(@"C://VXIPNP//WinNT//Bin//niSync.dll")]
-        private static extern bool niSync_SetAttributeViString(System.IntPtr session,
-            string terminalName,
-            int attribute,
-            string values);
-
-        System.IntPtr session = IntPtr.Zero;
-        bool status;
-        #endregion
 
         public void updateHardwareChannelCount()
         {
@@ -300,7 +234,7 @@ namespace AtticusServer
                 //button1.Enabled = false;
             }
             else
-              button1.Enabled = true;
+              refreshHardwareButton.Enabled = true;
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -337,29 +271,20 @@ namespace AtticusServer
             if (AtticusServer.server.serverSettings.ConnectOnStartup)
                 AtticusServer.server.reachMarshalStatus(ServerStructures.ServerCommunicatorStatus.Connected);
 
-            try
-            {
-                status = niSync_init("PXI1Slot2", true, true, out session);
-                status = niSync_SetAttributeViReal64(session, "", 1150400, 20000000);
-                status = niSync_SetAttributeViString(session, "", 1150201, "DDS");
-                status = niSync_ConnectClkTerminals(session, "Oscillator", "PXI_Clk10");
-                status = niSync_ConnectTrigTerminals(session, "SyncClkFullSpeed", "PXI_Trig7", "SyncClkFullSpeed", 0, 0); 
 
-            }
-            catch { }
+            //Entry point to now-disabled mystery code.
+            //See NiSync.cs for details.
+            //NiSync.onLoad();
                 
         }
 
         private void MainServerForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             AtticusServer.server.shutDown();
-            try
-            {
-                status = niSync_DisconnectClkTerminals(session, "Oscillator", "PXI_Clk10");
-                status = niSync_DisconnectTrigTerminals(session, "SyncClkFullSpeed", "PXI_Trig7");
-                status = niSync_close(session);
-            }
-            catch { }
+
+            //Entry point to now-disabled myster code.
+            //See NiSync.cs for details.
+            //NiSync.onClose();
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -443,7 +368,7 @@ namespace AtticusServer
             form.ShowDialog();
         }
 
-        private void button2_Click_1(object sender, EventArgs e)
+        private void deleteSelectedDeviceButtonClick(object sender, EventArgs e)
         {
             if (AtticusServer.server.serverSettings.myDevicesSettings.ContainsValue(listBox1.SelectedItem as DeviceSettings)) {
                 string str = "";
@@ -467,6 +392,18 @@ namespace AtticusServer
         {
             this.DisplayError = false;
         }
+
+        private void openHomePageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://akeshet.github.com/Cicero-Word-Generator/");
+        }
+
+        private void openGitRepositoryPageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/akeshet/Cicero-Word-Generator");
+        }
+
+
 
 
     }

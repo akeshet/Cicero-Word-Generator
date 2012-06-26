@@ -124,6 +124,7 @@
     <Compile Include="Controls\OverrideTab\OverridePage.Designer.cs">
       <DependentUpon>OverridePage.cs</DependentUpon>
     </Compile>
+    <Compile Include="ClientRunner.cs" />
     <Compile Include="Controls\Shared\NiceScale.cs" />
     <Compile Include="Controls\Shared\WaveformGraph.cs">
       <SubType>UserControl</SubType>

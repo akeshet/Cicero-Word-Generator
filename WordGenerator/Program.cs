@@ -73,15 +73,21 @@ namespace WordGenerator
                 }
 
 
+                MainClientForm mainForm;
 
                 if (runLog == null)
                 {
-                    Application.Run(new mainClientForm());
+                    mainForm = new MainClientForm();
                 }
                 else
                 {
-                    Application.Run(new mainClientForm(runLog));
+                    mainForm =  new MainClientForm(runLog);
                 }
+
+                ClientRunner runner = new ClientRunner();
+                runner.messageLog += new EventHandler<DataStructures.MessageEvent>(mainForm.addMessageLogText);
+
+                Application.Run(mainForm);
             }
             catch (Exception e)
             {

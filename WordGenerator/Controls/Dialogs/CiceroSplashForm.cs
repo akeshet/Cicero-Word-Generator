@@ -16,10 +16,10 @@ namespace WordGenerator.Controls
 
             label1.Text = DataStructures.Information.VersionString + "          " + DataStructures.Information.BuildDateString + "          \n" + DataStructures.Information.AuthorString + "\nContributors: " + DataStructures.Information.ContribString;
 
-            if (WordGenerator.mainClientForm.instance.studentEdition)
+            if (WordGenerator.MainClientForm.instance.studentEdition)
             {
-                WordGenerator.mainClientForm.instance.studentEdition = false;
-                WordGenerator.mainClientForm.instance.studentEditionDisabled = true;
+                WordGenerator.MainClientForm.instance.studentEdition = false;
+                WordGenerator.MainClientForm.instance.studentEditionDisabled = true;
             }
 
         }

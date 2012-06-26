@@ -801,23 +801,22 @@ namespace DataStructures
             return null;
         }
 
-        public SingleOutputFrame getSingleOutputFrameAtEndOfTimestep(int timeStep, SettingsData settings, bool outputAnalogDwellValues)
+        public SingleOutputFrame getSingleOutputFrameAtEndOfTimestep(TimeStep step, SettingsData settings, bool outputAnalogDwellValues)
         {
-            if (TimeSteps == null)
-                return null;
-            if (timeStep>=TimeSteps.Count)
-                return null;
-
-            TimeStep step = TimeSteps[timeStep];
-            int analogStep;
+         
+            int analogStepID;
             if (outputAnalogDwellValues)
             {
-                analogStep = TimeSteps.IndexOf(dwellWord());
+                analogStepID = TimeSteps.IndexOf(dwellWord());
             }
             else
             {
-                analogStep = timeStep;
+                analogStepID = TimeSteps.IndexOf(step);
             }
+
+            TimeStep analogStep = TimeSteps[analogStepID];
+
+            int timeStepID = TimeSteps.IndexOf(step);
 
             SingleOutputFrame ans = new SingleOutputFrame();
 
@@ -839,7 +838,7 @@ namespace DataStructures
                     }
                     else
                     {
-                        ans.analogValues.Add(analogID, getAnalogValueAtEndOfTimestep(analogStep, analogID, Variables));
+                        ans.analogValues.Add(analogID, getAnalogValueAtEndOfTimestep(analogStepID, analogID, Variables));
                     }
                 }
             }
@@ -856,17 +855,17 @@ namespace DataStructures
                 }
                 else
                 {
-                    if (TimeSteps[timeStep].DigitalData.ContainsKey(digitalID))
+                    if (step.DigitalData.ContainsKey(digitalID))
                     {
-                        DigitalDataPoint dp = TimeSteps[timeStep].DigitalData[digitalID];
+                        DigitalDataPoint dp = step.DigitalData[digitalID];
                         if (!dp.DigitalContinue)
                         {
-                            val = TimeSteps[timeStep].DigitalData[digitalID].getValue();
+                            val = step.DigitalData[digitalID].getValue();
                         }
                         else  // this digital value is a "continue" value, so, we have to go backwards in time until we find 
                         // what value to continue from
                         {
-                            int checkStep = timeStep - 1;
+                            int checkStep = timeStepID - 1;
                             val = false; // if we hunt all the way to the first timestep with no answer, the default answer is false
                             while (checkStep >= 0)
                             {
@@ -1237,8 +1236,10 @@ namespace DataStructures
             return false;
         }
 
+      
         /// <summary>
-        /// Computes 
+        /// Computer digital output buffer for a given channel, using a variable timebase described by timebaseSegments.
+        /// Stores result in ans
         /// </summary>
         /// <param name="digitalID"></param>
         /// <param name="masterTimebaseSampleDuration"></param>
@@ -1879,6 +1880,11 @@ namespace DataStructures
         }
 
 
+        /// <summary>
+        /// This class descibes a single "segment" of a variable timebase clock.
+        /// A "segment" is some number of samples (nSegmentSamples) repeated with a constant frequency
+        /// determined by MasterSamplesPerSegmentSample
+        /// </summary>
         [TypeConverter(typeof(ExpandableObjectConverter))]
         public class VariableTimebaseSegment
         {
@@ -2304,7 +2310,7 @@ namespace DataStructures
 
 
         /// <summary>
-        /// Similar tp usedVariables(), but for waveforms
+        /// Similar to usedVariables(), but for waveforms
         /// </summary>
         /// <returns></returns>
         public Dictionary<Waveform, string> usedWaveforms()
@@ -2598,7 +2604,7 @@ namespace DataStructures
         }
 
         /// <summary>
-        /// Replaces all occurences in sequence of analog gropu ReplaceMe with group Withme, then
+        /// Replaces all occurences in sequence of analog group ReplaceMe with group Withme, then
         /// removes ReplaceMe from list of groups.
         /// </summary>
         /// <param name="replaceMe"></param>
@@ -2618,7 +2624,7 @@ namespace DataStructures
         }
 
         /// <summary>
-        /// Replaces all occurences in sequence of GPIB gropu ReplaceMe with group Withme, then
+        /// Replaces all occurences in sequence of GPIB group ReplaceMe with group Withme, then
         /// removes ReplaceMe from list of groups.
         /// </summary>
         /// <param name="replaceMe"></param>
@@ -2639,7 +2645,7 @@ namespace DataStructures
 
 
         /// <summary>
-        /// Replaces all occurences in sequence of RS232 gropu ReplaceMe with group Withme, then
+        /// Replaces all occurences in sequence of RS232 group ReplaceMe with group Withme, then
         /// removes ReplaceMe from list of groups.
         /// </summary>
         /// <param name="replaceMe"></param>
@@ -2723,6 +2729,13 @@ namespace DataStructures
         }
 
 
+        /// <summary>
+        /// This function should be run prior to buffer generation, if Timestep loops are enabled.
+        /// 
+        /// This will create temporary "loop copies" of timesteps.
+        /// 
+        /// Call cleanupLoopCopies() after buffers are generated.
+        /// </summary>
         public void createLoopCopies()
         {
             foreach (TimestepGroup tsg in this.TimestepGroups)
@@ -2796,6 +2809,82 @@ namespace DataStructures
         private void setSerializationVersionNumber(StreamingContext sc)
         {
             this.versionNumberAtLastSerialization = DataStructuresVersionNumber.CurrentVersion;
+        }
+
+        #endregion
+
+        #region Test Buffer Creation
+
+        public Dictionary<int, bool[]> _testCalculateAllDigitalBuffersFixedFrequency(SettingsData settings, double masterTimestepSize)
+        {
+            Dictionary<int, bool[]> ans = new Dictionary<int, bool[]>();
+            foreach (int digitalChannelId in settings.logicalChannelManager.Digitals.Keys) {
+                ans.Add(digitalChannelId, this.computeDigitalBuffer(digitalChannelId, masterTimestepSize));
+            }
+            return ans;
+        }
+
+        public Dictionary<int, double[]> _testCalculateAllAnalogBuffersFixedFrequenct(SettingsData settings, double masterTimestepSize)
+        {
+            Dictionary<int, double[]> ans = new Dictionary<int, double[]>();
+            foreach (int analogId in settings.logicalChannelManager.Analogs.Keys)
+            {
+                ans.Add(analogId, this.computeAnalogBuffer(analogId, masterTimestepSize));
+            }
+            return ans;
+        }
+
+        public Dictionary<int, bool[]> _testCalculateAllDigitalBuffersVariableFrequency(SettingsData settings, double masterTimestepSize)
+        {
+            Dictionary<int, bool[]> ans = new Dictionary<int, bool[]>();
+            TimestepTimebaseSegmentCollection varbase = this.generateVariableTimebaseSegments(VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, masterTimestepSize);
+            int nSamples = varbase.nSegmentSamples() +1;
+            foreach (int digitalChannelId in settings.logicalChannelManager.Digitals.Keys)
+            {
+                bool[] chanBuff = new bool[nSamples];
+                this.computeDigitalBuffer(digitalChannelId, masterTimestepSize, chanBuff, varbase);
+                ans.Add(digitalChannelId, chanBuff);
+            }
+            return ans;
+        }
+
+        public Dictionary<int, double[]> _testCalculateAllAnalogBuffersVariableFrequency(SettingsData settings, double masterTimestepSize)
+        {
+            Dictionary<int, double[]> ans = new Dictionary<int, double[]>();
+            TimestepTimebaseSegmentCollection varbase = this.generateVariableTimebaseSegments(VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, masterTimestepSize);
+            int nSamples = varbase.nSegmentSamples()+1;
+            foreach (int analogId in settings.logicalChannelManager.Analogs.Keys)
+            {
+                double[] chanBuff = new double[nSamples];
+                this.computeAnalogBuffer(analogId, masterTimestepSize, chanBuff, varbase);
+                ans.Add(analogId, chanBuff);
+            }
+            return ans;
+        }
+
+        /// <summary>
+        /// Used for automated testing purposes only. Creates a buffer snapshot object which can be archived, or 
+        /// compared to archived versions, to verify that buffer generation code doesn't change behavior with
+        /// new releases.
+        /// </summary>
+        /// <param name="settings"></param>
+        /// <param name="masterSamp"></param>
+        /// <returns></returns>
+        public BufferTestSnapshot _createBufferSnapshot(SettingsData settings, double masterSamp)
+        {
+            BufferTestSnapshot snap = new BufferTestSnapshot();
+            snap.MasterTimebaseSampleDuration = masterSamp;
+            snap.Sequence = this;
+            snap.Settings = settings;
+
+            this.createLoopCopies();
+            snap.AnalogFixed = _testCalculateAllAnalogBuffersFixedFrequenct(snap.Settings, masterSamp);
+            snap.AnalogVar = _testCalculateAllAnalogBuffersVariableFrequency(snap.Settings, masterSamp);
+            snap.DigitalFixed = _testCalculateAllDigitalBuffersFixedFrequency(snap.Settings, masterSamp);
+            snap.DigitalVar = _testCalculateAllDigitalBuffersVariableFrequency(snap.Settings, masterSamp);
+            this.cleanupLoopCopies();
+
+            return snap;
         }
 
         #endregion

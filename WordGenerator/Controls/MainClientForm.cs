@@ -12,9 +12,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace WordGenerator
 {
-    public partial class mainClientForm : Form
+    public partial class MainClientForm : Form
     {
-        public static mainClientForm instance;
+        public static MainClientForm instance;
 
         /// <summary>
         /// This is the timestep that is currently being output. This applies only during "dwell" times, not during run times.
@@ -96,11 +96,11 @@ namespace WordGenerator
             else
             {
 
-                if (this.sequencePage1 != null)
+                if (this.sequencePage != null)
                 {
-                    if (this.sequencePage1.timeStepsFlowPanel != null)
+                    if (this.sequencePage.timeStepsFlowPanel != null)
                     {
-                        foreach (Control con in sequencePage1.timeStepsFlowPanel.Controls)
+                        foreach (Control con in sequencePage.timeStepsFlowPanel.Controls)
                         {
                             TimestepEditor te = con as TimestepEditor;
                             if (te != null)
@@ -122,19 +122,7 @@ namespace WordGenerator
         {
             if (currentlyOutputtingTimestep != null)
             {
-                // this isn't maybe the most elegant way to do this, but it re-uses the dwell code that I already 
-                // wrote in timestepeditor, so that's how it will be
-                foreach (Control con in sequencePage1.timeStepsFlowPanel.Controls)
-                {
-                    TimestepEditor te = con as TimestepEditor;
-                    if (te != null)
-                    {
-                        if (te.StepData == currentlyOutputtingTimestep)
-                        {
-                            return te.outputTimestepNow(false, true);
-                        }
-                    }
-                }
+                ClientRunner.instance.outputTimestepNow(currentlyOutputtingTimestep, false, true);
             }
             return false;
         }
@@ -153,7 +141,7 @@ namespace WordGenerator
 
         public void activateAnalogGroupEditor(AnalogGroup ag)
         {
-            this.analogGroupEditor1.setAnalogGroup(ag);
+            this.analogGroupEditor.setAnalogGroup(ag);
             this.mainTab.SelectedIndex = 1;
 
 
@@ -161,13 +149,13 @@ namespace WordGenerator
 
         public void activateGPIBGroupEditor(GPIBGroup gg)
         {
-            this.gpibGroupEditor1.setGpibGroup(gg);
+            this.gpibGroupEditor.setGpibGroup(gg);
             this.mainTab.SelectedIndex = 2;
         }
 
         public void activateRS232GroupEditor(RS232Group rg)
         {
-            this.rS232GroupEditor1.setRS232Group(rg);
+            this.rS232GroupEditor.setRS232Group(rg);
             this.mainTab.SelectedIndex = 3;
         }
 
@@ -215,7 +203,7 @@ namespace WordGenerator
         /// runLog will contain the log that we intent to browse.
         /// </summary>
         /// <param name="runLog"></param>
-        public mainClientForm(RunLog runLog)
+        public MainClientForm(RunLog runLog)
         {
             #region Singleton
             if (instance != null)
@@ -250,6 +238,10 @@ namespace WordGenerator
 
             InitializeComponent();
 
+#if DEBUG
+            debugToolStripMenuItem.Visible = true;
+#endif
+
             CiceroSplashForm splash = new CiceroSplashForm();
 
             splash.Show();
@@ -272,40 +264,41 @@ namespace WordGenerator
             // bind F1 to F8 to appropriate tab pages
 
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F1);
-            hotKeyBindings.Add(this.sequencePage);
+            hotKeyBindings.Add(this.sequenceTab);
 
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F2);
             hotKeyBindings.Add(this.overrideTab);
 
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F3);
-            hotKeyBindings.Add(this.analogPage);
+            hotKeyBindings.Add(this.analogTab);
 
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F4);
-            hotKeyBindings.Add(this.gpibPage);
+            hotKeyBindings.Add(this.gpibTab);
 
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F5);
             hotKeyBindings.Add(this.rs232Tab);
 
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F6);
-            hotKeyBindings.Add(this.commonWaveformPage);
+            hotKeyBindings.Add(this.commonWaveformTab);
 
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F7);
-            hotKeyBindings.Add(this.variablesPage);
+            hotKeyBindings.Add(this.variablesTab);
 
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F8);
             hotKeyBindings.Add(this.pulsesTab);
 
-
+            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.Control, Keys.F9);
+            hotKeyBindings.Add(this.sequencePage.runControl1.bgRunButton);
 
 
             RefreshRecentFiles();
-            this.RefreshSettingsDataToUI(Storage.settingsData);
-            this.RefreshSequenceDataToUI(Storage.sequenceData);
+            this.RefreshSettingsDataToUI();
+            this.RefreshSequenceDataToUI();
         }
 
 
 
-        public mainClientForm()
+        public MainClientForm()
             : this(null)
         {
 
@@ -361,7 +354,7 @@ namespace WordGenerator
 
             if (Storage.SaveAndLoad.LoadSequenceDataToStorage(ts.Text))
             {
-                RefreshSequenceDataToUI(Storage.sequenceData);
+                RefreshSequenceDataToUI();
                 this.handleMessageEvent(this, new MessageEvent("Loaded sequence file " + this.openSequenceFileName));
             }
         }
@@ -371,55 +364,58 @@ namespace WordGenerator
         /// This is a slow function, it effectively causes all of the controls which lay themselves out based on SequenceData
         /// to be re-drawn. Thus, it should not be called unnecessarily.
         /// </summary>
-        public void RefreshSequenceDataToUI(SequenceData sequenceData)
+        public void RefreshSequenceDataToUI()
         {
-            
-                WordGenerator.mainClientForm.instance.cursorWait();
+            SequenceData sequenceData = Storage.sequenceData;
 
-                lic_chk();
+            WordGenerator.MainClientForm.instance.cursorWait();
 
-                
-                this.commonWaveformEditor1.setCommonWaveforms(Storage.sequenceData.CommonWaveforms);
+            lic_chk();
 
-                if (sequenceData.AnalogGroups.Count != 0)
-                    this.analogGroupEditor1.setAnalogGroup(sequenceData.AnalogGroups[0]);
-                else
-                    this.analogGroupEditor1.setAnalogGroup(null);
 
-                
-                this.sequencePage1.layoutAll();
+            this.commonWaveformEditor.setCommonWaveforms(Storage.sequenceData.CommonWaveforms);
 
-                this.variablesEditor1.layout();
+            if (sequenceData.AnalogGroups.Count != 0)
+                this.analogGroupEditor.setAnalogGroup(sequenceData.AnalogGroups[0]);
+            else
+                this.analogGroupEditor.setAnalogGroup(null);
 
-                if (sequenceData.GpibGroups.Count != 0)
-                    this.gpibGroupEditor1.setGpibGroup(sequenceData.GpibGroups[0]);
-                else
-                    this.gpibGroupEditor1.setGpibGroup(null);
 
-                if (sequenceData.RS232Groups.Count != 0)
-                    this.rS232GroupEditor1.setRS232Group(sequenceData.RS232Groups[0]);
-                else
-                    this.rS232GroupEditor1.setRS232Group(null);
+            this.sequencePage.layoutAll();
 
-                this.analogGroupEditor1.updateRunOrderPanel();
-                this.gpibGroupEditor1.updateRunOrderPanel();
+            this.variablesEditor.layout();
 
-                updateFormTitle();
+            if (sequenceData.GpibGroups.Count != 0)
+                this.gpibGroupEditor.setGpibGroup(sequenceData.GpibGroups[0]);
+            else
+                this.gpibGroupEditor.setGpibGroup(null);
 
-                if (!Storage.sequenceData.TimeSteps.Contains(CurrentlyOutputtingTimestep))
-                {
-                    CurrentlyOutputtingTimestep = null;
-                }
+            if (sequenceData.RS232Groups.Count != 0)
+                this.rS232GroupEditor.setRS232Group(sequenceData.RS232Groups[0]);
+            else
+                this.rS232GroupEditor.setRS232Group(null);
 
-                pulsesPage1.layout();
+            this.analogGroupEditor.updateRunOrderPanel();
+            this.gpibGroupEditor.updateRunOrderPanel();
 
-                sequencePage1.forceUpdateAllScrollbars();
+            updateFormTitle();
 
-                setTimestepEditorBackgrounds();
+            if (!Storage.sequenceData.TimeSteps.Contains(CurrentlyOutputtingTimestep))
+            {
+                CurrentlyOutputtingTimestep = null;
+            }
 
-                waitForReady.Checked = Storage.sequenceData.WaitForReady;
+            pulsesPage.layout();
 
-                WordGenerator.mainClientForm.instance.cursorWaitRelease();
+            sequencePage.forceUpdateAllScrollbars();
+
+            setTimestepEditorBackgrounds();
+
+            waitForReady.Checked = Storage.sequenceData.WaitForReady;
+
+            this.refreshAllTimestepHotkeys();
+
+            WordGenerator.MainClientForm.instance.cursorWaitRelease();
 
         }
 
@@ -443,20 +439,21 @@ namespace WordGenerator
             }
         }
 
-        public void RefreshSettingsDataToUI(SettingsData settingsData)
+        public void RefreshSettingsDataToUI()
         {
-            WordGenerator.mainClientForm.instance.cursorWait();
+            SettingsData settingsData = Storage.settingsData;
+            WordGenerator.MainClientForm.instance.cursorWait();
 
-            this.analogGroupEditor1.setChannelCollection(settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.analog]);
-            this.gpibGroupEditor1.setChannelCollection(settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.gpib]);
-            this.rS232GroupEditor1.setChannelCollection(settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.rs232]);
-            this.overridePage1.setSettings(Storage.settingsData);
-            this.sequencePage1.layoutSettingsData();
-            this.sequencePage1.updateOverrideCount();
+            this.analogGroupEditor.setChannelCollection(settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.analog]);
+            this.gpibGroupEditor.setChannelCollection(settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.gpib]);
+            this.rS232GroupEditor.setChannelCollection(settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.rs232]);
+            this.overridePage.setSettings(Storage.settingsData);
+            this.sequencePage.layoutSettingsData();
+            this.sequencePage.updateOverrideCount();
 
             setTimestepEditorBackgrounds();
 
-            WordGenerator.mainClientForm.instance.cursorWaitRelease();
+            WordGenerator.MainClientForm.instance.cursorWaitRelease();
         }
 
 
@@ -506,7 +503,7 @@ namespace WordGenerator
         private void populateSequenceWithNewChannelsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Storage.sequenceData.populateWithChannels(Storage.settingsData);
-            this.RefreshSequenceDataToUI(Storage.sequenceData);
+            this.RefreshSequenceDataToUI();
 
         }
 
@@ -526,7 +523,7 @@ namespace WordGenerator
             if (Storage.SaveAndLoad.LoadSequenceDataToStorage(null))
             {
                 RefreshRecentFiles();
-                this.RefreshSequenceDataToUI(Storage.sequenceData);
+                this.RefreshSequenceDataToUI();
                 this.handleMessageEvent(this, new MessageEvent("Loaded sequence file " + this.openSequenceFileName));
             }
 
@@ -542,7 +539,7 @@ namespace WordGenerator
         {
             if (Storage.SaveAndLoad.LoadSettingsData(null))
             {
-                RefreshSettingsDataToUI(Storage.settingsData);
+                RefreshSettingsDataToUI();
                 this.handleMessageEvent(this, new MessageEvent("Loaded settings file " + this.openSettingsFileName));
             }
         }
@@ -558,7 +555,7 @@ namespace WordGenerator
             {
 
 
-                RefreshSettingsDataToUI(Storage.settingsData);
+                RefreshSettingsDataToUI();
                 this.handleMessageEvent(this, new MessageEvent("Loaded default settings from " + this.openSettingsFileName));
             }
         }
@@ -603,7 +600,7 @@ namespace WordGenerator
             }
             else
             {
-                toolStripStatusLabel1.Text = e.ToString();
+                toolStripStatusLabel.Text = e.ToString();
             }
         }
 
@@ -686,10 +683,10 @@ namespace WordGenerator
 
                             int id = (int)m.WParam;
                             object hotkeyObj = hotKeyBindings[id];
-                            if (hotkeyObj is TimestepEditor)
+                            if (hotkeyObj is TimeStep)
                             {
-                                TimestepEditor te = (TimestepEditor)hotkeyObj;
-                                te.outputTimestepNow();
+                                TimeStep step = (TimeStep)hotkeyObj;
+                                ClientRunner.instance.outputTimestepNow(step, false, true);
                             }
                             else if (hotkeyObj is Button)
                             {
@@ -714,15 +711,27 @@ namespace WordGenerator
             base.WndProc(ref m);
         }
 
+        private List<char> usedTimestepHotkeys;
+
         /// <summary>
-        /// used to register timestep hotkeys. Ctrl + key.
+        /// Used to register timestep hotkeys. Ctrl + key.
+        /// 
+        /// returns true if successful,
+        /// false if key was already in use
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="hotkeyObject"></param>
-        public void registerTimestepHotkey(char key, TimestepEditor hotkeyObject)
+        /// <param name="timeStep"></param>
+        public bool registerTimestepHotkey(char key, TimeStep timeStep)
         {
             if (hotKeyBindings == null)
                 hotKeyBindings = new List<object>();
+
+            if (usedTimestepHotkeys == null)
+                usedTimestepHotkeys = new List<char>();
+
+            if (usedTimestepHotkeys.Contains(key))
+                return false;
+
 
             // convert the character to a Keys enum element. This is weird but necessary.
             string keyStr = "" + char.ToUpper(key);
@@ -730,10 +739,12 @@ namespace WordGenerator
             Keys myKey = (Keys)Enum.Parse(typeof(Keys), keyStr);
 
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.Control, myKey);
-            hotKeyBindings.Add(hotkeyObject);
+            hotKeyBindings.Add(timeStep);
+
+            return false;
         }
 
-        public void unregisterHotkey(char key, object hotkeyObject)
+        public void unregisterHotkey(object hotkeyObject)
         {
             if (hotKeyBindings == null)
                 hotKeyBindings = new List<object>();
@@ -743,6 +754,38 @@ namespace WordGenerator
                 int id = hotKeyBindings.IndexOf(hotkeyObject);
                 UnregisterHotKey(Handle, id);
                 hotKeyBindings[id] = null;
+            }
+        }
+
+        public bool refreshAllTimestepHotkeys()
+        {
+            unregisterAllTimestepHotkeys();
+            return registerAllTimestepHotkeys();
+        }
+
+        public bool registerAllTimestepHotkeys()
+        {
+            bool allSuccess = true;
+
+            foreach (TimeStep step in Storage.sequenceData.TimeSteps)
+            {
+                if (step.HotKeyCharacter != 0)
+                {
+                    allSuccess &= registerTimestepHotkey(step.HotKeyCharacter, step);
+                }
+            }
+
+            return allSuccess;
+        }
+
+        public void unregisterAllTimestepHotkeys()
+        {
+            for (int i = 0; i < hotKeyBindings.Count; i++ )
+            {
+                if (hotKeyBindings[i] is TimeStep)
+                {
+                    unregisterHotkey(hotKeyBindings[i]);
+                }
             }
         }
 
@@ -770,8 +813,8 @@ namespace WordGenerator
         private void newSequence_Click(object sender, EventArgs e)
         {
             Storage.sequenceData = new SequenceData();
-            WordGenerator.mainClientForm.instance.OpenSequenceFileName = null;
-            RefreshSequenceDataToUI(Storage.sequenceData);
+            WordGenerator.MainClientForm.instance.OpenSequenceFileName = null;
+            RefreshSequenceDataToUI();
         }
 
 
@@ -800,7 +843,7 @@ namespace WordGenerator
         {
             if (!suppressHotkeys)
             {
-                RunForm rf = new RunForm(Storage.sequenceData, RunForm.RunType.Run_Iteration_Zero, sequencePage1.runControl1.repeatCheckBox.Checked, true);
+                RunForm rf = new RunForm(Storage.sequenceData, RunForm.RunType.Run_Iteration_Zero, sequencePage.runControl1.repeatCheckBox.Checked, true);
                 rf.ShowDialog();
             }
 
@@ -810,7 +853,7 @@ namespace WordGenerator
         {
             if (!suppressHotkeys)
             {
-                RunForm rf = new RunForm(Storage.sequenceData, RunForm.RunType.Run_Current_Iteration, sequencePage1.runControl1.repeatCheckBox.Checked, true);
+                RunForm rf = new RunForm(Storage.sequenceData, RunForm.RunType.Run_Current_Iteration, sequencePage.runControl1.repeatCheckBox.Checked, true);
                 rf.ShowDialog();
             }
         }
@@ -819,7 +862,7 @@ namespace WordGenerator
         {
             if (!suppressHotkeys)
             {
-                RunForm rf = new RunForm(Storage.sequenceData, RunForm.RunType.Run_Full_List, sequencePage1.runControl1.repeatCheckBox.Checked, true);
+                RunForm rf = new RunForm(Storage.sequenceData, RunForm.RunType.Run_Full_List, sequencePage.runControl1.repeatCheckBox.Checked, true);
                 rf.ShowDialog();
             }
         }
@@ -828,7 +871,7 @@ namespace WordGenerator
         {
             if (!suppressHotkeys)
             {
-                RunForm rf = new RunForm(Storage.sequenceData, RunForm.RunType.Run_Continue_List, sequencePage1.runControl1.repeatCheckBox.Checked, true);
+                RunForm rf = new RunForm(Storage.sequenceData, RunForm.RunType.Run_Continue_List, sequencePage.runControl1.repeatCheckBox.Checked, true);
                 rf.ShowDialog();
             }
         }
@@ -837,7 +880,7 @@ namespace WordGenerator
         {
             if (!suppressHotkeys)
             {
-                RunForm rf = new RunForm(Storage.sequenceData, RunForm.RunType.Run_Random_Order_List, sequencePage1.runControl1.repeatCheckBox.Checked, true);
+                RunForm rf = new RunForm(Storage.sequenceData, RunForm.RunType.Run_Random_Order_List, sequencePage.runControl1.repeatCheckBox.Checked, true);
                 rf.ShowDialog();
             }
         }
@@ -846,7 +889,7 @@ namespace WordGenerator
         {
             if (!suppressHotkeys)
             {
-                RunForm rf = new RunForm(Storage.sequenceData, RunForm.RunType.Run_Iteration_Zero, sequencePage1.runControl1.repeatCheckBox.Checked, false);
+                RunForm rf = new RunForm(Storage.sequenceData, RunForm.RunType.Run_Iteration_Zero, sequencePage.runControl1.repeatCheckBox.Checked, false);
                 rf.ShowDialog();
             }
         }
@@ -948,7 +991,7 @@ namespace WordGenerator
         private List<TimeStep> markedTimesteps()
         {
             List<TimeStep> markedSteps = new List<TimeStep>();
-            foreach (Control con in sequencePage1.timeStepsFlowPanel.Controls)
+            foreach (Control con in sequencePage.timeStepsFlowPanel.Controls)
             {
                 TimestepEditor ed = con as TimestepEditor;
                 if (ed != null)
@@ -1086,7 +1129,7 @@ namespace WordGenerator
 
 
 
-                RefreshSequenceDataToUI(Storage.sequenceData);
+                RefreshSequenceDataToUI();
             }
 
         }
@@ -1120,11 +1163,11 @@ namespace WordGenerator
                 fs.Close();
 
                 Storage.settingsData = log.RunSettings;
-                WordGenerator.mainClientForm.instance.OpenSettingsFileName = fileName;
+                WordGenerator.MainClientForm.instance.OpenSettingsFileName = fileName;
                 Storage.sequenceData = log.RunSequence;                
-                WordGenerator.mainClientForm.instance.OpenSequenceFileName = fileName;
+                WordGenerator.MainClientForm.instance.OpenSequenceFileName = fileName;
 
-                this.RefreshSequenceDataToUI(Storage.sequenceData);
+                this.RefreshSequenceDataToUI();
                 this.handleMessageEvent(this, new MessageEvent("Loaded sequence file " + fileName));
 
             }
@@ -1133,7 +1176,7 @@ namespace WordGenerator
 
         private void mainClientForm_Activated(object sender, EventArgs e)
         {
-            sequencePage1.runControl1.IsRunNoSaveEnabled=(Storage.settingsData.CameraPCs.Count != 0);
+            sequencePage.runControl1.IsRunNoSaveEnabled=(Storage.settingsData.CameraPCs.Count != 0);
             runWithoutSavingToolStripMenuItem.Enabled=(Storage.settingsData.CameraPCs.Count != 0);
         } 
 
@@ -1259,7 +1302,7 @@ namespace WordGenerator
         /// <param name="e"></param>
         void lced_valueChanged(object sender, EventArgs e)
         {
-            this.sequencePage1.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
+            this.sequencePage.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
         }
 
         void loopTsGroup_CheckedChanged(object sender, EventArgs e)
@@ -1267,7 +1310,7 @@ namespace WordGenerator
             ToolStripMenuItem it = sender as ToolStripMenuItem;
             TimestepGroup tsg = it.Tag as TimestepGroup;
             tsg.LoopTimestepGroup = it.Checked;
-            this.sequencePage1.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
+            this.sequencePage.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
         }
 
         void deleteTimestepsAndGroup_Click(object sender, EventArgs e)
@@ -1294,7 +1337,7 @@ namespace WordGenerator
                     }
 
                     Storage.sequenceData.TimestepGroups.Remove(tsg);
-                    RefreshSequenceDataToUI(Storage.sequenceData);
+                    RefreshSequenceDataToUI();
                     MessageBox.Show("Timestep group and member timesteps deleted.");
                 }
                 else
@@ -1345,7 +1388,7 @@ namespace WordGenerator
                 Storage.sequenceData.TimestepGroups.Remove(tsg);
 
                 MessageBox.Show("Timestep group deleted.");
-                sequencePage1.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
+                sequencePage.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
             }
 
         }
@@ -1364,7 +1407,7 @@ namespace WordGenerator
             ToolStripMenuItem tsm = sender as ToolStripMenuItem;
             TimestepGroup tsg = tsm.Tag as TimestepGroup;
             tsg.GroupEnabled = tsm.Checked;
-            this.sequencePage1.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
+            this.sequencePage.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
             
         }
 
@@ -1400,7 +1443,7 @@ namespace WordGenerator
             {
                 MessageBox.Show("No Timestep group assigned to " + i + " marked timestep(s).");
             }
-            sequencePage1.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
+            sequencePage.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
         }
 
 
@@ -1409,16 +1452,34 @@ namespace WordGenerator
 
         private void stToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            WordGenerator.mainClientForm.instance.studentEdition = true;
+            WordGenerator.MainClientForm.instance.studentEdition = true;
 
         }
 
-        private void sequencePage1_Load(object sender, EventArgs e)
+        private void enableDebugMenuToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            this.debugToolStripMenuItem.Visible = true;
         }
 
-        private void placeholderGroupClickerToolStripMenuItem_Click(object sender, EventArgs e)
+        private void createBufferSnapshotToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            BufferTestSnapshot snap = Storage.sequenceData._createBufferSnapshot(Storage.settingsData, 0.000001);
+
+            string path = SharedForms.PromptSaveFile("Buffer snapshot", ".buf");
+            Storage.SaveAndLoad.Save(path, snap, false);
+        }
+
+        private void openHomePageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://akeshet.github.com/Cicero-Word-Generator/");
+        }
+
+        private void openGitRepositoryPageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/akeshet/Cicero-Word-Generator");
+        }
+
+        private void doNothingToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }

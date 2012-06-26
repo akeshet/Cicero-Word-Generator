@@ -122,7 +122,7 @@ namespace WordGenerator.Controls
             set
             {
                 stepNumber = value;
-                redrawStepNumberLabel(stepData, stepNumber);
+                redrawStepNumberLabel();
                 
             }
         }
@@ -178,7 +178,7 @@ namespace WordGenerator.Controls
             timestepName.Text = stepData.StepName;
 
             this.durationEditor.setParameterData(stepData.StepDuration);
-            redrawStepNumberLabel(stepData, timeStepNumber);
+            redrawStepNumberLabel();
 
             analogSelector.Items.AddRange(Storage.sequenceData.AnalogGroups.ToArray());
             gpibSelector.Items.AddRange(Storage.sequenceData.GpibGroups.ToArray());
@@ -229,9 +229,9 @@ namespace WordGenerator.Controls
             updateWaitForRetriggerIndicator();
         }
 
-        private void redrawStepNumberLabel(TimeStep stepData, int timeStepNumber)
+        private void redrawStepNumberLabel()
         {
-            this.timeStepNumber.Text = timeStepNumber.ToString();
+            this.timeStepNumber.Text = this.stepNumber.ToString();
 
             if (stepData.HotKeyCharacter != 0)
                 this.timeStepNumber.Text += " {" + char.ToUpper(stepData.HotKeyCharacter) + "}";
@@ -281,8 +281,8 @@ namespace WordGenerator.Controls
 
             if (Storage.sequenceData.stepHidingEnabled)
             {
-                WordGenerator.mainClientForm.instance.sequencePage1.showOrHideHiddenTimestepEditors();
-                WordGenerator.mainClientForm.instance.sequencePage1.layoutTheRest();
+                WordGenerator.MainClientForm.instance.sequencePage.showOrHideHiddenTimestepEditors();
+                WordGenerator.MainClientForm.instance.sequencePage.layoutTheRest();
             }
         }
 
@@ -370,26 +370,9 @@ namespace WordGenerator.Controls
 
         private void outputNowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-            outputTimestepNow(false, true);
-
+            ClientRunner.instance.outputTimestepNow(StepData, false, true);
         }
 
-        public void unRegsiterHotkey()
-        {
-            if (stepData.HotKeyCharacter != 0)
-            {
-                WordGenerator.mainClientForm.instance.unregisterHotkey(stepData.HotKeyCharacter, this);
-            }
-        }
-
-        public void registerHotkey()
-        {
-            if (stepData.HotKeyCharacter != 0)
-            {
-                WordGenerator.mainClientForm.instance.registerTimestepHotkey(stepData.HotKeyCharacter, this);
-            }
-        }
 
         public void updatePulsesIndicator()
         {
@@ -410,79 +393,7 @@ namespace WordGenerator.Controls
 
         }
 
-        public bool outputTimestepNow()
-        {
-            return outputTimestepNow(false, false);
-        }
-
-        /// <summary>
-        /// outputs the editor's timestep. set silent to true if no message logs should be generated.
-        /// </summary>
-        /// <param name="silent"></param>
-        /// <returns></returns>
-        public bool outputTimestepNow(bool silent, bool showErrorDialog)
-        {
-            List<string> unconnectedServers = Storage.settingsData.unconnectedRequiredServers();
-
-            if (!Storage.sequenceData.Lists.ListLocked)
-            {
-                WordGenerator.mainClientForm.instance.variablesEditor1.tryLockLists();
-            }
-            if (!Storage.sequenceData.Lists.ListLocked)
-            {
-                if (!silent)
-                    messageLog(this, new MessageEvent("Unable to output timestep, lists not locked."));
-                if (showErrorDialog)
-                {
-                    MessageBox.Show("Unable to output timestep, lists not locked.");
-                }
-                return false;
-            }
-
-            if (unconnectedServers.Count == 0)
-            {
-
-                WordGenerator.mainClientForm.instance.cursorWait();
-
-
-
-                ServerManager.ServerActionStatus actionStatus = Storage.settingsData.serverManager.outputSingleTimestepOnConnectedServers(
-                    Storage.settingsData,
-                    Storage.sequenceData.getSingleOutputFrameAtEndOfTimestep(this.stepNumber - 1, Storage.settingsData, Storage.settingsData.OutputAnalogDwellValuesOnOutputNow),
-                    messageLog);
-
-                WordGenerator.mainClientForm.instance.cursorWaitRelease();
-
-                if (actionStatus == ServerManager.ServerActionStatus.Success)
-                {
-                    if (!silent)
-                        messageLog(this, new MessageEvent("Successfully output timestep " + stepData.ToString()));
-                    WordGenerator.mainClientForm.instance.CurrentlyOutputtingTimestep = this.stepData;
-                    return true;
-                }
-                else
-                {
-                   
-                    if (!silent)
-                        messageLog(this, new MessageEvent("Communication or server error attempting to output this timestep: " + actionStatus.ToString()));
-                    if (showErrorDialog)
-                    {
-                        MessageBox.Show("Communication or server error attempting to output this timestep: " + actionStatus.ToString());
-                    }
-                }
-            }
-            else
-            {
-                string missingServerList = ServerManager.convertListOfServersToOneString(unconnectedServers);
-                if (!silent)
-                    messageLog(this, new MessageEvent("Unable to output this timestep. The following required servers are not connected: " + missingServerList));
-            
-                if (showErrorDialog) {
-                    MessageBox.Show("Unable to output this timestep. The following required servers are not connected: " + missingServerList);
-                }
-            }
-            return false;
-        }
+        
 
         private void insertTimestepBeforeToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -493,7 +404,7 @@ namespace WordGenerator.Controls
 
             TimestepEditor te = new TimestepEditor(newStep, stepNumber);
 
-            WordGenerator.mainClientForm.instance.sequencePage1.insertTimestepEditor(te, stepNumber - 1);
+            WordGenerator.MainClientForm.instance.sequencePage.insertTimestepEditor(te, stepNumber - 1);
 
 
         //    WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
@@ -507,7 +418,7 @@ namespace WordGenerator.Controls
             Storage.sequenceData.populateWithChannels(Storage.settingsData);
             Storage.sequenceData.timestepsInsertedOrMoved();
 
-            WordGenerator.mainClientForm.instance.sequencePage1.insertTimestepEditor(
+            WordGenerator.MainClientForm.instance.sequencePage.insertTimestepEditor(
                 new TimestepEditor(newStep, stepNumber + 1), stepNumber);
  
 
@@ -519,7 +430,7 @@ namespace WordGenerator.Controls
             Storage.sequenceData.TimeSteps.Insert(stepNumber, newStep);
             Storage.sequenceData.timestepsInsertedOrMoved();
 
-            WordGenerator.mainClientForm.instance.sequencePage1.insertTimestepEditor(
+            WordGenerator.MainClientForm.instance.sequencePage.insertTimestepEditor(
                 new TimestepEditor(newStep, stepNumber + 1), stepNumber);
 
         }
@@ -528,7 +439,7 @@ namespace WordGenerator.Controls
         {
             Storage.sequenceData.TimeSteps.RemoveAt(stepNumber-1);
 
-            WordGenerator.mainClientForm.instance.sequencePage1.removeTimestepEditor(this);
+            WordGenerator.MainClientForm.instance.sequencePage.removeTimestepEditor(this);
         }
 
         private void durationEditor_updateGUI(object sender, EventArgs e)
@@ -557,10 +468,9 @@ namespace WordGenerator.Controls
         private void removeTimestepHotkeyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (stepData.HotKeyCharacter != 0)
-            {
-                unRegsiterHotkey();
+            {                
                 stepData.HotKeyCharacter = (char) 0;
-                WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+                WordGenerator.MainClientForm.instance.refreshAllTimestepHotkeys();
             }
         }
 
@@ -637,11 +547,9 @@ namespace WordGenerator.Controls
                     }
                 }
 
-                if (stepData.HotKeyCharacter != 0)
-                    unRegsiterHotkey();
-
                 stepData.HotKeyCharacter = hChar;
-                WordGenerator.mainClientForm.instance.RefreshSequenceDataToUI(Storage.sequenceData);
+                WordGenerator.MainClientForm.instance.refreshAllTimestepHotkeys();
+                redrawStepNumberLabel();
             }
         }
 
@@ -678,7 +586,7 @@ namespace WordGenerator.Controls
                     Storage.sequenceData.TimeSteps.Insert(destinationIndex, this.stepData);
                     Storage.sequenceData.timestepsInsertedOrMoved();
 
-                    WordGenerator.mainClientForm.instance.sequencePage1.moveTimestepEditor(currentIndex, destinationIndex);
+                    WordGenerator.MainClientForm.instance.sequencePage.moveTimestepEditor(currentIndex, destinationIndex);
 
                 }
             }
@@ -688,7 +596,7 @@ namespace WordGenerator.Controls
         {
             if (stepData.AnalogGroup != null)
             {
-                WordGenerator.mainClientForm.instance.activateAnalogGroupEditor(stepData.AnalogGroup);
+                WordGenerator.MainClientForm.instance.activateAnalogGroupEditor(stepData.AnalogGroup);
             }
         }
 
@@ -696,7 +604,7 @@ namespace WordGenerator.Controls
         {
             if (stepData.GpibGroup != null)
             {
-                WordGenerator.mainClientForm.instance.activateGPIBGroupEditor(stepData.GpibGroup);
+                WordGenerator.MainClientForm.instance.activateGPIBGroupEditor(stepData.GpibGroup);
             }
         }
 
@@ -704,7 +612,7 @@ namespace WordGenerator.Controls
         {
             if (stepData.rs232Group != null)
             {
-                WordGenerator.mainClientForm.instance.activateRS232GroupEditor(stepData.rs232Group);
+                WordGenerator.MainClientForm.instance.activateRS232GroupEditor(stepData.rs232Group);
             }
         }
 
@@ -732,8 +640,8 @@ namespace WordGenerator.Controls
             // scrolled to, but a scroll event would not be raised by stupid stupid windows, causing the 
             // horizontal scroll bars on the sequence page to become out of sync.
 
-            WordGenerator.mainClientForm.instance.sequencePage1.timeStepsPanel.ScrollControlIntoView(this);
-            WordGenerator.mainClientForm.instance.sequencePage1.forceUpdateAllScrollbars();
+            WordGenerator.MainClientForm.instance.sequencePage.timeStepsPanel.ScrollControlIntoView(this);
+            WordGenerator.MainClientForm.instance.sequencePage.forceUpdateAllScrollbars();
         }
 
         private void mark_Click(object sender, EventArgs e)
@@ -748,12 +656,12 @@ namespace WordGenerator.Controls
 
         private void markall_Click(object sender, EventArgs e)
         {
-            WordGenerator.mainClientForm.instance.sequencePage1.markAllTimesteps();
+            WordGenerator.MainClientForm.instance.sequencePage.markAllTimesteps();
         }
 
         private void unmarkall_Click(object sender, EventArgs e)
         {
-            WordGenerator.mainClientForm.instance.sequencePage1.unmarkAllTimesteps();
+            WordGenerator.MainClientForm.instance.sequencePage.unmarkAllTimesteps();
         }
 
         private void waitForRetriggerMenuItem_Click(object sender, EventArgs e)
@@ -796,7 +704,7 @@ namespace WordGenerator.Controls
         private void timestepGroupComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             stepData.MyTimestepGroup = timestepGroupComboBox.SelectedItem as TimestepGroup;
-            WordGenerator.mainClientForm.instance.sequencePage1.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
+            WordGenerator.MainClientForm.instance.sequencePage.updateTimestepEditorsAfterSequenceModeOrTimestepGroupChange();
         }
 
         private void TimestepEditor_Layout(object sender, LayoutEventArgs e)
@@ -863,9 +771,137 @@ namespace WordGenerator.Controls
                 {
                     dp.DigitalContinue = true;
                 }
-                WordGenerator.mainClientForm.instance.sequencePage1.digitalGrid1.forceRepaint();
+                WordGenerator.MainClientForm.instance.sequencePage.digitalGrid.forceRepaint();
             }
         }
+
+        private void TimestepEditor_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                DragDropEffects effect = this.DoDragDrop(this, DragDropEffects.Move);
+                return;
+            }
+            
+        }
+
+        private void TimestepEditor_GiveFeedback(object sender, GiveFeedbackEventArgs e)
+        {
+        }
+
+        private void TimestepEditor_DragEnter(object sender, DragEventArgs e)
+        {
+            
+            TimestepEditor otherEditor = (e.Data.GetData(typeof(TimestepEditor))) as TimestepEditor;
+            if (otherEditor != null && otherEditor != this)
+            {
+                e.Effect = DragDropEffects.Move;
+                bool rightHalf = dragToRightHalf(e);
+
+                // exclude drags that don't actually move the object
+                int myNumber = this.StepNumber;
+                int otherNumber = otherEditor.StepNumber;
+                if ((myNumber == otherNumber + 1) && !rightHalf)
+                {
+                    e.Effect = DragDropEffects.None;
+                    return;
+                }
+                if ((myNumber == otherNumber - 1) && rightHalf)
+                {
+                    e.Effect = DragDropEffects.None;
+                    return;
+                }
+
+                if (rightHalf)
+                {
+                    insertRight.Visible = true;
+                    insertLeft.Visible = false;
+                }
+                else
+                {
+                    insertRight.Visible = false;
+                    insertLeft.Visible = true;
+                }
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void clearTimestepInsertLabels()
+        {
+            insertLeft.Visible = false;
+            insertRight.Visible = false;
+        }
+
+        /// <summary>
+        /// Determines if a Drag Event entails the item being dragged over the Right half
+        /// or Left half of the timestep editor. This will determine whether
+        /// the inserted timestep goes before or after the current one.
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        private bool dragToRightHalf(DragEventArgs e)
+        {
+            Point dropPoint = PointToClient(new Point(e.X, e.Y));
+            bool rightHalf = false;
+            if (dropPoint.X > (this.Width / 2))
+            {
+                rightHalf = true;
+            }
+
+            return rightHalf;
+        }
+
+        private void TimestepEditor_DragDrop(object sender, DragEventArgs e)
+        {
+            TimestepEditor otherEditor = (e.Data.GetData(typeof(TimestepEditor))) as TimestepEditor;
+            if (otherEditor == null)
+            {
+                clearTimestepInsertLabels();
+                return;
+            }
+
+            bool rightHalf = dragToRightHalf(e);
+
+            int myNumber = this.StepNumber;
+            int otherNumber = otherEditor.StepNumber;
+            if ((otherNumber == myNumber - 1 && !rightHalf)
+                || (otherNumber == myNumber + 1 && rightHalf)
+                || (otherNumber == myNumber))
+            {
+                clearTimestepInsertLabels();
+                return;
+            }
+
+            SequenceData seq = Storage.sequenceData;
+            TimeStep otherStep = otherEditor.stepData;
+            seq.TimeSteps.Remove(otherStep);
+            int insertIndex = seq.TimeSteps.IndexOf(StepData);
+            if (rightHalf)
+                insertIndex++;
+            seq.TimeSteps.Insert(insertIndex, otherStep);
+
+            seq.timestepsInsertedOrMoved();
+
+            MainClientForm.instance.RefreshSequenceDataToUI();
+        }
+
+        private void TimestepEditor_DragLeave(object sender, EventArgs e)
+        {
+            insertRight.Visible = false;
+            insertLeft.Visible = false;
+        }
+
+        private void TimestepEditor_DragOver(object sender, DragEventArgs e)
+        {
+            TimestepEditor_DragEnter(sender, e);
+        }
+
+        
+
+       
 
 
     }

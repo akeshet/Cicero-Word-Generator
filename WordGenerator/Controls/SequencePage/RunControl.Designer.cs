@@ -175,7 +175,7 @@ namespace WordGenerator.Controls
             this.bgRunButton.Name = "bgRunButton";
             this.bgRunButton.Size = new System.Drawing.Size(110, 39);
             this.bgRunButton.TabIndex = 12;
-            this.bgRunButton.Text = "Run as Loop in Background";
+            this.bgRunButton.Text = "Run as Loop in Background (^F9)";
             this.bgRunButton.UseVisualStyleBackColor = true;
             this.bgRunButton.Click += new System.EventHandler(this.bgRunButton_Click);
             // 
@@ -208,6 +208,6 @@ namespace WordGenerator.Controls
         public System.Windows.Forms.Button RunNoSave;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button bgRunButton;
+        public System.Windows.Forms.Button bgRunButton;
     }
 }

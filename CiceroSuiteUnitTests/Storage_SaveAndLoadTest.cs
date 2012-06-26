@@ -1,6 +1,7 @@
 ﻿using WordGenerator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using DataStructures;
 
 namespace CiceroSuiteUnitTests
 {
@@ -79,20 +80,39 @@ namespace CiceroSuiteUnitTests
             Assert.Inconclusive("Verify the correctness of this test method.");*/
 
 
-            testLoadFile("SettingsData-1.5.set", typeof(DataStructures.SettingsData));
-            testLoadFile("Empty1.60Sequence.seq", typeof(DataStructures.SequenceData));
-            testLoadFile("Empty1.61Sequence.seq", typeof(DataStructures.SequenceData));
+            // Loading a sequence file with old-style GPIB address should produce an exception
+            bool expectedException = false;
+            try
+            {
+                Shared.loadTestFile("SettingsData-1.5.set", typeof(DataStructures.SettingsData), false);
+            }
+            catch (ArgumentException e)
+            {
+                if (e.Message.Contains("NationalInstruments.NI4882.Address"))
+                    expectedException = true;
+                else
+                    Assert.Fail("Unexpected Argument exception (wrong message).");
+            }
+            catch (Exception e)
+            {
+                Assert.Fail("Unexpected exception (wrong exception type)");
+            }
+            if (!expectedException)
+                Assert.Fail("Loading old sequence file failed to produce expected exception.");
+
+
+            // The above exception is fixed if we use the custom "GPIB Fix" binder when deserializing
+            Shared.loadTestFile("SettingsData-1.5.set", typeof(DataStructures.SettingsData),
+                true, new HardwareChannel.GpibBinderFix());
+
+
+
+            Shared.loadTestFile("Empty1.60Sequence.seq", typeof(DataStructures.SequenceData));
+            Shared.loadTestFile("Empty1.61Sequence.seq", typeof(DataStructures.SequenceData));
             
 
         }
 
-        private object testLoadFile(string path, Type desiredType)
-        {
-            Assert.IsTrue(System.IO.File.Exists(path), "Test file " + path + " does not exist.");
-            object loadedObject = Storage_Accessor.SaveAndLoad.Load(path);
-            Assert.IsNotNull(loadedObject, "Test file " + path + " loaded a null object.");
-            Assert.IsInstanceOfType(loadedObject, desiredType, "Test file " + path + " did not resolve to desired type.");
-            return loadedObject;
-        }
+
     }
 }
