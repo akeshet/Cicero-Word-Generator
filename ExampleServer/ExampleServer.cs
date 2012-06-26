@@ -30,7 +30,7 @@ namespace Virgil
 
 
         #region Implementation of ServerCommunicator
-        public override bool armTasks()
+        public override bool armTasks(UInt32 clockID)
         {
             return true;
         }

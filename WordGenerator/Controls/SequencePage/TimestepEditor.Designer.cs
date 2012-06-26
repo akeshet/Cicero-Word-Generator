@@ -35,6 +35,9 @@ namespace WordGenerator.Controls
             this.outputNowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.waitForRetriggerMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.waitTimeoutLabel = new System.Windows.Forms.ToolStripMenuItem();
+            this.edgeRetriggerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.negativeRetriggerEdgeOrValueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.insertTimestepBeforeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.insertTimestepAfterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -113,6 +116,9 @@ namespace WordGenerator.Controls
             this.outputNowToolStripMenuItem,
             this.toolStripSeparator4,
             this.waitForRetriggerMenuItem,
+            this.waitTimeoutLabel,
+            this.edgeRetriggerToolStripMenuItem,
+            this.negativeRetriggerEdgeOrValueToolStripMenuItem,
             this.toolStripSeparator2,
             this.insertTimestepBeforeToolStripMenuItem,
             this.insertTimestepAfterToolStripMenuItem,
@@ -135,7 +141,8 @@ namespace WordGenerator.Controls
             this.toolStripSeparator5,
             this.timestepGroupToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(258, 420);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(258, 508);
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // outputNowToolStripMenuItem
             // 
@@ -155,6 +162,28 @@ namespace WordGenerator.Controls
             this.waitForRetriggerMenuItem.Size = new System.Drawing.Size(257, 22);
             this.waitForRetriggerMenuItem.Text = "Enable Wait-for-retrigger";
             this.waitForRetriggerMenuItem.Click += new System.EventHandler(this.waitForRetriggerMenuItem_Click);
+            // 
+            // waitTimeoutLabel
+            // 
+            this.waitTimeoutLabel.Name = "waitTimeoutLabel";
+            this.waitTimeoutLabel.Size = new System.Drawing.Size(257, 22);
+            this.waitTimeoutLabel.Text = "Wait timeout:  (0 = none)";
+            // 
+            // edgeRetriggerToolStripMenuItem
+            // 
+            this.edgeRetriggerToolStripMenuItem.CheckOnClick = true;
+            this.edgeRetriggerToolStripMenuItem.Name = "edgeRetriggerToolStripMenuItem";
+            this.edgeRetriggerToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
+            this.edgeRetriggerToolStripMenuItem.Text = "Edge Retrigger";
+            this.edgeRetriggerToolStripMenuItem.CheckedChanged += new System.EventHandler(this.edgeRetriggerToolStripMenuItem_CheckedChanged);
+            // 
+            // negativeRetriggerEdgeOrValueToolStripMenuItem
+            // 
+            this.negativeRetriggerEdgeOrValueToolStripMenuItem.CheckOnClick = true;
+            this.negativeRetriggerEdgeOrValueToolStripMenuItem.Name = "negativeRetriggerEdgeOrValueToolStripMenuItem";
+            this.negativeRetriggerEdgeOrValueToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
+            this.negativeRetriggerEdgeOrValueToolStripMenuItem.Text = "Negative Retrigger (Edge or Value)";
+            this.negativeRetriggerEdgeOrValueToolStripMenuItem.CheckedChanged += new System.EventHandler(this.negativeRetriggerEdgeOrValueToolStripMenuItem_CheckedChanged);
             // 
             // toolStripSeparator2
             // 
@@ -629,5 +658,8 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.Label timestepGroupLoopIndicatorLabel;
         private System.Windows.Forms.Label insertLeft;
         private System.Windows.Forms.Label insertRight;
+        private System.Windows.Forms.ToolStripMenuItem waitTimeoutLabel;
+        private System.Windows.Forms.ToolStripMenuItem edgeRetriggerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem negativeRetriggerEdgeOrValueToolStripMenuItem;
     }
 }

@@ -163,46 +163,50 @@ namespace WordGenerator.Controls
 
             if (WordGenerator.MainClientForm.instance!=null)
                 WordGenerator.MainClientForm.instance.cursorWait();
-
-            List<Waveform> waveformsToDisplay = new List<Waveform>();
-            List<string> channelNamesToDisplay = new List<string>();
-
-
-            // figure out what to display in the waveform graph
-            if (gpibGroup != null)
+            try
             {
-                List<int> usedChannelIDs = gpibGroup.getChannelIDs();
-                for (int id = 0; id < usedChannelIDs.Count; id++)
+                List<Waveform> waveformsToDisplay = new List<Waveform>();
+                List<string> channelNamesToDisplay = new List<string>();
+
+
+                // figure out what to display in the waveform graph
+                if (gpibGroup != null)
                 {
-                    int gpibID = usedChannelIDs[id];
-
-                    if (Storage.settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.gpib].Channels.ContainsKey(gpibID))
+                    List<int> usedChannelIDs = gpibGroup.getChannelIDs();
+                    for (int id = 0; id < usedChannelIDs.Count; id++)
                     {
+                        int gpibID = usedChannelIDs[id];
 
-                        GPIBGroupChannelData channelData = gpibGroup.ChannelDatas[gpibID];
-                        if (channelData.Enabled)
+                        if (Storage.settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.gpib].Channels.ContainsKey(gpibID))
                         {
-                            if (channelData.DataType == GPIBGroupChannelData.GpibChannelDataType.voltage_frequency_waveform)
+
+                            GPIBGroupChannelData channelData = gpibGroup.ChannelDatas[gpibID];
+                            if (channelData.Enabled)
                             {
-                                waveformsToDisplay.Add(channelData.volts);
-                                channelNamesToDisplay.Add(gpibChannelCollection.Channels[gpibID].Name + " Vpp");
-                                waveformsToDisplay.Add(channelData.frequency);
-                                channelNamesToDisplay.Add(gpibChannelCollection.Channels[gpibID].Name + " Hz");
+                                if (channelData.DataType == GPIBGroupChannelData.GpibChannelDataType.voltage_frequency_waveform)
+                                {
+                                    waveformsToDisplay.Add(channelData.volts);
+                                    channelNamesToDisplay.Add(gpibChannelCollection.Channels[gpibID].Name + " Vpp");
+                                    waveformsToDisplay.Add(channelData.frequency);
+                                    channelNamesToDisplay.Add(gpibChannelCollection.Channels[gpibID].Name + " Hz");
+                                }
                             }
                         }
                     }
                 }
+
+
+                waveformGraphCollection1.deactivateAllGraphs();
+
+                waveformGraphCollection1.setWaveforms(waveformsToDisplay);
+                waveformGraphCollection1.setChannelNames(channelNamesToDisplay);
+                waveformGraphCollection1.setWaveformEditor(waveformEditor1);
             }
-
-
-            waveformGraphCollection1.deactivateAllGraphs();
-
-            waveformGraphCollection1.setWaveforms(waveformsToDisplay);
-            waveformGraphCollection1.setChannelNames(channelNamesToDisplay);
-            waveformGraphCollection1.setWaveformEditor(waveformEditor1);
-
-            if (WordGenerator.MainClientForm.instance!=null)    
-               WordGenerator.MainClientForm.instance.cursorWaitRelease();
+            finally
+            {
+                if (WordGenerator.MainClientForm.instance != null)
+                    WordGenerator.MainClientForm.instance.cursorWaitRelease();
+            }
 
         }
 

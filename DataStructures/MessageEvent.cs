@@ -28,7 +28,7 @@ namespace DataStructures
             get { return verbosity; }
         }
 
-        public enum MessageTypes { Routine, Warning, Error, Log };
+        public enum MessageTypes { Routine, Warning, Error, Log, Debug };
         private MessageTypes messageType;
 
         public MessageTypes MessageType
@@ -36,7 +36,7 @@ namespace DataStructures
             get { return messageType; }
         }
 
-        public enum MessageCategories { Unspecified, GPIB, Serial, RFSG };
+        public enum MessageCategories { Unspecified, GPIB, Serial, RFSG, SoftwareClock, Networking };
         private MessageCategories messageCategory;
 
         public MessageCategories MessageCategory

@@ -43,7 +43,6 @@ namespace DataStructures
         public List<ServerInfo> Servers
         {
             get { return servers; }
-            set { servers = value; }
         }
 
         [NonSerialized]
@@ -114,18 +113,21 @@ namespace DataStructures
         public List<HardwareChannel> getAllHardwareChannels()
         {
             List<HardwareChannel> ans = new List<HardwareChannel>();
-            foreach (ServerInfo server in servers)
+            lock (servers)
             {
-                if (connections.ContainsKey(server) && connections[server] == ConnectionStatus.Connected)
+                foreach (ServerInfo server in servers)
                 {
-                    try
+                    if (connections.ContainsKey(server) && connections[server] == ConnectionStatus.Connected)
                     {
-                        List<HardwareChannel> temp = communicators[server].getHardwareChannels();
-                        ans.AddRange(temp);
-                    }
-                    catch (Exception)
-                    {
-                        connections[server] = ConnectionStatus.Disconnected_Error;
+                        try
+                        {
+                            List<HardwareChannel> temp = communicators[server].getHardwareChannels();
+                            ans.AddRange(temp);
+                        }
+                        catch (Exception)
+                        {
+                            connections[server] = ConnectionStatus.Disconnected_Error;
+                        }
                     }
                 }
             }
@@ -189,8 +191,11 @@ namespace DataStructures
 
         public bool clearConnections()
         {
-
-            if (System.Threading.Monitor.TryEnter(lockObj, 100)) {
+            bool gotLock = System.Threading.Monitor.TryEnter(lockObj, 100);
+            try
+            {
+                if (!gotLock)
+                    return false;
 
                 connections.Clear();
                 communicators.Clear();
@@ -202,12 +207,13 @@ namespace DataStructures
                     }
                 }
                 connectedServerNames.Clear();
-
-                System.Threading.Monitor.Exit(lockObj);
-                return true;
             }
-            return false;
-
+            finally
+            {
+                if (gotLock)
+                    Monitor.Exit(lockObj);
+            }
+            return true;
         }
 
         #region connectServer(...)
@@ -218,22 +224,23 @@ namespace DataStructures
             if (messageLog != null)
                 messageLog(this, new MessageEvent("Attempting to connect server " + server.ToString()));
 
-
-            if (Monitor.TryEnter(lockObj, 1000))
+            bool gotLock = Monitor.TryEnter(lockObj, 1000);
+            try
             {
-                /// IMPORTANT: lockObj is now locked. Do not leave this part of the code without unlocking it
-                /// otherwise, the server manager will get permanently locked.
-
-
+                if (!gotLock)
+                {
+                    if (messageLog != null)
+                        messageLog(this, new MessageEvent("Unable to obtain lock on servermanager. Aborting attempt."));
+                    return false;
+                }
+                
                 // Cannot connect to a server that isn't is the servers list.
                 if (!servers.Contains(server))
                 {
-                    if (messageLog!=null)
+                    if (messageLog != null)
                         messageLog(this, new MessageEvent(server.ToString() + " is not on list of known servers. Aborting."));
-                    Monitor.Exit(lockObj);
                     return false;
                 }
-
 
                 // ensure that this server has a server connection status item
                 if (!connections.ContainsKey(server))
@@ -246,7 +253,6 @@ namespace DataStructures
                 {
                     if (messageLog != null)
                         messageLog(this, new MessageEvent(server.ToString() + " is not enabled. Aborting."));
-                    Monitor.Exit(lockObj);
                     return false;
                 }
 
@@ -255,7 +261,6 @@ namespace DataStructures
                 {
                     if (messageLog != null)
                         messageLog(this, new MessageEvent(server.ToString() + " is already connecting. Aborting."));
-                    Monitor.Exit(lockObj);
                     return false;
                 }
 
@@ -286,7 +291,6 @@ namespace DataStructures
                             messageLog(this, new MessageEvent("Connection took longer than 1000 ms, aborting."));
 
                         connectThread.Abort();
-                        Monitor.Exit(lockObj);
                         return false;
                     }
 
@@ -297,7 +301,6 @@ namespace DataStructures
                     if (messageLog != null)
                         messageLog(this, new MessageEvent("Caught exception when attempting to connect to server " + server.ToString() + ":" + e.Message + e.StackTrace));
                     connections[server] = ConnectionStatus.Unable_To_Connect;
-                    Monitor.Exit(lockObj);
                     return false;
                 }
 
@@ -312,14 +315,12 @@ namespace DataStructures
                         {
                             connections[server] = ConnectionStatus.Error_Name_Not_Unique;
                             communicators.Remove(server);
-                            Monitor.Exit(lockObj);
                             return false;
                         }
 
                         connectedServerNames.Add(server.ServerName);
                         connections[server] = ConnectionStatus.Connected;
                         messageLog(this, new MessageEvent("Server connected successfully."));
-                        Monitor.Exit(lockObj);
                         return true;
                     }
                     else
@@ -327,7 +328,6 @@ namespace DataStructures
                         if (messageLog != null)
                             messageLog(this, new MessageEvent("Server ping failed. Aborting."));
                         connections[server] = ConnectionStatus.Unable_To_Connect;
-                        Monitor.Exit(lockObj);
                         return false;
                     }
                 }
@@ -335,17 +335,15 @@ namespace DataStructures
                 {
                     messageLog(this, new MessageEvent("Exception when attempting to ping server: " + e.Message + e.StackTrace));
                     connections[server] = ConnectionStatus.Unable_To_Connect;
-                    Monitor.Exit(lockObj);
                     return false;
                 }
-
             }
-            else
+            finally
             {
-                if (messageLog != null)
-                    messageLog(this, new MessageEvent("Unable to obtain lock on servermanager. Aborting attempt."));
-                return false;
+                if (gotLock)
+                    Monitor.Exit(lockObj);
             }
+            return true;
         }
 
         private void server_connect_proc(object obj)
@@ -584,6 +582,16 @@ namespace DataStructures
         [NonSerialized]
         private Dictionary<string, MethodInfo> methodInfoCache;
 
+        private Dictionary<string, MethodInfo> MethodInfoCache
+        {
+            get
+            {
+                if (methodInfoCache == null)
+                    methodInfoCache = new Dictionary<string, MethodInfo>();
+                return methodInfoCache;
+            }
+        }
+
         /// <summary>
         /// Used in runNamedMethodOnConnectedServers. Eliminates the need for constant use of typeof.
         /// </summary>
@@ -601,23 +609,21 @@ namespace DataStructures
         {
             
 
-            if (methodInfoCache == null)
-                methodInfoCache = new Dictionary<string, MethodInfo>();
             if (serverCommunicatorType == null)
                 serverCommunicatorType = typeof(ServerCommunicator);
 
             MethodInfo method;
 
-            lock (methodInfoCache)
+            lock (MethodInfoCache)
             {
-                if (methodInfoCache.ContainsKey(methodName))
-                    method = methodInfoCache[methodName];
+                if (MethodInfoCache.ContainsKey(methodName))
+                    method = MethodInfoCache[methodName];
                 else
                 {
                     method = serverCommunicatorType.GetMethod(methodName);
                     if (method == null)
                         throw new Exception("Unable to find a method of ServerCommunicator with name " + methodName + ". If you have recently changed ServerCommunicator.cs, did you also remember to update ServerManager.cs?");
-                    methodInfoCache.Add(methodName, method);
+                    MethodInfoCache.Add(methodName, method);
                 }
             }
             return runMethodOnConnectedServers(method, parameters, msTimeout, messageLog);
@@ -638,9 +644,9 @@ namespace DataStructures
             return runNamedMethodOnConnectedServers("generateBuffers", new object[] { iterationNumber }, 20000, messageLog);
         }
 
-        public ServerActionStatus armTasksOnConnectedServers(EventHandler<MessageEvent> messageLog)
+        public ServerActionStatus armTasksOnConnectedServers(UInt32 clockID, EventHandler<MessageEvent> messageLog)
         {
-            return runNamedMethodOnConnectedServers("armTasks", null, 4000, messageLog);
+            return runNamedMethodOnConnectedServers("armTasks", new object[] { clockID }, 4000, messageLog);
         }
 
         public ServerActionStatus generateTriggersOnConnectedServers(EventHandler<MessageEvent> messageLog)
@@ -736,7 +742,7 @@ namespace DataStructures
 
             // -- Aviv Keshet
 
-            temp.armTasks();
+            temp.armTasks(0);
             temp.generateBuffers(0);
             temp.generateTrigger();
             temp.getHardwareChannels();

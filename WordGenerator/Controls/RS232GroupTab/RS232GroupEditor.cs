@@ -92,34 +92,38 @@ namespace WordGenerator.Controls.Temporary
         {
             if (WordGenerator.MainClientForm.instance != null)
                 WordGenerator.MainClientForm.instance.cursorWait();
-
-            List<Waveform> waveformsToDisplay = new List<Waveform>();
-            List<string> channelNamesToDisplay = new List<string>();
-
-
-            // figure out what to display in the waveform graph
-            if (rs232Group != null)
+            try
             {
-                List<int> usedChannelIDs = rs232Group.getChannelIDs();
-                for (int id = 0; id < usedChannelIDs.Count; id++)
+                List<Waveform> waveformsToDisplay = new List<Waveform>();
+                List<string> channelNamesToDisplay = new List<string>();
+
+
+                // figure out what to display in the waveform graph
+                if (rs232Group != null)
                 {
-                    RS232GroupChannelData channelData = rs232Group.ChannelDatas[id];
-                    if (channelData.Enabled)
+                    List<int> usedChannelIDs = rs232Group.getChannelIDs();
+                    for (int id = 0; id < usedChannelIDs.Count; id++)
                     {
-                        // if there are graph-based rs232 data types in future, add their waveform display handlers here
+                        RS232GroupChannelData channelData = rs232Group.ChannelDatas[id];
+                        if (channelData.Enabled)
+                        {
+                            // if there are graph-based rs232 data types in future, add their waveform display handlers here
+                        }
                     }
                 }
+
+
+                waveformGraphCollection1.deactivateAllGraphs();
+
+                waveformGraphCollection1.setWaveforms(waveformsToDisplay);
+                waveformGraphCollection1.setChannelNames(channelNamesToDisplay);
+                waveformGraphCollection1.setWaveformEditor(waveformEditor1);
             }
-
-
-            waveformGraphCollection1.deactivateAllGraphs();
-
-            waveformGraphCollection1.setWaveforms(waveformsToDisplay);
-            waveformGraphCollection1.setChannelNames(channelNamesToDisplay);
-            waveformGraphCollection1.setWaveformEditor(waveformEditor1);
-
-            if (WordGenerator.MainClientForm.instance != null)
-                WordGenerator.MainClientForm.instance.cursorWaitRelease();
+            finally
+            {
+                if (WordGenerator.MainClientForm.instance != null)
+                    WordGenerator.MainClientForm.instance.cursorWaitRelease();
+            }
 
         }
 

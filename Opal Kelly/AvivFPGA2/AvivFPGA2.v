@@ -66,6 +66,9 @@ assign ybus[22] = output_clock;
 
 assign ybus[26] = ~output_clock;
 
+reg [31:0] masterSamplesGenerated;
+reg [31:0] retriggerWaitSamples;   // Counts the total number of samples spent waiting for retriggers
+
 
 		// register inputs from computer
 wire [15:0] ok_wire_ins;
@@ -85,9 +88,19 @@ parameter s_idle = 1,
 reg [4:0] state; // this is 4 bits wide even though only 2 bits are used. I think the compiler shrinks it to 2 anyway.
 
 
+// 1-bit register used to keep track of if we are actively waiting for retrigger
+// 32-bit register used to count how long we have waited for
+reg waitingForRetrigger;
+reg [31:0] waitedCounts;
+reg [15:0] retriggerTimeoutCount; 
 
 reg [3:0] nSegsGenerated; // used only to drive LEDs
 
+
+// bit 0: last run finished successfully
+// bit 1: last run was aborted
+// bits 2-15: reserved for future use
+reg[15:0] fpgaStatusOut;
 
 
 // Mistrigger detection stuff
@@ -123,6 +136,7 @@ reg [32:0] repeat_counter;
 reg internal_reset;
 
 
+reg lastRetriggerIn;
 
 // Initialization of state machine
 initial begin
@@ -131,6 +145,11 @@ initial begin
 	repeat_counter<=0;
 	nSegsGenerated<=0;
 	mistriggerDetected<=0;
+	masterSamplesGenerated<=0;
+	retriggerTimeoutCount<=0;
+	retriggerWaitSamples<=0;
+	fpgaStatusOut<=0;
+	lastRetriggerIn<=0;
 end
 
 // triggering logic
@@ -148,6 +167,11 @@ wire [47:0] on_counts;				// FIFO data contains 3 important numbers
 wire [47:0] off_counts;
 wire [31:0] repeat_counts;
 
+wire edgeRetrigger = off_counts[0];
+wire retriggerValue = off_counts[1];
+
+
+
 												// divide the FIFO data correctly into those 3 numbers
 assign on_counts = clock_data_from_fifo[127:80];
 assign off_counts = clock_data_from_fifo[79:32];
@@ -160,6 +184,7 @@ assign negclk = ~refclk;
 
 
 always @(posedge refclk) begin
+	lastRetriggerIn<=retriggerIN;
 
 	// read from FIFO into local register, when required
 	if (fifo_read_enable==1) begin
@@ -181,6 +206,8 @@ always @(posedge refclk) begin
 			repeat_counter<=0;
 			nSegsGenerated<=0;
 			nSamplesGenerated<=0;
+			waitingForRetrigger<=0;
+			waitedCounts<=0;
 			toggler<=0;
 
 			if (soft_generate_trig_in==1) begin
@@ -194,6 +221,10 @@ always @(posedge refclk) begin
 		s_preparing_to_generate: begin			// this state lasts for only 1 clock cycle, to allow the first frame to be read from the FIFO
 			state<=s_generating;					// and then we immediately enter the generating state.
 			mistriggerDetected<=0;  			// we also use this opportunity to reset the mistriggerDetected register.
+			fpgaStatusOut<=0;						// and reset the status flags
+			masterSamplesGenerated<=0;       // and reset the previous master sample generation count
+			retriggerWaitSamples<=0;
+			retriggerTimeoutCount<=0;
 		end
 		
 		s_generating: begin							// generating state
@@ -201,18 +232,37 @@ always @(posedge refclk) begin
 				state<=s_idle;							// return to idle state
 				fifo_reset<=1;							// reset FIFO
 				output_clock<=0;						// and clock
+				fpgaStatusOut[1]<=1;					// And mark the status bit accordingly
 			end
-			else if (clock_data_from_fifo==0) begin 
-																	// clock_data_from_fifo == 0 is a special code for
+			else if (repeat_counts==0) begin
+																	// repeat_counts == 0 is a special code for
 																	// putting the FPGA into "wait for retrigger" mode
-																	
-																	// wait for the retrigger input to go high, then move on in the fifo
-				if (retriggerIN && fifo_read_enable==0) begin
-					fifo_read_enable<=1;
-					nSegsGenerated<=nSegsGenerated+1;
+																	// in this mode, if on_counts!=0, then on_counts 
+																	// is actually the wait timeout, after which we should 
+																	// continue even if we don't receieve the retrigger signal
+				if (waitingForRetrigger) begin
+					waitedCounts<=waitedCounts+1;
+					 retriggerWaitSamples<=retriggerWaitSamples+1;
+					if ((!edgeRetrigger && retriggerIN == retriggerValue && fifo_read_enable==0) // wait for retrigger input to go to correct value
+					   ||(edgeRetrigger && retriggerIN == retriggerValue && retriggerIN!=lastRetriggerIn && fifo_read_enable==0)// or for it to have edge of correct value
+					|| (on_counts!=0 && waitedCounts==on_counts))  //or for the wait to timeout, then move on in the fifo
+					begin		
+						fifo_read_enable<=1;
+						nSegsGenerated<=nSegsGenerated+1;
+						waitingForRetrigger<=0;
+						if (on_counts!=0 && waitedCounts==on_counts)
+							retriggerTimeoutCount<=retriggerTimeoutCount+1;
+					end
 				end
+				else begin
+					waitingForRetrigger<=1;
+					waitedCounts<=0;
+				end
+																	
+
 			end
 			else begin		
+				masterSamplesGenerated<=masterSamplesGenerated+1; // increment the master sample counter
 				if (main_counter<on_counts) begin   // if the counter indicates our output should be high
 					if (output_clock==0) begin          // then if it is low
 						output_clock<=1;					 	// make it high
@@ -248,6 +298,7 @@ always @(posedge refclk) begin
 							else begin										// no data in the FIFO?
 								state<=s_idle;								// then we are done. go back to idle
 								fifo_reset<=1;								// this line is probably unnecessary
+								fpgaStatusOut[0]<=1; 					// Mark the status output that we are done.
 							end
 						end
 					end		
@@ -277,6 +328,20 @@ okWireIn wireIn00 (.ok1(ok1), .ok2(ok2),
 // Wire outs for mistrigger detection
 okWireOut wire20 (.ok1(ok1), .ok2(ok2), .ep_addr(8'h20), .ep_datain(mistriggerDetected[15:0]));
 okWireOut wire21 (.ok1(ok1), .ok2(ok2), .ep_addr(8'h21), .ep_datain(mistriggerDetected[31:16]));
+
+// Wire outs for Atticus polling of FPGA's master sample count
+okWireOut wire22 (.ok1(ok1), .ok2(ok2), .ep_addr(8'h22), .ep_datain(masterSamplesGenerated[15:0]));
+okWireOut wire23 (.ok1(ok1), .ok2(ok2), .ep_addr(8'h23), .ep_datain(masterSamplesGenerated[31:16]));
+
+// Wire out for Atticus polling of # of retriggers that timed out
+okWireOut wire24 (.ok1(ok1), .ok2(ok2), .ep_addr(8'h24), .ep_datain(retriggerTimeoutCount[15:0]));
+
+// Wire out for Atticus polling of fpga status
+okWireOut wire25 (.ok1(ok1), .ok2(ok2), .ep_addr(8'h25), .ep_datain(fpgaStatusOut[15:0]));
+
+// Wire out for Atticus polling of # of samples spent waiting for retrigger
+okWireOut wire26 (.ok1(ok1), .ok2(ok2), .ep_addr(8'h26), .ep_datain(retriggerWaitSamples[15:0]));
+okWireOut wire27 (.ok1(ok1), .ok2(ok2), .ep_addr(8'h27), .ep_datain(retriggerWaitSamples[31:16]));
 
 // Create the FIFO for storing data from computer
 // write clock comes from Opal Kelly Host Interface

@@ -237,10 +237,15 @@ namespace WordGenerator.Controls
 
             if (WordGenerator.MainClientForm.instance != null)
                 WordGenerator.MainClientForm.instance.cursorWait();
-
-            digitalGrid.updateSize();
-            if (WordGenerator.MainClientForm.instance != null)
-                WordGenerator.MainClientForm.instance.cursorWaitRelease();
+            try
+            {
+                digitalGrid.updateSize();
+            }
+            finally
+            {
+                if (WordGenerator.MainClientForm.instance != null)
+                    WordGenerator.MainClientForm.instance.cursorWaitRelease();
+            }
 
             repairAllMargins(this, null);
 
@@ -591,28 +596,33 @@ namespace WordGenerator.Controls
         public void showOrHideHiddenTimestepEditors()
         {
             WordGenerator.MainClientForm.instance.cursorWait();
-            timeStepsFlowPanel.SuspendLayout();
-            foreach (Control con in timeStepsFlowPanel.Controls)
+            try
             {
-                TimestepEditor ed = con as TimestepEditor;
-                if (ed != null)
+                timeStepsFlowPanel.SuspendLayout();
+                foreach (Control con in timeStepsFlowPanel.Controls)
                 {
-                    if (ed.StepData != null)
+                    TimestepEditor ed = con as TimestepEditor;
+                    if (ed != null)
                     {
-                        if (hideHiddenTimesteps)
+                        if (ed.StepData != null)
                         {
-                            ed.Visible = !ed.StepData.StepHidden;
-                        }
-                        else
-                        {
-                            ed.Visible = true;
+                            if (hideHiddenTimesteps)
+                            {
+                                ed.Visible = !ed.StepData.StepHidden;
+                            }
+                            else
+                            {
+                                ed.Visible = true;
+                            }
                         }
                     }
                 }
+                timeStepsFlowPanel.ResumeLayout();
             }
-            timeStepsFlowPanel.ResumeLayout();
-            
-            WordGenerator.MainClientForm.instance.cursorWaitRelease();
+            finally
+            {
+                WordGenerator.MainClientForm.instance.cursorWaitRelease();
+            }
         }
 
         private void addNewTimestepToolStripMenuItem_Click(object sender, EventArgs e)

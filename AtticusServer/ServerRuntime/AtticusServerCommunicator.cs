@@ -76,7 +76,18 @@ namespace AtticusServer
         /// To be called to add messages to the server message log. Eventually may support logging to a file
         /// as well as to the screen.
         /// </summary>
-        public EventHandler<MessageEvent> messageLog;
+        private event EventHandler<MessageEvent> messageLogHandler;
+
+        public void registerMessageEventHandler(EventHandler<MessageEvent> handler)
+        {
+            messageLogHandler += handler;
+        }
+
+        public void messageLog(object sender, MessageEvent message)
+        {
+            if (messageLogHandler != null)
+                messageLogHandler(sender, message);
+        }
 
         // The next three objects are used in marshalling / unmarshalling this class
         // (ie sharing it over .NET remoting)
@@ -191,12 +202,35 @@ namespace AtticusServer
 
             communicatorStatus = ServerStructures.ServerCommunicatorStatus.Disconnected;
 
+            System.Console.WriteLine("Initializing Network clock broadcast and receiver threads.");
+
+            DataStructures.Timing.NetworkClockBroadcaster.registerMessageLogHandler(this.messageLog);
+            DataStructures.Timing.NetworkClockBroadcaster.startBroadcasterThreads();
+            resetNetworkClocks();
+
+            DataStructures.Timing.NetworkClockProvider.registerStaticMessageLogHandler(this.messageLog);
+            DataStructures.Timing.NetworkClockProvider.startListener(DataStructures.Timing.NetworkClockEndpointInfo.HostTypes.Atticus_Server);
+            
 
 
             System.Console.WriteLine("... done running AtticusServerRuntime constructor.");
 
         }
         #endregion
+
+        public void resetNetworkClocks()
+        {
+
+            messageLog(this, new MessageEvent("Resetting network clock recipients"));
+            DataStructures.Timing.NetworkClockBroadcaster.clearListeners();
+
+            if (serverSettings.BroadcastNetworkClock)
+            {
+                foreach (DataStructures.Timing.NetworkClockEndpointInfo endPoint in serverSettings.BroadcastNetworkRecipients)
+                    DataStructures.Timing.NetworkClockBroadcaster.addListener(endPoint);
+            }
+            
+        }
 
 
         #region Implementation of ServerCommunicator interface
@@ -299,11 +333,9 @@ namespace AtticusServer
 
         public override void nextRunTimeStamp(DateTime timeStamp)
         {
-
-
-            runTime = timeStamp;
             lock (remoteLockObj)
             {
+                runTime = timeStamp;
                 return;
             }
         }
@@ -312,6 +344,7 @@ namespace AtticusServer
         private delegate void voidObjDel(object o);
 
         private Task variableTimebaseClockTask;
+        private bool separateSoftwareClockStart = false;
 
         /// <summary>
         /// This method should be run after setSettings and setSequence to ensure sane data.
@@ -323,8 +356,7 @@ namespace AtticusServer
             lock (remoteLockObj)
             {
                 clientFinishedRun = false;
-                if (taskFinishTimeClicks == null)
-                    taskFinishTimeClicks = new List<long>();
+
                 lock (taskFinishTimeClicks)
                 {
                     taskFinishTimeClicks.Clear();
@@ -598,7 +630,7 @@ namespace AtticusServer
 					//First we determine if an analog in task should be created
                     foreach (DeviceSettings ds in AtticusServer.server.serverSettings.myDevicesSettings.Values)
                     {
-                        analogInCardDetected |= ds.DeviceDescription.Contains("6259") && ds.AnalogInEnabled;
+                        analogInCardDetected |= (ds.DeviceDescription.Contains("6259") || ds.DeviceDescription.Contains("6363")) && ds.AnalogInEnabled; // program will also support PXIe-6363 cards
                     }
 
                     if (analogInCardDetected)
@@ -607,72 +639,114 @@ namespace AtticusServer
                         analogS7ReadTask = new Task();
                         analogS7ReadTask.SynchronizeCallbacks = false;
                         analog_in_names = new List<string>();
-                        bool isUsed;
+                        // bool isUsed; // adareau : now obsolete
 
+                        #region Old Code
+                       // // Obtains a list of the analog in channels to be included in the task, and their name
+                       // AnalogInChannels the_channels = AtticusServer.server.serverSettings.AIChannels[0];
+                       // AnalogInNames the_names = AtticusServer.server.serverSettings.AINames[0];
 
-                       // Obtains a list of the analog in channels to be included in the task, and their name
-                        AnalogInChannels the_channels = AtticusServer.server.serverSettings.AIChannels[0];
-                        AnalogInNames the_names = AtticusServer.server.serverSettings.AINames[0];
+                       //// We use part of the channels as single ended, and part as differential. He channels are added here. The task is created on Slot 7. This shouldn't be hard coded and will be changed.
+                       // #region Single ended
+                       // for (int analog_index = 0; analog_index < 10; analog_index++)
+                       // {
+                       //     PropertyInfo the_channel = the_channels.GetType().GetProperty("AS" + analog_index.ToString());
+                       //     isUsed = (bool)the_channel.GetValue(the_channels, null);
+                       //     if (isUsed)
+                       //     {
+                       //         if (analog_index < 5)
+                       //         {
+                       //             analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + analog_index.ToString(), "",
+                       //                 AITerminalConfiguration.Nrse, -10, 10, AIVoltageUnits.Volts);
+                       //         }
+                       //         else
+                       //         {
+                       //             analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 3).ToString(), "",
+                       //                 AITerminalConfiguration.Nrse, -10, 10, AIVoltageUnits.Volts);
+                       //         }
+                       //         string theName = (string)(the_names.GetType().GetProperty("AS" + analog_index.ToString()).GetValue(the_names, null));
+                       //         if (theName == "")
+                       //             analog_in_names.Add("AIS" + analog_index.ToString());
+                       //         else
+                       //             analog_in_names.Add(theName);
+                       //     }
+                       // }
+                       // #endregion
 
-                       // We use part of the channels as single ended, and part as differential. He channels are added here. The task is created on Slot 7. This shouldn't be hard coded and will be changed.
-                        #region Single ended
-                        for (int analog_index = 0; analog_index < 10; analog_index++)
+                       // #region Differential
+                       // for (int analog_index = 0; analog_index < 11; analog_index++)
+                       // {
+                       //     PropertyInfo the_channel = the_channels.GetType().GetProperty("AD" + NamingFunctions.number_to_string(analog_index, 2));
+                       //     isUsed = (bool)the_channel.GetValue(the_channels, null);
+
+                       //     if (isUsed)
+                       //     {
+                       //         if (analog_index < 3)
+                       //         {
+                       //             analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 5).ToString(), "",
+                       //                 AITerminalConfiguration.Differential, -10, 10, AIVoltageUnits.Volts);
+                       //         }
+                       //         else
+                       //         {
+                       //             analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 13).ToString(), "",
+                       //                 AITerminalConfiguration.Differential, -10, 10, AIVoltageUnits.Volts);
+                       //         }
+                       //         string theName = (string)(the_names.GetType().GetProperty("AD" + NamingFunctions.number_to_string(analog_index, 2)).GetValue(the_names, null));
+                       //         if (theName == "")
+                       //             analog_in_names.Add("AID" + analog_index.ToString());
+                       //         else
+                       //             analog_in_names.Add(theName);
+                       //     }
+                       // }
+                       // #endregion
+
+                        #endregion 
+
+                        #region New Code
+
+                        List<AnalogInChannels> channels_list = AtticusServer.server.serverSettings.AIChannels;
+
+                        foreach (AnalogInChannels aiChannel in channels_list)
                         {
-                            PropertyInfo the_channel = the_channels.GetType().GetProperty("AS" + analog_index.ToString());
-                            isUsed = (bool)the_channel.GetValue(the_channels, null);
-                            if (isUsed)
+                            if (aiChannel.UseChannel)
                             {
-                                if (analog_index < 5)
+                                if (aiChannel.AnalogInChannelType == AnalogInChannels.AnalogInChannelTypeList.SingleEnded)
                                 {
-                                    analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + analog_index.ToString(), "",
-                                        AITerminalConfiguration.Nrse, -10, 10, AIVoltageUnits.Volts);
+                                    analogS7ReadTask.AIChannels.CreateVoltageChannel(AtticusServer.server.serverSettings.AIDev + "/" + aiChannel.ChannelName, "",
+                                      AITerminalConfiguration.Nrse, -10, 10, AIVoltageUnits.Volts);
                                 }
-                                else
-                                {
-                                    analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 3).ToString(), "",
-                                        AITerminalConfiguration.Nrse, -10, 10, AIVoltageUnits.Volts);
-                                }
-                                string theName = (string)(the_names.GetType().GetProperty("AS" + analog_index.ToString()).GetValue(the_names, null));
-                                if (theName == "")
-                                    analog_in_names.Add("AIS" + analog_index.ToString());
-                                else
-                                    analog_in_names.Add(theName);
-                            }
-                        }
-                        #endregion
 
-                        #region Differential
-                        for (int analog_index = 0; analog_index < 11; analog_index++)
-                        {
-                            PropertyInfo the_channel = the_channels.GetType().GetProperty("AD" + NamingFunctions.number_to_string(analog_index, 2));
-                            isUsed = (bool)the_channel.GetValue(the_channels, null);
+                                else if (aiChannel.AnalogInChannelType == AnalogInChannels.AnalogInChannelTypeList.Differential)
+                                {
+                                    analogS7ReadTask.AIChannels.CreateVoltageChannel(AtticusServer.server.serverSettings.AIDev + "/" + aiChannel.ChannelName, "",
+                                     AITerminalConfiguration.Differential, -10, 10, AIVoltageUnits.Volts);
+                                }
 
-                            if (isUsed)
-                            {
-                                if (analog_index < 3)
-                                {
-                                    analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 5).ToString(), "",
-                                        AITerminalConfiguration.Differential, -10, 10, AIVoltageUnits.Volts);
-                                }
-                                else
-                                {
-                                    analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 13).ToString(), "",
-                                        AITerminalConfiguration.Differential, -10, 10, AIVoltageUnits.Volts);
-                                }
-                                string theName = (string)(the_names.GetType().GetProperty("AD" + NamingFunctions.number_to_string(analog_index, 2)).GetValue(the_names, null));
-                                if (theName == "")
-                                    analog_in_names.Add("AID" + analog_index.ToString());
-                                else
-                                    analog_in_names.Add(theName);
+                                string theName = aiChannel.SaveName;
+                                analog_in_names.Add(theName);
+
                             }
+
+
                         }
+
                         #endregion
                         
+
                         // Configure timing specs of the analog In task. Again these things shouldn't be hard coded and will be changed    
                         analogS7ReadTask.Timing.ConfigureSampleClock("", (double)(AtticusServer.server.serverSettings.AIFrequency), SampleClockActiveEdge.Rising,
                             SampleQuantityMode.FiniteSamples, sequence.nSamples(1 / ((double)(AtticusServer.server.serverSettings.AIFrequency))));
 
-                        analogS7ReadTask.Timing.ReferenceClockSource = "/PXI1Slot7/PXI_Trig7";
+                        //analogS7ReadTask.Timing.ReferenceClockSource = "/PXI1Slot7/PXI_Trig7"; // adareau : with my configuration, declaring a ReferenceClockSource was generating errors. I remove this for now...
+                        
+                        if (AtticusServer.server.serverSettings.UseAITaskTriggering) //AD
+                        {
+
+                            DigitalEdgeStartTriggerEdge triggerEdge = DigitalEdgeStartTriggerEdge.Rising;  // AD : see below
+                            analogS7ReadTask.Triggers.StartTrigger.ConfigureDigitalEdgeTrigger(AtticusServer.server.serverSettings.AITriggerSource, triggerEdge); // AD : to fix synchronization problem between analog in and output tasks, I trigger
+                                                                                                                                                                 //  the analog in task, using the variable timebase source signal (available on PXI_Trig0)
+                                                                                                                                                                 // the task starts with the first signal sent by the VT source...
+                        }
                         analogS7ReadTask.Timing.ReferenceClockRate = 20000000;
                         analogS7ReadTask.Stream.Timeout = Convert.ToInt32(sequence.SequenceDuration * 1000) + 10000;
 
@@ -705,7 +779,6 @@ namespace AtticusServer
 
 
 
-
                     #region GPIB device and masquerading gpib channels (like rfsg channels)
 
                     foreach (int gpibID in usedGpibChannels.Keys)
@@ -724,6 +797,7 @@ namespace AtticusServer
                             gpibTask.Done += new TaskDoneEventHandler(aTaskFinished);
                             gpibTasks.Add(gpibChannel, gpibTask);
                             messageLog(this, new MessageEvent("Done."));
+                            
                         }
                         else
                         {
@@ -821,7 +895,7 @@ namespace AtticusServer
         /// </summary>
         private bool taskErrorsDetected = false;
 
-        public List<long> taskFinishTimeClicks;
+        public List<long> taskFinishTimeClicks = new List<long>();
 
         /// <summary>
         /// Event handler that gets called (by a task) whenever a task finishes. If there is an error in the task, then it will get reported here.
@@ -917,6 +991,16 @@ namespace AtticusServer
 
                 bool samplesGeneratedMismatchDetected = false;
 
+                if (fpgaTasks!=null) {
+                    if (fpgaTasks.Count>0) {
+                        IEnumerator<FpgaTimebaseTask> enumerator = fpgaTasks.Values.GetEnumerator();
+                        enumerator.MoveNext();
+                        FpgaTimebaseTask task = enumerator.Current;
+                        FpgaRunReport fpgaReport = task.getRunReport();                    
+                    }
+                }
+
+
                 foreach (string str in daqMxTasks.Keys)
                 {
                     Task task = daqMxTasks[str];
@@ -974,18 +1058,17 @@ namespace AtticusServer
                 }
 
                 bool earlyFinishDetected = false;
-                if (taskFinishTimeClicks != null)
+
+                lock (taskFinishTimeClicks)
                 {
-                    lock (taskFinishTimeClicks)
+                    foreach (long time in taskFinishTimeClicks)
                     {
-                        foreach (long time in taskFinishTimeClicks)
+                        if ((eventTime - time) > 10000000)
                         {
-                            if ((eventTime - time) > 10000000)
-                            {
-                                earlyFinishDetected = true;
-                            }
+                            earlyFinishDetected = true;
                         }
                     }
+
                 }
 
                 if (earlyFinishDetected)
@@ -1006,7 +1089,7 @@ namespace AtticusServer
                 {
                     foreach (FpgaTimebaseTask ft in fpgaTasks.Values)
                     {
-                        int ans = ft.getMistriggerStatus();
+                        int ans = (int)ft.getMistriggerStatus();
                         if (ans != 0)
                         {
                             int errorSamp = ans - 1;
@@ -1349,12 +1432,13 @@ namespace AtticusServer
         /// 
         private object softwareTriggeringTaskLock = new object();
 
+
         /// <summary>
         /// Start hardware triggered tasks, and software triggerred tasks which run off an external sample clock. This function also
         /// sets up the software-timed task triggering mechanism, if one is in use.
         /// </summary>
         /// <returns></returns>
-        public override bool armTasks()
+        public override bool armTasks(UInt32 clockID)
         {
             lock (remoteLockObj)
             {
@@ -1363,11 +1447,66 @@ namespace AtticusServer
                     messageLog(this, new MessageEvent("Arming tasks"));
                     int armedTasks = 0;
 
+
+                    DataStructures.Timing.SoftwareClockProvider softwareClockProvider;
+                    
+                    // chose local software clock provider...
+                    if (serverSettings.ReceiveNetworkClock)
+                    {
+                        softwareClockProvider = new DataStructures.Timing.NetworkClockProvider(clockID);
+                        messageLog(this, new MessageEvent("Using network clock as software clock provider."));
+                    }
+                    else if (fpgaTasks!=null && fpgaTasks.Count != 0)
+                    {
+                        IEnumerator<string> e = fpgaTasks.Keys.GetEnumerator();
+                        e.MoveNext();
+                        string key = e.Current;
+                        softwareClockProvider = fpgaTasks[key];
+                        messageLog(this, new MessageEvent("Using FPGA task on device " + key + " as software clock source."));
+                    }
+                    else
+                    {
+                        if (computerClockProvider != null)
+                        {
+                            throw new Exception("Expected computer clock provider to be null when arming task. Aborting.");
+                        }
+                        this.computerClockProvider = new DataStructures.Timing.ComputerClockSoftwareClockProvider(5);
+                        softwareClockProvider = computerClockProvider;
+                        messageLog(this, new MessageEvent("Using computer clock as software clock source."));
+                    }
+
+                    // create a clock broadcaster 
+                    if (clockBroadcaster != null)
+                    {
+                        throw new Exception("Expected clockBroadcaster to be null when it was not.");
+                    }
+                    if (serverSettings.BroadcastNetworkClock && ! serverSettings.ReceiveNetworkClock)
+                    {
+                        clockBroadcaster = new DataStructures.Timing.NetworkClockBroadcaster(clockID, (uint)((sequence.SequenceDuration * 1000.0) + 100));
+                        softwareClockProvider.addSubscriber(clockBroadcaster, 20);
+                    }
+
+                    // add software clock subscribers
+                    foreach (RfsgTask task in this.rfsgTasks.Values)
+                        softwareClockProvider.addSubscriber(task, 1);
+
+                    foreach (GpibTask task in this.gpibTasks.Values)
+                        softwareClockProvider.addSubscriber(task, 1);
+
+                    foreach (RS232Task task in this.rs232Tasks.Values)
+                        softwareClockProvider.addSubscriber(task, 1);
+
+                    
+
+                   
+
+
                     lock (softwareTriggeringTaskLock)
                     {
                         softwareTriggeringTask = null;
                     }
 
+                   
 
 
                     softwareTimedTasksTriggered = false;
@@ -1421,13 +1560,14 @@ namespace AtticusServer
 
                                             }
                                         }
+
                                         lock (softwareTriggeringTaskLock)
                                         {
                                             softwareTriggeringTask = task;
+                                            softwareTaskTriggerPollingFunctionInitialPosition = task.Stream.TotalSamplesGeneratedPerChannel;
+                                            softwareTaskTriggerPollingThread = new Thread(new ThreadStart(softwareTaskTriggerPollingFunction));
+                                            softwareTaskTriggerPollingThread.Start();
                                         }
-                                        softwareTaskTriggerPollingFunctionInitialPosition = task.Stream.TotalSamplesGeneratedPerChannel;
-                                        softwareTaskTriggerPollingThread = new Thread(new ThreadStart(softwareTaskTriggerPollingFunction));
-                                        softwareTaskTriggerPollingThread.Start();
 
                                     }
                                 }
@@ -1460,7 +1600,7 @@ namespace AtticusServer
             }
         }
 
-        private Object softTrigLock = new object();
+        private Object softwareTriggerPollingFunctionLock = new object();
         private Task softwareTriggeringTask;
         private bool softwareTimedTasksTriggered;
         private int softwareTimedTriggerCount;
@@ -1475,64 +1615,51 @@ namespace AtticusServer
         /// </summary>
         private void softwareTaskTriggerPollingFunction()
         {
+
+            bool gotLock = Monitor.TryEnter(softwareTriggerPollingFunctionLock, 100);
             try
             {
-                bool entered = Monitor.TryEnter(softTrigLock, 100);
-                if (!entered)
+
+                if (!gotLock)
                 {
                     messageLog(this, new MessageEvent("******* Unable to run software task triggering polling thread, as another such thread is already running. Software timed tasks may not be triggered. *******"));
                     displayError();
                     return;
                 }
-                try
+
+                messageLog(this, new MessageEvent("Started a polling thread to trigger software timed tasks. Initial buffer write position being monitored: " + softwareTaskTriggerPollingFunctionInitialPosition));
+                lock (softwareTriggeringTaskLock)
                 {
-                    messageLog(this, new MessageEvent("Started a polling thread to trigger software timed tasks. Initial buffer write position being monitored: " + softwareTaskTriggerPollingFunctionInitialPosition));
-                    lock (softwareTriggeringTaskLock)
+                    bool keepGoing = true;
+                    while (keepGoing)
                     {
-                        while (true)
+                        Thread.Sleep(1);
+
+                        if (softwareTriggeringTask.Stream.TotalSamplesGeneratedPerChannel != softwareTaskTriggerPollingFunctionInitialPosition)
                         {
-                            if (softwareTriggeringTask.Stream.TotalSamplesGeneratedPerChannel != softwareTaskTriggerPollingFunctionInitialPosition)
+                            if (computerClockProvider != null)
                             {
-                                foreach (GpibTask gp in gpibTasks.Values)
-                                {
-                                    gp.Start();
-                                }
-                                foreach (RS232Task rs in rs232Tasks.Values)
-                                {
-                                    rs.Start();
-                                }
-                                foreach (RfsgTask rf in rfsgTasks.Values)
-                                {
-                                    rf.Start();
-                                }
-
-                                messageLog(this, new MessageEvent("Software timed tasks triggered."));
-                                softwareTaskTriggerPollingThread = null;
-                                Monitor.Exit(softTrigLock);
-                                return;
+                                computerClockProvider.ArmClockProvider();
+                                computerClockProvider.StartClockProvider();
+                                messageLog(this, new MessageEvent("Computer-clock based software clock triggered."));
                             }
-
-                            Thread.Sleep(1);
+                            softwareTaskTriggerPollingThread = null;
+                            keepGoing = false;
                         }
                     }
                 }
-                catch (ThreadAbortException)
-                {
-                    Monitor.Exit(softTrigLock);
-                }
+
+
             }
             catch (Exception e)
             {
                 messageLog(this, new MessageEvent("Caught exception during software trigger polling thread: " + e.Message + e.StackTrace));
                 displayError();
-                try
-                {
-                    Monitor.Exit(softTrigLock);
-                }
-                catch (Exception)
-                {
-                    messageLog(this, new MessageEvent("Also, caught exception when attempting to release software polling thread lock. This is probably not important."));
-                }
+            }
+            finally
+            {
+                if (gotLock)
+                    Monitor.Exit(softwareTriggerPollingFunctionLock);
             }
 
         }
@@ -1540,58 +1667,6 @@ namespace AtticusServer
         bool readyReaderLoopRunning = false;
         bool readyReaderLoopAbort = false;
 
-        /// <summary>
-        /// This event handler will be called when a task on this server receives a sample clock. 
-        /// We only want to consume the first such event. It will be used to start and software timed
-        /// operations on this server.
-        /// 
-        /// NOTE: This method never worked well, and is not no longer in use. Polling the buffer position with a monitoring
-        /// thread ended up working much better. See softwareTaskTriggerPollingFunction()
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void triggerSoftwareTimedTasks(object sender, SampleClockEventArgs e)
-        {
-            messageLog(this, new MessageEvent("******** triggerSoftwareTimedTasks(...) was called. This function is no longer supported. How did you get here? ********"));
-            displayError();
-            /*
-            lock (softTrigLock)
-            {
-                if (!softwareTimedTasksTriggered)
-                {
-                    lock (softwareTriggeringTaskLock)
-                    {
-                        // first order of business is to remove this event handler so it doesn't get overwhelmed
-                        softwareTriggeringTask.SampleClock -= triggerSoftwareTimedTasks;
-                    }
-
-                    softwareTimedTasksTriggered = true;
-
-                    //ok. Now trigger the tasks.
-                    foreach (GpibTask gp in gpibTasks.Values)
-                    {
-                        gp.Start();
-                    }
-                    foreach (RS232Task rs in rs232Tasks.Values)
-                    {
-                        rs.Start();
-                    }
-                    foreach (RfsgTask rf in rfsgTasks.Values)
-                    {
-                        rf.Start();
-                    }
-                    messageLog(this, new MessageEvent("Software timed tasks triggered by " + serverSettings.DeviceToSyncSoftwareTimedTasksTo));
-                }
-                else
-                {
-                    softwareTimedTriggerCount++;
-                    if (softwareTimedTriggerCount % 10 == 0)
-                    {
-                        messageLog(this, new MessageEvent("Ignored " + softwareTimedTriggerCount + " duplicate software-timed task triggers."));
-                    }
-                }
-            }*/
-        }
 
         public void shutDown()
         {
@@ -1601,6 +1676,9 @@ namespace AtticusServer
             messageLog(this, new MessageEvent("Stopping all tasks."));
             this.stopAndCleanupTasks();
 
+            DataStructures.Timing.NetworkClockBroadcaster.stopBroadcasterThread();
+            DataStructures.Timing.NetworkClockProvider.shutDown();
+
             // Reset devices on exit. This is so that if you close this and open the old word generator,
             // it doesn't complain on startup.
             resetAllDevices();
@@ -1608,6 +1686,8 @@ namespace AtticusServer
             messageLog(this, new MessageEvent("Shutdown complete."));
         }
 
+        private DataStructures.Timing.ComputerClockSoftwareClockProvider computerClockProvider;
+        private DataStructures.Timing.NetworkClockBroadcaster clockBroadcaster;
 
         /// <summary>
         /// Start internally clocked software triggered tasks, software timed tasks (like gpib tasks), and tasks which act as clocks for other tasks.
@@ -1773,27 +1853,15 @@ namespace AtticusServer
                         // triggered through a triggering task. (see the armTasks function for more info).
                         if (softwareTriggeringTask == null)
                         {
-                            int softTrigs = 0;
-                            // software triggering for gpib tasks
-                            foreach (GpibTask gpTask in gpibTasksToTrigger)
+                            if (computerClockProvider != null)
                             {
-                                gpTask.Start();
-                                softTrigs++;
+                                computerClockProvider.ArmClockProvider();
+                                computerClockProvider.StartClockProvider();
+                                messageLog(this, new MessageEvent("Triggered computer-software-clock (without sync to a hardware timed task)."));
                             }
+                            
 
-                            // softward triggering for rs232 tasks
-                            foreach (RS232Task task in rs232TasksToTrigger)
-                            {
-                                task.Start();
-                                softTrigs++;
-                            }
-
-                            foreach (RfsgTask rftask in rfsgTasksToTrigger)
-                            {
-                                rftask.Start();
-                                softTrigs++;
-                            }
-                            messageLog(this, new MessageEvent("Triggered " + softTrigs + " software-timed task(s) (without sync to a hardware timed task)."));
+                           
                         }
                     }
 
@@ -1842,27 +1910,14 @@ namespace AtticusServer
                         // triggered through a triggering task. (see the armTasks function for more info).
                         if (softwareTriggeringTask == null)
                         {
-                            int softTrigs = 0;
-                            // software triggering for gpib tasks
-                            foreach (GpibTask gpTask in gpibTasksToTrigger)
+                            if (computerClockProvider != null)
                             {
-                                gpTask.Start();
-                                softTrigs++;
+                                computerClockProvider.ArmClockProvider();
+                                computerClockProvider.StartClockProvider();
+                                messageLog(this, new MessageEvent("Triggered software-timed task(s) (without sync to a hardware timed task)."));   
                             }
 
-                            // softward triggering for rs232 tasks
-                            foreach (RS232Task task in rs232TasksToTrigger)
-                            {
-                                task.Start();
-                                softTrigs++;
-                            }
-
-                            foreach (RfsgTask rftask in rfsgTasksToTrigger)
-                            {
-                                rftask.Start();
-                                softTrigs++;
-                            }
-                              messageLog(this, new MessageEvent("Triggered " + softTrigs + " software-timed task(s) (without sync to a hardware timed task)."));                        
+                     
                         }
 
                     }
@@ -1874,6 +1929,8 @@ namespace AtticusServer
                     {
                         foreach (FpgaTimebaseTask ft in fpgaTasks.Values)
                         {
+                            ft.ArmClockProvider();
+                            ft.StartClockProvider();
                             ft.Start();
                         }
                     }
@@ -1977,7 +2034,10 @@ namespace AtticusServer
                     foreach (FpgaTimebaseTask ftask in fpgaTasks.Values)
                     {
                         ftask.Stop();
+                        ftask.AbortClockProvider();
                     }
+
+                    fpgaTasks.Clear();
                 }
 
                 if (variableTimebaseClockTask != null)
@@ -2045,17 +2105,21 @@ namespace AtticusServer
                     GC.Collect();
                 }
 
+
+                if (computerClockProvider != null)
+                    computerClockProvider.AbortClockProvider();
+                computerClockProvider = null;
+
+                if (clockBroadcaster != null)
+                    clockBroadcaster = null;
+
                 if (gpibTasks == null)
                 {
                     gpibTasks = new Dictionary<HardwareChannel, GpibTask>();
                 }
                 else
                 {
-                    // stop gpib tasks.
-
-                    foreach (GpibTask gp in gpibTasks.Values)
-                        gp.stop();
-
+    
                     gpibTasks.Clear();
                 }
 
@@ -2065,11 +2129,7 @@ namespace AtticusServer
                 }
                 else
                 {
-                    foreach (RS232Task rt in rs232Tasks.Values)
-                    {
-                        rt.stop();
-                    }
-                    rs232Tasks.Clear();
+                     rs232Tasks.Clear();
                 }
 
                 if (rfsgTasks == null)
@@ -2078,10 +2138,6 @@ namespace AtticusServer
                 }
                 else
                 {
-                    foreach (RfsgTask rf in rfsgTasks.Values)
-                    {
-                        rf.stop();
-                    }
                     rfsgTasks.Clear();
                 }
 
@@ -2547,9 +2603,9 @@ namespace AtticusServer
                 }
                 catch (Exception e)
                 {
-                    if (messageLog != null)
+                    if (messageLogHandler != null)
                     {
-                        messageLog(this, new MessageEvent("Caught exception when attempting to detect serial ports: " + e.Message + e.StackTrace));
+                        messageLogHandler(this, new MessageEvent("Caught exception when attempting to detect serial ports: " + e.Message + e.StackTrace));
                     }
                     else
                     {

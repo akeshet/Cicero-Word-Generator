@@ -43,6 +43,7 @@ namespace AtticusServer
             this.clearDeviceSettingsButton = new System.Windows.Forms.Button();
             this.refreshHardwareButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.resetNetworkClocksButton = new System.Windows.Forms.Button();
             this.serverSettingsPropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.connectButton = new System.Windows.Forms.Button();
             this.connectionStatusLabel = new System.Windows.Forms.Label();
@@ -50,7 +51,7 @@ namespace AtticusServer
             this.label1 = new System.Windows.Forms.Label();
             this.eventLogTextBox = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.verboseCheckBox = new System.Windows.Forms.CheckBox();
+            this.softwareTimedTaskLogTextCheckbox = new System.Windows.Forms.CheckBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.serverSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,6 +63,7 @@ namespace AtticusServer
             this.licenseInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openHomePageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openGitRepositoryPageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showWarningsErrorsOnly = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -107,7 +109,7 @@ namespace AtticusServer
             this.excludeChannelsButton.TabIndex = 12;
             this.excludeChannelsButton.Text = "Exclude channel(s)";
             this.excludeChannelsButton.UseVisualStyleBackColor = true;
-            this.excludeChannelsButton.Click += new System.EventHandler(this.button4_Click_1);
+            this.excludeChannelsButton.Click += new System.EventHandler(this.excludeChannelsButtonClick);
             // 
             // label3
             // 
@@ -143,7 +145,7 @@ namespace AtticusServer
             this.resetDevicesButton.TabIndex = 8;
             this.resetDevicesButton.Text = "Reset Devices";
             this.resetDevicesButton.UseVisualStyleBackColor = true;
-            this.resetDevicesButton.Click += new System.EventHandler(this.button5_Click);
+            this.resetDevicesButton.Click += new System.EventHandler(this.resetDevicesButtonClick);
             // 
             // HardwareChannelCount
             // 
@@ -202,6 +204,7 @@ namespace AtticusServer
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.resetNetworkClocksButton);
             this.groupBox2.Controls.Add(this.serverSettingsPropertyGrid);
             this.groupBox2.Controls.Add(this.connectButton);
             this.groupBox2.Controls.Add(this.connectionStatusLabel);
@@ -213,6 +216,16 @@ namespace AtticusServer
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Server Settings";
+            // 
+            // resetNetworkClocksButton
+            // 
+            this.resetNetworkClocksButton.Location = new System.Drawing.Point(236, 71);
+            this.resetNetworkClocksButton.Name = "resetNetworkClocksButton";
+            this.resetNetworkClocksButton.Size = new System.Drawing.Size(198, 35);
+            this.resetNetworkClocksButton.TabIndex = 6;
+            this.resetNetworkClocksButton.Text = "Reset Network Clock Provider";
+            this.resetNetworkClocksButton.UseVisualStyleBackColor = true;
+            this.resetNetworkClocksButton.Click += new System.EventHandler(this.resetNetworkClocksButton_Click);
             // 
             // serverSettingsPropertyGrid
             // 
@@ -284,13 +297,13 @@ namespace AtticusServer
             // 
             // verboseCheckBox
             // 
-            this.verboseCheckBox.AutoSize = true;
-            this.verboseCheckBox.Location = new System.Drawing.Point(793, 529);
-            this.verboseCheckBox.Name = "verboseCheckBox";
-            this.verboseCheckBox.Size = new System.Drawing.Size(193, 17);
-            this.verboseCheckBox.TabIndex = 4;
-            this.verboseCheckBox.Text = "Show GPIB and RS232 Commands";
-            this.verboseCheckBox.UseVisualStyleBackColor = true;
+            this.softwareTimedTaskLogTextCheckbox.AutoSize = true;
+            this.softwareTimedTaskLogTextCheckbox.Location = new System.Drawing.Point(793, 529);
+            this.softwareTimedTaskLogTextCheckbox.Name = "verboseCheckBox";
+            this.softwareTimedTaskLogTextCheckbox.Size = new System.Drawing.Size(193, 17);
+            this.softwareTimedTaskLogTextCheckbox.TabIndex = 4;
+            this.softwareTimedTaskLogTextCheckbox.Text = "Show GPIB and RS232 Commands";
+            this.softwareTimedTaskLogTextCheckbox.UseVisualStyleBackColor = true;
             // 
             // menuStrip1
             // 
@@ -379,12 +392,24 @@ namespace AtticusServer
             this.openGitRepositoryPageToolStripMenuItem.Text = "Open Git Repository Page";
             this.openGitRepositoryPageToolStripMenuItem.Click += new System.EventHandler(this.openGitRepositoryPageToolStripMenuItem_Click);
             // 
+            // showWarningsErrorsOnly
+            // 
+            this.showWarningsErrorsOnly.AutoSize = true;
+            this.showWarningsErrorsOnly.Location = new System.Drawing.Point(623, 529);
+            this.showWarningsErrorsOnly.Name = "showWarningsErrorsOnly";
+            this.showWarningsErrorsOnly.Size = new System.Drawing.Size(161, 17);
+            this.showWarningsErrorsOnly.TabIndex = 6;
+            this.showWarningsErrorsOnly.Text = "Show only Warnings / Errors";
+            this.showWarningsErrorsOnly.UseVisualStyleBackColor = true;
+            this.showWarningsErrorsOnly.CheckedChanged += new System.EventHandler(this.showWarningsErrorsOnly_CheckedChanged);
+            // 
             // MainServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(996, 742);
-            this.Controls.Add(this.verboseCheckBox);
+            this.Controls.Add(this.showWarningsErrorsOnly);
+            this.Controls.Add(this.softwareTimedTaskLogTextCheckbox);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -396,6 +421,7 @@ namespace AtticusServer
             this.Name = "MainServerForm";
             this.Text = "Atticus Server 1.0 Beta";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainServerForm_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainServerForm_FormClosed);
             this.Load += new System.EventHandler(this.MainServerForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -432,7 +458,6 @@ namespace AtticusServer
         private System.Windows.Forms.ListBox hcList;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button excludeChannelsButton;
-        public System.Windows.Forms.CheckBox verboseCheckBox;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem serverSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
@@ -445,6 +470,9 @@ namespace AtticusServer
         private System.Windows.Forms.Button deleteSelectedDeviceButton;
         private System.Windows.Forms.ToolStripMenuItem openHomePageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openGitRepositoryPageToolStripMenuItem;
+        private System.Windows.Forms.CheckBox softwareTimedTaskLogTextCheckbox;
+        private System.Windows.Forms.Button resetNetworkClocksButton;
+        private System.Windows.Forms.CheckBox showWarningsErrorsOnly;
 
     }
 }

@@ -85,9 +85,12 @@ namespace WordGenerator
                 }
 
                 ClientRunner runner = new ClientRunner();
-                runner.messageLog += new EventHandler<DataStructures.MessageEvent>(mainForm.addMessageLogText);
 
+                runner.messageLog += new EventHandler<MessageEvent>(mainForm.addMessageLogText);
+
+           
                 Application.Run(mainForm);
+
             }
             catch (Exception e)
             {

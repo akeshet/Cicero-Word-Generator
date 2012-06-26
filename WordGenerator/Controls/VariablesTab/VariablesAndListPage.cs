@@ -50,33 +50,37 @@ namespace WordGenerator.Controls
         {
             if (MainClientForm.instance != null)
                 MainClientForm.instance.cursorWait();
-
-            for (int i = 0; i < ListData.NLists; i++)
+            try
             {
-                listPanels[i].setListID(i + 1);
+                for (int i = 0; i < ListData.NLists; i++)
+                {
+                    listPanels[i].setListID(i + 1);
+                }
+
+
+
+                for (int i = 0; i < ListData.NLists; i++)
+                {
+                    listPanels[i].setData(Storage.sequenceData.Lists.Lists[i]);
+
+                }
+
+
+                if (!Storage.sequenceData.Lists.ListLocked)
+                    unlockLists();
+                else
+                    lockLists();
+
+                this.layoutVariables();
+
+                layoutCalibrationUI();
+
             }
-
-
-
-            for (int i = 0; i < ListData.NLists; i++)
+            finally
             {
-                listPanels[i].setData(Storage.sequenceData.Lists.Lists[i]);
-                
+                if (MainClientForm.instance != null)
+                    MainClientForm.instance.cursorWaitRelease();
             }
-            
-
-            if (!Storage.sequenceData.Lists.ListLocked)
-                unlockLists();
-            else
-                lockLists();
-
-            this.layoutVariables();
-
-            layoutCalibrationUI();
-
-
-            if (MainClientForm.instance != null)
-                MainClientForm.instance.cursorWaitRelease();
         }
 
         private void layoutCalibrationUI()

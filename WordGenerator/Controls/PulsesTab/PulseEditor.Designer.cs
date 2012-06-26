@@ -28,8 +28,6 @@ namespace WordGenerator.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PulseEditor));
             this.pulseNameTextBox = new System.Windows.Forms.TextBox();
             this.pulseDescriptionTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -56,7 +54,6 @@ namespace WordGenerator.Controls
             this.getValueFromVariableCheckBox = new System.Windows.Forms.CheckBox();
             this.valueVariableComboBox = new System.Windows.Forms.ComboBox();
             this.autoNameCheckBox = new System.Windows.Forms.CheckBox();
-            this.autoNameGlossaryToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.pulseDuration = new WordGenerator.Controls.HorizontalParameterEditor();
             this.endDelayTime = new WordGenerator.Controls.HorizontalParameterEditor();
             this.startDelayTime = new WordGenerator.Controls.HorizontalParameterEditor();
@@ -334,16 +331,8 @@ namespace WordGenerator.Controls
             this.autoNameCheckBox.Size = new System.Drawing.Size(77, 17);
             this.autoNameCheckBox.TabIndex = 17;
             this.autoNameCheckBox.Text = "Auto-name";
-            this.autoNameGlossaryToolTip.SetToolTip(this.autoNameCheckBox, resources.GetString("autoNameCheckBox.ToolTip"));
             this.autoNameCheckBox.UseVisualStyleBackColor = true;
             this.autoNameCheckBox.CheckedChanged += new System.EventHandler(this.autoNameCheckBox_CheckedChanged);
-            // 
-            // autoNameGlossaryToolTip
-            // 
-            this.autoNameGlossaryToolTip.AutoPopDelay = 32000;
-            this.autoNameGlossaryToolTip.InitialDelay = 500;
-            this.autoNameGlossaryToolTip.ReshowDelay = 100;
-            this.autoNameGlossaryToolTip.Popup += new System.Windows.Forms.PopupEventHandler(this.toolTip1_Popup);
             // 
             // pulseDuration
             // 
@@ -438,6 +427,5 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.CheckBox getValueFromVariableCheckBox;
         private System.Windows.Forms.ComboBox valueVariableComboBox;
         private System.Windows.Forms.CheckBox autoNameCheckBox;
-        private System.Windows.Forms.ToolTip autoNameGlossaryToolTip;
     }
 }

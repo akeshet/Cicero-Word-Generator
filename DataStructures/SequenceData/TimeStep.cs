@@ -143,6 +143,35 @@ namespace DataStructures
             set { waitForRetrigger = value; }
         }
 
+        private DimensionedParameter retriggerTimeout;
+
+        public DimensionedParameter RetriggerTimeout
+        {
+            get
+            {
+                if (retriggerTimeout == null)
+                    retriggerTimeout = new DimensionedParameter(Units.s, 0);
+                return retriggerTimeout;
+            }
+            set { retriggerTimeout = value; }
+        }
+
+        private bool retriggerOnEdge;
+
+        public bool RetriggerOnEdge
+        {
+            get { return retriggerOnEdge; }
+            set { retriggerOnEdge = value; }
+        }
+
+        private bool retriggerOnNegativeValueOrEdge;
+
+        public bool RetriggerOnNegativeValueOrEdge
+        {
+            get { return retriggerOnNegativeValueOrEdge; }
+            set { retriggerOnNegativeValueOrEdge = value; }
+        }
+
         private AnalogGroup myAnalogGroup;
 
         [Category("Groups"), Description("The analog group started in this timestep, if any.")]

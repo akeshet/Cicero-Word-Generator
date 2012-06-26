@@ -78,11 +78,15 @@ namespace AtticusServer
                 MainServerForm form = new MainServerForm();
 
                 server.updateGUI += form.updateGUI;
-                server.messageLog += form.addMessageLogText;
+                server.registerMessageEventHandler(form.addMessageLogText);
+
+
 
 
 
                 Application.Run(form);
+
+                
 
                 saveServerSettings(AppDomain.CurrentDomain.BaseDirectory +  FileNameStrings.DefaultServerSettingsDataFile, serverSettings);
             }

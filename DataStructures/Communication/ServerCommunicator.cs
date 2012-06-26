@@ -85,9 +85,11 @@ namespace DataStructures
 
         /// <summary>
         /// Starts any Hardware Triggered tasks, or any software triggered tasks which run off an external sample clock.
+        /// 
+        /// clockID is a randomly-generated-per-shot number that is used to uniquely identify a shared network clock
         /// </summary>
         /// <returns></returns>
-        public abstract bool armTasks();
+        public abstract bool armTasks(UInt32 clockID);
 
         /// <summary>
         /// Returns true if the most recent run completed sucessfully, false otherwise.

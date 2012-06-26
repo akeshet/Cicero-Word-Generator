@@ -66,6 +66,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\PulsesTab\AutoNameGlossaryDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\PulsesTab\AutoNameGlossaryDialog.Designer.cs">
+      <DependentUpon>AutoNameGlossaryDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Shared\AlternateFlowLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -369,6 +375,9 @@
     <EmbeddedResource Include="Controls\OverrideTab\OverridePage.resx">
       <SubType>Designer</SubType>
       <DependentUpon>OverridePage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PulsesTab\AutoNameGlossaryDialog.resx">
+      <DependentUpon>AutoNameGlossaryDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\VariablesTab\PermanentVariablesEditor.resx">
       <SubType>Designer</SubType>

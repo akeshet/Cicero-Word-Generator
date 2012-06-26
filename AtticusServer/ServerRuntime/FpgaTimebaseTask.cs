@@ -10,20 +10,27 @@ namespace AtticusServer
     /// <summary>
     /// Task that generated a variable timebase using an OpalKelly FPGA.
     /// </summary>
-    class FpgaTimebaseTask
+    class FpgaTimebaseTask : DataStructures.Timing.PollingThreadSoftwareClockProvider
     {
+        private object lockObj = new object();
 
-        okCFrontPanel opalKellyDevice;
+        private double masterClockPeriod;
 
+        private okCFrontPanel opalKellyDevice;
+
+        public class FpgaTimebaseGenerationException : Exception
+        {
+
+        }
         
 
         private struct ListItem
         {
-            public int onCounts;
-            public int offCounts;
-            public int repeats;
+            public uint onCounts;
+            public uint offCounts;
+            public uint repeats;
 
-            public ListItem(int onCounts, int offCounts, int repeats)
+            public ListItem(uint onCounts, uint offCounts, uint repeats)
             {
                 this.onCounts = onCounts;
                 this.offCounts = offCounts;
@@ -38,7 +45,16 @@ namespace AtticusServer
             }
         }
 
-        public static byte[] createByteArray(TimestepTimebaseSegmentCollection segments,
+        /// <summary>
+        /// Create byte array for use in programming FPGA
+        /// </summary>
+        /// <param name="segments"></param>
+        /// <param name="sequence"></param>
+        /// <param name="nSegments"></param>
+        /// <param name="masterClockPeriod"></param>
+        /// <param name="assymetric"></param>
+        /// <returns></returns>
+        private static byte[] createByteArray(TimestepTimebaseSegmentCollection segments,
                                                 SequenceData sequence, out int nSegments, double masterClockPeriod, bool assymetric)
         {
             List<ListItem> listItems = new List<ListItem>();
@@ -49,8 +65,21 @@ namespace AtticusServer
                 {
                     if (sequence.TimeSteps[stepID].WaitForRetrigger)
                     {
-                        listItems.Add(new ListItem(0, 0, 0)); // 0,0,0 list item is code for "wait for retrigger
-                                                              // FPGA knows how to handle this
+                        uint waitTime = (uint) (sequence.TimeSteps[stepID].RetriggerTimeout.getBaseValue() / masterClockPeriod);
+                        
+                        uint retriggerFlags = 0;
+                        if (sequence.TimeSteps[stepID].RetriggerOnEdge)
+                            retriggerFlags += 1;
+                        if (!sequence.TimeSteps[stepID].RetriggerOnNegativeValueOrEdge)
+                            retriggerFlags += 2;
+                        
+                        listItems.Add(new ListItem(waitTime, retriggerFlags, 0));
+                               // counts = 0 is a special signal for WAIT_FOR_RETRIGGER mode
+                               // in this mode, FPGA waits a maximum of on_counts master samples
+                               // before moving on anyway.
+                               // (unless on_counts = 0, in which case it never artificially retriggers)
+                                // retrigger flags set if the FPGA will trigger on edge or on value
+                                // and whether to trigger on positive or negative (edge or value)
                     }
 
                     List<SequenceData.VariableTimebaseSegment> stepSegments = segments[sequence.TimeSteps[stepID]];
@@ -59,9 +88,9 @@ namespace AtticusServer
                         ListItem item = new ListItem();
                         SequenceData.VariableTimebaseSegment currentSeg = stepSegments[i];
 
-                        item.repeats = currentSeg.NSegmentSamples;
-                        item.offCounts = currentSeg.MasterSamplesPerSegmentSample / 2;
-                        item.onCounts = currentSeg.MasterSamplesPerSegmentSample - item.offCounts;
+                        item.repeats = (uint)currentSeg.NSegmentSamples;
+                        item.offCounts = (uint)(currentSeg.MasterSamplesPerSegmentSample / 2);
+                        item.onCounts = (uint)(currentSeg.MasterSamplesPerSegmentSample - item.offCounts);
 
                         // in assymmetric mode (spelling?), the clock duty cycle is not held at 50%, but rather the pulses are made to be
                         // 5 master cycles long at most. This is a workaround for the weird behavior of one of our fiber links
@@ -70,7 +99,7 @@ namespace AtticusServer
                         {
                             if (item.onCounts > 5)
                             {
-                                int difference = item.onCounts - 5;
+                                uint difference = item.onCounts - 5;
                                 item.onCounts = 5;
                                 item.offCounts = item.offCounts + difference;
                             }
@@ -96,7 +125,7 @@ namespace AtticusServer
             if (minCounts <= 0)
                 minCounts = 1;
 
-            ListItem finishItem = new ListItem(minCounts, minCounts, 1);
+            ListItem finishItem = new ListItem((uint)minCounts, (uint)minCounts, 1);
 
             if (assymetric)
             {
@@ -116,6 +145,8 @@ namespace AtticusServer
             // the data is a little shuffled because
             // of the details of the byte order in 
             // piping data to the fpga.
+            
+            // Each list item takes up 16 bytes in the output FIFO.
             for (int i = 0; i < listItems.Count; i++)
             {
                 ListItem item = listItems[i];
@@ -146,13 +177,13 @@ namespace AtticusServer
 
         }
 
-        private static byte[] splitIntToBytes(int splitMe)
+        private static byte[] splitIntToBytes(uint splitMe)
         {
             byte[] ans = new byte[4];
-            int one = splitMe >> 24;
-            int two = (splitMe-(one << 24))>>16;
-            int three = (splitMe - (one<<24) - (two<<16))>>8;
-            int four = splitMe - (one << 24) - (two << 16) - (three << 8);
+            uint one = splitMe >> 24;
+            uint two = (splitMe-(one << 24))>>16;
+            uint three = (splitMe - (one<<24) - (two<<16))>>8;
+            uint four = splitMe - (one << 24) - (two << 16) - (three << 8);
             ans[0] = (byte)one;
             ans[1] = (byte)two;
             ans[2] = (byte)three;
@@ -160,14 +191,21 @@ namespace AtticusServer
             return ans;
         }
 
+        private UInt32 max_elapsedtime_ms;
+
         public FpgaTimebaseTask(DeviceSettings deviceSettings, okCFrontPanel opalKellyDevice, SequenceData sequence, double masterClockPeriod, out int nSegments, bool useRfModulation, bool assymetric)
+            : base()
         {
             com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode;
 
             this.opalKellyDevice = opalKellyDevice;
 
+            this.masterClockPeriod = masterClockPeriod;
+
             TimestepTimebaseSegmentCollection segments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock,
                                                         masterClockPeriod);
+
+            this.max_elapsedtime_ms = (UInt32)((sequence.SequenceDuration * 1000.0) + 100);
 
             byte[] data = FpgaTimebaseTask.createByteArray(segments, sequence, out nSegments, masterClockPeriod, assymetric );
 
@@ -210,46 +248,184 @@ namespace AtticusServer
 
         }
 
-        public void triggerMonitoringProc()
-        {
 
+        /// <summary>
+        ///  Must call updateWireOuts before using.
+        /// </summary>
+        /// <returns></returns>
+        private UInt32 getMasterSamplesGenerated()
+        {
+            return extractUInt32FromAddresses(0x22, 0x23);
         }
+
+        private uint extractUInt32FromAddresses(Int32 lowWordAddr, Int32 highWordAddr)
+        {
+            UInt32 lowWord;
+            UInt32 highWord;
+
+            lock (lockObj)
+            {
+                lowWord = opalKellyDevice.GetWireOutValue(lowWordAddr);
+                highWord = opalKellyDevice.GetWireOutValue(highWordAddr);
+            }
+
+            UInt32 ans = highWord;
+            ans = ans << 16;
+            ans = ans + lowWord;
+
+            return ans;
+        }
+
+        /// <summary>
+        ///  Must call updateWireOuts before using.
+        /// </summary>
+        /// <returns></returns>
+        private UInt32 getSamplesWaitedForRetrigger()
+        {
+            return extractUInt32FromAddresses(0x26, 0x27);
+        }
+
+        /// <summary>
+        ///  Must call updateWireOuts before using.
+        /// </summary>
+        /// <returns></returns>
+        private UInt16 getRetriggerTimeoutCount()
+        {
+            return (UInt16) opalKellyDevice.GetWireOutValue(0x24);
+        }
+
+        private object startedLockObj = new object();
+        private bool started = false;
 
         public void Start()
         {
-            // Send the device a start trigger.
-            com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode = opalKellyDevice.ActivateTriggerIn(0x40, 0);
-            if (errorCode != okCFrontPanel.ErrorCode.NoError)
+            lock (lockObj)
             {
-                throw new Exception("Unable to send software start trigger to FPGA device. " + errorCode.ToString());
+                // Send the device a start trigger.
+                com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode = opalKellyDevice.ActivateTriggerIn(0x40, 0);
+                if (errorCode != okCFrontPanel.ErrorCode.NoError)
+                {
+                    throw new Exception("Unable to send software start trigger to FPGA device. " + errorCode.ToString());
+                }
+                lock (startedLockObj)
+                {
+                    started = true;
+                    Monitor.PulseAll(startedLockObj);
+                }
             }
         }
 
-        public int getMistriggerStatus()
+        
+
+        public uint getMistriggerStatus()
         {
-            opalKellyDevice.UpdateWireOuts();
-            int highWord;
-            int lowWord;
+            lock (lockObj)
+                opalKellyDevice.UpdateWireOuts();
 
-            lowWord = (int) opalKellyDevice.GetWireOutValue(0x20);
-            highWord = (int) opalKellyDevice.GetWireOutValue(0x21);
+            return extractUInt32FromAddresses(0x20, 0x21);
+        }
 
-            int ans = highWord;
-            ans = ans << 16;
-            ans = ans + lowWord;
-           
-            return ans;
+        private FpgaStatus getFpgaStatus()
+        {
+            uint statusRegister;
+            lock (lockObj)
+                statusRegister = opalKellyDevice.GetWireOutValue(0x25);
+
+            FpgaStatus status;
+            status.Finished = ((statusRegister & 1)!=0);
+            status.Aborted = ((statusRegister & 2)!=0);
+            return status;
+        }
+
+        private struct FpgaStatus
+        {
+            public bool Aborted;
+            public bool Finished;
         }
 
         public void Stop()
         {
-            com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode;
-            // Send the device an abort trigger.
-            errorCode = opalKellyDevice.ActivateTriggerIn(0x40, 1);
-            if (errorCode != okCFrontPanel.ErrorCode.NoError)
+            lock (lockObj)
             {
-                throw new Exception("Unable to send software stop trigger to FPGA device. " + errorCode.ToString());
+                com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode;
+                // Send the device an abort trigger.
+                errorCode = opalKellyDevice.ActivateTriggerIn(0x40, 1);
+                if (errorCode != okCFrontPanel.ErrorCode.NoError)
+                {
+                    throw new Exception("Unable to send software stop trigger to FPGA device. " + errorCode.ToString());
+                }
             }
         }
+
+        protected override void armTimerThread()
+        {
+            // nothing required
+        }
+
+        protected override void timerThreadProc()
+        {
+            uint lastmSamp=0;
+            bool keepGoing = true;
+            int rollovers = 0;
+            uint rolloverTime = (uint)(UInt32.MaxValue * this.masterClockPeriod * 1000.0);
+
+            // Wait for the started flag to get set (when Start() is called on Fpga task
+            while (true)
+            {
+                lock (startedLockObj)
+                {
+                    if (started)
+                        break;
+                    Monitor.Wait(startedLockObj);
+                }
+            }
+
+
+            while (keepGoing)
+            {
+                uint mSamp;
+                FpgaStatus status;
+                lock (lockObj)
+                {
+                    opalKellyDevice.UpdateWireOuts();
+                    mSamp = getMasterSamplesGenerated();
+                    status = getFpgaStatus();
+                }
+
+                if (status.Finished && lastmSamp >0)
+                {
+                    reachTime(max_elapsedtime_ms);
+                    keepGoing = false;
+                    continue;
+                }
+
+
+                if (mSamp < lastmSamp) // this may occur for very long sequences (about 429 seconds at least, if FPGA running at 10Mhz)
+                {                       // or if the fpga finished a run (in which case master sample will return 0)
+                    rollovers++;
+                }
+
+                if (mSamp == lastmSamp)
+                    continue;
+                lastmSamp = mSamp;
+
+                uint nowTime = (uint)(mSamp * this.masterClockPeriod * 1000.0) + (uint)(rollovers * rolloverTime);
+
+                keepGoing = reachTime(nowTime);
+                Thread.Sleep(5);
+            }
+        }
+
+        public FpgaRunReport getRunReport()
+        {
+            FpgaRunReport ans = new FpgaRunReport();
+            opalKellyDevice.UpdateWireOuts();
+            ans.retriggerWaitedSamples = this.getSamplesWaitedForRetrigger();
+            ans.retriggerTimeoutCount = this.getRetriggerTimeoutCount();
+
+            return ans;
+        }
+
+        
     }
 }
