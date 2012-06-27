@@ -1,6 +1,7 @@
 ﻿using WordGenerator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using DataStructures;
 
 namespace CiceroSuiteUnitTests
 {
@@ -83,6 +84,32 @@ namespace CiceroSuiteUnitTests
             testLoadFile("Empty1.60Sequence.seq", typeof(DataStructures.SequenceData));
             testLoadFile("Empty1.61Sequence.seq", typeof(DataStructures.SequenceData));
             
+
+        }
+
+        /// <summary>
+        ///A test for loading old gpib channels
+        ///</summary>
+        [DeploymentItem("WordGenerator.exe"), TestMethod()]
+        public void LoadOldGpibTest()
+        {
+
+
+            SettingsData gpibTestSettings = (SettingsData)
+                testLoadFile("OldGpibAddressSettings.set", typeof(SettingsData));
+
+            Assert.AreEqual(5, gpibTestSettings.logicalChannelManager.GPIBs.Count);
+            for (int i = 0; i < gpibTestSettings.logicalChannelManager.GPIBs.Count; i++)
+            {
+                LogicalChannel chan = gpibTestSettings.logicalChannelManager.GPIBs[i];
+                Assert.AreEqual(HardwareChannel.HardwareConstants.ChannelTypes.gpib, chan.HardwareChannel.ChannelType);
+                Assert.AreEqual("test description " + i, chan.HardwareChannel.ChannelDescription);
+                Assert.AreEqual("test channel " + i, chan.HardwareChannel.ChannelName);
+                Assert.AreEqual("test device " + i, chan.HardwareChannel.DeviceName);
+                Assert.AreEqual(i, chan.HardwareChannel.GpibAddress.PrimaryAddress);
+                Assert.AreEqual(i, chan.HardwareChannel.GpibAddress.SecondaryAddress);
+            }
+
 
         }
 
