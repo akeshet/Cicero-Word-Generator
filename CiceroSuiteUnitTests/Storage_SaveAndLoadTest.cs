@@ -114,5 +114,34 @@ namespace CiceroSuiteUnitTests
         }
 
 
+        /// <summary>
+        ///A test for loading old gpib channels
+        ///</summary>
+        [DeploymentItem("WordGenerator.exe"), TestMethod()]
+        public void LoadOldGpibTest()
+        {
+
+
+            SettingsData gpibTestSettings = (SettingsData)
+                Shared.loadTestFile("OldGpibAddressSettings.set", typeof(SettingsData),
+                true,
+                new HardwareChannel.GpibBinderFix());
+
+            Assert.AreEqual(5, gpibTestSettings.logicalChannelManager.GPIBs.Count);
+            for (int i = 0; i < gpibTestSettings.logicalChannelManager.GPIBs.Count; i++)
+            {
+                LogicalChannel chan = gpibTestSettings.logicalChannelManager.GPIBs[i];
+                Assert.AreEqual(HardwareChannel.HardwareConstants.ChannelTypes.gpib, chan.HardwareChannel.ChannelType);
+                Assert.AreEqual("test description " + i, chan.HardwareChannel.ChannelDescription);
+                Assert.AreEqual("test channel " + i, chan.HardwareChannel.ChannelName);
+                Assert.AreEqual("test device " + i, chan.HardwareChannel.DeviceName);
+//                Assert.AreEqual(i, chan.HardwareChannel.GpibAddress.PrimaryAddress);     //  These asserts are expected to fail
+//                Assert.AreEqual(i, chan.HardwareChannel.GpibAddress.SecondaryAddress);   //  due to incompatibility in deserializing
+                                                                                           //  old gpib channel addresses
+            }
+
+
+        }
+
     }
 }
