@@ -1191,6 +1191,7 @@ namespace WordGenerator
 
             if (result == DialogResult.OK)
             {
+                RunLog log = null;
                 FileStream fs = null;
                 bool fileOpened = false;
 
@@ -1200,7 +1201,7 @@ namespace WordGenerator
                     fileOpened = true;
                     BinaryFormatter bf = new BinaryFormatter();
                     bf.Binder = new HardwareChannel.GpibBinderFix();
-                    RunLog log = (RunLog)bf.Deserialize(fs);
+                    log = (RunLog)bf.Deserialize(fs);
                 }
                 finally
                 {
