@@ -558,6 +558,10 @@ namespace WordGenerator
                 RefreshSettingsDataToUI();
                 this.handleMessageEvent(this, new MessageEvent("Loaded settings file " + this.openSettingsFileName));
             }
+            else
+            {
+                MessageBox.Show("You cancelled, or specified a file that was not a valid Settings file.", "Load cancelled.");
+            }
         }
 
         private void saveSettings_Click(object sender, EventArgs e)
