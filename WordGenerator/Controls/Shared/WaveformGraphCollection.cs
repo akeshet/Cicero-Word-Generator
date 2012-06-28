@@ -139,7 +139,8 @@ namespace WordGenerator.Controls
             }
             finally
             {
-                WordGenerator.MainClientForm.instance.cursorWaitRelease();
+                if (WordGenerator.MainClientForm.instance!=null)
+                    WordGenerator.MainClientForm.instance.cursorWaitRelease();
             }
 
         }
