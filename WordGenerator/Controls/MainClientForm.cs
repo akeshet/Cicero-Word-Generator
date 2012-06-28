@@ -1193,6 +1193,7 @@ namespace WordGenerator
             {
                 FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.None);
                 BinaryFormatter bf = new BinaryFormatter();
+                bf.Binder = new HardwareChannel.GpibBinderFix();
                 RunLog log = (RunLog)bf.Deserialize(fs);
                 fs.Close();
 

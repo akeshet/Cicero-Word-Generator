@@ -60,6 +60,7 @@ namespace WordGenerator
             private static object Load(string path)
             {
                 BinaryFormatter b = new BinaryFormatter();
+                b.Binder = new HardwareChannel.GpibBinderFix();
                 object result = null;
 
                 if (path == null)
@@ -72,8 +73,7 @@ namespace WordGenerator
                 try
                 {
                     fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
-                    fileopened = true;
-                    b.Binder = new HardwareChannel.GpibBinderFix();
+                    fileopened = true;                   
                     result = b.Deserialize(fs);
 
                 }

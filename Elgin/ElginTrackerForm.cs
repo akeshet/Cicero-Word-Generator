@@ -221,6 +221,7 @@ namespace Elgin
                 {
                     FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.None);
                     BinaryFormatter bf = new BinaryFormatter();
+                    bf.Binder = new HardwareChannel.GpibBinderFix();
                     RunLog log = (RunLog)bf.Deserialize(fs);
                     RunLogExplorerForm explorer = new RunLogExplorerForm(log, fileName);
                     explorer.MdiParent = this.MdiParent;
