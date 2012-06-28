@@ -219,9 +219,23 @@ namespace Elgin
             {
                 try
                 {
-                    FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.None);
-                    BinaryFormatter bf = new BinaryFormatter();
-                    RunLog log = (RunLog)bf.Deserialize(fs);
+                    RunLog log = null;
+                    FileStream fs = null;
+                    bool fileOpened = false;
+                    try
+                    {
+                        fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.None);
+                        fileOpened = true;
+                        BinaryFormatter bf = new BinaryFormatter();
+                        bf.Binder = new HardwareChannel.GpibBinderFix();
+                        log = (RunLog)bf.Deserialize(fs);
+                    }
+                    finally
+                    {
+                        if (fileOpened)
+                            fs.Close();
+                    }
+
                     RunLogExplorerForm explorer = new RunLogExplorerForm(log, fileName);
                     explorer.MdiParent = this.MdiParent;
                     explorer.FormClosed += new FormClosedEventHandler(explorer_FormClosed);

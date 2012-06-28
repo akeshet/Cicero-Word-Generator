@@ -108,18 +108,23 @@ namespace AtticusServer
         {
 
             BinaryFormatter b = new BinaryFormatter();
+
+            b.Binder = new HardwareChannel.GpibBinderFix();
+
             FileStream fs = null;
             ServerSettings serverSettings = null;
+
+            bool fileopened = false;
 
             try
             {
                 fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.None);
+                fileopened = true;
                 serverSettings = (ServerSettings)b.Deserialize(fs);
-                fs.Close();
                 return serverSettings;
             }
-            catch (System.ArgumentException e)
-            {
+            /*catch (System.ArgumentException e) // Commented out this block. Now we ALWAYS use the binder fix thing, not trying first
+            {                                    // to see if an exception results
                 // Cludgey fix to incompatability in serialization between different version of NI4882.Address. 
                 // Temporarily modify HardwareChannel so that gpibAddress is marked as nonserlialized. This allows us to deserialize
                 // most of the settings object, but we lose the gpibaddress information.
@@ -145,6 +150,11 @@ namespace AtticusServer
                 }
                 else
                     throw;
+            }*/
+            finally
+            {
+                if (fileopened)
+                    fs.Close();
             }
             
         }

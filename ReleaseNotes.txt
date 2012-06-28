@@ -102,6 +102,9 @@ Changes to Analog Input channel configuration. Note -- your old Atticus
 settings will no longer correctly configure your analog inputs (if you
 are using this feature).
 
+Bugfix to Cicero occasionally failing to load old settings file (platform-
+dependent).
+
 Major changes to FPGA feature set, and how it interacts with software-timed
 tasks:
   a) FPGA "Wait For Retrigger" words now support a wait timeout, after which

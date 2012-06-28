@@ -16,7 +16,7 @@ namespace WordGenerator
     ///     3) sequenceData;
     /// For further details on each subclass, please see the associated source file.
     /// </summary>
-    public static class Storage
+    public class Storage
     {
         private static string clientStartupSettingsFileName;
 
@@ -26,6 +26,21 @@ namespace WordGenerator
         public static SequenceData sequenceData;
 
         public static Waveform clipboardWaveform;
+
+        private static Storage dummy = new Storage();
+
+        private static event EventHandler<MessageEvent> messageLog;
+
+        public static void registerMessageLogHandler(EventHandler<MessageEvent> handler) {
+            messageLog+=handler;
+        }
+
+        private static void safeMessageLog(MessageEvent message) {
+            if (messageLog != null)
+                messageLog(dummy, message);
+        }
+
+
 
 
         /// <summary>
@@ -45,56 +60,71 @@ namespace WordGenerator
             private static object Load(string path)
             {
                 BinaryFormatter b = new BinaryFormatter();
+                b.Binder = new HardwareChannel.GpibBinderFix();
                 object result = null;
 
                 if (path == null)
                     return null;
 
                 FileStream fs=null;
+                
+                bool fileopened = false;
 
                 try
                 {
                     fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
+                    fileopened = true;                   
                     result = b.Deserialize(fs);
-                    fs.Close();
+
                 }
                 catch (FileNotFoundException e)
                 {
                     Console.WriteLine("SaveAndLoad.Load(), FileNotFoundException: " + e.Message);
+                    safeMessageLog(new MessageEvent("SaveAndLoad.Load(), FileNotFoundException: " + e.Message, 0, MessageEvent.MessageTypes.Error));
                 }
                 catch (SerializationException e)
                 {
                     Console.WriteLine("SaveAndLoad.Load(), SerializationException: " + e.Message);
+                    safeMessageLog(new MessageEvent("SaveAndLoad.Load(), SerializationException: " + e.Message, 0, MessageEvent.MessageTypes.Error));
                 }
                 catch (ArgumentNullException e)
                 {
-                    Console.WriteLine("SaveAndLoad.Load(), ArgumentNullException: " + e.Message);
+                    Console.WriteLine("SaveAndLoad.Load(), IOException: " + e.Message);
+                    safeMessageLog(new MessageEvent("SaveAndLoad.Load(), IOException: " + e.Message, 0, MessageEvent.MessageTypes.Error));
                 }
-                catch (System.ArgumentException e)
+                catch (IOException e)
                 {
-                    // Cludgey fix to incompatability in serialization between different version of NI4882.Address. 
-                    // Temporarily modify HardwareChannel so that gpibAddress is marked as nonserlialized. This allows us to deserialize
-                    // most of the settings object, but we lose the gpibaddress information.
-                    if (e.Message.Contains("NationalInstruments.NI4882.Address"))
-                    {
+                    Console.WriteLine("SaveAndLoad.Load(), IOException: " + e.Message);
+                    safeMessageLog(new MessageEvent("SaveAndLoad.Load(), ArgumentNullException: " + e.Message, 0, MessageEvent.MessageTypes.Error));
 
-
-
-                        fs.Close();
-                        fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
-                        b = new BinaryFormatter();
-                        b.Binder = new HardwareChannel.GpibBinderFix();
-                        result = b.Deserialize(fs);
-                        fs.Close();
-
-                    }
-                    else
-                        throw;
                 }
-                catch (DirectoryNotFoundException e)
+                /*  catch (System.ArgumentException e) // commented out this block. I will just ALWAYS use the fixing binder.
+                  {
+                      // Cludgey fix to incompatability in serialization between different version of NI4882.Address. 
+                      // Temporarily modify HardwareChannel so that gpibAddress is marked as nonserlialized. This allows us to deserialize
+                      // most of the settings object, but we lose the gpibaddress information.
+                      if (e.Message.Contains("NationalInstruments.NI4882.Address"))
+                      {
+
+
+
+                          fs.Close();
+                          fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
+                          b = new BinaryFormatter();
+                          b.Binder = new HardwareChannel.GpibBinderFix();
+                          result = b.Deserialize(fs);
+                          fs.Close();
+
+                      }
+                      else
+                          throw;
+                  }*/
+                finally
                 {
-                    Console.WriteLine("SaveAndLoad.Load(), DirectoryNotFoundException: " + e.Message);
+                    if (fileopened)
+                        fs.Close();
                 }
+                
 
                 return result;
             }
@@ -224,23 +254,35 @@ namespace WordGenerator
 
             public static bool LoadSettingsData(string path)
             {
-                SettingsData loadMe = null;
+                SettingsData loadedSettings = null;
 
                 if (path != null)
                 {
-                    loadMe = Load(path) as SettingsData;                    
+                    loadedSettings = Load(path) as SettingsData;                    
                 }
                 else
                 {
                     path =
                         SharedForms.PromptOpenFileDialog(FileNameStrings.FriendlyNames.ClientSettingsData, FileNameStrings.Extensions.ClientSettingsData);
 
-                    loadMe = Load(path) as SettingsData;
+                    object loadedObject = Load(path);
+
+#if DEBUG
+                    if (!(loadedSettings is SettingsData))
+                    {
+                        WordGenerator.MainClientForm.instance.handleMessageEvent(
+                            WordGenerator.MainClientForm.instance, new MessageEvent("Loaded settings object is non settings data object.", 0, MessageEvent.MessageTypes.Debug,
+                                 MessageEvent.MessageCategories.Unspecified)
+                                 );
+                    }
+#endif
+
+                    loadedSettings = Load(path) as SettingsData;
                 }
 
-                if (loadMe != null)
+                if (loadedSettings != null)
                 {
-                    Storage.settingsData = loadMe;
+                    Storage.settingsData = loadedSettings;
                     WordGenerator.MainClientForm.instance.OpenSettingsFileName = path;
                     return true;
                 }
