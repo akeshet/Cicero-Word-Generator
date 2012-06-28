@@ -615,11 +615,11 @@ namespace WordGenerator
 
 
 
-        public void addStatusText(object sender, EventArgs e)
+        public void addStatusText(object sender, MessageEvent e)
         {
             if (this.InvokeRequired)
             {
-                this.BeginInvoke(new EventHandler(addStatusText), new object[] { sender, e });
+                this.BeginInvoke(new EventHandler<MessageEvent>(addStatusText), new object[] { sender, e });
             }
             else
             {

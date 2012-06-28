@@ -87,7 +87,7 @@ namespace WordGenerator
                 ClientRunner runner = new ClientRunner();
 
                 runner.messageLog += new EventHandler<MessageEvent>(mainForm.addMessageLogText);
-
+                Storage.registerMessageLogHandler(mainForm.handleMessageEvent);
            
                 Application.Run(mainForm);
 
