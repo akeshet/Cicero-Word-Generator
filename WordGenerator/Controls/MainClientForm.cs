@@ -1191,11 +1191,22 @@ namespace WordGenerator
 
             if (result == DialogResult.OK)
             {
-                FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.None);
-                BinaryFormatter bf = new BinaryFormatter();
-                bf.Binder = new HardwareChannel.GpibBinderFix();
-                RunLog log = (RunLog)bf.Deserialize(fs);
-                fs.Close();
+                FileStream fs = null;
+                bool fileOpened = false;
+
+                try
+                {
+                    fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.None);
+                    fileOpened = true;
+                    BinaryFormatter bf = new BinaryFormatter();
+                    bf.Binder = new HardwareChannel.GpibBinderFix();
+                    RunLog log = (RunLog)bf.Deserialize(fs);
+                }
+                finally
+                {
+                    if (fileOpened)
+                        fs.Close();
+                }
 
                 Storage.settingsData = log.RunSettings;
                 WordGenerator.MainClientForm.instance.OpenSettingsFileName = fileName;
