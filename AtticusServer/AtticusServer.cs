@@ -116,9 +116,10 @@ namespace AtticusServer
             // Save server settings
 
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream fst = new FileStream(fileName, FileMode.Create);
-            bf.Serialize(fst, serverSettings);
-            fst.Close();
+            using (FileStream fst = new FileStream(fileName, FileMode.Create))
+            {
+                bf.Serialize(fst, serverSettings);
+            }
         }
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)

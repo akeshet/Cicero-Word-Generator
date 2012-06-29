@@ -26,20 +26,12 @@ namespace DataStructures
 
             BinaryFormatter b = new BinaryFormatter();
             b.Binder = new GpibBinderFix();
-            bool fileOpened = false;
-            FileStream fs = null;
 
-            try
+            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))           
             {
-                fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
-                fileOpened = true;
                 return b.Deserialize(fs); // filestream gets closed anyway since that is in the finally block.
             }
-            finally
-            {
-                if (fileOpened)
-                    fs.Close();
-            }
+           
 
         }
 

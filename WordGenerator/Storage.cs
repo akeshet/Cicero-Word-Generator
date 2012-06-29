@@ -158,9 +158,10 @@ namespace WordGenerator
                     #endregion
 
                 // Since we have created a backup, it ought to be okay to clobber the old!
-                FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);
-                b.Serialize(fs, obj);
-                fs.Close();
+                using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    b.Serialize(fs, obj);
+                }
             }
 
 
