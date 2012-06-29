@@ -140,8 +140,6 @@
     <Compile Include="Timing\Shared.cs" />
     <Compile Include="Timing\SoftwareClockProvider.cs" />
     <Compile Include="Timing\SoftwareClockSubscriber.cs" />
-    <Compile Include="UtilityClasses\CiceroUtilityFunctions.cs" />
-    <Compile Include="UtilityClasses\HelperFunctions.cs" />
     <Compile Include="UtilityClasses\NamingFunctions.cs" />
     <Compile Include="UtilityClasses\WaveformParser.cs" />
   </ItemGroup>

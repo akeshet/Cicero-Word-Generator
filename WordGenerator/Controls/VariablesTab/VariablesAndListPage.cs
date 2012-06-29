@@ -537,7 +537,7 @@ namespace WordGenerator.Controls
 
         private void loadCalSequenceFromCurrentSequence_Click(object sender, EventArgs e)
         {
-            SequenceData copyOfCurrentSequence = (SequenceData)HelperFunctions.createDeepCopyBySerialization(Storage.sequenceData);
+            SequenceData copyOfCurrentSequence = (SequenceData)Common.createDeepCopyBySerialization(Storage.sequenceData);
             setCalibrationSequence(copyOfCurrentSequence);
         }
 

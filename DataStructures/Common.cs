@@ -64,7 +64,38 @@ namespace DataStructures
                 else
                     return Type.GetType(typeName);
             }
+        }
 
+
+        /// <summary>
+        /// Creates a deep copy of specified object, by serializing and deserialziing it.
+        /// </summary>
+        /// <param name="objectToCopy"></param>
+        /// <returns></returns>
+        public static Object createDeepCopyBySerialization(Object objectToCopy)
+        {
+            // Create a deep copy of the current sequence file, by serializing and then deserializing. A clever trick.
+            using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
+            {
+                System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                bf.Serialize(ms, objectToCopy);
+                ms.Position = 0;
+                return bf.Deserialize(ms);
+            }
+        }
+
+
+        /// <summary>
+        /// Returns a time stamp string in a suitable format for use in a file name,
+        /// and which will sort correctly by name.
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public static string getTimeStampString(DateTime time)
+        {
+            string temp = time.ToString("s");
+            temp = temp.Replace(":", "-");
+            return temp;
         }
     }
 }
