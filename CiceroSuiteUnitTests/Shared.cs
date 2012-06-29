@@ -9,7 +9,7 @@ using System.IO;
 
 namespace CiceroSuiteUnitTests
 {
-    public class Shared
+    public class SharedTestFunctions
     {
         public static object loadTestFile(string path, Type desiredType, 
             bool failOnException = true, SerializationBinder customBinder = null)

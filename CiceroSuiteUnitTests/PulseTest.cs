@@ -70,7 +70,7 @@ namespace CiceroSuiteUnitTests
         [TestMethod()]
         public void PulseDeserializationTest()
         {
-            SequenceData seq = (SequenceData) Shared.loadTestFile("pulseSerTest.seq", typeof(SequenceData));
+            SequenceData seq = (SequenceData) SharedTestFunctions.loadTestFile("pulseSerTest.seq", typeof(SequenceData));
             Assert.IsNotNull(seq.DigitalPulses[0]);
             Assert.AreEqual("testPulse", seq.DigitalPulses[0].PulseName);
             Assert.AreEqual(1.5, seq.DigitalPulses[0].startDelay.getBaseValue());
