@@ -102,6 +102,7 @@ namespace WordGenerator.Controls
                 else
                 {
                     pulseNameTextBox.Enabled = true;
+                    updatePulseNameTextBox();
                 }
 
                 if (pulse.startCondition == Pulse.PulseTimingCondition.Duration)
@@ -188,6 +189,11 @@ namespace WordGenerator.Controls
             {
                 pulse.PulseName = pulseNameTextBox.Text;
             }
+        }
+
+        private void updatePulseNameTextBox()
+        {
+            pulseNameTextBox.Text=pulse.PulseName;
         }
 
         private void pulseDescriptionTextBox_TextChanged(object sender, EventArgs e)
