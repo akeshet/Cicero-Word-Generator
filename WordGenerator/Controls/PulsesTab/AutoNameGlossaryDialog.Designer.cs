@@ -51,6 +51,7 @@
             this.glossaryText.Size = new System.Drawing.Size(241, 104);
             this.glossaryText.TabIndex = 1;
             this.glossaryText.Text = resources.GetString("glossaryText.Text");
+            this.glossaryText.Click += new System.EventHandler(this.glossaryText_Click);
             // 
             // AutoNameGlossaryDialog
             // 

@@ -218,8 +218,9 @@ namespace WordGenerator.Controls
                         double g_stepSize = (g_active_width-g_x_plot_mar)/(double)nSamples;
 
                         //These will hold the max/min values of yValues
-                        double maxY=-10000;
-                        double minY=10000;
+                        //Initialize to an arbitary element of list
+                        double maxY=yValues[0];
+                        double minY=yValues[0];
                         for (int i = 0; i < nSamples; i++)
                         {
                             //If statements to find min/max values of yValues
