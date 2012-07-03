@@ -22,9 +22,6 @@ namespace WordGenerator.Controls
             this.Close();
         }
 
-        private void glossaryText_Click(object sender, EventArgs e)
-        {
-
-        }
+    
     }
 }

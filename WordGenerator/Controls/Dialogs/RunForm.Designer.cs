@@ -175,9 +175,11 @@ namespace WordGenerator
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.progressBar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(576, 662);
+            this.MinimumSize = new System.Drawing.Size(576, 662);
             this.Name = "RunForm";
             this.ShowIcon = false;
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Run Controller";
             this.Activated += new System.EventHandler(this.RunForm_Activated);
