@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Diagnostics;
 
 namespace DataStructures.Timing
 {
@@ -12,35 +13,44 @@ namespace DataStructures.Timing
     /// </summary>
     public class ComputerClockSoftwareClockProvider : PollingThreadSoftwareClockProvider
     {
-        private long startTicks;
         private uint pollingPeriod_ms;
+		private Stopwatch stopwatch;
 
         public ComputerClockSoftwareClockProvider(uint pollingPeriod_ms) : base()
         {
             this.pollingPeriod_ms = pollingPeriod_ms;
+			stopwatch = new Stopwatch();
         }
 
         
         protected override void armTimerThread()
         {
-            startTicks = DateTime.Now.Ticks;
+			stopwatch.Reset();
+			stopwatch.Start();
         }
 
 
         protected override sealed void timerThreadProc()
         {
-            uint lastTime = 0;
-            bool keepGoing = true;
-            while (keepGoing)
-            {
-                Thread.Sleep((int)pollingPeriod_ms);
-                uint nowTime = Shared.TicksToMilliseconds(DateTime.Now.Ticks - startTicks);
-                if (nowTime > lastTime)
-                {
-                    lastTime = nowTime;
-                    keepGoing = reachTime(nowTime);
-                }
-            }
+			try {
+	            uint lastTime = 0;
+	            bool keepGoing = true;
+	            while (keepGoing)
+	            {
+	                Thread.Sleep((int)pollingPeriod_ms);
+					uint nowTime = stopwatch.ElapsedMilliseconds;
+	                if (nowTime > lastTime)
+	                {
+	                    lastTime = nowTime;
+	                    keepGoing = reachTime(nowTime);
+						DateTime.Now;
+	                }
+	            }
+			}
+			finally {
+				stopwatch.Stop(); // when thread gets aborted,
+							      // this finally block will execute
+			}
         }
     }
 }
