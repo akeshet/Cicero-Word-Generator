@@ -12,6 +12,8 @@ namespace DataStructures.Timing
         private static object staticLockObj = new object();
         private object instanceLockObj = new object();
 
+        private bool receivedFirstClock = false;
+
         private uint clockID;
         
         private NetworkClockProvider() { }
@@ -42,7 +44,7 @@ namespace DataStructures.Timing
         {
             lock (staticLockObj)
                 if (staticMessageLogHandler != null)
-                    staticMessageLogHandler(dummy, e);
+                    staticMessageLogHandler.BeginInvoke(dummy, e, null, null);
         }
 
         private static Thread listenerThread;
@@ -141,22 +143,41 @@ namespace DataStructures.Timing
                 }
                 lastNGramID = ndgram.DatagramCount;
 
+                NetworkClockProvider pr = null;
+
+                // Pull designated provider out of provider's dictionary (locked on staticLockObj since
+                // we are accessing static providers dictionary)
+                // Will leave pr as null if no such ClockID listener exists.
+                // Will throw an exception if clockID does exist, but listener is null.
                 lock (staticLockObj)
                 {
                     if (providers.ContainsKey(ndgram.ClockID))
                     {
-                        NetworkClockProvider pr = providers[ndgram.ClockID];
+                        pr = providers[ndgram.ClockID];
                         if (pr == null)
                             throw new SoftwareClockProviderException("Unexpected null network clock provider.");
-                        lock (pr.instanceLockObj)
-                        {
-                            if (providers[ndgram.ClockID].isRunning)
-                            {
-                                providers[ndgram.ClockID].reachTime(ndgram.ElaspedTime);
-                            }
-                        }
                     }
                 }
+
+                // If provider does exist, (is not null), relay to it the latest
+                // clock message
+                if (pr != null)
+                {
+                    // Thread lock on pr object
+                    lock (pr.instanceLockObj)
+                    {
+                        if (pr.isRunning)
+                        {
+                            if (!pr.receivedFirstClock)
+                            {
+                                staticLogMessage(new MessageEvent("Received first clock datagram for clockID " + Shared.clockIDToString(pr.clockID),
+                                    0, MessageEvent.MessageTypes.Routine, MessageEvent.MessageCategories.SoftwareClock));
+                                pr.receivedFirstClock = true;
+                            }
+                            pr.reachTime(ndgram.ElaspedTime);
+                        }
+                    }
+                }   
             }
         }
 
@@ -167,7 +188,7 @@ namespace DataStructures.Timing
                 isRunning = false;
             }
 
-            lock (providers)
+            lock (staticLockObj)
             {
                 providers.Remove(clockID);
             }
@@ -180,7 +201,7 @@ namespace DataStructures.Timing
 
         protected override void startClockProvider()
         {
-            lock (staticLockObj)
+            lock (instanceLockObj)
                 isRunning = true;
         }
 
