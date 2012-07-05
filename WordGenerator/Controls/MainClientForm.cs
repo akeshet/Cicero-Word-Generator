@@ -853,7 +853,7 @@ namespace WordGenerator
         private void inspectVariableTimebaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Storage.sequenceData.createLoopCopies();
-            TimestepTimebaseSegmentCollection ans = Storage.sequenceData.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, .000001);
+            TimestepTimebaseSegmentCollection ans = Storage.sequenceData.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, .0000001);
             Storage.sequenceData.cleanupLoopCopies();
 
             PropertyGridForm dialog = new PropertyGridForm(ans);
