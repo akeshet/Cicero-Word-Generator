@@ -247,8 +247,8 @@ always @(posedge refclk) begin
 					   ||(edgeRetrigger && retriggerIN == retriggerValue && retriggerIN!=lastRetriggerIn && fifo_read_enable==0)// or for it to have edge of correct value
 					|| (on_counts!=0 && waitedCounts==on_counts))  //or for the wait to timeout, then move on in the fifo
 					begin		
-						fifo_read_enable<=1;
-						nSegsGenerated<=nSegsGenerated+1;
+						fifo_read_enable<=1;									// this will cause us to move on in the fifo
+						nSegsGenerated<=nSegsGenerated+1;				// let's also update status counters
 						waitingForRetrigger<=0;
 						if (on_counts!=0 && waitedCounts==on_counts)
 							retriggerTimeoutCount<=retriggerTimeoutCount+1;
