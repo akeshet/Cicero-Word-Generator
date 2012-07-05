@@ -121,5 +121,7 @@ to Cicero (to make the UI reflect any retrigger waits) and other Atticus servers
 1.64
 -----
 
-To do: Cicero "always use network clock" features
-To do: FPGA debounce feature
+New feature: Cicero "always use network clock" checkbox.
+
+New feature: FPGA retrigger debounce (accessible through Atticus device settings
+for FPGA).
