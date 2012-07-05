@@ -122,7 +122,7 @@ namespace CiceroSuiteUnitTests
 
         private void testSnapshot(string path)
         {
-            BufferTestSnapshot snapshot = (BufferTestSnapshot) Shared.loadTestFile(path, typeof(BufferTestSnapshot));
+            BufferTestSnapshot snapshot = (BufferTestSnapshot) SharedTestFunctions.loadTestFile(path, typeof(BufferTestSnapshot));
 
             BufferTestSnapshot newShapshot = snapshot.Sequence._createBufferSnapshot(snapshot.Settings, snapshot.MasterTimebaseSampleDuration);
 

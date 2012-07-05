@@ -32,33 +32,19 @@ namespace Virgil
             server.openConnection();
         }
 
-        public delegate void voidVoidDelegate();
 
         public void reenableConnectButton()
         {
-            if (this.InvokeRequired)
-            {
-
-                this.BeginInvoke(new voidVoidDelegate(reenableConnectButton));
-            }
-            else
-                this.connectButton.Enabled = true;
+            Action enableConnectButton = () => this.connectButton.Enabled = true;
+            BeginInvoke(enableConnectButton);
         }
 
 
 
-        public delegate void MessageEventCallDelegate(object sender, MessageEvent e);
         public void addMessageLogText(object sender, MessageEvent e)
         {
-            if (this.InvokeRequired)
-            {
-                MessageEventCallDelegate ev = new MessageEventCallDelegate(addMessageLogText);
-                this.BeginInvoke(ev, new object[] { sender, e });
-            }
-            else
-            {
-                this.textBox1.AppendText(e.MyTime.ToString() + " " + sender.ToString() + ": " + e.ToString() + "\r\n");
-            }
+            Action addText = () => this.textBox1.AppendText(e.MyTime.ToString() + " " + sender.ToString() + ": " + e.ToString() + "\r\n");
+            BeginInvoke(addText);
         }
 
 

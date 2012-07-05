@@ -13,11 +13,10 @@ namespace WordGenerator.Controls
     {
         private StringParameterString sps;
 
-        public delegate void spsEvent(StringParameterString sps);
 
-        public event spsEvent insertBelow;
-        public event spsEvent insertAbove;
-        public event spsEvent delete;
+        public event Action<StringParameterString> insertBelow;
+        public event Action<StringParameterString> insertAbove;
+        public event Action<StringParameterString> delete;
 
         public StringParameterStringEditor()
         {

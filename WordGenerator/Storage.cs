@@ -1,9 +1,8 @@
 using System;
 using DataStructures;
 using System.Windows.Forms;
-
-using System.IO;
 using System.Runtime.Serialization;
+using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace WordGenerator
@@ -59,23 +58,13 @@ namespace WordGenerator
             /// <returns>Deserialized object or null</returns>
             private static object Load(string path)
             {
-                BinaryFormatter b = new BinaryFormatter();
-                b.Binder = new HardwareChannel.GpibBinderFix();
-                object result = null;
 
                 if (path == null)
                     return null;
 
-                FileStream fs=null;
-                
-                bool fileopened = false;
-
                 try
                 {
-                    fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
-                    fileopened = true;                   
-                    result = b.Deserialize(fs);
-
+                    return Common.loadBinaryObjectFromFile(path);
                 }
                 catch (FileNotFoundException e)
                 {
@@ -96,37 +85,9 @@ namespace WordGenerator
                 {
                     Console.WriteLine("SaveAndLoad.Load(), IOException: " + e.Message);
                     safeMessageLog(new MessageEvent("SaveAndLoad.Load(), ArgumentNullException: " + e.Message, 0, MessageEvent.MessageTypes.Error));
-
-                }
-                /*  catch (System.ArgumentException e) // commented out this block. I will just ALWAYS use the fixing binder.
-                  {
-                      // Cludgey fix to incompatability in serialization between different version of NI4882.Address. 
-                      // Temporarily modify HardwareChannel so that gpibAddress is marked as nonserlialized. This allows us to deserialize
-                      // most of the settings object, but we lose the gpibaddress information.
-                      if (e.Message.Contains("NationalInstruments.NI4882.Address"))
-                      {
-
-
-
-                          fs.Close();
-                          fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
-                          b = new BinaryFormatter();
-                          b.Binder = new HardwareChannel.GpibBinderFix();
-                          result = b.Deserialize(fs);
-                          fs.Close();
-
-                      }
-                      else
-                          throw;
-                  }*/
-                finally
-                {
-                    if (fileopened)
-                        fs.Close();
                 }
                 
-
-                return result;
+                return null;
             }
 
 
@@ -197,9 +158,10 @@ namespace WordGenerator
                     #endregion
 
                 // Since we have created a backup, it ought to be okay to clobber the old!
-                FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);
-                b.Serialize(fs, obj);
-                fs.Close();
+                using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    b.Serialize(fs, obj);
+                }
             }
 
 
@@ -251,8 +213,6 @@ namespace WordGenerator
             }
 
 
-
-            private delegate bool boolVoidDelegate();
 
             public static bool LoadSettingsData(string path)
             {

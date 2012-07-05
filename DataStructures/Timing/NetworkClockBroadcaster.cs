@@ -36,7 +36,7 @@ namespace DataStructures.Timing
         private UInt32 maxTime;
         public NetworkClockBroadcaster(UInt32 clockID, UInt32 maximumElapsedTime=0)
         {
-            logMessage(new MessageEvent("Creating new clock broadcaster, clockID " + String.Format("{0:X8}", clockID)));
+            logMessage(new MessageEvent("Creating new clock broadcaster, clockID " + Shared.clockIDToString(clockID)));
             this.clockID = clockID;
             this.maxTime = maximumElapsedTime;
             if (clients == null)

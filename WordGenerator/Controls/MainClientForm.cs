@@ -84,18 +84,11 @@ namespace WordGenerator
             }
         }
 
-        private delegate void voidVoidDelegate();
 
         private void setTimestepEditorBackgrounds()
         {
-            if (this.InvokeRequired)
+            Action setBackgrounds = () =>
             {
-
-                this.BeginInvoke(new voidVoidDelegate(setTimestepEditorBackgrounds));
-            }
-            else
-            {
-
                 if (this.sequencePage != null)
                 {
                     if (this.sequencePage.timeStepsFlowPanel != null)
@@ -110,7 +103,9 @@ namespace WordGenerator
                         }
                     }
                 }
-            }
+            };
+
+            this.BeginInvoke(setBackgrounds);
         }
 
 
@@ -1192,23 +1187,9 @@ namespace WordGenerator
 
             if (result == DialogResult.OK)
             {
-                RunLog log = null;
-                FileStream fs = null;
-                bool fileOpened = false;
-
-                try
-                {
-                    fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.None);
-                    fileOpened = true;
-                    BinaryFormatter bf = new BinaryFormatter();
-                    bf.Binder = new HardwareChannel.GpibBinderFix();
-                    log = (RunLog)bf.Deserialize(fs);
-                }
-                finally
-                {
-                    if (fileOpened)
-                        fs.Close();
-                }
+                RunLog log = Common.loadBinaryObjectFromFile(fileName) as RunLog;
+                if (log == null)
+                    return;
 
                 Storage.settingsData = log.RunSettings;
                 WordGenerator.MainClientForm.instance.OpenSettingsFileName = fileName;

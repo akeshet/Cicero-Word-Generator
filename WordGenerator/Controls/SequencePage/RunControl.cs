@@ -128,7 +128,7 @@ namespace WordGenerator.Controls
                 MessageBox.Show("The current sequence does not have its lists locked, and thus cannot be run in the background. Please lock the lists (in the Variables tab).", "Lists not locked, unable to run in background.");
                 return;
             }
-            SequenceData sequenceCopy = (SequenceData)HelperFunctions.createDeepCopyBySerialization(Storage.sequenceData);
+            SequenceData sequenceCopy = (SequenceData)Common.createDeepCopyBySerialization(Storage.sequenceData);
             if (RunForm.backgroundIsRunning())
             {
                 RunForm.bringBackgroundRunFormToFront();

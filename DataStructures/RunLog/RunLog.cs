@@ -124,9 +124,11 @@ namespace DataStructures
                 return null;
             }
 
-            FileStream fs = new FileStream(fullFileName, FileMode.Create);
-            b.Serialize(fs, this);
-            fs.Close();
+            using (FileStream fs = new FileStream(fullFileName, FileMode.Create))
+            {
+                b.Serialize(fs, this);
+            }
+
             return fullFileName;
         }
 

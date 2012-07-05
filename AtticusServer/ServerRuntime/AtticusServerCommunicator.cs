@@ -340,9 +340,6 @@ namespace AtticusServer
             }
         }
 
-
-        private delegate void voidObjDel(object o);
-
         private Task variableTimebaseClockTask;
         private bool separateSoftwareClockStart = false;
 
@@ -2344,8 +2341,6 @@ namespace AtticusServer
         #endregion
 
 
-        private delegate void gpibWriteDelegate(string s);
-
         /// <summary>
         /// This method is to be called on the server side, and is not open to use via remoting. Its purpose
         /// is to update the servers internal list of hardware channels by querying the National Instruments drivers.
@@ -2513,7 +2508,7 @@ namespace AtticusServer
                                     dev.Clear();
 
                                     // ask the device for its identity
-                                    gpibWriteDelegate writeDelegate = new gpibWriteDelegate(dev.Write);
+                                    Action<string> writeDelegate = new Action<string>(dev.Write);
                                     IAsyncResult result = writeDelegate.BeginInvoke("*IDN?\n", null, null);
                                     result.AsyncWaitHandle.WaitOne(wait_delay, true);
 

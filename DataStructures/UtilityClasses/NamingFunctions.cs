@@ -11,7 +11,12 @@ namespace DataStructures.UtilityClasses
     /// </summary>
     public class NamingFunctions
     {
-        //Adds the appropriate number of zeros so that number has n0 digit
+        /// <summary>
+        /// Adds the appropriate number of zeros so that number has n0 digit
+        /// </summary>
+        /// <param name="number"></param>
+        /// <param name="n0"></param>
+        /// <returns></returns>
         public static string number_to_string(int number, int n0)
         {
             string res = number.ToString();
@@ -22,7 +27,11 @@ namespace DataStructures.UtilityClasses
             return res;
         }
 
-        //Obtains a list '_' separated of the bound variables and their values, reported in the name of the shot
+        /// <summary>
+        /// Obtains a list '_' separated of the bound variables and their values, reported in the name of the shot
+        /// </summary>
+        /// <param name="sequence"></param>
+        /// <returns></returns>
         public static string listBoundVariables(SequenceData sequence)
         {
             string listBoundVariableValues = "";
@@ -45,7 +54,11 @@ namespace DataStructures.UtilityClasses
 
         }
 
-        //Obtains the directory in which the files will be saved
+        /// <summary>
+        /// Obtains the directory in which the files will be saved
+        /// </summary>
+        /// <param name="settings"></param>
+        /// <returns></returns>
         public static string get_fileDirectory(SettingsData settings)
         {
             string fileDirectory;
@@ -80,13 +93,19 @@ namespace DataStructures.UtilityClasses
 
         }
 
-        //Obtains the name of the shot, containing bound variables, the name and the description of the sequence
+        /// <summary>
+        /// Obtains the name of the shot, containing bound variables, the name and the description of the sequence
+        /// </summary>
+        /// <param name="sequence"></param>
+        /// <param name="settings"></param>
+        /// <param name="runTime"></param>
+        /// <returns></returns>
         public static string get_fileStamp(SequenceData sequence, SettingsData settings, DateTime runTime)
         {
             string fileStamp;
             if (!settings.UseParisStyleFileTimestamps)
             {
-                fileStamp = "RunLog-" + CiceroUtilityFunctions.getTimeStampString(runTime);
+                fileStamp = "RunLog-" + Common.getTimeStampString(runTime);
             }
             else
             {
@@ -101,7 +120,12 @@ namespace DataStructures.UtilityClasses
             return fileStamp;
         }
 
-        //Looks for variable names in the sequence name or description to add the value afterwards
+        /// <summary>
+        /// Looks for variable names in the sequence name or description to add the value afterwards
+        /// </summary>
+        /// <param name="theName"></param>
+        /// <param name="sequence"></param>
+        /// <returns></returns>
         public static string ProcessName(string theName, SequenceData sequence)
         {
             string ans = theName;

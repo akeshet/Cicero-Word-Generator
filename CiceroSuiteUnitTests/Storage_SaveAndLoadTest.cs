@@ -84,7 +84,7 @@ namespace CiceroSuiteUnitTests
             bool expectedException = false;
             try
             {
-                Shared.loadTestFile("SettingsData-1.5.set", typeof(DataStructures.SettingsData), false);
+                SharedTestFunctions.loadTestFile("SettingsData-1.5.set", typeof(DataStructures.SettingsData), false);
             }
             catch (ArgumentException e)
             {
@@ -102,13 +102,13 @@ namespace CiceroSuiteUnitTests
 
 
             // The above exception is fixed if we use the custom "GPIB Fix" binder when deserializing
-            Shared.loadTestFile("SettingsData-1.5.set", typeof(DataStructures.SettingsData),
-                true, new HardwareChannel.GpibBinderFix());
+            SharedTestFunctions.loadTestFile("SettingsData-1.5.set", typeof(DataStructures.SettingsData),
+                true, new Common.GpibBinderFix());
 
 
 
-            Shared.loadTestFile("Empty1.60Sequence.seq", typeof(DataStructures.SequenceData));
-            Shared.loadTestFile("Empty1.61Sequence.seq", typeof(DataStructures.SequenceData));
+            SharedTestFunctions.loadTestFile("Empty1.60Sequence.seq", typeof(DataStructures.SequenceData));
+            SharedTestFunctions.loadTestFile("Empty1.61Sequence.seq", typeof(DataStructures.SequenceData));
             
 
         }
@@ -123,9 +123,9 @@ namespace CiceroSuiteUnitTests
 
 
             SettingsData gpibTestSettings = (SettingsData)
-                Shared.loadTestFile("OldGpibAddressSettings.set", typeof(SettingsData),
+                SharedTestFunctions.loadTestFile("OldGpibAddressSettings.set", typeof(SettingsData),
                 true,
-                new HardwareChannel.GpibBinderFix());
+                new Common.GpibBinderFix());
 
             Assert.AreEqual(5, gpibTestSettings.logicalChannelManager.GPIBs.Count);
             for (int i = 0; i < gpibTestSettings.logicalChannelManager.GPIBs.Count; i++)

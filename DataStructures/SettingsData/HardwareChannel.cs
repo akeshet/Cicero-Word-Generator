@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
 using DataStructures;
-using System.Runtime.Serialization;
+
 
 
 namespace DataStructures
@@ -350,25 +350,7 @@ namespace DataStructures
 
         #endregion
 
-        /// <summary>
-        /// This custom SerializationBinder is to be used as the binder for a BinaryFormatter in the case that deserializing has caused an exception of type 
-        /// System.ArgumentException with a message about being unable to convert "NationalInstruments.NI4882.Address".
-        /// 
-        /// </summary>
-        public sealed class GpibBinderFix : SerializationBinder
-        {
-            public override Type BindToType(string assemblyName, string typeName)
-            {
 
-                if (typeName == "NationalInstruments.NI4882.Address")
-                {
-                    return typeof(DataStructures.Gpib.Address);
-                }
-                else
-                    return Type.GetType(typeName);
-            }
-
-        }
 
     }
 }
