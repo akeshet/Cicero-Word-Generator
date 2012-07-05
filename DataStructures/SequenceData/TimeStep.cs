@@ -4,6 +4,12 @@ using System.Text;
 using System.ComponentModel;
 using DataStructures;
 
+// *** IMPORTANT!
+// This class uses a copy constructure TimeStep(TimeStep duplicateMe);
+// MAKE SURE TO ADD COPYING CODE FOR ANY MEMBERS THAT YOU ADD,
+// OTHERWISE THEY WILL NOT BE CORRECTLY COPIED if that constructor gets used
+// (for instance when creating "loop copies")
+
 namespace DataStructures
 {
     [Serializable, TypeConverter(typeof(ExpandableObjectConverter))]
@@ -341,6 +347,9 @@ namespace DataStructures
             this.WaitForRetrigger = duplicateMe.WaitForRetrigger;
             this.Description = duplicateMe.Description;
             this.LoopCopy = duplicateMe.LoopCopy;
+            this.RetriggerOnEdge = duplicateMe.RetriggerOnEdge;
+            this.RetriggerOnNegativeValueOrEdge = duplicateMe.RetriggerOnNegativeValueOrEdge;
+            this.RetriggerTimeout = duplicateMe.RetriggerTimeout;
         }
 
         public TimeStep getLoopCopy(int loopNum, int totalLoops)

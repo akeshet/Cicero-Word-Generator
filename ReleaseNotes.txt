@@ -125,3 +125,6 @@ New feature: Cicero "always use network clock" checkbox.
 
 New feature: FPGA retrigger debounce (accessible through Atticus device settings
 for FPGA).
+
+Bugfix: fixed unpredictable behaviour when combining looped timestep groups
+with retrigger waits.
