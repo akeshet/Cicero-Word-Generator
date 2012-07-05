@@ -47,3 +47,5 @@ _xmsgs/pn_parser.xmsgs
 avivfpga2.bgn
 avivfpga2.drc
 webtalk.log
+*.ncd
+*.gise

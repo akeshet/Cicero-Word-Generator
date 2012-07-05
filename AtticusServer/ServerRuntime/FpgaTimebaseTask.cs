@@ -227,13 +227,9 @@ namespace AtticusServer
                 wireInValue += 2;
             }
 
-            errorCode = opalKellyDevice.SetWireInValue(0x00, wireInValue);
+            setWireInValue(0x00, wireInValue);
 
-            if (errorCode != okCFrontPanel.ErrorCode.NoError)
-            {
-                throw new Exception("Unable to send a wire in value to FPGA device. Error code " + errorCode.ToString());
-            }
-
+            setWireInValue(0x01, deviceSettings.RetriggerDebounceSamples);
 
             opalKellyDevice.UpdateWireIns();
 
@@ -248,6 +244,16 @@ namespace AtticusServer
 
         }
 
+        private void setWireInValue(int address, UInt16 value)
+        {
+            com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode;
+            errorCode = opalKellyDevice.SetWireInValue(address, value);
+
+            if (errorCode != okCFrontPanel.ErrorCode.NoError)
+            {
+                throw new Exception("Unable to send a wire in value to FPGA device. Error code " + errorCode.ToString());
+            }
+        }
 
         /// <summary>
         ///  Must call updateWireOuts before using.
