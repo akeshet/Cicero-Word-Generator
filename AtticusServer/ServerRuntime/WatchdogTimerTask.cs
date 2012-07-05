@@ -33,7 +33,7 @@ namespace AtticusServer
         {
             this.taskToWatch = taskToWatch;
             TimestepTimebaseSegmentCollection segments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock,
-                                         1.0 / ((double)masterFrequency));
+                                         Common.getPeriodFromFrequency(masterFrequency));
 
             int currentSequenceSampleNumber = 0;
             long currentMasterSampleNumber=0;
