@@ -38,12 +38,13 @@ namespace DataStructures.Timing
 	            while (keepGoing)
 	            {
 	                Thread.Sleep((int)pollingPeriod_ms);
-					uint nowTime = stopwatch.ElapsedMilliseconds;
+                    if (stopwatch.ElapsedMilliseconds > uint.MaxValue)
+                        throw new SoftwareClockProviderException("Stopwatch reached time beyond maximum value of " + uint.MaxValue + "ms.");
+					uint nowTime = (uint) stopwatch.ElapsedMilliseconds;
 	                if (nowTime > lastTime)
 	                {
 	                    lastTime = nowTime;
 	                    keepGoing = reachTime(nowTime);
-						DateTime.Now;
 	                }
 	            }
 			}
