@@ -980,13 +980,16 @@ namespace WordGenerator
 
                 if (softwareClockProvider != null || networkClockProvider!=null)
                 {
-                    addMessageLogText(this, new MessageEvent("A software clock provider already exists, unespectedly. Aborting."));
+                    addMessageLogText(this, new MessageEvent("A software clock provider already exists, unexpectedly. Aborting."));
                     return false;
                 }
 
-                softwareClockProvider = new ComputerClockSoftwareClockProvider(10);
-                softwareClockProvider.addSubscriber(this, 41, 0);
-                softwareClockProvider.ArmClockProvider();
+                if (!Storage.settingsData.AlwaysUseNetworkClock)
+                {
+                    softwareClockProvider = new ComputerClockSoftwareClockProvider(10);
+                    softwareClockProvider.addSubscriber(this, 41, 0);
+                    softwareClockProvider.ArmClockProvider();
+                }
 
                 networkClockProvider = new NetworkClockProvider(clockID);
                 networkClockProvider.addSubscriber(this, 41, 1);
@@ -1031,7 +1034,8 @@ namespace WordGenerator
 
 
                 // start software clock
-                softwareClockProvider.StartClockProvider();
+                if (softwareClockProvider!=null)
+                    softwareClockProvider.StartClockProvider();
                 networkClockProvider.StartClockProvider();
 
                 while (true)
@@ -1049,7 +1053,8 @@ namespace WordGenerator
                 }
 
 
-                softwareClockProvider.AbortClockProvider();
+                if (softwareClockProvider!=null)
+                    softwareClockProvider.AbortClockProvider();
                 softwareClockProvider = null;
                 networkClockProvider.AbortClockProvider();
                 networkClockProvider = null;
@@ -1241,13 +1246,14 @@ namespace WordGenerator
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
+
             if (softwareClockProvider != null)
-            {
                 softwareClockProvider.AbortClockProvider();
-                softwareClockProvider = null;
+            softwareClockProvider = null;
+
+            if (networkClockProvider != null)
                 networkClockProvider.AbortClockProvider();
-                networkClockProvider = null;
-            }
+            networkClockProvider = null;
 
             WordGenerator.MainClientForm.instance.suppressHotkeys = false;
             if (this.isBackgroundRunform)
@@ -1258,7 +1264,7 @@ namespace WordGenerator
                     this.backgroundRunUpdated(this, null);
                 }
             }
-            
+
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -1288,12 +1294,14 @@ namespace WordGenerator
             idleTimer.Start();
 
             if (softwareClockProvider != null)
-            {
                 softwareClockProvider.AbortClockProvider();
-                softwareClockProvider = null;
+            softwareClockProvider = null;
+
+
+            if (networkClockProvider != null)
                 networkClockProvider.AbortClockProvider();
-                networkClockProvider = null;
-            }
+            networkClockProvider = null;
+
 
             if (this.runningThread != null)
                 runningThread.Abort();

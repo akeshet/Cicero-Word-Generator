@@ -463,6 +463,7 @@ namespace WordGenerator
                 this.overridePage.setSettings(Storage.settingsData);
                 this.sequencePage.layoutSettingsData();
                 this.sequencePage.updateOverrideCount();
+                this.useNetworkClockCheckBox.Checked = settingsData.AlwaysUseNetworkClock;
 
                 setTimestepEditorBackgrounds();
             }
@@ -1529,6 +1530,12 @@ namespace WordGenerator
         private void doNothingToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void useNetworkClockCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (Storage.settingsData != null)
+                Storage.settingsData.AlwaysUseNetworkClock = useNetworkClockCheckBox.Checked;
         }
 
     }

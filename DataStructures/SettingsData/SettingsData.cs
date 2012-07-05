@@ -237,6 +237,19 @@ namespace DataStructures
             versionNumberAtLastSerialization = DataStructuresVersionNumber.CurrentVersion;
         }
 
+        private bool alwaysUseNetworkClock;
+
+        /// <summary>
+        /// If true, Cicero will use ONLY the network clock.
+        /// If false, Cicero will use the network clock only if it has received
+        /// a clock datagram for that run, otherwise it will use the built in software clock.
+        /// </summary>
+        public bool AlwaysUseNetworkClock
+        {
+            get { return alwaysUseNetworkClock; }
+            set { alwaysUseNetworkClock = value; }
+        }
+
         #region Version Number Tracking
 
         private DataStructuresVersionNumber versionNumberAtFirstCreation;
