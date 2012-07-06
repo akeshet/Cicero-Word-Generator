@@ -63,14 +63,14 @@ namespace AtticusServer
             {
                 if (sequence.TimeSteps[stepID].StepEnabled)
                 {
-                    if (sequence.TimeSteps[stepID].WaitForRetrigger)
+                    if (sequence.TimeSteps[stepID].RetriggerOptions.WaitForRetrigger)
                     {
-                        uint waitTime = (uint) (sequence.TimeSteps[stepID].RetriggerTimeout.getBaseValue() / masterClockPeriod);
+                        uint waitTime = (uint)(sequence.TimeSteps[stepID].RetriggerOptions.RetriggerTimeout.getBaseValue() / masterClockPeriod);
                         
                         uint retriggerFlags = 0;
-                        if (sequence.TimeSteps[stepID].RetriggerOnEdge)
+                        if (sequence.TimeSteps[stepID].RetriggerOptions.RetriggerOnEdge)
                             retriggerFlags += 1;
-                        if (!sequence.TimeSteps[stepID].RetriggerOnNegativeValueOrEdge)
+                        if (!sequence.TimeSteps[stepID].RetriggerOptions.RetriggerOnNegativeValueOrEdge)
                             retriggerFlags += 2;
                         
                         listItems.Add(new ListItem(waitTime, retriggerFlags, 0));

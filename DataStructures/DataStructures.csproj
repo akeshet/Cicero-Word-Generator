@@ -102,6 +102,7 @@
     <Compile Include="SequenceData\GPIBGroup.cs" />
     <Compile Include="SequenceData\ListData.cs" />
     <Compile Include="SequenceData\Pulse.cs" />
+    <Compile Include="SequenceData\RetriggerOptions.cs" />
     <Compile Include="SequenceData\RS232Group.cs" />
     <Compile Include="SequenceData\SequenceComparer.cs" />
     <Compile Include="SequenceData\SequenceData.cs" />

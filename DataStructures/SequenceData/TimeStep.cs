@@ -141,17 +141,25 @@ namespace DataStructures
             }
         }
 
-        private bool waitForRetrigger;
+        private RetriggerOptions retriggerOptions;
 
-        public bool WaitForRetrigger
+        public RetriggerOptions RetriggerOptions
         {
-            get { return waitForRetrigger; }
-            set { waitForRetrigger = value; }
+            get
+            {
+                if (retriggerOptions==null)
+                    retriggerOptions = new RetriggerOptions(
+                        waitForRetrigger, retriggerOnNegativeValueOrEdge, retriggerOnEdge, RetriggerTimeout);
+                return retriggerOptions;
+            }
+            set { retriggerOptions = value; }
         }
 
+        #region Deprecated retrigger options
+        // These deprecated options are retained here so that old files will deserialize correctly. However, they should not be used otherwise.
+        private bool waitForRetrigger;
         private DimensionedParameter retriggerTimeout;
-
-        public DimensionedParameter RetriggerTimeout
+        private DimensionedParameter RetriggerTimeout
         {
             get
             {
@@ -159,24 +167,13 @@ namespace DataStructures
                     retriggerTimeout = new DimensionedParameter(Units.s, 0);
                 return retriggerTimeout;
             }
-            set { retriggerTimeout = value; }
         }
-
         private bool retriggerOnEdge;
-
-        public bool RetriggerOnEdge
-        {
-            get { return retriggerOnEdge; }
-            set { retriggerOnEdge = value; }
-        }
-
         private bool retriggerOnNegativeValueOrEdge;
+        #endregion
 
-        public bool RetriggerOnNegativeValueOrEdge
-        {
-            get { return retriggerOnNegativeValueOrEdge; }
-            set { retriggerOnNegativeValueOrEdge = value; }
-        }
+
+
 
         private AnalogGroup myAnalogGroup;
 
@@ -344,12 +341,9 @@ namespace DataStructures
             this.StepHidden = duplicateMe.StepHidden;
             this.StepName = "Copy of " + duplicateMe.StepName;
             this.MyTimestepGroup = duplicateMe.MyTimestepGroup;
-            this.WaitForRetrigger = duplicateMe.WaitForRetrigger;
             this.Description = duplicateMe.Description;
             this.LoopCopy = duplicateMe.LoopCopy;
-            this.RetriggerOnEdge = duplicateMe.RetriggerOnEdge;
-            this.RetriggerOnNegativeValueOrEdge = duplicateMe.RetriggerOnNegativeValueOrEdge;
-            this.RetriggerTimeout = duplicateMe.RetriggerTimeout;
+            this.RetriggerOptions = new RetriggerOptions(duplicateMe.RetriggerOptions);
         }
 
         public TimeStep getLoopCopy(int loopNum, int totalLoops)

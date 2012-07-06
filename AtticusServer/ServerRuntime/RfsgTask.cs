@@ -114,7 +114,7 @@ namespace AtticusServer
                 }
 
                 long postTime = 0;
-                if (currentStep.WaitForRetrigger)
+                if (currentStep.RetriggerOptions.WaitForRetrigger)
                     postTime = postRetriggerTime;
 
                 // determine the index of the next step in which this channel has an action
