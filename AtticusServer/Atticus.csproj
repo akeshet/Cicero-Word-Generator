@@ -177,7 +177,6 @@
     <Compile Include="ServerRuntime\GpibTask.cs" />
     <Compile Include="ServerRuntime\SerialPortSettings.cs" />
     <Compile Include="ServerRuntime\TerminalPair.cs" />
-    <Compile Include="ServerRuntime\WatchdogTimerTask.cs" />
     <Compile Include="ServerSettingsBrowser.cs">
       <SubType>Form</SubType>
     </Compile>
