@@ -70,7 +70,7 @@ namespace DataStructures.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to May 31, 2012.
+        ///   Looks up a localized string similar to July 5, 2012.
         /// </summary>
         internal static string BuildDateString {
             get {
@@ -88,7 +88,7 @@ namespace DataStructures.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to unreleased2.
+        ///   Looks up a localized string similar to .
         /// </summary>
         internal static string RevisionString {
             get {

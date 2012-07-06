@@ -1494,7 +1494,7 @@ namespace WordGenerator
 
         private void createBufferSnapshotToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            BufferTestSnapshot snap = Storage.sequenceData._createBufferSnapshot(Storage.settingsData, 0.000001);
+            BufferTestSnapshot snap = Storage.sequenceData._createBufferSnapshot(Storage.settingsData, Common.getPeriodFromFrequency(10000000));
 
             string path = SharedForms.PromptSaveFile("Buffer snapshot", ".buf");
             Storage.SaveAndLoad.Save(path, snap, false);
