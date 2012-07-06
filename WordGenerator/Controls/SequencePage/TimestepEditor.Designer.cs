@@ -160,14 +160,14 @@ namespace WordGenerator.Controls
             // 
             this.waitForRetriggerMenuItem.Name = "waitForRetriggerMenuItem";
             this.waitForRetriggerMenuItem.Size = new System.Drawing.Size(257, 22);
-            this.waitForRetriggerMenuItem.Text = "Enable Wait-for-retrigger";
+            this.waitForRetriggerMenuItem.Text = "Enable Hold-then-retrigger";
             this.waitForRetriggerMenuItem.Click += new System.EventHandler(this.waitForRetriggerMenuItem_Click);
             // 
             // waitTimeoutLabel
             // 
             this.waitTimeoutLabel.Name = "waitTimeoutLabel";
             this.waitTimeoutLabel.Size = new System.Drawing.Size(257, 22);
-            this.waitTimeoutLabel.Text = "Wait timeout:  (0 = none)";
+            this.waitTimeoutLabel.Text = "Hold timeout:  (0 = none)";
             // 
             // edgeRetriggerToolStripMenuItem
             // 
@@ -457,11 +457,11 @@ namespace WordGenerator.Controls
             this.waitLabel.BackColor = System.Drawing.Color.Red;
             this.waitLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.waitLabel.ForeColor = System.Drawing.Color.Purple;
-            this.waitLabel.Location = new System.Drawing.Point(59, 0);
+            this.waitLabel.Location = new System.Drawing.Point(61, 0);
             this.waitLabel.Name = "waitLabel";
-            this.waitLabel.Size = new System.Drawing.Size(14, 12);
+            this.waitLabel.Size = new System.Drawing.Size(12, 12);
             this.waitLabel.TabIndex = 10;
-            this.waitLabel.Text = "W";
+            this.waitLabel.Text = "H";
             this.waitLabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TimestepEditor_MouseDown);
             // 
             // timestepGroupIndicatorLabel
@@ -470,7 +470,7 @@ namespace WordGenerator.Controls
             this.timestepGroupIndicatorLabel.BackColor = System.Drawing.Color.Blue;
             this.timestepGroupIndicatorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F);
             this.timestepGroupIndicatorLabel.ForeColor = System.Drawing.Color.White;
-            this.timestepGroupIndicatorLabel.Location = new System.Drawing.Point(47, 0);
+            this.timestepGroupIndicatorLabel.Location = new System.Drawing.Point(49, 0);
             this.timestepGroupIndicatorLabel.Name = "timestepGroupIndicatorLabel";
             this.timestepGroupIndicatorLabel.Size = new System.Drawing.Size(12, 12);
             this.timestepGroupIndicatorLabel.TabIndex = 11;
@@ -519,7 +519,7 @@ namespace WordGenerator.Controls
             this.timestepGroupLoopIndicatorLabel.BackColor = System.Drawing.Color.Yellow;
             this.timestepGroupLoopIndicatorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F);
             this.timestepGroupLoopIndicatorLabel.ForeColor = System.Drawing.Color.Black;
-            this.timestepGroupLoopIndicatorLabel.Location = new System.Drawing.Point(36, 0);
+            this.timestepGroupLoopIndicatorLabel.Location = new System.Drawing.Point(38, 0);
             this.timestepGroupLoopIndicatorLabel.Name = "timestepGroupLoopIndicatorLabel";
             this.timestepGroupLoopIndicatorLabel.Size = new System.Drawing.Size(10, 12);
             this.timestepGroupLoopIndicatorLabel.TabIndex = 15;

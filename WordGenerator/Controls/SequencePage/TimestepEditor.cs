@@ -678,12 +678,12 @@ namespace WordGenerator.Controls
             if (this.StepData.WaitForRetrigger)
             {
                 waitLabel.Visible = true;
-                waitForRetriggerMenuItem.Text = "Disable Wait-for-retrigger.";
+                waitForRetriggerMenuItem.Text = "Disable Hold-then-retrigger.";
             }
             else
             {
                 waitLabel.Visible = false;
-                waitForRetriggerMenuItem.Text = "Enable Wait-for-retrigger.";
+                waitForRetriggerMenuItem.Text = "Enable Hold-then-retrigger.";
             }
         }
 

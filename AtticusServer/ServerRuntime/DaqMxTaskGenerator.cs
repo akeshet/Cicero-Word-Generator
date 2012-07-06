@@ -478,7 +478,7 @@ namespace AtticusServer
                 // non "variable timebase" buffer creation
 
 
-                double timeStepSize = 1.0 / (double)deviceSettings.SampleClockRate;
+                double timeStepSize = Common.getPeriodFromFrequency(deviceSettings.SampleClockRate);
                 int nBaseSamples = sequence.nSamples(timeStepSize);
 
                 // for reasons that are utterly stupid and frustrating, the DAQmx libraries seem to prefer sample
@@ -640,7 +640,7 @@ namespace AtticusServer
                 double timeStepSize = Common.getPeriodFromFrequency(deviceSettings.SampleClockRate);
 
                 TimestepTimebaseSegmentCollection timebaseSegments =
-    sequence.generateVariableTimebaseSegments(serverSettings.VariableTimebaseType,
+                    sequence.generateVariableTimebaseSegments(serverSettings.VariableTimebaseType,
                                             timeStepSize);
 
                 int nBaseSamples = timebaseSegments.nSegmentSamples();
