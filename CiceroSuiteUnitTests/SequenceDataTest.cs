@@ -120,10 +120,10 @@ namespace CiceroSuiteUnitTests
         }
 
         /// <summary>
-        ///A test for _createBufferSnapshot
+        /// Tests some complicated sequences the ensure that they reproduce old buffer generation behavior.
         ///</summary>
         [TestMethod()]
-        public void _createBufferSnapshotTest()
+        public void bufferSnapshotTest()
         {
             // A complicated test snapshot which exercises most cicero features
             // (pulses, permanent variables, equations, timestep loops, lists, iteration counts,
@@ -133,8 +133,6 @@ namespace CiceroSuiteUnitTests
             // A simple test snapshot which exercises pulses with start or end
             // pretriggers or delays
             testSnapshot("bufferGenTest2.buf");
-
-
         }
 
         private void testSnapshot(string path)
