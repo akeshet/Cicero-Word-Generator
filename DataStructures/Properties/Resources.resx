@@ -121,7 +121,7 @@
     <value>(c) 2008  Aviv Keshet  (MIT),  Free software under GNU General Public License.</value>
   </data>
   <data name="BuildDateString" xml:space="preserve">
-    <value>May 31, 2012</value>
+    <value>July 5, 2012</value>
   </data>
   <data name="ContribsString" xml:space="preserve">
     <value>Tony Kim (MIT), Ryan Olf (Berkeley), Emmanuel Mimoun (ENS Paris), Timur Rvachov (MIT)</value>
@@ -131,7 +131,7 @@
     <comment>[Optional] eg: rev2. Will be displayed in UI, but not tracked in serialized Sequence, Settings, or ServerSettings files.</comment>
   </data>
   <data name="VersionString" xml:space="preserve">
-    <value>1.63</value>
+    <value>1.64</value>
     <comment>Must be of the form X.YZ</comment>
   </data>
 </root>

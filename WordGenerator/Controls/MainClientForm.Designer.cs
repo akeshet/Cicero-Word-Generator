@@ -122,6 +122,7 @@ namespace WordGenerator
             this.eventLogTab = new System.Windows.Forms.TabPage();
             this.messageLogTextBox = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.useNetworkClockCheckBox = new System.Windows.Forms.CheckBox();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.variablesTab.SuspendLayout();
@@ -727,6 +728,7 @@ namespace WordGenerator
             // 
             // sequenceTab
             // 
+            this.sequenceTab.Controls.Add(this.useNetworkClockCheckBox);
             this.sequenceTab.Controls.Add(this.waitForReady);
             this.sequenceTab.Controls.Add(this.lockDigitalCheckBox);
             this.sequenceTab.Controls.Add(this.rs232GroupsLabel);
@@ -820,7 +822,7 @@ namespace WordGenerator
             this.sequencePage.Size = new System.Drawing.Size(1258, 804);
             this.sequencePage.TabIndex = 0;
             this.sequencePage.TimestepEditors = null;
-            this.sequencePage.messageLog += new System.EventHandler<DataStructures.MessageEvent> (this.handleMessageEvent);
+            this.sequencePage.messageLog += new System.EventHandler<DataStructures.MessageEvent>(this.handleMessageEvent);
             // 
             // mainTab
             // 
@@ -918,6 +920,17 @@ namespace WordGenerator
             this.toolTip1.AutomaticDelay = 0;
             this.toolTip1.UseAnimation = false;
             this.toolTip1.UseFading = false;
+            // 
+            // useNetworkClockCheckBox
+            // 
+            this.useNetworkClockCheckBox.AutoSize = true;
+            this.useNetworkClockCheckBox.Location = new System.Drawing.Point(7, 768);
+            this.useNetworkClockCheckBox.Name = "useNetworkClockCheckBox";
+            this.useNetworkClockCheckBox.Size = new System.Drawing.Size(118, 17);
+            this.useNetworkClockCheckBox.TabIndex = 10;
+            this.useNetworkClockCheckBox.Text = "Use Network Clock";
+            this.useNetworkClockCheckBox.UseVisualStyleBackColor = true;
+            this.useNetworkClockCheckBox.CheckedChanged += new System.EventHandler(this.useNetworkClockCheckbox_CheckedChanged);
             // 
             // MainClientForm
             // 
@@ -1051,6 +1064,7 @@ namespace WordGenerator
         private System.Windows.Forms.ToolStripMenuItem openHomePageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openGitRepositoryPageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showOnlyWarningsOrErrorsInEventLogToolStripMenuItem;
+        private System.Windows.Forms.CheckBox useNetworkClockCheckBox;
 
     }
 }

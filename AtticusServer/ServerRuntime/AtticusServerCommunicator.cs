@@ -411,7 +411,7 @@ namespace AtticusServer
                                             FpgaTimebaseTask ftask = new FpgaTimebaseTask(fsettings,
                                                 opalKellyDevices[opalKellyDeviceNames.IndexOf(fsettings.DeviceName)],
                                                 sequence,
-                                                ((double)1) / ((double)(fsettings.SampleClockRate)),
+                                                Common.getPeriodFromFrequency(fsettings.SampleClockRate),
                                                 out nSegs,
                                                 myServerSettings.UseFpgaRfModulatedClockOutput,
                                                 myServerSettings.UseFpgaAssymetricDutyCycleClocking);
@@ -1096,7 +1096,7 @@ namespace AtticusServer
                             if (serverSettings.DeviceToSyncSoftwareTimedTasksTo != null && serverSettings.DeviceToSyncSoftwareTimedTasksTo != "")
                             {
                                 int masterFreq = myServerSettings.myDevicesSettings[serverSettings.DeviceToSyncSoftwareTimedTasksTo].SampleClockRate;
-                                TimestepTimebaseSegmentCollection segments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, (1.0 / ((double)masterFreq)));
+                                TimestepTimebaseSegmentCollection segments = sequence.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, Common.getPeriodFromFrequency(masterFreq));
                                 int masterSamp = sequence.getMasterSampleFromDerivedSample(errorSamp, segments);
                                 double seqTime = ((double)masterSamp) / ((double)masterFreq);
                                 TimeStep step = sequence.getTimeStepAtTime(seqTime);

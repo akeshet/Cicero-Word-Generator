@@ -26,5 +26,10 @@ namespace DataStructures.Timing
         {
             return ((double)ticks) / 10000000.0;
         }
+
+        public static String clockIDToString(UInt32 clockID)
+        {
+            return String.Format("{0:X8}", clockID);
+        }
     }
 }

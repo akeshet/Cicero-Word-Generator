@@ -367,5 +367,15 @@ Category("Error Checking")]
             set { samplesGeneratedCheckSensitivity = value; }
         }
 
+        private UInt16 retriggerDebounceSamples;
+
+        [Description("Applies only to FPGA Variable Timebase generation devices using their Retrigger input. Sets a debounce time for the retrigger input (measured in FPGA clock cycles). Increase this number to reduce spurious edges, while simultaneously slowing down retrigger response time."),
+        Category("FPGA")]
+        public UInt16 RetriggerDebounceSamples
+        {
+            get { return retriggerDebounceSamples; }
+            set { retriggerDebounceSamples = value; }
+        }
+
     }
 }

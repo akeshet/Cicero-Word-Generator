@@ -116,3 +116,19 @@ timed tasks (ie GPIB, RFSG, RS232) to be synchronized to FPGA clock, even if the
 are long retrigger waits. The software clock can also be broadcast over the network
 to Cicero (to make the UI reflect any retrigger waits) and other Atticus servers
 (to synchronize their software tasks to the FPGA as well).
+
+
+1.64
+-----
+
+New feature: Cicero "always use network clock" checkbox.
+
+New feature: FPGA retrigger debounce (accessible through Atticus device settings
+for FPGA).
+
+Bugfix: fixed unpredictable behaviour when combining looped timestep groups
+with retrigger waits.
+
+Rename "Wait-for-retrigger" to "Hold-then-retrigger" to better reflect its actual
+behavior (the beginning of the hold word will be output, THEN the sequence will wait,
+and THEN the sequence will continue running the rest of the word once a retrigger is received).

@@ -63,14 +63,14 @@ namespace AtticusServer
             {
                 if (sequence.TimeSteps[stepID].StepEnabled)
                 {
-                    if (sequence.TimeSteps[stepID].WaitForRetrigger)
+                    if (sequence.TimeSteps[stepID].RetriggerOptions.WaitForRetrigger)
                     {
-                        uint waitTime = (uint) (sequence.TimeSteps[stepID].RetriggerTimeout.getBaseValue() / masterClockPeriod);
+                        uint waitTime = (uint)(sequence.TimeSteps[stepID].RetriggerOptions.RetriggerTimeout.getBaseValue() / masterClockPeriod);
                         
                         uint retriggerFlags = 0;
-                        if (sequence.TimeSteps[stepID].RetriggerOnEdge)
+                        if (sequence.TimeSteps[stepID].RetriggerOptions.RetriggerOnEdge)
                             retriggerFlags += 1;
-                        if (!sequence.TimeSteps[stepID].RetriggerOnNegativeValueOrEdge)
+                        if (!sequence.TimeSteps[stepID].RetriggerOptions.RetriggerOnNegativeValueOrEdge)
                             retriggerFlags += 2;
                         
                         listItems.Add(new ListItem(waitTime, retriggerFlags, 0));
@@ -227,13 +227,9 @@ namespace AtticusServer
                 wireInValue += 2;
             }
 
-            errorCode = opalKellyDevice.SetWireInValue(0x00, wireInValue);
+            setWireInValue(0x00, wireInValue);
 
-            if (errorCode != okCFrontPanel.ErrorCode.NoError)
-            {
-                throw new Exception("Unable to send a wire in value to FPGA device. Error code " + errorCode.ToString());
-            }
-
+            setWireInValue(0x01, deviceSettings.RetriggerDebounceSamples);
 
             opalKellyDevice.UpdateWireIns();
 
@@ -248,6 +244,16 @@ namespace AtticusServer
 
         }
 
+        private void setWireInValue(int address, UInt16 value)
+        {
+            com.opalkelly.frontpanel.okCFrontPanel.ErrorCode errorCode;
+            errorCode = opalKellyDevice.SetWireInValue(address, value);
+
+            if (errorCode != okCFrontPanel.ErrorCode.NoError)
+            {
+                throw new Exception("Unable to send a wire in value to FPGA device. Error code " + errorCode.ToString());
+            }
+        }
 
         /// <summary>
         ///  Must call updateWireOuts before using.

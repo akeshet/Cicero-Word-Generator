@@ -221,8 +221,8 @@ namespace WordGenerator.Controls
                 rs232Selector.BackColor = Color.Green;
             }
 
-            this.negativeRetriggerEdgeOrValueToolStripMenuItem.Checked = stepData.RetriggerOnNegativeValueOrEdge;
-            this.edgeRetriggerToolStripMenuItem.Checked = stepData.RetriggerOnEdge;
+            this.negativeRetriggerEdgeOrValueToolStripMenuItem.Checked = stepData.RetriggerOptions.RetriggerOnNegativeValueOrEdge;
+            this.edgeRetriggerToolStripMenuItem.Checked = stepData.RetriggerOptions.RetriggerOnEdge;
 
 
             layoutEnableButton();
@@ -669,21 +669,21 @@ namespace WordGenerator.Controls
 
         private void waitForRetriggerMenuItem_Click(object sender, EventArgs e)
         {
-            this.StepData.WaitForRetrigger = !this.StepData.WaitForRetrigger;
+            this.StepData.RetriggerOptions.WaitForRetrigger = !this.StepData.RetriggerOptions.WaitForRetrigger;
             updateWaitForRetriggerIndicator();
         }
 
         public void updateWaitForRetriggerIndicator()
         {
-            if (this.StepData.WaitForRetrigger)
+            if (this.StepData.RetriggerOptions.WaitForRetrigger)
             {
                 waitLabel.Visible = true;
-                waitForRetriggerMenuItem.Text = "Disable Wait-for-retrigger.";
+                waitForRetriggerMenuItem.Text = "Disable Hold-then-retrigger.";
             }
             else
             {
                 waitLabel.Visible = false;
-                waitForRetriggerMenuItem.Text = "Enable Wait-for-retrigger.";
+                waitForRetriggerMenuItem.Text = "Enable Hold-then-retrigger.";
             }
         }
 
@@ -913,8 +913,8 @@ namespace WordGenerator.Controls
                 waitTimeEditor = null;
             }
 
-            waitTimeEditor = new ToolStripNumericOrVariableEditor(StepData.RetriggerTimeout, true);
-            if (StepData.WaitForRetrigger)
+            waitTimeEditor = new ToolStripNumericOrVariableEditor(StepData.RetriggerOptions.RetriggerTimeout, true);
+            if (StepData.RetriggerOptions.WaitForRetrigger)
             {
                 waitTimeEditor.Enabled = true;
                 waitTimeoutLabel.Enabled = true;
@@ -936,12 +936,12 @@ namespace WordGenerator.Controls
 
         private void edgeRetriggerToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
-            stepData.RetriggerOnEdge = edgeRetriggerToolStripMenuItem.Checked;
+            stepData.RetriggerOptions.RetriggerOnEdge = edgeRetriggerToolStripMenuItem.Checked;
         }
 
         private void negativeRetriggerEdgeOrValueToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
-            stepData.RetriggerOnNegativeValueOrEdge = negativeRetriggerEdgeOrValueToolStripMenuItem.Checked;
+            stepData.RetriggerOptions.RetriggerOnNegativeValueOrEdge = negativeRetriggerEdgeOrValueToolStripMenuItem.Checked;
         }
 
 

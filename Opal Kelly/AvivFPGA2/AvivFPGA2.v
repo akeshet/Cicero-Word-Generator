@@ -73,6 +73,9 @@ reg [31:0] retriggerWaitSamples;   // Counts the total number of samples spent w
 		// register inputs from computer
 wire [15:0] ok_wire_ins;
 
+	// input from computer -- specifies how long to count up to for debounce counter
+wire [15:0] debounce_counts;
+reg  [15:0] debounce_counter;
 
 // modulated clock signal... this will be interesting
 wire use_modulated_clock;
@@ -112,9 +115,25 @@ wire togglerIN;
 assign togglerIN = ybus[0];
 assign ybus[1] = toggler;
 
-wire retriggerIN;
-assign retriggerIN = ybus[2];
+wire retriggerIN_bouncy;
+assign retriggerIN_bouncy = ybus[2];
 
+
+// Retrigger debounce stuff
+reg retriggerIN;
+reg retrigger_next;
+always @(posedge refclk) begin
+	retrigger_next<=retriggerIN_bouncy;
+	if (retrigger_next==retriggerIN_bouncy) begin
+		debounce_counter<=debounce_counter+1;
+		if (debounce_counter>=debounce_counts) begin
+			retriggerIN<=retrigger_next;
+		end
+	end
+	else begin
+		debounce_counter<=0;  // reset the debounce counter every time the bouncy input chages state
+	end
+end
 
 wire hard_trig_in;
 
@@ -247,8 +266,8 @@ always @(posedge refclk) begin
 					   ||(edgeRetrigger && retriggerIN == retriggerValue && retriggerIN!=lastRetriggerIn && fifo_read_enable==0)// or for it to have edge of correct value
 					|| (on_counts!=0 && waitedCounts==on_counts))  //or for the wait to timeout, then move on in the fifo
 					begin		
-						fifo_read_enable<=1;
-						nSegsGenerated<=nSegsGenerated+1;
+						fifo_read_enable<=1;									// this will cause us to move on in the fifo
+						nSegsGenerated<=nSegsGenerated+1;				// let's also update status counters
 						waitingForRetrigger<=0;
 						if (on_counts!=0 && waitedCounts==on_counts)
 							retriggerTimeoutCount<=retriggerTimeoutCount+1;
@@ -258,8 +277,6 @@ always @(posedge refclk) begin
 					waitingForRetrigger<=1;
 					waitedCounts<=0;
 				end
-																	
-
 			end
 			else begin		
 				masterSamplesGenerated<=masterSamplesGenerated+1; // increment the master sample counter
@@ -323,6 +340,9 @@ okTriggerIn trigIn40 (.ok1(ok1), .ok2(ok2),
 
 okWireIn wireIn00 (.ok1(ok1), .ok2(ok2),
 	.ep_addr(8'h00), .ep_dataout(ok_wire_ins));
+	
+okWireIn wireIn01 (.ok1(ok1), .ok2(ok2),
+	.ep_addr(8'h01), .ep_dataout(debounce_counts));
 
 
 // Wire outs for mistrigger detection

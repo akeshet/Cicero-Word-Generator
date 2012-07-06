@@ -458,6 +458,7 @@ namespace WordGenerator
                 this.overridePage.setSettings(Storage.settingsData);
                 this.sequencePage.layoutSettingsData();
                 this.sequencePage.updateOverrideCount();
+                this.useNetworkClockCheckBox.Checked = settingsData.AlwaysUseNetworkClock;
 
                 setTimestepEditorBackgrounds();
             }
@@ -851,8 +852,10 @@ namespace WordGenerator
 
         private void inspectVariableTimebaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TimestepTimebaseSegmentCollection ans = Storage.sequenceData.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, .000001);
-           
+            Storage.sequenceData.createLoopCopies();
+            TimestepTimebaseSegmentCollection ans = Storage.sequenceData.generateVariableTimebaseSegments(SequenceData.VariableTimebaseTypes.AnalogGroupControlledVariableFrequencyClock, (1.0 / (double)10000000));
+            Storage.sequenceData.cleanupLoopCopies();
+
             PropertyGridForm dialog = new PropertyGridForm(ans);
             dialog.ShowDialog();
         }
@@ -1491,7 +1494,7 @@ namespace WordGenerator
 
         private void createBufferSnapshotToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            BufferTestSnapshot snap = Storage.sequenceData._createBufferSnapshot(Storage.settingsData, 0.000001);
+            BufferTestSnapshot snap = Storage.sequenceData._createBufferSnapshot(Storage.settingsData, Common.getPeriodFromFrequency(10000000));
 
             string path = SharedForms.PromptSaveFile("Buffer snapshot", ".buf");
             Storage.SaveAndLoad.Save(path, snap, false);
@@ -1510,6 +1513,12 @@ namespace WordGenerator
         private void doNothingToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void useNetworkClockCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (Storage.settingsData != null)
+                Storage.settingsData.AlwaysUseNetworkClock = useNetworkClockCheckBox.Checked;
         }
 
     }

@@ -102,11 +102,28 @@ namespace CiceroSuiteUnitTests
 
         }
 
+        [TestMethod()]
+        public void retriggerOptionsSerializationTest()
+        {
+            SequenceData target = (SequenceData)SharedTestFunctions.loadTestFile("retriggers.seq", typeof(SequenceData));
+            Assert.AreEqual(false, target.TimeSteps[0].RetriggerOptions.WaitForRetrigger);
+            Assert.AreEqual(true, target.TimeSteps[1].RetriggerOptions.WaitForRetrigger);
+            Assert.AreEqual(true, target.TimeSteps[2].RetriggerOptions.WaitForRetrigger);
+
+            Assert.AreEqual(true, target.TimeSteps[1].RetriggerOptions.RetriggerOnEdge);
+            Assert.AreEqual(true, target.TimeSteps[1].RetriggerOptions.RetriggerOnNegativeValueOrEdge);
+
+            Assert.AreEqual(false, target.TimeSteps[2].RetriggerOptions.RetriggerOnEdge);
+            Assert.AreEqual(false, target.TimeSteps[2].RetriggerOptions.RetriggerOnNegativeValueOrEdge);
+
+            Assert.AreEqual((double)17, target.TimeSteps[1].RetriggerOptions.RetriggerTimeout.getBaseValue());            
+        }
+
         /// <summary>
-        ///A test for _createBufferSnapshot
+        /// Tests some complicated sequences the ensure that they reproduce old buffer generation behavior.
         ///</summary>
         [TestMethod()]
-        public void _createBufferSnapshotTest()
+        public void bufferSnapshotTest()
         {
             // A complicated test snapshot which exercises most cicero features
             // (pulses, permanent variables, equations, timestep loops, lists, iteration counts,
@@ -116,8 +133,6 @@ namespace CiceroSuiteUnitTests
             // A simple test snapshot which exercises pulses with start or end
             // pretriggers or delays
             testSnapshot("bufferGenTest2.buf");
-
-
         }
 
         private void testSnapshot(string path)

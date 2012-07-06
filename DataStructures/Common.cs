@@ -89,5 +89,16 @@ namespace DataStructures
             temp = temp.Replace(":", "-");
             return temp;
         }
+
+
+        /// <summary>
+        /// Converts frequency integer (in Hz) to clock period double precision float (in s)
+        /// </summary>
+        /// <param name="frequency"></param>
+        /// <returns></returns>
+        public static double getPeriodFromFrequency(int frequency)
+        {
+            return 1.0 / (double)frequency;
+        }
     }
 }

@@ -50,7 +50,7 @@ namespace AtticusServer
 
             // First generate the variable timebase buffer. We will need stuff like its length for configuring the task, which is why we do this first.
                       
-            TimestepTimebaseSegmentCollection timebaseSegments = sequenceData.generateVariableTimebaseSegments(timebaseType, 1.0 / deviceSettings.SampleClockRate);
+            TimestepTimebaseSegmentCollection timebaseSegments = sequenceData.generateVariableTimebaseSegments(timebaseType, Common.getPeriodFromFrequency(masterFrequency));
             bool[] variableTimebaseBuffer = sequenceData.getVariableTimebaseClock(timebaseSegments);
 
 
@@ -274,7 +274,7 @@ namespace AtticusServer
             Task task = new Task("Variable timebase output task");
 
             TimestepTimebaseSegmentCollection timebaseSegments = sequenceData.generateVariableTimebaseSegments(timebaseType,
-                1.0 / (double)masterFrequency);
+                Common.getPeriodFromFrequency(masterFrequency));
 
             bool [] buffer = sequenceData.getVariableTimebaseClock(timebaseSegments);
 
@@ -478,7 +478,7 @@ namespace AtticusServer
                 // non "variable timebase" buffer creation
 
 
-                double timeStepSize = 1.0 / (double)deviceSettings.SampleClockRate;
+                double timeStepSize = Common.getPeriodFromFrequency(deviceSettings.SampleClockRate);
                 int nBaseSamples = sequence.nSamples(timeStepSize);
 
                 // for reasons that are utterly stupid and frustrating, the DAQmx libraries seem to prefer sample
@@ -637,10 +637,10 @@ namespace AtticusServer
 
 
 
-                double timeStepSize = 1.0 / (double)deviceSettings.SampleClockRate;
+                double timeStepSize = Common.getPeriodFromFrequency(deviceSettings.SampleClockRate);
 
                 TimestepTimebaseSegmentCollection timebaseSegments =
-    sequence.generateVariableTimebaseSegments(serverSettings.VariableTimebaseType,
+                    sequence.generateVariableTimebaseSegments(serverSettings.VariableTimebaseType,
                                             timeStepSize);
 
                 int nBaseSamples = timebaseSegments.nSegmentSamples();

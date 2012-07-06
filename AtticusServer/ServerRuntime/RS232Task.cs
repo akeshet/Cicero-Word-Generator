@@ -99,7 +99,7 @@ namespace AtticusServer
                         continue;
 
                     long postTime = 0;
-                    if (currentStep.WaitForRetrigger)
+                    if (currentStep.RetriggerOptions.WaitForRetrigger)
                         postTime = postRetriggerTime;
 
                     if (currentStep.rs232Group == null || !currentStep.rs232Group.channelEnabled(logicalChannelID))
