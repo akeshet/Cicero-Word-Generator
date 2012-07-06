@@ -528,7 +528,6 @@ namespace DataStructures
 
         #endregion
 
-
         #region Constructors
 
         public SequenceData()
@@ -581,6 +580,45 @@ namespace DataStructures
         }
 
         #endregion
+
+        #region Convenience methods
+
+        /// <summary>
+        /// Returns true if all the following conditions are met:
+        /// 1) Timestep group contains timesteps.
+        /// 2) Timesteps contained within group are consecutive.
+        /// </summary>
+        /// <returns></returns>
+        public bool TimestepGroupIsLoopable(TimestepGroup tsg)
+        {
+            if (tsg == null)
+                return false;
+            if (!TimestepGroups.Contains(tsg))
+                return false;
+
+            List<TimeStep> memberSteps = new List<TimeStep>();
+            List<int> memberStepIds = new List<int>();
+            foreach (TimeStep step in TimeSteps)
+            {
+                if (step.MyTimestepGroup == tsg)
+                {
+                    memberSteps.Add(step);
+                    memberStepIds.Add(TimeSteps.IndexOf(step));
+                }
+            }
+
+            if (memberStepIds.Count == 0)
+                return false;
+
+            int firstVal = memberStepIds[0];
+            for (int i = 0; i < memberStepIds.Count; i++)
+            {
+                if (memberStepIds[i] != firstVal + i)
+                    return false;
+            }
+            return true;
+        }
+
 
         public string insertSequence(SequenceData insertMe, TimeStep insertAfter)
         {
@@ -724,6 +762,16 @@ namespace DataStructures
             return ans;
         }
 
+
+        /// <summary>
+        /// Gets an analog interpolation for channel ID specified by analogID, and buts this interpolation in array given by buf.
+        /// Used in analog preview pane.
+        /// </summary>
+        /// <param name="timeStep"></param>
+        /// <param name="analogID"></param>
+        /// <param name="buf"></param>
+        /// <param name="nPoints"></param>
+        /// <param name="offset"></param>
         public void getTimestepInterpolation(int timeStep, int analogID, double[] buf, int nPoints, int offset)
         {
             if (TimeSteps.Count <= timeStep)
@@ -758,6 +806,543 @@ namespace DataStructures
 
             TimeSteps[groupTimeStep].AnalogGroup.ChannelDatas[analogID].waveform.getInterpolation(nPoints, lagTime, lagTime + TimeSteps[timeStep].StepDuration.getBaseValue(), buf, offset, Variables, CommonWaveforms);
         }
+
+        public void populateWithChannels(SettingsData settings)
+        {
+            foreach (TimeStep step in TimeSteps)
+            {
+                // Add digital datapoints to each timestep.
+                foreach (int digitalID in settings.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.digital].getSortedChannelIDList())
+                {
+                    if (!step.DigitalData.ContainsKey(digitalID))
+                    {
+                        step.DigitalData.Add(digitalID, new DigitalDataPoint());
+                    }
+                }
+            }
+
+            foreach (AnalogGroup ag in AnalogGroups)
+            {
+                foreach (int analogID in settings.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.analog].getSortedChannelIDList())
+                {
+                    if (!ag.containsChannelID(analogID))
+                    {
+                        ag.addChannel(analogID);
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region Buffer generation utility methods
+
+        public int nSamples(double timeStepSize)
+        {
+            double remainderTime = 0;
+            return 1 + this.nSamplesBetweenTimeSteps(0, TimeSteps.Count, ref remainderTime, timeStepSize);
+        }
+
+
+        public TimeStep getTimestepAtSample(int nSamples, double timeStepSize)
+        {
+            int count = 0;
+            double remainderTime = 0;
+            foreach (TimeStep step in TimeSteps)
+            {
+                if (step.StepEnabled)
+                {
+                    int temp = 0;
+                    computeNSamplesAndRemainderTime(ref temp, ref remainderTime, step.StepDuration.getBaseValue(), timeStepSize);
+                    count += temp;
+                    if (count > nSamples)
+                        return step;
+                }
+            }
+            return null;
+        }
+
+        public int getSamplesAtTimestep(TimeStep step, double timeStepSize)
+        {
+            int count = 0;
+            double remainderTime = 0;
+            foreach (TimeStep ts in TimeSteps)
+            {
+                if (ts == step)
+                    return count;
+                if (ts.StepEnabled)
+                {
+                    int temp = 0;
+                    computeNSamplesAndRemainderTime(ref temp, ref remainderTime, ts.StepDuration.getBaseValue(), timeStepSize);
+                    count += temp;
+                }
+            }
+            return -1;
+        }
+
+
+        /// <summary>
+        /// Gets the number of timesteps that have enabled set to true.
+        /// </summary>
+        /// <returns></returns>
+        public int getNEnabledTimesteps()
+        {
+            int ans = 0;
+            foreach (TimeStep st in TimeSteps)
+                if (st.StepEnabled)
+                    ans++;
+            return ans;
+        }
+
+        public int getNthEnabledTimestepID(int N)
+        {
+            for (int i = 0; i < TimeSteps.Count; i++)
+            {
+                if (TimeSteps[i].StepEnabled)
+                {
+                    N--;
+                }
+                if (N == 0)
+                    return i;
+            }
+            return -1;
+        }
+
+        /// <summary>
+        /// Returns a dictionary giving the running analog groups, as well as the remaining time until their effective duration
+        /// is over, as determined at the beginning of the timestep given by timestepID.
+        /// </summary>
+        /// <param name="timeStepID"></param>
+        /// <returns></returns>
+        public Dictionary<AnalogGroup, double> getRunningGroupRemainingTime(int timeStepID)
+        {
+            Dictionary<AnalogGroup, double> ans = getRunningAnalogGroups(timeStepID);
+            List<AnalogGroup> groups = new List<AnalogGroup>(ans.Keys);
+            foreach (AnalogGroup ag in groups)
+            {
+                ans[ag] = ag.getEffectiveDuration() - ans[ag];
+            }
+            return ans;
+        }
+
+        /// <summary>
+        /// Returns a dictionary containing all of the analog groups that are active at a given timestep, as well as a double
+        /// representing how long they have been running.
+        /// 
+        /// An analog group is considered to be "active" at a certain timestep if:
+        /// 1) Its effective duration has not elapsed. AND
+        /// 2) It has at least one channel enabled which has not been subsequently interrupted.
+        /// </summary>
+        /// <param name="timeStepID"></param>
+        /// <returns></returns>
+        public Dictionary<AnalogGroup, double> getRunningAnalogGroups(int timeStepID)
+        {
+            Dictionary<AnalogGroup, double> ans = new Dictionary<AnalogGroup, double>();
+
+            Dictionary<int, bool> channelActive = new Dictionary<int, bool>();
+
+            // This function works by checking each of the previous sequence timesteps to see if it started an analog group,
+            // and if so whether that group is still running.
+
+            for (int startingID = 0; startingID <= timeStepID; startingID++)
+            {
+                if (TimeSteps[startingID].StepEnabled)
+                {
+                    if (TimeSteps[startingID].AnalogGroup != null)
+                    {
+                        AnalogGroup ag = TimeSteps[startingID].AnalogGroup;
+
+                        bool groupStillRunning = true;
+
+                        double elapsedTime = 0;
+                        double effectiveDuration = ag.getEffectiveDuration();
+                        channelActive.Clear();
+                        foreach (int channelID in ag.ChannelDatas.Keys)
+                        {
+                            if (ag.channelEnabled(channelID))
+                                channelActive.Add(channelID, true);
+                        }
+
+                        double previousTimestepDuration = TimeSteps[startingID].StepDuration.getBaseValue();
+
+                        for (int interimStep = startingID + 1; interimStep <= timeStepID; interimStep++)
+                        {
+                            if (TimeSteps[interimStep].StepEnabled)
+                            {
+                                elapsedTime += previousTimestepDuration;
+                                previousTimestepDuration = TimeSteps[interimStep].StepDuration.getBaseValue();
+                                if (elapsedTime > effectiveDuration)
+                                {
+                                    groupStillRunning = false;
+                                    break;
+                                }
+
+                                if (TimeSteps[interimStep].AnalogGroup != null)
+                                {
+                                    AnalogGroup interruptingGroup = TimeSteps[interimStep].AnalogGroup;
+                                    foreach (int channelID in interruptingGroup.ChannelDatas.Keys)
+                                    {
+                                        if (interruptingGroup.channelEnabled(channelID))
+                                        {
+                                            if (channelActive.ContainsKey(channelID))
+                                            {
+                                                channelActive[channelID] = false;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (!channelActive.ContainsValue(true))
+                                {
+                                    groupStillRunning = false;
+                                    break;
+                                }
+
+                            }
+                        }
+
+                        if (groupStillRunning)
+                        {
+                            ans.Add(ag, elapsedTime);
+                        }
+                    }
+                }
+            }
+
+            return ans;
+        }
+
+        public static void fillBoolArray(bool[] array, bool value, int startIndex, int nEntries)
+        {
+            for (int i = 0; i < nEntries; i++)
+            {
+                array[i + startIndex] = value;
+            }
+        }
+
+        /// <summary>
+        /// returns the index of the next timestep (after the one indicated by startIndex) which
+        /// is both enabled and which is not "continue" with respect to analog channel id specified.
+        /// Returns step count if there is no next enabled step, or if the input data is somehow invalid.
+        /// </summary>
+        /// <param name="timeSteps"></param>
+        /// <param name="startIndex"></param>
+        /// <returns></returns>
+        public static int findNextAnalogChannelEnabledTimestep(List<TimeStep> timeSteps, int startIndex, int analogID)
+        {
+            for (int i = startIndex + 1; i < timeSteps.Count; i++)
+            {
+                if (timeSteps[i] != null)
+                {
+                    if (timeSteps[i].StepEnabled)
+                    {
+                        if (timeSteps[i].AnalogGroup != null)
+                        {
+                            if (timeSteps[i].AnalogGroup.channelEnabled(analogID))
+                                return i;
+                        }
+                    }
+                }
+            }
+            return timeSteps.Count;
+        }
+
+        public int findNextAnalogChannelEnabledTimestep(int startIndex, int analogID)
+        {
+            return SequenceData.findNextAnalogChannelEnabledTimestep(this.TimeSteps, startIndex, analogID);
+        }
+
+        /// <summary>
+        /// returns the index of the next timestep (after the one indicated by startIndex) which
+        /// is both enabled and which is not "continue" with respect to gpib channel id specified.
+        /// Returns step count if there is no next enabled step, or if the input data is somehow invalid.
+        /// </summary>
+        /// <param name="timeSteps"></param>
+        /// <param name="startIndex"></param>
+        /// <returns></returns>
+        public static int findNextGpibChannelEnabledTimestep(List<TimeStep> timeSteps, int startIndex, int gpibID)
+        {
+            for (int i = startIndex + 1; i < timeSteps.Count; i++)
+            {
+                if (timeSteps[i] != null)
+                {
+                    if (timeSteps[i].StepEnabled)
+                    {
+                        if (timeSteps[i].GpibGroup != null)
+                        {
+                            if (timeSteps[i].GpibGroup.channelEnabled(gpibID))
+                            {
+                                return i;
+                            }
+                        }
+                    }
+                }
+            }
+            return timeSteps.Count;
+        }
+
+        /// <summary>
+        /// Returns the ID of the next enabled timestep after startIndex (not including startIndex).
+        /// Returns TimeSteps.Count if there are no further enabled timesteps.
+        /// </summary>
+        /// <param name="startIndex"></param>
+        /// <returns></returns>
+        public int findNextEnabledTimestep(int startIndex)
+        {
+            for (int i = startIndex + 1; i < TimeSteps.Count; i++)
+            {
+                if (TimeSteps[i].StepEnabled)
+                    return i;
+            }
+            return TimeSteps.Count;
+        }
+
+        public int findNextGpibChannelEnabledTimestep(int startIndex, int gpibID)
+        {
+            return SequenceData.findNextGpibChannelEnabledTimestep(this.TimeSteps, startIndex, gpibID);
+        }
+
+        public int findNextRS232ChannelEnabledTimestep(int startIndex, int rs232ID)
+        {
+            for (int i = startIndex + 1; i < TimeSteps.Count; i++)
+            {
+                if (TimeSteps[i] != null)
+                {
+                    if (TimeSteps[i].StepEnabled)
+                    {
+                        if (TimeSteps[i].rs232Group != null)
+                        {
+                            if (TimeSteps[i].rs232Group.channelEnabled(rs232ID))
+                            {
+                                return i;
+                            }
+                        }
+                    }
+                }
+            }
+            return TimeSteps.Count;
+        }
+
+        /// <summary>
+        /// Returns the total duration of all the enabled timesteps between start and end. Including start, but not including end.
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
+        public double timeBetweenSteps(int start, int end)
+        {
+            double ans = 0;
+            for (int i = start; i < end; i++)
+            {
+                if (i >= 0 && i < TimeSteps.Count)
+                {
+                    if (TimeSteps[i] != null)
+                    {
+                        if (TimeSteps[i].StepEnabled)
+                            ans += TimeSteps[i].StepDuration.getBaseValue();
+                    }
+                }
+            }
+            return ans;
+        }
+
+        /// <summary>
+        /// Returns the sample id of the first derived sample which is on or after the given master sample, given a set of variable timebase segments.
+        /// </summary>
+        /// <param name="masterSample"></param>
+        /// <param name="timebaseSegments"></param>
+        /// <returns></returns>
+        public int getDerivedSampleFromMasterSample(int masterSample, TimestepTimebaseSegmentCollection timebaseSegments)
+        {
+            int currentDerivedSample = 0;
+            int currentMasterSample = 0;
+            if (masterSample == 0)
+                return 0;
+
+            foreach (TimeStep step in TimeSteps)
+            {
+                if (step.StepEnabled)
+                {
+                    foreach (VariableTimebaseSegment segment in timebaseSegments[step])
+                    {
+                        for (int i = 0; i < segment.NSegmentSamples; i++)
+                        {
+                            currentMasterSample += segment.MasterSamplesPerSegmentSample;
+                            currentDerivedSample++;
+                            if (currentMasterSample >= masterSample)
+                                return currentDerivedSample;
+                        }
+                    }
+                }
+            }
+            return currentDerivedSample;
+        }
+
+
+        /// <summary>
+        /// Gets the master timebase sample from a given derived timebase sample.
+        /// </summary>
+        /// <param name="derivedSample"></param>
+        /// <param name="timebaseSegments"></param>
+        /// <returns></returns>
+        public int getMasterSampleFromDerivedSample(int derivedSample, TimestepTimebaseSegmentCollection timebaseSegments)
+        {
+            int currentDerivedSample = 0;
+            int currentMasterSample = 0;
+            if (derivedSample == 0)
+                return 0;
+            foreach (TimeStep step in TimeSteps)
+            {
+                if (step.StepEnabled)
+                {
+                    foreach (VariableTimebaseSegment segment in timebaseSegments[step])
+                    {
+                        for (int i = 0; i < segment.NSegmentSamples; i++)
+                        {
+                            currentMasterSample += segment.MasterSamplesPerSegmentSample;
+                            currentDerivedSample++;
+                            if (currentDerivedSample >= derivedSample)
+                                return currentMasterSample;
+                        }
+                    }
+                }
+            }
+            return currentMasterSample;
+        }
+
+        /// <summary>
+        /// Returns true if there is an enabled timestep in which the given channel uses a pulse.
+        /// </summary>
+        /// <param name="digitalID"></param>
+        /// <returns></returns>
+        public bool digitalChannelUsesPulses(int digitalID)
+        {
+            foreach (TimeStep step in TimeSteps)
+            {
+                if (step.DigitalData.ContainsKey(digitalID))
+                {
+                    if (step.DigitalData[digitalID].usesPulse())
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+
+        /// <summary>
+        /// Returns the step ID of the next timestep (after or including currentStep) 
+        /// that has analog channel analogID enabled. Returns TimeSteps.Count if there is no 
+        /// subsequent timestep with the channel enabled.
+        /// </summary>
+        /// <param name="currentStep"></param>
+        /// <param name="analogID"></param>
+        /// <returns></returns>
+        public int nextTimestepWithAnalogChannelEnabled(int currentStep, int analogID)
+        {
+            while (true)
+            {
+                if (currentStep == TimeSteps.Count)
+                    return TimeSteps.Count;
+
+                if (TimeSteps[currentStep].StepEnabled)
+                {
+                    if (TimeSteps[currentStep].AnalogGroup != null)
+                    {
+                        if (TimeSteps[currentStep].AnalogGroup.channelEnabled(analogID))
+                        {
+                            return currentStep;
+                        }
+                    }
+                }
+
+                currentStep++;
+
+            }
+        }
+
+        /// <summary>
+        /// fills the specified double array with nEntries copies of value, starting at startIndex.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="array"></param>
+        /// <param name="startIndex"></param>
+        /// <param name="nEntries"></param>
+        public static void fillArrayRange(double value, double[] array, int startIndex, int nEntries)
+        {
+            for (int i = 0; i < nEntries; i++)
+            {
+                array[i + startIndex] = value;
+            }
+        }
+
+        /// <summary>
+        /// Returns the start time of the specified timestep.
+        /// </summary>
+        /// <param name="stepID"></param>
+        /// <returns></returns>
+        public double timeAtTimestep(int stepID)
+        {
+            double ans = 0;
+            for (int i = 0; i < stepID; i++)
+            {
+                if (TimeSteps.Count <= i)
+                    return ans;
+
+                if (TimeSteps[i].StepEnabled)
+                {
+                    ans += TimeSteps[i].StepDuration.getBaseValue();
+                }
+            }
+            return ans;
+        }
+
+        /// <summary>
+        /// Returns the number of samples between startID timestep and endID timestep. This is done in a 
+        /// maximally accurate counting method, timestep-by-timestep, and taking into account and "remainder time"
+        /// (ie samples that straddle the border between timesteps).
+        /// </summary>
+        /// <param name="startID">ID of the start step</param>
+        /// <param name="endID">ID of the end step</param>
+        /// <param name="remainderTime">present remainder time. 0 if unspecified. currentSampleTime + remainderTime = currentActualTime</param>
+        /// <param name="timeStepSize"></param>
+        /// <returns></returns>
+        public int nSamplesBetweenTimeSteps(int startID, int endID, ref double remainderTime, double timeStepSize)
+        {
+            int nSamples = 0;
+            for (int i = startID; i < endID; i++)
+            {
+                if (TimeSteps[i].StepEnabled)
+                {
+                    int temp = 0;
+                    computeNSamplesAndRemainderTime(ref temp, ref remainderTime, TimeSteps[i].StepDuration.getBaseValue(), timeStepSize);
+                    nSamples += temp;
+                }
+            }
+            return nSamples;
+        }
+
+        /// <summary>
+        /// Computes the number of samples and the remainder time corresponding to the given duration and timestep size. 
+        /// </summary>
+        /// <param name="nSteps"></param>
+        /// <param name="remainderTime"></param>
+        /// <param name="duration"></param>
+        /// <param name="timeStepSize"></param>
+        public static void computeNSamplesAndRemainderTime(ref int nSteps, ref double remainderTime, double duration, double timeStepSize)
+        {
+            nSteps = (int)(duration / timeStepSize);
+            remainderTime += duration - nSteps * timeStepSize;
+            // currentActualTime = currentSampleTime + remainderTime.
+            // remainderTime should vary between -timeStepSize/2 and timeStepSize/2
+            if (remainderTime >= (timeStepSize / 2))
+            {
+                nSteps++;
+                remainderTime -= timeStepSize;
+            }
+        }
+
 
         public double getAnalogValueAtEndOfTimestep(int timeStep, int analogID, List<Variable> existingVariables)
         {
@@ -904,684 +1489,11 @@ namespace DataStructures
 
         }
 
+        #endregion
 
-        public void populateWithChannels(SettingsData settings)
-        {
-            foreach (TimeStep step in TimeSteps)
-            {
-                // Add digital datapoints to each timestep.
-                foreach (int digitalID in settings.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.digital].getSortedChannelIDList())
-                {
-                    if (!step.DigitalData.ContainsKey(digitalID))
-                    {
-                        step.DigitalData.Add(digitalID, new DigitalDataPoint());
-                    }
-                }
-            }
+        #region Variable timebase generation methods
 
-            foreach (AnalogGroup ag in AnalogGroups)
-            {
-                foreach (int analogID in settings.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.analog].getSortedChannelIDList())
-                {
-                    if (!ag.containsChannelID(analogID))
-                    {
-                        ag.addChannel(analogID);
-                    }
-                }
-            }
-        }
 
-
-        #region Calculations
-
-        public int nSamples(double timeStepSize)
-        {
-            double remainderTime=0;
-            return 1 + this.nSamplesBetweenTimeSteps(0, TimeSteps.Count, ref remainderTime, timeStepSize);
-        }
-
-        public double[] computeAnalogBuffer(int analogChannelID, double timeStepSize)
-        {
-            int nSamples = this.nSamples(timeStepSize);
-
-            double[] ans = new double[nSamples];
-
-            this.computeAnalogBuffer(analogChannelID, timeStepSize, ans);
-            return ans;
-        }
-
-       
-
-        /// <summary>
-        /// This function should hopefully handle timing intelligently now, keeping track of "remainder time" when there are timesteps with 
-        /// durations that are not an integer multiple of the timestepsize.
-        /// </summary>
-        /// <param name="analogChannelID"></param>
-        /// <param name="timeStepSize"></param>
-        /// <returns></returns>
-        public void computeAnalogBuffer(int analogChannelID, double timeStepSize, double [] ans)
-        {
-            int nSamples = this.nSamples(timeStepSize);
-
-        
-            ans[0] = dwellWord().getEndAnalogValue(analogChannelID, Variables, CommonWaveforms);
-
-
-            // forward fast to first timestep which actually uses this channel
-            int currentStep = 0;
-            int currentSample = 0;
-
-            double remainderTime = 0;
-
-
-            currentStep = nextTimestepWithAnalogChannelEnabled(currentStep, analogChannelID);
-
-            int nDwellSamples = nSamplesBetweenTimeSteps(0, currentStep, ref remainderTime, timeStepSize);
-
-            // fill in the dwell time
-            fillArrayRange(ans[0], ans, currentSample, nDwellSamples);
-
-            currentSample += nDwellSamples;
-
-
-            // now the timestep of the currentStep should be one that references analogChannelID
-
-
-            while (true)
-            {
-                if (currentStep == TimeSteps.Count)
-                    break;
-
-                int endStep = nextTimestepWithAnalogChannelEnabled(currentStep+1, analogChannelID);
-
-                double initialRemainderTime = remainderTime;
-                int nStepSamples = nSamplesBetweenTimeSteps(currentStep, endStep, ref remainderTime, timeStepSize);
-
-                /*Commented out Nov 28 2007. May be responsible for loss of sync between analog and digital data.
-                 * 
-                 * double interpolationStartTime = initialRemainderTime;
-                double interpolationEndTime = nStepSamples * timeStepSize + remainderTime;
-                */
-
-                double interpolationStartTime = 0;
-                double interpolationEndTime = nStepSamples * timeStepSize;
-
-
-                Waveform theWaveform = TimeSteps[currentStep].getChannelWaveform(analogChannelID);
-
-                theWaveform.getInterpolation(nStepSamples,
-                    interpolationStartTime, interpolationEndTime, ans, currentSample, Variables, CommonWaveforms);
-                
-                currentStep = endStep;
-                currentSample += nStepSamples;
-            }
-
-            if (currentSample != nSamples - 2)
-                ans[nSamples - 2] = ans[nSamples - 3];
-
-            ans[nSamples - 1] = ans[0];
-            return;
-        }
-
-        /// <summary>
-        /// Returns the step ID of the next timestep (after or including currentStep) 
-        /// that has analog channel analogID enabled. Returns TimeSteps.Count if there is no 
-        /// subsequent timestep with the channel enabled.
-        /// </summary>
-        /// <param name="currentStep"></param>
-        /// <param name="analogID"></param>
-        /// <returns></returns>
-        public int nextTimestepWithAnalogChannelEnabled(int currentStep, int analogID)
-        {
-            while (true)
-            {
-                if (currentStep == TimeSteps.Count)
-                    return TimeSteps.Count;
-
-                if (TimeSteps[currentStep].StepEnabled)
-                {
-                    if (TimeSteps[currentStep].AnalogGroup != null)
-                    {
-                        if (TimeSteps[currentStep].AnalogGroup.channelEnabled(analogID))
-                        {
-                            return currentStep;
-                        }
-                    }
-                }
-
-                currentStep++;
-
-            }
-        }
-
-        /// <summary>
-        /// fills the specified double array with nEntries copies of value, starting at startIndex.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="array"></param>
-        /// <param name="startIndex"></param>
-        /// <param name="nEntries"></param>
-        public static void fillArrayRange(double value, double[] array, int startIndex, int nEntries)
-        {
-            for (int i = 0; i < nEntries; i++)
-            {
-                array[i + startIndex] = value;
-            }
-        }
-
-        /// <summary>
-        /// Returns the start time of the specified timestep.
-        /// </summary>
-        /// <param name="stepID"></param>
-        /// <returns></returns>
-        public double timeAtTimestep(int stepID)
-        {
-            double ans = 0;
-            for (int i = 0; i < stepID; i++)
-            {
-                if (TimeSteps.Count <= i)
-                    return ans;
-
-                if (TimeSteps[i].StepEnabled)
-                {
-                    ans += TimeSteps[i].StepDuration.getBaseValue();
-                }
-            }
-            return ans;
-        }
-
-        /// <summary>
-        /// Returns the number of samples between startID timestep and endID timestep. This is done in a 
-        /// maximally accurate counting method, timestep-by-timestep, and taking into account and "remainder time"
-        /// (ie samples that straddle the border between timesteps).
-        /// </summary>
-        /// <param name="startID">ID of the start step</param>
-        /// <param name="endID">ID of the end step</param>
-        /// <param name="remainderTime">present remainder time. 0 if unspecified. currentSampleTime + remainderTime = currentActualTime</param>
-        /// <param name="timeStepSize"></param>
-        /// <returns></returns>
-        public int nSamplesBetweenTimeSteps(int startID, int endID, ref double remainderTime, double timeStepSize)
-        {
-            int nSamples = 0;
-            for (int i = startID; i < endID; i++)
-            {
-                if (TimeSteps[i].StepEnabled)
-                {
-                    int temp=0;
-                    computeNSamplesAndRemainderTime(ref temp, ref remainderTime, TimeSteps[i].StepDuration.getBaseValue(), timeStepSize);
-                    nSamples += temp;
-                }
-            }
-            return nSamples;
-        }
-
-        /// <summary>
-        /// Computes the number of samples and the remainder time corresponding to the given duration and timestep size. 
-        /// </summary>
-        /// <param name="nSteps"></param>
-        /// <param name="remainderTime"></param>
-        /// <param name="duration"></param>
-        /// <param name="timeStepSize"></param>
-        public static void computeNSamplesAndRemainderTime(ref int nSteps, ref double remainderTime, double duration, double timeStepSize)
-        {
-            nSteps = (int) (duration / timeStepSize);
-            remainderTime += duration - nSteps * timeStepSize;
-            // currentActualTime = currentSampleTime + remainderTime.
-            // remainderTime should vary between -timeStepSize/2 and timeStepSize/2
-            if (remainderTime >= (timeStepSize/2))
-            {
-                nSteps++;
-                remainderTime -= timeStepSize;
-            }
-        }
-
-        public bool[] computeDigitalBuffer(int digitalID, double timestepSize)
-        {
-            bool [] ans = new bool[nSamples(timestepSize)];
-            computeDigitalBuffer(digitalID, timestepSize, ans);
-            return ans;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="digitalID"></param>
-        /// <param name="timestepSize"></param>
-        /// <returns></returns>
-        public void computeDigitalBuffer(int digitalID, double timestepSize, bool [] ans)
-        {
-            int nSamples = this.nSamples(timestepSize);
-
-            ans[0] = dwellWord().getDigitalValue(digitalID, TimeSteps, 0);
-
-            if (nSamples == 1)
-                return;
-
-            int currentSample = 0;
-            int currentStep = findNextEnabledTimestep(-1);
-            double remainderTime = 0;
-
-            while (true)
-            {
-                if (currentStep == TimeSteps.Count)
-                    break;
-
-                int nStepSamples = 0;
-                computeNSamplesAndRemainderTime(ref nStepSamples, ref remainderTime, TimeSteps[currentStep].StepDuration.getBaseValue(), timestepSize);
-                bool value = TimeSteps[currentStep].getDigitalValue(digitalID, TimeSteps, currentStep);
-                fillBoolArray(ans, value, currentSample, nStepSamples);
-                currentSample += nStepSamples;
-                currentStep = findNextEnabledTimestep(currentStep);
-            }
-
-            if (currentSample != nSamples - 2)
-                ans[nSamples - 2] = ans[nSamples - 3];
-
-            ans[nSamples - 1] = ans[0];
-
-            if (this.digitalChannelUsesPulses(digitalID))
-            {
-                // Now fill in any digital pulses which may be on this channel...
-                currentSample = 0;
-                remainderTime = 0;
-                foreach (TimeStep step in TimeSteps)
-                {
-                    if (step.StepEnabled)
-                    {
-                        if (step.DigitalData[digitalID] != null)
-                        {
-                            if (step.DigitalData[digitalID].usesPulse())
-                            {
-                                Pulse pulse = step.DigitalData[digitalID].DigitalPulse;
-
-                                Pulse.PulseSampleTimes sampleTimes = pulse.getPulseSampleTimes(remainderTime, timestepSize, step.StepDuration.getBaseValue());
-
-                                int start = currentSample + sampleTimes.startSample;
-                                int end = currentSample + sampleTimes.endSample;
-
-                                start = Math.Max(0, start);
-                                end = Math.Min(end, ans.Length);
-                                for (int i = start; i < end; i++)
-                                {
-                                    ans[i] = pulse.PulseValue;
-                                }
-                            }
-                        }
-                        int nStepSamples = 0;
-                        computeNSamplesAndRemainderTime(ref nStepSamples, ref remainderTime, step.StepDuration.getBaseValue(), timestepSize);
-                        currentSample += nStepSamples;
-                    }
-
-                }
-            }
-        }
-
-        /// <summary>
-        /// Returns true if there is an enabled timestep in which the given channel uses a pulse.
-        /// </summary>
-        /// <param name="digitalID"></param>
-        /// <returns></returns>
-        public bool digitalChannelUsesPulses(int digitalID)
-        {
-            foreach (TimeStep step in TimeSteps)
-            {
-                if (step.DigitalData.ContainsKey(digitalID))
-                {
-                    if (step.DigitalData[digitalID].usesPulse())
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-      
-        /// <summary>
-        /// Computer digital output buffer for a given channel, using a variable timebase described by timebaseSegments.
-        /// Stores result in ans
-        /// </summary>
-        /// <param name="digitalID"></param>
-        /// <param name="masterTimebaseSampleDuration"></param>
-        /// <param name="ans"></param>
-        /// <param name="timebaseSegments"></param>
-        public void computeDigitalBuffer(int digitalID, double masterTimebaseSampleDuration, bool[] ans, TimestepTimebaseSegmentCollection timebaseSegments)
-        {
-
-            int currentSample = 0;
-
-            for (int stepID = 0; stepID < TimeSteps.Count; stepID++)
-            {
-                if (TimeSteps[stepID].StepEnabled)
-                {
-                    TimeStep currentStep = TimeSteps[stepID];
-                    bool channelValue = TimeSteps[stepID].getDigitalValue(digitalID, TimeSteps, stepID);
-                    int nSegmentSamples = 0;
-                    if (!timebaseSegments.ContainsKey(currentStep))
-                        throw new Exception("No timebase segment for timestep " + currentStep.ToString());
-
-                    nSegmentSamples = timebaseSegments.nSegmentSamples(currentStep);
-
-
-                    for (int j = 0; j < nSegmentSamples; j++)
-                    {
-                        ans[j + currentSample] = channelValue;
-                    }
-
-                    currentSample += nSegmentSamples;
-                }
-            }
-
-            ans[currentSample] = dwellWord().getDigitalValue(digitalID, TimeSteps, 0);
-
-            if (this.digitalChannelUsesPulses(digitalID))
-            {
-
-                int currentMasterSample = 0;
-                // now fill in any pulses which act on this channel...
-                foreach (TimeStep step in TimeSteps)
-                {
-                    if (step.StepEnabled)
-                    {
-
-                        int nMasterSamplesInTimestep = timebaseSegments.nMasterSamples(step);
-
-                        if (step.DigitalData.ContainsKey(digitalID))
-                        {
-                            if (step.DigitalData[digitalID].usesPulse())
-                            {
-                                Pulse pulse = step.DigitalData[digitalID].DigitalPulse;
-                                Pulse.PulseSampleTimes sampleTimes = pulse.getPulseSampleTimes(nMasterSamplesInTimestep, masterTimebaseSampleDuration);
-
-                                int start = currentMasterSample + sampleTimes.startSample;
-                                int end = currentMasterSample + sampleTimes.endSample;
-
-                                // ok. Paint the pulse...
-                                // to do this, we need to find which derived sample (ie sample in this buffer) corresponds to 
-                                // which master timestep.
-
-                                int derivedStart = getDerivedSampleFromMasterSample(start, timebaseSegments);
-                                int derivedEnd = getDerivedSampleFromMasterSample(end, timebaseSegments);
-
-                                derivedStart = Math.Max(0, derivedStart);
-                                derivedEnd = Math.Min(derivedEnd, ans.Length);
-
-                                for (int i = derivedStart; i < derivedEnd; i++)
-                                {
-                                    ans[i] = pulse.PulseValue;
-                                }
-                            }
-                        }
-                        currentMasterSample += nMasterSamplesInTimestep;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Returns the sample id of the first derived sample which is on or after the given master sample, given a set of variable timebase segments.
-        /// </summary>
-        /// <param name="masterSample"></param>
-        /// <param name="timebaseSegments"></param>
-        /// <returns></returns>
-        public int getDerivedSampleFromMasterSample(int masterSample, TimestepTimebaseSegmentCollection timebaseSegments)
-        {
-            int currentDerivedSample = 0;
-            int currentMasterSample=0;
-            if (masterSample==0)
-                return 0;
-
-            foreach (TimeStep step in TimeSteps)
-            {
-                if (step.StepEnabled)
-                {
-                    foreach (VariableTimebaseSegment segment in timebaseSegments[step])
-                    {
-                        for (int i = 0; i < segment.NSegmentSamples; i++)
-                        {
-                            currentMasterSample += segment.MasterSamplesPerSegmentSample;
-                            currentDerivedSample++;
-                            if (currentMasterSample >= masterSample)
-                                return currentDerivedSample;
-                        }
-                    }
-                }
-            }
-            return currentDerivedSample;
-        }
-
-
-        /// <summary>
-        /// Gets the master timebase sample from a given derived timebase sample.
-        /// </summary>
-        /// <param name="derivedSample"></param>
-        /// <param name="timebaseSegments"></param>
-        /// <returns></returns>
-        public int getMasterSampleFromDerivedSample(int derivedSample, TimestepTimebaseSegmentCollection timebaseSegments)
-        {
-            int currentDerivedSample = 0;
-            int currentMasterSample = 0;
-            if (derivedSample == 0)
-                return 0;
-            foreach (TimeStep step in TimeSteps)
-            {
-                if (step.StepEnabled)
-                {
-                    foreach (VariableTimebaseSegment segment in timebaseSegments[step])
-                    {
-                        for (int i = 0; i < segment.NSegmentSamples; i++)
-                        {
-                            currentMasterSample += segment.MasterSamplesPerSegmentSample;
-                            currentDerivedSample++;
-                            if (currentDerivedSample >= derivedSample)
-                                return currentMasterSample;
-                        }
-                    }
-                }
-            }
-            return currentMasterSample;
-        }
-
-        public void computeAnalogBuffer(int analogChannelID, double masterTimebaseSampleDuration, double[] ans, TimestepTimebaseSegmentCollection timebaseSegments)
-        {
-            int currentSample = 0;
-            double dwellingValue = dwellWord().getEndAnalogValue(analogChannelID, Variables, CommonWaveforms);
-            AnalogGroup currentlyRunningGroup = null;
-            double groupRunningTime = 0;
-
-
-            for (int stepID = 0; stepID < TimeSteps.Count; stepID++)
-            {
-                TimeStep currentStep = TimeSteps[stepID];
-                if (currentStep.StepEnabled)
-                {
-                    if (currentStep.AnalogGroup != null)
-                    {
-                        if (currentStep.AnalogGroup.channelEnabled(analogChannelID))
-                        {
-                            currentlyRunningGroup = currentStep.AnalogGroup;
-                            groupRunningTime = 0;
-                        }
-                    }
-
-
-                    if (currentlyRunningGroup == null)
-                    {
-                        int nSegmentSamples = timebaseSegments.nSegmentSamples(currentStep);
-
-
-
-                        for (int j = 0; j < nSegmentSamples; j++)
-                        {
-                            ans[j + currentSample] = dwellingValue;
-                        }
-                        currentSample += nSegmentSamples;
-                    }
-                    else
-                    {
-                        Waveform runningWaveform = currentlyRunningGroup.ChannelDatas[analogChannelID].waveform;
-                        double waveformRunningTime = groupRunningTime;
-                        foreach (VariableTimebaseSegment segment in timebaseSegments[currentStep])
-                        {
-                            
-                            runningWaveform.getInterpolation(segment.NSegmentSamples, waveformRunningTime,
-                                waveformRunningTime + segment.NSegmentSamples * segment.MasterSamplesPerSegmentSample * masterTimebaseSampleDuration,
-                                ans,
-                                currentSample, Variables, CommonWaveforms);
-                            currentSample += segment.NSegmentSamples;
-                            waveformRunningTime += segment.NSegmentSamples * segment.MasterSamplesPerSegmentSample * masterTimebaseSampleDuration;
-                        }
-
-                        groupRunningTime += currentStep.StepDuration.getBaseValue();
-                        if (runningWaveform.getEffectiveWaveformDuration() <= groupRunningTime)
-                        {
-                            currentlyRunningGroup = null;
-                        }
-
-                        dwellingValue = runningWaveform.getValueAtTime(runningWaveform.WaveformDuration.getBaseValue(),
-                            Variables, CommonWaveforms);
-                    }
-                }
-            }
-
-            ans[currentSample] = dwellWord().getEndAnalogValue(analogChannelID, Variables, CommonWaveforms);
-        }
-
-        public static void fillBoolArray(bool[] array, bool value, int startIndex, int nEntries)
-        {
-            for (int i = 0; i < nEntries; i++)
-            {
-                array[i + startIndex] = value;
-            }
-        }
-
-        /// <summary>
-        /// returns the index of the next timestep (after the one indicated by startIndex) which
-        /// is both enabled and which is not "continue" with respect to analog channel id specified.
-        /// Returns step count if there is no next enabled step, or if the input data is somehow invalid.
-        /// </summary>
-        /// <param name="timeSteps"></param>
-        /// <param name="startIndex"></param>
-        /// <returns></returns>
-        public static int findNextAnalogChannelEnabledTimestep(List<TimeStep> timeSteps, int startIndex, int analogID)
-        {
-            for (int i = startIndex+1; i < timeSteps.Count; i++)
-            {
-                if (timeSteps[i] != null)
-                {
-                    if (timeSteps[i].StepEnabled)
-                    {
-                        if (timeSteps[i].AnalogGroup != null)
-                        {
-                            if (timeSteps[i].AnalogGroup.channelEnabled(analogID))
-                                return i;
-                        }
-                    }
-                }
-            }
-            return timeSteps.Count;
-        }
-
-        public int findNextAnalogChannelEnabledTimestep(int startIndex, int analogID)
-        {
-            return SequenceData.findNextAnalogChannelEnabledTimestep(this.TimeSteps, startIndex, analogID);
-        }
-
-        /// <summary>
-        /// returns the index of the next timestep (after the one indicated by startIndex) which
-        /// is both enabled and which is not "continue" with respect to gpib channel id specified.
-        /// Returns step count if there is no next enabled step, or if the input data is somehow invalid.
-        /// </summary>
-        /// <param name="timeSteps"></param>
-        /// <param name="startIndex"></param>
-        /// <returns></returns>
-        public static int findNextGpibChannelEnabledTimestep(List<TimeStep> timeSteps, int startIndex, int gpibID)
-        {
-            for (int i = startIndex + 1; i < timeSteps.Count; i++)
-            {
-                if (timeSteps[i]!=null) {
-                    if (timeSteps[i].StepEnabled) {
-                        if (timeSteps[i].GpibGroup!=null) {
-                            if (timeSteps[i].GpibGroup.channelEnabled(gpibID))
-                            {
-                                return i;
-                            }
-                        }
-                    }
-                }
-            }
-            return timeSteps.Count;
-        }
-
-        /// <summary>
-        /// Returns the ID of the next enabled timestep after startIndex (not including startIndex).
-        /// Returns TimeSteps.Count if there are no further enabled timesteps.
-        /// </summary>
-        /// <param name="startIndex"></param>
-        /// <returns></returns>
-        public int findNextEnabledTimestep(int startIndex)
-        {
-            for (int i = startIndex+1; i < TimeSteps.Count; i++)
-            {
-                if (TimeSteps[i].StepEnabled)
-                    return i;
-            }
-            return TimeSteps.Count;
-        }
-
-        public int findNextGpibChannelEnabledTimestep(int startIndex, int gpibID)
-        {
-            return SequenceData.findNextGpibChannelEnabledTimestep(this.TimeSteps, startIndex, gpibID);
-        }
-
-        public int findNextRS232ChannelEnabledTimestep(int startIndex, int rs232ID)
-        {
-            for (int i = startIndex + 1; i < TimeSteps.Count; i++)
-            {
-                if (TimeSteps[i] != null)
-                {
-                    if (TimeSteps[i].StepEnabled)
-                    {
-                        if (TimeSteps[i].rs232Group!=null)
-                        {
-                            if (TimeSteps[i].rs232Group.channelEnabled(rs232ID))
-                            {
-                                return i;
-                            }
-                        }
-                    }
-                }
-            }
-            return TimeSteps.Count;
-        }
-
-        /// <summary>
-        /// Returns the total duration of all the enabled timesteps between start and end. Including start, but not including end.
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
-        /// <returns></returns>
-        public double timeBetweenSteps(int start, int end)
-        {
-            double ans = 0;
-            for (int i = start; i < end; i++)
-            {
-                if (i >= 0 && i < TimeSteps.Count)
-                {
-                    if (TimeSteps[i] != null)
-                    {
-                        if (TimeSteps[i].StepEnabled)
-                            ans += TimeSteps[i].StepDuration.getBaseValue();
-                    }
-                }
-            }
-            return ans;
-        }
-
-
-        
-
-    
         /// <summary>
         /// enumeration of the various variable timebase types supported. 
         /// </summary>
@@ -1612,7 +1524,7 @@ namespace DataStructures
         /// <param name="timebaseType"></param>
         /// <param name="masterTimebaseSampleDuration"></param>
         /// <returns></returns>
-        public TimestepTimebaseSegmentCollection generateVariableTimebaseSegments(VariableTimebaseTypes timebaseType,  double masterTimebaseSampleDuration)
+        public TimestepTimebaseSegmentCollection generateVariableTimebaseSegments(VariableTimebaseTypes timebaseType, double masterTimebaseSampleDuration)
         {
             switch (timebaseType)
             {
@@ -1637,7 +1549,7 @@ namespace DataStructures
                                     List<AnalogGroup> groups = new List<AnalogGroup>(runningGroups.Keys);
                                     foreach (AnalogGroup ag in groups)
                                     {
-                                        if (runningGroups[ag] < 2 * masterTimebaseSampleDuration) 
+                                        if (runningGroups[ag] < 2 * masterTimebaseSampleDuration)
                                         {
                                             runningGroups.Remove(ag);
                                         }
@@ -1646,7 +1558,7 @@ namespace DataStructures
 
                                 if (runningGroups.Count == 0)
                                 {
-                                    
+
                                     timestepSegments.Add(new VariableTimebaseSegment(1, (int)(currentStep.StepDuration.getBaseValue() / masterTimebaseSampleDuration)));
                                 }
                                 else
@@ -1694,34 +1606,34 @@ namespace DataStructures
 
                                         int nSegmentSamples = (int)(timeToRunGroup / ((double)masterTimebaseSamplesPerSegmentSample * masterTimebaseSampleDuration));
 
-                               //         if (nSegmentSamples > 0)
-                               //         {
+                                        //         if (nSegmentSamples > 0)
+                                        //         {
 
-                                            double actualGroupRunTime = nSegmentSamples * masterTimebaseSampleDuration * masterTimebaseSamplesPerSegmentSample;
-                                            if (nSegmentSamples != 0)
-                                            {
-                                                timestepSegments.Add(new VariableTimebaseSegment(nSegmentSamples, masterTimebaseSamplesPerSegmentSample));
-                                            }
-                                            else
-                                            {
-                                            }
-                                            runningGroups.Remove(smallestResolutionGroup);
-                                            List<AnalogGroup> groups = new List<AnalogGroup>(runningGroups.Keys);
-                                            foreach (AnalogGroup ag in groups)
-                                            {
-                                                runningGroups[ag] -= actualGroupRunTime;
-                                                if (runningGroups[ag] <= 2 * masterTimebaseSampleDuration)
-                                                    runningGroups.Remove(ag);
+                                        double actualGroupRunTime = nSegmentSamples * masterTimebaseSampleDuration * masterTimebaseSamplesPerSegmentSample;
+                                        if (nSegmentSamples != 0)
+                                        {
+                                            timestepSegments.Add(new VariableTimebaseSegment(nSegmentSamples, masterTimebaseSamplesPerSegmentSample));
+                                        }
+                                        else
+                                        {
+                                        }
+                                        runningGroups.Remove(smallestResolutionGroup);
+                                        List<AnalogGroup> groups = new List<AnalogGroup>(runningGroups.Keys);
+                                        foreach (AnalogGroup ag in groups)
+                                        {
+                                            runningGroups[ag] -= actualGroupRunTime;
+                                            if (runningGroups[ag] <= 2 * masterTimebaseSampleDuration)
+                                                runningGroups.Remove(ag);
 
-                                            }
+                                        }
 
 
-                                            timeIntoCurrentStep += actualGroupRunTime;
-                               //         }
-                               //         else
-                               //         {
-                               //             timeIntoCurrentStep = currentStep.StepDuration.getBaseValue();
-                               //         }
+                                        timeIntoCurrentStep += actualGroupRunTime;
+                                        //         }
+                                        //         else
+                                        //         {
+                                        //             timeIntoCurrentStep = currentStep.StepDuration.getBaseValue();
+                                        //         }
                                     }
 
                                     // if the present collection of segments does not get us to the end of the timestep, add
@@ -1777,7 +1689,7 @@ namespace DataStructures
                                             // Now, if necessary, add small jog in and jog out segment
                                             int jogIn = samplesTillImpig;
                                             int jogOut = segmentToSplit.MasterSamplesPerSegmentSample - jogIn;
-                                            
+
                                             // have to be carefull. We can't jog in or out by less than 2.
                                             // If both are either greater than 1 or equal to zero, no problem.
                                             // If jogIn is 1, we will make it 2 if we can (ie if jogOut is not 0 or 2).
@@ -1867,7 +1779,7 @@ namespace DataStructures
                                 {
                                     timestepSegments.Remove(seg);
                                 }
-                                
+
 
                                 ans.Add(currentStep, timestepSegments);
                             }
@@ -1909,7 +1821,8 @@ namespace DataStructures
                 set { masterSamplesPerSegmentSample = value; }
             }
 
-            public VariableTimebaseSegment(int nSegmentSamples, int masterSamplesPerSegmentSample)  {
+            public VariableTimebaseSegment(int nSegmentSamples, int masterSamplesPerSegmentSample)
+            {
                 this.nSegmentSamples = nSegmentSamples;
                 this.masterSamplesPerSegmentSample = masterSamplesPerSegmentSample;
             }
@@ -1921,9 +1834,329 @@ namespace DataStructures
 
             public override string ToString()
             {
-                return NSegmentSamples.ToString() + " X "  + masterSamplesPerSegmentSample.ToString() + " (nseg * mast)";
-                
+                return NSegmentSamples.ToString() + " X " + masterSamplesPerSegmentSample.ToString() + " (nseg * mast)";
+
             }
+        }
+
+        #endregion
+
+        #region Buffer generation methods
+
+        public double[] computeAnalogBuffer(int analogChannelID, double timeStepSize)
+        {
+            int nSamples = this.nSamples(timeStepSize);
+
+            double[] ans = new double[nSamples];
+
+            this.computeAnalogBuffer(analogChannelID, timeStepSize, ans);
+            return ans;
+        }
+
+       
+
+        /// <summary>
+        /// This function should hopefully handle timing intelligently now, keeping track of "remainder time" when there are timesteps with 
+        /// durations that are not an integer multiple of the timestepsize.
+        /// </summary>
+        /// <param name="analogChannelID"></param>
+        /// <param name="timeStepSize"></param>
+        /// <returns></returns>
+        public void computeAnalogBuffer(int analogChannelID, double timeStepSize, double [] ans)
+        {
+            int nSamples = this.nSamples(timeStepSize);
+
+        
+            ans[0] = dwellWord().getEndAnalogValue(analogChannelID, Variables, CommonWaveforms);
+
+
+            // forward fast to first timestep which actually uses this channel
+            int currentStep = 0;
+            int currentSample = 0;
+
+            double remainderTime = 0;
+
+
+            currentStep = nextTimestepWithAnalogChannelEnabled(currentStep, analogChannelID);
+
+            int nDwellSamples = nSamplesBetweenTimeSteps(0, currentStep, ref remainderTime, timeStepSize);
+
+            // fill in the dwell time
+            fillArrayRange(ans[0], ans, currentSample, nDwellSamples);
+
+            currentSample += nDwellSamples;
+
+
+            // now the timestep of the currentStep should be one that references analogChannelID
+
+
+            while (true)
+            {
+                if (currentStep == TimeSteps.Count)
+                    break;
+
+                int endStep = nextTimestepWithAnalogChannelEnabled(currentStep+1, analogChannelID);
+
+                double initialRemainderTime = remainderTime;
+                int nStepSamples = nSamplesBetweenTimeSteps(currentStep, endStep, ref remainderTime, timeStepSize);
+
+                /*Commented out Nov 28 2007. May be responsible for loss of sync between analog and digital data.
+                 * 
+                 * double interpolationStartTime = initialRemainderTime;
+                double interpolationEndTime = nStepSamples * timeStepSize + remainderTime;
+                */
+
+                double interpolationStartTime = 0;
+                double interpolationEndTime = nStepSamples * timeStepSize;
+
+
+                Waveform theWaveform = TimeSteps[currentStep].getChannelWaveform(analogChannelID);
+
+                theWaveform.getInterpolation(nStepSamples,
+                    interpolationStartTime, interpolationEndTime, ans, currentSample, Variables, CommonWaveforms);
+                
+                currentStep = endStep;
+                currentSample += nStepSamples;
+            }
+
+            if (currentSample != nSamples - 2)
+                ans[nSamples - 2] = ans[nSamples - 3];
+
+            ans[nSamples - 1] = ans[0];
+            return;
+        }
+
+
+
+        public bool[] computeDigitalBuffer(int digitalID, double timestepSize)
+        {
+            bool [] ans = new bool[nSamples(timestepSize)];
+            computeDigitalBuffer(digitalID, timestepSize, ans);
+            return ans;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="digitalID"></param>
+        /// <param name="timestepSize"></param>
+        /// <returns></returns>
+        public void computeDigitalBuffer(int digitalID, double timestepSize, bool [] ans)
+        {
+            int nSamples = this.nSamples(timestepSize);
+
+            ans[0] = dwellWord().getDigitalValue(digitalID, TimeSteps, 0);
+
+            if (nSamples == 1)
+                return;
+
+            int currentSample = 0;
+            int currentStep = findNextEnabledTimestep(-1);
+            double remainderTime = 0;
+
+            while (true)
+            {
+                if (currentStep == TimeSteps.Count)
+                    break;
+
+                int nStepSamples = 0;
+                computeNSamplesAndRemainderTime(ref nStepSamples, ref remainderTime, TimeSteps[currentStep].StepDuration.getBaseValue(), timestepSize);
+                bool value = TimeSteps[currentStep].getDigitalValue(digitalID, TimeSteps, currentStep);
+                fillBoolArray(ans, value, currentSample, nStepSamples);
+                currentSample += nStepSamples;
+                currentStep = findNextEnabledTimestep(currentStep);
+            }
+
+            if (currentSample != nSamples - 2)
+                ans[nSamples - 2] = ans[nSamples - 3];
+
+            ans[nSamples - 1] = ans[0];
+
+            if (this.digitalChannelUsesPulses(digitalID))
+            {
+                // Now fill in any digital pulses which may be on this channel...
+                currentSample = 0;
+                remainderTime = 0;
+                foreach (TimeStep step in TimeSteps)
+                {
+                    if (step.StepEnabled)
+                    {
+                        if (step.DigitalData[digitalID] != null)
+                        {
+                            if (step.DigitalData[digitalID].usesPulse())
+                            {
+                                Pulse pulse = step.DigitalData[digitalID].DigitalPulse;
+
+                                Pulse.PulseSampleTimes sampleTimes = pulse.getPulseSampleTimes(remainderTime, timestepSize, step.StepDuration.getBaseValue());
+
+                                int start = currentSample + sampleTimes.startSample;
+                                int end = currentSample + sampleTimes.endSample;
+
+                                start = Math.Max(0, start);
+                                end = Math.Min(end, ans.Length);
+                                for (int i = start; i < end; i++)
+                                {
+                                    ans[i] = pulse.PulseValue;
+                                }
+                            }
+                        }
+                        int nStepSamples = 0;
+                        computeNSamplesAndRemainderTime(ref nStepSamples, ref remainderTime, step.StepDuration.getBaseValue(), timestepSize);
+                        currentSample += nStepSamples;
+                    }
+
+                }
+            }
+        }
+
+  
+      
+        /// <summary>
+        /// Computer digital output buffer for a given channel, using a variable timebase described by timebaseSegments.
+        /// Stores result in ans
+        /// </summary>
+        /// <param name="digitalID"></param>
+        /// <param name="masterTimebaseSampleDuration"></param>
+        /// <param name="ans"></param>
+        /// <param name="timebaseSegments"></param>
+        public void computeDigitalBuffer(int digitalID, double masterTimebaseSampleDuration, bool[] ans, TimestepTimebaseSegmentCollection timebaseSegments)
+        {
+
+            int currentSample = 0;
+
+            for (int stepID = 0; stepID < TimeSteps.Count; stepID++)
+            {
+                if (TimeSteps[stepID].StepEnabled)
+                {
+                    TimeStep currentStep = TimeSteps[stepID];
+                    bool channelValue = TimeSteps[stepID].getDigitalValue(digitalID, TimeSteps, stepID);
+                    int nSegmentSamples = 0;
+                    if (!timebaseSegments.ContainsKey(currentStep))
+                        throw new Exception("No timebase segment for timestep " + currentStep.ToString());
+
+                    nSegmentSamples = timebaseSegments.nSegmentSamples(currentStep);
+
+
+                    for (int j = 0; j < nSegmentSamples; j++)
+                    {
+                        ans[j + currentSample] = channelValue;
+                    }
+
+                    currentSample += nSegmentSamples;
+                }
+            }
+
+            ans[currentSample] = dwellWord().getDigitalValue(digitalID, TimeSteps, 0);
+
+            if (this.digitalChannelUsesPulses(digitalID))
+            {
+
+                int currentMasterSample = 0;
+                // now fill in any pulses which act on this channel...
+                foreach (TimeStep step in TimeSteps)
+                {
+                    if (step.StepEnabled)
+                    {
+
+                        int nMasterSamplesInTimestep = timebaseSegments.nMasterSamples(step);
+
+                        if (step.DigitalData.ContainsKey(digitalID))
+                        {
+                            if (step.DigitalData[digitalID].usesPulse())
+                            {
+                                Pulse pulse = step.DigitalData[digitalID].DigitalPulse;
+                                Pulse.PulseSampleTimes sampleTimes = pulse.getPulseSampleTimes(nMasterSamplesInTimestep, masterTimebaseSampleDuration);
+
+                                int start = currentMasterSample + sampleTimes.startSample;
+                                int end = currentMasterSample + sampleTimes.endSample;
+
+                                // ok. Paint the pulse...
+                                // to do this, we need to find which derived sample (ie sample in this buffer) corresponds to 
+                                // which master timestep.
+
+                                int derivedStart = getDerivedSampleFromMasterSample(start, timebaseSegments);
+                                int derivedEnd = getDerivedSampleFromMasterSample(end, timebaseSegments);
+
+                                derivedStart = Math.Max(0, derivedStart);
+                                derivedEnd = Math.Min(derivedEnd, ans.Length);
+
+                                for (int i = derivedStart; i < derivedEnd; i++)
+                                {
+                                    ans[i] = pulse.PulseValue;
+                                }
+                            }
+                        }
+                        currentMasterSample += nMasterSamplesInTimestep;
+                    }
+                }
+            }
+        }
+
+ 
+
+        public void computeAnalogBuffer(int analogChannelID, double masterTimebaseSampleDuration, double[] ans, TimestepTimebaseSegmentCollection timebaseSegments)
+        {
+            int currentSample = 0;
+            double dwellingValue = dwellWord().getEndAnalogValue(analogChannelID, Variables, CommonWaveforms);
+            AnalogGroup currentlyRunningGroup = null;
+            double groupRunningTime = 0;
+
+
+            for (int stepID = 0; stepID < TimeSteps.Count; stepID++)
+            {
+                TimeStep currentStep = TimeSteps[stepID];
+                if (currentStep.StepEnabled)
+                {
+                    if (currentStep.AnalogGroup != null)
+                    {
+                        if (currentStep.AnalogGroup.channelEnabled(analogChannelID))
+                        {
+                            currentlyRunningGroup = currentStep.AnalogGroup;
+                            groupRunningTime = 0;
+                        }
+                    }
+
+
+                    if (currentlyRunningGroup == null)
+                    {
+                        int nSegmentSamples = timebaseSegments.nSegmentSamples(currentStep);
+
+
+
+                        for (int j = 0; j < nSegmentSamples; j++)
+                        {
+                            ans[j + currentSample] = dwellingValue;
+                        }
+                        currentSample += nSegmentSamples;
+                    }
+                    else
+                    {
+                        Waveform runningWaveform = currentlyRunningGroup.ChannelDatas[analogChannelID].waveform;
+                        double waveformRunningTime = groupRunningTime;
+                        foreach (VariableTimebaseSegment segment in timebaseSegments[currentStep])
+                        {
+                            
+                            runningWaveform.getInterpolation(segment.NSegmentSamples, waveformRunningTime,
+                                waveformRunningTime + segment.NSegmentSamples * segment.MasterSamplesPerSegmentSample * masterTimebaseSampleDuration,
+                                ans,
+                                currentSample, Variables, CommonWaveforms);
+                            currentSample += segment.NSegmentSamples;
+                            waveformRunningTime += segment.NSegmentSamples * segment.MasterSamplesPerSegmentSample * masterTimebaseSampleDuration;
+                        }
+
+                        groupRunningTime += currentStep.StepDuration.getBaseValue();
+                        if (runningWaveform.getEffectiveWaveformDuration() <= groupRunningTime)
+                        {
+                            currentlyRunningGroup = null;
+                        }
+
+                        dwellingValue = runningWaveform.getValueAtTime(runningWaveform.WaveformDuration.getBaseValue(),
+                            Variables, CommonWaveforms);
+                    }
+                }
+            }
+
+            ans[currentSample] = dwellWord().getEndAnalogValue(analogChannelID, Variables, CommonWaveforms);
         }
 
         /// <summary>
@@ -2066,113 +2299,11 @@ namespace DataStructures
 
         }
 
-        /// <summary>
-        /// Returns a dictionary giving the running analog groups, as well as the remaining time until their effective duration
-        /// is over, as determined at the beginning of the timestep given by timestepID.
-        /// </summary>
-        /// <param name="timeStepID"></param>
-        /// <returns></returns>
-        public Dictionary<AnalogGroup, double> getRunningGroupRemainingTime(int timeStepID)
-        {
-            Dictionary<AnalogGroup, double> ans = getRunningAnalogGroups(timeStepID);
-            List<AnalogGroup> groups = new List<AnalogGroup>(ans.Keys);
-            foreach (AnalogGroup ag in groups)
-            {
-                ans[ag] = ag.getEffectiveDuration() - ans[ag];
-            }
-            return ans;
-        }
-
-        /// <summary>
-        /// Returns a dictionary containing all of the analog groups that are active at a given timestep, as well as a double
-        /// representing how long they have been running.
-        /// 
-        /// An analog group is considered to be "active" at a certain timestep if:
-        /// 1) Its effective duration has not elapsed. AND
-        /// 2) It has at least one channel enabled which has not been subsequently interrupted.
-        /// </summary>
-        /// <param name="timeStepID"></param>
-        /// <returns></returns>
-        public Dictionary<AnalogGroup, double> getRunningAnalogGroups(int timeStepID)
-        {
-            Dictionary<AnalogGroup, double> ans = new Dictionary<AnalogGroup, double>();
-
-            Dictionary<int, bool> channelActive = new Dictionary<int, bool>();
-
-            // This function works by checking each of the previous sequence timesteps to see if it started an analog group,
-            // and if so whether that group is still running.
-
-            for (int startingID = 0; startingID <= timeStepID; startingID++)
-            {
-                if (TimeSteps[startingID].StepEnabled)
-                {
-                    if (TimeSteps[startingID].AnalogGroup != null)
-                    {
-                        AnalogGroup ag = TimeSteps[startingID].AnalogGroup;
-
-                        bool groupStillRunning = true;
-
-                        double elapsedTime = 0;
-                        double effectiveDuration = ag.getEffectiveDuration();
-                        channelActive.Clear();
-                        foreach (int channelID in ag.ChannelDatas.Keys)
-                        {
-                            if (ag.channelEnabled(channelID))
-                                channelActive.Add(channelID, true);
-                        }
-
-                        double previousTimestepDuration = TimeSteps[startingID].StepDuration.getBaseValue();
-
-                        for (int interimStep = startingID + 1; interimStep <= timeStepID; interimStep++)
-                        {
-                            if (TimeSteps[interimStep].StepEnabled)
-                            {
-                                elapsedTime += previousTimestepDuration;
-                                previousTimestepDuration = TimeSteps[interimStep].StepDuration.getBaseValue();
-                                if (elapsedTime > effectiveDuration)
-                                {
-                                    groupStillRunning = false;
-                                    break;
-                                }
-
-                                if (TimeSteps[interimStep].AnalogGroup != null)
-                                {
-                                    AnalogGroup interruptingGroup = TimeSteps[interimStep].AnalogGroup;
-                                    foreach (int channelID in interruptingGroup.ChannelDatas.Keys)
-                                    {
-                                        if (interruptingGroup.channelEnabled(channelID))
-                                        {
-                                            if (channelActive.ContainsKey(channelID))
-                                            {
-                                                channelActive[channelID] = false;
-                                            }
-                                        }
-                                    }
-                                }
-
-                                if (!channelActive.ContainsValue(true))
-                                {
-                                    groupStillRunning = false;
-                                    break;
-                                }
-
-                            }
-                        }
-
-                        if (groupStillRunning)
-                        {
-                            ans.Add(ag, elapsedTime);
-                        }
-                    }
-                }
-            }
-
-            return ans;
-        }
+        #endregion
 
         #region Code for dealing with digital pulses.
 
- 
+
         /// <summary>
         /// Used in calculating a variable timebase, in the presenece of digital pulses. An impingement 
         /// is a point in time where a digital value is changing due to a pulse, but that is not either the start
@@ -2238,76 +2369,11 @@ namespace DataStructures
             dict[impigStep].Add(impig);
         }
 
-        public TimeStep getTimestepAtSample(int nSamples, double timeStepSize) 
-        {
-            int count = 0;
-            double remainderTime = 0;
-            foreach (TimeStep step in TimeSteps) {
-                if (step.StepEnabled)
-                {
-                    int temp = 0;
-                    computeNSamplesAndRemainderTime(ref temp, ref remainderTime, step.StepDuration.getBaseValue(), timeStepSize);
-                    count += temp;
-                    if (count > nSamples)
-                        return step;
-                }
-            }
-            return null;
-        }
-
-        public int getSamplesAtTimestep(TimeStep step, double timeStepSize)
-        {
-            int count = 0;
-            double remainderTime = 0;
-            foreach (TimeStep ts in TimeSteps)
-            {
-                if (ts == step)
-                    return count;
-                if (ts.StepEnabled)
-                {
-                    int temp = 0;
-                    computeNSamplesAndRemainderTime(ref temp, ref remainderTime, ts.StepDuration.getBaseValue(), timeStepSize);
-                    count += temp;
-                }
-            }
-            return -1;
-        }
 
 
 #endregion
 
-
-
-        /// <summary>
-        /// Gets the number of timesteps that have enabled set to true.
-        /// </summary>
-        /// <returns></returns>
-        public int getNEnabledTimesteps()
-        {
-            int ans = 0;
-            foreach (TimeStep st in TimeSteps)
-                if (st.StepEnabled)
-                    ans++;
-            return ans;
-        }
-
-        public int getNthEnabledTimestepID(int N)
-        {
-            for (int i = 0; i < TimeSteps.Count; i++)
-            {
-                if (TimeSteps[i].StepEnabled)
-                {
-                    N--;
-                }
-                if (N == 0)
-                    return i;
-            }
-            return -1;
-        }
-
-
-        #endregion
-
+        #region Search and search/replace methods
 
         /// <summary>
         /// Similar to usedVariables(), but for waveforms
@@ -2664,41 +2730,9 @@ namespace DataStructures
                 rs232Groups.Remove(replaceMe);
         }
 
-        /// <summary>
-        /// Returns true if all the following conditions are met:
-        /// 1) Timestep group contains timesteps.
-        /// 2) Timesteps contained within group are consecutive.
-        /// </summary>
-        /// <returns></returns>
-        public bool TimestepGroupIsLoopable(TimestepGroup tsg)
-        {
-            if (tsg == null)
-                return false;
-            if (!TimestepGroups.Contains(tsg))
-                return false;
+        #endregion
 
-            List<TimeStep> memberSteps = new List<TimeStep>();
-            List<int> memberStepIds = new List<int>();
-            foreach (TimeStep step in TimeSteps)
-            {
-                if (step.MyTimestepGroup == tsg)
-                {
-                    memberSteps.Add(step);
-                    memberStepIds.Add(TimeSteps.IndexOf(step));
-                }
-            }
-
-            if (memberStepIds.Count == 0)
-                return false;
-
-            int firstVal = memberStepIds[0];
-            for (int i = 0; i < memberStepIds.Count; i++)
-            {
-                if (memberStepIds[i] != firstVal + i)
-                    return false;
-            }
-            return true;
-        }
+        #region Looping related utility functions
 
         /// <summary>
         /// Should be run whenever timesteps are created / inserted / moved,
@@ -2787,6 +2821,7 @@ namespace DataStructures
                 }
             }
         }
+        #endregion
 
         #region Version Number Tracking
 
