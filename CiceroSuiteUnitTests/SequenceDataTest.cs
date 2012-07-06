@@ -106,17 +106,17 @@ namespace CiceroSuiteUnitTests
         public void retriggerOptionsSerializationTest()
         {
             SequenceData target = (SequenceData)SharedTestFunctions.loadTestFile("retriggers.seq", typeof(SequenceData));
-            Assert.AreEqual(false, target.TimeSteps[0].WaitForRetrigger);
-            Assert.AreEqual(true, target.TimeSteps[1].WaitForRetrigger);
-            Assert.AreEqual(true, target.TimeSteps[2].WaitForRetrigger);
+            Assert.AreEqual(false, target.TimeSteps[0].RetriggerOptions.WaitForRetrigger);
+            Assert.AreEqual(true, target.TimeSteps[1].RetriggerOptions.WaitForRetrigger);
+            Assert.AreEqual(true, target.TimeSteps[2].RetriggerOptions.WaitForRetrigger);
 
-            Assert.AreEqual(true, target.TimeSteps[1].RetriggerOnEdge);
-            Assert.AreEqual(true, target.TimeSteps[1].RetriggerOnNegativeValueOrEdge);
+            Assert.AreEqual(true, target.TimeSteps[1].RetriggerOptions.RetriggerOnEdge);
+            Assert.AreEqual(true, target.TimeSteps[1].RetriggerOptions.RetriggerOnNegativeValueOrEdge);
 
-            Assert.AreEqual(false, target.TimeSteps[2].RetriggerOnEdge);
-            Assert.AreEqual(false, target.TimeSteps[2].RetriggerOnNegativeValueOrEdge);
+            Assert.AreEqual(false, target.TimeSteps[2].RetriggerOptions.RetriggerOnEdge);
+            Assert.AreEqual(false, target.TimeSteps[2].RetriggerOptions.RetriggerOnNegativeValueOrEdge);
 
-            Assert.AreEqual((double)17, target.TimeSteps[1].RetriggerTimeout.getBaseValue());            
+            Assert.AreEqual((double)17, target.TimeSteps[1].RetriggerOptions.RetriggerTimeout.getBaseValue());            
         }
 
         /// <summary>
