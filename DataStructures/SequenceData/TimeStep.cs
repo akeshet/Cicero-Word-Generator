@@ -393,6 +393,18 @@ namespace DataStructures
         }
 
         /// <summary>
+        /// Returns false if step is null.
+        /// </summary>
+        /// <param name="step"></param>
+        /// <returns></returns>
+        public static bool isEnabled(TimeStep step)
+        {
+            if (step == null)
+                return false;
+            return step.StepEnabled;
+        }
+
+        /// <summary>
         /// Doesn't really do anything.
         /// </summary>
         /// <returns></returns>

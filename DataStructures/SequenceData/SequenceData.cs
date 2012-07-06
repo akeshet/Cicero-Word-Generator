@@ -21,6 +21,7 @@ see <http://www.gnu.org/licenses/>.
 using System;
 using System.ComponentModel;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using DataStructures;
 using System.Runtime.Serialization;
@@ -248,12 +249,9 @@ namespace DataStructures
 
                 double ans = 0;
 
-                foreach (TimeStep step in TimeSteps)
+                foreach (TimeStep step in enabledTimeSteps())
                 {
-                    if (step.StepEnabled)
-                    {
-                        ans += step.StepDuration.getBaseValue();
-                    }
+                    ans += step.StepDuration.getBaseValue();
                 }
 
                 return ans;
@@ -295,14 +293,11 @@ namespace DataStructures
                     }
                 }
             }
-            foreach (Variable var in variables)
+
+            foreach (Variable var in variables.FindAll(v => v.DerivedVariable))
             {
-                if (var.DerivedVariable)
-                {
-                    var.parseVariableFormula(variables);
-                }
+                var.parseVariableFormula(variables);
             }
-            
         }
 
 
@@ -496,16 +491,9 @@ namespace DataStructures
         }
 
         [Category("Sequence"), Description("A list of just the enabled timesteps used in the sequence.")]
-        public List<TimeStep> enabledTimeSteps()
+        public ReadOnlyCollection<TimeStep> enabledTimeSteps()
         {
-            List<TimeStep> ans = new List<TimeStep>();
-            foreach (TimeStep step in this.TimeSteps)
-            {
-                if (step != null)
-                    if (step.StepEnabled)
-                        ans.Add(step);
-            }
-            return ans;
+            return this.TimeSteps.FindAll(TimeStep.isEnabled).AsReadOnly();
         }
 
         [Category("Sequence"), Description("The number of timesteps (included disabled ones) in the sequence.")]
@@ -666,19 +654,18 @@ namespace DataStructures
             }
         }
 
+        /// <summary>
+        /// Returns the first timestep after elasped time from sequence start (in seconds) given by time.
+        /// Note
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
         public TimeStep getTimeStepAtTime(double time)
         {
             if (time < 0) return null;
 
-            foreach (TimeStep step in TimeSteps)
+            foreach (TimeStep step in enabledTimeSteps())
             {
-                if (step != null)
-                {
-                    if (step.StepEnabled)
-                    {
-                        time -= step.StepDuration.getBaseValue();
-                    }
-                }
                 if (time <= 0)
                     return step;
             }
@@ -848,16 +835,13 @@ namespace DataStructures
         {
             int count = 0;
             double remainderTime = 0;
-            foreach (TimeStep step in TimeSteps)
+            foreach (TimeStep step in enabledTimeSteps())
             {
-                if (step.StepEnabled)
-                {
-                    int temp = 0;
-                    computeNSamplesAndRemainderTime(ref temp, ref remainderTime, step.StepDuration.getBaseValue(), timeStepSize);
-                    count += temp;
-                    if (count > nSamples)
-                        return step;
-                }
+                int temp = 0;
+                computeNSamplesAndRemainderTime(ref temp, ref remainderTime, step.StepDuration.getBaseValue(), timeStepSize);
+                count += temp;
+                if (count > nSamples)
+                    return step;
             }
             return null;
         }
@@ -887,11 +871,7 @@ namespace DataStructures
         /// <returns></returns>
         public int getNEnabledTimesteps()
         {
-            int ans = 0;
-            foreach (TimeStep st in TimeSteps)
-                if (st.StepEnabled)
-                    ans++;
-            return ans;
+            return enabledTimeSteps().Count;
         }
 
         public int getNthEnabledTimestepID(int N)
@@ -1159,19 +1139,16 @@ namespace DataStructures
             if (masterSample == 0)
                 return 0;
 
-            foreach (TimeStep step in TimeSteps)
+            foreach (TimeStep step in enabledTimeSteps())
             {
-                if (step.StepEnabled)
+                foreach (VariableTimebaseSegment segment in timebaseSegments[step])
                 {
-                    foreach (VariableTimebaseSegment segment in timebaseSegments[step])
+                    for (int i = 0; i < segment.NSegmentSamples; i++)
                     {
-                        for (int i = 0; i < segment.NSegmentSamples; i++)
-                        {
-                            currentMasterSample += segment.MasterSamplesPerSegmentSample;
-                            currentDerivedSample++;
-                            if (currentMasterSample >= masterSample)
-                                return currentDerivedSample;
-                        }
+                        currentMasterSample += segment.MasterSamplesPerSegmentSample;
+                        currentDerivedSample++;
+                        if (currentMasterSample >= masterSample)
+                            return currentDerivedSample;
                     }
                 }
             }
@@ -1191,19 +1168,16 @@ namespace DataStructures
             int currentMasterSample = 0;
             if (derivedSample == 0)
                 return 0;
-            foreach (TimeStep step in TimeSteps)
+            foreach (TimeStep step in enabledTimeSteps())
             {
-                if (step.StepEnabled)
+                foreach (VariableTimebaseSegment segment in timebaseSegments[step])
                 {
-                    foreach (VariableTimebaseSegment segment in timebaseSegments[step])
+                    for (int i = 0; i < segment.NSegmentSamples; i++)
                     {
-                        for (int i = 0; i < segment.NSegmentSamples; i++)
-                        {
-                            currentMasterSample += segment.MasterSamplesPerSegmentSample;
-                            currentDerivedSample++;
-                            if (currentDerivedSample >= derivedSample)
-                                return currentMasterSample;
-                        }
+                        currentMasterSample += segment.MasterSamplesPerSegmentSample;
+                        currentDerivedSample++;
+                        if (currentDerivedSample >= derivedSample)
+                            return currentMasterSample;
                     }
                 }
             }
@@ -1977,34 +1951,30 @@ namespace DataStructures
                 // Now fill in any digital pulses which may be on this channel...
                 currentSample = 0;
                 remainderTime = 0;
-                foreach (TimeStep step in TimeSteps)
+                foreach (TimeStep step in enabledTimeSteps())
                 {
-                    if (step.StepEnabled)
+                    if (step.DigitalData[digitalID] != null)
                     {
-                        if (step.DigitalData[digitalID] != null)
+                        if (step.DigitalData[digitalID].usesPulse())
                         {
-                            if (step.DigitalData[digitalID].usesPulse())
+                            Pulse pulse = step.DigitalData[digitalID].DigitalPulse;
+
+                            Pulse.PulseSampleTimes sampleTimes = pulse.getPulseSampleTimes(remainderTime, timestepSize, step.StepDuration.getBaseValue());
+
+                            int start = currentSample + sampleTimes.startSample;
+                            int end = currentSample + sampleTimes.endSample;
+
+                            start = Math.Max(0, start);
+                            end = Math.Min(end, ans.Length);
+                            for (int i = start; i < end; i++)
                             {
-                                Pulse pulse = step.DigitalData[digitalID].DigitalPulse;
-
-                                Pulse.PulseSampleTimes sampleTimes = pulse.getPulseSampleTimes(remainderTime, timestepSize, step.StepDuration.getBaseValue());
-
-                                int start = currentSample + sampleTimes.startSample;
-                                int end = currentSample + sampleTimes.endSample;
-
-                                start = Math.Max(0, start);
-                                end = Math.Min(end, ans.Length);
-                                for (int i = start; i < end; i++)
-                                {
-                                    ans[i] = pulse.PulseValue;
-                                }
+                                ans[i] = pulse.PulseValue;
                             }
                         }
-                        int nStepSamples = 0;
-                        computeNSamplesAndRemainderTime(ref nStepSamples, ref remainderTime, step.StepDuration.getBaseValue(), timestepSize);
-                        currentSample += nStepSamples;
                     }
-
+                    int nStepSamples = 0;
+                    computeNSamplesAndRemainderTime(ref nStepSamples, ref remainderTime, step.StepDuration.getBaseValue(), timestepSize);
+                    currentSample += nStepSamples;
                 }
             }
         }
@@ -2053,10 +2023,8 @@ namespace DataStructures
 
                 int currentMasterSample = 0;
                 // now fill in any pulses which act on this channel...
-                foreach (TimeStep step in TimeSteps)
+                foreach (TimeStep step in enabledTimeSteps())
                 {
-                    if (step.StepEnabled)
-                    {
 
                         int nMasterSamplesInTimestep = timebaseSegments.nMasterSamples(step);
 
@@ -2087,7 +2055,6 @@ namespace DataStructures
                             }
                         }
                         currentMasterSample += nMasterSamplesInTimestep;
-                    }
                 }
             }
         }
@@ -2217,31 +2184,28 @@ namespace DataStructures
             if (digitalChannelUsesPulses(digitalID))
             {
                 currentSample = 1;
-                foreach (TimeStep step in TimeSteps)
+                foreach (TimeStep step in enabledTimeSteps())
                 {
-                    if (step.StepEnabled)
+                    int nStepSamples = timebaseSegments.nMasterSamples(step);
+
+                    if (step.DigitalData[digitalID].usesPulse())
                     {
-                        int nStepSamples = timebaseSegments.nMasterSamples(step);
+                        Pulse pulse = step.DigitalData[digitalID].DigitalPulse;
 
-                        if (step.DigitalData[digitalID].usesPulse())
+                        Pulse.PulseSampleTimes sampleTimes = pulse.getPulseSampleTimes(nStepSamples, masterTimestepSize);
+
+                        int start = currentSample + sampleTimes.startSample;
+                        int end = currentSample + sampleTimes.endSample;
+
+                        start = Math.Max(0, start);
+                        end = Math.Min(end, ans.Length);
+
+                        for (int i = start; i < end; i++)
                         {
-                            Pulse pulse = step.DigitalData[digitalID].DigitalPulse;
-
-                            Pulse.PulseSampleTimes sampleTimes = pulse.getPulseSampleTimes(nStepSamples, masterTimestepSize);
-
-                            int start = currentSample + sampleTimes.startSample;
-                            int end = currentSample + sampleTimes.endSample;
-
-                            start = Math.Max(0, start);
-                            end = Math.Min(end, ans.Length);
-
-                            for (int i = start; i < end; i++)
-                            {
-                                ans[i] = pulse.PulseValue;
-                            }
+                            ans[i] = pulse.PulseValue;
                         }
-                        currentSample += nStepSamples;
                     }
+                    currentSample += nStepSamples;
                 }
             }
 
@@ -2303,7 +2267,6 @@ namespace DataStructures
 
         #region Code for dealing with digital pulses.
 
-
         /// <summary>
         /// Used in calculating a variable timebase, in the presenece of digital pulses. An impingement 
         /// is a point in time where a digital value is changing due to a pulse, but that is not either the start
@@ -2315,6 +2278,11 @@ namespace DataStructures
             public int nSamplesFromTimestepStart;
         }
 
+        /// <summary>
+        /// Computes all the digital impingement points (defined above) for all timesteps in the sequence.
+        /// </summary>
+        /// <param name="timeStepSize"></param>
+        /// <returns></returns>
         private Dictionary<TimeStep, List<DigitalImpingement>> getDigitalImpingements(double timeStepSize)
         {
             int nSamplesSoFar = 0;
@@ -2322,36 +2290,31 @@ namespace DataStructures
 
             Dictionary<TimeStep, List<DigitalImpingement>> ans = new Dictionary<TimeStep,List<DigitalImpingement>>();
 
-            foreach (TimeStep step in TimeSteps)
+
+            foreach (TimeStep step in enabledTimeSteps())
             {
-                if (step.StepEnabled)
+                foreach (int digID in step.DigitalData.Keys)
                 {
-                    foreach (int digID in step.DigitalData.Keys)
+                    if (step.DigitalData[digID].usesPulse())
                     {
-                        if (step.DigitalData[digID].usesPulse())
+                        Pulse pulse = step.DigitalData[digID].DigitalPulse;
+
+                        Pulse.PulseSampleTimes sampleTimes = pulse.getPulseSampleTimes(remainderTime, timeStepSize, step.StepDuration.getBaseValue());
+
+                        if (sampleTimes.startRequiresImpingement)
                         {
-                            Pulse pulse = step.DigitalData[digID].DigitalPulse;
+                            addImpingement(ans, nSamplesSoFar + sampleTimes.startSample, timeStepSize);
+                        }
 
-                            Pulse.PulseSampleTimes sampleTimes = pulse.getPulseSampleTimes(remainderTime, timeStepSize, step.StepDuration.getBaseValue());
-
-                            if (sampleTimes.startRequiresImpingement)
-                            {
-                                addImpingement(ans, nSamplesSoFar + sampleTimes.startSample, timeStepSize);
-                            }
-
-                            if (sampleTimes.endRequiresImpingement)
-                            {
-                                addImpingement(ans, nSamplesSoFar + sampleTimes.endSample, timeStepSize);
-                            }
-
-
-                            
+                        if (sampleTimes.endRequiresImpingement)
+                        {
+                            addImpingement(ans, nSamplesSoFar + sampleTimes.endSample, timeStepSize);
                         }
                     }
-                    int nStepSamples = 0;
-                    computeNSamplesAndRemainderTime(ref nStepSamples, ref remainderTime, step.StepDuration.getBaseValue(), timeStepSize);
-                    nSamplesSoFar += nStepSamples;
                 }
+                int nStepSamples = 0;
+                computeNSamplesAndRemainderTime(ref nStepSamples, ref remainderTime, step.StepDuration.getBaseValue(), timeStepSize);
+                nSamplesSoFar += nStepSamples;
             }
 
             return ans;
@@ -2625,16 +2588,13 @@ namespace DataStructures
         /// <returns></returns>
         public bool rs232ChannelUsed(int channelID)
         {
-            foreach (TimeStep step in TimeSteps)
+            foreach (TimeStep step in enabledTimeSteps())
             {
-                if (step.StepEnabled)
+                if (step.rs232Group != null)
                 {
-                    if (step.rs232Group != null)
+                    if (step.rs232Group.channelEnabled(channelID))
                     {
-                        if (step.rs232Group.channelEnabled(channelID))
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
             }
