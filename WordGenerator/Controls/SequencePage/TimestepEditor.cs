@@ -471,6 +471,7 @@ namespace WordGenerator.Controls
             {                
                 stepData.HotKeyCharacter = (char) 0;
                 WordGenerator.MainClientForm.instance.refreshAllTimestepHotkeys();
+                this.redrawStepNumberLabel();
             }
         }
 
