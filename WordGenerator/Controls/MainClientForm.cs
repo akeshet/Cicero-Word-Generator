@@ -259,6 +259,11 @@ namespace WordGenerator
             hotKeyBindings.Add(sequencePage1.runControl1.runZeroButton);
             */
 
+            //bind Ctrl+S as Save
+            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.Control, Keys.S);
+            hotKeyBindings.Add(this.saveSequenceToolStripMenuItem);
+
+
             // bind F11 hotkey to server manager:
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F11);
             hotKeyBindings.Add(this.serverManagerButton);
@@ -277,7 +282,7 @@ namespace WordGenerator
 
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F4);
             hotKeyBindings.Add(this.gpibTab);
-
+            
             RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F5);
             hotKeyBindings.Add(this.rs232Tab);
 
@@ -541,6 +546,14 @@ namespace WordGenerator
 
         }
 
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Storage.SaveAndLoad.SaveSequenceData(OpenSequenceFileName);
+            RefreshRecentFiles();
+        }
+
+
+
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Storage.SaveAndLoad.SaveSequenceData(null);
@@ -730,6 +743,11 @@ namespace WordGenerator
                             {
                                 TabPage t = (TabPage)hotkeyObj;
                                 mainTab.SelectedTab = t;
+                            }
+                            else if (hotkeyObj is ToolStripMenuItem)
+                            {
+                                ToolStripMenuItem t = (ToolStripMenuItem)hotkeyObj;
+                                t.PerformClick();
                             }
                         }
                     }
