@@ -260,8 +260,8 @@ namespace WordGenerator
             */
 
             //bind Ctrl+S as Save
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.Control, Keys.S);
-            hotKeyBindings.Add(this.saveSequenceToolStripMenuItem);
+            //RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.Control, Keys.S);
+            //hotKeyBindings.Add(this.saveSequenceToolStripMenuItem);
 
 
             // bind F11 hotkey to server manager:
