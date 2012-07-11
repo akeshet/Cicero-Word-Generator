@@ -249,50 +249,57 @@ namespace WordGenerator
 
             splash.Show();
 
-            // bind F9 hotkey to run button:
             if (hotKeyBindings == null)
                 hotKeyBindings = new List<object>();
 
+				try {
 
-            /*
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F9);
-            hotKeyBindings.Add(sequencePage1.runControl1.runZeroButton);
-            */
-
-            // bind F11 hotkey to server manager:
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F11);
-            hotKeyBindings.Add(this.serverManagerButton);
+	            /*
+	            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F9);
+	            hotKeyBindings.Add(sequencePage1.runControl1.runZeroButton);
+	            */
 
 
-            // bind F1 to F8 to appropriate tab pages
 
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F1);
-            hotKeyBindings.Add(this.sequenceTab);
+	            // bind F11 hotkey to server manager:
+	            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F11);
+	            hotKeyBindings.Add(this.serverManagerButton);
 
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F2);
-            hotKeyBindings.Add(this.overrideTab);
 
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F3);
-            hotKeyBindings.Add(this.analogTab);
+	            // bind F1 to F8 to appropriate tab pages
 
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F4);
-            hotKeyBindings.Add(this.gpibTab);
+	            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F1);
+	            hotKeyBindings.Add(this.sequenceTab);
 
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F5);
-            hotKeyBindings.Add(this.rs232Tab);
+	            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F2);
+	            hotKeyBindings.Add(this.overrideTab);
 
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F6);
-            hotKeyBindings.Add(this.commonWaveformTab);
+	            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F3);
+	            hotKeyBindings.Add(this.analogTab);
 
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F7);
-            hotKeyBindings.Add(this.variablesTab);
+	            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F4);
+	            hotKeyBindings.Add(this.gpibTab);
 
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F8);
-            hotKeyBindings.Add(this.pulsesTab);
+	            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F5);
+	            hotKeyBindings.Add(this.rs232Tab);
 
-            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.Control, Keys.F9);
-            hotKeyBindings.Add(this.sequencePage.runControl1.bgRunButton);
+	            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F6);
+	            hotKeyBindings.Add(this.commonWaveformTab);
 
+	            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F7);
+	            hotKeyBindings.Add(this.variablesTab);
+
+	            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F8);
+	            hotKeyBindings.Add(this.pulsesTab);
+
+	            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.Control, Keys.F9);
+	            hotKeyBindings.Add(this.sequencePage.runControl1.bgRunButton);
+			}
+			catch (Exception e) {
+				addMessageLogText(this, new MessageEvent("Unable to add hotkeys due to error: " + e.Message, 
+				                                         0, 
+				                                         MessageEvent.MessageTypes.Error));
+			}
 
             RefreshRecentFiles();
             this.RefreshSettingsDataToUI();
@@ -630,11 +637,16 @@ namespace WordGenerator
         }
 
         private bool formOpen = false;
+		private string queuedMessagesString = "";
 
         public void addMessageLogText(object sender, EventArgs e)
         {
-            if (!formOpen)
-                return;
+            if (!formOpen) {
+				if (e is MessageEvent) {
+					MessageEvent message = (MessageEvent) e;
+					queuedMessagesString+=message.MyTime.ToString() + " " + message.ToString() + "\r\n";
+				}
+			}
 
             if (this.InvokeRequired)
             {
@@ -642,6 +654,11 @@ namespace WordGenerator
             }
             else
             {
+				if (queuedMessagesString!="") {
+					messageLogTextBox.AppendText(queuedMessagesString);
+					queuedMessagesString="";
+				}
+
                 if (e is MessageEvent)
                 {
                     MessageEvent message = (MessageEvent)e;
