@@ -535,10 +535,10 @@ namespace WordGenerator.Controls
         private Brush continueBrush(int row, bool continueValue)
         {
 			HatchStyle hs;
-			if (continueValue)
-				hs = HatchStyle.Percent80;
-			else
-				hs = HatchStyle.Percent20;
+            if (continueValue)
+                hs = HatchStyle.Percent75;
+            else
+                hs = HatchStyle.Percent25;
 
             return new HatchBrush(hs, ChannelColor(row), Color.Tan);
            // return new HatchBrush(HatchStyle.DarkUpwardDiagonal, TrueBrushColors[row % TrueBrushColors.Count], Color.Tan);
@@ -783,7 +783,7 @@ namespace WordGenerator.Controls
                 {
 					int stepID = cellPointToTimeStepId(p);
 					int channelID = cellPointToChannelID(p);
-					if (stepID==-1 || channelID==1)
+					if (stepID==-1 || channelID==-1)
 						return;
 					TimeStep step = Storage.sequenceData.TimeSteps[stepID];
 					bool continueValue = step.getDigitalValue(channelID,
