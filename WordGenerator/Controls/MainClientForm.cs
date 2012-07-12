@@ -633,6 +633,12 @@ namespace WordGenerator
             else
             {
                 toolStripStatusLabel.Text = e.ToString();
+                System.Threading.ThreadPool.QueueUserWorkItem(delegate {
+                    Invoke(new Action(delegate { toolStripStatusLabel.ForeColor=Color.Red; }));
+                    System.Threading.Thread.Sleep(2000);
+                    Invoke(new Action(delegate { toolStripStatusLabel.ForeColor = Color.Black; }));
+                });
+               
             }
         }
 
