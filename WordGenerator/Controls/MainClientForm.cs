@@ -192,11 +192,8 @@ namespace WordGenerator
 
             this.Text = textPreamble;
 
-
-            if (this.settingsFileLabel != null)
-            {
-                this.settingsFileLabel.Text = this.OpenSettingsFileName;
-            }
+            this.handleMessageEvent(this, new MessageEvent("Loaded settings file:  " + this.OpenSettingsFileName));
+            
         }
 
 
@@ -625,9 +622,16 @@ namespace WordGenerator
         }
 
 
+        private object statusTextThreadLock = new object();
 
         public void addStatusText(object sender, MessageEvent e)
         {
+
+
+
+            if (toolStripStatusLabel == null)
+                return;
+
             if (this.InvokeRequired)
             {
                 this.BeginInvoke(new EventHandler<MessageEvent>(addStatusText), new object[] { sender, e });
@@ -636,14 +640,22 @@ namespace WordGenerator
             {
                 toolStripStatusLabel.Text = e.ToString();
                 System.Threading.ThreadPool.QueueUserWorkItem(delegate {
-                    //Make Status label flash red when it is changed
-                    Invoke(new Action(delegate { toolStripStatusLabel.ForeColor=Color.Red; }));
-                    System.Threading.Thread.Sleep(500);
-                    Invoke(new Action(delegate { toolStripStatusLabel.ForeColor = Color.Black; }));
-                    System.Threading.Thread.Sleep(500);
-                    Invoke(new Action(delegate { toolStripStatusLabel.ForeColor = Color.Red; }));
-                    System.Threading.Thread.Sleep(500);
-                    Invoke(new Action(delegate { toolStripStatusLabel.ForeColor = Color.Black; }));
+                    bool entered = System.Threading.Monitor.TryEnter(statusTextThreadLock, 0);
+                    if (entered) try
+                        {
+                            //Make Status label flash red when it is changed
+                            Invoke(new Action(delegate { toolStripStatusLabel.ForeColor = Color.Red; }));
+                            System.Threading.Thread.Sleep(500);
+                            Invoke(new Action(delegate { toolStripStatusLabel.ForeColor = Color.Black; }));
+                            System.Threading.Thread.Sleep(500);
+                            Invoke(new Action(delegate { toolStripStatusLabel.ForeColor = Color.Red; }));
+                            System.Threading.Thread.Sleep(500);
+                            Invoke(new Action(delegate { toolStripStatusLabel.ForeColor = Color.Black; }));
+                        }
+                        finally
+                        {
+                            System.Threading.Monitor.Exit(statusTextThreadLock);
+                        }
                 });
                
             }

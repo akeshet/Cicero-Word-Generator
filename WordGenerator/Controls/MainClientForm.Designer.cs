@@ -31,7 +31,6 @@ namespace WordGenerator
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainClientForm));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.settingsFileLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -141,17 +140,11 @@ namespace WordGenerator
             // statusStrip
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.settingsFileLabel,
             this.toolStripStatusLabel});
             this.statusStrip.Location = new System.Drawing.Point(0, 860);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(1272, 22);
             this.statusStrip.TabIndex = 1;
-            // 
-            // settingsFileLabel
-            // 
-            this.settingsFileLabel.Name = "settingsFileLabel";
-            this.settingsFileLabel.Size = new System.Drawing.Size(0, 17);
             // 
             // toolStripStatusLabel
             // 
@@ -1034,7 +1027,6 @@ namespace WordGenerator
         private System.Windows.Forms.ToolStripMenuItem runListToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem continueListToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runListInRandomOrderToolStripMenuItem;
-        private System.Windows.Forms.ToolStripStatusLabel settingsFileLabel;
         private System.Windows.Forms.TabPage pulsesTab;
         private System.Windows.Forms.Label rs232GroupsLabel;
         private System.Windows.Forms.Label gpibGroupsLabel;
