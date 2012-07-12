@@ -626,8 +626,8 @@ namespace WordGenerator
 
         public void addStatusText(object sender, MessageEvent e)
         {
-
-
+            if (e.Verbosity != 0)
+                return;
 
             if (toolStripStatusLabel == null)
                 return;
