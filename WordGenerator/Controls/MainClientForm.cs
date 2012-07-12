@@ -549,6 +549,7 @@ namespace WordGenerator
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Storage.SaveAndLoad.SaveSequenceData(OpenSequenceFileName);
+            this.handleMessageEvent(this, new MessageEvent("Saved sequence file to" + OpenSequenceFileName));
             RefreshRecentFiles();
         }
 
@@ -557,6 +558,7 @@ namespace WordGenerator
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Storage.SaveAndLoad.SaveSequenceData(null);
+            this.handleMessageEvent(this, new MessageEvent("Saved sequence file to" + OpenSequenceFileName));
             RefreshRecentFiles();
         }
 
@@ -634,8 +636,13 @@ namespace WordGenerator
             {
                 toolStripStatusLabel.Text = e.ToString();
                 System.Threading.ThreadPool.QueueUserWorkItem(delegate {
+                    //Make Status label flash red when it is changed
                     Invoke(new Action(delegate { toolStripStatusLabel.ForeColor=Color.Red; }));
-                    System.Threading.Thread.Sleep(2000);
+                    System.Threading.Thread.Sleep(500);
+                    Invoke(new Action(delegate { toolStripStatusLabel.ForeColor = Color.Black; }));
+                    System.Threading.Thread.Sleep(500);
+                    Invoke(new Action(delegate { toolStripStatusLabel.ForeColor = Color.Red; }));
+                    System.Threading.Thread.Sleep(500);
                     Invoke(new Action(delegate { toolStripStatusLabel.ForeColor = Color.Black; }));
                 });
                
@@ -866,6 +873,7 @@ namespace WordGenerator
         {
             Storage.sequenceData = new SequenceData();
             WordGenerator.MainClientForm.instance.OpenSequenceFileName = null;
+            this.handleMessageEvent(this, new MessageEvent("Created new sequence (unsaved)."));
             RefreshSequenceDataToUI();
         }
 
