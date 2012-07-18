@@ -209,7 +209,13 @@ namespace AtticusServer
             resetNetworkClocks();
 
             DataStructures.Timing.NetworkClockProvider.registerStaticMessageLogHandler(this.messageLog);
-            DataStructures.Timing.NetworkClockProvider.startListener(DataStructures.Timing.NetworkClockEndpointInfo.HostTypes.Atticus_Server);
+            bool created = DataStructures.Timing.NetworkClockProvider.startListener(DataStructures.Timing.NetworkClockEndpointInfo.HostTypes.Atticus_Server);
+            if (!created)
+            {
+                messageLog(this, new MessageEvent("Unable to start network clock listener. Is it possible that a separate Cicero instance is running on this computer?",
+                    0, MessageEvent.MessageTypes.Error, MessageEvent.MessageCategories.Networking));
+
+            }
             
 
 

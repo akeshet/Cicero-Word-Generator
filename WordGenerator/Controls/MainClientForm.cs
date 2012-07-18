@@ -590,7 +590,12 @@ namespace WordGenerator
             this.WindowState = FormWindowState.Maximized;
             formOpen = true;
             DataStructures.Timing.NetworkClockProvider.registerStaticMessageLogHandler(addMessageLogText);
-            DataStructures.Timing.NetworkClockProvider.startListener(DataStructures.Timing.NetworkClockEndpointInfo.HostTypes.Cicero_Client);
+            bool listenerCreated = 
+                DataStructures.Timing.NetworkClockProvider.startListener(DataStructures.Timing.NetworkClockEndpointInfo.HostTypes.Cicero_Client);
+            if (!listenerCreated)
+            {
+                MessageBox.Show("Unable to start network clock listener. Is it possible that a separate Cicero instance is running on this computer?", "Unable to create clock listener.");
+            }
             /* CiceroSplashForm splash = new CiceroSplashForm();
              splash.Show();*/
         }
