@@ -179,5 +179,23 @@ namespace CiceroSuiteUnitTests
             }
         }
 
+
+
+
+        /// <summary>
+        ///A test for getTimeStepAtTime
+        ///</summary>
+        [TestMethod()]
+        public void getTimeStepAtTimeTest()
+        {
+            SequenceData target = (SequenceData)SharedTestFunctions.loadTestFile("gettimesteptestseq.seq", typeof(SequenceData), true, null);
+            Assert.AreEqual("1", target.getTimeStepAtTime(.5).StepName);
+            Assert.AreEqual("1", target.getTimeStepAtTime(.5).StepName);
+            Assert.AreEqual("1", target.getTimeStepAtTime(1).StepName);
+            Assert.AreEqual("2", target.getTimeStepAtTime(1.5).StepName);
+            Assert.AreEqual("4", target.getTimeStepAtTime(4).StepName);
+            Assert.IsNull(target.getTimeStepAtTime(-1));
+            Assert.IsNull(target.getTimeStepAtTime(10));
+        }
     }
 }

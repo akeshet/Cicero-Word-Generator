@@ -666,6 +666,7 @@ namespace DataStructures
 
             foreach (TimeStep step in enabledTimeSteps())
             {
+                time -= step.StepDuration.getBaseValue();
                 if (time <= 0)
                     return step;
             }
