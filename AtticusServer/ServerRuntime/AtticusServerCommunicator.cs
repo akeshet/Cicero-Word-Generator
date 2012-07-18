@@ -212,7 +212,7 @@ namespace AtticusServer
             bool created = DataStructures.Timing.NetworkClockProvider.startListener(DataStructures.Timing.NetworkClockEndpointInfo.HostTypes.Atticus_Server);
             if (!created)
             {
-                messageLog(this, new MessageEvent("Unable to start network clock listener. Is it possible that a separate Cicero instance is running on this computer?",
+                messageLog(this, new MessageEvent("Unable to start network clock listener. Is it possible that a separate Atticus instance is running on this computer?",
                     0, MessageEvent.MessageTypes.Error, MessageEvent.MessageCategories.Networking));
 
             }
