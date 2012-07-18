@@ -358,7 +358,8 @@ namespace WordGenerator.Controls
 
                         for (int col = start; col <= end; col++)
                         {
-                            DigitalDataPoint dp = cellPointToDigitalDataPoint(new Point(col, clickStartPoint.Y));
+							Point p = new Point(col, clickStartPoint.Y);
+                            DigitalDataPoint dp = cellPointToDigitalDataPoint(p);
                             if (dp != null)
                             {
                                 if (dp.variable == null)
@@ -378,6 +379,9 @@ namespace WordGenerator.Controls
                                         {
                                             dp.ManualValue = !dp.ManualValue;
                                         }
+
+										refreshAllContinueCellsInSameRow(p);
+
                                     }
                                 }
                             }
@@ -395,7 +399,25 @@ namespace WordGenerator.Controls
             }
         }
 
-        
+        private void refreshAllContinueCellsInSameRow(Point p) {
+			if (buffer==null)
+				return;
+			bool refreshedACell = false;
+			using (Graphics g = Graphics.FromImage(buffer)) {
+				if (g==null)
+					return;
+				for (int i=0; i<Storage.sequenceData.getNDisplayedTimeSteps(); i++) {
+					Point newPoint = new Point(i, p.Y);
+					DigitalDataPoint dp = cellPointToDigitalDataPoint(p);
+					if (dp.DigitalContinue) {
+						refreshCell(g, newPoint);
+						refreshedACell = true;
+					}
+				}
+			}
+			if (refreshedACell)
+				this.Refresh();
+		}
 
         private void drawDrag()
         {
@@ -510,9 +532,15 @@ namespace WordGenerator.Controls
             return new SolidBrush(ChannelColor(row));
         }
 
-        private Brush continueBrush(int row)
+        private Brush continueBrush(int row, bool continueValue)
         {
-            return new HatchBrush(HatchStyle.NarrowHorizontal, ChannelColor(row), Color.Tan);
+			HatchStyle hs;
+            if (continueValue)
+                hs = HatchStyle.Percent75;
+            else
+                hs = HatchStyle.Percent25;
+
+            return new HatchBrush(hs, ChannelColor(row), Color.Tan);
            // return new HatchBrush(HatchStyle.DarkUpwardDiagonal, TrueBrushColors[row % TrueBrushColors.Count], Color.Tan);
         }
 
@@ -561,6 +589,26 @@ namespace WordGenerator.Controls
         }
 
 
+		private TimeStep cellPointToTimeStep(Point p) {
+			if (Storage.sequenceData!=null)
+				return Storage.sequenceData.getNthDisplayedTimeStep(p.X);
+			else
+				return null;
+		}
+
+		private int cellPointToTimeStepId(Point p) {
+			return Storage.sequenceData.getNthDisplayedTimeStepID(p.X);
+		}
+
+		// returns -1 on error
+		private int cellPointToChannelID(Point p) {
+			List<int> channelIDs = Storage.settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.digital].getSortedChannelIDList();
+            if (channelIDs.Count <= p.Y)
+            	return -1;
+
+            return channelIDs[p.Y];
+		}
+
         private DigitalDataPoint cellPointToDigitalDataPoint(Point p)
         {
             if (Storage.sequenceData != null)
@@ -568,11 +616,10 @@ namespace WordGenerator.Controls
                 TimeStep step = Storage.sequenceData.getNthDisplayedTimeStep(p.X);
                 if (step == null) return null;
 
-                List<int> channelIDs = Storage.settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.digital].getSortedChannelIDList();
-                if (channelIDs.Count <= p.Y)
-                    return null;
+				int channelID = cellPointToChannelID(p);
+				if (channelID==-1)
+					return null;
 
-                int channelID = channelIDs[p.Y];
 
                 if (step.DigitalData.ContainsKey(channelID))
                     return step.DigitalData[channelID];
@@ -734,7 +781,16 @@ namespace WordGenerator.Controls
                 Brush br;
                 if (dp.DigitalContinue)
                 {
-                    br = continueBrush(p.Y);
+					int stepID = cellPointToTimeStepId(p);
+					int channelID = cellPointToChannelID(p);
+					if (stepID==-1 || channelID==-1)
+						return;
+					TimeStep step = Storage.sequenceData.TimeSteps[stepID];
+					bool continueValue = step.getDigitalValue(channelID,
+					                                         Storage.sequenceData.TimeSteps,
+					                                         stepID);
+
+                    br = continueBrush(p.Y, continueValue);
                 }
                 else if (dp.ManualValue)
                 {

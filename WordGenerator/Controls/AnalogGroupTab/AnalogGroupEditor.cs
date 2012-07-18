@@ -96,29 +96,27 @@ namespace WordGenerator.Controls
             {
                 if (Storage.sequenceData.TimeSteps != null)
                 {
-                    foreach (TimeStep step in Storage.sequenceData.TimeSteps)
+                    foreach (TimeStep step in Storage.sequenceData.enabledTimeSteps())
                     {
-                        if (step.StepEnabled)
+
+                        if (step.AnalogGroup != null)
                         {
-                            if (step.AnalogGroup != null)
-                            {
-                                AnalogGroup ag = step.AnalogGroup;
-                                Label lab = new Label();
-                                lab.Text = ag.ToString();
-                                lab.BorderStyle = BorderStyle.FixedSingle;
-                                lab.AutoSize = false;
-                                lab.Width = 80;
-                                lab.TextAlign = ContentAlignment.MiddleCenter;
-                                lab.AutoEllipsis = true;
-                                lab.Location = new Point(xPos, label1.Location.Y);
-                                lab.Click += new EventHandler(runOrderLabelClick);
-                                runOrderLabelGroups.Add(lab, ag);
-                                runOrderLabels.Add(lab);
+                            AnalogGroup ag = step.AnalogGroup;
+                            Label lab = new Label();
+                            lab.Text = ag.ToString();
+                            lab.BorderStyle = BorderStyle.FixedSingle;
+                            lab.AutoSize = false;
+                            lab.Width = 80;
+                            lab.TextAlign = ContentAlignment.MiddleCenter;
+                            lab.AutoEllipsis = true;
+                            lab.Location = new Point(xPos, label1.Location.Y);
+                            lab.Click += new EventHandler(runOrderLabelClick);
+                            runOrderLabelGroups.Add(lab, ag);
+                            runOrderLabels.Add(lab);
 
-                                this.toolTip1.SetToolTip(lab, "Timestep: " + step.StepName + ", Duration: " + step.StepDuration.ToString());
+                            this.toolTip1.SetToolTip(lab, "Timestep: " + step.StepName + ", Duration: " + step.StepDuration.ToString());
 
-                                xPos += lab.Width + 10;
-                            }
+                            xPos += lab.Width + 10;
                         }
                     }
                 }
