@@ -26,9 +26,9 @@ namespace AtticusServer
             this.Close();
         }
 
-        public AtticusSplashForm(bool runTimer) : this()
+        public AtticusSplashForm(bool autoCloseAfterTimeout) : this()
         {
-            this.timer1.Enabled = runTimer;
+            this.timer1.Enabled = autoCloseAfterTimeout;
         }
     }
 }

@@ -250,9 +250,7 @@ namespace WordGenerator
             debugToolStripMenuItem.Visible = true;
 #endif
 
-            CiceroSplashForm splash = new CiceroSplashForm();
 
-            splash.Show();
 
             // bind F9 hotkey to run button:
             if (hotKeyBindings == null)
@@ -598,6 +596,9 @@ namespace WordGenerator
             }
             /* CiceroSplashForm splash = new CiceroSplashForm();
              splash.Show();*/
+            CiceroSplashForm splash = new CiceroSplashForm();
+
+            splash.ShowDialog();
         }
 
         protected override bool IsInputChar(char charCode)
