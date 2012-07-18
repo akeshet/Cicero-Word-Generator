@@ -49,7 +49,7 @@ namespace AtticusServer
             // timer1
             // 
             this.timer1.Enabled = true;
-            this.timer1.Interval = 6000;
+            this.timer1.Interval = 2000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // label1
@@ -74,7 +74,6 @@ namespace AtticusServer
             this.Name = "AtticusSplashForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AtticusSplashForm";
-            this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

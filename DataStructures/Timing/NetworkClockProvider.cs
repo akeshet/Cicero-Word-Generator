@@ -56,20 +56,46 @@ namespace DataStructures.Timing
         private static Dictionary<uint, NetworkClockProvider> providers = new Dictionary<uint,NetworkClockProvider>();
         private static NetworkClockEndpointInfo.HostTypes myListenerType;
 
-        public static void startListener(NetworkClockEndpointInfo.HostTypes listenerType) {
+        /// <summary>
+        /// Returns true if successful, false otherwise.
+        /// </summary>
+        /// <param name="listenerType"></param>
+        /// <returns></returns>
+        public static bool startListener(NetworkClockEndpointInfo.HostTypes listenerType) {
             lock (staticLockObj)
             {
                 staticLogMessage(new MessageEvent("Starting network clock listener...", 0, MessageEvent.MessageTypes.Routine, MessageEvent.MessageCategories.SoftwareClock));
                 myListenerType = listenerType;
+
+                // Check if a listener thread is running already.
                 if (listenerThread != null)
                 {
                     throw new SoftwareClockProviderException("Attempted to start listener thread when already started.");
                 }
+
+
+                // Open a UDP socket
+                staticLogMessage(new MessageEvent("Opening UDP input socket for network clock.", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.Networking));
+                try
+                {
+                    udpClient = new UdpClient(NetworkClockEndpointInfo.getListenerPort(myListenerType));
+                }
+                catch (System.Net.Sockets.SocketException e)
+                {
+                    staticLogMessage(new MessageEvent("Unable to open input socket for network clock due to socket exception: " + e.Message,
+                                                        0, MessageEvent.MessageTypes.Error, MessageEvent.MessageCategories.Networking));
+                    udpClient = null;
+                    return false;
+                }
+               
+
+
                 listenerThread = new Thread(listenerThreadProc);
                 listenerThread.Start();
                 providers = new Dictionary<uint, NetworkClockProvider>();
-                staticLogMessage(new MessageEvent("...done", 0, MessageEvent.MessageTypes.Routine, MessageEvent.MessageCategories.SoftwareClock));
+                
             }
+            return true;
         }
 
         public static void shutDown()
@@ -79,11 +105,17 @@ namespace DataStructures.Timing
                 staticLogMessage(new MessageEvent("Shutting down network clock listener.", 0, MessageEvent.MessageTypes.Routine, MessageEvent.MessageCategories.SoftwareClock));
                 if (listenerThread == null)
                 {
-                    throw new SoftwareClockProviderException("Attempted to stop a listener that was not running.");
+                    //throw new SoftwareClockProviderException("Attempted to stop a listener that was not running.");
+                    return;
                 }
                 listenerThread.Abort();
                 listenerThread = null;
 
+                if (udpClient != null)
+                {
+                    udpClient.Close();
+                    udpClient = null;
+                }
 
                 List<uint> providerIDs = providers.Keys.ToList();
                 foreach (uint id in providerIDs)
@@ -92,8 +124,6 @@ namespace DataStructures.Timing
                 }
 
                 providers = null;
-
-                staticLogMessage(new MessageEvent("...done"));
             }
         }
 
@@ -111,20 +141,33 @@ namespace DataStructures.Timing
 
         private static UdpClient udpClient;
 
+
+
         private static void listenerThreadProc()
         {
-            lock (staticLockObj)
-            {
-                staticLogMessage(new MessageEvent("Starting Network Clock listener thread...", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.Networking));
-                udpClient = new UdpClient(NetworkClockEndpointInfo.getListenerPort(myListenerType));
-                staticLogMessage(new MessageEvent("...done", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.Networking));
-            }
+             staticLogMessage(new MessageEvent("Network Clock listener thread is alive", 1, MessageEvent.MessageTypes.Log, MessageEvent.MessageCategories.Networking));
+
 
             while (true)
             {
+                // Wait for a datagram from the udpClient.
+                // This makes use of a temporary local reference to udpClient so that we can be sure
+                // that even if the static udpClient member is changed when we don't hold the static lock
+                // we will at least run the callback on the correct instance of udpClient.
+                // (I didn't want to lock the receive callback on staticLockObj, because the callback may
+                // take arbitrarily long to return, and I don't want to be locked out of other static activities like
+                // shutting down the listener.
+
                 System.Net.IPEndPoint remoteEnd = null;
-                IAsyncResult result = udpClient.BeginReceive(null, null);
-                byte[] received = udpClient.EndReceive(result, ref remoteEnd);
+                IAsyncResult result;
+                byte[] received;
+                UdpClient udpClientNonstatic;
+                lock (staticLockObj)
+                {
+                    udpClientNonstatic = udpClient;
+                    result = udpClient.BeginReceive(null, null);
+                }
+                received = udpClientNonstatic.EndReceive(result, ref remoteEnd);
 
                 if (received.Length != NetworkClockDatagram.datagramByteLength)
                 {
