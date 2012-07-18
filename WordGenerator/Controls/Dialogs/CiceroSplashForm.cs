@@ -34,10 +34,10 @@ namespace WordGenerator.Controls
             this.Close();
         }
 
-        public CiceroSplashForm(bool runTimer)
+        public CiceroSplashForm(bool autoCloseAfterTimeout)
             : this()
         {
-            this.timer1.Enabled = runTimer;
+            this.timer1.Enabled = autoCloseAfterTimeout;
         }
 
 
