@@ -2114,7 +2114,8 @@ namespace AtticusServer
 
 
                 if (computerClockProvider != null)
-                    computerClockProvider.AbortClockProvider();
+                    if (computerClockProvider.ClockStatus== DataStructures.Timing.SoftwareClockProvider.Status.Running)
+                        computerClockProvider.AbortClockProvider();
                 computerClockProvider = null;
 
                 if (clockBroadcaster != null)
