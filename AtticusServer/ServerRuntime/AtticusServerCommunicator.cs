@@ -2040,7 +2040,8 @@ namespace AtticusServer
                     foreach (FpgaTimebaseTask ftask in fpgaTasks.Values)
                     {
                         ftask.Stop();
-                        ftask.AbortClockProvider();
+                        if (ftask.ClockStatus == DataStructures.Timing.SoftwareClockProvider.Status.Running)
+                            ftask.AbortClockProvider();
                     }
 
                     fpgaTasks.Clear();

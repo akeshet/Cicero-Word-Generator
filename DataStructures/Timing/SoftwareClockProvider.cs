@@ -44,6 +44,16 @@ namespace DataStructures.Timing
                 messageLog += handler;
         }
 
+        public enum Status { Idle, Armed, Running, Aborted };
+
+        private Status clockStatus;
+
+        public Status ClockStatus
+        {
+            get { return clockStatus; }
+        }
+
+
         /// <summary>
         /// Safely logs a message.
         /// </summary>
@@ -105,8 +115,10 @@ namespace DataStructures.Timing
         /// </summary>
         public void ArmClockProvider()
         {
-            lock (lockObj)
+             lock (lockObj)
             {
+                clockStatus = Status.Armed;
+
                 armClockProvider();
 
                 elapsedTime_ms = 0;
@@ -135,6 +147,7 @@ namespace DataStructures.Timing
         /// </summary>
         public void StartClockProvider() {
             lock (lockObj) {
+                clockStatus = Status.Running;
                 startClockProvider();
             }
         }
@@ -164,6 +177,7 @@ namespace DataStructures.Timing
         {
             lock (lockObj)
             {
+                clockStatus = Status.Aborted;
                 cleanupClockProvider();
 
                 foreach (Thread thread in subscriberThreads.Values)
