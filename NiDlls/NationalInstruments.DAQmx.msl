@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<DotNETComponent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Visible>true</Visible>
+  <SupportedProjectTypes>
+    <string>CppCLI2008</string>
+    <string>WindowsFormsApplication2008</string>
+  </SupportedProjectTypes>
+  <SelectedByDefault>true</SelectedByDefault>
+  <Title>Measurement Studio Hardware Class Libraries/DAQmx Library</Title>
+  <Description>Contains classes, delegates, and enumerations to communicate with and control a NI data acquisition (DAQ) device.</Description>
+  <Name2008>NationalInstruments.DAQmx</Name2008>
+  <Licensed>false</Licensed>
+  <Dependencies>
+    <DotNETAssembly>
+      <Name>NationalInstruments.Common</Name>
+    </DotNETAssembly>
+  </Dependencies>
+  <Namespaces>
+    <string>NationalInstruments.DAQmx</string>
+  </Namespaces>
+</DotNETComponent>
