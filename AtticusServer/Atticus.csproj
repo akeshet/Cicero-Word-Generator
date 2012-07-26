@@ -81,12 +81,14 @@
     <Reference Include="NationalInstruments.DAQmx, Version=9.5.35.112, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\NiDlls\NationalInstruments.DAQmx.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NationalInstruments.NI4882, Version=9.0.35.157, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
     <Reference Include="NationalInstruments.VisaNS">
       <HintPath>..\NiDlls\NationalInstruments.VisaNS.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
