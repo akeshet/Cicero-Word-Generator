@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<DotNETComponent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Visible>true</Visible>
+  <SupportedProjectTypes>
+    <string>CppCLI2008</string>
+    <string>WindowsFormsApplication2008</string>
+  </SupportedProjectTypes>
+  <SelectedByDefault>true</SelectedByDefault>
+  <Title>Measurement Studio Hardware Class Libraries/VisaNS Library</Title>
+  <Description>Contains objects to access the functionality available in NI-VISA for communicating with message-based and register-based instruments using protocols supported by NI-VISA.</Description>
+  <Name2008>NationalInstruments.VisaNS</Name2008>
+  <Licensed>false</Licensed>
+  <Dependencies>
+    <DotNETAssembly>
+      <Name>NationalInstruments.Common</Name>
+  </DotNETAssembly>
+  </Dependencies>
+  <Namespaces>
+    <string>NationalInstruments.VisaNS</string>
+  </Namespaces>
+</DotNETComponent>
