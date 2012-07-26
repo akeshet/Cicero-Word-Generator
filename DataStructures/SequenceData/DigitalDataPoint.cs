@@ -11,12 +11,40 @@ namespace DataStructures
         private Parameter parameter;
 
         private Pulse digitalPulse;
+        private List<Pulse> pulseList;
+
 
         public Pulse DigitalPulse
         {
-            get { return digitalPulse; }
-            set { digitalPulse = value; }
+            get {
+                if (PulseList.Count!=0)
+                    return PulseList[0]; 
+                return null;
+            }
+            
+            set {
+                if (PulseList.Count!=0)
+                    PulseList.Add(value);
+                else
+                    PulseList[0]=value;
+            }
         }
+
+        public List<Pulse> PulseList
+        {
+            get { 
+         
+                if (pulseList==null)
+                {    
+                    pulseList=new List<Pulse> ();
+                    if (digitalPulse!=null)
+                        pulseList.Add(digitalPulse);
+                }
+          
+                return pulseList;
+            }
+        }
+
 
         private bool digitalContinue;
 
