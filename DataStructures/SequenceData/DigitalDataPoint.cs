@@ -38,7 +38,10 @@ namespace DataStructures
                 {    
                     pulseList=new List<Pulse> ();
                     if (digitalPulse!=null)
+                    {
                         pulseList.Add(digitalPulse);
+                        digitalPulse=null;
+                    }
                 }
           
                 return pulseList;
@@ -64,7 +67,7 @@ namespace DataStructures
         /// <returns></returns>
         public bool usesPulse()
         {
-            if (digitalPulse!=null) {
+            if (DigitalPulse!=null) {
                 return true;
             }
             return false;
@@ -83,6 +86,7 @@ namespace DataStructures
             this.parameter = copyMe.parameter;
             this.digitalPulse = copyMe.digitalPulse;
             this.DigitalContinue = copyMe.digitalContinue;
+            this.pulseList = new List<Pulse>(copyMe.PulseList);
         }
 
 
