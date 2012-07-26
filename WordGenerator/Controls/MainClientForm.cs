@@ -694,6 +694,7 @@ namespace WordGenerator
 					MessageEvent message = (MessageEvent) e;
 					queuedMessagesString+=message.MyTime.ToString() + " " + message.ToString() + "\r\n";
 				}
+                return;
 			}
 
             if (this.InvokeRequired)
