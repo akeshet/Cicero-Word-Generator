@@ -31,13 +31,13 @@ namespace WordGenerator
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainClientForm));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.settingsFileLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newSequence = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.recentFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveSequenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.compareSequenceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -76,7 +76,7 @@ namespace WordGenerator
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sequenceExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.appSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.saveClientStartupSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -104,6 +104,7 @@ namespace WordGenerator
             this.analogTab = new System.Windows.Forms.TabPage();
             this.analogGroupEditor = new WordGenerator.Controls.AnalogGroupEditor();
             this.sequenceTab = new System.Windows.Forms.TabPage();
+            this.useNetworkClockCheckBox = new System.Windows.Forms.CheckBox();
             this.waitForReady = new System.Windows.Forms.CheckBox();
             this.lockDigitalCheckBox = new System.Windows.Forms.CheckBox();
             this.rs232GroupsLabel = new System.Windows.Forms.Label();
@@ -122,7 +123,6 @@ namespace WordGenerator
             this.eventLogTab = new System.Windows.Forms.TabPage();
             this.messageLogTextBox = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.useNetworkClockCheckBox = new System.Windows.Forms.CheckBox();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.variablesTab.SuspendLayout();
@@ -140,17 +140,11 @@ namespace WordGenerator
             // statusStrip
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.settingsFileLabel,
             this.toolStripStatusLabel});
             this.statusStrip.Location = new System.Drawing.Point(0, 860);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(1272, 22);
             this.statusStrip.TabIndex = 1;
-            // 
-            // settingsFileLabel
-            // 
-            this.settingsFileLabel.Name = "settingsFileLabel";
-            this.settingsFileLabel.Size = new System.Drawing.Size(0, 17);
             // 
             // toolStripStatusLabel
             // 
@@ -180,6 +174,7 @@ namespace WordGenerator
             this.newSequence,
             this.openToolStripMenuItem,
             this.recentFilesToolStripMenuItem,
+            this.saveSequenceToolStripMenuItem,
             this.saveAsToolStripMenuItem,
             this.toolStripSeparator3,
             this.compareSequenceMenuItem,
@@ -218,6 +213,13 @@ namespace WordGenerator
             this.recentFilesToolStripMenuItem.Name = "recentFilesToolStripMenuItem";
             this.recentFilesToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.recentFilesToolStripMenuItem.Text = "Recent Sequence Files";
+            // 
+            // saveSequenceToolStripMenuItem
+            // 
+            this.saveSequenceToolStripMenuItem.Name = "saveSequenceToolStripMenuItem";
+            this.saveSequenceToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.saveSequenceToolStripMenuItem.Text = "&Save Sequence";
+            this.saveSequenceToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
@@ -483,7 +485,7 @@ namespace WordGenerator
             this.advancedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.sequenceExplorerToolStripMenuItem,
             this.settingsExplorerToolStripMenuItem,
-            this.saveToolStripMenuItem});
+            this.appSettingsToolStripMenuItem});
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
             this.advancedToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
             this.advancedToolStripMenuItem.Text = "&Advanced";
@@ -502,18 +504,18 @@ namespace WordGenerator
             this.settingsExplorerToolStripMenuItem.Text = "Se&ttings Explorer";
             this.settingsExplorerToolStripMenuItem.Click += new System.EventHandler(this.settingsExplorerToolStripMenuItem_Click);
             // 
-            // saveToolStripMenuItem
+            // appSettingsToolStripMenuItem
             // 
-            this.saveToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.appSettingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveAllToolStripMenuItem,
             this.toolStripMenuItem2,
             this.saveClientStartupSettingsToolStripMenuItem,
             this.saveSettingsDataToolStripMenuItem,
             this.saveSequenceDataToolStripMenuItem});
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.saveToolStripMenuItem.Text = "&Application Settings";
-            this.saveToolStripMenuItem.Visible = false;
+            this.appSettingsToolStripMenuItem.Name = "appSettingsToolStripMenuItem";
+            this.appSettingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.appSettingsToolStripMenuItem.Text = "&Application Settings";
+            this.appSettingsToolStripMenuItem.Visible = false;
             // 
             // saveAllToolStripMenuItem
             // 
@@ -704,7 +706,7 @@ namespace WordGenerator
             this.gpibGroupEditor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gpibGroupEditor.Location = new System.Drawing.Point(3, 3);
             this.gpibGroupEditor.Name = "gpibGroupEditor";
-            this.gpibGroupEditor.Size = new System.Drawing.Size(1258, 890);
+            this.gpibGroupEditor.Size = new System.Drawing.Size(1258, 804);
             this.gpibGroupEditor.TabIndex = 0;
             // 
             // analogTab
@@ -723,7 +725,7 @@ namespace WordGenerator
             this.analogGroupEditor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.analogGroupEditor.Location = new System.Drawing.Point(3, 3);
             this.analogGroupEditor.Name = "analogGroupEditor";
-            this.analogGroupEditor.Size = new System.Drawing.Size(1258, 890);
+            this.analogGroupEditor.Size = new System.Drawing.Size(1258, 804);
             this.analogGroupEditor.TabIndex = 0;
             // 
             // sequenceTab
@@ -745,6 +747,17 @@ namespace WordGenerator
             this.sequenceTab.Text = "Sequence (F1)";
             this.sequenceTab.ToolTipText = "Testing";
             this.sequenceTab.UseVisualStyleBackColor = true;
+            // 
+            // useNetworkClockCheckBox
+            // 
+            this.useNetworkClockCheckBox.AutoSize = true;
+            this.useNetworkClockCheckBox.Location = new System.Drawing.Point(7, 768);
+            this.useNetworkClockCheckBox.Name = "useNetworkClockCheckBox";
+            this.useNetworkClockCheckBox.Size = new System.Drawing.Size(118, 17);
+            this.useNetworkClockCheckBox.TabIndex = 10;
+            this.useNetworkClockCheckBox.Text = "Use Network Clock";
+            this.useNetworkClockCheckBox.UseVisualStyleBackColor = true;
+            this.useNetworkClockCheckBox.CheckedChanged += new System.EventHandler(this.useNetworkClockCheckbox_CheckedChanged);
             // 
             // waitForReady
             // 
@@ -857,7 +870,7 @@ namespace WordGenerator
             this.overridePage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.overridePage.Location = new System.Drawing.Point(0, 0);
             this.overridePage.Name = "overridePage";
-            this.overridePage.Size = new System.Drawing.Size(1264, 896);
+            this.overridePage.Size = new System.Drawing.Size(1264, 810);
             this.overridePage.TabIndex = 0;
             // 
             // rs232Tab
@@ -892,7 +905,7 @@ namespace WordGenerator
             this.pulsesPage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pulsesPage.Location = new System.Drawing.Point(0, 0);
             this.pulsesPage.Name = "pulsesPage";
-            this.pulsesPage.Size = new System.Drawing.Size(1264, 896);
+            this.pulsesPage.Size = new System.Drawing.Size(1264, 810);
             this.pulsesPage.TabIndex = 0;
             // 
             // eventLogTab
@@ -920,17 +933,6 @@ namespace WordGenerator
             this.toolTip1.AutomaticDelay = 0;
             this.toolTip1.UseAnimation = false;
             this.toolTip1.UseFading = false;
-            // 
-            // useNetworkClockCheckBox
-            // 
-            this.useNetworkClockCheckBox.AutoSize = true;
-            this.useNetworkClockCheckBox.Location = new System.Drawing.Point(7, 768);
-            this.useNetworkClockCheckBox.Name = "useNetworkClockCheckBox";
-            this.useNetworkClockCheckBox.Size = new System.Drawing.Size(118, 17);
-            this.useNetworkClockCheckBox.TabIndex = 10;
-            this.useNetworkClockCheckBox.Text = "Use Network Clock";
-            this.useNetworkClockCheckBox.UseVisualStyleBackColor = true;
-            this.useNetworkClockCheckBox.CheckedChanged += new System.EventHandler(this.useNetworkClockCheckbox_CheckedChanged);
             // 
             // MainClientForm
             // 
@@ -982,7 +984,7 @@ namespace WordGenerator
         private System.Windows.Forms.ToolStripMenuItem recentFilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem advancedToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem appSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem saveClientStartupSettingsToolStripMenuItem;
@@ -1025,7 +1027,6 @@ namespace WordGenerator
         private System.Windows.Forms.ToolStripMenuItem runListToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem continueListToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runListInRandomOrderToolStripMenuItem;
-        private System.Windows.Forms.ToolStripStatusLabel settingsFileLabel;
         private System.Windows.Forms.TabPage pulsesTab;
         private System.Windows.Forms.Label rs232GroupsLabel;
         private System.Windows.Forms.Label gpibGroupsLabel;
@@ -1065,6 +1066,7 @@ namespace WordGenerator
         private System.Windows.Forms.ToolStripMenuItem openGitRepositoryPageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showOnlyWarningsOrErrorsInEventLogToolStripMenuItem;
         private System.Windows.Forms.CheckBox useNetworkClockCheckBox;
+        private System.Windows.Forms.ToolStripMenuItem saveSequenceToolStripMenuItem;
 
     }
 }

@@ -21,5 +21,7 @@ namespace WordGenerator.Controls
         {
             this.Close();
         }
+
+    
     }
 }

@@ -192,11 +192,8 @@ namespace WordGenerator
 
             this.Text = textPreamble;
 
-
-            if (this.settingsFileLabel != null)
-            {
-                this.settingsFileLabel.Text = this.OpenSettingsFileName;
-            }
+            this.handleMessageEvent(this, new MessageEvent("Loaded settings file:  " + this.OpenSettingsFileName));
+            
         }
 
 
@@ -259,6 +256,13 @@ namespace WordGenerator
 
 
 
+                //bind Ctrl+S as Save
+                //RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.Control, Keys.S);
+                //hotKeyBindings.Add(this.saveSequenceToolStripMenuItem);
+
+
+
+
 	            // bind F11 hotkey to server manager:
 	            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F11);
 	            hotKeyBindings.Add(this.serverManagerButton);
@@ -272,11 +276,13 @@ namespace WordGenerator
 	            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F2);
 	            hotKeyBindings.Add(this.overrideTab);
 
+
 	            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F3);
 	            hotKeyBindings.Add(this.analogTab);
 
 	            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F4);
 	            hotKeyBindings.Add(this.gpibTab);
+
 
 	            RegisterHotKey(Handle, hotKeyBindings.Count, KeyModifiers.None, Keys.F5);
 	            hotKeyBindings.Add(this.rs232Tab);
@@ -546,9 +552,19 @@ namespace WordGenerator
 
         }
 
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Storage.SaveAndLoad.SaveSequenceData(OpenSequenceFileName);
+            this.handleMessageEvent(this, new MessageEvent("Saved sequence file to" + OpenSequenceFileName));
+            RefreshRecentFiles();
+        }
+
+
+
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Storage.SaveAndLoad.SaveSequenceData(null);
+            this.handleMessageEvent(this, new MessageEvent("Saved sequence file to" + OpenSequenceFileName));
             RefreshRecentFiles();
         }
 
@@ -623,9 +639,16 @@ namespace WordGenerator
         }
 
 
+        private object statusTextThreadLock = new object();
 
         public void addStatusText(object sender, MessageEvent e)
         {
+            if (e.Verbosity != 0)
+                return;
+
+            if (toolStripStatusLabel == null)
+                return;
+
             if (this.InvokeRequired)
             {
                 this.BeginInvoke(new EventHandler<MessageEvent>(addStatusText), new object[] { sender, e });
@@ -633,6 +656,25 @@ namespace WordGenerator
             else
             {
                 toolStripStatusLabel.Text = e.ToString();
+                System.Threading.ThreadPool.QueueUserWorkItem(delegate {
+                    bool entered = System.Threading.Monitor.TryEnter(statusTextThreadLock, 0);
+                    if (entered) try
+                        {
+                            //Make Status label flash red when it is changed
+                            Invoke(new Action(delegate { toolStripStatusLabel.ForeColor = Color.Red; }));
+                            System.Threading.Thread.Sleep(500);
+                            Invoke(new Action(delegate { toolStripStatusLabel.ForeColor = Color.Black; }));
+                            System.Threading.Thread.Sleep(500);
+                            Invoke(new Action(delegate { toolStripStatusLabel.ForeColor = Color.Red; }));
+                            System.Threading.Thread.Sleep(500);
+                            Invoke(new Action(delegate { toolStripStatusLabel.ForeColor = Color.Black; }));
+                        }
+                        finally
+                        {
+                            System.Threading.Monitor.Exit(statusTextThreadLock);
+                        }
+                });
+               
             }
         }
 
@@ -754,6 +796,11 @@ namespace WordGenerator
                                 TabPage t = (TabPage)hotkeyObj;
                                 mainTab.SelectedTab = t;
                             }
+                            else if (hotkeyObj is ToolStripMenuItem)
+                            {
+                                ToolStripMenuItem t = (ToolStripMenuItem)hotkeyObj;
+                                t.PerformClick();
+                            }
                         }
                     }
                     break;
@@ -865,6 +912,7 @@ namespace WordGenerator
         {
             Storage.sequenceData = new SequenceData();
             WordGenerator.MainClientForm.instance.OpenSequenceFileName = null;
+            this.handleMessageEvent(this, new MessageEvent("Created new sequence (unsaved)."));
             RefreshSequenceDataToUI();
         }
 

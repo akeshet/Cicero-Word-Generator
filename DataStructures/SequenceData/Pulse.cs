@@ -12,14 +12,24 @@ namespace DataStructures
 
         private bool autoName;
 
+        private string savedUserDefName;
+     
+
         public bool AutoName
         {
             get { return autoName; }
             set
             {
                 autoName = value;
-                if (AutoName)
+                if (value)
+                {
+                    savedUserDefName = PulseName;    
                     updateAutoName();
+                }
+                else
+                {
+                    PulseName = savedUserDefName;
+                }
             }
         }
 
@@ -28,7 +38,7 @@ namespace DataStructures
             //if the pulse is invalid, autoname should't work. Maybe I call this method twice? Redudant? ASKAVIV
             if (!this.dataValid())
             {
-                this.pulseName="Invalid Pulse";
+                this.PulseName="Invalid Pulse";
                 return;
             }
 
@@ -128,7 +138,7 @@ namespace DataStructures
                 else
                     automaticName="low::"+automaticName;
 
-                this.pulseName = automaticName;
+                pulseName = automaticName;
 
             }
             // return automaticName;
@@ -211,6 +221,7 @@ namespace DataStructures
             this.pulseDescription = copyMe.pulseDescription;
             this.pulseDuration = new DimensionedParameter(copyMe.pulseDuration);
             this.pulseName = "Copy of " + copyMe.pulseName;
+            this.savedUserDefName = this.pulseName;
             this.pulseValue = copyMe.pulseValue;
             this.startCondition = copyMe.startCondition;
             this.startDelay = new DimensionedParameter(copyMe.startDelay);
@@ -230,9 +241,6 @@ namespace DataStructures
                 }
                 return pulseName; }
             set { 
-                // TODO: TIMUR
-                // Pulse should not be renameable if autoName is set to true
-                // so the following line should not run in that case
                 if (!autoName)
                 {
                     pulseName = value; 
@@ -347,6 +355,7 @@ namespace DataStructures
         public Pulse()
         {
             this.PulseName = "Unnamed";
+            this.savedUserDefName = this.PulseName;
             this.endCondition = PulseTimingCondition.TimestepEnd;
             this.endDelay = new DimensionedParameter(Units.s, 0);
             this.endDelayed = false;

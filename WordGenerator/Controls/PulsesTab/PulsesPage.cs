@@ -153,7 +153,7 @@ namespace WordGenerator.Controls
         public void openAutoNameGlossary(object sender, EventArgs e)
         {
            AutoNameGlossaryDialog autoNameBox = new AutoNameGlossaryDialog();
-           autoNameBox.Show();
+           autoNameBox.ShowDialog();
         }
     }
 }

@@ -59,7 +59,14 @@
             this.ClientSize = new System.Drawing.Size(347, 347);
             this.Controls.Add(this.glossaryText);
             this.Controls.Add(this.closeButton);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(363, 385);
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(363, 385);
             this.Name = "AutoNameGlossaryDialog";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "Autoname Glossary";
             this.ResumeLayout(false);
             this.PerformLayout();

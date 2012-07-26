@@ -71,6 +71,10 @@ namespace WordGenerator.Controls
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(590, 367);
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(590, 367);
             this.Name = "CiceroSplashForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
