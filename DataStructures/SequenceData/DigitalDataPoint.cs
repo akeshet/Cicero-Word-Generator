@@ -14,7 +14,7 @@ namespace DataStructures
         private List<Pulse> pulseList;
 
 
-        public Pulse DigitalPulse
+       /* public Pulse DigitalPulse
         {
             get {
                 if (PulseList.Count!=0)
@@ -29,7 +29,7 @@ namespace DataStructures
                     PulseList[0]=value;
             }
         }
-
+        */
         public List<Pulse> PulseList
         {
             get { 
@@ -67,10 +67,31 @@ namespace DataStructures
         /// <returns></returns>
         public bool usesPulse()
         {
-            if (DigitalPulse!=null) {
+            if (PulseList.Count!=0) {
                 return true;
             }
             return false;
+        }
+        /// <summary>
+        /// Sets the first pulse of the PulseList. If the pulse to set is null, then PulseList is cleared.
+        /// </summary>
+        /// <param name="pulse"></param>
+        public void setFirstPulse(Pulse pulse)
+        {
+            if (pulse == null)
+            {
+                clearPulse();
+                return;
+            }
+            if (PulseList.Count == 0)
+                PulseList.Add(pulse);
+            else
+                PulseList[0] = pulse;
+        }
+
+        public void clearPulse()
+        {
+            PulseList.Clear();
         }
 
         public DigitalDataPoint()

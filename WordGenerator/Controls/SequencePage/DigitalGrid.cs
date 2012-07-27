@@ -89,7 +89,8 @@ namespace WordGenerator.Controls
             if (pulseSelectorTarget != null)
             {
                 Pulse val = pulseSelector.SelectedItem as Pulse;
-                pulseSelectorTarget.DigitalPulse = val;
+              
+                pulseSelectorTarget.setFirstPulse(val);
             }
             this.Controls.Remove(pulseSelector);
 
@@ -231,7 +232,7 @@ namespace WordGenerator.Controls
                 DigitalDataPoint dp = cellPointToDigitalDataPoint(temp);
                 if (dp != null)
                 {
-                    if (dp.DigitalPulse != null)
+                    if (dp.usesPulse())
                     {
                         paintPulse(g, temp, dp);
                     }
@@ -815,7 +816,7 @@ namespace WordGenerator.Controls
                 g.DrawString(dp.variable.ToString(), variableFont, Brushes.Black, new RectangleF(p.X * colWidth, p.Y * rowHeight, colWidth, rowHeight));
             }
 
-            if (dp.DigitalPulse != null)
+            if (dp.usesPulse())
             {
                 p = paintPulse(g, p, dp);
             }
@@ -834,7 +835,8 @@ namespace WordGenerator.Controls
             {
                 textBrush = Brushes.Black;
             }
-            g.DrawString(dp.DigitalPulse.PulseName, variableFont, textBrush, new Rectangle(p.X * colWidth + 2, p.Y * rowHeight + 2, colWidth - 4, rowHeight - 4));
+            if (dp.usesPulse() && dp.PulseList[0]!=null)
+                g.DrawString(dp.PulseList[0].PulseName, variableFont, textBrush, new Rectangle(p.X * colWidth + 2, p.Y * rowHeight + 2, colWidth - 4, rowHeight - 4));
             return p;
         }
 

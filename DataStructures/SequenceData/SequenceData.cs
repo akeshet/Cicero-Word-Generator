@@ -1958,18 +1958,19 @@ namespace DataStructures
                     {
                         if (step.DigitalData[digitalID].usesPulse())
                         {
-                            Pulse pulse = step.DigitalData[digitalID].DigitalPulse;
-
-                            Pulse.PulseSampleTimes sampleTimes = pulse.getPulseSampleTimes(remainderTime, timestepSize, step.StepDuration.getBaseValue());
-
-                            int start = currentSample + sampleTimes.startSample;
-                            int end = currentSample + sampleTimes.endSample;
-
-                            start = Math.Max(0, start);
-                            end = Math.Min(end, ans.Length);
-                            for (int i = start; i < end; i++)
+                            foreach(Pulse pulse in step.DigitalData[digitalID].PulseList)
                             {
-                                ans[i] = pulse.PulseValue;
+                                Pulse.PulseSampleTimes sampleTimes = pulse.getPulseSampleTimes(remainderTime, timestepSize, step.StepDuration.getBaseValue());
+
+                                int start = currentSample + sampleTimes.startSample;
+                                int end = currentSample + sampleTimes.endSample;
+
+                                start = Math.Max(0, start);
+                                end = Math.Min(end, ans.Length);
+                                for (int i = start; i < end; i++)
+                                {
+                                    ans[i] = pulse.PulseValue;
+                                }
                             }
                         }
                     }
@@ -2027,13 +2028,15 @@ namespace DataStructures
                 foreach (TimeStep step in enabledTimeSteps())
                 {
 
-                        int nMasterSamplesInTimestep = timebaseSegments.nMasterSamples(step);
+                    int nMasterSamplesInTimestep = timebaseSegments.nMasterSamples(step);
 
-                        if (step.DigitalData.ContainsKey(digitalID))
+                    if (step.DigitalData.ContainsKey(digitalID))
+                    {
+                        if (step.DigitalData[digitalID].usesPulse())
                         {
-                            if (step.DigitalData[digitalID].usesPulse())
+                            foreach (Pulse pulse in step.DigitalData[digitalID].PulseList)
                             {
-                                Pulse pulse = step.DigitalData[digitalID].DigitalPulse;
+
                                 Pulse.PulseSampleTimes sampleTimes = pulse.getPulseSampleTimes(nMasterSamplesInTimestep, masterTimebaseSampleDuration);
 
                                 int start = currentMasterSample + sampleTimes.startSample;
@@ -2054,12 +2057,14 @@ namespace DataStructures
                                     ans[i] = pulse.PulseValue;
                                 }
                             }
+
                         }
-                        currentMasterSample += nMasterSamplesInTimestep;
+                    }
+                    currentMasterSample += nMasterSamplesInTimestep;
                 }
             }
         }
-
+    
  
 
         public void computeAnalogBuffer(int analogChannelID, double masterTimebaseSampleDuration, double[] ans, TimestepTimebaseSegmentCollection timebaseSegments)
@@ -2191,19 +2196,20 @@ namespace DataStructures
 
                     if (step.DigitalData[digitalID].usesPulse())
                     {
-                        Pulse pulse = step.DigitalData[digitalID].DigitalPulse;
-
-                        Pulse.PulseSampleTimes sampleTimes = pulse.getPulseSampleTimes(nStepSamples, masterTimestepSize);
-
-                        int start = currentSample + sampleTimes.startSample;
-                        int end = currentSample + sampleTimes.endSample;
-
-                        start = Math.Max(0, start);
-                        end = Math.Min(end, ans.Length);
-
-                        for (int i = start; i < end; i++)
+                        foreach (Pulse pulse in step.DigitalData[digitalID].PulseList)
                         {
-                            ans[i] = pulse.PulseValue;
+                            Pulse.PulseSampleTimes sampleTimes = pulse.getPulseSampleTimes(nStepSamples, masterTimestepSize);
+
+                            int start = currentSample + sampleTimes.startSample;
+                            int end = currentSample + sampleTimes.endSample;
+
+                            start = Math.Max(0, start);
+                            end = Math.Min(end, ans.Length);
+
+                            for (int i = start; i < end; i++)
+                            {
+                                ans[i] = pulse.PulseValue;
+                            }
                         }
                     }
                     currentSample += nStepSamples;
@@ -2298,18 +2304,20 @@ namespace DataStructures
                 {
                     if (step.DigitalData[digID].usesPulse())
                     {
-                        Pulse pulse = step.DigitalData[digID].DigitalPulse;
-
-                        Pulse.PulseSampleTimes sampleTimes = pulse.getPulseSampleTimes(remainderTime, timeStepSize, step.StepDuration.getBaseValue());
-
-                        if (sampleTimes.startRequiresImpingement)
+                        foreach (Pulse pulse in step.DigitalData[digID].PulseList)
                         {
-                            addImpingement(ans, nSamplesSoFar + sampleTimes.startSample, timeStepSize);
-                        }
 
-                        if (sampleTimes.endRequiresImpingement)
-                        {
-                            addImpingement(ans, nSamplesSoFar + sampleTimes.endSample, timeStepSize);
+                            Pulse.PulseSampleTimes sampleTimes = pulse.getPulseSampleTimes(remainderTime, timeStepSize, step.StepDuration.getBaseValue());
+
+                            if (sampleTimes.startRequiresImpingement)
+                            {
+                                addImpingement(ans, nSamplesSoFar + sampleTimes.startSample, timeStepSize);
+                            }
+
+                            if (sampleTimes.endRequiresImpingement)
+                            {
+                                addImpingement(ans, nSamplesSoFar + sampleTimes.endSample, timeStepSize);
+                            }
                         }
                     }
                 }
@@ -2431,9 +2439,14 @@ namespace DataStructures
             {
                 foreach (DigitalDataPoint dp in st.DigitalData.Values)
                 {
-                    if (dp.DigitalPulse != null)
-                        if (!ans.Contains(dp.DigitalPulse))
-                            ans.Add(dp.DigitalPulse);
+                    if (dp.PulseList != null)
+                    {
+                        foreach (Pulse pulse in dp.PulseList)
+                        {
+                            if (!ans.Contains(pulse))
+                                ans.Add(pulse);
+                        }
+                    }
                 }
             }
             return ans;
@@ -2616,9 +2629,12 @@ namespace DataStructures
                 {
                     if (dp.usesPulse())
                     {
-                        if (dp.DigitalPulse == replaceMe)
+                        for (int i = 0; i < dp.PulseList.Count; i++)
                         {
-                            dp.DigitalPulse = withMe;
+                            if (dp.PulseList[i] == replaceMe)
+                            {
+                                dp.PulseList[i] = withMe;
+                            }
                         }
                     }
                 }

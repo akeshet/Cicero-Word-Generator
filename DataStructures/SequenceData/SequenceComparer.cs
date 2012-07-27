@@ -342,19 +342,31 @@ namespace DataStructures
         {
             bool diffs = false;
 
-            if (a.DigitalPulse != null || b.DigitalPulse != null)
+            if (a.PulseList != null || b.PulseList != null)
             {
-                if (a.DigitalPulse != null && b.DigitalPulse != null)
+                if (a.PulseList != null && b.PulseList != null)
                 {
-                    if (a.DigitalPulse.PulseName != b.DigitalPulse.PulseName)
+                    if (a.PulseList.Count != b.PulseList.Count)
                     {
                         diffs = true;
-                        ans.Add(new SequenceDifference(prestring + "pulse names differ."));
+                        ans.Add(new SequenceDifference(prestring + "pulse list lengths differ."));
+                    }
+                    
+                    for (int i=0; i<a.PulseList.Count;i++)
+                    {
+                        Pulse pulseA=a.PulseList[i];
+                        Pulse pulseB = b.PulseList[i];
+
+                        if (pulseA.PulseName != pulseB.PulseName)
+                        {
+                            diffs = true;
+                            ans.Add(new SequenceDifference(prestring + "pulse names differ."));
+                        }
                     }
                 }
                 else
                 {
-                    ans.Add(new SequenceDifference(prestring + "one uses pulse, other doesn't."));
+                    ans.Add(new SequenceDifference(prestring + "one has uninitialized pulse list."));
                     diffs = true;
                 }
             }

@@ -273,7 +273,7 @@ namespace WordGenerator.Controls
             {
                 foreach (int digID in step.DigitalData.Keys)
                 {
-                    if (step.DigitalData[digID].DigitalPulse == pulse)
+                    if (step.DigitalData[digID].PulseList.Contains(pulse))
                     {
                         MessageBox.Show("Cannot delete this pulse, it is used in timestep [" + step.ToString() + "] in digital ID " + digID);
                         return;
