@@ -2,13 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DataStructures.Cicero2.Extensions;
+using Cicero.DataStructures2.Extensions;
 
-namespace DataStructures.Cicero2
+namespace Cicero.DataStructures2
 {
     public struct ResourceID
     {
+        public static readonly ResourceID Null = new ResourceID(0);
+
+        private static readonly UInt64[] specialIDs = new UInt64[] {
+            Null.idInteger
+        };
+
         private UInt64 idInteger;
+
+        private ResourceID(UInt64 idInteger) {
+            this.idInteger = idInteger;
+        }
 
         public override int GetHashCode()
         {
@@ -39,6 +49,14 @@ namespace DataStructures.Cicero2
             return String.Format("{0:X16}", idInteger);
         }
 
+        public static bool operator==(ResourceID a, ResourceID b) {
+            return a.idInteger==b.idInteger;
+        }
+
+        public static bool operator!=(ResourceID a, ResourceID b) {
+            return a.idInteger!=b.idInteger;
+        }
+
         private static Random randomGenerator;
 
         /// <summary>
@@ -48,10 +66,16 @@ namespace DataStructures.Cicero2
         public static ResourceID newRandom() {
             if (randomGenerator==null)
                 randomGenerator = new Random();
-           
-            ResourceID ans;
-            ans.idInteger = randomGenerator.NextUInt64();
-            return ans;
+
+            UInt64 randomInt64;
+            while (true) {
+                randomInt64 = randomGenerator.NextUInt64();
+                if (specialIDs.Contains(randomInt64))
+                    continue;
+                break;
+            }
+
+            return new ResourceID(randomInt64);
         }
 
         /// <summary>

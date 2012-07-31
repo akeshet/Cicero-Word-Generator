@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DataStructures.Cicero2
+namespace Cicero.DataStructures2.Extensions
 {
     public static class Cicero2ExtensionMethods
     {

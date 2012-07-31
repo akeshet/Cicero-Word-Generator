@@ -1,4 +1,4 @@
-﻿using DataStructures.Cicero2;
+﻿using Cicero.DataStructures2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
