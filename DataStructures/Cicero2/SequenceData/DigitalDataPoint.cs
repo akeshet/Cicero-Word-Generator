@@ -8,6 +8,14 @@ namespace Cicero.DataStructures2
     [Serializable, TypeConverter(typeof(ExpandableObjectConverter))]
     public class DigitalDataPoint : Cicero2DataObject
     {
+		protected override IEnumerable<Cicero.DataStructures2.ResourceID> ReferencedResources_Internal ()
+		{
+			return new ResourceID[] {
+				parameter.variable,
+				this.DigitalPulse
+			};
+		}
+
         private Parameter parameter;
 
         private ResourceID<Pulse> digitalPulse;

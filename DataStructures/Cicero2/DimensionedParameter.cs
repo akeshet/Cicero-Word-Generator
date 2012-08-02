@@ -235,5 +235,14 @@ namespace Cicero.DataStructures2
         {
             return resourceDictionary.Get(a).parameter;
         }
+
+		public static void forceToManualValue(this ResourceID<DimensionedParameter> a, 
+		                                      double value, Units units,
+		                                      Cicero2ResourceDictionary resources)
+        {
+			DimensionedParameter param = resources.Get(a);
+            param.units = units;
+            param.parameter.forceToManualValue(value);
+        }
     }
 }
