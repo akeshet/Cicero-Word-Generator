@@ -8,8 +8,8 @@
     <ProjectGuid>{07B67011-62AB-43E3-80F6-E00BCBFF8558}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DataStructures</RootNamespace>
-    <AssemblyName>DataStructures</AssemblyName>
+    <RootNamespace>Cicero.DataStructures2</RootNamespace>
+    <AssemblyName>Cicero.DataStructures2</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -66,6 +66,7 @@
     <Compile Include="Cicero2\Cicero2ExtensionMethods.cs" />
     <Compile Include="Cicero2\Cicero2ResourceDictionary.cs" />
     <Compile Include="Cicero2\DimensionedParameter.cs" />
+    <Compile Include="Cicero2\ForwardVersionConverter.cs" />
     <Compile Include="Cicero2\SequenceData\Parameter.cs" />
     <Compile Include="Cicero2\ResourceID.cs" />
     <Compile Include="Cicero2\SequenceData\Pulse.cs" />
