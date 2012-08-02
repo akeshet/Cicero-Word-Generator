@@ -151,6 +151,7 @@
     <Compile Include="Cicero2\SequenceData\DigitalDataPoint.cs" />
     <Compile Include="Cicero2\SequenceData\Waveform.cs" />
     <Compile Include="Cicero2\DimensionedParameter.cs" />
+    <Compile Include="Cicero2\SequenceData\WaveformEquationInterpolator.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\ExceptionViewerDialog.resx">

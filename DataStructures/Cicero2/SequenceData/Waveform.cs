@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using EnumWrapperTypeConverter = DataStructures.EnumWrapperTypeConverter;
 using Units = DataStructures.Units;
+using InterpolationException = DataStructures.InterpolationException;
 
 namespace Cicero.DataStructures2
 {
@@ -350,11 +351,12 @@ namespace Cicero.DataStructures2
             /// <param name="referencedWaveforms"></param>
             /// <param name="combiners"></param>
             /// <returns></returns>
-            public double getValueAtTime(double time, double wfDuration, double[] xValues, double[] yValues, double[] extraValues, List<Waveform> referencedWaveforms, List<CombinationOperators> combiners, string equationString, List<Variable> existingVariables, List<Waveform> existingCommonWaveforms)
+            public double getValueAtTime(double time, double wfDuration, double[] xValues, double[] yValues, double[] extraValues, List<Waveform> referencedWaveforms, List<CombinationOperators> combiners, string equationString, List<Variable> existingVariables, List<Waveform> existingCommonWaveforms,
+			                             Cicero2ResourceDictionary resources)
             {
 
                 double[] arr = new double[1];
-                this.getInterpolation(1, time, time, wfDuration, xValues, yValues, extraValues, referencedWaveforms, combiners, arr, 0, equationString, existingVariables, existingCommonWaveforms);
+                this.getInterpolation(1, time, time, wfDuration, xValues, yValues, extraValues, referencedWaveforms, combiners, arr, 0, equationString, existingVariables, existingCommonWaveforms, resources);
                 return arr[0];
 
             }
@@ -373,7 +375,21 @@ namespace Cicero.DataStructures2
             /// <param name="usingManualValues">Bool specifying whether using "manual" or "variable" values. True for manual.</param>
             /// <param name="variableValues">Double array of variable values. Used only if usingManualValues is false, and if this is a combination type interpolation.</param>
             /// <returns></returns>
-			public void getInterpolation(int nSamples, double startTime, double endTime, double wfDuration , double [] xValues, double [] yValues, double [] extraValues, List<Waveform> referencedWaveforms, List<CombinationOperators> combiners, double [] output, int startIndex, string equationString, List<Variable> existingVariables, List<Waveform> existingCommonWaveforms) {
+			public void getInterpolation(int nSamples, 
+			                             double startTime, 
+			                             double endTime, 
+			                             double wfDuration , 
+			                             double [] xValues, 
+			                             double [] yValues, 
+			                             double [] extraValues, 
+			                             List<Waveform> referencedWaveforms, 
+			                             List<CombinationOperators> combiners, 
+			                             double [] output, 
+			                             int startIndex, 
+			                             string equationString, 
+			                             List<Variable> existingVariables, 
+			                             List<Waveform> existingCommonWaveforms,
+			                             Cicero2ResourceDictionary resources) {
                 if (startTime > endTime)
                     startTime = endTime;
  
@@ -593,14 +609,13 @@ namespace Cicero.DataStructures2
                         // Comination of waveforms
                     case InterpolationID.Combination: 
                         {
-                            // Since we've already allocated memory for the answer, lets not waste it. Thus, we pass a reference to the array for the interpolater to use.
-                            combinationInterpolation(nSamples, startTime, endTime, referencedWaveforms, combiners, output, startIndex, existingVariables, existingCommonWaveforms);
+							throw new InterpolationException("Combination interpolation is deprechated.");
                         }
                         break;
 
                     case InterpolationID.Equation:
                         {
-                            WaveformEquationInterpolator.getEquationInterpolation(equationString, startTime, endTime, nSamples, startIndex, output, existingVariables, existingCommonWaveforms, wfDuration);
+                            WaveformEquationInterpolator.getEquationInterpolation(equationString, startTime, endTime, nSamples, startIndex, output, existingVariables, existingCommonWaveforms, wfDuration, resources);
                         }
                         break;
 				}
@@ -608,210 +623,10 @@ namespace Cicero.DataStructures2
 				return;
             }
             #region Combination Interpolater
-            private void combinationInterpolation(int nSamples, double startTime, double endTime, List<Waveform> referencedWaveforms, List<CombinationOperators> combiners, double [] output, int startIndex, List<Variable> existingVariables, List<Waveform> existingCommonWaveforms)
+            private void combinationInterpolation(int nSamples, double startTime, double endTime, List<Waveform> referencedWaveforms, List<CombinationOperators> combiners, double [] output, int startIndex, List<Variable> existingVariables, List<Waveform> existingCommonWaveforms,
+			                                      Cicero2ResourceDictionary resources)
             {
-                int numRefs = 0;
-                if (referencedWaveforms != null)
-                    numRefs = referencedWaveforms.Count;
-
-                int numCombiners = 0;
-                if (combiners != null)
-                    numCombiners = combiners.Count;
-
-                if (numRefs!=(numCombiners+1))
-                    throw new InterpolationException("InterpolationException: the number of combination operators must be exactly 1 less than the number of referenced waveforms.)");
-
-                if (numCombiners == 0)
-                {
-                    Waveform theOnlyWaveform = referencedWaveforms[0];
-                    if (theOnlyWaveform == null)
-                        return;
-
-                    int cutoffstart;
-
-                    theOnlyWaveform.getInterpolation(nSamples, startTime, endTime, output, startIndex, existingVariables, existingCommonWaveforms);
-                    cutoffstart =(int) ( (theOnlyWaveform.WaveformDuration.getBaseValue() - startTime) / (double)(endTime - startTime) * (double) nSamples);
-
-                    if (cutoffstart < 1)
-                        cutoffstart = 1;
-                    for (int i = cutoffstart; i < nSamples; i++)
-                            output[i + startIndex] = output[i + startIndex - 1];
-
-                        return;
-                }
-
-                // List of times when each segment of the interpolation begins. The first segment begins at time zero.
-                List<double> segmentStartTimes = new List<double>();
-                segmentStartTimes.Add(0);
-                List<double> segmentLengths = new List<double>();
-                List<List<Waveform>> segmentWaveforms = new List<List<Waveform>>();
-                segmentWaveforms.Add(new List<Waveform>());
-
-                List<List<CombinationOperators>> segmentCombinationOperators = new List<List<CombinationOperators>>();
-                segmentCombinationOperators.Add(new List<CombinationOperators>());
-
-                double segLength = 0;
-                int currentSegment = 0;
-                // First, figure out all the segment lengths / times and the waveforms / combiners used in each segment
-
-                segmentWaveforms[0].Add(referencedWaveforms[0]);
-                if (referencedWaveforms[0] != null)
-                {
-
-                     segLength = referencedWaveforms[0].WaveformDuration.getBaseValue();
-                }
-
-                for (int i = 1; i < referencedWaveforms.Count; i++)
-                {
-
-
-                    if (combiners[i-1] == CombinationOperators.Then) // write down the current seg length and start again
-                    {
-                        segmentStartTimes.Add(segLength + segmentStartTimes[segmentStartTimes.Count - 1]);
-                        segmentLengths.Add(segLength);
-                        segLength = 0;
-
-                        segmentWaveforms.Add(new List<Waveform>());
-                        segmentCombinationOperators.Add(new List<CombinationOperators>());
-
-                        currentSegment++;
-                    }
-                    else
-                        segmentCombinationOperators[currentSegment].Add(combiners[i-1]);
-
-
-                    if (referencedWaveforms[i] != null)
-                    {
-
-                        segLength = Math.Max(referencedWaveforms[i].WaveformDuration.getBaseValue(), segLength);
-                    }
-
-                    segmentWaveforms[currentSegment].Add(referencedWaveforms[i]);
-
-                }
-
-                segLength = Math.Min(segLength, endTime - segmentStartTimes[segmentStartTimes.Count - 1]);
-
-                segmentLengths.Add(segLength);
-
-
-
-
-                double x = startTime;
-
-                double baseStepSize = (endTime - startTime) / ((double) nSamples);
-                // now, for each segment, interpolate that segment and piece the results together.
-                double remainderTime = 0;
-
-                int currentTimeStep = 0;
-
-                for (int i=0; i<segmentStartTimes.Count; i++) 
-                {
-                    if (segmentStartTimes[i] >= endTime)
-                        continue;
-                    int nSegmentSteps;
-                    double segmentTotalTime;
-                    double interpolationStartTime = Math.Max(x, segmentStartTimes[i]); // this is the time at which we will start interpolating
-                               // in most cases segmentstarttime and x will be equal, but this may not be true
-                                // the first time through this loop if startTime!=0
-                    double interpolationEndTime;
-
-
- //                   if (segmentLengths.Count > i)
-                        interpolationEndTime = Math.Min(endTime, segmentStartTimes[i] + segmentLengths[i]);
- //                   else
-  //                      interpolationEndTime = endTime;
-
-                    segmentTotalTime = interpolationEndTime - interpolationStartTime;
-
-                    if (segmentTotalTime <= 0) // this segment is getting ignored.
-                        continue;
-
-                    if (baseStepSize == 0)
-                        nSegmentSteps = 0;
-                    else
-                        nSegmentSteps = (int) (segmentTotalTime / baseStepSize);
-
-                    // This code is to make sure that the total number of timesteps, when you piece all the segments
-                    // together, is finally equal to nSamples.
-                    remainderTime += segmentTotalTime - nSegmentSteps * baseStepSize;
-                    if (remainderTime > baseStepSize)
-                    {
-                        nSegmentSteps++;
-                        remainderTime -= baseStepSize;
-                    }
-
-                    // generate all the the interpolations of the waveforms to combine
-                    double[][] interpolations = new double [segmentWaveforms[i].Count] [];
-                    for (int j = 0; j < segmentWaveforms[i].Count; j++)
-                    {
-                        if (segmentWaveforms[i][j]==null) {
-                            interpolations[j] = new double[nSegmentSteps];
-                            continue;
-                        }
-
-
-                        interpolations[j] = segmentWaveforms[i][j].getInterpolation(nSegmentSteps, 0, segmentTotalTime, existingVariables, existingCommonWaveforms);
-
-                    }
-
-                    //now combine them. This code cleverly takes into account order of operations wrt + - and * by using 2 accumulators.
-                    double[] accumulatorA = new double[nSegmentSteps];
-                    double[] accumulatorB = interpolations[0];
-
-                    for (int j = 1; j < segmentWaveforms[i].Count; j++)
-                    {
-                        if (segmentCombinationOperators[i][j - 1] == CombinationOperators.Times)
-                        {
-                            for (int k = 0; k < nSegmentSteps; k++)
-                                accumulatorB[k] *= interpolations[j][k];
-                        }
-                        else if (segmentCombinationOperators[i][j - 1] == CombinationOperators.Plus)
-                        {
-                            for (int k = 0; k < nSegmentSteps; k++)
-                            {
-                                accumulatorA[k] += accumulatorB[k];
-                                accumulatorB[k] = interpolations[j][k];
-                            }
-                        }
-                        else if (segmentCombinationOperators[i][j - 1] == CombinationOperators.Minus)
-                        {
-                            for (int k = 0; k < nSegmentSteps; k++)
-                            {
-                                accumulatorA[k] += accumulatorB[k];
-                                accumulatorB[k] = -interpolations[j][k];
-                            }
-                        }
-                        else
-                            throw new InterpolationException("InterpolationException: Unrecognized combination operator.");
-                    }
-
-                    for (int k = 0; k < nSegmentSteps; k++)
-                    {
-                        accumulatorA[k] += accumulatorB[k];
-                    }
-
-
-                    //Finally, stick the interpolation for this segment into the full interpolation in the appropriate spot
-
-                    for (int k = currentTimeStep; k < nSegmentSteps + currentTimeStep; k++)
-                    {
-                        output[k+startIndex] = accumulatorA[k - currentTimeStep];
-                    }
-                    currentTimeStep += nSegmentSteps;
-                }
-
-                // finally, make sure that we really did generate nSamples samples, and if we did, innocently fill in the final
-                // datum to be a repeat of its previous one
-                for (; currentTimeStep < nSamples; currentTimeStep++ )
-                {
-                    if (currentTimeStep == 0)
-                        output[currentTimeStep+startIndex] = 0;
-                    else
-                        output[currentTimeStep+startIndex] = output[currentTimeStep+startIndex-1];
-                }
-
-                return;
+				throw new NotImplementedException("Combination interpolation is being deprecated. Use equation interpolation instead.");
             }
 
             #endregion
@@ -892,7 +707,7 @@ namespace Cicero.DataStructures2
             extraParameters[2].forceToManualValue(frequency, Units.Hz, resources);
             extraParameters[3].forceToManualValue(phase, Units.deg, resources);
 
-            this.waveformDuration.forceToManualValue(duration, Units.s);
+            waveformDuration.forceToManualValue(duration, Units.s, resources);
         }
 
         /// <summary>
@@ -913,7 +728,7 @@ namespace Cicero.DataStructures2
             yValues.Add(resources.AddNew(new DimensionedParameter(Units.V, startvalue)));
             yValues.Add(resources.AddNew(new DimensionedParameter(Units.V, endvalue)));
 
-            this.waveformDuration.forceToManualValue(duration, Units.s);
+            waveformDuration.forceToManualValue(duration, Units.s, resources);
 
         }
 
@@ -1078,10 +893,10 @@ namespace Cicero.DataStructures2
             set { combiners = value; }
         }
 
-        private DimensionedParameter waveformDuration = new DimensionedParameter(Units.Dimension.s);
+		private ResourceID<DimensionedParameter> waveformDuration;
 
         [Description("The duration of this waveform."), Category("Parameters.")]
-        public DimensionedParameter WaveformDuration
+        public ResourceID<DimensionedParameter> WaveformDuration
         {
             get { return waveformDuration; }
             set { waveformDuration = value; }
@@ -1132,21 +947,21 @@ namespace Cicero.DataStructures2
         /// <returns></returns>
         public double[] getInterpolation(int nSamples, List<Variable> existingVariables, List<Waveform> existingCommonWaveforms, Cicero2ResourceDictionary resources)
         {
-            return this.getInterpolation(nSamples, 0, waveformDuration.getBaseValue(), existingVariables, existingCommonWaveforms), resources;
+            return this.getInterpolation(nSamples, 0, waveformDuration.getBaseValue(resources), existingVariables, existingCommonWaveforms, resources);
         }
 
         public void getInterpolation(int nSamples, double[] output, int startIndex, List<Variable> existingVariables, List<Waveform> existingCommonWaveforms, Cicero2ResourceDictionary resources)
         {
-            this.getInterpolation(nSamples, 0, waveformDuration.getBaseValue(), output, startIndex, existingVariables, existingCommonWaveforms), resources;
+            this.getInterpolation(nSamples, 0, waveformDuration.getBaseValue(resources), output, startIndex, existingVariables, existingCommonWaveforms, resources);
         }
 
         public double getValueAtTime(double time, List<Variable> existingVariables, List<Waveform> existingCommonWaveforms, Cicero2ResourceDictionary resources)
         {
             return this.interpolationType.getValueAtTime(time,
-                waveformDuration.getBaseValue(),
-                DimensionedParameter.getBaseValues(xValues),
-                DimensionedParameter.getBaseValues(yValues),
-                DimensionedParameter.getBaseValues(extraParameters),
+                waveformDuration.getBaseValue(resources),
+                DimensionedParameter.getBaseValues(xValues, resources),
+                DimensionedParameter.getBaseValues(yValues, resources),
+                DimensionedParameter.getBaseValues(extraParameters, resources),
                 referencedWaveforms,
                 combiners,
                 EquationString,
@@ -1154,7 +969,7 @@ namespace Cicero.DataStructures2
                 existingCommonWaveforms, resources);
         }
 
-        public void getInterpolation(int nSamples, double startTime, double endTime, double [] output, int startIndex, List<Variable> existingVariables, List<Waveform> existingCommonWaveforms)
+        public void getInterpolation(int nSamples, double startTime, double endTime, double [] output, int startIndex, List<Variable> existingVariables, List<Waveform> existingCommonWaveforms, Cicero2ResourceDictionary resources)
         {
             if (interpolationType.referencesOtherWaveforms && this.isWaveformReferenceRecursive()) throw new InterpolationException("Interpolation Exception: Attempted to interpolate a recursive wavefunction.");
 
@@ -1162,25 +977,26 @@ namespace Cicero.DataStructures2
                 nSamples,
                 startTime,
                 endTime,
-                waveformDuration.getBaseValue(),
-                DimensionedParameter.getBaseValues(xValues),
-                DimensionedParameter.getBaseValues(yValues),
-                DimensionedParameter.getBaseValues(extraParameters),
+                waveformDuration.getBaseValue(resources),
+                DimensionedParameter.getBaseValues(xValues, resources),
+                DimensionedParameter.getBaseValues(yValues, resources),
+                DimensionedParameter.getBaseValues(extraParameters, resources),
                 referencedWaveforms,
                 combiners,
                 output,
                 startIndex,
                 EquationString,
                 existingVariables,
-                existingCommonWaveforms);
+                existingCommonWaveforms,
+				resources);
         }
 
-        public double [] getInterpolation(int nSamples, double startTime, double endTime, List<Variable> existingVariables, List<Waveform> existingCommonWaveforms)
+        public double [] getInterpolation(int nSamples, double startTime, double endTime, List<Variable> existingVariables, List<Waveform> existingCommonWaveforms, Cicero2ResourceDictionary resources)
         {
             if (nSamples > 0)
             {
                 double[] ans = new double[nSamples];
-                this.getInterpolation(nSamples, startTime, endTime, ans, 0, existingVariables, existingCommonWaveforms);
+                this.getInterpolation(nSamples, startTime, endTime, ans, 0, existingVariables, existingCommonWaveforms, resources);
                 return ans;
             }
             else
@@ -1292,7 +1108,7 @@ namespace Cicero.DataStructures2
             return waveformName;
         }
 
-        public Dictionary<Variable, string> usedVariables()
+ /*       public Dictionary<Variable, string> usedVariables()
         {
             Dictionary<Variable, string> ans = new Dictionary<Variable, string>();
 
@@ -1321,13 +1137,13 @@ namespace Cicero.DataStructures2
             }
 
             return ans;
-        }
+        }*/
 
         /// <summary>
         /// Returns the effective duration of the waveform, which is the time until the waveform holds flat.
         /// </summary>
         /// <returns></returns>
-        public double getEffectiveWaveformDuration()
+        public double getEffectiveWaveformDuration(Cicero2ResourceDictionary resources)
         {
             if (myInterpolationType == InterpolationType.Linear || myInterpolationType == InterpolationType.Step)
             {
@@ -1349,7 +1165,7 @@ namespace Cicero.DataStructures2
                     return Math.Min(maxX, waveformDuration.getBaseValue());
                      * */
 
-                    return waveformDuration.getBaseValue();
+                    return waveformDuration.getBaseValue(resources);
                 }
                 else
                 {
@@ -1358,19 +1174,19 @@ namespace Cicero.DataStructures2
             }
             else if (myInterpolationType == InterpolationType.Sinusoidal)
             {
-                return (waveformDuration.getBaseValue());
+                return (waveformDuration.getBaseValue(resources));
             }
             else if (myInterpolationType == InterpolationType.Exponential)
             {
-                DimensionedParameter endTime = extraParameters[4];
-                return Math.Min(endTime.getBaseValue(), waveformDuration.getBaseValue());
+                DimensionedParameter endTime = resources.Get(extraParameters[4]);
+                return Math.Min(endTime.getBaseValue(resources), waveformDuration.getBaseValue(resources));
             }
             else if (myInterpolationType == InterpolationType.TwoPointCubicSpline)
             {
                 if (xValues.Count > 1)
                 {
-                    DimensionedParameter endTime = xValues[1];
-                    return Math.Min(endTime.getBaseValue(), waveformDuration.getBaseValue());
+                    DimensionedParameter endTime = resources.Get(xValues[1]);
+                    return Math.Min(endTime.getBaseValue(resources), waveformDuration.getBaseValue(resources));
                 }
                 else
                 {
@@ -1379,11 +1195,11 @@ namespace Cicero.DataStructures2
             }
             else if (myInterpolationType == InterpolationType.Combination)
             {
-                return waveformDuration.getBaseValue();
+                return waveformDuration.getBaseValue(resources);
             }
             else if (myInterpolationType == InterpolationType.Equation)
             {
-                return waveformDuration.getBaseValue();
+                return waveformDuration.getBaseValue(resources);
             }
             else
             {
@@ -1391,17 +1207,17 @@ namespace Cicero.DataStructures2
             }
         }
 
-        public void sortXValues()
+        public void sortXValues(Cicero2ResourceDictionary resources)
         {
-            List<DimensionedParameter> sortedX = new List<DimensionedParameter>();
-            List<DimensionedParameter> sortedY = new List<DimensionedParameter>();
+            List<ResourceID<DimensionedParameter>> sortedX = new List<ResourceID<DimensionedParameter>>();
+            List<ResourceID<DimensionedParameter>> sortedY = new List<ResourceID<DimensionedParameter>>();
 
             for (int inIndex = 0; inIndex < XValues.Count; inIndex++)
             {
                 int outIndex = 0;
-                foreach (DimensionedParameter outX in sortedX)
+                foreach (ResourceID<DimensionedParameter> outX in sortedX)
                 {
-                    if (XValues[inIndex].getBaseValue() <= outX.getBaseValue())
+                    if (XValues[inIndex].getBaseValue(resources) <= outX.getBaseValue(resources))
                         break;
                     outIndex++;
                 }
@@ -1413,25 +1229,26 @@ namespace Cicero.DataStructures2
             YValues = sortedY;
         }
 
-        public bool scaleXValues()
+
+        public bool scaleXValues(Cicero2ResourceDictionary resources)
         {
-            if (waveformDuration.parameter.variable != null)
+            if (resources.Get(waveformDuration).parameter.variable != ResourceID.Null)
                 return false;
 
-            foreach (DimensionedParameter dp in XValues)
+            foreach (ResourceID<DimensionedParameter> dp in XValues)
             {
-                if (dp.parameter.variable != null)
+                if (resources.Get (dp).parameter.variable != ResourceID.Null)
                 {
                     return false;
                 }
             }
 
-            double maxX = 0;
-            foreach (DimensionedParameter dp in XValues)
+			double maxX = 0;
+            foreach (ResourceID<DimensionedParameter> dp in XValues)
             {
-                if (dp.getBaseValue() > maxX)
+                if (dp.getBaseValue(resources) > maxX)
                 {
-                    maxX = dp.getBaseValue();
+                    maxX = dp.getBaseValue(resources);
                 }
             }
 
@@ -1440,9 +1257,9 @@ namespace Cicero.DataStructures2
                 return false;
             }
 
-            foreach (DimensionedParameter dp in XValues)
+            foreach (ResourceID<DimensionedParameter> dp in XValues)
             {
-                dp.setBaseValue(dp.getBaseValue() * waveformDuration.getBaseValue() / maxX); 
+                resources.Get(dp).setBaseValue(dp.getBaseValue(resources) * waveformDuration.getBaseValue(resources) / maxX); 
             }
             return true;
         }

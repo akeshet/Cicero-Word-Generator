@@ -15,6 +15,13 @@ namespace Cicero.DataStructures2
     [Serializable, TypeConverter(typeof(ExpandableObjectConverter))]
     public class DimensionedParameter : Cicero2DataObject
     {
+		protected override IEnumerable<Cicero.DataStructures2.ResourceID> ReferencedResources_Internal ()
+		{
+			return new ResourceID[] {
+				this.myParameter.variable
+			};
+		}
+
         public static bool Equivalent(DimensionedParameter a, DimensionedParameter b)
         {
             if (!Parameter.Equivalent(a.myParameter, b.myParameter))
@@ -188,7 +195,7 @@ namespace Cicero.DataStructures2
         /// <param name="list"></param>
         /// <param name="variableValues"></param>
         /// <returns></returns>
-        public static double[] getBaseValues(List<DimensionedParameter> list, Cicero2ResourceDictionary resourceDictionary)
+        public static double[] getBaseValues(List<ResourceID<DimensionedParameter>> list, Cicero2ResourceDictionary resourceDictionary)
         {
             if (list == null) return null;
             double[] ans = new double[list.Count];
