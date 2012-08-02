@@ -21,7 +21,7 @@ namespace Cicero.DataStructures2
         public ResourceID var;
 
         [Description("The variable that is driving the parameter, if any.")]
-        public ResourceID variable
+        public ResourceID<Variable> variable
         {
             get { return var; }
             set { var = value; }
