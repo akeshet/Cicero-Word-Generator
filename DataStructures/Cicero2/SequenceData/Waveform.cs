@@ -19,8 +19,18 @@ namespace Cicero.DataStructures2
     // SO if some weird bug in .NET remoting re-appears, I may have to remove above line.
 
     ]
-	public class Waveform
+	public class Waveform : Cicero2DataObject
 	{
+
+		protected override IEnumerable<Cicero.DataStructures2.ResourceID> ReferencedResources_Internal ()
+		{
+			List<ResourceID> ans = new List<Cicero.DataStructures2.ResourceID>();
+			ans.AddRange(this.ExtraParameters.DownCast());
+			ans.AddRange(this.XValues.DownCast());
+			ans.AddRange(this.YValues.DownCast());
+			ans.Add(this.WaveformDuration);
+			return ans;
+		}
 
         /*public void copyWaveform(Waveform copyMe)
         {

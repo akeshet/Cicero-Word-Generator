@@ -213,6 +213,14 @@ namespace Cicero.DataStructures2
         }
     }
 
+	public static class ResourceIDCastExtensions {
+		public static IEnumerable<ResourceID> DownCast<ResourceType>(this IEnumerable<ResourceID<ResourceType>> a) 
+		where ResourceType : Cicero2DataObject
+		{
+			return a.Cast<ResourceID>();
+		}
+	}
+
     public class ResourceException : Exception
     {
         public ResourceException(String message) : base(message) {}
