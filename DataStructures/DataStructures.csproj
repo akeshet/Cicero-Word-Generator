@@ -66,9 +66,10 @@
     <Compile Include="Cicero2\Cicero2ExtensionMethods.cs" />
     <Compile Include="Cicero2\Cicero2ResourceDictionary.cs" />
     <Compile Include="Cicero2\DimensionedParameter.cs" />
-    <Compile Include="Cicero2\Parameter.cs" />
+    <Compile Include="Cicero2\SequenceData\Parameter.cs" />
     <Compile Include="Cicero2\ResourceID.cs" />
-    <Compile Include="Cicero2\Variable.cs" />
+    <Compile Include="Cicero2\SequenceData\Pulse.cs" />
+    <Compile Include="Cicero2\SequenceData\Variable.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="DataStructuresVersionNumber.cs" />
     <Compile Include="ClientStartupSettings.cs" />

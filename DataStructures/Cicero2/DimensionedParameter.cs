@@ -15,11 +15,6 @@ namespace Cicero.DataStructures2
     [Serializable, TypeConverter(typeof(ExpandableObjectConverter))]
     public class DimensionedParameter : Cicero2DataObject
     {
-        public override string ResourceType
-        {
-            get { return "DimensionedParameter"; }
-        }
-
         public static bool Equivalent(DimensionedParameter a, DimensionedParameter b)
         {
             if (!Parameter.Equivalent(a.myParameter, b.myParameter))
@@ -167,6 +162,8 @@ namespace Cicero.DataStructures2
             return units.multiplier * parameter.getValue(resourceDictionary);
         }
 
+
+
         /*     /// <summary>
              /// Returns an array of manual base values corresponding to the manual values of
              /// the DimensionedParameters in the list.
@@ -214,10 +211,29 @@ namespace Cicero.DataStructures2
         /// </summary>
         /// <returns></returns>
 
-        /*public string ToShortString()
+        public string ToShortString(Cicero2ResourceDictionary resourceDictionary)
         {
-            return this.parameter.Value.ToString() + this.units.ToString();
-        }*/
+            return this.parameter.getValue(resourceDictionary).ToString() + this.units.ToString();
+        }
 
+    }
+
+    public static class DimensionedParameterExtensions
+    {
+        /// <summary>
+        /// Helper extension to ResourceID.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="resourceDictionary"></param>
+        /// <returns></returns>
+        public static double getBaseValue(this ResourceID<DimensionedParameter> a, Cicero2ResourceDictionary resourceDictionary)
+        {
+            return resourceDictionary.Get(a).getBaseValue(resourceDictionary);
+        }
+
+        public static Parameter parameter(this ResourceID<DimensionedParameter> a, Cicero2ResourceDictionary resourceDictionary)
+        {
+            return resourceDictionary.Get(a).parameter;
+        }
     }
 }

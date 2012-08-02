@@ -9,10 +9,6 @@ namespace Cicero.DataStructures2
     [Serializable, TypeConverter(typeof(ExpandableObjectConverter))]
     public class Variable : Cicero2DataObject
     {
-        public override string ResourceType
-        {
-            get { return "Variable"; }
-        }
 
         public static readonly string EQUATION_ERROR_RECURSIVE = "Recursive variable reference detected.";
 

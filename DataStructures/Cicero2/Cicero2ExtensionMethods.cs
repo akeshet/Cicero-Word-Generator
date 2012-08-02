@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Cicero.DataStructures2.Extensions
+namespace Cicero.DataStructures2
 {
     public static class Cicero2ExtensionMethods
     {
@@ -13,5 +13,7 @@ namespace Cicero.DataStructures2.Extensions
             rnd.NextBytes(buffer);
             return BitConverter.ToUInt64(buffer, 0);
         }
+
+
     }
 }

@@ -27,9 +27,5 @@ namespace Cicero.DataStructures2 {
         {
             this.resourceID = ResourceID.newRandom(exclusionList);
         }
-
-        public abstract string ResourceType {
-            get;
-        }
     }
 }

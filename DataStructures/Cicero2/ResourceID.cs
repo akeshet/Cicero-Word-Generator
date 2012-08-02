@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Cicero.DataStructures2.Extensions;
+
 
 namespace Cicero.DataStructures2
 {
@@ -211,5 +211,10 @@ namespace Cicero.DataStructures2
                     return ans;
             }
         }
+    }
+
+    public class ResourceException : Exception
+    {
+        public ResourceException(String message) : base(message) {}
     }
 }
