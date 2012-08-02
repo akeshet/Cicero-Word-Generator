@@ -15,3 +15,6 @@ obj/
 *.pdb
 *.vshost.exe.manifest
 TestResults/
+*.resources
+*.DS_Store
+*.userprefs

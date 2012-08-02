@@ -40,8 +40,24 @@ namespace Cicero.DataStructures2
             return true;
         }
 
+		/// <summary>
+		/// Get the specified resourceID. Returns null if 
+		/// resourceID == ResourceID.Null, or if
+		/// resource is not contained in dictionary.
+		/// 
+		/// Throws exception if resourceID is not castable to ResourceType.
+		/// </summary>
+		/// <param name='resourceID'>
+		/// Resource I.
+		/// </param>
+		/// <typeparam name='ResourceType'>
+		/// The 1st type parameter.
+		/// </typeparam>
         public ResourceType Get<ResourceType>(ResourceID<ResourceType> resourceID) where ResourceType : Cicero2DataObject
         {
+			if (resourceID==ResourceID.Null)
+				return null;
+
             if (ContainsKey(resourceID))
             {
                 Cicero2DataObject resource = this[resourceID];
@@ -53,6 +69,17 @@ namespace Cicero.DataStructures2
             }
             return null;
         }
+
+		/// <summary>
+		/// Get the specified resourceID. Same behavior as
+		/// type-templated version of function.
+		/// </summary>
+		/// <param name='resourceID'>
+		/// Resource I.
+		/// </param>
+		public Cicero2DataObject Get(ResourceID resourceID) {
+			return Get ((ResourceID<Cicero2DataObject>) resourceID);
+		}
 
         /// <summary>
         /// Intended to be used only when first creating a resource. Example use:

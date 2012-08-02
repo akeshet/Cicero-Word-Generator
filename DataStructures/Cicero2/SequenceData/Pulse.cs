@@ -13,6 +13,16 @@ namespace Cicero.DataStructures2
     public class Pulse : Cicero2DataObject
     {
 
+		protected override IEnumerable<Cicero.DataStructures2.ResourceID> ReferencedResources_Internal ()
+		{
+			return new ResourceID[] {
+				this.endDelay,
+				this.pulseDuration,
+				this.startDelay,
+				this.ValueVariable
+			};
+		}
+
         private bool autoName;
 
         private string savedUserDefName;
@@ -202,7 +212,7 @@ namespace Cicero.DataStructures2
                 valueFromVariable = value;
                 if (valueFromVariable == false)
                 {
-                    ValueVariable = null;
+                    ValueVariable = ResourceID.Null;
                 }
 
                 // TODO: TIMUR
@@ -214,9 +224,11 @@ namespace Cicero.DataStructures2
                     updateAutoName();
             }
         }
-        private Variable valueVariable;
 
-        public Variable ValueVariable
+
+        private ResourceID<Variable> valueVariable;
+
+        public ResourceID<Variable> ValueVariable
         {
             get { return valueVariable; }
             set { valueVariable = value;
@@ -345,26 +357,28 @@ namespace Cicero.DataStructures2
 
         private bool pulseValue;
 
-        public bool PulseValue
+        public bool getPulseValue(Cicero2ResourceDictionary resources)
         {
-            get {
                 if (!ValueFromVariable)
                 {
                     return pulseValue;
                 }
                 else {
-                    if (ValueVariable==null)
+                    if (ValueVariable==ResourceID.Null)
                         return false;
-                    if (ValueVariable.VariableValue!=0)
+                    if (resources.Get(ValueVariable).VariableValue!=0)
                         return true;
-                    return false;
-                }
-            }
-            set { pulseValue = value;
+                   return false;
+			}
+		}
+	
+	
+        public void setPulseValue(bool value) 
+		{ 
+			pulseValue = value;
             if (AutoName)
                 updateAutoName();
-             }
-        }
+		}
 
         public Pulse(Cicero2ResourceDictionary resourceDictionary)
         {
@@ -565,7 +579,6 @@ namespace Cicero.DataStructures2
             }
 
             return ans;
-
         }
     }
 }
