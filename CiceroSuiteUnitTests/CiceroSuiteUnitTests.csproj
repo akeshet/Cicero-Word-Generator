@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AtticusServerTest.cs" />
+    <Compile Include="Cicero2ResourceDictionaryTest.cs" />
     <Compile Include="EqCompilerTest.cs" />
     <Compile Include="NetworkClockDatagramTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
