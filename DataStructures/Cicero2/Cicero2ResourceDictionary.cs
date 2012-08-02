@@ -40,8 +40,24 @@ namespace Cicero.DataStructures2
             return true;
         }
 
+		/// <summary>
+		/// Get the specified resourceID. Returns null if 
+		/// resourceID == ResourceID.Null, or if
+		/// resource is not contained in dictionary.
+		/// 
+		/// Throws exception if resourceID is not castable to ResourceType.
+		/// </summary>
+		/// <param name='resourceID'>
+		/// Resource I.
+		/// </param>
+		/// <typeparam name='ResourceType'>
+		/// The 1st type parameter.
+		/// </typeparam>
         public ResourceType Get<ResourceType>(ResourceID<ResourceType> resourceID) where ResourceType : Cicero2DataObject
         {
+			if (resourceID==ResourceID.Null)
+				return null;
+
             if (ContainsKey(resourceID))
             {
                 Cicero2DataObject resource = this[resourceID];
