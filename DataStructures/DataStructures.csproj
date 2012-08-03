@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Cicero.DataStructures2</RootNamespace>
-    <AssemblyName>Cicero.DataStructures2</AssemblyName>
+    <AssemblyName>DataStructures</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -152,7 +152,6 @@
     <Compile Include="UtilityClasses\WaveformParser.cs" />
     <Compile Include="Cicero2\SequenceData\DigitalDataPoint.cs" />
     <Compile Include="Cicero2\SequenceData\Waveform.cs" />
-    <Compile Include="Cicero2\DimensionedParameter.cs" />
     <Compile Include="Cicero2\SequenceData\WaveformEquationInterpolator.cs" />
     <Compile Include="Cicero2\SequenceData\Group.cs" />
     <Compile Include="Cicero2\SequenceData\AnalogGroup.cs" />

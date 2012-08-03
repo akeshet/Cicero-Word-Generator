@@ -7,9 +7,10 @@ namespace Cicero.DataStructures2
 {
     public static class ForwardVersionConverter
     {
-        public static ResourceID<Waveform> convert(DataStructures.Waveform input, Cicero2ResourceDictionary resources)
+       /* public static ResourceID<Waveform> convert(DataStructures.Waveform input, Cicero2ResourceDictionary resources)
         {
 
-        }
+        }*/
+
     }
 }
