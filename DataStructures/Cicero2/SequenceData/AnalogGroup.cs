@@ -124,10 +124,7 @@ namespace Cicero.DataStructures2
             };
         }
 
-        /// <summary>
-        /// Contains a dictionary of waveforms associated with channel ID#s. Note, these waveforms may point to a common waveform,
-        /// in which case they should not be editable from within the analog group editor.
-        /// </summary>
+        
         private ResourceID<Waveform> myWaveform;
 
         [Description("The waveform assigned to this channel.")]
@@ -169,7 +166,7 @@ namespace Cicero.DataStructures2
         }
 
         public AnalogGroupChannelData()
-            : this(new Waveform(), false, false)
+            : this(ResourceID.Null, false, false)
         {
         }
     }

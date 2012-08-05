@@ -13,7 +13,7 @@ namespace Cicero.DataStructures2
     /// <typeparam name="?"></typeparam>
     [Serializable, TypeConverter(typeof(ExpandableObjectConverter))]
     abstract public class Group<ChannelDataType> : Cicero2DataObject
-        where ChannelDataType : Cicero2DataObject, new ()
+        where ChannelDataType : Cicero2DataObject, new()
     {
         protected string groupName;
 
