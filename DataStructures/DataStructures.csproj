@@ -8,7 +8,7 @@
     <ProjectGuid>{07B67011-62AB-43E3-80F6-E00BCBFF8558}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cicero.DataStructures2</RootNamespace>
+    <RootNamespace>DataStructures</RootNamespace>
     <AssemblyName>DataStructures</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileUpgradeFlags>

@@ -1275,4 +1275,11 @@ namespace Cicero.DataStructures2
         }
 
     }
+
+    public static class WaveformResourceExtensions
+    {
+        public static double getEffectiveWaveformDuration(this ResourceID<Waveform> waveformID, Cicero2ResourceDictionary resources) {
+            return resources.Get(waveformID).getEffectiveWaveformDuration(resources);
+        }
+    }
 }
