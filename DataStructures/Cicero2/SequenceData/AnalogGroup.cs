@@ -10,10 +10,17 @@ namespace Cicero.DataStructures2
     public class AnalogGroup : Group<AnalogGroupChannelData>
     {
 
+        protected override IEnumerable<ResourceID> ReferencedResources_Internal()
+        {
+            List<ResourceID> ans = new List<ResourceID>();
+            ans.Add(TimeResolution);
+            ans.AddRange(ChannelDatas.Values.DownCast());
+            return ans;
+        }
 
-        private DimensionedParameter timeResolution;
+        private ResourceID<DimensionedParameter> timeResolution;
 
-        public DimensionedParameter TimeResolution
+        public ResourceID<DimensionedParameter> TimeResolution
         {
             get {
                 //default time resolution is 1 ms.
@@ -43,7 +50,7 @@ namespace Cicero.DataStructures2
         /// <returns></returns>
         public List<ResourceID<Waveform>> getAnalogGroupWaveforms(Cicero2ResourceDictionary resources)
         {
-            List<int> channelIDs = getAnalogGroupWaveformChannelIDs();
+            List<int> channelIDs = getAnalogGroupWaveformChannelIDs(resources);
             List<ResourceID<Waveform>> wfs = new List<ResourceID<Waveform>>();
             foreach (int id in channelIDs)
             {
@@ -57,12 +64,12 @@ namespace Cicero.DataStructures2
         /// Note that only channel IDs which have their common waveform bit set to false will be in this list.
         /// </summary>
         /// <returns></returns>
-        public List<int> getAnalogGroupWaveformChannelIDs()
+        public List<int> getAnalogGroupWaveformChannelIDs(Cicero2ResourceDictionary resources)
         {
             List<int> channelIDs = new List<int>();
             foreach (int id in channelDatas.Keys)
             {
-                if (!channelDatas[id].ChannelWaveformIsCommon)
+                if (!resources.Get(channelDatas[id]).ChannelWaveformIsCommon)
                     channelIDs.Add(id);
             }
 
@@ -70,23 +77,23 @@ namespace Cicero.DataStructures2
             return channelIDs;
         }
 
-        public bool channelEnabled(int channelID)
+        public bool channelEnabled(int channelID, Cicero2ResourceDictionary resources)
         {
             if (!channelExists(channelID))
                 return false;
-            return channelDatas[channelID].ChannelEnabled;
+            return resources.Get(channelDatas[channelID]).ChannelEnabled;
         }
 
-        public double getEffectiveDuration()
+        public double getEffectiveDuration(Cicero2ResourceDictionary resources)
         {
             double ans = 0;
-            foreach (AnalogGroupChannelData channelData in ChannelDatas.Values)
+            foreach (ResourceID<AnalogGroupChannelData> channelData in ChannelDatas.Values)
             {
-                if (channelData.ChannelEnabled)
+                if (resources.Get(channelData).ChannelEnabled)
                 {
-                    if (channelData.waveform != null)
+                    if (resources.Get(channelData).waveform != null)
                     {
-                        double temp = channelData.waveform.getEffectiveWaveformDuration();
+                        double temp = resources.Get(channelData).waveform.getEffectiveWaveformDuration(resources);
                         if (temp > ans)
                             ans = temp;
                     }
@@ -110,6 +117,13 @@ namespace Cicero.DataStructures2
     [Serializable, TypeConverter(typeof(ExpandableObjectConverter))]
     public class AnalogGroupChannelData : Cicero2DataObject
     {
+        protected override IEnumerable<ResourceID> ReferencedResources_Internal()
+        {
+            return new ResourceID[] {
+                this.waveform
+            };
+        }
+
         /// <summary>
         /// Contains a dictionary of waveforms associated with channel ID#s. Note, these waveforms may point to a common waveform,
         /// in which case they should not be editable from within the analog group editor.
