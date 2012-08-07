@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		ReleaseNotes.txt = ReleaseNotes.txt
 		Syncronization.txt = Syncronization.txt
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+		Useful Regular Expressions.txt = Useful Regular Expressions.txt
 		WordGenerator.vsmdi = WordGenerator.vsmdi
 	EndProjectSection
 EndProject

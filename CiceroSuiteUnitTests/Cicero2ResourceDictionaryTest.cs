@@ -90,9 +90,9 @@ namespace CiceroSuiteUnitTests
             ResourceID<Pulse> p1 =  resDict.AddNew(new Pulse(resDict));
             ResourceID<DimensionedParameter> dp3 = resDict.AddNew(new DimensionedParameter(Units.Dimension.Hz));
             ResourceID<Variable> v1 = resDict.AddNew(new Variable());
-            resDict.Get(v1).VariableValue = 1.85;
+            v1.Get(resDict).VariableValue = 1.85;
 
-            resDict.Get(dp3).parameter.variable = v1;
+            dp3.Get(resDict).parameter.variable = v1;
 
             Assert.AreEqual(1, dp1.getBaseValue(resDict));
             Assert.AreEqual(4, dp2.getBaseValue(resDict));

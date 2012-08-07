@@ -66,9 +66,15 @@
     <Compile Include="Cicero2\Cicero2ExtensionMethods.cs" />
     <Compile Include="Cicero2\Cicero2ResourceDictionary.cs" />
     <Compile Include="Cicero2\DimensionedParameter.cs" />
+    <Compile Include="Cicero2\SequenceData\GPIBGroup.cs" />
     <Compile Include="Cicero2\SequenceData\Parameter.cs" />
     <Compile Include="Cicero2\ResourceID.cs" />
     <Compile Include="Cicero2\SequenceData\Pulse.cs" />
+    <Compile Include="Cicero2\SequenceData\RetriggerOptions.cs" />
+    <Compile Include="Cicero2\SequenceData\RS232Group.cs" />
+    <Compile Include="Cicero2\SequenceData\StringParameterString.cs" />
+    <Compile Include="Cicero2\SequenceData\TimeStep.cs" />
+    <Compile Include="Cicero2\SequenceData\TimestepGroup.cs" />
     <Compile Include="Cicero2\SequenceData\Variable.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="DataStructuresVersionNumber.cs" />

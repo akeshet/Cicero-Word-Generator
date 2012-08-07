@@ -1,0 +1,9 @@
+A collection of recular expressions that have been useful, for future reference.
+To use this, you need to you "Replace in Files" in VS, and make sure that Regular Expressions
+are selected under Find Options.
+
+---
+Find and replaces occurances of resources.Lookup(blah) with blah.Get(resources):
+Find: resources.Lookup\({[^)]*}\)
+Replace with: \1.Get(resources)
+Note: This will not play nice if the <blah> expression has parentheses of its own.

@@ -1247,7 +1247,7 @@ namespace Cicero.DataStructures2
 
             foreach (ResourceID<DimensionedParameter> dp in XValues)
             {
-                if (dp.Get(resources).parameter.variable != ResourceID.Null)
+                if (resources.Lookup (dp).parameter.variable != ResourceID.Null)
                 {
                     return false;
                 }
