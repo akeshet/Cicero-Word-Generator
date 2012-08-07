@@ -83,8 +83,8 @@ namespace Cicero.DataStructures2
             }
         }
 
-		public Variable getVariable(Cicero2ResourceDictionary resourceDictionary) {
-			return resourceDictionary.Get(parameter.variable);
+		public Variable getVariable(Cicero2ResourceDictionary resources) {
+			return parameter.variable.Get(resources);
 		}
 
         public bool getValue(Cicero2ResourceDictionary resourceDictionary)

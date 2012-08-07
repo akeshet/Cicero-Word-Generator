@@ -97,6 +97,13 @@ namespace Cicero.DataStructures2
                 return this == (ResourceID<Cicero2DataObject>)obj;
             return false;
         }
+
+        public ResourceType Get(Cicero2ResourceDictionary resources)
+        {
+            if (resources == null)
+                return null;
+            return resources.Lookup(this);
+        }
     }
 
     /// <summary>

@@ -231,23 +231,23 @@ namespace Cicero.DataStructures2
         /// Helper extension to ResourceID.
         /// </summary>
         /// <param name="a"></param>
-        /// <param name="resourceDictionary"></param>
+        /// <param name="resources"></param>
         /// <returns></returns>
-        public static double getBaseValue(this ResourceID<DimensionedParameter> a, Cicero2ResourceDictionary resourceDictionary)
+        public static double getBaseValue(this ResourceID<DimensionedParameter> a, Cicero2ResourceDictionary resources)
         {
-            return resourceDictionary.Get(a).getBaseValue(resourceDictionary);
+            return a.getBaseValue(resources);
         }
 
-        public static Parameter parameter(this ResourceID<DimensionedParameter> a, Cicero2ResourceDictionary resourceDictionary)
+        public static Parameter parameter(this ResourceID<DimensionedParameter> a, Cicero2ResourceDictionary resources)
         {
-            return resourceDictionary.Get(a).parameter;
+            return a.parameter(resources);
         }
 
 		public static void forceToManualValue(this ResourceID<DimensionedParameter> a, 
 		                                      double value, Units units,
 		                                      Cicero2ResourceDictionary resources)
         {
-			DimensionedParameter param = resources.Get(a);
+            DimensionedParameter param = a.Get(resources);
             param.units = units;
             param.parameter.forceToManualValue(value);
         }

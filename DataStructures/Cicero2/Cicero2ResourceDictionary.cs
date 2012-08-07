@@ -41,11 +41,14 @@ namespace Cicero.DataStructures2
         }
 
 		/// <summary>
-		/// Get the specified resourceID. Returns null if 
+		/// Returns the resource for the specified resourceID. Returns null if 
 		/// resourceID == ResourceID.Null, or if
 		/// resource is not contained in dictionary.
 		/// 
 		/// Throws exception if resourceID is not castable to ResourceType.
+        /// 
+        /// Preferable for code readability to use a ResourceID's Get method,
+        /// which uses this internally.
 		/// </summary>
 		/// <param name='resourceID'>
 		/// Resource I.
@@ -53,7 +56,7 @@ namespace Cicero.DataStructures2
 		/// <typeparam name='ResourceType'>
 		/// The 1st type parameter.
 		/// </typeparam>
-        public ResourceType Get<ResourceType>(ResourceID<ResourceType> resourceID) where ResourceType : Cicero2DataObject
+        public ResourceType Lookup<ResourceType>(ResourceID<ResourceType> resourceID) where ResourceType : Cicero2DataObject
         {
 			if (resourceID==ResourceID.Null)
 				return null;
@@ -71,14 +74,14 @@ namespace Cicero.DataStructures2
         }
 
 		/// <summary>
-		/// Get the specified resourceID. Same behavior as
+		/// Get the resource specified by given resourceID. Same behavior as
 		/// type-templated version of function.
 		/// </summary>
 		/// <param name='resourceID'>
-		/// Resource I.
+		/// Resource ID.
 		/// </param>
-		public Cicero2DataObject Get(ResourceID resourceID) {
-			return Get ((ResourceID<Cicero2DataObject>) resourceID);
+		public Cicero2DataObject Lookup(ResourceID resourceID) {
+			return Lookup ((ResourceID<Cicero2DataObject>) resourceID);
 		}
 
         /// <summary>

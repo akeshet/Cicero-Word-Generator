@@ -56,7 +56,7 @@ namespace Cicero.DataStructures2
             throw new NotImplementedException();
         }
 
-        public void updateAutoName(Cicero2ResourceDictionary resourceDictionary)
+        public void updateAutoName(Cicero2ResourceDictionary resources)
         {
 
             //if the pulse is invalid, autoname should't work. Maybe I call this method twice? Redudant? ASKAVIV
@@ -97,7 +97,7 @@ namespace Cicero.DataStructures2
                     //startCondition and endCondition is checked for by dataValid at the beginning of this method
 
                     //pulse duration
-                    automaticName=resourceDictionary.Get(pulseDuration).ToShortString(resourceDictionary)+" "+automaticName;
+                    automaticName=pulseDuration.Get(resources).ToShortString(resources)+" "+automaticName;
 
                     if (this.startCondition == PulseTimingCondition.TimestepStart)
                         automaticName=automaticName+" OnStart";
@@ -121,7 +121,7 @@ namespace Cicero.DataStructures2
                 else if (this.startCondition == PulseTimingCondition.TimestepEnd)
                     first_half = "E";
                 else if (this.startCondition == PulseTimingCondition.Duration)
-                    first_half = resourceDictionary.Get(pulseDuration).ToShortString(resourceDictionary) + "_D";
+                    first_half = pulseDuration.Get(resources).ToShortString(resources) + "_D";
 
                 if (this.startDelayEnabled && this.startCondition != PulseTimingCondition.Duration)
                 {
@@ -131,7 +131,7 @@ namespace Cicero.DataStructures2
                         first_half = "p" + first_half;
 
                     //could use the ToString function here, but it outputs a space and I don't want that
-                    first_half = resourceDictionary.Get(startDelay).ToShortString(resourceDictionary) + "_" + first_half;
+                    first_half = startDelay.Get(resources).ToShortString(resources) + "_" + first_half;
                 }
 
 
@@ -142,7 +142,7 @@ namespace Cicero.DataStructures2
                 else if (this.endCondition == PulseTimingCondition.TimestepEnd)
                     second_half = "E";
                 else if (this.endCondition == PulseTimingCondition.Duration)
-                    second_half = resourceDictionary.Get(pulseDuration).ToShortString(resourceDictionary) + "_D";
+                    second_half = pulseDuration.Get(resources).ToShortString(resources) + "_D";
 
                 if (this.endDelayEnabled && this.endCondition != PulseTimingCondition.Duration)
                 {
@@ -151,7 +151,7 @@ namespace Cicero.DataStructures2
                     else
                         second_half = "p" + second_half;
 
-                    second_half = resourceDictionary.Get(endDelay).ToShortString(resourceDictionary) + "_" + second_half;
+                    second_half = endDelay.Get(resources).ToShortString(resources) + "_" + second_half;
                 }
 
                 //add pos or neg pulse label
@@ -366,7 +366,7 @@ namespace Cicero.DataStructures2
                 else {
                     if (ValueVariable==ResourceID.Null)
                         return false;
-                    if (resources.Get(ValueVariable).VariableValue!=0)
+                    if (ValueVariable.Get(resources).VariableValue!=0)
                         return true;
                    return false;
 			}
@@ -489,7 +489,7 @@ namespace Cicero.DataStructures2
         }
         */
  
-        public PulseSampleTimes getPulseSampleTimes(int nSamplesInSequenceTimestep, double sampleDuration, Cicero2ResourceDictionary resourceDictionary)
+        public PulseSampleTimes getPulseSampleTimes(int nSamplesInSequenceTimestep, double sampleDuration, Cicero2ResourceDictionary resources)
         {
             if (!dataValid())
                 throw new InvalidDataException("This pulse is invalid.");
@@ -503,7 +503,7 @@ namespace Cicero.DataStructures2
 
                 if (startDelayEnabled)
                 {
-                    int delaySamples = (int)(0.5 + startDelay.getBaseValue(resourceDictionary) / sampleDuration);
+                    int delaySamples = (int)(0.5 + startDelay.getBaseValue(resources) / sampleDuration);
                     if (startDelayed) {
                         ans.startSample+=delaySamples;
                     }
@@ -518,7 +518,7 @@ namespace Cicero.DataStructures2
                 ans.startSample = nSamplesInSequenceTimestep;
                 if (startDelayEnabled)
                 {
-                    int delaySamples = (int)(0.5 + resourceDictionary.Get(startDelay).getBaseValue(resourceDictionary) / sampleDuration);
+                    int delaySamples = (int)(0.5 + startDelay.Get(resources).getBaseValue(resources) / sampleDuration);
                     if (startDelayed) {
                         ans.startSample+=delaySamples;
                     }
@@ -534,7 +534,7 @@ namespace Cicero.DataStructures2
 
                 if (endDelayEnabled)
                 {
-                    int delaySamples = (int)(0.5 + resourceDictionary.Get(endDelay).getBaseValue(resourceDictionary) / sampleDuration);
+                    int delaySamples = (int)(0.5 + endDelay.Get(resources).getBaseValue(resources) / sampleDuration);
                     if (endDelayed) {
                         ans.endSample+=delaySamples;
                     }
@@ -550,7 +550,7 @@ namespace Cicero.DataStructures2
 
                 if (endDelayEnabled)
                 {
-                    int delaySamples = (int)(0.5 + endDelay.getBaseValue(resourceDictionary) / sampleDuration);
+                    int delaySamples = (int)(0.5 + endDelay.getBaseValue(resources) / sampleDuration);
                     if (endDelayed) {
                         ans.endSample+=delaySamples;
                     }
@@ -562,12 +562,12 @@ namespace Cicero.DataStructures2
 
             if (endCondition == PulseTimingCondition.Duration)
             {
-                ans.endSample = ans.startSample + (int)(0.5 + pulseDuration.getBaseValue(resourceDictionary) / sampleDuration);
+                ans.endSample = ans.startSample + (int)(0.5 + pulseDuration.getBaseValue(resources) / sampleDuration);
             }
 
             if (startCondition == PulseTimingCondition.Duration)
             {
-                ans.startSample = ans.endSample - (int)(0.5 + pulseDuration.getBaseValue(resourceDictionary) / sampleDuration);
+                ans.startSample = ans.endSample - (int)(0.5 + pulseDuration.getBaseValue(resources) / sampleDuration);
             }
 
             if (ans.startSample!=0 && ans.startSample!=nSamplesInSequenceTimestep) {

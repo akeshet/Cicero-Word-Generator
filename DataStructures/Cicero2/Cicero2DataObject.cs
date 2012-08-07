@@ -71,7 +71,7 @@ namespace Cicero.DataStructures2 {
 			foreach (ResourceID id in referencedResources) {
 				if (id==ResourceID.Null)
 					continue;
-				Cicero2DataObject referencedObject = resourceDictionary.Get(id);
+				Cicero2DataObject referencedObject = resourceDictionary.Lookup(id);
 				if (referencedObject!=null)
 					referencedObject.UsedResources(resourceDictionary, usedSet);
 			}

@@ -776,7 +776,7 @@ namespace Cicero.DataStructures2
                     {
                         xValues.Add(resources.AddNew(new DimensionedParameter(Units.Dimension.s)));
                         yValues.Add(resources.AddNew(new DimensionedParameter(YUnits)));
-                        resources.Get(xValues[i]).parameter.ManualValue = i;
+                        xValues[i].Get(resources).parameter.ManualValue = i;
                     }
                 }
             }
@@ -1188,14 +1188,14 @@ namespace Cicero.DataStructures2
             }
             else if (myInterpolationType == InterpolationType.Exponential)
             {
-                DimensionedParameter endTime = resources.Get(extraParameters[4]);
+                DimensionedParameter endTime = extraParameters[4].Get(resources);
                 return Math.Min(endTime.getBaseValue(resources), waveformDuration.getBaseValue(resources));
             }
             else if (myInterpolationType == InterpolationType.TwoPointCubicSpline)
             {
                 if (xValues.Count > 1)
                 {
-                    DimensionedParameter endTime = resources.Get(xValues[1]);
+                    DimensionedParameter endTime = xValues[1].Get(resources);
                     return Math.Min(endTime.getBaseValue(resources), waveformDuration.getBaseValue(resources));
                 }
                 else
@@ -1242,12 +1242,12 @@ namespace Cicero.DataStructures2
 
         public bool scaleXValues(Cicero2ResourceDictionary resources)
         {
-            if (resources.Get(waveformDuration).parameter.variable != ResourceID.Null)
+            if (waveformDuration.Get(resources).parameter.variable != ResourceID.Null)
                 return false;
 
             foreach (ResourceID<DimensionedParameter> dp in XValues)
             {
-                if (resources.Get (dp).parameter.variable != ResourceID.Null)
+                if (dp.Get(resources).parameter.variable != ResourceID.Null)
                 {
                     return false;
                 }
@@ -1269,7 +1269,7 @@ namespace Cicero.DataStructures2
 
             foreach (ResourceID<DimensionedParameter> dp in XValues)
             {
-                resources.Get(dp).setBaseValue(dp.getBaseValue(resources) * waveformDuration.getBaseValue(resources) / maxX); 
+                dp.Get(resources).setBaseValue(dp.getBaseValue(resources) * waveformDuration.getBaseValue(resources) / maxX); 
             }
             return true;
         }
@@ -1279,7 +1279,7 @@ namespace Cicero.DataStructures2
     public static class WaveformResourceExtensions
     {
         public static double getEffectiveWaveformDuration(this ResourceID<Waveform> waveformID, Cicero2ResourceDictionary resources) {
-            return resources.Get(waveformID).getEffectiveWaveformDuration(resources);
+            return waveformID.Get(resources).getEffectiveWaveformDuration(resources);
         }
     }
 }

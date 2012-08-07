@@ -54,7 +54,7 @@ namespace Cicero.DataStructures2
             List<ResourceID<Waveform>> wfs = new List<ResourceID<Waveform>>();
             foreach (int id in channelIDs)
             {
-                wfs.Add(resources.Get(channelDatas[id]).waveform);
+                wfs.Add(channelDatas[id].Get(resources).waveform);
             }
             return wfs;
         }
@@ -69,7 +69,7 @@ namespace Cicero.DataStructures2
             List<int> channelIDs = new List<int>();
             foreach (int id in channelDatas.Keys)
             {
-                if (!resources.Get(channelDatas[id]).ChannelWaveformIsCommon)
+                if (!channelDatas[id].Get(resources).ChannelWaveformIsCommon)
                     channelIDs.Add(id);
             }
 
@@ -81,7 +81,7 @@ namespace Cicero.DataStructures2
         {
             if (!channelExists(channelID))
                 return false;
-            return resources.Get(channelDatas[channelID]).ChannelEnabled;
+            return channelDatas[channelID].Get(resources).ChannelEnabled;
         }
 
         public double getEffectiveDuration(Cicero2ResourceDictionary resources)
@@ -89,11 +89,11 @@ namespace Cicero.DataStructures2
             double ans = 0;
             foreach (ResourceID<AnalogGroupChannelData> channelData in ChannelDatas.Values)
             {
-                if (resources.Get(channelData).ChannelEnabled)
+                if (channelData.Get(resources).ChannelEnabled)
                 {
-                    if (resources.Get(channelData).waveform != null)
+                    if (channelData.Get(resources).waveform != null)
                     {
-                        double temp = resources.Get(channelData).waveform.getEffectiveWaveformDuration(resources);
+                        double temp = channelData.Get(resources).waveform.getEffectiveWaveformDuration(resources);
                         if (temp > ans)
                             ans = temp;
                     }
