@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
-using ExpandableStructConverter = DataStructures.ExpandableStructConverter;
 using System.Linq;
 
 namespace Cicero.DataStructures2
 {
-    [Serializable, TypeConverter(typeof(ExpandableStructConverter))]
-    public struct StringParameterString : Cicero2ResourceReferrer
+    [Serializable, TypeConverter(typeof(ExpandableObjectConverter))]
+    public class StringParameterString : Cicero2DataObject
     {
-        public IEnumerable<ResourceID> ReferencedResources_Internal()
+
+        protected override IEnumerable<ResourceID> ReferencedResources_Internal()
         {
             return new ResourceID[] { Parameter };
         }

@@ -58,6 +58,10 @@ namespace Cicero.DataStructures2
     [Serializable, TypeConverter(typeof(ExpandableObjectConverter))]
     public class RS232GroupChannelData : Cicero2DataObject {
 
+        protected override IEnumerable<DataStructures2.ResourceID> ReferencedResources_Internal()
+        {
+            return StringParameterStrings;
+        }
 
         public enum RS232DataType { 
         /// <summary>
@@ -104,9 +108,9 @@ namespace Cicero.DataStructures2
             set { channelEnabled = value; }
         }
 
-        private List<StringParameterString> stringParameterStrings;
+        private List<ResourceID<StringParameterString>> stringParameterStrings;
 
-        public List<StringParameterString> StringParameterStrings
+        public List<ResourceID<StringParameterString>> StringParameterStrings
         {
             get { return stringParameterStrings; }
             set { stringParameterStrings = value; }

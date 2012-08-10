@@ -9,6 +9,11 @@ namespace Cicero.DataStructures2
     [Serializable, TypeConverter(typeof(ExpandableObjectConverter))]
     public class TimestepGroup : Cicero2DataObject
     {
+        protected override IEnumerable<ResourceID> ReferencedResources_Internal()
+        {
+            return new ResourceID[] { LoopCount };
+        }
+
         private string timestepGroupName;
 
         public string TimestepGroupName
@@ -53,9 +58,9 @@ namespace Cicero.DataStructures2
             set { loopTimestepGroup = value; }
         }
 
-        private DimensionedParameter loopCount;
+        private ResourceID<DimensionedParameter> loopCount;
 
-        public DimensionedParameter LoopCount
+        public ResourceID<DimensionedParameter> LoopCount
         {
             get
             {
@@ -78,13 +83,6 @@ namespace Cicero.DataStructures2
             }
         }
 
-        public Dictionary<Variable, string> usedVariables()
-        {
-            Dictionary<Variable, string> ans = new Dictionary<Variable, string>();
 
-            if (this.LoopCount.myParameter.variable != null)
-                ans.Add(this.LoopCount.myParameter.variable, "Loop Count.");
-            return ans;
-        }
     }
 }

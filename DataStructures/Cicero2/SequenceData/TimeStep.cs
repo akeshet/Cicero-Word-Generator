@@ -15,6 +15,19 @@ namespace Cicero.DataStructures2
     [Serializable, TypeConverter(typeof(ExpandableObjectConverter))]
     public class TimeStep : Cicero2DataObject
     {
+        protected override IEnumerable<ResourceID> ReferencedResources_Internal()
+        {
+            List<ResourceID> ans = new List<ResourceID>();
+            ans.AddRange(this.DigitalData.Values.DownCast());
+            ans.Add(this.AnalogGroup);
+            ans.Add(this.rs232Group);
+            ans.Add(this.gpibGroup);
+            ans.Add(this.StepDuration);
+            ans.Add(this.MyTimestepGroup);
+            ans.Add(this.RetriggerTimeout);
+            return ans;
+        }
+
         private string stepName;
 
         [Category("Global"), Description("Name of the timestep.")]
@@ -46,9 +59,9 @@ namespace Cicero.DataStructures2
             return false;
         }
 
-        private TimestepGroup myTimestepGroup;
+        private ResourceID<TimestepGroup> myTimestepGroup;
 
-        public TimestepGroup MyTimestepGroup
+        public ResourceID<TimestepGroup> MyTimestepGroup
         {
             get { return myTimestepGroup; }
             set { myTimestepGroup = value; }

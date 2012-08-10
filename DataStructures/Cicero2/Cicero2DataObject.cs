@@ -70,26 +70,4 @@ namespace Cicero.DataStructures2 {
 		}
     }
 
-    public interface Cicero2ResourceReferrer
-    {
-        /// <summary>
-        /// To be implemented by subclasses of Cicero2DataObject.
-        /// Should return a List (or other enumerable type) of all
-        /// directly referenced resources in use by this object. (Ie just 
-        /// those ResourceIDs that are currently directly referenced).
-        /// 
-        /// May return null if none referenced.
-        /// </summary>
-        /// <returns>
-        /// The resources_ internal.
-        /// </returns>
-        IEnumerable<ResourceID> ReferencedResources_Internal();
-    }
-
-    public static class CiceroDataObjectExtensions
-    {
-        public static IEnumerable<ResourceID> ReferencedResources_Internal(this IEnumerable<Cicero2ResourceReferrer> referrers) {
-            return referrers.SelectMany(x => { return x.ReferencedResources_Internal(); });
-        }
-    }
 }

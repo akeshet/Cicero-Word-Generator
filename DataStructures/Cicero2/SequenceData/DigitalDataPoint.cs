@@ -11,12 +11,12 @@ namespace Cicero.DataStructures2
 		protected override IEnumerable<Cicero.DataStructures2.ResourceID> ReferencedResources_Internal ()
 		{
 			return new ResourceID[] {
-				parameter.variable,
+				this.parameter,
 				this.DigitalPulse
 			};
 		}
 
-        private Parameter parameter;
+        private ResourceID<DimensionedParameter> parameter;
 
         private ResourceID<Pulse> digitalPulse;
 

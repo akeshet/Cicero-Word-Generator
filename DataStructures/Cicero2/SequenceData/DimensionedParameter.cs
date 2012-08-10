@@ -18,7 +18,7 @@ namespace Cicero.DataStructures2
 		protected override IEnumerable<Cicero.DataStructures2.ResourceID> ReferencedResources_Internal ()
 		{
 			return new ResourceID[] {
-				this.myParameter.variable
+				this.Variable
 			};
 		}
 
@@ -34,14 +34,9 @@ namespace Cicero.DataStructures2
             return true;
         }
 
-        public Parameter parameter;
+        public ResourceID<Variable> Variable;
 
-        [Description("The parameter object underlying this dimensioned parameter.")]
-        public Parameter myParameter
-        {
-            get { return parameter; }
-            set { parameter = value; }
-        }
+        public double manualValue;
 
         /// <summary>
         /// Forces this dimensioned parameter to take on a manual value with specified units. This will stop use of
@@ -52,7 +47,8 @@ namespace Cicero.DataStructures2
         public void forceToManualValue(double value, Units units)
         {
             this.units = units;
-            this.parameter.forceToManualValue(value);
+            this.manualValue = value;
+            this.Variable = ResourceID.Null;
         }
 
         public Units units;
@@ -238,18 +234,13 @@ namespace Cicero.DataStructures2
             return a.getBaseValue(resources);
         }
 
-        public static Parameter parameter(this ResourceID<DimensionedParameter> a, Cicero2ResourceDictionary resources)
-        {
-            return a.parameter(resources);
-        }
 
 		public static void forceToManualValue(this ResourceID<DimensionedParameter> a, 
 		                                      double value, Units units,
 		                                      Cicero2ResourceDictionary resources)
         {
             DimensionedParameter param = a.Get(resources);
-            param.units = units;
-            param.parameter.forceToManualValue(value);
+            param.forceToManualValue(value, units);
         }
     }
 }
