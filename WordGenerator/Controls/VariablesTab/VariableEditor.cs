@@ -209,7 +209,7 @@ namespace WordGenerator.Controls
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void deleteVariableButtonClick(object sender, EventArgs e)
         {
             attemptDeleteVariable();
         }
