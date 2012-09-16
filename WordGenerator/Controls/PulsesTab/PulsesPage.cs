@@ -42,6 +42,7 @@ namespace WordGenerator.Controls
                     for (int i = 0; i < extras; i++)
                     {
                         pulseEditorsFlowPanel.Controls.Remove(pulseEditors[0]);
+                        pulseEditors[0].Dispose();
                         pulseEditors.RemoveAt(0);
                     }
                 }
@@ -104,6 +105,7 @@ namespace WordGenerator.Controls
                 PulseEditor pe = sender as PulseEditor;
                 pulseEditors.Remove(pe);
                 pulseEditorsFlowPanel.Controls.Remove(pe);
+                pe.Dispose();
             }
         }
 
