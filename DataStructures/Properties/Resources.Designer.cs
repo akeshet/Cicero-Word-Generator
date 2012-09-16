@@ -88,7 +88,7 @@ namespace DataStructures.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to rev5.
+        ///   Looks up a localized string similar to rev6.
         /// </summary>
         internal static string RevisionString {
             get {

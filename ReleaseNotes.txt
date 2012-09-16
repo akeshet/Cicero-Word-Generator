@@ -132,3 +132,7 @@ with retrigger waits.
 Rename "Wait-for-retrigger" to "Hold-then-retrigger" to better reflect its actual
 behavior (the beginning of the hold word will be output, THEN the sequence will wait,
 and THEN the sequence will continue running the rest of the word once a retrigger is received).
+
+[rev6] Fix to major memory leaks which could cause Cicero to crash after prolonged
+operation. (timestep editors, variable editors, and pulse editors were not being
+properly disposed of. bugs introduced in version 1.61 and 1.62)
