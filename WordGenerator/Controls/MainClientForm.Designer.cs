@@ -821,8 +821,7 @@ namespace WordGenerator
             this.sequencePage.Name = "sequencePage";
             this.sequencePage.Size = new System.Drawing.Size(1258, 804);
             this.sequencePage.TabIndex = 0;
-            this.sequencePage.TimestepEditors = null;
-            this.sequencePage.messageLog += new System.EventHandler<DataStructures.MessageEvent>(this.handleMessageEvent);
+            this.sequencePage.messageLog += new System.EventHandler<DataStructures.MessageEvent> (this.handleMessageEvent);
             // 
             // mainTab
             // 
