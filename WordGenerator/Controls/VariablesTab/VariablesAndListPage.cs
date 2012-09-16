@@ -141,6 +141,7 @@ namespace WordGenerator.Controls
                     for (int i = 0; i < extras; i++)
                     {
                         variablesPanel.Controls.Remove(variableEditors[0]);
+                        variableEditors[0].Dispose();
                         variableEditors.RemoveAt(0);
                     }
                 }
@@ -226,6 +227,7 @@ namespace WordGenerator.Controls
                 // if we know which specific editor it was
                 variableEditors.Remove(ved);
                 variablesPanel.Controls.Remove(ved);
+                ved.Dispose();
 
             }
             else
