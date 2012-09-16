@@ -338,9 +338,10 @@ namespace WordGenerator.Controls
             timeStepsFlowPanel.SuspendLayout();
             // remove old timestep editors
 
-
-            List<Control> temp = new List<Control>();
-
+            foreach (Control c in timeStepsFlowPanel.Controls) {
+                if (c!=null)
+                    c.Dispose();
+            }
             timeStepsFlowPanel.Controls.Clear();
 
 
