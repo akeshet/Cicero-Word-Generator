@@ -92,7 +92,7 @@ namespace WordGenerator.Controls
             this.deleteButton.TabIndex = 3;
             this.deleteButton.TabStop = false;
             this.deleteButton.UseVisualStyleBackColor = true;
-            this.deleteButton.Click += new System.EventHandler(this.button1_Click);
+            this.deleteButton.Click += new System.EventHandler(this.deleteVariableButtonClick);
             // 
             // derivedCheckBox
             // 
