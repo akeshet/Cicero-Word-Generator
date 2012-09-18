@@ -8,7 +8,7 @@ using wgControlLibrary;
 using DataStructures;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
-
+using WordGenerator.Controls;
 
 
 namespace WordGenerator.Controls
@@ -54,16 +54,23 @@ namespace WordGenerator.Controls
                             ComboBox pulseSelectBox = new ComboBox();
                             pulseSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
                             pulseSelectBox.Items.Clear();
+                            
+                            pulseSelectBox.Items.Add("Manage Pulses");
+                           //TODO: Make this menu prettier
+                            pulseSelectBox.Items.Add("Quick Add");
+                            
+                            pulseSelectBox.Items.Add("None");
 
-                            pulseSelectBox.Items.Add("None.");
                             foreach (Pulse pulse in Storage.sequenceData.DigitalPulses)
                             {
                                 pulseSelectBox.Items.Add(pulse);
                             }
                             pulseSelectBox.Width = colWidth;
                             pulseSelectBox.Height = rowHeight;
-                            pulseSelectBox.Location = cellPointToClickPixel(clickPoint.X, clickPoint.Y);
 
+
+                            //finds closes cell to click location
+                            pulseSelectBox.Location = cellPointToClickPixel(clickPoint.X, clickPoint.Y);
                             pulseSelector = pulseSelectBox;
                             pulseSelectorTarget = dp;
                             pulseSelectorPoint = clickPoint;
@@ -86,14 +93,22 @@ namespace WordGenerator.Controls
 
         void pulseSelector_DropDownClosed(object sender, EventArgs e)
         {
+           
             if (pulseSelectorTarget != null)
             {
+                string nonPulseSelection = pulseSelector.SelectedItem as string;
+                if (nonPulseSelection!=null && nonPulseSelection.Equals("Manage Pulses",StringComparison.Ordinal))
+                {
+                    Dialogs.PulseManager pulseManager = new Dialogs.PulseManager();
+                    pulseManager.ShowDialog();
+                }
+
                 Pulse val = pulseSelector.SelectedItem as Pulse;
-              
+                
                 pulseSelectorTarget.setFirstPulse(val);
             }
             this.Controls.Remove(pulseSelector);
-
+          
             refreshCell(Graphics.FromImage(buffer), pulseSelectorPoint);
 
             pulseSelector.Dispose();
