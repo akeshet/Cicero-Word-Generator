@@ -99,7 +99,7 @@ namespace WordGenerator.Controls
                 string nonPulseSelection = pulseSelector.SelectedItem as string;
                 if (nonPulseSelection!=null && nonPulseSelection.Equals("Manage Pulses",StringComparison.Ordinal))
                 {
-                    Dialogs.PulseManager pulseManager = new Dialogs.PulseManager();
+                    Dialogs.PulseManager pulseManager = new Dialogs.PulseManager(Storage.sequenceData.DigitalPulses, pulseSelectorTarget.PulseList);
                     pulseManager.ShowDialog();
                 }
 
