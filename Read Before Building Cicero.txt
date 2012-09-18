@@ -18,7 +18,7 @@ structure that are not being track by the git repository (they will get deleted
 with the following command!).
 
 3) At the git command prompt, from the top level of the Cicero git repository,
-run "git -f -x -d"
+run "git clean -f -x -d"
 
 -- Building --
 
