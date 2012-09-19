@@ -73,6 +73,8 @@ namespace WordGenerator.Controls
 
         public SequencePage()
         {
+            timestepEditors = new List<TimestepEditor>();
+
             InitializeComponent();
             timeStepsPanel.HorizontalScroll.SmallChange = TimestepEditor.TimestepEditorWidth;
             digitalGrid.ColWidth = TimestepEditor.TimestepEditorWidth;
@@ -325,7 +327,6 @@ namespace WordGenerator.Controls
         public List<TimestepEditor> TimestepEditors
         {
             get { return timestepEditors; }
-            set { timestepEditors = value; }
         }
 
 
@@ -344,9 +345,15 @@ namespace WordGenerator.Controls
             // remove old timestep editors
 
 
-            List<Control> temp = new List<Control>();
-
             timeStepsFlowPanel.Controls.Clear();
+
+            foreach (TimestepEditor ed in timestepEditors)
+            {
+                ed.Dispose();
+            }
+            timestepEditors.Clear();
+
+            
 
 
 
@@ -355,7 +362,6 @@ namespace WordGenerator.Controls
            
 
             List<TimeStep> timeSteps = Storage.sequenceData.TimeSteps;
-            timestepEditors = new List<TimestepEditor>();
             for (int i = 0; i < timeSteps.Count; i++)
             {
 
