@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using DataStructures;
+
+
 namespace WordGenerator.Controls.Dialogs
 {
     public partial class PulseManager : Form
@@ -58,10 +60,10 @@ namespace WordGenerator.Controls.Dialogs
                 usedPulses.Add(p);
                 availablePulses.Remove(p);
             }
-            
-            
 
+      
 
+        
 
             
             //UsedPulseListBox.DisplayMember = "PulseName";
@@ -142,6 +144,19 @@ namespace WordGenerator.Controls.Dialogs
             //Prepare to return the used list of pulses
             outputPulseList = new List<Pulse>(usedPulses);
             this.Close();
+        }
+
+        private void PulseManager_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics g = this.CreateGraphics();
+            Font f = new Font("Arial",12.0f);
+            Brush b = new SolidBrush(Color.Blue);
+            Pen p = new Pen(Color.Red, 5);
+            g.DrawLine(p, 20, 20, 200, 210);
+            g.DrawLine(p, 20, 200, 210, 20);
+
+            g.DrawString("Pulse Visualizer goes here \n (..clearly still in development)", f, b, 160, 100);
+
         }
 
 

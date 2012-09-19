@@ -129,6 +129,7 @@
             this.Controls.Add(this.doneButton);
             this.Name = "PulseManager";
             this.Text = "PulseManager";
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.PulseManager_Paint);
             this.ResumeLayout(false);
             this.PerformLayout();
 
