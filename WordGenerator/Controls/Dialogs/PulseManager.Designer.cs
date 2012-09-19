@@ -55,6 +55,7 @@
             this.AvailablePulseListBox.Name = "AvailablePulseListBox";
             this.AvailablePulseListBox.Size = new System.Drawing.Size(120, 95);
             this.AvailablePulseListBox.TabIndex = 1;
+            this.AvailablePulseListBox.DoubleClick += new System.EventHandler(this.addPulseToUsedList);
             // 
             // UsedPulseListBox
             // 
@@ -63,6 +64,7 @@
             this.UsedPulseListBox.Name = "UsedPulseListBox";
             this.UsedPulseListBox.Size = new System.Drawing.Size(120, 95);
             this.UsedPulseListBox.TabIndex = 2;
+            this.UsedPulseListBox.DoubleClick += new System.EventHandler(this.removePulseFromUsedList);
             // 
             // UsedPulseLabel
             // 

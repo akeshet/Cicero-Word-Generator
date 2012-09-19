@@ -13,7 +13,15 @@ namespace WordGenerator.Controls.Dialogs
     {
         private BindingList<Pulse> availablePulses;
         private BindingList<Pulse> usedPulses;
-               
+
+        private List<Pulse> outputPulseList;
+        public List<Pulse> OutputPulseList
+        {
+            get { return outputPulseList; }
+
+        }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public PulseManager()
@@ -131,18 +139,12 @@ namespace WordGenerator.Controls.Dialogs
 
         private void closeWindow(object sender, EventArgs e)
         {
+            //Prepare to return the used list of pulses
+            outputPulseList = new List<Pulse>(usedPulses);
             this.Close();
         }
 
 
-        public void NotifyPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this,
-                    new PropertyChangedEventArgs(propertyName));
-            }
-        }
-
+       
     }
 }

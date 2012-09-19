@@ -97,15 +97,17 @@ namespace WordGenerator.Controls
             if (pulseSelectorTarget != null)
             {
                 string nonPulseSelection = pulseSelector.SelectedItem as string;
-                if (nonPulseSelection!=null && nonPulseSelection.Equals("Manage Pulses",StringComparison.Ordinal))
+                if (nonPulseSelection != null && nonPulseSelection.Equals("Manage Pulses", StringComparison.Ordinal))
                 {
                     Dialogs.PulseManager pulseManager = new Dialogs.PulseManager(Storage.sequenceData.DigitalPulses, pulseSelectorTarget.PulseList);
                     pulseManager.ShowDialog();
+                    pulseSelectorTarget.PulseList = pulseManager.OutputPulseList;
                 }
-
-                Pulse val = pulseSelector.SelectedItem as Pulse;
-                
-                pulseSelectorTarget.setFirstPulse(val);
+                else
+                {
+                    Pulse val = pulseSelector.SelectedItem as Pulse;
+                    pulseSelectorTarget.setFirstPulse(val);
+                }
             }
             this.Controls.Remove(pulseSelector);
           
@@ -573,6 +575,10 @@ namespace WordGenerator.Controls
 
         private static readonly Font variableFont = new Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 
+        private static readonly Font variableFontSpecial = new Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        
+
+
         private static readonly Brush seb = new TextureBrush(WordGenerator.Properties.Resources.StudentEdition_ps, WrapMode.Tile);
         /// <summary>
         /// Converts a pixel position to a grid cell position.
@@ -850,8 +856,14 @@ namespace WordGenerator.Controls
             {
                 textBrush = Brushes.Black;
             }
-            if (dp.usesPulse() && dp.PulseList[0]!=null)
-                g.DrawString(dp.PulseList[0].PulseName, variableFont, textBrush, new Rectangle(p.X * colWidth + 2, p.Y * rowHeight + 2, colWidth - 4, rowHeight - 4));
+            if (dp.usesPulse() && dp.PulseList[0] != null)
+            {
+                if (dp.PulseList.Count==1)
+                    g.DrawString(dp.PulseList[0].PulseName, variableFont, textBrush, new Rectangle(p.X * colWidth + 2, p.Y * rowHeight + 2, colWidth - 4, rowHeight - 4));
+                else
+                    g.DrawString("Multipulse", variableFontSpecial, textBrush, new Rectangle(p.X * colWidth + 2, p.Y * rowHeight + 2, colWidth - 4, rowHeight - 4));    
+            }
+                
             return p;
         }
 
