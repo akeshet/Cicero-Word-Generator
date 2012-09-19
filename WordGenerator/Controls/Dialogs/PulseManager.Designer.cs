@@ -90,6 +90,7 @@
             this.UsedToAvButton.TabIndex = 5;
             this.UsedToAvButton.Text = "<----";
             this.UsedToAvButton.UseVisualStyleBackColor = true;
+            this.UsedToAvButton.Click += new System.EventHandler(this.removePulseFromUsedList);
             // 
             // AvToUsedButton
             // 
@@ -99,6 +100,7 @@
             this.AvToUsedButton.TabIndex = 6;
             this.AvToUsedButton.Text = "---->";
             this.AvToUsedButton.UseVisualStyleBackColor = true;
+            this.AvToUsedButton.Click += new System.EventHandler(this.addPulseToUsedList);
             // 
             // ClearPulsesButton
             // 
@@ -108,6 +110,7 @@
             this.ClearPulsesButton.TabIndex = 7;
             this.ClearPulsesButton.Text = "Clear Pulses";
             this.ClearPulsesButton.UseVisualStyleBackColor = true;
+            this.ClearPulsesButton.Click += new System.EventHandler(this.clearUsedList);
             // 
             // PulseManager
             // 

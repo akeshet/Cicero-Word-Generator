@@ -11,9 +11,10 @@ namespace WordGenerator.Controls.Dialogs
 {
     public partial class PulseManager : Form
     {
-        private List<Pulse> availablePulses;
-        private List<Pulse> usedPulses;
-
+        private BindingList<Pulse> availablePulses;
+        private BindingList<Pulse> usedPulses;
+               
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public PulseManager()
         {
@@ -24,43 +25,123 @@ namespace WordGenerator.Controls.Dialogs
         {
             InitializeComponent();
 
+
          
 
-            //I think passAvailablePulses and passUsedPulses were passed by value, but fuck it let's just be safe.
-            availablePulses = passAvailablePulses;
-            usedPulses = passUsedPulses;
+            
+            availablePulses = new BindingList<Pulse>();
+            usedPulses = new BindingList<Pulse>();
 
-            foreach (Pulse pulse in usedPulses)
+            availablePulses.AllowNew = true;
+            availablePulses.AllowRemove = true;
+
+            usedPulses.AllowNew = true;
+            usedPulses.AllowRemove = true;
+
+
+            //we need to copy the lists element by element so we don't ever point to passAvailablePulses or passUsedPulses,
+            //because we could then screw these things up in the rest of the program
+            foreach (Pulse p in passAvailablePulses)
             {
-                UsedPulseListBox.Items.Add(pulse);
-                availablePulses.Remove(pulse);
+                availablePulses.Add(p);
             }
+            foreach (Pulse p in passUsedPulses)
+            {
+                usedPulses.Add(p);
+                availablePulses.Remove(p);
+            }
+            
+            
 
-            foreach (Pulse pulse in availablePulses)
+
+
+            
+            //UsedPulseListBox.DisplayMember = "PulseName";
+
+
+            
+            UsedPulseListBox.DataSource = usedPulses;
+            AvailablePulseListBox.DataSource = availablePulses;
+
+
+
+            //These lines aren't necessary--I think I'd need them if I was making a new object when adding,
+            //but I'm not. I'm just adding an object from one list to the other.
+          //  availablePulses.AddingNew += new AddingNewEventHandler (availablePulses_AddingNew);
+          //  usedPulses.AddingNew += new AddingNewEventHandler (usedPulses_AddingNew);
+
+
+            /*foreach (Pulse pulse in availablePulses)
             {
                 AvailablePulseListBox.Items.Add(pulse);
             }
-
-           
+            */
+                  
             
 
         }
 
+       /* private void availablePulses_AddingNew(object sender, AddingNewEventArgs e)
+        {
+            Pulse toMove = AvailablePulseListBox.SelectedItem as Pulse;
+            if (toMove != null)//this check should already be okay
+            {
+                e.NewObject = toMove;
+            }
+        }
+
+        private void usedPulses_AddingNew(object sender, AddingNewEventArgs e)
+        {
+            
+        }*/
 
         private void addPulseToUsedList(object sender, EventArgs e)
         {
+            Pulse toMove = AvailablePulseListBox.SelectedItem as Pulse;
+            if (toMove != null)
+            {
+                usedPulses.Add(toMove);
+               
+                availablePulses.Remove(toMove);
+            }
            
         }
 
         private void removePulseFromUsedList(object sender, EventArgs e)
         {
-            
+            Pulse toMove = UsedPulseListBox.SelectedItem as Pulse;
+            if (toMove != null)
+            {
+                availablePulses.Add(toMove);
+
+                usedPulses.Remove(toMove);
+            }
+           
+        }
+
+        private void clearUsedList(object sender, EventArgs e)
+        {
+            foreach (Pulse p in usedPulses)
+            {
+                availablePulses.Add(p);
+            }
+            usedPulses.Clear();
         }
 
 
         private void closeWindow(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+
+        public void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this,
+                    new PropertyChangedEventArgs(propertyName));
+            }
         }
 
     }

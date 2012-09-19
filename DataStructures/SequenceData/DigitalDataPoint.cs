@@ -46,6 +46,7 @@ namespace DataStructures
           
                 return pulseList;
             }
+            set { pulseList = value; }
         }
 
 
