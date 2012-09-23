@@ -156,6 +156,7 @@ namespace WordGenerator.Controls.Dialogs
             g.DrawLine(p, 20, 200, 210, 20);
 
             g.DrawString("Pulse Visualizer goes here \n (..clearly still in development)", f, b, 160, 100);
+            g.DrawString("Colin sucks", f, b, 160, 140);
 
         }
 
