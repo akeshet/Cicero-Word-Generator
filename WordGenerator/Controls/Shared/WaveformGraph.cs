@@ -236,7 +236,7 @@ namespace WordGenerator.Controls
 
                        
                         
-
+                        
                         if ((maxY-minY) <= 1e-7)
                         {//If we have essential a flat-line waveform, make the surrounding yScale +/-1V of the Waveform value
                             maxY = maxY+1;

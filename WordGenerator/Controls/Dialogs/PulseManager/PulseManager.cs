@@ -146,7 +146,7 @@ namespace WordGenerator.Controls.Dialogs
             this.Close();
         }
 
-        private void PulseManager_Paint(object sender, PaintEventArgs e)
+       /* private void PulseManager_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = this.CreateGraphics();
             Font f = new Font("Arial",12.0f);
@@ -155,10 +155,10 @@ namespace WordGenerator.Controls.Dialogs
             g.DrawLine(p, 20, 20, 200, 210);
             g.DrawLine(p, 20, 200, 210, 20);
 
-            g.DrawString("Pulse Visualizer goes here \n (..clearly still in development)", f, b, 160, 100);
-            g.DrawString("Colin sucks", f, b, 160, 140);
+            
+            
 
-        }
+        }*/
 
 
        

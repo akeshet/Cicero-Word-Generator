@@ -36,6 +36,7 @@
             this.UsedToAvButton = new System.Windows.Forms.Button();
             this.AvToUsedButton = new System.Windows.Forms.Button();
             this.ClearPulsesButton = new System.Windows.Forms.Button();
+            this.pulseVisualizer1 = new WordGenerator.Controls.Dialogs.PulseVisualizer();
             this.SuspendLayout();
             // 
             // doneButton
@@ -114,11 +115,19 @@
             this.ClearPulsesButton.UseVisualStyleBackColor = true;
             this.ClearPulsesButton.Click += new System.EventHandler(this.clearUsedList);
             // 
+            // pulseVisualizer1
+            // 
+            this.pulseVisualizer1.Location = new System.Drawing.Point(29, 12);
+            this.pulseVisualizer1.Name = "pulseVisualizer1";
+            this.pulseVisualizer1.Size = new System.Drawing.Size(374, 210);
+            this.pulseVisualizer1.TabIndex = 8;
+            // 
             // PulseManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(436, 429);
+            this.Controls.Add(this.pulseVisualizer1);
             this.Controls.Add(this.ClearPulsesButton);
             this.Controls.Add(this.AvToUsedButton);
             this.Controls.Add(this.UsedToAvButton);
@@ -129,7 +138,6 @@
             this.Controls.Add(this.doneButton);
             this.Name = "PulseManager";
             this.Text = "PulseManager";
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.PulseManager_Paint);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -145,5 +153,6 @@
         private System.Windows.Forms.Button UsedToAvButton;
         private System.Windows.Forms.Button AvToUsedButton;
         private System.Windows.Forms.Button ClearPulsesButton;
+        private PulseVisualizer pulseVisualizer1;
     }
 }

@@ -376,6 +376,9 @@
     <EmbeddedResource Include="Controls\Dialogs\PulseManager\PulseManager.resx">
       <DependentUpon>PulseManager.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Dialogs\PulseManager\PulseVisualizer.resx">
+      <DependentUpon>PulseVisualizer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\Dialogs\VariablePreviewEditorForm.resx">
       <DependentUpon>VariablePreviewEditorForm.cs</DependentUpon>
     </EmbeddedResource>
