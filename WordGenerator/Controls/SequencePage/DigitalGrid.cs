@@ -51,8 +51,15 @@ namespace WordGenerator.Controls
                         DigitalDataPoint dp = this.cellPointToDigitalDataPoint(clickPoint);
                         if (dp != null)
                         {
+                            //why do we make pulseSelectBox, only to later point to it by pulseSelector?
+                            //why not just work with pulseSelector to begin with, to make the code more comapct?
+                            //...I do not understand
                             ComboBox pulseSelectBox = new ComboBox();
                             pulseSelectBox.DropDownStyle = ComboBoxStyle.DropDownList;
+                            
+                            pulseSelectBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+                            pulseSelectBox.DrawItem += new DrawItemEventHandler(pulseSelector_DrawItem);
+                           // pulseSelectBox.MeasureItem += new MeasureItemEventHandler(pulseSelector_MeasureItem);
                             pulseSelectBox.Items.Clear();
                             
                             pulseSelectBox.Items.Add("Manage Pulses");
@@ -89,6 +96,56 @@ namespace WordGenerator.Controls
             }
         }
 
+        private void pulseSelector_DrawItem(object sender, System.Windows.Forms.DrawItemEventArgs e)
+        {
+            if (e.Index < 0)
+            {
+                return;
+            }
+
+            Font font = pulseSelector.Font;
+            Brush backgroundColor;
+            Brush textColor;
+
+            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+            {
+                backgroundColor = SystemBrushes.Highlight;
+                textColor = SystemBrushes.HighlightText;
+            }
+            else
+            {
+                backgroundColor = SystemBrushes.Window;
+                textColor = SystemBrushes.WindowText;
+            }
+
+
+            Pulse template = pulseSelector.Items[e.Index] as Pulse;
+            if (template != null)
+            {
+
+                
+
+                
+                if (pulseSelectorTarget.PulseList.Contains(template))
+                {
+                    font = new Font(font, FontStyle.Bold);
+                }
+                e.Graphics.FillRectangle(backgroundColor, e.Bounds);
+                e.Graphics.DrawString(template.PulseName, font, textColor, e.Bounds);
+
+            }
+            else
+            {
+                string menuString = pulseSelector.Items[e.Index] as string;
+                e.Graphics.FillRectangle(backgroundColor, e.Bounds);
+                e.Graphics.DrawString(menuString, font, textColor, e.Bounds);
+            }
+        }
+
+        private void pulseSelector_MeasureItem(object sender, System.Windows.Forms.MeasureItemEventArgs e)
+        {
+
+        }
 
 
         void pulseSelector_DropDownClosed(object sender, EventArgs e)

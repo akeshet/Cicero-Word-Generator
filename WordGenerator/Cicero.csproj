@@ -72,12 +72,6 @@
     <Compile Include="Controls\Dialogs\PulseManager\PulseManager.Designer.cs">
       <DependentUpon>PulseManager.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Dialogs\PulseManager\PulseVisualizer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\Dialogs\PulseManager\PulseVisualizer.Designer.cs">
-      <DependentUpon>PulseVisualizer.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\PulsesTab\AutoNameGlossaryDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -375,9 +369,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Dialogs\PulseManager\PulseManager.resx">
       <DependentUpon>PulseManager.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Dialogs\PulseManager\PulseVisualizer.resx">
-      <DependentUpon>PulseVisualizer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Dialogs\VariablePreviewEditorForm.resx">
       <DependentUpon>VariablePreviewEditorForm.cs</DependentUpon>
