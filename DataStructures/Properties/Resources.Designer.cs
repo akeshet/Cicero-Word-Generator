@@ -88,7 +88,7 @@ namespace DataStructures.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to rev6.
+        ///   Looks up a localized string similar to .
         /// </summary>
         internal static string RevisionString {
             get {
@@ -97,7 +97,7 @@ namespace DataStructures.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1.64.
+        ///   Looks up a localized string similar to 1.65.
         /// </summary>
         internal static string VersionString {
             get {
