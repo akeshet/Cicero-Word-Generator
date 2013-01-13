@@ -245,6 +245,11 @@ namespace WordGenerator
             debugToolStripMenuItem.Visible = true;
 #endif
 
+            ToolStripMenuItem citationItem = new ToolStripMenuItem();
+            citationItem.Text = "Citation";
+            citationItem.Click += new EventHandler(citationItem_Click);
+            aboutToolStripMenuItem.DropDownItems.Add(citationItem);
+
 
 
             if (hotKeyBindings == null)
@@ -302,6 +307,19 @@ namespace WordGenerator
             RefreshRecentFiles();
             this.RefreshSettingsDataToUI();
             this.RefreshSequenceDataToUI();
+
+            if (!Storage.clientStartupSettings.HasShownCitationMessage)
+            {
+                CitationInfoForm cif = new CitationInfoForm(true);
+                cif.ShowDialog();
+                Storage.clientStartupSettings.HasShownCitationMessage = true;
+            }
+        }
+
+        void citationItem_Click(object sender, EventArgs e)
+        {
+            CitationInfoForm cif = new CitationInfoForm(false);
+            cif.ShowDialog();
         }
 
 
@@ -1542,6 +1560,12 @@ namespace WordGenerator
         {
             if (Storage.settingsData != null)
                 Storage.settingsData.AlwaysUseNetworkClock = useNetworkClockCheckBox.Checked;
+        }
+
+        private void citationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CitationInfoForm cif = new CitationInfoForm(false);
+            cif.ShowDialog();
         }
 
     }

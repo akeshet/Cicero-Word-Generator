@@ -66,6 +66,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\Dialogs\CitationInfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\Dialogs\CitationInfoForm.Designer.cs">
+      <DependentUpon>CitationInfoForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PulsesTab\AutoNameGlossaryDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -352,6 +358,9 @@
     <EmbeddedResource Include="Controls\Dialogs\ChannelManager\EditDevice.resx">
       <SubType>Designer</SubType>
       <DependentUpon>EditDevice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Dialogs\CitationInfoForm.resx">
+      <DependentUpon>CitationInfoForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Dialogs\FormulaHelpDialog.resx">
       <SubType>Designer</SubType>

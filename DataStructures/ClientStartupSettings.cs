@@ -81,5 +81,13 @@ namespace DataStructures
         {
             recentFiles = new List<string>();
         }
+
+        private bool hasShownCitationMessage;
+
+        public bool HasShownCitationMessage
+        {
+            get { return hasShownCitationMessage; }
+            set { hasShownCitationMessage = value; }
+        }
     }
 }
