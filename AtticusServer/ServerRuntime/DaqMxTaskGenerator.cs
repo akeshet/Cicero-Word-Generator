@@ -972,7 +972,7 @@ namespace AtticusServer
                 groupDigitalChannels(digitalIDs, digitals, out port_digital_IDs, out usedPortNumbers, true, false);
                 is6363 = false;
             }
-            else if (deviceSettings.DeviceDescription.Contains("6363"))
+            else if (deviceSettings.DeviceDescription.Contains("6363") | deviceSettings.DeviceDescription.Contains("6259"))//change to 6259 for Poland
             {
                 is6363 = true;
                 groupDigitalChannels(digitalIDs, digitals, out port_digital_IDs, out usedPortNumbers, false, true);
@@ -1034,6 +1034,8 @@ namespace AtticusServer
             // to the same port, and fill in any "holes" (ie missing channels) with empty data
             {
                 usedPortNumbers = new List<int>();
+
+                bool doNotAddMoreThanPort0Flag = true;
                 // mapping from port number to an array of integers. The nth element of the array gives the digital ID
                 // of the channel which is connected to the nth line of that port. If there is no channel on that port,
                 // the ID is -1.
@@ -1076,13 +1078,14 @@ namespace AtticusServer
                                 port_digital_IDs.Add(2, new int[] { -1, -1, -1, -1, -1, -1, -1, -1 });
                                 port_digital_IDs.Add(3, new int[] { -1, -1, -1, -1, -1, -1, -1, -1 });
                             }
-                            else if (is6363)
+                            else if (is6363 & doNotAddMoreThanPort0Flag)
                             {
                                 //the PXIe6363 card has port0/(line0-31), port1/(line0-7), port2/(line0-7). Only port0 is hardware timed, hence we don't even try to buffer port1 and port 2. 
                                 //Unlike other digital cards, port0 has 32 lines rather than the typical 8, so we have take care of that here.
+                                
                                 usedPortNumbers.Add(0);
                                 port_digital_IDs.Add(0,new int[] {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1});
-
+                                doNotAddMoreThanPort0Flag = false;
                                 //Possible issue: I do not explicity disallow the use of port1 and port2 for a 6363 card here. I assume that they've somehow been disabled in Cicero, so we're only working
                                 //with port0
 
