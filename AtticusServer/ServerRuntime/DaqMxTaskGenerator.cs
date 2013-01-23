@@ -341,7 +341,7 @@ namespace AtticusServer
         /// <returns></returns>
 
 
-        public static Task createDaqMxTaskAndOutputNow(string deviceName, DeviceSettings deviceSettings, SingleOutputFrame output, 
+        public static Task createDaqMxTaskAndOutputNow(AtticusServerCommunicator sender, string deviceName, DeviceSettings deviceSettings, SingleOutputFrame output, 
             SettingsData settings, Dictionary<int, HardwareChannel> usedDigitalChannels, Dictionary<int, HardwareChannel> usedAnalogChannels)
         {
 
@@ -354,7 +354,7 @@ namespace AtticusServer
 
             bool is6363;
             // Parse and create channels.
-            parseAndCreateChannels(deviceName,deviceSettings, usedDigitalChannels, usedAnalogChannels, task, out analogIDs, out analogs, out port_digital_IDs, out usedPortNumbers,out is6363);
+            parseAndCreateChannels(sender,deviceName,deviceSettings, usedDigitalChannels, usedAnalogChannels, task, out analogIDs, out analogs, out port_digital_IDs, out usedPortNumbers,out is6363);
 
 
             // now create buffer.
@@ -469,7 +469,7 @@ namespace AtticusServer
         /// <param name="usedDigitalChannels">digital channels which reside on this server.</param>
         /// <param name="usedAnalogChannels">analog channels which reside on this server</param>
         /// <returns></returns>
-        public static Task createDaqMxTask(string deviceName, DeviceSettings deviceSettings, SequenceData sequence, 
+        public static Task createDaqMxTask(AtticusServerCommunicator sender, string deviceName, DeviceSettings deviceSettings, SequenceData sequence, 
             SettingsData settings, Dictionary<int, HardwareChannel> usedDigitalChannels, Dictionary<int, HardwareChannel> usedAnalogChannels, 
             ServerSettings serverSettings, out long expectedSamplesGenerated)
         {
@@ -487,7 +487,7 @@ namespace AtticusServer
             //boolean to check for 6363 device, which requires 32lines per port
             bool is6363;
             // Parse and create channels.
-            parseAndCreateChannels(deviceName,deviceSettings, usedDigitalChannels, usedAnalogChannels, task, out analogIDs, out analogs, out port_digital_IDs, out usedPortNumbers, out is6363);
+            parseAndCreateChannels(sender,deviceName,deviceSettings, usedDigitalChannels, usedAnalogChannels, task, out analogIDs, out analogs, out port_digital_IDs, out usedPortNumbers, out is6363);
 
 
 
@@ -942,7 +942,7 @@ namespace AtticusServer
         /// <param name="usedPortNumbers">
         /// An out parameter, which will store a list of integers corresponding to the digital port numbers that were used on this device, in the order created.
         /// </param>
-        private static void parseAndCreateChannels(string deviceName,DeviceSettings deviceSettings, Dictionary<int, HardwareChannel> usedDigitalChannels, Dictionary<int, HardwareChannel> usedAnalogChannels, Task task, out List<int> analogIDs, out List<HardwareChannel> analogs, out Dictionary<int, int[]> port_digital_IDs, out List<int> usedPortNumbers,out bool is6363)
+        private static void parseAndCreateChannels(AtticusServerCommunicator sender,string deviceName,DeviceSettings deviceSettings, Dictionary<int, HardwareChannel> usedDigitalChannels, Dictionary<int, HardwareChannel> usedAnalogChannels, Task task, out List<int> analogIDs, out List<HardwareChannel> analogs, out Dictionary<int, int[]> port_digital_IDs, out List<int> usedPortNumbers,out bool is6363)
         {
             // figure out which of the analog and digital channels belong on this device. Add them here and index by 
             // logical ID#
@@ -994,7 +994,14 @@ namespace AtticusServer
             for (int i = 0; i < usedPortNumbers.Count; i++)
             {
                 int portNum = usedPortNumbers[i];
-                task.DOChannels.CreateChannel(deviceName + '/' + HardwareChannel.digitalPhysicalChannelName(portNum), "", ChannelLineGrouping.OneChannelForAllLines);
+                try
+                {
+                    task.DOChannels.CreateChannel(deviceName + '/' + HardwareChannel.digitalPhysicalChannelName(portNum), "", ChannelLineGrouping.OneChannelForAllLines);
+                }
+                catch (Exception e)
+                {
+                    sender.messageLog(sender, new MessageEvent("Couldn't create channel:" + deviceName + '/' + HardwareChannel.digitalPhysicalChannelName(portNum)));
+                }
             }
         }
 

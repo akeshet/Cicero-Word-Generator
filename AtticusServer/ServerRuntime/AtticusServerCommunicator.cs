@@ -301,7 +301,7 @@ namespace AtticusServer
                         if (deviceSettings.DeviceEnabled)
                         {
                             messageLog(this, new MessageEvent("Generating single output for " + dev));
-                            Task task = DaqMxTaskGenerator.createDaqMxTaskAndOutputNow(dev,
+                            Task task = DaqMxTaskGenerator.createDaqMxTaskAndOutputNow(this,dev,
                                 deviceSettings,
                                 output,
                                 settings,
@@ -1214,7 +1214,7 @@ namespace AtticusServer
                     long expectedGenerated = 0;
 
                     messageLog(this, new MessageEvent("Generating buffer for " + dev));
-                    Task task = DaqMxTaskGenerator.createDaqMxTask(dev,
+                    Task task = DaqMxTaskGenerator.createDaqMxTask(this,dev,
                         deviceSettings,
                         sequence,
                         settings,
