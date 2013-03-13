@@ -972,7 +972,7 @@ namespace AtticusServer
                 groupDigitalChannels(digitalIDs, digitals, out port_digital_IDs, out usedPortNumbers, true, false);
                 is6363 = false;
             }
-            else if (deviceSettings.DeviceDescription.Contains("6363") | deviceSettings.DeviceDescription.Contains("6259"))//change to 6259 for Poland
+            else if (deviceSettings.DeviceDescription.Contains("6363") | deviceSettings.DeviceDescription.Contains("6259"))//change to 6259 for Krzysztof Stanik
             {
                 is6363 = true;
                 groupDigitalChannels(digitalIDs, digitals, out port_digital_IDs, out usedPortNumbers, false, true);
