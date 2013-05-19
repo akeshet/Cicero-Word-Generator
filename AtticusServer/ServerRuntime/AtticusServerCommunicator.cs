@@ -2409,11 +2409,15 @@ namespace AtticusServer
                     myDeviceDescriptions.Add(devices[i], device.ProductType);
                     string[] analogs = device.AOPhysicalChannels;
                     string[] digitalLines = device.DOLines;
-
+                    
+                    //SETTINGS_LOAD_BUG: This adds a new device to the list if there isn't already a device in the settings with the same key (e.g. Dev1)
+                    //Note: the serverSettings are *loaded* from a file. If you have a settings file with Dev1, and then change
+                    //which card is labelled Dev1 in Automation Explorer, the change will *not* be updated here. This should perhaps be fixed at some point.
                     if (!serverSettings.myDevicesSettings.ContainsKey(devices[i]))
                     {
-                        serverSettings.myDevicesSettings.Add(devices[i], new DeviceSettings(devices[i], myDeviceDescriptions[devices[i]]));
+                        serverSettings.myDevicesSettings.Add(devices[i], new DeviceSettings(devices[i], device.ProductType));
                     }
+                    
 
                     // Special case: 6259 cards use 32-bit wide ports instead of 16 bit wide.
                     if (myDeviceDescriptions[devices[i]].Contains("6259"))
