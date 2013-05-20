@@ -604,6 +604,7 @@ namespace AtticusServer
                 }
 
                 //Now on to the digital
+                //SOMEBULLSHIT
                 if (!is6363)
                 {
                     if (usedPortNumbers.Count != 0)
@@ -960,6 +961,10 @@ namespace AtticusServer
             // list of the corresponding hardware channels
             List<HardwareChannel> digitals = new List<HardwareChannel>();
             sortDicionaryByID(digitalIDs, digitals, digitalsUnsorted);
+
+
+            //**deviceSettings IS VERY IMPORTANT HERE
+
 
             // ****
             // description of port_digital_IDs:

@@ -350,10 +350,12 @@ Category("RFSG")]
             this.deviceEnabled = false;
         }
 
-        public DeviceSettings(string deviceName, string deviceDescription) : this()
+        public DeviceSettings(string deviceName, string deviceDescription, int analogHardwareStructure, int [] digitalHardwareStructure) : this()
         {
             this.deviceName = deviceName;
             this.deviceDescription = deviceDescription;
+            this.analogHardwareStructure = analogHardwareStructure;
+            this.digitalHardwareStructure = digitalHardwareStructure;
         }
 
         public enum DeviceErrorCheckSamplesGeneratedSensitivity { Strict, Within4, Disabled };
@@ -375,6 +377,27 @@ Category("Error Checking")]
         {
             get { return retriggerDebounceSamples; }
             set { retriggerDebounceSamples = value; }
+        }
+
+        private int analogHardwareStructure;
+
+        [Description("Total number of enabled analog channels on device."),
+        Category("Analog")]
+        public int AnalogHardwareStructure
+        {
+            get { return analogHardwareStructure; }
+           // set { analogHardwareStructure = value; }
+        }
+
+
+        private int[] digitalHardwareStructure;
+
+        [Description("Array describing the digtal port/line configuration of the card. The index of the array corresponds to the port number, while the value in the array corresponds to the number of lines on that port. E.g. DigitalHardwareStructure[0]=8 means there are 8 lines on port 0. This value is null for non-digital output cards."),
+        Category("Digital")]
+        public int [] DigitalHardwareStructure
+        {
+            get { return digitalHardwareStructure; }
+            //set { digitalHardwareStructure = value; }
         }
 
     }
