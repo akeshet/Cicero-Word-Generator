@@ -2405,6 +2405,13 @@ namespace AtticusServer
 
                     Device device = daqSystem.LoadDevice(devices[i]);
 
+                    //Attempts to weed out non-hardware timed channels.
+                    /*object thingy = device.DOPorts;
+                    object thingy2 = device.COSampleModes;
+
+                    string[] thingy3 = device.GetPhysicalChannels(PhysicalChannelTypes.CO, PhysicalChannelAccess.All); ;
+                    */
+                 
 
                     myDeviceDescriptions.Add(devices[i], device.ProductType);
                     string[] analogs = device.AOPhysicalChannels;
