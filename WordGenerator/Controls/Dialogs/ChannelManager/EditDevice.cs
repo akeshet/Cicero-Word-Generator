@@ -22,6 +22,32 @@ namespace WordGenerator.ChannelManager
             this.deviceTypeText.Text = sd.channelTypeString;
             this.deviceNameText.Text = sd.lc.Name;
             this.deviceDescText.Text = sd.lc.Description;
+            this.absoluteCheck.Checked = sd.lc.AbsoluteValueChannel;
+
+
+
+            this.SignForChannelCombo.Items.Clear();
+            this.SignForChannelCombo.Items.Add(new KeyValuePair<int, string>(-1, "none"));
+
+            this.SignForChannelCombo.DisplayMember = "Value";
+            this.SignForChannelCombo.ValueMember = "Key";
+
+            foreach (int aid in Storage.settingsData.logicalChannelManager.Analogs.Keys)
+            {
+                string aname = Storage.settingsData.logicalChannelManager.Analogs[aid].Name;
+                this.SignForChannelCombo.Items.Add(new KeyValuePair<int, string>(aid, aname));
+            }
+
+            if (Storage.settingsData.logicalChannelManager.Analogs.ContainsKey(sd.lc.SignChannelFor))
+            {
+                string aname = Storage.settingsData.logicalChannelManager.Analogs[sd.lc.SignChannelFor].Name;
+                this.SignForChannelCombo.SelectedItem = new KeyValuePair<int, string>(sd.lc.SignChannelFor, aname);
+            }
+            else
+            {
+                this.SignForChannelCombo.SelectedIndex = 0;
+            }
+
 
             this.availableHardwareChanCombo.Items.Clear();
             this.availableHardwareChanCombo.Items.Add(HardwareChannel.Unassigned);
@@ -41,10 +67,23 @@ namespace WordGenerator.ChannelManager
             if (sd.channelType == HardwareChannel.HardwareConstants.ChannelTypes.analog)
             {
                 checkBox1.Visible = true;
+                absoluteCheck.Visible = true;
             }
             else
             {
+                absoluteCheck.Visible = false;
                 checkBox1.Visible = false;
+            }
+
+            if (sd.channelType == HardwareChannel.HardwareConstants.ChannelTypes.digital)
+            {
+                SignForChannelCombo.Visible = true;
+                SignLabel.Visible = true;
+            }
+            else
+            {
+                SignForChannelCombo.Visible = false;
+                SignLabel.Visible = false;
             }
 
             if (sd.channelType == HardwareChannel.HardwareConstants.ChannelTypes.analog ||
@@ -102,6 +141,17 @@ namespace WordGenerator.ChannelManager
         private void togglingCheck_CheckedChanged(object sender, EventArgs e)
         {
             sd.lc.TogglingChannel = togglingCheck.Checked;
+        }
+
+        private void absoluteCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            sd.lc.AbsoluteValueChannel = absoluteCheck.Checked;
+        }
+
+        private void SignForChannelCombo_ValueChanged(object sender, EventArgs e)
+        {
+            if(SignForChannelCombo.SelectedItem != null)
+                sd.lc.SignChannelFor = ((KeyValuePair<int,string>) SignForChannelCombo.SelectedItem).Key;
         }
 
     }
