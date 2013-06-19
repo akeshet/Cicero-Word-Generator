@@ -416,7 +416,10 @@ namespace AtticusServer
                         }
 
                         DigitalMultiChannelWriter writer = new DigitalMultiChannelWriter(task.Stream);
+
+
                         writer.WriteSingleSamplePort(true, outputValues.ToArray());
+                       // writer.WriteSingleSamplePort(
                     }
                     else if (deviceSettings.DigitalHardwareStructure[0] == 32)
                     {
@@ -483,7 +486,7 @@ namespace AtticusServer
 
             Task task = new Task(deviceName + " output task");
 
-
+            Task DOtask = new Task(deviceName + " output DO task");
 
             List<int> analogIDs;
             List<HardwareChannel> analogs;
@@ -539,6 +542,7 @@ namespace AtticusServer
                 if (deviceSettings.MySampleClockSource == DeviceSettings.SampleClockSource.DerivedFromMaster)
                 {
                     task.Timing.ConfigureSampleClock("", deviceSettings.SampleClockRate, deviceSettings.ClockEdge, SampleQuantityMode.FiniteSamples, nSamples);
+                    //"" empty string defaults to analog input sample clock.
                 }
                 else
                 {
@@ -674,6 +678,7 @@ namespace AtticusServer
                             System.GC.Collect();
                             DigitalMultiChannelWriter writer = new DigitalMultiChannelWriter(task.Stream);
                             writer.WriteMultiSamplePort(false, digitalBuffer);
+                            
                             /// Digital cards report the number of generated samples as a multiple of 4
                             expectedSamplesGenerated = nSamples;
                        }
