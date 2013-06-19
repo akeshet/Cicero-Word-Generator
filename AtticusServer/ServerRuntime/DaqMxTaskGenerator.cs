@@ -377,6 +377,12 @@ namespace AtticusServer
                         val = output.analogValues[analogID];
                     else
                         val = 0;
+
+                    if (settings.logicalChannelManager.Analogs[analogID].AbsoluteValueChannel)
+                    {
+                                  val = Math.Abs(val);
+                    }
+
                     outputValues.Add(val);
                 }
 
@@ -401,6 +407,11 @@ namespace AtticusServer
                             bool val = false;
                             if (output.digitalValues.ContainsKey(digitalID))
                                 val = output.digitalValues[digitalID];
+
+                            if (settings.logicalChannelManager.Digitals[digitalID].SignChannelFor!=-1)
+                            {
+                                val = (output.analogValues[settings.logicalChannelManager.Digitals[digitalID].SignChannelFor]<0);
+                            }
 
                             if (val)
                                 value |= digitalMask;
@@ -506,7 +517,6 @@ namespace AtticusServer
                 }
 
 
-
                 // Analog first...
 
                 if (analogIDs.Count != 0)
@@ -543,6 +553,15 @@ namespace AtticusServer
                             sequence.computeAnalogBuffer(analogIDs[i], timeStepSize, singleChannelBuffer);
                         }
 
+                        if (settings.logicalChannelManager.Analogs[analogID].AbsoluteValueChannel)
+                        {
+                            bool[] signs = new bool[nSamples];
+                            for (int j = 0; j < nBaseSamples; j++)
+                            {  
+                                singleChannelBuffer[j] = Math.Abs(singleChannelBuffer[j]);
+                            }
+                        }
+
                         for (int j = 0; j < nBaseSamples; j++)
                         {
                             analogBuffer[i, j] = singleChannelBuffer[j];
@@ -564,7 +583,7 @@ namespace AtticusServer
                     expectedSamplesGenerated = nSamples;
 
                 }
-
+                
 
                 if (usedPortNumbers.Count != 0)
                 {
@@ -590,8 +609,11 @@ namespace AtticusServer
                             int digitalID = port_digital_IDs[portNum][lineNum];
                             if (digitalID != -1)
                             {
+                                System.Console.WriteLine("Digital Channel \"" + digitalID + "\"");
                                 if (settings.logicalChannelManager.Digitals[digitalID].TogglingChannel)
                                 {
+                                    System.Console.WriteLine("Digital Channel " + digitalID + " is toggling channel");
+
                                     getDigitalTogglingBuffer(singleChannelBuffer);
                                 }
                                 else if (settings.logicalChannelManager.Digitals[digitalID].overridden)
@@ -599,6 +621,19 @@ namespace AtticusServer
                                     for (int j = 0; j < singleChannelBuffer.Length; j++)
                                     {
                                         singleChannelBuffer[j] = settings.logicalChannelManager.Digitals[digitalID].digitalOverrideValue;
+                                    }
+                                    System.Console.WriteLine("Digital Channel " + digitalID + " is overriden");
+
+                                }
+                                else if (settings.logicalChannelManager.Digitals[digitalID].SignChannelFor != -1)
+                                {
+                                    double[] tmpBuffer = new double[nSamples];
+                                    sequence.computeAnalogBuffer(settings.logicalChannelManager.Digitals[digitalID].SignChannelFor, timeStepSize,tmpBuffer);
+                                    System.Console.WriteLine("Digital Channel " + digitalID + " is sign channel for analog channel " +settings.logicalChannelManager.Digitals[digitalID].SignChannelFor);
+                                    
+                                    for (int j = 0; j < singleChannelBuffer.Length; j++)
+                                    {
+                                        singleChannelBuffer[j] = (tmpBuffer[j]<0);
                                     }
                                 }
                                 else
