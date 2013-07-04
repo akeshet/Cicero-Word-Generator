@@ -738,6 +738,16 @@ namespace AtticusServer
                         {
                             sequence.computeAnalogBuffer(analogIDs[i], timeStepSize, singleChannelBuffer, timebaseSegments);
                         }
+
+                        if (settings.logicalChannelManager.Analogs[analogID].AbsoluteValueChannel)
+                        {
+                            bool[] signs = new bool[nSamples];
+                            for (int j = 0; j < nBaseSamples; j++)
+                            {
+                                singleChannelBuffer[j] = Math.Abs(singleChannelBuffer[j]);
+                            }
+                        }
+
                         for (int j = 0; j < nBaseSamples; j++)
                         {
                             analogBuffer[i, j] = singleChannelBuffer[j];
@@ -794,6 +804,17 @@ namespace AtticusServer
                                     for (int j = 0; j < singleChannelBuffer.Length; j++)
                                     {
                                         singleChannelBuffer[j] = settings.logicalChannelManager.Digitals[digitalID].digitalOverrideValue;
+                                    }
+                                }
+                                else if (settings.logicalChannelManager.Digitals[digitalID].SignChannelFor != -1)
+                                {
+                                    double[] tmpBuffer = new double[nSamples];
+                                    sequence.computeAnalogBuffer(settings.logicalChannelManager.Digitals[digitalID].SignChannelFor, timeStepSize, tmpBuffer);
+                                    System.Console.WriteLine("Digital Channel " + digitalID + " is sign channel for analog channel " + settings.logicalChannelManager.Digitals[digitalID].SignChannelFor);
+
+                                    for (int j = 0; j < singleChannelBuffer.Length; j++)
+                                    {
+                                        singleChannelBuffer[j] = (tmpBuffer[j] < 0);
                                     }
                                 }
                                 else
