@@ -43,6 +43,9 @@ namespace WordGenerator.ChannelManager
             this.refreshHardwareButton = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.togglingCheck = new System.Windows.Forms.CheckBox();
+            this.absoluteCheck = new System.Windows.Forms.CheckBox();
+            this.SignLabel = new System.Windows.Forms.Label();
+            this.SignForChannelCombo = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // logicalIDText
@@ -64,7 +67,7 @@ namespace WordGenerator.ChannelManager
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(246, 169);
+            this.cancelButton.Location = new System.Drawing.Point(246, 198);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 21;
@@ -74,7 +77,7 @@ namespace WordGenerator.ChannelManager
             // 
             // okButton
             // 
-            this.okButton.Location = new System.Drawing.Point(165, 169);
+            this.okButton.Location = new System.Drawing.Point(165, 198);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 20;
@@ -152,7 +155,7 @@ namespace WordGenerator.ChannelManager
             // 
             // refreshHardwareButton
             // 
-            this.refreshHardwareButton.Location = new System.Drawing.Point(15, 169);
+            this.refreshHardwareButton.Location = new System.Drawing.Point(15, 198);
             this.refreshHardwareButton.Name = "refreshHardwareButton";
             this.refreshHardwareButton.Size = new System.Drawing.Size(105, 23);
             this.refreshHardwareButton.TabIndex = 27;
@@ -184,11 +187,45 @@ namespace WordGenerator.ChannelManager
             this.togglingCheck.UseVisualStyleBackColor = true;
             this.togglingCheck.CheckedChanged += new System.EventHandler(this.togglingCheck_CheckedChanged);
             // 
+            // absoluteCheck
+            // 
+            this.absoluteCheck.AutoSize = true;
+            this.absoluteCheck.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.absoluteCheck.Location = new System.Drawing.Point(16, 166);
+            this.absoluteCheck.Name = "absoluteCheck";
+            this.absoluteCheck.Size = new System.Drawing.Size(189, 17);
+            this.absoluteCheck.TabIndex = 30;
+            this.absoluteCheck.Text = "Analog output uses absolute value";
+            this.absoluteCheck.UseVisualStyleBackColor = true;
+            this.absoluteCheck.Visible = false;
+            this.absoluteCheck.CheckedChanged += new System.EventHandler(this.absoluteCheck_CheckedChanged);
+            // 
+            // SignLabel
+            // 
+            this.SignLabel.AutoSize = true;
+            this.SignLabel.Location = new System.Drawing.Point(13, 167);
+            this.SignLabel.Name = "SignLabel";
+            this.SignLabel.Size = new System.Drawing.Size(87, 13);
+            this.SignLabel.TabIndex = 32;
+            this.SignLabel.Text = "Sign for channel:";
+            // 
+            // SignForChannelCombo
+            // 
+            this.SignForChannelCombo.FormattingEnabled = true;
+            this.SignForChannelCombo.Location = new System.Drawing.Point(120, 164);
+            this.SignForChannelCombo.Name = "SignForChannelCombo";
+            this.SignForChannelCombo.Size = new System.Drawing.Size(201, 21);
+            this.SignForChannelCombo.TabIndex = 34;
+            this.SignForChannelCombo.SelectedIndexChanged += new System.EventHandler(this.SignForChannelCombo_ValueChanged);
+            // 
             // EditDevice
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(342, 209);
+            this.ClientSize = new System.Drawing.Size(342, 242);
+            this.Controls.Add(this.SignForChannelCombo);
+            this.Controls.Add(this.SignLabel);
+            this.Controls.Add(this.absoluteCheck);
             this.Controls.Add(this.togglingCheck);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.refreshHardwareButton);
@@ -228,5 +265,8 @@ namespace WordGenerator.ChannelManager
         private System.Windows.Forms.Button refreshHardwareButton;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.CheckBox togglingCheck;
+        private System.Windows.Forms.CheckBox absoluteCheck;
+        private System.Windows.Forms.Label SignLabel;
+        private System.Windows.Forms.ComboBox SignForChannelCombo;
     }
 }

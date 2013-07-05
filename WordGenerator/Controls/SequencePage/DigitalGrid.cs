@@ -545,6 +545,7 @@ namespace WordGenerator.Controls
         }
 
         private static readonly Brush falseBrush = Brushes.Tan;
+        private static readonly Brush disabledBrush = Brushes.LightGray;
 
         private static readonly Pen normalOutlinePen = Pens.Black;
         private static readonly Pen pulseOutlintPen = Pens.White;
@@ -779,10 +780,18 @@ namespace WordGenerator.Controls
             if (dp.variable == null)
             {
                 Brush br;
-                if (dp.DigitalContinue)
+                int channelID = cellPointToChannelID(p);
+
+                if (Storage.settingsData.logicalChannelManager.Digitals.ContainsKey(channelID)
+                    && (Storage.settingsData.logicalChannelManager.Digitals[channelID].SignChannelFor != -1))
+                {
+                    // channel driven by analog channel sign
+                    br = disabledBrush;
+                }
+                else if (dp.DigitalContinue)
                 {
 					int stepID = cellPointToTimeStepId(p);
-					int channelID = cellPointToChannelID(p);
+					
 					if (stepID==-1 || channelID==-1)
 						return;
 					TimeStep step = Storage.sequenceData.TimeSteps[stepID];

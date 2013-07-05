@@ -61,6 +61,22 @@ namespace DataStructures
             set { togglingChannel = value; }
         }
 
+        // output absolute value to analog channel...
+        private bool absoluteValueChannel;
+        public bool AbsoluteValueChannel
+        {
+            get { return absoluteValueChannel; }
+            set { absoluteValueChannel = value; }
+        }
+        //... and sign to digital channel
+        private int signChannelFor;
+        public int SignChannelFor
+        {
+            get {  
+                    return signChannelFor; }
+            set {  signChannelFor = value; }
+        }
+
         public LogicalChannel()
         {
             name = "";
@@ -71,6 +87,8 @@ namespace DataStructures
             digitalOverrideValue = false;
             analogOverrideValue = 0;
             togglingChannel = false;
+            absoluteValueChannel = false;
+            signChannelFor = -1;
         }
 
         /// <summary>
