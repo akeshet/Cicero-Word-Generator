@@ -2399,12 +2399,13 @@ namespace AtticusServer
                         niDaqDevicesExistThatAreNotNamedDevSomething = true;
                     }
 
-                    System.Console.WriteLine("Querying device " + i + "...");
+                    System.Console.WriteLine("Querying device " + i + "..." );
 
                     detectedDevices.Add(devices[i]);
 
                     Device device = daqSystem.LoadDevice(devices[i]);
 
+                    System.Console.WriteLine("Device type " + device.ProductType);
                     //Attempts to weed out non-hardware timed channels.
                     /*object thingy = device.DOPorts;
                     object thingy2 = device.COSampleModes;
@@ -2493,11 +2494,17 @@ namespace AtticusServer
                     
 
                     // Special case: 6259 cards use 32-bit wide ports instead of 16 bit wide.
+                  
+
+                    //Below is hardcoded support for the 6259 card, which is now commented out because the 32 or 8 lines per
+                    //port business should all be taken care of using the DigitalHardwareStructure object
+
+                    /*
                     if (myDeviceDescriptions[devices[i]].Contains("6259"))
                     {
                         serverSettings.myDevicesSettings[devices[i]].use32BitDigitalPorts = true;
                     }
-
+                    */
 
                     // Add all the analog channels, but only if the device settings say this card is enabled
 
@@ -2531,7 +2538,7 @@ namespace AtticusServer
                         }
                     }
 
-                    System.Console.WriteLine("...done.");
+                    System.Console.WriteLine("...done.\n");
 
                 }
 
