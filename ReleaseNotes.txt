@@ -136,3 +136,11 @@ and THEN the sequence will continue running the rest of the word once a retrigge
 [rev6] Fix to major memory leaks which could cause Cicero to crash after prolonged
 operation. (timestep editors, variable editors, and pulse editors were not being
 properly disposed of. bugs introduced in version 1.61 and 1.62)
+
+1.65
+-----
+
+Implemented support for newer digital cards which have 32 lines per port (e.g.PXI-6254,
+PXI-6363).
+
+

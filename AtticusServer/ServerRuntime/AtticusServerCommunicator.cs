@@ -2507,7 +2507,6 @@ namespace AtticusServer
                     */
 
                     // Add all the analog channels, but only if the device settings say this card is enabled
-
                     if (serverSettings.myDevicesSettings.ContainsKey(devices[i]) && serverSettings.myDevicesSettings[devices[i]].DeviceEnabled)
                     {
 
