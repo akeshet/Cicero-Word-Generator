@@ -26,15 +26,15 @@ namespace DataStructures
         }
 
 
-        //This is necessary for backwards compatibility with previous settings files.
+        //MakeGUIMap is necessary for backwards compatibility with previous settings files.
         //If there exists a settings file which was saved before the drawGUIMap feature,
-        //then when that settings file is deserialized then the ChannelCollection() constructor
+        //then when that settings file is deserialized the ChannelCollection() constructor
         //will never be run, hence drawGUIMap will be null and this will result in problems when the
         //code tries to use it to draw.
 
         //To fix this, MakeGUIMap is like a constructor only for drawGUIMap, which will be run if a 
         //NullReferenceException exception is caught
-        private void MakeGUIMap()
+        public void MakeGUIMap()
         {
             drawGUIMap = new Map<int, int>();
             foreach (int key in channels.Keys)
@@ -102,17 +102,36 @@ namespace DataStructures
         //Map to order channels when drawing gui.
         //First Key is draw ID, Second Key logical ID
         private Map<int, int> drawGUIMap;
+
         public Map<int, int> DrawGUIMap
         {
-            get { return drawGUIMap; }
-        }
-
+            get
+            {
+                try
+                {
+                    return drawGUIMap;
+                }
+                catch (NullReferenceException e)
+                {
+                    MakeGUIMap();
+                    return drawGUIMap;
+                }
+            }
+         }
 
         public List<int> getSortedChannelIDList()
         {
             List<int> ans = new List<int>(channels.Keys);
             ans.Sort();
             return ans;
+        }
+
+        public List<int> getSortedDrawIDList()
+        {
+            List<int> ans = new List<int> (drawGUIMap.GetFirstKeys());
+            ans.Sort();
+            return ans;
+
         }
 
         public int Count
@@ -182,6 +201,12 @@ namespace DataStructures
             _forward.Remove(_reverse[t2]);
             _reverse.Remove(t2);
         }
+
+        public Dictionary<T1,T2>.KeyCollection GetFirstKeys()
+        {
+            return _forward.Keys;
+        }
+      
 
         public Indexer<T1, T2> Forward { get; private set; }
         public Indexer<T2, T1> Reverse { get; private set; }

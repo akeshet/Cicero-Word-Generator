@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
-
+using DataStructures;
 namespace WordGenerator.Controls
 {
     public partial class DigitalChannelLabelsPanel : UserControl
@@ -46,8 +46,24 @@ namespace WordGenerator.Controls
             List<int> digitalIDs = new List<int>(Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.digital].Channels.Keys);
             digitalIDs.Sort();
 
-            for (int i = 0; i < digitalIDs.Count; i++)
+            DataStructures.Map <int,int> drawIDs= Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.digital].DrawGUIMap;
+            digitalIDs.Sort();
+            int i = -1000;
+            for (int j = 0; j < digitalIDs.Count; j++)
             {
+                //**** i is switched to drawID value so that channels are drawn where they should be
+                //try-catch is for old settings files which don't have any drawID data stored
+                try
+                {
+                    i = drawIDs.GetBySecondKey(j);
+                }
+                catch(NullReferenceException e)
+                {
+                    Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.digital].MakeGUIMap();
+                    drawIDs = Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.digital].DrawGUIMap;
+                    i = drawIDs.GetBySecondKey(j);
+                }
+                //**** 
                 Label fillerLbl = new Label();
                 fillerLbl.Text = "";
                 fillerLbl.Width = 18;

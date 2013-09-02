@@ -602,11 +602,12 @@ namespace WordGenerator.Controls
 
 		// returns -1 on error
 		private int cellPointToChannelID(Point p) {
-			List<int> channelIDs = Storage.settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.digital].getSortedChannelIDList();
-            if (channelIDs.Count <= p.Y)
+			List<int> channelDrawIDs = Storage.settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.digital].getSortedDrawIDList();
+            DataStructures.Map<int, int> drawGUIMap = Storage.settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.digital].DrawGUIMap;
+            if (channelDrawIDs.Count <= p.Y)
             	return -1;
 
-            return channelIDs[p.Y];
+            return drawGUIMap.GetByFirstKey(channelDrawIDs[p.Y]);
 		}
 
         private DigitalDataPoint cellPointToDigitalDataPoint(Point p)
