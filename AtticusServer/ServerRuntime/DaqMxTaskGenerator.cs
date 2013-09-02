@@ -616,7 +616,7 @@ namespace AtticusServer
                 //Now on to the digital
                 //SOMEBULLSHIT
                if (usedPortNumbers.Count != 0)
-                    {
+               {
                      if (deviceSettings.DigitalHardwareStructure[0] == 8)
                      {
                         byte[,] digitalBuffer;
@@ -852,66 +852,132 @@ namespace AtticusServer
 
                 if (usedPortNumbers.Count != 0)
                 {
-                    byte[,] digitalBuffer;
-                    bool[] singleChannelBuffer;
+                    if (deviceSettings.DigitalHardwareStructure[0] == 8)
+                    {
+                        byte[,] digitalBuffer;
+                        bool[] singleChannelBuffer;
 
-                    try
-                    {
-                        digitalBuffer = new byte[usedPortNumbers.Count, nSamples];
-                        singleChannelBuffer = new bool[nSamples];
-                    }
-                    catch (Exception e)
-                    {
-                        throw new Exception("Unable to allocate digital buffer for device " + deviceName + ". Reason: " + e.Message + "\n" + e.StackTrace);
-                    }
-
-                    for (int i = 0; i < usedPortNumbers.Count; i++)
-                    {
-                        int portNum = usedPortNumbers[i];
-                        byte digitalBitMask = 1;
-                        for (int lineNum = 0; lineNum < 8; lineNum++)
+                        try
                         {
-                            int digitalID = port_digital_IDs[portNum][lineNum];
-                            if (digitalID != -1)
+                            digitalBuffer = new byte[usedPortNumbers.Count, nSamples];
+                            singleChannelBuffer = new bool[nSamples];
+                        }
+                        catch (Exception e)
+                        {
+                            throw new Exception("Unable to allocate digital buffer for device " + deviceName + ". Reason: " + e.Message + "\n" + e.StackTrace);
+                        }
+
+                        for (int i = 0; i < usedPortNumbers.Count; i++)
+                        {
+                            int portNum = usedPortNumbers[i];
+                            byte digitalBitMask = 1;
+                            for (int lineNum = 0; lineNum < 8; lineNum++)
                             {
-                                if (settings.logicalChannelManager.Digitals[digitalID].TogglingChannel)
+                                int digitalID = port_digital_IDs[portNum][lineNum];
+                                if (digitalID != -1)
                                 {
-                                    getDigitalTogglingBuffer(singleChannelBuffer);
-                                }
-                                else if (settings.logicalChannelManager.Digitals[digitalID].overridden)
-                                {
-                                    for (int j = 0; j < singleChannelBuffer.Length; j++)
+                                    if (settings.logicalChannelManager.Digitals[digitalID].TogglingChannel)
                                     {
-                                        singleChannelBuffer[j] = settings.logicalChannelManager.Digitals[digitalID].digitalOverrideValue;
+                                        getDigitalTogglingBuffer(singleChannelBuffer);
                                     }
-                                }
-                                else
-                                {
+                                    else if (settings.logicalChannelManager.Digitals[digitalID].overridden)
+                                    {
+                                        for (int j = 0; j < singleChannelBuffer.Length; j++)
+                                        {
+                                            singleChannelBuffer[j] = settings.logicalChannelManager.Digitals[digitalID].digitalOverrideValue;
+                                        }
+                                    }
+                                    else
+                                    {
 
-                                    sequence.computeDigitalBuffer(digitalID, timeStepSize, singleChannelBuffer, timebaseSegments);
-                                }
-                                // byte digitalBitMask = (byte)(((byte) 2)^ ((byte)lineNum));
-                                for (int j = 0; j < nBaseSamples; j++)
-                                {
-                                    // copy the bit value into the digital buffer byte.
-                                    if (singleChannelBuffer[j])
-                                        digitalBuffer[i, j] |= digitalBitMask;
-                                }
+                                        sequence.computeDigitalBuffer(digitalID, timeStepSize, singleChannelBuffer, timebaseSegments);
+                                    }
+                                    // byte digitalBitMask = (byte)(((byte) 2)^ ((byte)lineNum));
+                                    for (int j = 0; j < nBaseSamples; j++)
+                                    {
+                                        // copy the bit value into the digital buffer byte.
+                                        if (singleChannelBuffer[j])
+                                            digitalBuffer[i, j] |= digitalBitMask;
+                                    }
 
+                                }
+                                digitalBitMask = (byte)(digitalBitMask << 1);
                             }
-                            digitalBitMask = (byte)(digitalBitMask << 1);
+                            for (int j = nBaseSamples; j < nSamples; j++)
+                            {
+                                digitalBuffer[i, j] = digitalBuffer[i, j - 1];
+                            }
                         }
-                        for (int j = nBaseSamples; j < nSamples; j++)
-                        {
-                            digitalBuffer[i, j] = digitalBuffer[i, j - 1];
-                        }
+                        singleChannelBuffer = null;
+                        System.GC.Collect();
+                        DigitalMultiChannelWriter writer = new DigitalMultiChannelWriter(task.Stream);
+                        writer.WriteMultiSamplePort(false, digitalBuffer);
+                        // digital cards report number of samples generated up to multiple of 4
+                        expectedSamplesGenerated = nSamples;
                     }
-                    singleChannelBuffer = null;
-                    System.GC.Collect();
-                    DigitalMultiChannelWriter writer = new DigitalMultiChannelWriter(task.Stream);
-                    writer.WriteMultiSamplePort(false, digitalBuffer);
-                    // digital cards report number of samples generated up to multiple of 4
-                    expectedSamplesGenerated = nSamples;
+                    else if (deviceSettings.DigitalHardwareStructure[0] == 32)
+                    {
+                        UInt32[,] digitalBuffer;
+                        bool[] singleChannelBuffer;
+
+                        try
+                        {
+                            digitalBuffer = new UInt32[usedPortNumbers.Count, nSamples];
+                            singleChannelBuffer = new bool[nSamples];
+                        }
+                        catch (Exception e)
+                        {
+                            throw new Exception("Unable to allocate digital buffer for device " + deviceName + ". Reason: " + e.Message + "\n" + e.StackTrace);
+                        }
+
+                        for (int i = 0; i < usedPortNumbers.Count; i++)
+                        {
+                            int portNum = usedPortNumbers[i];
+                            UInt32 digitalBitMask = 1;
+                            for (int lineNum = 0; lineNum < 8; lineNum++)
+                            {
+                                int digitalID = port_digital_IDs[portNum][lineNum];
+                                if (digitalID != -1)
+                                {
+                                    if (settings.logicalChannelManager.Digitals[digitalID].TogglingChannel)
+                                    {
+                                        getDigitalTogglingBuffer(singleChannelBuffer);
+                                    }
+                                    else if (settings.logicalChannelManager.Digitals[digitalID].overridden)
+                                    {
+                                        for (int j = 0; j < singleChannelBuffer.Length; j++)
+                                        {
+                                            singleChannelBuffer[j] = settings.logicalChannelManager.Digitals[digitalID].digitalOverrideValue;
+                                        }
+                                    }
+                                    else
+                                    {
+
+                                        sequence.computeDigitalBuffer(digitalID, timeStepSize, singleChannelBuffer, timebaseSegments);
+                                    }
+                                    // byte digitalBitMask = (byte)(((byte) 2)^ ((byte)lineNum));
+                                    for (int j = 0; j < nBaseSamples; j++)
+                                    {
+                                        // copy the bit value into the digital buffer byte.
+                                        if (singleChannelBuffer[j])
+                                            digitalBuffer[i, j] |= digitalBitMask;
+                                    }
+
+                                }
+                                digitalBitMask = (UInt32)(digitalBitMask << 1);
+                            }
+                            for (int j = nBaseSamples; j < nSamples; j++)
+                            {
+                                digitalBuffer[i, j] = digitalBuffer[i, j - 1];
+                            }
+                        }
+                        singleChannelBuffer = null;
+                        System.GC.Collect();
+                        DigitalMultiChannelWriter writer = new DigitalMultiChannelWriter(task.Stream);
+                        writer.WriteMultiSamplePort(false, digitalBuffer);
+                        // digital cards report number of samples generated up to multiple of 4
+                        expectedSamplesGenerated = nSamples;
+                    }
                 }
             }
 
