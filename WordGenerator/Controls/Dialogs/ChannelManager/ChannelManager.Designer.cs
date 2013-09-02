@@ -30,16 +30,17 @@ namespace WordGenerator.ChannelManager
         {
             this.logicalDevSplitContainer = new System.Windows.Forms.SplitContainer();
             this.logicalDevicesDataGridView = new System.Windows.Forms.DataGridView();
-            this.deviceTypeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.deviceIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.deviceNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.deviceDescColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.deviceHardwareChanColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.deleteDeviceButton = new System.Windows.Forms.Button();
             this.editDeviceButton = new System.Windows.Forms.Button();
             this.addDeviceButton = new System.Windows.Forms.Button();
             this.deviceTypeCombo = new System.Windows.Forms.ComboBox();
             this.lblShowDevice = new System.Windows.Forms.Label();
+            this.deviceTypeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.drawIDcolumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.deviceIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.deviceNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.deviceDescColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.deviceHardwareChanColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.logicalDevSplitContainer.Panel1.SuspendLayout();
             this.logicalDevSplitContainer.Panel2.SuspendLayout();
             this.logicalDevSplitContainer.SuspendLayout();
@@ -78,6 +79,7 @@ namespace WordGenerator.ChannelManager
             this.logicalDevicesDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.logicalDevicesDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.deviceTypeColumn,
+            this.drawIDcolumn,
             this.deviceIDColumn,
             this.deviceNameColumn,
             this.deviceDescColumn,
@@ -92,45 +94,7 @@ namespace WordGenerator.ChannelManager
             this.logicalDevicesDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.logicalDevicesDataGridView.Size = new System.Drawing.Size(695, 573);
             this.logicalDevicesDataGridView.TabIndex = 0;
-            // 
-            // deviceTypeColumn
-            // 
-            this.deviceTypeColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.deviceTypeColumn.FillWeight = 126.9036F;
-            this.deviceTypeColumn.HeaderText = "Type";
-            this.deviceTypeColumn.Name = "deviceTypeColumn";
-            this.deviceTypeColumn.ReadOnly = true;
-            this.deviceTypeColumn.Width = 56;
-            // 
-            // deviceIDColumn
-            // 
-            this.deviceIDColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.deviceIDColumn.FillWeight = 93.27411F;
-            this.deviceIDColumn.HeaderText = "Logical ID";
-            this.deviceIDColumn.Name = "deviceIDColumn";
-            this.deviceIDColumn.ReadOnly = true;
-            this.deviceIDColumn.Width = 80;
-            // 
-            // deviceNameColumn
-            // 
-            this.deviceNameColumn.FillWeight = 93.27411F;
-            this.deviceNameColumn.HeaderText = "Name";
-            this.deviceNameColumn.Name = "deviceNameColumn";
-            this.deviceNameColumn.ReadOnly = true;
-            // 
-            // deviceDescColumn
-            // 
-            this.deviceDescColumn.FillWeight = 93.27411F;
-            this.deviceDescColumn.HeaderText = "Description";
-            this.deviceDescColumn.Name = "deviceDescColumn";
-            this.deviceDescColumn.ReadOnly = true;
-            // 
-            // deviceHardwareChanColumn
-            // 
-            this.deviceHardwareChanColumn.FillWeight = 93.27411F;
-            this.deviceHardwareChanColumn.HeaderText = "Hardware Channel";
-            this.deviceHardwareChanColumn.Name = "deviceHardwareChanColumn";
-            this.deviceHardwareChanColumn.ReadOnly = true;
+            this.logicalDevicesDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.logicalDevicesDataGridView_CellContentClick);
             // 
             // deleteDeviceButton
             // 
@@ -181,6 +145,51 @@ namespace WordGenerator.ChannelManager
             this.lblShowDevice.TabIndex = 0;
             this.lblShowDevice.Text = "Show device type:";
             // 
+            // deviceTypeColumn
+            // 
+            this.deviceTypeColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.deviceTypeColumn.FillWeight = 126.9036F;
+            this.deviceTypeColumn.HeaderText = "Type";
+            this.deviceTypeColumn.Name = "deviceTypeColumn";
+            this.deviceTypeColumn.ReadOnly = true;
+            this.deviceTypeColumn.Width = 56;
+            // 
+            // drawIDcolumn
+            // 
+            this.drawIDcolumn.HeaderText = "Draw Order ID";
+            this.drawIDcolumn.Name = "drawIDcolumn";
+            this.drawIDcolumn.ReadOnly = true;
+            // 
+            // deviceIDColumn
+            // 
+            this.deviceIDColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.deviceIDColumn.FillWeight = 93.27411F;
+            this.deviceIDColumn.HeaderText = "Logical ID";
+            this.deviceIDColumn.Name = "deviceIDColumn";
+            this.deviceIDColumn.ReadOnly = true;
+            this.deviceIDColumn.Width = 80;
+            // 
+            // deviceNameColumn
+            // 
+            this.deviceNameColumn.FillWeight = 93.27411F;
+            this.deviceNameColumn.HeaderText = "Name";
+            this.deviceNameColumn.Name = "deviceNameColumn";
+            this.deviceNameColumn.ReadOnly = true;
+            // 
+            // deviceDescColumn
+            // 
+            this.deviceDescColumn.FillWeight = 93.27411F;
+            this.deviceDescColumn.HeaderText = "Description";
+            this.deviceDescColumn.Name = "deviceDescColumn";
+            this.deviceDescColumn.ReadOnly = true;
+            // 
+            // deviceHardwareChanColumn
+            // 
+            this.deviceHardwareChanColumn.FillWeight = 93.27411F;
+            this.deviceHardwareChanColumn.HeaderText = "Hardware Channel";
+            this.deviceHardwareChanColumn.Name = "deviceHardwareChanColumn";
+            this.deviceHardwareChanColumn.ReadOnly = true;
+            // 
             // ChannelManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -189,8 +198,8 @@ namespace WordGenerator.ChannelManager
             this.Controls.Add(this.logicalDevSplitContainer);
             this.Name = "ChannelManager";
             this.Text = "ChannelManager";
-            this.Load += new System.EventHandler(this.ChannelManager_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ChannelManager_FormClosing);
+            this.Load += new System.EventHandler(this.ChannelManager_Load);
             this.logicalDevSplitContainer.Panel1.ResumeLayout(false);
             this.logicalDevSplitContainer.Panel2.ResumeLayout(false);
             this.logicalDevSplitContainer.Panel2.PerformLayout();
@@ -204,16 +213,17 @@ namespace WordGenerator.ChannelManager
 
         private System.Windows.Forms.SplitContainer logicalDevSplitContainer;
         private System.Windows.Forms.DataGridView logicalDevicesDataGridView;
-        private System.Windows.Forms.DataGridViewTextBoxColumn deviceTypeColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn deviceIDColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn deviceNameColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn deviceDescColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn deviceHardwareChanColumn;
         private System.Windows.Forms.Button deleteDeviceButton;
         private System.Windows.Forms.Button editDeviceButton;
         private System.Windows.Forms.Button addDeviceButton;
         private System.Windows.Forms.ComboBox deviceTypeCombo;
         private System.Windows.Forms.Label lblShowDevice;
+        private System.Windows.Forms.DataGridViewTextBoxColumn deviceTypeColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn drawIDcolumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn deviceIDColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn deviceNameColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn deviceDescColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn deviceHardwareChanColumn;
 
     }
 }

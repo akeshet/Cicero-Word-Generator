@@ -77,12 +77,16 @@ namespace WordGenerator.ChannelManager
                 Storage.settingsData.logicalChannelManager.GetDeviceCollection(ct);
 
             foreach (int logicalID in selectedDeviceDict.Channels.Keys)
-                EmitLogicalDeviceToGrid(ct, logicalID, selectedDeviceDict.Channels[logicalID]);
+            {
+                EmitLogicalDeviceToGrid(ct, logicalID, selectedDeviceDict.GetDrawID(logicalID), selectedDeviceDict.Channels[logicalID]);
+            }
         }
-        private void EmitLogicalDeviceToGrid(HardwareChannel.HardwareConstants.ChannelTypes ct, int logicalID, LogicalChannel lc)
+        private void EmitLogicalDeviceToGrid(HardwareChannel.HardwareConstants.ChannelTypes ct, int logicalID, int drawID, LogicalChannel lc)
         {
+            
             string[] row = { ct.ToString(),
-                             logicalID.ToString(), 
+                             "a"+drawID.ToString(),
+                             logicalID.ToString(),
                              lc.Name,
                              lc.Description,
                              lc.HardwareChannel.ToString() };
@@ -185,6 +189,11 @@ namespace WordGenerator.ChannelManager
             MainClientForm.instance.RefreshSettingsDataToUI();
             MainClientForm.instance.RefreshSequenceDataToUI();
           //  mainClientForm.instance.Enabled = true;
+        }
+
+        private void logicalDevicesDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
  
     }
