@@ -104,5 +104,15 @@ namespace WordGenerator.ChannelManager
             sd.lc.TogglingChannel = togglingCheck.Checked;
         }
 
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void swapDrawIDButton_Click(object sender, EventArgs e)
+        {
+            //TODO
+        }
+
     }
 }

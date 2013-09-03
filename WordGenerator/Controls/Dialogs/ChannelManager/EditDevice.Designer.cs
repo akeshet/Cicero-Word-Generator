@@ -43,6 +43,10 @@ namespace WordGenerator.ChannelManager
             this.refreshHardwareButton = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.togglingCheck = new System.Windows.Forms.CheckBox();
+            this.lblDrawID = new System.Windows.Forms.Label();
+            this.drawIDText = new System.Windows.Forms.TextBox();
+            this.swapDrawIDButton = new System.Windows.Forms.Button();
+            this.swapToID_Text = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // logicalIDText
@@ -64,7 +68,7 @@ namespace WordGenerator.ChannelManager
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(246, 169);
+            this.cancelButton.Location = new System.Drawing.Point(246, 209);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 21;
@@ -74,7 +78,7 @@ namespace WordGenerator.ChannelManager
             // 
             // okButton
             // 
-            this.okButton.Location = new System.Drawing.Point(165, 169);
+            this.okButton.Location = new System.Drawing.Point(165, 209);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 20;
@@ -86,7 +90,7 @@ namespace WordGenerator.ChannelManager
             // 
             this.availableHardwareChanCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.availableHardwareChanCombo.FormattingEnabled = true;
-            this.availableHardwareChanCombo.Location = new System.Drawing.Point(120, 97);
+            this.availableHardwareChanCombo.Location = new System.Drawing.Point(120, 137);
             this.availableHardwareChanCombo.Name = "availableHardwareChanCombo";
             this.availableHardwareChanCombo.Size = new System.Drawing.Size(201, 21);
             this.availableHardwareChanCombo.TabIndex = 19;
@@ -94,14 +98,14 @@ namespace WordGenerator.ChannelManager
             // 
             // deviceDescText
             // 
-            this.deviceDescText.Location = new System.Drawing.Point(120, 72);
+            this.deviceDescText.Location = new System.Drawing.Point(120, 112);
             this.deviceDescText.Name = "deviceDescText";
             this.deviceDescText.Size = new System.Drawing.Size(201, 20);
             this.deviceDescText.TabIndex = 18;
             // 
             // deviceNameText
             // 
-            this.deviceNameText.Location = new System.Drawing.Point(120, 47);
+            this.deviceNameText.Location = new System.Drawing.Point(120, 87);
             this.deviceNameText.Name = "deviceNameText";
             this.deviceNameText.Size = new System.Drawing.Size(201, 20);
             this.deviceNameText.TabIndex = 17;
@@ -109,7 +113,7 @@ namespace WordGenerator.ChannelManager
             // lblHardwareChan
             // 
             this.lblHardwareChan.AutoSize = true;
-            this.lblHardwareChan.Location = new System.Drawing.Point(12, 100);
+            this.lblHardwareChan.Location = new System.Drawing.Point(12, 140);
             this.lblHardwareChan.Name = "lblHardwareChan";
             this.lblHardwareChan.Size = new System.Drawing.Size(98, 13);
             this.lblHardwareChan.TabIndex = 16;
@@ -127,7 +131,7 @@ namespace WordGenerator.ChannelManager
             // lblDescription
             // 
             this.lblDescription.AutoSize = true;
-            this.lblDescription.Location = new System.Drawing.Point(12, 75);
+            this.lblDescription.Location = new System.Drawing.Point(12, 115);
             this.lblDescription.Name = "lblDescription";
             this.lblDescription.Size = new System.Drawing.Size(63, 13);
             this.lblDescription.TabIndex = 14;
@@ -136,7 +140,7 @@ namespace WordGenerator.ChannelManager
             // lblName
             // 
             this.lblName.AutoSize = true;
-            this.lblName.Location = new System.Drawing.Point(12, 50);
+            this.lblName.Location = new System.Drawing.Point(12, 90);
             this.lblName.Name = "lblName";
             this.lblName.Size = new System.Drawing.Size(38, 13);
             this.lblName.TabIndex = 13;
@@ -152,7 +156,7 @@ namespace WordGenerator.ChannelManager
             // 
             // refreshHardwareButton
             // 
-            this.refreshHardwareButton.Location = new System.Drawing.Point(15, 169);
+            this.refreshHardwareButton.Location = new System.Drawing.Point(15, 209);
             this.refreshHardwareButton.Name = "refreshHardwareButton";
             this.refreshHardwareButton.Size = new System.Drawing.Size(105, 23);
             this.refreshHardwareButton.TabIndex = 27;
@@ -164,7 +168,7 @@ namespace WordGenerator.ChannelManager
             // 
             this.checkBox1.AutoSize = true;
             this.checkBox1.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBox1.Location = new System.Drawing.Point(16, 129);
+            this.checkBox1.Location = new System.Drawing.Point(16, 169);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(241, 17);
             this.checkBox1.TabIndex = 28;
@@ -176,7 +180,7 @@ namespace WordGenerator.ChannelManager
             // 
             this.togglingCheck.AutoSize = true;
             this.togglingCheck.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.togglingCheck.Location = new System.Drawing.Point(15, 146);
+            this.togglingCheck.Location = new System.Drawing.Point(15, 186);
             this.togglingCheck.Name = "togglingCheck";
             this.togglingCheck.Size = new System.Drawing.Size(300, 17);
             this.togglingCheck.TabIndex = 29;
@@ -184,11 +188,51 @@ namespace WordGenerator.ChannelManager
             this.togglingCheck.UseVisualStyleBackColor = true;
             this.togglingCheck.CheckedChanged += new System.EventHandler(this.togglingCheck_CheckedChanged);
             // 
+            // lblDrawID
+            // 
+            this.lblDrawID.AutoSize = true;
+            this.lblDrawID.Location = new System.Drawing.Point(206, 41);
+            this.lblDrawID.Name = "lblDrawID";
+            this.lblDrawID.Size = new System.Drawing.Size(49, 13);
+            this.lblDrawID.TabIndex = 30;
+            this.lblDrawID.Text = "Draw ID:";
+            this.lblDrawID.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // drawIDText
+            // 
+            this.drawIDText.Location = new System.Drawing.Point(261, 38);
+            this.drawIDText.Name = "drawIDText";
+            this.drawIDText.ReadOnly = true;
+            this.drawIDText.Size = new System.Drawing.Size(60, 20);
+            this.drawIDText.TabIndex = 31;
+            // 
+            // swapDrawIDButton
+            // 
+            this.swapDrawIDButton.Location = new System.Drawing.Point(86, 36);
+            this.swapDrawIDButton.Name = "swapDrawIDButton";
+            this.swapDrawIDButton.Size = new System.Drawing.Size(114, 23);
+            this.swapDrawIDButton.TabIndex = 32;
+            this.swapDrawIDButton.Text = "--Swap Draw ID-->";
+            this.swapDrawIDButton.UseVisualStyleBackColor = true;
+            this.swapDrawIDButton.Click += new System.EventHandler(this.swapDrawIDButton_Click);
+            // 
+            // swapToID_Text
+            // 
+            this.swapToID_Text.Location = new System.Drawing.Point(15, 38);
+            this.swapToID_Text.Name = "swapToID_Text";
+            this.swapToID_Text.ReadOnly = true;
+            this.swapToID_Text.Size = new System.Drawing.Size(60, 20);
+            this.swapToID_Text.TabIndex = 33;
+            // 
             // EditDevice
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(342, 209);
+            this.ClientSize = new System.Drawing.Size(334, 250);
+            this.Controls.Add(this.swapToID_Text);
+            this.Controls.Add(this.swapDrawIDButton);
+            this.Controls.Add(this.drawIDText);
+            this.Controls.Add(this.lblDrawID);
             this.Controls.Add(this.togglingCheck);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.refreshHardwareButton);
@@ -228,5 +272,9 @@ namespace WordGenerator.ChannelManager
         private System.Windows.Forms.Button refreshHardwareButton;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.CheckBox togglingCheck;
+        private System.Windows.Forms.Label lblDrawID;
+        private System.Windows.Forms.TextBox drawIDText;
+        private System.Windows.Forms.Button swapDrawIDButton;
+        private System.Windows.Forms.TextBox swapToID_Text;
     }
 }
