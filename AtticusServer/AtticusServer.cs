@@ -23,7 +23,7 @@ namespace AtticusServer
         static void Main()
         {
 
-            /*
+            /* //
              * // demand high security permissions for Atticus. This may help improve performance?
 
             SecurityPermission perm = new SecurityPermission(SecurityPermissionFlag.AllFlags);
