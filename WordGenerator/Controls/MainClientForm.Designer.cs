@@ -104,6 +104,7 @@ namespace WordGenerator
             this.analogTab = new System.Windows.Forms.TabPage();
             this.analogGroupEditor = new WordGenerator.Controls.AnalogGroupEditor();
             this.sequenceTab = new System.Windows.Forms.TabPage();
+            this.useNetworkClockCheckBox = new System.Windows.Forms.CheckBox();
             this.waitForReady = new System.Windows.Forms.CheckBox();
             this.lockDigitalCheckBox = new System.Windows.Forms.CheckBox();
             this.rs232GroupsLabel = new System.Windows.Forms.Label();
@@ -122,7 +123,7 @@ namespace WordGenerator
             this.eventLogTab = new System.Windows.Forms.TabPage();
             this.messageLogTextBox = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.useNetworkClockCheckBox = new System.Windows.Forms.CheckBox();
+            this.editRunLoggingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.variablesTab.SuspendLayout();
@@ -442,7 +443,8 @@ namespace WordGenerator
             this.editLogicalDevicesToolStripMenuItem,
             this.editServerManagerToolStripMenuItem,
             this.populateSequenceWithNewChannelsToolStripMenuItem,
-            this.enableDebugMenuToolStripMenuItem});
+            this.enableDebugMenuToolStripMenuItem,
+            this.editRunLoggingToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
@@ -467,8 +469,8 @@ namespace WordGenerator
             this.populateSequenceWithNewChannelsToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.populateSequenceWithNewChannelsToolStripMenuItem.Text = "&Populate Sequence";
             this.populateSequenceWithNewChannelsToolStripMenuItem.ToolTipText = "Click here to update SequenceData object to contain all of the channels in the pr" +
-                "esent SettingsData. NOTE: Once this is done, Sequence files will no longer be co" +
-                "mpatible with old settings files.\r\n";
+    "esent SettingsData. NOTE: Once this is done, Sequence files will no longer be co" +
+    "mpatible with old settings files.\r\n";
             this.populateSequenceWithNewChannelsToolStripMenuItem.Click += new System.EventHandler(this.populateSequenceWithNewChannelsToolStripMenuItem_Click);
             // 
             // enableDebugMenuToolStripMenuItem
@@ -704,7 +706,7 @@ namespace WordGenerator
             this.gpibGroupEditor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gpibGroupEditor.Location = new System.Drawing.Point(3, 3);
             this.gpibGroupEditor.Name = "gpibGroupEditor";
-            this.gpibGroupEditor.Size = new System.Drawing.Size(1258, 890);
+            this.gpibGroupEditor.Size = new System.Drawing.Size(1258, 804);
             this.gpibGroupEditor.TabIndex = 0;
             // 
             // analogTab
@@ -723,7 +725,7 @@ namespace WordGenerator
             this.analogGroupEditor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.analogGroupEditor.Location = new System.Drawing.Point(3, 3);
             this.analogGroupEditor.Name = "analogGroupEditor";
-            this.analogGroupEditor.Size = new System.Drawing.Size(1258, 890);
+            this.analogGroupEditor.Size = new System.Drawing.Size(1258, 804);
             this.analogGroupEditor.TabIndex = 0;
             // 
             // sequenceTab
@@ -745,6 +747,17 @@ namespace WordGenerator
             this.sequenceTab.Text = "Sequence (F1)";
             this.sequenceTab.ToolTipText = "Testing";
             this.sequenceTab.UseVisualStyleBackColor = true;
+            // 
+            // useNetworkClockCheckBox
+            // 
+            this.useNetworkClockCheckBox.AutoSize = true;
+            this.useNetworkClockCheckBox.Location = new System.Drawing.Point(7, 768);
+            this.useNetworkClockCheckBox.Name = "useNetworkClockCheckBox";
+            this.useNetworkClockCheckBox.Size = new System.Drawing.Size(118, 17);
+            this.useNetworkClockCheckBox.TabIndex = 10;
+            this.useNetworkClockCheckBox.Text = "Use Network Clock";
+            this.useNetworkClockCheckBox.UseVisualStyleBackColor = true;
+            this.useNetworkClockCheckBox.CheckedChanged += new System.EventHandler(this.useNetworkClockCheckbox_CheckedChanged);
             // 
             // waitForReady
             // 
@@ -821,7 +834,7 @@ namespace WordGenerator
             this.sequencePage.Name = "sequencePage";
             this.sequencePage.Size = new System.Drawing.Size(1258, 804);
             this.sequencePage.TabIndex = 0;
-            this.sequencePage.messageLog += new System.EventHandler<DataStructures.MessageEvent> (this.handleMessageEvent);
+            this.sequencePage.messageLog += new System.EventHandler<DataStructures.MessageEvent>(this.handleMessageEvent);
             // 
             // mainTab
             // 
@@ -856,7 +869,7 @@ namespace WordGenerator
             this.overridePage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.overridePage.Location = new System.Drawing.Point(0, 0);
             this.overridePage.Name = "overridePage";
-            this.overridePage.Size = new System.Drawing.Size(1264, 896);
+            this.overridePage.Size = new System.Drawing.Size(1264, 810);
             this.overridePage.TabIndex = 0;
             // 
             // rs232Tab
@@ -891,7 +904,7 @@ namespace WordGenerator
             this.pulsesPage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pulsesPage.Location = new System.Drawing.Point(0, 0);
             this.pulsesPage.Name = "pulsesPage";
-            this.pulsesPage.Size = new System.Drawing.Size(1264, 896);
+            this.pulsesPage.Size = new System.Drawing.Size(1264, 810);
             this.pulsesPage.TabIndex = 0;
             // 
             // eventLogTab
@@ -920,16 +933,12 @@ namespace WordGenerator
             this.toolTip1.UseAnimation = false;
             this.toolTip1.UseFading = false;
             // 
-            // useNetworkClockCheckBox
+            // editRunLoggingToolStripMenuItem
             // 
-            this.useNetworkClockCheckBox.AutoSize = true;
-            this.useNetworkClockCheckBox.Location = new System.Drawing.Point(7, 768);
-            this.useNetworkClockCheckBox.Name = "useNetworkClockCheckBox";
-            this.useNetworkClockCheckBox.Size = new System.Drawing.Size(118, 17);
-            this.useNetworkClockCheckBox.TabIndex = 10;
-            this.useNetworkClockCheckBox.Text = "Use Network Clock";
-            this.useNetworkClockCheckBox.UseVisualStyleBackColor = true;
-            this.useNetworkClockCheckBox.CheckedChanged += new System.EventHandler(this.useNetworkClockCheckbox_CheckedChanged);
+            this.editRunLoggingToolStripMenuItem.Name = "editRunLoggingToolStripMenuItem";
+            this.editRunLoggingToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.editRunLoggingToolStripMenuItem.Text = "Run Log Config";
+            this.editRunLoggingToolStripMenuItem.Click += new System.EventHandler(this.editRunLoggingToolStripMenuItem_Click);
             // 
             // MainClientForm
             // 
@@ -1064,6 +1073,7 @@ namespace WordGenerator
         private System.Windows.Forms.ToolStripMenuItem openGitRepositoryPageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showOnlyWarningsOrErrorsInEventLogToolStripMenuItem;
         private System.Windows.Forms.CheckBox useNetworkClockCheckBox;
+        private System.Windows.Forms.ToolStripMenuItem editRunLoggingToolStripMenuItem;
 
     }
 }

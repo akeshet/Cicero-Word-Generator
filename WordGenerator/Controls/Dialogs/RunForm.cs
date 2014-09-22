@@ -26,6 +26,7 @@ namespace WordGenerator
 
         int repeatCount = 1;
 
+        private bool variableOutputTextFile;
 
         Thread getConfirmationThread;
 
