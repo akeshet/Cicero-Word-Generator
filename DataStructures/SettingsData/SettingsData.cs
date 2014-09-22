@@ -106,7 +106,10 @@ namespace DataStructures
         private bool writeVariableOutputTextFile;
         public bool WriteVariableOutputTextFile
         {
-            get { return writeVariableOutputTextFile; }
+            get {
+                if (writeVariableOutputTextFile == null)
+                    writeVariableOutputTextFile = false;
+                return writeVariableOutputTextFile; }
             set { writeVariableOutputTextFile = value; }
         }
 

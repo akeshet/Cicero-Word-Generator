@@ -699,10 +699,10 @@ namespace WordGenerator
                     addMessageLogText(this, new MessageEvent("Lists locked successfully."));
                 }
 
-
-
+                
                 sequence.ListIterationNumber = iterationNumber;
-
+                
+                #region Pre-run Variables Check
                 string listBoundVariableValues = "";
 
                 foreach (Variable var in sequence.Variables)
@@ -785,6 +785,21 @@ namespace WordGenerator
                     int nChanged = variablePreviewForm.refresh(sequence);
                     addMessageLogText(this, new MessageEvent("... " + nChanged + " variable values changed."));
                 }
+                #endregion
+
+                if (Storage.settingsData.WriteVariableOutputTextFile)
+                {
+                    addMessageLogText(this, new MessageEvent("Variable-to-file output enabled. Writing variable file..."));
+                    
+                    bool write_success=sequence.writeVariableListToFile(Storage.settingsData.VariableOutputFilename, Storage.settingsData.VariableOutputFilenameDirectory);
+                    if (write_success)
+                        addMessageLogText(this, new MessageEvent("Variable-to-file output succeeded."));
+                    else
+                        addMessageLogText(this, new MessageEvent("Variable-to-file output failed. Check path and filename of output file."));
+
+                }
+
+
 
 
                 // Create timestep "loop copies" if there are timestep loops in use
