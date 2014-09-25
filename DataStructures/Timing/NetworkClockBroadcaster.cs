@@ -64,7 +64,7 @@ namespace DataStructures.Timing
             logMessage(new MessageEvent("Adding network " + endPoint.HostType.ToString() + " clock listener at hostname: " + endPoint.HostName, 0, MessageEvent.MessageTypes.Routine, MessageEvent.MessageCategories.SoftwareClock));
             if (!clients.ContainsKey(endPoint.HostName)) {
                 UdpClient client = new UdpClient(endPoint.HostName, endPoint.getPort());
-                clients.Add(endPoint.HostName, client);
+                clients.Add(endPoint.HostName + " " + endPoint.HostType.ToString(), client);
             }
             logMessage(new MessageEvent("...done", 0, MessageEvent.MessageTypes.Routine, MessageEvent.MessageCategories.SoftwareClock));
                 
