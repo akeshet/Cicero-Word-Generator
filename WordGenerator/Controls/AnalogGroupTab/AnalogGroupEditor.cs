@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using DataStructures;
 using wgControlLibrary;
-
+//test comment
 namespace WordGenerator.Controls
 {
     public partial class AnalogGroupEditor : UserControl
