@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Linq;
 using DataStructures;
 
 namespace WordGenerator.ChannelManager
@@ -13,7 +14,11 @@ namespace WordGenerator.ChannelManager
         /// physical channels.
         /// </summary>
         public List<HardwareChannel> knownHardwareChannels;
+        private string chan1_string;
+        private string chan2_string;
 
+        private bool chan1_analog;
+        private bool chan2_analog;
 
         public ChannelManager()
         {
@@ -76,7 +81,15 @@ namespace WordGenerator.ChannelManager
             ChannelCollection selectedDeviceDict =
                 Storage.settingsData.logicalChannelManager.GetDeviceCollection(ct);
 
-            foreach (int logicalID in selectedDeviceDict.Channels.Keys)
+            //So I want to output the channel list always sorted. The Channel collection is a dictionary, which
+            //does not have any inherent order, though it usually comes out sorted "by accident". However, after
+            //implementing the channel swap feature, they key collection of the dictionary is not longer accidentally
+            //sorted, so here we have to sort it manually:
+            var keyList = selectedDeviceDict.Channels.Keys.ToList();
+            keyList.Sort();
+
+
+            foreach (int logicalID in keyList)
                 EmitLogicalDeviceToGrid(ct, logicalID, selectedDeviceDict.Channels[logicalID]);
         }
         private void EmitLogicalDeviceToGrid(HardwareChannel.HardwareConstants.ChannelTypes ct, int logicalID, LogicalChannel lc)
@@ -185,6 +198,54 @@ namespace WordGenerator.ChannelManager
             MainClientForm.instance.RefreshSettingsDataToUI();
             MainClientForm.instance.RefreshSequenceDataToUI();
           //  mainClientForm.instance.Enabled = true;
+        }
+
+        private void txtBoxChan2_TextChanged(object sender, EventArgs e)
+        {
+            chan2_string = txtBoxChan2.Text;
+        }
+
+        private void txtBoxChan1_TextChanged(object sender, EventArgs e)
+        {
+            chan1_string = txtBoxChan1.Text;
+        }
+
+        private void Ch1AnalogCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            chan1_analog = Ch1AnalogCheckBox.Checked;
+        }
+
+        private void Ch2AnalogCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            chan2_analog = Ch2AnalogCheckBox.Checked;
+        }
+
+        private void swapChannelsButton_Click(object sender, EventArgs e)
+        {
+            //First, check if the swap input is valid
+            if (chan1_analog != chan2_analog)
+                return;
+            int chan1_ID;
+            int chan2_ID;
+
+            if (!Int32.TryParse(chan1_string, out chan1_ID) || !Int32.TryParse(chan2_string, out chan2_ID))
+                return;
+
+            //If we made it this far without returning, then we have a valid swap to perform:
+            HardwareChannel.HardwareConstants.ChannelTypes selectedType;
+            if (chan1_analog)
+                selectedType = HardwareChannel.HardwareConstants.ChannelTypes.analog;
+            else
+                selectedType = HardwareChannel.HardwareConstants.ChannelTypes.digital;
+
+            //get the two logical channels to swap
+
+
+            ChannelCollection selectedChannelCollection = Storage.settingsData.logicalChannelManager.GetDeviceCollection(selectedType);
+
+            selectedChannelCollection.SwapChannelKeys(chan1_ID, chan2_ID);
+            RefreshLogicalDeviceDataGrid();
+
         }
  
     }

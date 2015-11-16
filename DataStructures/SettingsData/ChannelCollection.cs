@@ -21,6 +21,22 @@ namespace DataStructures
             channels = new Dictionary<int, LogicalChannel>();
         }
 
+        public void SwapChannelKeys(int key1, int key2)
+        {
+            //hold on to logical channels that will be swapped
+            LogicalChannel lc1 = Channels[key1];
+            LogicalChannel lc2 = Channels[key2];
+
+            //remove logical channels from dictionary
+            channels.Remove(key1);
+            channels.Remove(key2);
+
+            //re-enter into dictionary, but with swapped keys
+            channels.Add(key1, lc2);
+            channels.Add(key2, lc1);
+
+        }
+
         public void AddChannel(LogicalChannel lc)
         {
             channels.Add(GetNextSuggestedKey(), lc);
