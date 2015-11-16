@@ -10,6 +10,8 @@ namespace WordGenerator.ChannelManager
     {
         ChannelManager cm;
         SelectedDevice sd;
+        bool color_override;
+
         public EditDevice(SelectedDevice sd, ChannelManager cm)
         {
             InitializeComponent();
@@ -102,6 +104,11 @@ namespace WordGenerator.ChannelManager
         private void togglingCheck_CheckedChanged(object sender, EventArgs e)
         {
             sd.lc.TogglingChannel = togglingCheck.Checked;
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            color_override = colorOverrideCheckBox.Checked;
         }
 
     }
