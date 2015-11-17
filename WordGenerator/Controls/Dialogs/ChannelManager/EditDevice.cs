@@ -24,6 +24,7 @@ namespace WordGenerator.ChannelManager
             this.deviceTypeText.Text = sd.channelTypeString;
             this.deviceNameText.Text = sd.lc.Name;
             this.deviceDescText.Text = sd.lc.Description;
+            this.colorOverrideCheckBox.Checked = sd.lc.DoOverrideDigitalColor;
 
             this.availableHardwareChanCombo.Items.Clear();
             this.availableHardwareChanCombo.Items.Add(HardwareChannel.Unassigned);
@@ -108,13 +109,17 @@ namespace WordGenerator.ChannelManager
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
-            color_override = colorOverrideCheckBox.Checked;
+            sd.lc.DoOverrideDigitalColor = colorOverrideCheckBox.Checked;
+            if (sd.lc.OverrideColor == null)
+                sd.lc.OverrideColor = System.Drawing.Color.Black;
+            
         }
 
         private void ColorSelectorButton_Click(object sender, EventArgs e)
         {
             ColorDialog colorSelect = new ColorDialog();
-            colorSelect.ShowDialog();
+            if (colorSelect.ShowDialog() == DialogResult.OK)
+                sd.lc.OverrideColor = colorSelect.Color;
         }
 
     }

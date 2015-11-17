@@ -44,16 +44,7 @@ namespace WordGenerator.ChannelManager
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.togglingCheck = new System.Windows.Forms.CheckBox();
             this.colorOverrideCheckBox = new System.Windows.Forms.CheckBox();
-            this.trackBarGreen = new System.Windows.Forms.TrackBar();
-            this.trackBarBlue = new System.Windows.Forms.TrackBar();
-            this.textBoxGreen = new System.Windows.Forms.TextBox();
-            this.textBoxBlue = new System.Windows.Forms.TextBox();
-            this.textBoxRed = new System.Windows.Forms.TextBox();
-            this.trackBarRed = new System.Windows.Forms.TrackBar();
             this.ColorSelectorButton = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarGreen)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarBlue)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarRed)).BeginInit();
             this.SuspendLayout();
             // 
             // logicalIDText
@@ -75,7 +66,7 @@ namespace WordGenerator.ChannelManager
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(246, 169);
+            this.cancelButton.Location = new System.Drawing.Point(242, 223);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 21;
@@ -85,7 +76,7 @@ namespace WordGenerator.ChannelManager
             // 
             // okButton
             // 
-            this.okButton.Location = new System.Drawing.Point(165, 169);
+            this.okButton.Location = new System.Drawing.Point(161, 223);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 20;
@@ -163,7 +154,7 @@ namespace WordGenerator.ChannelManager
             // 
             // refreshHardwareButton
             // 
-            this.refreshHardwareButton.Location = new System.Drawing.Point(15, 169);
+            this.refreshHardwareButton.Location = new System.Drawing.Point(11, 223);
             this.refreshHardwareButton.Name = "refreshHardwareButton";
             this.refreshHardwareButton.Size = new System.Drawing.Size(105, 23);
             this.refreshHardwareButton.TabIndex = 27;
@@ -198,7 +189,7 @@ namespace WordGenerator.ChannelManager
             // colorOverrideCheckBox
             // 
             this.colorOverrideCheckBox.AutoSize = true;
-            this.colorOverrideCheckBox.Location = new System.Drawing.Point(21, 212);
+            this.colorOverrideCheckBox.Location = new System.Drawing.Point(17, 188);
             this.colorOverrideCheckBox.Name = "colorOverrideCheckBox";
             this.colorOverrideCheckBox.Size = new System.Drawing.Size(99, 17);
             this.colorOverrideCheckBox.TabIndex = 30;
@@ -206,58 +197,13 @@ namespace WordGenerator.ChannelManager
             this.colorOverrideCheckBox.UseVisualStyleBackColor = true;
             this.colorOverrideCheckBox.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
-            // trackBarGreen
-            // 
-            this.trackBarGreen.Location = new System.Drawing.Point(12, 298);
-            this.trackBarGreen.Name = "trackBarGreen";
-            this.trackBarGreen.Size = new System.Drawing.Size(188, 45);
-            this.trackBarGreen.TabIndex = 32;
-            // 
-            // trackBarBlue
-            // 
-            this.trackBarBlue.Location = new System.Drawing.Point(12, 345);
-            this.trackBarBlue.Name = "trackBarBlue";
-            this.trackBarBlue.Size = new System.Drawing.Size(188, 45);
-            this.trackBarBlue.TabIndex = 33;
-            // 
-            // textBoxGreen
-            // 
-            this.textBoxGreen.Location = new System.Drawing.Point(202, 298);
-            this.textBoxGreen.Name = "textBoxGreen";
-            this.textBoxGreen.Size = new System.Drawing.Size(38, 20);
-            this.textBoxGreen.TabIndex = 35;
-            this.textBoxGreen.Text = "0";
-            // 
-            // textBoxBlue
-            // 
-            this.textBoxBlue.Location = new System.Drawing.Point(202, 345);
-            this.textBoxBlue.Name = "textBoxBlue";
-            this.textBoxBlue.Size = new System.Drawing.Size(38, 20);
-            this.textBoxBlue.TabIndex = 36;
-            this.textBoxBlue.Text = "0";
-            // 
-            // textBoxRed
-            // 
-            this.textBoxRed.Location = new System.Drawing.Point(202, 247);
-            this.textBoxRed.Name = "textBoxRed";
-            this.textBoxRed.Size = new System.Drawing.Size(38, 20);
-            this.textBoxRed.TabIndex = 34;
-            this.textBoxRed.Text = "0";
-            // 
-            // trackBarRed
-            // 
-            this.trackBarRed.Location = new System.Drawing.Point(12, 247);
-            this.trackBarRed.Name = "trackBarRed";
-            this.trackBarRed.Size = new System.Drawing.Size(188, 45);
-            this.trackBarRed.TabIndex = 31;
-            // 
             // ColorSelectorButton
             // 
-            this.ColorSelectorButton.Location = new System.Drawing.Point(126, 208);
+            this.ColorSelectorButton.Location = new System.Drawing.Point(135, 184);
             this.ColorSelectorButton.Name = "ColorSelectorButton";
             this.ColorSelectorButton.Size = new System.Drawing.Size(75, 23);
             this.ColorSelectorButton.TabIndex = 37;
-            this.ColorSelectorButton.Text = "SelectColor";
+            this.ColorSelectorButton.Text = "Select Color";
             this.ColorSelectorButton.UseVisualStyleBackColor = true;
             this.ColorSelectorButton.Click += new System.EventHandler(this.ColorSelectorButton_Click);
             // 
@@ -265,14 +211,8 @@ namespace WordGenerator.ChannelManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(349, 420);
+            this.ClientSize = new System.Drawing.Size(349, 261);
             this.Controls.Add(this.ColorSelectorButton);
-            this.Controls.Add(this.textBoxBlue);
-            this.Controls.Add(this.textBoxGreen);
-            this.Controls.Add(this.textBoxRed);
-            this.Controls.Add(this.trackBarBlue);
-            this.Controls.Add(this.trackBarGreen);
-            this.Controls.Add(this.trackBarRed);
             this.Controls.Add(this.colorOverrideCheckBox);
             this.Controls.Add(this.togglingCheck);
             this.Controls.Add(this.checkBox1);
@@ -291,9 +231,6 @@ namespace WordGenerator.ChannelManager
             this.Controls.Add(this.lblName);
             this.Name = "EditDevice";
             this.Text = "Edit logical device";
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarGreen)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarBlue)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarRed)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -317,12 +254,6 @@ namespace WordGenerator.ChannelManager
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.CheckBox togglingCheck;
         private System.Windows.Forms.CheckBox colorOverrideCheckBox;
-        private System.Windows.Forms.TrackBar trackBarGreen;
-        private System.Windows.Forms.TrackBar trackBarBlue;
-        private System.Windows.Forms.TextBox textBoxGreen;
-        private System.Windows.Forms.TextBox textBoxBlue;
-        private System.Windows.Forms.TextBox textBoxRed;
-        private System.Windows.Forms.TrackBar trackBarRed;
         private System.Windows.Forms.Button ColorSelectorButton;
     }
 }
