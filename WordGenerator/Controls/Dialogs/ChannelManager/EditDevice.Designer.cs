@@ -44,15 +44,16 @@ namespace WordGenerator.ChannelManager
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.togglingCheck = new System.Windows.Forms.CheckBox();
             this.colorOverrideCheckBox = new System.Windows.Forms.CheckBox();
-            this.trackBarRed = new System.Windows.Forms.TrackBar();
             this.trackBarGreen = new System.Windows.Forms.TrackBar();
             this.trackBarBlue = new System.Windows.Forms.TrackBar();
-            this.textBoxRed = new System.Windows.Forms.TextBox();
             this.textBoxGreen = new System.Windows.Forms.TextBox();
             this.textBoxBlue = new System.Windows.Forms.TextBox();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarRed)).BeginInit();
+            this.textBoxRed = new System.Windows.Forms.TextBox();
+            this.trackBarRed = new System.Windows.Forms.TrackBar();
+            this.ColorSelectorButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarGreen)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarBlue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarRed)).BeginInit();
             this.SuspendLayout();
             // 
             // logicalIDText
@@ -205,13 +206,6 @@ namespace WordGenerator.ChannelManager
             this.colorOverrideCheckBox.UseVisualStyleBackColor = true;
             this.colorOverrideCheckBox.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
-            // trackBarRed
-            // 
-            this.trackBarRed.Location = new System.Drawing.Point(12, 247);
-            this.trackBarRed.Name = "trackBarRed";
-            this.trackBarRed.Size = new System.Drawing.Size(188, 45);
-            this.trackBarRed.TabIndex = 31;
-            // 
             // trackBarGreen
             // 
             this.trackBarGreen.Location = new System.Drawing.Point(12, 298);
@@ -225,14 +219,6 @@ namespace WordGenerator.ChannelManager
             this.trackBarBlue.Name = "trackBarBlue";
             this.trackBarBlue.Size = new System.Drawing.Size(188, 45);
             this.trackBarBlue.TabIndex = 33;
-            // 
-            // textBoxRed
-            // 
-            this.textBoxRed.Location = new System.Drawing.Point(202, 247);
-            this.textBoxRed.Name = "textBoxRed";
-            this.textBoxRed.Size = new System.Drawing.Size(38, 20);
-            this.textBoxRed.TabIndex = 34;
-            this.textBoxRed.Text = "0";
             // 
             // textBoxGreen
             // 
@@ -250,11 +236,37 @@ namespace WordGenerator.ChannelManager
             this.textBoxBlue.TabIndex = 36;
             this.textBoxBlue.Text = "0";
             // 
+            // textBoxRed
+            // 
+            this.textBoxRed.Location = new System.Drawing.Point(202, 247);
+            this.textBoxRed.Name = "textBoxRed";
+            this.textBoxRed.Size = new System.Drawing.Size(38, 20);
+            this.textBoxRed.TabIndex = 34;
+            this.textBoxRed.Text = "0";
+            // 
+            // trackBarRed
+            // 
+            this.trackBarRed.Location = new System.Drawing.Point(12, 247);
+            this.trackBarRed.Name = "trackBarRed";
+            this.trackBarRed.Size = new System.Drawing.Size(188, 45);
+            this.trackBarRed.TabIndex = 31;
+            // 
+            // ColorSelectorButton
+            // 
+            this.ColorSelectorButton.Location = new System.Drawing.Point(126, 208);
+            this.ColorSelectorButton.Name = "ColorSelectorButton";
+            this.ColorSelectorButton.Size = new System.Drawing.Size(75, 23);
+            this.ColorSelectorButton.TabIndex = 37;
+            this.ColorSelectorButton.Text = "SelectColor";
+            this.ColorSelectorButton.UseVisualStyleBackColor = true;
+            this.ColorSelectorButton.Click += new System.EventHandler(this.ColorSelectorButton_Click);
+            // 
             // EditDevice
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(349, 420);
+            this.Controls.Add(this.ColorSelectorButton);
             this.Controls.Add(this.textBoxBlue);
             this.Controls.Add(this.textBoxGreen);
             this.Controls.Add(this.textBoxRed);
@@ -279,9 +291,9 @@ namespace WordGenerator.ChannelManager
             this.Controls.Add(this.lblName);
             this.Name = "EditDevice";
             this.Text = "Edit logical device";
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarRed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarGreen)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarBlue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarRed)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -305,11 +317,12 @@ namespace WordGenerator.ChannelManager
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.CheckBox togglingCheck;
         private System.Windows.Forms.CheckBox colorOverrideCheckBox;
-        private System.Windows.Forms.TrackBar trackBarRed;
         private System.Windows.Forms.TrackBar trackBarGreen;
         private System.Windows.Forms.TrackBar trackBarBlue;
-        private System.Windows.Forms.TextBox textBoxRed;
         private System.Windows.Forms.TextBox textBoxGreen;
         private System.Windows.Forms.TextBox textBoxBlue;
+        private System.Windows.Forms.TextBox textBoxRed;
+        private System.Windows.Forms.TrackBar trackBarRed;
+        private System.Windows.Forms.Button ColorSelectorButton;
     }
 }

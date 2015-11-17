@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
+using System.Linq;
 
 namespace DataStructures
 {
@@ -21,19 +22,38 @@ namespace DataStructures
             channels = new Dictionary<int, LogicalChannel>();
         }
 
-        public void SwapChannelKeys(int key1, int key2)
+        public void MoveValue(int key, int target)
         {
             //hold on to logical channels that will be swapped
-            LogicalChannel lc1 = Channels[key1];
-            LogicalChannel lc2 = Channels[key2];
+            LogicalChannel lc1 = channels[key];
+            //LogicalChannel lc2 = channels[target];
 
-            //remove logical channels from dictionary
-            channels.Remove(key1);
-            channels.Remove(key2);
+            RemoveChannel(key);
 
-            //re-enter into dictionary, but with swapped keys
-            channels.Add(key1, lc2);
-            channels.Add(key2, lc1);
+            List <KeyValuePair<int, LogicalChannel>> tempList = channels.ToList();
+
+            tempList.Sort(
+                delegate (KeyValuePair<int, LogicalChannel> p1, KeyValuePair<int,LogicalChannel> p2)
+                {
+                    return p1.Key.CompareTo(p2.Key);
+                });
+
+            int newKey=0;
+            channels.Clear();
+            foreach(KeyValuePair<int,LogicalChannel> i in tempList)
+            {
+                if (newKey == target)
+                {
+                    channels.Add(newKey, lc1);
+                    newKey++;
+                    channels.Add(newKey, i.Value);
+                }
+                else
+                    channels.Add(newKey, i.Value);
+
+                newKey++;
+            }
+           
 
         }
 

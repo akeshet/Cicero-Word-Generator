@@ -111,5 +111,11 @@ namespace WordGenerator.ChannelManager
             color_override = colorOverrideCheckBox.Checked;
         }
 
+        private void ColorSelectorButton_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorSelect = new ColorDialog();
+            colorSelect.ShowDialog();
+        }
+
     }
 }

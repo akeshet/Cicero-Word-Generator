@@ -85,8 +85,7 @@ namespace WordGenerator.ChannelManager
             //does not have any inherent order, though it usually comes out sorted "by accident". However, after
             //implementing the channel swap feature, they key collection of the dictionary is not longer accidentally
             //sorted, so here we have to sort it manually:
-            var keyList = selectedDeviceDict.Channels.Keys.ToList();
-            keyList.Sort();
+            var keyList = selectedDeviceDict.getSortedChannelIDList();
 
 
             foreach (int logicalID in keyList)
@@ -243,7 +242,7 @@ namespace WordGenerator.ChannelManager
 
             ChannelCollection selectedChannelCollection = Storage.settingsData.logicalChannelManager.GetDeviceCollection(selectedType);
 
-            selectedChannelCollection.SwapChannelKeys(chan1_ID, chan2_ID);
+            selectedChannelCollection.MoveValue(chan1_ID, chan2_ID);
             RefreshLogicalDeviceDataGrid();
 
         }

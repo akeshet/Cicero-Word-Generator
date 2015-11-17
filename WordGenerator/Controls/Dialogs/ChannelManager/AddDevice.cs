@@ -106,7 +106,6 @@ namespace WordGenerator.ChannelManager
             lc.Description = this.deviceDescText.Text;
             lc.AnalogChannelOutputNowUsesDwellWord = checkBox1.Checked;
             lc.TogglingChannel = togglingCheck.Checked;
-
             if (this.availableHardwareChanCombo.SelectedItem is HardwareChannel)
                 lc.HardwareChannel = (HardwareChannel)this.availableHardwareChanCombo.SelectedItem;
             else

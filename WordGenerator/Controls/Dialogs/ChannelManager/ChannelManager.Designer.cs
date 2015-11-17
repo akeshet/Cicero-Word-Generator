@@ -156,7 +156,7 @@ namespace WordGenerator.ChannelManager
             this.Ch2AnalogCheckBox.Name = "Ch2AnalogCheckBox";
             this.Ch2AnalogCheckBox.Size = new System.Drawing.Size(53, 17);
             this.Ch2AnalogCheckBox.TabIndex = 12;
-            this.Ch2AnalogCheckBox.Text = "Anal?";
+            this.Ch2AnalogCheckBox.Text = "Anlg?";
             this.Ch2AnalogCheckBox.UseVisualStyleBackColor = true;
             this.Ch2AnalogCheckBox.CheckedChanged += new System.EventHandler(this.Ch2AnalogCheckBox_CheckedChanged);
             // 
@@ -167,7 +167,7 @@ namespace WordGenerator.ChannelManager
             this.Ch1AnalogCheckBox.Name = "Ch1AnalogCheckBox";
             this.Ch1AnalogCheckBox.Size = new System.Drawing.Size(53, 17);
             this.Ch1AnalogCheckBox.TabIndex = 11;
-            this.Ch1AnalogCheckBox.Text = "Anal?";
+            this.Ch1AnalogCheckBox.Text = "Anlg?";
             this.Ch1AnalogCheckBox.UseVisualStyleBackColor = true;
             this.Ch1AnalogCheckBox.CheckedChanged += new System.EventHandler(this.Ch1AnalogCheckBox_CheckedChanged);
             // 
@@ -177,7 +177,7 @@ namespace WordGenerator.ChannelManager
             this.swapChannelsButton.Name = "swapChannelsButton";
             this.swapChannelsButton.Size = new System.Drawing.Size(75, 23);
             this.swapChannelsButton.TabIndex = 10;
-            this.swapChannelsButton.Text = "Swap";
+            this.swapChannelsButton.Text = "Move To";
             this.swapChannelsButton.UseVisualStyleBackColor = true;
             this.swapChannelsButton.Click += new System.EventHandler(this.swapChannelsButton_Click);
             // 
@@ -186,18 +186,18 @@ namespace WordGenerator.ChannelManager
             this.lblChID2.AutoSize = true;
             this.lblChID2.Location = new System.Drawing.Point(5, 442);
             this.lblChID2.Name = "lblChID2";
-            this.lblChID2.Size = new System.Drawing.Size(40, 13);
+            this.lblChID2.Size = new System.Drawing.Size(38, 13);
             this.lblChID2.TabIndex = 9;
-            this.lblChID2.Text = "ChID 2";
+            this.lblChID2.Text = "Target";
             // 
             // lblChID1
             // 
             this.lblChID1.AutoSize = true;
-            this.lblChID1.Location = new System.Drawing.Point(5, 371);
+            this.lblChID1.Location = new System.Drawing.Point(8, 371);
             this.lblChID1.Name = "lblChID1";
-            this.lblChID1.Size = new System.Drawing.Size(40, 13);
+            this.lblChID1.Size = new System.Drawing.Size(31, 13);
             this.lblChID1.TabIndex = 8;
-            this.lblChID1.Text = "ChID 1";
+            this.lblChID1.Text = "ChID";
             // 
             // txtBoxChan2
             // 
