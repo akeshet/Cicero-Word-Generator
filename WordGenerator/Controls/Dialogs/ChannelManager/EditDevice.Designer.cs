@@ -195,7 +195,6 @@ namespace WordGenerator.ChannelManager
             this.colorOverrideCheckBox.TabIndex = 30;
             this.colorOverrideCheckBox.Text = "Color Override?";
             this.colorOverrideCheckBox.UseVisualStyleBackColor = true;
-            this.colorOverrideCheckBox.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // ColorSelectorButton
             // 

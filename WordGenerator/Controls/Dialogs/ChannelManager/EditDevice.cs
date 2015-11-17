@@ -28,6 +28,9 @@ namespace WordGenerator.ChannelManager
 
             this.availableHardwareChanCombo.Items.Clear();
             this.availableHardwareChanCombo.Items.Add(HardwareChannel.Unassigned);
+            //KNOWN BUG HERE. If this is the only place you set the color (ie you don't
+            //use the ColorSelector below, then for some reason the drawn color is screwed up
+            
             if (sd.lc.HardwareChannel!=null) 
                 this.availableHardwareChanCombo.Items.Add(sd.lc.HardwareChannel);
             
@@ -69,7 +72,11 @@ namespace WordGenerator.ChannelManager
             sd.lc.Name = this.deviceNameText.Text;
             sd.lc.Description = this.deviceDescText.Text;
             sd.lc.AnalogChannelOutputNowUsesDwellWord = checkBox1.Checked;
-            
+            sd.lc.DoOverrideDigitalColor = colorOverrideCheckBox.Checked;
+            if (sd.lc.OverrideColor == null)
+                sd.lc.OverrideColor = System.Drawing.Color.Black;
+
+
             if (this.availableHardwareChanCombo.SelectedItem is HardwareChannel)
                 sd.lc.HardwareChannel = (HardwareChannel) this.availableHardwareChanCombo.SelectedItem;
             else
@@ -105,14 +112,6 @@ namespace WordGenerator.ChannelManager
         private void togglingCheck_CheckedChanged(object sender, EventArgs e)
         {
             sd.lc.TogglingChannel = togglingCheck.Checked;
-        }
-
-        private void checkBox2_CheckedChanged(object sender, EventArgs e)
-        {
-            sd.lc.DoOverrideDigitalColor = colorOverrideCheckBox.Checked;
-            if (sd.lc.OverrideColor == null)
-                sd.lc.OverrideColor = System.Drawing.Color.Black;
-            
         }
 
         private void ColorSelectorButton_Click(object sender, EventArgs e)
