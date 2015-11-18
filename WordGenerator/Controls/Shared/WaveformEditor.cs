@@ -426,6 +426,8 @@ namespace WordGenerator.Controls
         {
             fileLoadCheckBox.Enabled = true;
             fileLoadCheckBox.Checked = currentWaveform.DataFromFile;
+            reloadDataFileCheckBox.Enabled = true;
+            reloadDataFileCheckBox.Checked = currentWaveform.ReloadFromFile;
 
             if (currentWaveform.DataFromFile)
             {
@@ -458,6 +460,8 @@ namespace WordGenerator.Controls
             hideLoadFileControls();
             fileLoadCheckBox.Enabled = false;
             fileLoadCheckBox.Checked = false;
+            reloadDataFileCheckBox.Enabled = false;
+            reloadDataFileCheckBox.Checked = false;
         }
 
         //REO 10/2008
@@ -870,6 +874,26 @@ namespace WordGenerator.Controls
         private void equationHelpText_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void fileLoadCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void WaveformEditor_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void reloadDataFileCheckBox_Click(object sender, EventArgs e)
+        {
+            currentWaveform.ReloadFromFile = reloadDataFileCheckBox.Checked;
         }
 
         

@@ -13,6 +13,7 @@ using System.Net.Sockets;
 using DataStructures.UtilityClasses;
 using DataStructures.Database;
 using DataStructures.Timing;
+using System.IO;
 
 namespace WordGenerator
 {
@@ -1078,6 +1079,56 @@ namespace WordGenerator
                                  handler2.closeConnection();
                              */
                         
+                    }
+                }
+                //Added by Will Lunden 2015
+                //Now reload any waveform data files that need to be reloaded
+                foreach (AnalogGroup analogGroup in Storage.sequenceData.AnalogGroups)
+                {
+                    foreach (System.Collections.Generic.KeyValuePair<int,AnalogGroupChannelData> channelDataKVP in analogGroup.ChannelDatas)
+                    {
+                        if (analogGroup.ChannelDatas[channelDataKVP.Key].waveform.ReloadFromFile)
+                        {
+                            //Running the load-datafile code from WaveformEditor.cs
+                            Waveform currentWaveform = analogGroup.ChannelDatas[channelDataKVP.Key].waveform;
+                            try
+                            {
+                                // Create an instance of StreamReader to read from a file.
+                                // The using statement also closes the StreamReader.
+                                using (StreamReader sr = new StreamReader(currentWaveform.DataFileName))
+                                {
+                                    //to hold temporary X and Y values
+                                    Waveform tempwaveform = new Waveform();
+                                    //to parse each line in the file at either space or comma seperator
+                                    //trimming each line of white space at the beginning and end
+                                    DataStructures.UtilityClasses.WaveformParser p = new DataStructures.UtilityClasses.WaveformParser(sr, @"[,\s]\s*", delegate(string s) { return s.Trim(); });
+
+                                    double[] values;
+                                    while ((values = p.ReadFloats()) != null)
+                                    {
+                                        //there should be two values, otherwise the file is formated wrong
+                                        if (values.Length != 2)
+                                            throw new System.ApplicationException("File should have two comma or tab separated numbers per line");
+
+                                        tempwaveform.XValues.Add(new DimensionedParameter(Units.s, values[0]));
+                                        tempwaveform.YValues.Add(new DimensionedParameter(new Units(currentWaveform.YUnits, Units.Multiplier.unity), values[1]));
+                                    }
+
+                                    currentWaveform.XValues = tempwaveform.XValues;
+                                    currentWaveform.YValues = tempwaveform.YValues;
+                                    currentWaveform.WaveformDuration = (currentWaveform.XValues.Count > 0)
+                                        ? currentWaveform.XValues[currentWaveform.XValues.Count - 1] : currentWaveform.WaveformDuration;
+                                 
+
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                // Let the user know what went wrong.
+                                MessageBox.Show("The file could not be read:\n" + ex.Message);
+                            }
+
+                        }
                     }
                 }
 

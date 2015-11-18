@@ -63,6 +63,7 @@ namespace WordGenerator.Controls
             this.durationParameterEditor = new WordGenerator.Controls.HorizontalParameterEditor();
             this.XYParametersStart2 = new WordGenerator.Controls.HorizontalParameterEditor();
             this.XYParametersStart1 = new WordGenerator.Controls.HorizontalParameterEditor();
+            this.reloadDataFileCheckBox = new System.Windows.Forms.CheckBox();
             this.specialParametersBox.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.fileLoadGroupBox.SuspendLayout();
@@ -134,8 +135,8 @@ namespace WordGenerator.Controls
             this.equationHelpText.Size = new System.Drawing.Size(188, 67);
             this.equationHelpText.TabIndex = 4;
             this.equationHelpText.Text = "Enter equation. You may use any of the existing variables or Common Waveforms, an" +
-                "d any of the functions described in the Variables tab. Use \"t\" for time (in seco" +
-                "nds).";
+    "d any of the functions described in the Variables tab. Use \"t\" for time (in seco" +
+    "nds).";
             this.equationHelpText.Visible = false;
             this.equationHelpText.Click += new System.EventHandler(this.equationHelpText_Click);
             // 
@@ -278,26 +279,26 @@ namespace WordGenerator.Controls
             this.copyToClipboardToolStripMenuItem,
             this.pasteFromClipboardToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(226, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(234, 70);
             // 
             // copyToCommonWaveformsToolStripMenuItem
             // 
             this.copyToCommonWaveformsToolStripMenuItem.Name = "copyToCommonWaveformsToolStripMenuItem";
-            this.copyToCommonWaveformsToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.copyToCommonWaveformsToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.copyToCommonWaveformsToolStripMenuItem.Text = "Copy to Common Waveforms";
             this.copyToCommonWaveformsToolStripMenuItem.Click += new System.EventHandler(this.copyToCommonWaveformsToolStripMenuItem_Click);
             // 
             // copyToClipboardToolStripMenuItem
             // 
             this.copyToClipboardToolStripMenuItem.Name = "copyToClipboardToolStripMenuItem";
-            this.copyToClipboardToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.copyToClipboardToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.copyToClipboardToolStripMenuItem.Text = "Copy to Clipboard";
             this.copyToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyToClipboardToolStripMenuItem_Click);
             // 
             // pasteFromClipboardToolStripMenuItem
             // 
             this.pasteFromClipboardToolStripMenuItem.Name = "pasteFromClipboardToolStripMenuItem";
-            this.pasteFromClipboardToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.pasteFromClipboardToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.pasteFromClipboardToolStripMenuItem.Text = "Paste from Clipboard";
             this.pasteFromClipboardToolStripMenuItem.Click += new System.EventHandler(this.pasteFromClipboardToolStripMenuItem_Click);
             // 
@@ -305,12 +306,13 @@ namespace WordGenerator.Controls
             // 
             this.fileLoadCheckBox.AutoSize = true;
             this.fileLoadCheckBox.Enabled = false;
-            this.fileLoadCheckBox.Location = new System.Drawing.Point(6, 15);
+            this.fileLoadCheckBox.Location = new System.Drawing.Point(0, 15);
             this.fileLoadCheckBox.Name = "fileLoadCheckBox";
             this.fileLoadCheckBox.Size = new System.Drawing.Size(95, 17);
             this.fileLoadCheckBox.TabIndex = 16;
             this.fileLoadCheckBox.Text = "Load From File";
             this.fileLoadCheckBox.UseVisualStyleBackColor = true;
+            this.fileLoadCheckBox.CheckedChanged += new System.EventHandler(this.fileLoadCheckBox_CheckedChanged);
             this.fileLoadCheckBox.Click += new System.EventHandler(this.fileLoadCheckBox_Click);
             // 
             // filePathTextBox
@@ -337,7 +339,7 @@ namespace WordGenerator.Controls
             // fileLoadButton
             // 
             this.fileLoadButton.Enabled = false;
-            this.fileLoadButton.Location = new System.Drawing.Point(107, 12);
+            this.fileLoadButton.Location = new System.Drawing.Point(95, 12);
             this.fileLoadButton.Name = "fileLoadButton";
             this.fileLoadButton.Size = new System.Drawing.Size(96, 20);
             this.fileLoadButton.TabIndex = 19;
@@ -348,13 +350,14 @@ namespace WordGenerator.Controls
             // 
             // fileLoadGroupBox
             // 
+            this.fileLoadGroupBox.Controls.Add(this.reloadDataFileCheckBox);
             this.fileLoadGroupBox.Controls.Add(this.fileLoadCheckBox);
             this.fileLoadGroupBox.Controls.Add(this.fileLoadButton);
             this.fileLoadGroupBox.Controls.Add(this.fileBrowseButton);
             this.fileLoadGroupBox.Controls.Add(this.filePathTextBox);
-            this.fileLoadGroupBox.Location = new System.Drawing.Point(24, 244);
+            this.fileLoadGroupBox.Location = new System.Drawing.Point(3, 244);
             this.fileLoadGroupBox.Name = "fileLoadGroupBox";
-            this.fileLoadGroupBox.Size = new System.Drawing.Size(217, 39);
+            this.fileLoadGroupBox.Size = new System.Drawing.Size(263, 39);
             this.fileLoadGroupBox.TabIndex = 20;
             this.fileLoadGroupBox.TabStop = false;
             // 
@@ -409,6 +412,18 @@ namespace WordGenerator.Controls
             this.XYParametersStart1.UnitSelectorVisibility = true;
             this.XYParametersStart1.Visible = false;
             // 
+            // reloadDataFileCheckBox
+            // 
+            this.reloadDataFileCheckBox.AutoSize = true;
+            this.reloadDataFileCheckBox.Location = new System.Drawing.Point(197, 15);
+            this.reloadDataFileCheckBox.Name = "reloadDataFileCheckBox";
+            this.reloadDataFileCheckBox.Size = new System.Drawing.Size(66, 17);
+            this.reloadDataFileCheckBox.TabIndex = 24;
+            this.reloadDataFileCheckBox.Text = "Reload?";
+            this.reloadDataFileCheckBox.UseVisualStyleBackColor = true;
+            this.reloadDataFileCheckBox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.reloadDataFileCheckBox.Click += new System.EventHandler(this.reloadDataFileCheckBox_Click);
+            // 
             // WaveformEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -437,6 +452,7 @@ namespace WordGenerator.Controls
             this.Controls.Add(this.XLabel);
             this.Name = "WaveformEditor";
             this.Size = new System.Drawing.Size(269, 790);
+            this.Load += new System.EventHandler(this.WaveformEditor_Load);
             this.specialParametersBox.ResumeLayout(false);
             this.specialParametersBox.PerformLayout();
             this.contextMenuStrip1.ResumeLayout(false);
@@ -483,5 +499,6 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.Label equationHelpText;
         private System.Windows.Forms.ToolStripMenuItem copyToClipboardToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pasteFromClipboardToolStripMenuItem;
+        private System.Windows.Forms.CheckBox reloadDataFileCheckBox;
     }
 }
