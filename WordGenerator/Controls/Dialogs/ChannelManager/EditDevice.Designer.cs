@@ -47,11 +47,12 @@ namespace WordGenerator.ChannelManager
             // 
             // logicalIDText
             // 
+            this.logicalIDText.ForeColor = System.Drawing.SystemColors.WindowText;
             this.logicalIDText.Location = new System.Drawing.Point(261, 12);
             this.logicalIDText.Name = "logicalIDText";
-            this.logicalIDText.ReadOnly = true;
             this.logicalIDText.Size = new System.Drawing.Size(60, 20);
             this.logicalIDText.TabIndex = 24;
+            this.logicalIDText.TextChanged += new System.EventHandler(this.logicalIDText_TextChanged);
             // 
             // lblLogicalID
             // 
@@ -149,6 +150,7 @@ namespace WordGenerator.ChannelManager
             this.deviceTypeText.ReadOnly = true;
             this.deviceTypeText.Size = new System.Drawing.Size(121, 20);
             this.deviceTypeText.TabIndex = 26;
+            this.deviceTypeText.TextChanged += new System.EventHandler(this.deviceTypeText_TextChanged);
             // 
             // refreshHardwareButton
             // 

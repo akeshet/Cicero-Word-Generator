@@ -104,6 +104,7 @@ namespace WordGenerator
             this.analogTab = new System.Windows.Forms.TabPage();
             this.analogGroupEditor = new WordGenerator.Controls.AnalogGroupEditor();
             this.sequenceTab = new System.Windows.Forms.TabPage();
+            this.useNetworkClockCheckBox = new System.Windows.Forms.CheckBox();
             this.waitForReady = new System.Windows.Forms.CheckBox();
             this.lockDigitalCheckBox = new System.Windows.Forms.CheckBox();
             this.rs232GroupsLabel = new System.Windows.Forms.Label();
@@ -122,7 +123,6 @@ namespace WordGenerator
             this.eventLogTab = new System.Windows.Forms.TabPage();
             this.messageLogTextBox = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.useNetworkClockCheckBox = new System.Windows.Forms.CheckBox();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.variablesTab.SuspendLayout();
@@ -139,6 +139,7 @@ namespace WordGenerator
             // 
             // statusStrip
             // 
+            this.statusStrip.BackColor = System.Drawing.SystemColors.ControlLight;
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settingsFileLabel,
             this.toolStripStatusLabel});
@@ -160,6 +161,7 @@ namespace WordGenerator
             // 
             // menuStrip
             // 
+            this.menuStrip.BackColor = System.Drawing.SystemColors.ControlLight;
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.runToolStripMenuItem,
@@ -467,8 +469,8 @@ namespace WordGenerator
             this.populateSequenceWithNewChannelsToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.populateSequenceWithNewChannelsToolStripMenuItem.Text = "&Populate Sequence";
             this.populateSequenceWithNewChannelsToolStripMenuItem.ToolTipText = "Click here to update SequenceData object to contain all of the channels in the pr" +
-                "esent SettingsData. NOTE: Once this is done, Sequence files will no longer be co" +
-                "mpatible with old settings files.\r\n";
+    "esent SettingsData. NOTE: Once this is done, Sequence files will no longer be co" +
+    "mpatible with old settings files.\r\n";
             this.populateSequenceWithNewChannelsToolStripMenuItem.Click += new System.EventHandler(this.populateSequenceWithNewChannelsToolStripMenuItem_Click);
             // 
             // enableDebugMenuToolStripMenuItem
@@ -704,7 +706,7 @@ namespace WordGenerator
             this.gpibGroupEditor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gpibGroupEditor.Location = new System.Drawing.Point(3, 3);
             this.gpibGroupEditor.Name = "gpibGroupEditor";
-            this.gpibGroupEditor.Size = new System.Drawing.Size(1258, 890);
+            this.gpibGroupEditor.Size = new System.Drawing.Size(1258, 804);
             this.gpibGroupEditor.TabIndex = 0;
             // 
             // analogTab
@@ -723,7 +725,7 @@ namespace WordGenerator
             this.analogGroupEditor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.analogGroupEditor.Location = new System.Drawing.Point(3, 3);
             this.analogGroupEditor.Name = "analogGroupEditor";
-            this.analogGroupEditor.Size = new System.Drawing.Size(1258, 890);
+            this.analogGroupEditor.Size = new System.Drawing.Size(1258, 804);
             this.analogGroupEditor.TabIndex = 0;
             // 
             // sequenceTab
@@ -746,31 +748,49 @@ namespace WordGenerator
             this.sequenceTab.ToolTipText = "Testing";
             this.sequenceTab.UseVisualStyleBackColor = true;
             // 
+            // useNetworkClockCheckBox
+            // 
+            this.useNetworkClockCheckBox.AutoSize = true;
+            this.useNetworkClockCheckBox.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.useNetworkClockCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.useNetworkClockCheckBox.Location = new System.Drawing.Point(14, 762);
+            this.useNetworkClockCheckBox.Name = "useNetworkClockCheckBox";
+            this.useNetworkClockCheckBox.Size = new System.Drawing.Size(118, 17);
+            this.useNetworkClockCheckBox.TabIndex = 10;
+            this.useNetworkClockCheckBox.Text = "Use Network Clock";
+            this.useNetworkClockCheckBox.UseVisualStyleBackColor = false;
+            this.useNetworkClockCheckBox.CheckedChanged += new System.EventHandler(this.useNetworkClockCheckbox_CheckedChanged);
+            // 
             // waitForReady
             // 
             this.waitForReady.AutoSize = true;
-            this.waitForReady.Location = new System.Drawing.Point(7, 747);
+            this.waitForReady.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.waitForReady.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.waitForReady.Location = new System.Drawing.Point(14, 741);
             this.waitForReady.Name = "waitForReady";
             this.waitForReady.Size = new System.Drawing.Size(97, 17);
             this.waitForReady.TabIndex = 9;
             this.waitForReady.Text = "Wait for Ready";
-            this.waitForReady.UseVisualStyleBackColor = true;
+            this.waitForReady.UseVisualStyleBackColor = false;
             this.waitForReady.CheckedChanged += new System.EventHandler(this.waitForReady_CheckedChanged);
             // 
             // lockDigitalCheckBox
             // 
             this.lockDigitalCheckBox.AutoSize = true;
-            this.lockDigitalCheckBox.Location = new System.Drawing.Point(7, 726);
+            this.lockDigitalCheckBox.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.lockDigitalCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.lockDigitalCheckBox.Location = new System.Drawing.Point(14, 720);
             this.lockDigitalCheckBox.Name = "lockDigitalCheckBox";
             this.lockDigitalCheckBox.Size = new System.Drawing.Size(112, 17);
             this.lockDigitalCheckBox.TabIndex = 8;
             this.lockDigitalCheckBox.Text = "Lock Digital Panel";
-            this.lockDigitalCheckBox.UseVisualStyleBackColor = true;
+            this.lockDigitalCheckBox.UseVisualStyleBackColor = false;
             // 
             // rs232GroupsLabel
             // 
             this.rs232GroupsLabel.AutoSize = true;
-            this.rs232GroupsLabel.Location = new System.Drawing.Point(178, 200);
+            this.rs232GroupsLabel.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.rs232GroupsLabel.Location = new System.Drawing.Point(167, 200);
             this.rs232GroupsLabel.Name = "rs232GroupsLabel";
             this.rs232GroupsLabel.Size = new System.Drawing.Size(75, 13);
             this.rs232GroupsLabel.TabIndex = 7;
@@ -779,7 +799,8 @@ namespace WordGenerator
             // gpibGroupsLabel
             // 
             this.gpibGroupsLabel.AutoSize = true;
-            this.gpibGroupsLabel.Location = new System.Drawing.Point(186, 174);
+            this.gpibGroupsLabel.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.gpibGroupsLabel.Location = new System.Drawing.Point(175, 174);
             this.gpibGroupsLabel.Name = "gpibGroupsLabel";
             this.gpibGroupsLabel.Size = new System.Drawing.Size(67, 13);
             this.gpibGroupsLabel.TabIndex = 6;
@@ -788,7 +809,8 @@ namespace WordGenerator
             // analogGroupsLabel
             // 
             this.analogGroupsLabel.AutoSize = true;
-            this.analogGroupsLabel.Location = new System.Drawing.Point(179, 148);
+            this.analogGroupsLabel.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.analogGroupsLabel.Location = new System.Drawing.Point(168, 148);
             this.analogGroupsLabel.Name = "analogGroupsLabel";
             this.analogGroupsLabel.Size = new System.Drawing.Size(75, 13);
             this.analogGroupsLabel.TabIndex = 5;
@@ -796,7 +818,8 @@ namespace WordGenerator
             // 
             // serverManagerButton
             // 
-            this.serverManagerButton.Location = new System.Drawing.Point(3, 685);
+            this.serverManagerButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.serverManagerButton.Location = new System.Drawing.Point(11, 679);
             this.serverManagerButton.Name = "serverManagerButton";
             this.serverManagerButton.Size = new System.Drawing.Size(116, 35);
             this.serverManagerButton.TabIndex = 3;
@@ -806,7 +829,8 @@ namespace WordGenerator
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(3, 646);
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.button2.Location = new System.Drawing.Point(11, 640);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(116, 33);
             this.button2.TabIndex = 2;
@@ -816,12 +840,17 @@ namespace WordGenerator
             // 
             // sequencePage
             // 
+            this.sequencePage.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.sequencePage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.sequencePage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sequencePage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.sequencePage.ForeColor = System.Drawing.SystemColors.ControlText;
             this.sequencePage.Location = new System.Drawing.Point(3, 3);
             this.sequencePage.Name = "sequencePage";
             this.sequencePage.Size = new System.Drawing.Size(1258, 804);
             this.sequencePage.TabIndex = 0;
-            this.sequencePage.messageLog += new System.EventHandler<DataStructures.MessageEvent> (this.handleMessageEvent);
+            this.sequencePage.messageLog += new System.EventHandler<DataStructures.MessageEvent>(this.handleMessageEvent);
+            this.sequencePage.Load += new System.EventHandler(this.sequencePage_Load);
             // 
             // mainTab
             // 
@@ -835,6 +864,8 @@ namespace WordGenerator
             this.mainTab.Controls.Add(this.pulsesTab);
             this.mainTab.Controls.Add(this.eventLogTab);
             this.mainTab.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainTab.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.mainTab.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.mainTab.Location = new System.Drawing.Point(0, 24);
             this.mainTab.Name = "mainTab";
             this.mainTab.SelectedIndex = 0;
@@ -853,10 +884,11 @@ namespace WordGenerator
             // 
             // overridePage
             // 
+            this.overridePage.BackColor = System.Drawing.Color.Transparent;
             this.overridePage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.overridePage.Location = new System.Drawing.Point(0, 0);
             this.overridePage.Name = "overridePage";
-            this.overridePage.Size = new System.Drawing.Size(1264, 896);
+            this.overridePage.Size = new System.Drawing.Size(1264, 810);
             this.overridePage.TabIndex = 0;
             // 
             // rs232Tab
@@ -891,7 +923,7 @@ namespace WordGenerator
             this.pulsesPage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pulsesPage.Location = new System.Drawing.Point(0, 0);
             this.pulsesPage.Name = "pulsesPage";
-            this.pulsesPage.Size = new System.Drawing.Size(1264, 896);
+            this.pulsesPage.Size = new System.Drawing.Size(1264, 810);
             this.pulsesPage.TabIndex = 0;
             // 
             // eventLogTab
@@ -920,21 +952,11 @@ namespace WordGenerator
             this.toolTip1.UseAnimation = false;
             this.toolTip1.UseFading = false;
             // 
-            // useNetworkClockCheckBox
-            // 
-            this.useNetworkClockCheckBox.AutoSize = true;
-            this.useNetworkClockCheckBox.Location = new System.Drawing.Point(7, 768);
-            this.useNetworkClockCheckBox.Name = "useNetworkClockCheckBox";
-            this.useNetworkClockCheckBox.Size = new System.Drawing.Size(118, 17);
-            this.useNetworkClockCheckBox.TabIndex = 10;
-            this.useNetworkClockCheckBox.Text = "Use Network Clock";
-            this.useNetworkClockCheckBox.UseVisualStyleBackColor = true;
-            this.useNetworkClockCheckBox.CheckedChanged += new System.EventHandler(this.useNetworkClockCheckbox_CheckedChanged);
-            // 
             // MainClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(1272, 882);
             this.Controls.Add(this.mainTab);
             this.Controls.Add(this.statusStrip);
@@ -943,7 +965,7 @@ namespace WordGenerator
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(10000, 10000);
             this.Name = "MainClientForm";
-            this.Text = "Cicero Word Generator 1.0 Beta";
+            this.Text = "Cicero Word Generator BEC V Edition";
             this.Activated += new System.EventHandler(this.mainClientForm_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.mainClientForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.mainClientForm_FormClosed);

@@ -70,6 +70,8 @@ namespace WordGenerator.Controls
         public void DropDown()
         {
             this.Width = 200;
+            comboBox1.BackColor = System.Drawing.ColorTranslator.FromHtml("#A9B7E1");
+            comboBox1.ForeColor = Color.White;
             comboBox1.Width = 200;
             comboBox1.Focus();
             comboBox1.Show();
@@ -151,6 +153,7 @@ namespace WordGenerator.Controls
         {
           /*  comboBox1.DrawMode = DrawMode.OwnerDrawFixed;
             comboBox1.DrawItem += new DrawItemEventHandler(comboBox1_DrawItem);*/
+          
         }
 
         void comboBox1_DrawItem(object sender, DrawItemEventArgs e)

@@ -202,6 +202,28 @@ namespace DataStructures
             set { listDriven = value; }
         }
 
+        //Database driven:
+        private bool dbDriven;
+
+        public bool DBDriven
+        {
+            get { return dbDriven; }
+            set { dbDriven = value; }
+
+        }
+
+        //Database field number if applicable:
+        private int dbFieldNumber;
+
+        public int DBFieldNumber
+        {
+            get { return dbFieldNumber; }
+            set { dbFieldNumber = value; }
+
+        }
+
+
+
         private int listNumber;
 
         [Description("If ListDriven is true, indicates the list number which is driving this variable.")]
@@ -385,7 +407,7 @@ namespace DataStructures
             get { return isSpecialVariable; }
             set { isSpecialVariable = value; }
         }
-        public enum SpecialVariableType { IterationNum, IterationCount };
+        public enum SpecialVariableType { IterationNum, IterationCount, RunningCounter };
         private SpecialVariableType mySpecialVariableType;
 
         public SpecialVariableType MySpecialVariableType

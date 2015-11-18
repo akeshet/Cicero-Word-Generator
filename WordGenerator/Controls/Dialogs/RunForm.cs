@@ -34,6 +34,7 @@ namespace WordGenerator
 
         bool isIdle = false;
         bool isCameraSaving = true;
+      
 
         DateTime runStartTime;
 
@@ -406,6 +407,7 @@ namespace WordGenerator
         {
             // start run! woo hoo!
             // do it async so as not to block the UI thread.
+         
 
             if (!runningSequence.Lists.ListLocked)
             {
@@ -616,6 +618,9 @@ namespace WordGenerator
             while (keepGoing)
             {
                 MainClientForm.instance.CurrentlyOutputtingTimestep = null;
+                runningSequence.RunningCounter++; //Increment this motherfucker right off the bat
+                addMessageLogText(this, new MessageEvent("The running counter is at " + runningSequence.RunningCounter.ToString()));
+
 
 
 
@@ -728,6 +733,7 @@ namespace WordGenerator
                         }
                         listBoundVariableValues += var.VariableName + " = " + var.VariableValue.ToString() + ", ";
                     }
+                   
                 }
 
                 if (listBoundVariableValues != "")
@@ -904,6 +910,176 @@ namespace WordGenerator
                 #endregion
 
                 ServerManager.ServerActionStatus actionStatus;
+                string fileName = "";
+                RunLog runLog = runLog = new RunLog(runStartTime, formCreationTime, sequence, Storage.settingsData, WordGenerator.MainClientForm.instance.OpenSequenceFileName, WordGenerator.MainClientForm.instance.OpenSettingsFileName);  
+                addMessageLogText(this, new MessageEvent("Starting run. Writing log file (for first run) and updating database"));
+                if (runningSequence.RunningCounter == 1)
+                {
+                    runLog = new RunLog(runStartTime, formCreationTime, sequence, Storage.settingsData, WordGenerator.MainClientForm.instance.OpenSequenceFileName, WordGenerator.MainClientForm.instance.OpenSettingsFileName);
+                    fileName = runLog.WriteLogFile();
+                    if (fileName != null)
+                    {
+                        addMessageLogText(this, new MessageEvent("Log written to " + fileName));
+                    }
+                    else
+                    {
+                        addMessageLogText(this, new MessageEvent("Log not written! Perhaps a file with this name already exists?"));
+                        ErrorDetected = false; //Actualyl true, but just keeping the screen from turning red
+                    }
+                }
+               
+
+                foreach (RunLogDatabaseSettings rset in Storage.settingsData.BECVDatabaseSettings) //Should only have one working one in here for db-binding of variables
+                {
+
+                    if (Storage.settingsData.WaitForHub)
+                    {
+                     
+                            DatabaseHelper.DatabaseHelper newDatabaseHelper2 = new DatabaseHelper.DatabaseHelper(rset.getConnectionString());
+
+                            addMessageLogText(this, new MessageEvent("Now waiting for BEC V Hub to give all clear."));
+                            newDatabaseHelper2.setHubHandshakeValue(false); //Set to false, wait for true
+                            while (!newDatabaseHelper2.checkHubHandshakeValue())
+                            {
+                                //Nothing -- we wait here
+                            }
+                            addMessageLogText(this, new MessageEvent("BEC V Hub handshake completed!"));
+                      
+
+                    }
+
+                    if (rset.Enabled)
+                    {
+                        //First, DB-binding of variables
+                        VariableInputDatabaseHandler handler1 = null;
+                        foreach (Variable var in sequence.Variables)
+                        {
+
+                            if (var.DBDriven)
+                            {
+                                try
+                                {
+                                    addMessageLogText(this, new MessageEvent("Waiting for Database Update for Variable " + var.VariableName + "."));
+                                    handler1 = new VariableInputDatabaseHandler(rset);
+                                    var.VariableValue = handler1.readFromDB(var.DBFieldNumber, rset.WaitForUpdates);
+                                    addMessageLogText(this, new MessageEvent("Received Updated Value!"));
+
+                                }
+                                catch (RunLogDatabaseException e)
+                                {
+                                    addMessageLogText(this, new MessageEvent("Caught exception when attempting to connect to the BECVDatabase " + rset.Url + "."));
+                                    if (rset.VerboseErrorReporting)
+                                    {
+                                        addMessageLogText(this, new MessageEvent("Displaying BECVDatabase exception. To disable this display, turn off verbose error reporting for this runlog database in Cicero settings (under Advanced->Settings Explorer)"));
+                                        ExceptionViewerDialog ev = new ExceptionViewerDialog(e);
+                                        ev.ShowDialog();
+                                    }
+                                    else
+                                    {
+                                        addMessageLogText(this, new MessageEvent("Exception was " + e.Message + ". For more detailed information, turn on verbose error reporting for this runlog database in Cicero settings (under Advanced->Settings Explorer)"));
+                                    }
+                                }
+                            }
+                        }
+
+                        //Then, writing the variable values and updating the slaves
+                       
+                        try
+                        {
+                            DatabaseHelper.DatabaseHelper newDatabaseHelper = new DatabaseHelper.DatabaseHelper(rset.getConnectionString());
+                           //First, write to the variable table "ciceroOut"
+                           variableStruct outgoingStruct = new variableStruct();
+                           List<variable> outgoingList = new List<variable>();
+                           foreach (Variable var in sequence.Variables)
+                           {
+                               variable temp = new variable(var.VariableName, var.VariableValue);
+                               outgoingList.Add(temp);
+                           }
+
+                           outgoingStruct.variableList = outgoingList.ToArray();
+                           newDatabaseHelper.writeVariableValues(outgoingStruct);
+
+                           //Then, tell the slaves that there is a new run coming
+                           while (newDatabaseHelper.checkForRunUpdate() != 1)
+                           {
+                               newDatabaseHelper.updateNewRun();
+                           }
+
+                           //Finally, if it's the first run, then create a new sequence
+                           if (runningSequence.RunningCounter == 1)
+                           {
+                               newDatabaseHelper.createNewSequence("no name", "no description");
+                           }
+                        }
+                        catch
+                        {
+                            addMessageLogText(this, new MessageEvent("Caught exception when attempting to add runlog to mysqldatabase at " + rset.Url + "."));
+                        }
+                       
+                    }
+
+                }
+
+                foreach (RunLogDatabaseSettings rset in Storage.settingsData.RunlogDatabaseSettings)
+                {
+
+                    if (rset.Enabled)
+                    {
+
+
+                        //Database binding of variables
+                        /* VariableInputDatabaseHandler handler2 = null;
+                         handler2 = new VariableInputDatabaseHandler(rset);
+                         foreach (Variable var in sequence.Variables)
+                         {
+
+                             if (var.DBDriven)
+                             {
+
+                                 addMessageLogText(this, new MessageEvent("Waiting for the Database Field to be Updated..."));
+                                 var.VariableValue = handler2.readFromDB();
+                                 addMessageLogText(this, new MessageEvent("Continuing with Run"));
+
+
+                             }
+                         }
+                         */
+
+                           
+
+
+                            RunlogDatabaseHandler handler = null;
+                            try
+                            {
+                                handler = new RunlogDatabaseHandler(rset);
+                                handler.addRunLog(fileName, runLog);
+                                addMessageLogText(this, new MessageEvent("Run log added to mysql database at url " + rset.Url + " successfully."));
+                            }
+                            catch (RunLogDatabaseException e)
+                            {
+                                addMessageLogText(this, new MessageEvent("Caught exception when attempting to add runlog to mysqldatabase at " + rset.Url + "."));
+                                if (rset.VerboseErrorReporting)
+                                {
+                                    addMessageLogText(this, new MessageEvent("Displaying runlogdatabase exception. To disable this display, turn off verbose error reporting for this runlog database in Cicero settings (under Advanced->Settings Explorer)"));
+                                    ExceptionViewerDialog ev = new ExceptionViewerDialog(e);
+                                    ev.ShowDialog();
+                                }
+                                else
+                                {
+                                    addMessageLogText(this, new MessageEvent("Exception was " + e.Message + ". For more detailed information, turn on verbose error reporting for this runlog database in Cicero settings (under Advanced->Settings Explorer)"));
+                                }
+                            }
+
+
+
+                            if (handler != null)
+                                handler.closeConnection();
+                            /* if (handler2 != null)
+                                 handler2.closeConnection();
+                             */
+                        
+                    }
+                }
 
                 // send start timestamp
                 addMessageLogText(this, new MessageEvent("Sending run start timestamp."));
@@ -1059,51 +1235,7 @@ namespace WordGenerator
                     sequence.cleanupLoopCopies();
 
 
-                addMessageLogText(this, new MessageEvent("Finished run. Writing log file..."));
-                RunLog runLog = new RunLog(runStartTime, formCreationTime, sequence, Storage.settingsData, WordGenerator.MainClientForm.instance.OpenSequenceFileName, WordGenerator.MainClientForm.instance.OpenSettingsFileName);
-                string fileName = runLog.WriteLogFile();
 
-                if (fileName != null)
-                {
-                    addMessageLogText(this, new MessageEvent("Log written to " + fileName));
-                }
-                else
-                {
-                    addMessageLogText(this, new MessageEvent("Log not written! Perhaps a file with this name already exists?"));
-                    ErrorDetected = true;
-                }
-
-                foreach (RunLogDatabaseSettings rset in Storage.settingsData.RunlogDatabaseSettings)
-                {
-
-                    if (rset.Enabled)
-                    {
-                        RunlogDatabaseHandler handler = null;
-                        try
-                        {
-                            handler = new RunlogDatabaseHandler(rset);
-                            handler.addRunLog(fileName, runLog);
-                            addMessageLogText(this, new MessageEvent("Run log added to mysql database at url " + rset.Url + " successfully."));
-                        }
-                        catch (RunLogDatabaseException e)
-                        {
-                            addMessageLogText(this, new MessageEvent("Caught exception when attempting to add runlog to mysqldatabase at " + rset.Url + "."));
-                            if (rset.VerboseErrorReporting)
-                            {
-                                addMessageLogText(this, new MessageEvent("Displaying runlogdatabase exception. To disable this display, turn off verbose error reporting for this runlog database in Cicero settings (under Advanced->Settings Explorer)"));
-                                ExceptionViewerDialog ev = new ExceptionViewerDialog(e);
-                                ev.ShowDialog();
-                            }
-                            else
-                            {
-                                addMessageLogText(this, new MessageEvent("Exception was " + e.Message + ". For more detailed information, turn on verbose error reporting for this runlog database in Cicero settings (under Advanced->Settings Explorer)"));
-                            }
-                        }
-
-                        if (handler != null)
-                            handler.closeConnection();
-                    }
-                }
 
 
 
@@ -1112,7 +1244,10 @@ namespace WordGenerator
 
 
                 if (runRepeat)
+                {
                     keepGoing = true;
+                    
+                }
                 else
                     keepGoing = false;
 
@@ -1255,6 +1390,29 @@ namespace WordGenerator
 
         private void stopButton_Click(object sender, EventArgs e)
         {
+            foreach (RunLogDatabaseSettings rset in Storage.settingsData.BECVDatabaseSettings) //Should only have one working one in here for db-binding of variables
+            {
+
+
+                if (Storage.settingsData.WaitForHub)
+                {
+                    try
+                    {
+                        DatabaseHelper.DatabaseHelper newDatabaseHelper3 = new DatabaseHelper.DatabaseHelper(rset.getConnectionString());
+                        while (newDatabaseHelper3.checkForRunUpdate() == 1)
+                        {
+                            newDatabaseHelper3.undoUpdateNewRun();
+                        }
+                    }
+                    catch
+                    {
+                       
+
+                    }
+
+                }
+
+            }
             userAborted = true;
             foreach (Socket theSocket in CameraPCsSocketList)
             {
@@ -1525,5 +1683,48 @@ namespace WordGenerator
             }
         }
         #endregion
+
+        private void progressBar_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void RunForm_Load(object sender, EventArgs e)
+        {
+            runningSequence.RunningCounter = 0;
+            foreach (RunLogDatabaseSettings rset in Storage.settingsData.BECVDatabaseSettings) //Should only have one working one in here for db-binding of variables
+            {
+
+
+                if (Storage.settingsData.WaitForHub)
+                {
+                    try
+                    {
+                        DatabaseHelper.DatabaseHelper newDatabaseHelper3 = new DatabaseHelper.DatabaseHelper(rset.getConnectionString());
+                        while (newDatabaseHelper3.checkForRunUpdate() == 1)
+                        {
+                            newDatabaseHelper3.undoUpdateNewRun();
+                        }
+                    }
+                    catch
+                    {
+
+
+                    }
+
+                }
+
+            }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void fortuneCookieLabel_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

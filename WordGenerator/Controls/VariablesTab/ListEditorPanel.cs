@@ -177,7 +177,7 @@ namespace WordGenerator.Controls
             
             if (this.isListParsable())
             {
-                this.listName.BackColor = Color.Green;
+                this.listName.BackColor = Color.RoyalBlue;
                 if (!UI_Updating)
                 {
                     if (Storage.sequenceData != null)

@@ -6,13 +6,12 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using DataStructures;
-using WordGenerator.Controls;
 
-namespace wgControlLibrary
+namespace WordGenerator.Controls
 {
-    public partial class RS232GroupChannelSelection : UserControl
+    public partial class GpibGroupChannelSelection : UserControl
     {
-        public RS232GroupChannelData groupChannelData;
+        public GPIBGroupChannelData groupChannelData;
         public LogicalChannel logicalChannel;
 
         public event EventHandler updateGUI;
@@ -20,14 +19,14 @@ namespace wgControlLibrary
 
 
 
-        public RS232GroupChannelSelection()
+        public GpibGroupChannelSelection()
         {
             InitializeComponent();
-            groupChannelData = new RS232GroupChannelData();
+            groupChannelData = new GPIBGroupChannelData();
             logicalChannel = new LogicalChannel();
             this.layout();
         
-            foreach (RS232GroupChannelData.RS232DataType type in RS232GroupChannelData.allDataTypes)
+            foreach (GPIBGroupChannelData.GpibChannelDataType type in GPIBGroupChannelData.GpibChannelDataType.allTypes)
             {
                 this.dataTypeSelector.Items.Add(type);
             }
@@ -36,7 +35,7 @@ namespace wgControlLibrary
         }
 
 
-        public RS232GroupChannelSelection(LogicalChannel logicalChannel, RS232GroupChannelData groupChannelData) : this()
+        public GpibGroupChannelSelection(LogicalChannel logicalChannel, GPIBGroupChannelData groupChannelData) : this()
         {
             this.groupChannelData = groupChannelData;
             this.logicalChannel = logicalChannel;
@@ -46,12 +45,13 @@ namespace wgControlLibrary
             this.layout();
 
             this.dataTypeSelector.Items.Clear();
-            foreach (RS232GroupChannelData.RS232DataType type in RS232GroupChannelData.allDataTypes) {
+            foreach (GPIBGroupChannelData.GpibChannelDataType type in GPIBGroupChannelData.GpibChannelDataType.allTypes) {
                 this.dataTypeSelector.Items.Add(type);
             }
             //this.dataTypeSelector.Items.AddRange(GPIBGroupChannelData.GpibChannelDataType.allTypes);
             this.dataTypeSelector.SelectedItem = groupChannelData.DataType;
             this.rawStringTextBox.Text = groupChannelData.RawString;
+
         }
         
 
@@ -65,45 +65,53 @@ namespace wgControlLibrary
 
         private void layout()
         {
+            spsFlowLayoutPanel.Controls.Clear();
 			if (groupChannelData.Enabled)
 		    {
 			    enabledButton.BackColor = Color.RoyalBlue;
 			    enabledButton.Text = "Enabled";
                 dataTypeSelector.Enabled = true;
-                if (groupChannelData.DataType == RS232GroupChannelData.RS232DataType.Raw)
+
+                if (groupChannelData.DataType == GPIBGroupChannelData.GpibChannelDataType.raw_string)
                 {
                     rawStringTextBox.Enabled = true;
                     rawStringTextBox.Visible = true;
-                    spsFlowPanel.Visible = false;
+                    spsFlowLayoutPanel.Visible = false;
+                    spsFlowLayoutPanel.Controls.Clear();
+
                 }
-                else if (groupChannelData.DataType == RS232GroupChannelData.RS232DataType.Parameter)
+                else if (groupChannelData.DataType == GPIBGroupChannelData.GpibChannelDataType.voltage_frequency_waveform)
                 {
                     rawStringTextBox.Enabled = false;
                     rawStringTextBox.Visible = false;
-                    spsFlowPanel.Visible = true;
+                    spsFlowLayoutPanel.Visible = false;
+                    spsFlowLayoutPanel.Controls.Clear();
+
+                }
+                else if (groupChannelData.DataType == GPIBGroupChannelData.GpibChannelDataType.string_param_string)
+                {
+                    rawStringTextBox.Enabled = false;
+                    rawStringTextBox.Visible = false;
+                    spsFlowLayoutPanel.Visible = true;
+
                     if (groupChannelData.StringParameterStrings == null)
                     {
                         groupChannelData.StringParameterStrings = new List<StringParameterString>();
-                    }
-                    if (groupChannelData.StringParameterStrings.Count == 0)
-                    {
                         groupChannelData.StringParameterStrings.Add(new StringParameterString());
                     }
-
-                    spsFlowPanel.Controls.Clear();
 
                     foreach (StringParameterString sps in groupChannelData.StringParameterStrings)
                     {
                         StringParameterStringEditor spse = new StringParameterStringEditor(sps);
-                        spsFlowPanel.Controls.Add(spse);
 
-                        spse.delete += new Action<StringParameterString>(spse_delete);
                         spse.insertAbove += new Action<StringParameterString>(spse_insertAbove);
                         spse.insertBelow += new Action<StringParameterString>(spse_insertBelow);
+                        spse.delete += new Action<StringParameterString>(spse_delete);
+
+                        spsFlowLayoutPanel.Controls.Add(spse);
                     }
-                     
+
                 }
-                
 		    }
 		    else
 		    {
@@ -111,47 +119,55 @@ namespace wgControlLibrary
 		    	enabledButton.Text = "Continue";
                 dataTypeSelector.Enabled = false;
                 rawStringTextBox.Enabled = false;
+                rawStringTextBox.Visible = true;
+
 		    }
             enabledButton.Invalidate();
         }
 
-        void spse_insertBelow(StringParameterString sps)
+        void spse_delete(StringParameterString sps)
         {
-            if (groupChannelData.StringParameterStrings != null)
+            if (sps != null)
             {
                 if (groupChannelData.StringParameterStrings.Contains(sps))
                 {
-                    groupChannelData.StringParameterStrings.Insert(
-                        groupChannelData.StringParameterStrings.IndexOf(sps) +1, new StringParameterString());
-                    this.layout();
+                    if (groupChannelData.StringParameterStrings.Count > 1)
+                    {
+                        groupChannelData.StringParameterStrings.Remove(sps);
+                        layout();
+                    }
+                }
+            }
+        }
+
+        void spse_insertBelow(StringParameterString sps)
+        {
+            if (sps != null)
+            {
+                if (groupChannelData.StringParameterStrings.Contains(sps))
+                {
+                    int idx = groupChannelData.StringParameterStrings.IndexOf(sps);
+                    groupChannelData.StringParameterStrings.Insert(idx + 1, new StringParameterString());
+                    layout();
                 }
             }
         }
 
         void spse_insertAbove(StringParameterString sps)
         {
-            if (groupChannelData.StringParameterStrings != null)
+            if (sps != null)
             {
                 if (groupChannelData.StringParameterStrings.Contains(sps))
                 {
-                    groupChannelData.StringParameterStrings.Insert(
-                        groupChannelData.StringParameterStrings.IndexOf(sps) , new StringParameterString());
-                    this.layout();
+                    int idx = groupChannelData.StringParameterStrings.IndexOf(sps);
+                    groupChannelData.StringParameterStrings.Insert(idx, new StringParameterString());
+                    layout();
                 }
             }
         }
 
-        void spse_delete(StringParameterString sps)
-        {
-            if (groupChannelData.StringParameterStrings != null)
-            {
-                if (groupChannelData.StringParameterStrings.Contains(sps))
-                {
-                    groupChannelData.StringParameterStrings.Remove(sps);
-                    this.layout();
-                }
-            }
-        }
+
+
 
         private void channelName_Paint(object sender, PaintEventArgs e)
         {
@@ -165,10 +181,9 @@ namespace wgControlLibrary
 
         private void dataTypeSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (dataTypeSelector.SelectedItem is RS232GroupChannelData.RS232DataType)
+            if (dataTypeSelector.SelectedItem is GPIBGroupChannelData.GpibChannelDataType)
             {
-
-                    groupChannelData.DataType = (RS232GroupChannelData.RS232DataType)dataTypeSelector.SelectedItem;
+                groupChannelData.DataType = (GPIBGroupChannelData.GpibChannelDataType)dataTypeSelector.SelectedItem;
             }
             layout();
             if (updateGUI != null)
@@ -187,5 +202,7 @@ namespace wgControlLibrary
             if (dataTypeSelector.SelectedItem == null)
                 dataTypeSelector.SelectedItem = backupSelectedType;
         }
+
+
     }
 }

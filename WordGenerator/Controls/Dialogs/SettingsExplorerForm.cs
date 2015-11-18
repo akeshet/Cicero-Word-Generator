@@ -28,6 +28,11 @@ namespace WordGenerator
             MainClientForm.instance.RefreshSettingsDataToUI();
         }
 
+        private void propertyGrid1_Click(object sender, EventArgs e)
+        {
+
+        }
+
 
     }
 }

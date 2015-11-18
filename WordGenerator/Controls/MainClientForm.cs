@@ -575,6 +575,7 @@ namespace WordGenerator
             if (Storage.SaveAndLoad.LoadSettingsData(null))
             {
                 RefreshSettingsDataToUI();
+                RefreshSequenceDataToUI();
                 this.handleMessageEvent(this, new MessageEvent("Loaded settings file " + this.openSettingsFileName));
             }
             else
@@ -1566,6 +1567,11 @@ namespace WordGenerator
         {
             CitationInfoForm cif = new CitationInfoForm(false);
             cif.ShowDialog();
+        }
+
+        private void sequencePage_Load(object sender, EventArgs e)
+        {
+
         }
 
     }

@@ -28,10 +28,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CiceroSuiteUnitTests", "CiceroSuiteUnitTests\CiceroSuiteUnitTests.csproj", "{2C5EAE42-1165-4350-A549-A13F5F50C874}"
 EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = WordGenerator.vsmdi
 	EndGlobalSection
@@ -101,7 +97,7 @@ Global
 		{88DA2EF3-B748-43AB-8279-F22293844E29}.Debug|Win32.ActiveCfg = Debug|Any CPU
 		{88DA2EF3-B748-43AB-8279-F22293844E29}.Release|Any CPU.ActiveCfg = Release-x64|Any CPU
 		{88DA2EF3-B748-43AB-8279-F22293844E29}.Release|Any CPU.Build.0 = Release-x64|Any CPU
-		{88DA2EF3-B748-43AB-8279-F22293844E29}.Release|Mixed Platforms.ActiveCfg = Release-x64|Any CPU
+		{88DA2EF3-B748-43AB-8279-F22293844E29}.Release|Mixed Platforms.ActiveCfg = Release-x86|Any CPU
 		{88DA2EF3-B748-43AB-8279-F22293844E29}.Release|Win32.ActiveCfg = Release-x64|Any CPU
 		{5F033A41-24F6-4B51-9602-03301DA111CD}.Atticus-Release-x64|Any CPU.ActiveCfg = Release|Any CPU
 		{5F033A41-24F6-4B51-9602-03301DA111CD}.Atticus-Release-x64|Any CPU.Build.0 = Release|Any CPU
@@ -179,5 +175,9 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = 
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal

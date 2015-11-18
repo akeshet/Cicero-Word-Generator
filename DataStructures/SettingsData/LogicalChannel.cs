@@ -9,12 +9,21 @@ namespace DataStructures
     public class LogicalChannel
     {
         private bool enabled;
-
         public bool Enabled
         {
             get { return enabled; }
             set { enabled = value; }
         }
+
+        private System.Drawing.Color channelColor;
+        public System.Drawing.Color ChannelColor
+        {
+            get { return channelColor; }
+            set { channelColor = value; }
+
+        }
+
+        
 
         //Hotkey for toggling the override value.
         public char hotkeyChar;
@@ -26,7 +35,7 @@ namespace DataStructures
 
         public bool digitalOverrideValue;
         public double analogOverrideValue;
-
+ 
         private string name;
 
         public string Name
@@ -71,8 +80,9 @@ namespace DataStructures
             digitalOverrideValue = false;
             analogOverrideValue = 0;
             togglingChannel = false;
-        }
+            channelColor = System.Drawing.Color.Lavender;
 
+        }
         /// <summary>
         /// Meaningfull only for analog logical channels. If true, then when running "output now" the analog channel
         /// gets its value from the end of the dwell word. Otherwise, it gets its value from the end of the output word.
@@ -99,6 +109,8 @@ namespace DataStructures
             get { return overrideColor; }
             set { overrideColor = value; }
         }
+
+        
 
     }
 }

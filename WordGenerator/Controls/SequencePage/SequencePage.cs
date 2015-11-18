@@ -990,6 +990,16 @@ namespace WordGenerator.Controls
             }
         }
 
+        private void digitalGrid_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void analogPreviewPane_Load(object sender, EventArgs e)
+        {
+
+        }
+
 
 
 

@@ -55,7 +55,7 @@ namespace WordGenerator.Controls
         private void updateButtonColor()
         {
             if (changeValueOnNextRefresh)
-                clickToChangeButton.BackColor = Color.Green;
+                clickToChangeButton.BackColor = Color.RoyalBlue;
             else
                 this.clickToChangeButton.BackColor = Color.Red;
         }

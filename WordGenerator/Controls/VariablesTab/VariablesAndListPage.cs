@@ -543,6 +543,11 @@ namespace WordGenerator.Controls
             setCalibrationSequence(copyOfCurrentSequence);
         }
 
+        private void variableEditorPlaceholder_Load(object sender, EventArgs e)
+        {
+
+        }
+
 
 
     }

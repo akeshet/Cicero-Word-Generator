@@ -102,7 +102,7 @@ namespace WordGenerator
             this.toolStripMenuItem3,
             this.toolStripMenuItem4});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(190, 98);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(187, 98);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // toolStripMenuItem1
@@ -111,7 +111,7 @@ namespace WordGenerator
             this.toolStripMenuItem2,
             this.hotkeyTextbox});
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(189, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(186, 22);
             this.toolStripMenuItem1.Text = "Set toggle hotkey";
             // 
             // toolStripMenuItem2
@@ -123,20 +123,20 @@ namespace WordGenerator
             // hotkeyTextbox
             // 
             this.hotkeyTextbox.Name = "hotkeyTextbox";
-            this.hotkeyTextbox.Size = new System.Drawing.Size(100, 21);
+            this.hotkeyTextbox.Size = new System.Drawing.Size(100, 23);
             this.hotkeyTextbox.TextChanged += new System.EventHandler(this.hotkeyTextbox_TextChanged);
             // 
             // clearHotkeyToolStripMenuItem
             // 
             this.clearHotkeyToolStripMenuItem.Name = "clearHotkeyToolStripMenuItem";
-            this.clearHotkeyToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.clearHotkeyToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.clearHotkeyToolStripMenuItem.Text = "Clear toggle hotkey";
             this.clearHotkeyToolStripMenuItem.Click += new System.EventHandler(this.clearHotkeyToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(186, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(183, 6);
             // 
             // toolStripMenuItem3
             // 
@@ -144,7 +144,7 @@ namespace WordGenerator
             this.ctrlAltToolStripMenuItem,
             this.overrideHotkeyTextbox});
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(189, 22);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(186, 22);
             this.toolStripMenuItem3.Text = "Set override hotkey";
             // 
             // ctrlAltToolStripMenuItem
@@ -156,13 +156,13 @@ namespace WordGenerator
             // overrideHotkeyTextbox
             // 
             this.overrideHotkeyTextbox.Name = "overrideHotkeyTextbox";
-            this.overrideHotkeyTextbox.Size = new System.Drawing.Size(100, 21);
+            this.overrideHotkeyTextbox.Size = new System.Drawing.Size(100, 23);
             this.overrideHotkeyTextbox.TextChanged += new System.EventHandler(this.overrideHotkeyTextbox_TextChanged);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(189, 22);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(186, 22);
             this.toolStripMenuItem4.Text = "Clear override hotkey";
             this.toolStripMenuItem4.Click += new System.EventHandler(this.toolStripMenuItem4_Click);
             // 
@@ -188,6 +188,7 @@ namespace WordGenerator
             this.Controls.Add(this.valueBox);
             this.Name = "DigitalOverride";
             this.Size = new System.Drawing.Size(365, 27);
+            this.Load += new System.EventHandler(this.DigitalOverride_Load);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

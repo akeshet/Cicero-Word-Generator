@@ -185,12 +185,29 @@ namespace WordGenerator.Controls
         {
             if (!invalidated)
             {
-                Pen blackPen = Pens.Black;
-
-              //  g.DrawLine(blackPen, 0, p.Y * rowHeight, Width, p.Y * rowHeight);
-              //  g.DrawLine(blackPen, 0, (p.Y + 1) * rowHeight, Width, (p.Y + 1) * rowHeight);
+                Pen blackPen = new Pen(Color.Black, 1);
+                g.DrawLine(blackPen, 0, p.Y * rowHeight, Width, p.Y * rowHeight);
+                g.DrawLine(blackPen, 0, (p.Y + 1) * rowHeight, Width, (p.Y + 1) * rowHeight);
                 g.DrawLine(blackPen, p.X * ColWidth, 0, p.X * ColWidth, Height);
                 g.DrawLine(blackPen, (p.X + 1) * ColWidth, 0, (p.X + 1) * ColWidth, Height);
+
+                //Re-color the labels:
+                int channelID = cellPointToChannelID(p);
+                Control[] labels = WordGenerator.MainClientForm.instance.Controls.Find(channelID.ToString(), true);
+                if (labels != null && labels.Length > 0)
+                {
+                    if (Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.digital].Channels[channelID].ChannelColor != Color.Empty)
+                    {
+                        labels[0].BackColor = Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.digital].Channels[channelID].ChannelColor;
+                        labels[1].BackColor = Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.digital].Channels[channelID].ChannelColor;
+                    }
+                    else
+                    {
+                        labels[0].BackColor = Color.RoyalBlue;
+                        labels[1].BackColor = Color.RoyalBlue;
+                    }
+                }
+                //end re-coloring
 
                 refreshCell(g, p);
 
@@ -221,10 +238,10 @@ namespace WordGenerator.Controls
             {
                 g.FillRectangle(trueBrush(temp.Y), temp.X * colWidth + 10, temp.Y * rowHeight + 3, colWidth - 20, rowHeight - 6);
 
-                Pen whitePen = Pens.White;
+                Pen whitePen = new Pen(Color.SkyBlue,1); //White pen is now Royal Blue pen
 
-               // g.DrawLine(whitePen, 0, temp.Y * rowHeight, Width, temp.Y  * rowHeight);
-               // g.DrawLine(whitePen, 0, (temp.Y +1)* rowHeight, Width, (temp.Y+1) * rowHeight);
+                g.DrawLine(whitePen, 0, temp.Y * rowHeight, Width, temp.Y  * rowHeight);
+                g.DrawLine(whitePen, 0, (temp.Y +1)* rowHeight, Width, (temp.Y+1) * rowHeight);
                 g.DrawLine(whitePen, temp.X * ColWidth, 0, temp.X * ColWidth, Height);
                 g.DrawLine(whitePen, (temp.X + 1) * ColWidth, 0, (temp.X + 1) * ColWidth, Height);
 
@@ -235,6 +252,15 @@ namespace WordGenerator.Controls
                     {
                         paintPulse(g, temp, dp);
                     }
+                    //Re-color the labels:
+                    int channelID = cellPointToChannelID(temp);
+                    Control[] labels = WordGenerator.MainClientForm.instance.Controls.Find(channelID.ToString(), true);
+                    if (labels != null && labels.Length > 0)
+                    {
+                        labels[0].BackColor = Color.Black; //Label
+                        labels[1].BackColor = Color.Black; //ID Label
+                    }
+                    //end re-coloring
                 }
 
                 TimestepEditor te = 
@@ -511,25 +537,57 @@ namespace WordGenerator.Controls
 
         public static Color ChannelColor(int i)
         {
-            if (Storage.settingsData.logicalChannelManager.Digitals.ContainsKey(i))
+            /*if (Storage.settingsData.logicalChannelManager.Digitals.ContainsKey(i))
             {
                 if (Storage.settingsData.logicalChannelManager.Digitals[i] != null)
                 {
                     if (Storage.settingsData.logicalChannelManager.Digitals[i].DoOverrideDigitalColor)
                     {
-                        return Storage.settingsData.logicalChannelManager.Digitals[i].OverrideColor;
+                       return Storage.settingsData.logicalChannelManager.Digitals[i].OverrideColor;
+                       
                     }
+                   
+                }
+            }*/
+
+            //Will's change: now there are colors associated with the channels... let's use them!
+           
+            if (Storage.settingsData.logicalChannelManager.Digitals.ContainsKey(i))
+            {
+                if (Storage.settingsData.logicalChannelManager.Digitals[i] != null)
+                {
+                    if(Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.digital].Channels[i].ChannelColor != null)
+                    {
+                        if (Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.digital].Channels[i].ChannelColor != Color.Empty)
+                            return Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.digital].Channels[i].ChannelColor;
+                        else
+                            return Color.RoyalBlue;
+    
+                    }
+
                 }
             }
 
+
+
+                  
             return TrueBrushColorsList[i % TrueBrushColorsList.Count];
+            
         }
 
 
         
         private Brush trueBrush(int row)
         {
-            return new SolidBrush(ChannelColor(row));
+            int i = this.rowToChannelID(row);
+            if (i >= 0)
+            {
+                return new SolidBrush(ChannelColor(i));
+            }
+            else
+            {
+                return new SolidBrush(ChannelColor(row));
+            }
         }
 
         private Brush continueBrush(int row, bool continueValue)
@@ -540,11 +598,23 @@ namespace WordGenerator.Controls
             else
                 hs = HatchStyle.Percent25;
 
-            return new HatchBrush(hs, ChannelColor(row), Color.Tan);
+
+            int i = this.rowToChannelID(row);
+            if (i >= 0)
+            {
+                return new HatchBrush(hs, ChannelColor(i), Color.White);
+            }
+            else
+            {
+                return new HatchBrush(hs, ChannelColor(row), Color.White);
+            }
+
+           
+           
            // return new HatchBrush(HatchStyle.DarkUpwardDiagonal, TrueBrushColors[row % TrueBrushColors.Count], Color.Tan);
         }
 
-        private static readonly Brush falseBrush = Brushes.Tan;
+        private static readonly Brush falseBrush = Brushes.White;
 
         private static readonly Pen normalOutlinePen = Pens.Black;
         private static readonly Pen pulseOutlintPen = Pens.White;
@@ -608,6 +678,15 @@ namespace WordGenerator.Controls
 
             return channelIDs[p.Y];
 		}
+
+        private int rowToChannelID(int row)
+        {
+            List<int> channelIDs = Storage.settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.digital].getSortedChannelIDList();
+            if (channelIDs.Count <= row)
+                return -1;
+
+            return channelIDs[row];
+        }
 
         private DigitalDataPoint cellPointToDigitalDataPoint(Point p)
         {

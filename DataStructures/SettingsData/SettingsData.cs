@@ -60,7 +60,8 @@ namespace DataStructures
         [Description("Colors to be used for the digital grid panel. To return to default values, remove all elements from the list. Colors can either be selected from pre-existing list, or specified in R,G,B coordinates.")]
         public List<System.Drawing.Color> DigitalGridColors
         {
-            get {
+            get
+            {
                 if (colors == null)
                 {
                     colors = new List<System.Drawing.Color>();
@@ -226,6 +227,34 @@ namespace DataStructures
                 return runlogDatabaseSettings;
             }
             set { runlogDatabaseSettings = value; }
+        }
+
+        private List<Database.RunLogDatabaseSettings> becVDatabaseSettings;
+
+        [Description("BECV database MySql servers to connect to, if any."), Category("BECV Customization")]
+        public List<Database.RunLogDatabaseSettings> BECVDatabaseSettings
+        {
+            get
+            {
+                if (becVDatabaseSettings == null)
+                    becVDatabaseSettings = new List<Database.RunLogDatabaseSettings>();
+                return becVDatabaseSettings;
+            }
+            set { becVDatabaseSettings = value; }
+        }
+
+        private Boolean waitForHub;
+
+        [Description("Whether to wait for the Hub to give the all-clear."), Category("BECV Customization")]
+        public Boolean WaitForHub
+        {
+            get
+            {
+                if (waitForHub == null)
+                    waitForHub = false;
+                return waitForHub;
+            }
+            set { waitForHub = value; }
         }
 
         public SettingsData()

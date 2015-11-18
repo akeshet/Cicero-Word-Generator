@@ -144,7 +144,7 @@ namespace WordGenerator.Controls
 
         private void variableComboBox1_Paint(object sender, PaintEventArgs e)
         {
-
+            this.variableComboBox1.BackColor = Color.White;
         }
 
         private void variableComboBox1_RightClick(object sender, EventArgs e)
@@ -215,6 +215,11 @@ namespace WordGenerator.Controls
         private void valueSelector_Enter(object sender, EventArgs e)
         {
             valueSelector.Select(0, 100);
+        }
+
+        private void variableComboBox1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
