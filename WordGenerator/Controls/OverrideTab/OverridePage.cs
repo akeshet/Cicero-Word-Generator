@@ -14,6 +14,7 @@ namespace WordGenerator
         public OverridePage()
         {
             InitializeComponent();
+
         }
 
         private List<DigitalOverride> digitalOverrides;
@@ -48,7 +49,10 @@ namespace WordGenerator
                                             digitalOverridePlaceholder.Location.Y + counter * (digitalOverridePlaceholder.Height - 4));
                     digitalOverrides.Add(dov);
                     dov.registerHotkey();
-                    dov.BackColor = Storage.settingsData.DigitalGridColors[counter % Storage.settingsData.DigitalGridColors.Count];
+                    if (Storage.settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.digital].Channels[id].ChannelColor != Color.Empty)
+                        dov.BackColor = Storage.settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.digital].Channels[id].ChannelColor;
+                    else
+                        dov.BackColor = Color.RoyalBlue;
                     counter++;
                 }
                 digitalOverridePanel.Controls.AddRange(digitalOverrides.ToArray());

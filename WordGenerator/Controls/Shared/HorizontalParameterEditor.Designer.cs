@@ -52,11 +52,11 @@ namespace WordGenerator.Controls
             this.valueSelector.Size = new System.Drawing.Size(80, 20);
             this.valueSelector.TabIndex = 1;
             this.valueSelector.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.valueSelector.Paint += new System.Windows.Forms.PaintEventHandler(this.valueSelector_Paint);
             this.valueSelector.ValueChanged += new System.EventHandler(this.valueSelector_ValueChanged);
+            this.valueSelector.Paint += new System.Windows.Forms.PaintEventHandler(this.valueSelector_Paint);
+            this.valueSelector.Enter += new System.EventHandler(this.valueSelector_Enter);
             this.valueSelector.MouseClick += new System.Windows.Forms.MouseEventHandler(this.valueSelector_MouseClick);
             this.valueSelector.MouseDown += new System.Windows.Forms.MouseEventHandler(this.valueSelector_MouseDown);
-            this.valueSelector.Enter += new System.EventHandler(this.valueSelector_Enter);
             // 
             // unitSelector
             // 
@@ -71,8 +71,9 @@ namespace WordGenerator.Controls
             // 
             // variableComboBox1
             // 
-            this.variableComboBox1.BackColor = System.Drawing.SystemColors.Window;
+            this.variableComboBox1.BackColor = System.Drawing.Color.White;
             this.variableComboBox1.Enabled = false;
+            this.variableComboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.variableComboBox1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.variableComboBox1.Location = new System.Drawing.Point(0, 0);
             this.variableComboBox1.Margin = new System.Windows.Forms.Padding(0);
@@ -80,9 +81,10 @@ namespace WordGenerator.Controls
             this.variableComboBox1.Size = new System.Drawing.Size(80, 21);
             this.variableComboBox1.TabIndex = 2;
             this.variableComboBox1.Visible = false;
-            this.variableComboBox1.RightClick += new System.EventHandler(this.variableComboBox1_RightClick);
-            this.variableComboBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.variableComboBox1_Paint);
             this.variableComboBox1.SelectedIndexChanged += new System.EventHandler(this.variableComboBox1_SelectedIndexChanged);
+            this.variableComboBox1.RightClick += new System.EventHandler(this.variableComboBox1_RightClick);
+            this.variableComboBox1.Load += new System.EventHandler(this.variableComboBox1_Load);
+            this.variableComboBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.variableComboBox1_Paint);
             // 
             // HorizontalParameterEditor
             // 
@@ -92,8 +94,8 @@ namespace WordGenerator.Controls
             this.Controls.Add(this.valueSelector);
             this.Name = "HorizontalParameterEditor";
             this.Size = new System.Drawing.Size(133, 22);
-            this.updateGUI += new System.EventHandler(this.HorizontalParameterEditor_updateGUI);
             this.ParameterChanged += new System.EventHandler(this.HorizontalParameterEditor_ParameterChanged);
+            this.updateGUI += new System.EventHandler(this.HorizontalParameterEditor_updateGUI);
             ((System.ComponentModel.ISupportInitialize)(this.valueSelector)).EndInit();
             this.ResumeLayout(false);
 

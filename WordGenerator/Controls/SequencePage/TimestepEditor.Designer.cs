@@ -141,7 +141,7 @@ namespace WordGenerator.Controls
             this.toolStripSeparator5,
             this.timestepGroupToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(258, 508);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(258, 486);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // outputNowToolStripMenuItem
@@ -374,8 +374,10 @@ namespace WordGenerator.Controls
             // 
             // enabledButton
             // 
-            this.enabledButton.BackColor = System.Drawing.Color.Green;
+            this.enabledButton.BackColor = System.Drawing.Color.Chartreuse;
             this.enabledButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.enabledButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.enabledButton.ForeColor = System.Drawing.SystemColors.Control;
             this.enabledButton.Location = new System.Drawing.Point(0, 38);
             this.enabledButton.Name = "enabledButton";
             this.enabledButton.Size = new System.Drawing.Size(84, 22);
@@ -387,8 +389,10 @@ namespace WordGenerator.Controls
             // 
             // analogSelector
             // 
+            this.analogSelector.BackColor = System.Drawing.SystemColors.Window;
             this.analogSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.analogSelector.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.analogSelector.ForeColor = System.Drawing.SystemColors.Window;
             this.analogSelector.FormattingEnabled = true;
             this.analogSelector.Location = new System.Drawing.Point(0, 142);
             this.analogSelector.Name = "analogSelector";
@@ -396,12 +400,14 @@ namespace WordGenerator.Controls
             this.analogSelector.TabIndex = 5;
             this.analogSelector.Visible = false;
             this.analogSelector.DropDown += new System.EventHandler(this.analogSelector_DropDown);
+            this.analogSelector.SelectedIndexChanged += new System.EventHandler(this.analogSelector_SelectedIndexChanged);
             this.analogSelector.DropDownClosed += new System.EventHandler(this.analogSelector_DropDownClosed);
             this.analogSelector.SelectedValueChanged += new System.EventHandler(this.analogSelector_SelectedValueChanged);
             // 
             // gpibSelector
             // 
             this.gpibSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.gpibSelector.ForeColor = System.Drawing.SystemColors.Window;
             this.gpibSelector.FormattingEnabled = true;
             this.gpibSelector.Location = new System.Drawing.Point(0, 168);
             this.gpibSelector.Name = "gpibSelector";
@@ -409,12 +415,14 @@ namespace WordGenerator.Controls
             this.gpibSelector.TabIndex = 6;
             this.gpibSelector.Visible = false;
             this.gpibSelector.DropDown += new System.EventHandler(this.gpibSelector_DropDown);
+            this.gpibSelector.SelectedIndexChanged += new System.EventHandler(this.gpibSelector_SelectedIndexChanged);
             this.gpibSelector.DropDownClosed += new System.EventHandler(this.gpibSelector_DropDownClosed);
             this.gpibSelector.SelectedValueChanged += new System.EventHandler(this.gpibSelector_SelectedValueChanged);
             // 
             // rs232Selector
             // 
             this.rs232Selector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.rs232Selector.ForeColor = System.Drawing.SystemColors.Window;
             this.rs232Selector.FormattingEnabled = true;
             this.rs232Selector.Location = new System.Drawing.Point(0, 194);
             this.rs232Selector.Name = "rs232Selector";
@@ -422,6 +430,7 @@ namespace WordGenerator.Controls
             this.rs232Selector.TabIndex = 7;
             this.rs232Selector.Visible = false;
             this.rs232Selector.DropDown += new System.EventHandler(this.rs232Selector_DropDown);
+            this.rs232Selector.SelectedIndexChanged += new System.EventHandler(this.rs232Selector_SelectedIndexChanged);
             this.rs232Selector.DropDownClosed += new System.EventHandler(this.rs232Selector_DropDownClosed);
             this.rs232Selector.SelectedValueChanged += new System.EventHandler(this.rs232Selector_SelectedValueChanged);
             // 
@@ -542,7 +551,7 @@ namespace WordGenerator.Controls
             // insertRight
             // 
             this.insertRight.AutoSize = true;
-            this.insertRight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.insertRight.BackColor = System.Drawing.Color.Red;
             this.insertRight.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insertRight.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.insertRight.Location = new System.Drawing.Point(0, 66);
@@ -561,6 +570,7 @@ namespace WordGenerator.Controls
             this.durationEditor.UnitSelectorVisibility = true;
             this.durationEditor.Visible = false;
             this.durationEditor.updateGUI += new System.EventHandler(this.durationEditor_updateGUI);
+            this.durationEditor.Load += new System.EventHandler(this.durationEditor_Load);
             // 
             // TimestepEditor
             // 
@@ -589,6 +599,7 @@ namespace WordGenerator.Controls
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "TimestepEditor";
             this.Size = new System.Drawing.Size(86, 219);
+            this.Load += new System.EventHandler(this.TimestepEditor_Load);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.TimestepEditor_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.TimestepEditor_DragEnter);
             this.DragOver += new System.Windows.Forms.DragEventHandler(this.TimestepEditor_DragOver);

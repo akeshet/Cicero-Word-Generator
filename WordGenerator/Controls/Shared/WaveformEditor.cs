@@ -825,7 +825,7 @@ namespace WordGenerator.Controls
             }
 
             if (equationStatusLabel.Text == "Valid equation.")
-                equationStatusLabel.BackColor = Color.Green;
+                equationStatusLabel.BackColor = Color.RoyalBlue;
             else
                 equationStatusLabel.BackColor = Color.Red;
         }

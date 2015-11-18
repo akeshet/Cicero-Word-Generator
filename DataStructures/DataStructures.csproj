@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common.cs" />
+    <Compile Include="Database\VariableInputDatabaseHandler.cs" />
     <Compile Include="DataStructuresVersionNumber.cs" />
     <Compile Include="ClientStartupSettings.cs" />
     <Compile Include="Communication\ServerSettingsInterface.cs" />

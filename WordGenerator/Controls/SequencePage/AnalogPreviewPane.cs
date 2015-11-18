@@ -218,8 +218,10 @@ namespace WordGenerator.Controls
                    buffer = new Bitmap(xSize, ySize);
                    gc = Graphics.FromImage(buffer);
                }
+               Brush continueBrush = new HatchBrush(HatchStyle.Percent20, Color.RoyalBlue);
+               Brush disabledBrush = new HatchBrush(HatchStyle.Percent20, Color.Black);
 
-               gc.FillRectangle(Brushes.Black, 0, 0, xSize, ySize);
+               gc.FillRectangle(continueBrush, 0, 0, xSize, ySize);
 
 
 
@@ -227,8 +229,7 @@ namespace WordGenerator.Controls
                analogIDs.Sort();
 
 
-               Brush continueBrush = new HatchBrush(HatchStyle.Percent20, Color.Green);
-               Brush disabledBrush = new HatchBrush(HatchStyle.Percent20, Color.Red);
+               
 
                double[] channelValues = new double[xSize * samples_per_pixel];
                for (int i = 0; i < analogIDs.Count; i++)

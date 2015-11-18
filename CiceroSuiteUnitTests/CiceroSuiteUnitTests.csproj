@@ -40,7 +40,9 @@
     <Reference Include="MySql.Data, Version=6.4.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
-    <Reference Include="NationalInstruments.Common, Version=9.1.40.163, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=MSIL" />
+    <Reference Include="NationalInstruments.Common, Version=9.1.40.163, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="NationalInstruments.DAQmx, Version=9.5.40.112, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=x86" />
     <Reference Include="NationalInstruments.NI4882, Version=9.0.40.157, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=MSIL" />
     <Reference Include="NationalInstruments.VisaNS, Version=9.0.40.156, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=MSIL" />

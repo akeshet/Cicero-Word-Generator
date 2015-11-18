@@ -6,6 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using DataStructures;
+using DataStructures.Database;
 
 namespace WordGenerator.Controls
 {
@@ -47,6 +48,7 @@ namespace WordGenerator.Controls
             InitializeComponent();
             this.listSelector.Items.Clear();
             this.listSelector.Items.Add("Manual");
+            this.listSelector.Items.Add("Database I");
             for (int i = 0; i < ListData.NLists; i++)
             {
                 this.listSelector.Items.Add("List " + (i + 1));
@@ -107,7 +109,7 @@ namespace WordGenerator.Controls
                 this.variable.VariableName = textBox1.Text;
                 if (this.variable.VariableName == "SeqMode")
                 {
-                    this.BackColor = Color.Salmon;
+                    this.BackColor = Color.White;
                     this.variable.PermanentVariable = false;
                 }
                 else
@@ -142,13 +144,21 @@ namespace WordGenerator.Controls
             {
                 variable.ListDriven = false;
                 listSelector.Visible = false;
+                variable.DBDriven = false;
                 this.valueSelector.Value = backupValue;
+               
+            }
+            else if (listSelector.SelectedIndex == 1) //Database Option
+            {
+                variable.ListDriven = false;
+                variable.DBDriven = true;
             }
             else
             {
                 this.backupValue = valueSelector.Value;
-                int listNum = listSelector.SelectedIndex;
+                int listNum = (listSelector.SelectedIndex - 1);
                 this.variable.ListDriven = true;
+                variable.DBDriven = false;
                 this.variable.ListNumber = listNum;
             }
 
@@ -368,6 +378,21 @@ namespace WordGenerator.Controls
         {
             FormulaHelpDialog dial = new FormulaHelpDialog();
             dial.ShowDialog();
+        }
+
+        private void derivedValueLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listSelector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void permanentValueLabel_Click(object sender, EventArgs e)
+        {
+
         }
 
     /*    private void downButton_Click(object sender, EventArgs e)

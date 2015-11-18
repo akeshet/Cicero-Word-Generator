@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
 using DataStructures;
 
 namespace WordGenerator.ChannelManager
@@ -10,6 +9,12 @@ namespace WordGenerator.ChannelManager
     {
         ChannelManager cm;
         SelectedDevice sd;
+
+        //Will stuff
+        ChannelCollection selectedChannelCollection;
+        HardwareChannel.HardwareConstants.ChannelTypes selectedChannelType;
+
+        
         public EditDevice(SelectedDevice sd, ChannelManager cm)
         {
             InitializeComponent();
@@ -22,6 +27,13 @@ namespace WordGenerator.ChannelManager
             this.deviceTypeText.Text = sd.channelTypeString;
             this.deviceNameText.Text = sd.lc.Name;
             this.deviceDescText.Text = sd.lc.Description;
+
+            //Will stuff
+            string selectedTypeString = this.deviceTypeText.Text.ToString();
+            selectedChannelType = HardwareChannel.HardwareConstants.ParseChannelTypeFromString(selectedTypeString);
+            selectedChannelCollection = Storage.settingsData.logicalChannelManager.GetDeviceCollection(selectedChannelType);
+
+
 
             this.availableHardwareChanCombo.Items.Clear();
             this.availableHardwareChanCombo.Items.Add(HardwareChannel.Unassigned);
@@ -66,6 +78,9 @@ namespace WordGenerator.ChannelManager
             sd.lc.Name = this.deviceNameText.Text;
             sd.lc.Description = this.deviceDescText.Text;
             sd.lc.AnalogChannelOutputNowUsesDwellWord = checkBox1.Checked;
+            selectedChannelCollection.RemoveChannel(sd.logicalID);
+            selectedChannelCollection.EditChannel(sd.logicalID, Convert.ToInt32(logicalIDText.Text), sd.lc);
+            
             
             if (this.availableHardwareChanCombo.SelectedItem is HardwareChannel)
                 sd.lc.HardwareChannel = (HardwareChannel) this.availableHardwareChanCombo.SelectedItem;
@@ -102,6 +117,16 @@ namespace WordGenerator.ChannelManager
         private void togglingCheck_CheckedChanged(object sender, EventArgs e)
         {
             sd.lc.TogglingChannel = togglingCheck.Checked;
+        }
+
+        private void logicalIDText_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void deviceTypeText_TextChanged(object sender, EventArgs e)
+        {
+        
         }
 
     }

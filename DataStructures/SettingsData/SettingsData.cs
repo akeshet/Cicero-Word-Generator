@@ -60,7 +60,8 @@ namespace DataStructures
         [Description("Colors to be used for the digital grid panel. To return to default values, remove all elements from the list. Colors can either be selected from pre-existing list, or specified in R,G,B coordinates.")]
         public List<System.Drawing.Color> DigitalGridColors
         {
-            get {
+            get
+            {
                 if (colors == null)
                 {
                     colors = new List<System.Drawing.Color>();

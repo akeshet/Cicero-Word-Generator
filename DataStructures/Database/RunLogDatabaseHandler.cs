@@ -13,6 +13,7 @@ namespace DataStructures.Database
     /// <summary>
     /// Initial author: Edward Su
     /// This class can be used to export run log information into a MySql database.
+    /// Modified by Will Lunden so that variables are cleared each run
     /// 
     /// </summary>
     public class RunlogDatabaseHandler
@@ -107,6 +108,10 @@ namespace DataStructures.Database
                 cmd.Parameters.AddWithValue("@description", log.RunSequence.SequenceDescription);
 
                 cmd.ExecuteNonQuery();
+
+                //Will's addition: Clearing the variablevalue table each iteration.
+                MySqlCommand cmd2 = new MySqlCommand(@"DELETE FROM filelist_variablevalue", this.conn);
+                cmd2.ExecuteNonQuery();
 
                 this.addVariables(runLogFileName, log);
             }
