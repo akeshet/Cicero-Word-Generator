@@ -13,13 +13,14 @@ namespace DataStructures.Database
     /// <summary>
     /// Initial author: Edward Su
     /// This class can be used to export run log information into a MySql database.
+    /// Modified by Will Lunden so that variables are cleared each run
     /// 
     /// </summary>
     public class RunlogDatabaseHandler
     {
 
         public MySqlConnection conn = null;
-
+      
         public RunlogDatabaseHandler(RunLogDatabaseSettings databaseSettings)
         {
             if (conn != null)
@@ -28,19 +29,24 @@ namespace DataStructures.Database
             }
 
             string connStr = databaseSettings.getConnectionString();
-            this.conn = new MySqlConnection(connStr);
-            try
-            {
-                conn.Open();
-            }
-            catch (Exception ex)
-            {
-                try { conn.Close(); } catch(Exception) {};
+         
+            
 
-                conn = null;
-                RunLogDatabaseException newex = new RunLogDatabaseException("Unable to open database due to exception: " + ex.Message, ex);
-                throw newex;
-            }            
+                this.conn = new MySqlConnection(connStr);
+                try
+                {
+                    conn.Open();
+                }
+                catch (Exception ex)
+                {
+                    try { conn.Close(); }
+                    catch (Exception) { };
+
+                    conn = null;
+                    RunLogDatabaseException newex = new RunLogDatabaseException("Unable to open database due to exception: " + ex.Message, ex);
+                    throw newex;
+                }
+            
         }
 
         ~RunlogDatabaseHandler()
@@ -108,13 +114,20 @@ namespace DataStructures.Database
 
                 cmd.ExecuteNonQuery();
 
+                //Will's addition: Clearing the variablevalue table each iteration.
+                MySqlCommand cmd2 = new MySqlCommand(@"DELETE FROM filelist_variablevalue", this.conn);
+                cmd2.ExecuteNonQuery();
+
                 this.addVariables(runLogFileName, log);
             }
         }
 
+       
+
 
         private void addVariables(string fileName, RunLog log)
         {
+
             foreach (Variable var in log.RunSequence.Variables)
             {
                 MySqlCommand cmd = new MySqlCommand(@"INSERT INTO filelist_variablevalue
@@ -124,8 +137,8 @@ namespace DataStructures.Database
                 cmd.Parameters.AddWithValue("@name", var.VariableName);
                 cmd.Parameters.AddWithValue("@value", var.VariableValue);
                 cmd.Parameters.AddWithValue("@runlog", fileName);
-
                 cmd.ExecuteNonQuery();
+
             }
         }
 

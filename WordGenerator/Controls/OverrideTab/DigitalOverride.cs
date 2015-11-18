@@ -216,6 +216,11 @@ namespace WordGenerator
             }
         }
 
+        private void DigitalOverride_Load(object sender, EventArgs e)
+        {
+
+        }
+
 
     }
 }

@@ -220,6 +220,18 @@ namespace DataStructures
                 this.setIterationNumber(listIterationNumber);
             }
         }
+
+        private int runningCounter = 0;
+
+        public int RunningCounter
+        {
+            get { return runningCounter; }
+            set
+            {
+                runningCounter = value;
+            }
+        }
+
  
 
         [Category("Global"), Description("The name of the sequence.")]
@@ -291,6 +303,11 @@ namespace DataStructures
                     {
                         var.VariableValue = 0;
                     }
+                }
+
+                if (var.IsSpecialVariable && var.MySpecialVariableType == Variable.SpecialVariableType.RunningCounter)
+                {
+                    var.VariableValue = runningCounter;
                 }
             }
 

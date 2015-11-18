@@ -187,38 +187,38 @@ namespace WordGenerator.Controls
             if (stepData.AnalogGroup != null)
             {
                 this.analogSelector.SelectedItem = stepData.AnalogGroup;
-                this.analogSelector.BackColor = Color.White;
+                this.analogSelector.BackColor = System.Drawing.ColorTranslator.FromHtml("#A9B7E1");;
                 this.analogSelector.Visible = true;
             }
             else
             {
                 this.analogSelector.SelectedItem = "Continue";
-                this.analogSelector.BackColor = Color.Green;
+                this.analogSelector.BackColor = Color.RoyalBlue;
             }
 
 
             if (stepData.GpibGroup != null)
             {
                 this.gpibSelector.SelectedItem = stepData.GpibGroup;
-                this.gpibSelector.BackColor = Color.White;
+                this.gpibSelector.BackColor = System.Drawing.ColorTranslator.FromHtml("#A9B7E1");;
                 this.gpibSelector.Visible = true;
             }
             else
             {
                 this.gpibSelector.SelectedItem = "Continue";
-                this.gpibSelector.BackColor = Color.Green;
+                this.gpibSelector.BackColor = Color.RoyalBlue;
             }
 
             if (stepData.rs232Group != null)
             {
                 rs232Selector.SelectedItem = stepData.rs232Group;
-                rs232Selector.BackColor = Color.White;
+                rs232Selector.BackColor = System.Drawing.ColorTranslator.FromHtml("#A9B7E1");;
                 this.rs232Selector.Visible = true;
             }
             else
             {
                 rs232Selector.SelectedItem = "Continue";
-                rs232Selector.BackColor = Color.Green;
+                rs232Selector.BackColor = Color.RoyalBlue;
             }
 
             this.negativeRetriggerEdgeOrValueToolStripMenuItem.Checked = stepData.RetriggerOptions.RetriggerOnNegativeValueOrEdge;
@@ -266,12 +266,12 @@ namespace WordGenerator.Controls
             if (stepData.StepEnabled)
             {
                 enabledButton.Text = "Enabled";
-                enabledButton.BackColor = Color.Green;
+                enabledButton.BackColor = Color.RoyalBlue;
             }
             else
             {
                 enabledButton.Text = "Disabled";
-                enabledButton.BackColor = Color.Red;
+                enabledButton.BackColor = Color.Black;
             }
             enabledButton.Invalidate();
         }
@@ -294,19 +294,21 @@ namespace WordGenerator.Controls
             if (stepData.StepHidden)
             {
                 showHideButton.Text = "Hidden";
-                showHideButton.BackColor = Color.DarkKhaki;
+                showHideButton.BackColor = Color.Black;
+                showHideButton.ForeColor = Color.White;
             }
             else
             {
                 showHideButton.Text = "Visible";
-                showHideButton.BackColor = Color.Transparent;
+                showHideButton.BackColor = Color.RoyalBlue;
+                showHideButton.ForeColor = Color.White;
             }
         }
 
         private void analogSelector_DropDown(object sender, EventArgs e)
         {
             analogSelector.Items.Clear();
-            analogSelector.BackColor = Color.White;
+            analogSelector.BackColor = System.Drawing.ColorTranslator.FromHtml("#A9B7E1");;
             analogSelector.Items.Add("Continue");
             analogSelector.Items.AddRange(Storage.sequenceData.AnalogGroups.ToArray());
         }
@@ -317,11 +319,11 @@ namespace WordGenerator.Controls
         {
             if (analogSelector.SelectedItem.ToString() == "Continue")
             {
-                analogSelector.BackColor = Color.Green;
+                analogSelector.BackColor = Color.RoyalBlue;
                 toolTip1.SetToolTip(analogSelector, "Continue previous analog group.");
             }
             else
-                analogSelector.BackColor = Color.White;
+                analogSelector.BackColor = System.Drawing.ColorTranslator.FromHtml("#A9B7E1");;
 
             if (stepData != null)
             {
@@ -344,11 +346,11 @@ namespace WordGenerator.Controls
         {
             if (gpibSelector.SelectedItem.ToString() == "Continue")
             {
-                gpibSelector.BackColor = Color.Green;
+                gpibSelector.BackColor = Color.RoyalBlue;
                 toolTip1.SetToolTip(gpibSelector, "Continue previous GPIB group.");
             }
             else
-                gpibSelector.BackColor = Color.White;
+                gpibSelector.BackColor = System.Drawing.ColorTranslator.FromHtml("#A9B7E1");;
 
             if (stepData != null)
             {
@@ -366,7 +368,7 @@ namespace WordGenerator.Controls
         private void gpibSelector_DropDown(object sender, EventArgs e)
         {
             gpibSelector.Items.Clear();
-            gpibSelector.BackColor = Color.White;
+            gpibSelector.BackColor = System.Drawing.ColorTranslator.FromHtml("#A9B7E1");;
             gpibSelector.Items.Add("Continue");
             gpibSelector.Items.AddRange(Storage.sequenceData.GpibGroups.ToArray());
         }
@@ -482,7 +484,7 @@ namespace WordGenerator.Controls
         {
 
             rs232Selector.Items.Clear();
-            rs232Selector.BackColor = Color.White;
+            rs232Selector.BackColor = System.Drawing.ColorTranslator.FromHtml("#A9B7E1");
             rs232Selector.Items.Add("Continue");
             rs232Selector.Items.AddRange(Storage.sequenceData.RS232Groups.ToArray());
 
@@ -500,11 +502,11 @@ namespace WordGenerator.Controls
         {
             if (rs232Selector.SelectedItem.ToString() == "Continue")
             {
-                rs232Selector.BackColor = Color.Green;
+                rs232Selector.BackColor = Color.RoyalBlue;
                 toolTip1.SetToolTip(rs232Selector, "Continue previous RS232 group.");
             }
             else
-                rs232Selector.BackColor = Color.White;
+               rs232Selector.BackColor = System.Drawing.ColorTranslator.FromHtml("#A9B7E1");
 
             if (stepData != null)
             {
@@ -943,6 +945,31 @@ namespace WordGenerator.Controls
         private void negativeRetriggerEdgeOrValueToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
             stepData.RetriggerOptions.RetriggerOnNegativeValueOrEdge = negativeRetriggerEdgeOrValueToolStripMenuItem.Checked;
+        }
+
+        private void analogSelector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void gpibSelector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rs232Selector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void durationEditor_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TimestepEditor_Load(object sender, EventArgs e)
+        {
+
         }
 
 

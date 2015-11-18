@@ -43,6 +43,8 @@ namespace WordGenerator.ChannelManager
             this.refreshHardwareButton = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.togglingCheck = new System.Windows.Forms.CheckBox();
+            this.colorSwatch = new System.Windows.Forms.Panel();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.SuspendLayout();
             // 
             // lblName
@@ -109,7 +111,7 @@ namespace WordGenerator.ChannelManager
             // 
             // okButton
             // 
-            this.okButton.Location = new System.Drawing.Point(170, 179);
+            this.okButton.Location = new System.Drawing.Point(170, 198);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 7;
@@ -119,7 +121,7 @@ namespace WordGenerator.ChannelManager
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(246, 179);
+            this.cancelButton.Location = new System.Drawing.Point(246, 198);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 8;
@@ -156,7 +158,7 @@ namespace WordGenerator.ChannelManager
             // 
             // refreshHardwareButton
             // 
-            this.refreshHardwareButton.Location = new System.Drawing.Point(15, 179);
+            this.refreshHardwareButton.Location = new System.Drawing.Point(15, 198);
             this.refreshHardwareButton.Name = "refreshHardwareButton";
             this.refreshHardwareButton.Size = new System.Drawing.Size(105, 23);
             this.refreshHardwareButton.TabIndex = 12;
@@ -189,11 +191,23 @@ namespace WordGenerator.ChannelManager
             this.togglingCheck.Visible = false;
             this.togglingCheck.CheckedChanged += new System.EventHandler(this.togglingCheck_CheckedChanged);
             // 
+            // colorSwatch
+            // 
+            this.colorSwatch.BackColor = System.Drawing.Color.RoyalBlue;
+            this.colorSwatch.Location = new System.Drawing.Point(178, 16);
+            this.colorSwatch.Name = "colorSwatch";
+            this.colorSwatch.Size = new System.Drawing.Size(20, 19);
+            this.colorSwatch.TabIndex = 15;
+            this.colorSwatch.Visible = false;
+            this.colorSwatch.Click += new System.EventHandler(this.colorSwatch_Click);
+            this.colorSwatch.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
             // AddDevice
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(342, 233);
+            this.Controls.Add(this.colorSwatch);
             this.Controls.Add(this.togglingCheck);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.refreshHardwareButton);
@@ -211,6 +225,7 @@ namespace WordGenerator.ChannelManager
             this.Controls.Add(this.lblName);
             this.Name = "AddDevice";
             this.Text = "Add new logical device";
+            this.Load += new System.EventHandler(this.AddDevice_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -233,5 +248,7 @@ namespace WordGenerator.ChannelManager
         private System.Windows.Forms.Button refreshHardwareButton;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.CheckBox togglingCheck;
+        private System.Windows.Forms.Panel colorSwatch;
+        private System.Windows.Forms.ColorDialog colorDialog1;
     }
 }

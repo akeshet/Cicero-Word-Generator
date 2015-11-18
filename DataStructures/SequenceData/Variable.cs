@@ -202,6 +202,37 @@ namespace DataStructures
             set { listDriven = value; }
         }
 
+        //LUT driven:
+        private bool lutDriven;
+
+        public bool LUTDriven
+        {
+            get { return lutDriven; }
+            set { lutDriven = value; }
+
+        }
+
+        //LUT number if applicable:
+        private int dbFieldNumber;
+
+        public int LUTNumber
+        {
+            get { return dbFieldNumber; }
+            set { dbFieldNumber = value; }
+
+        }
+
+        //LUT input variable if applicable
+        private Variable lutInput;
+
+        public Variable LUTInput
+        {
+            get { return lutInput; }
+            set { lutInput = value; }
+        }
+
+
+
         private int listNumber;
 
         [Description("If ListDriven is true, indicates the list number which is driving this variable.")]
@@ -385,7 +416,7 @@ namespace DataStructures
             get { return isSpecialVariable; }
             set { isSpecialVariable = value; }
         }
-        public enum SpecialVariableType { IterationNum, IterationCount };
+        public enum SpecialVariableType { IterationNum, IterationCount, RunningCounter };
         private SpecialVariableType mySpecialVariableType;
 
         public SpecialVariableType MySpecialVariableType

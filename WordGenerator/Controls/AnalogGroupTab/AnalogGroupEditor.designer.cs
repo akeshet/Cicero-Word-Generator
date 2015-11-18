@@ -91,9 +91,9 @@ namespace WordGenerator.Controls
             this.analogGroupSelector.Name = "analogGroupSelector";
             this.analogGroupSelector.Size = new System.Drawing.Size(110, 21);
             this.analogGroupSelector.TabIndex = 6;
+            this.analogGroupSelector.DropDown += new System.EventHandler(this.comboBox1_DropDown);
             this.analogGroupSelector.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.analogGroupSelector.DropDownClosed += new System.EventHandler(this.analogGroupSelector_DropDownClosed);
-            this.analogGroupSelector.DropDown += new System.EventHandler(this.comboBox1_DropDown);
             // 
             // renameTextBox
             // 
@@ -224,8 +224,8 @@ namespace WordGenerator.Controls
             this.replacementGroupSelector.Name = "replacementGroupSelector";
             this.replacementGroupSelector.Size = new System.Drawing.Size(122, 21);
             this.replacementGroupSelector.TabIndex = 20;
-            this.replacementGroupSelector.SelectedValueChanged += new System.EventHandler(this.replacementGroupSelector_SelectedValueChanged);
             this.replacementGroupSelector.DropDown += new System.EventHandler(this.replacementSelector_DropDown_1);
+            this.replacementGroupSelector.SelectedValueChanged += new System.EventHandler(this.replacementGroupSelector_SelectedValueChanged);
             // 
             // timeResolutionEditor
             // 
@@ -244,6 +244,7 @@ namespace WordGenerator.Controls
             this.waveformEditor1.Size = new System.Drawing.Size(269, 790);
             this.waveformEditor1.TabIndex = 2;
             this.waveformEditor1.copyDuration += new System.EventHandler(this.waveformEditor1_copyDuration);
+            this.waveformEditor1.Load += new System.EventHandler(this.waveformEditor1_Load);
             // 
             // waveformGraphCollection1
             // 

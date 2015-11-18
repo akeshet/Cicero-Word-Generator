@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common.cs" />
+    <Compile Include="Database\VariableInputDatabaseHandler.cs" />
     <Compile Include="DataStructuresVersionNumber.cs" />
     <Compile Include="ClientStartupSettings.cs" />
     <Compile Include="Communication\ServerSettingsInterface.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="SequenceData\Waveform.cs" />
     <Compile Include="SequenceData\WaveformEquationInterpolator.cs" />
     <Compile Include="SettingsData\ChannelCollection.cs" />
+    <Compile Include="SettingsData\LUT.cs" />
     <Compile Include="SettingsData\HardwareChannel.cs" />
     <Compile Include="SettingsData\LogicalChannel.cs" />
     <Compile Include="SettingsData\LogicalChannelManager.cs" />

@@ -16,6 +16,15 @@ namespace DataStructures
     [Serializable, TypeConverter(typeof(ExpandableObjectConverter))]
     public class SettingsData
     {
+
+        private List<LUT> lookupTables;
+
+        public List<LUT> LookupTables
+        {
+            get { return lookupTables; }
+            set { lookupTables = value; }
+        }
+
         private LogicalChannelManager myLogicalChannelManager;
 
         public LogicalChannelManager logicalChannelManager
@@ -60,7 +69,8 @@ namespace DataStructures
         [Description("Colors to be used for the digital grid panel. To return to default values, remove all elements from the list. Colors can either be selected from pre-existing list, or specified in R,G,B coordinates.")]
         public List<System.Drawing.Color> DigitalGridColors
         {
-            get {
+            get
+            {
                 if (colors == null)
                 {
                     colors = new List<System.Drawing.Color>();
@@ -212,24 +222,9 @@ namespace DataStructures
             set { myServerManager = value; }
         }
 
-
-
-        private List<Database.RunLogDatabaseSettings> runlogDatabaseSettings;
-
-        [Description("Run log database MySql servers to connect to, if any.")]
-        public List<Database.RunLogDatabaseSettings> RunlogDatabaseSettings
-        {
-            get
-            {
-                if (runlogDatabaseSettings == null)
-                    runlogDatabaseSettings = new List<Database.RunLogDatabaseSettings>();
-                return runlogDatabaseSettings;
-            }
-            set { runlogDatabaseSettings = value; }
-        }
-
         public SettingsData()
         {
+            lookupTables = new List<LUT>();
             myLogicalChannelManager = new LogicalChannelManager();
             myServerManager = new ServerManager();
             cameraPCs = new List<IPAdresses>();

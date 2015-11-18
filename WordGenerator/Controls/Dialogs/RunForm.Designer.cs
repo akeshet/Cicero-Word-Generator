@@ -50,6 +50,7 @@ namespace WordGenerator
             this.progressBar.Step = 1;
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar.TabIndex = 0;
+            this.progressBar.Click += new System.EventHandler(this.progressBar_Click);
             // 
             // textBox1
             // 
@@ -61,25 +62,28 @@ namespace WordGenerator
             this.textBox1.Size = new System.Drawing.Size(546, 313);
             this.textBox1.TabIndex = 1;
             this.textBox1.Click += new System.EventHandler(this.textBox1_Click);
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // stopButton
             // 
+            this.stopButton.BackColor = System.Drawing.SystemColors.Control;
             this.stopButton.Location = new System.Drawing.Point(51, 403);
             this.stopButton.Name = "stopButton";
             this.stopButton.Size = new System.Drawing.Size(90, 44);
             this.stopButton.TabIndex = 2;
             this.stopButton.Text = "Abort  (A, ESC)";
-            this.stopButton.UseVisualStyleBackColor = true;
+            this.stopButton.UseVisualStyleBackColor = false;
             this.stopButton.Click += new System.EventHandler(this.stopButton_Click);
             // 
             // closeButton
             // 
+            this.closeButton.BackColor = System.Drawing.SystemColors.Control;
             this.closeButton.Location = new System.Drawing.Point(427, 403);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(98, 44);
             this.closeButton.TabIndex = 3;
             this.closeButton.Text = "Close  (C, Space)";
-            this.closeButton.UseVisualStyleBackColor = true;
+            this.closeButton.UseVisualStyleBackColor = false;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
             // 
             // timeLabel
@@ -108,12 +112,13 @@ namespace WordGenerator
             // 
             // runAgainButton
             // 
+            this.runAgainButton.BackColor = System.Drawing.SystemColors.Control;
             this.runAgainButton.Location = new System.Drawing.Point(221, 404);
             this.runAgainButton.Name = "runAgainButton";
             this.runAgainButton.Size = new System.Drawing.Size(104, 43);
             this.runAgainButton.TabIndex = 7;
             this.runAgainButton.Text = "Run Again  (R, F9)";
-            this.runAgainButton.UseVisualStyleBackColor = true;
+            this.runAgainButton.UseVisualStyleBackColor = false;
             this.runAgainButton.Click += new System.EventHandler(this.runAgainButton_Click);
             // 
             // fortuneCookieLabel
@@ -161,6 +166,7 @@ namespace WordGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(570, 634);
             this.Controls.Add(this.showVariablePreviewCheckbox);
             this.Controls.Add(this.savingWarning);
@@ -183,6 +189,7 @@ namespace WordGenerator
             this.Activated += new System.EventHandler(this.RunForm_Activated);
             this.Deactivate += new System.EventHandler(this.RunForm_Deactivate);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.RunForm_FormClosing);
+            this.Load += new System.EventHandler(this.RunForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

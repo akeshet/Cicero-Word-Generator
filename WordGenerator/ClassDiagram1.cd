@@ -1,0 +1,423 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="WordGenerator.ClientRunner" Collapsed="true">
+    <Position X="6.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAJAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>ClientRunner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.RunForm" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAGRgJYwDWJYkAIAWqiBCokfABaAYVAE2wQByAJALbQ=</HashCode>
+      <FileName>Controls\Dialogs\RunForm.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="WordGenerator.ServerManagerForm" Collapsed="true">
+    <Position X="3" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAiAAAAAAACDIAAACAAAIAAAQEEAAAAAAAAA=</HashCode>
+      <FileName>Controls\Dialogs\ServerManagerForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.SettingsExplorerForm" Collapsed="true">
+    <Position X="6.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAACAAAACAgQAAAAQAAAAAAAAAAA=</HashCode>
+      <FileName>Controls\Dialogs\SettingsExplorerForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.MainClientForm" Collapsed="true">
+    <Position X="15.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>jsbWEm0ppGQ9b/TyHLi3+NTvrpnU0717P6JvdzYzaDc=</HashCode>
+      <FileName>Controls\MainClientForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.AnalogOverride" Collapsed="true">
+    <Position X="10" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQBACEAIBEAAACAAAACAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Controls\OverrideTab\Analog Override.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.DigitalOverride" Collapsed="true">
+    <Position X="13.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAMFgFBBCBAIRACACSFAAACAAGACAAAAAAAACAABAI=</HashCode>
+      <FileName>Controls\OverrideTab\DigitalOverride.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.OverridePage" Collapsed="true">
+    <Position X="4.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgABAACABABAAACCAAAACAAAIgAAAAEAAAQAAQCI=</HashCode>
+      <FileName>Controls\OverrideTab\OverridePage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.PropertyGridForm" Collapsed="true">
+    <Position X="10" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAACAAAACAAAAAAAQAAAAAAAAAAA=</HashCode>
+      <FileName>Controls\Shared\PropertyGridForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.GlobalInfo" Collapsed="true">
+    <Position X="4.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Program" Collapsed="true">
+    <Position X="8.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAAAAAQAQACAAAIAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Storage" Collapsed="true">
+    <Position X="8.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEEAAIBAAAAAAAAAAAEAAgCCAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Storage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.AnalogGroupEditor" Collapsed="true">
+    <Position X="8.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QQRAJEQBhKAwAjEBIAGICAADUAQYIAgUMGAAABUQhBA=</HashCode>
+      <FileName>Controls\AnalogGroupTab\AnalogGroupEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.GroupChannelSelection" Collapsed="true">
+    <Position X="10" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABACAAAAAAAECBAAQCBABABAJAAAQCCIAAAAA=</HashCode>
+      <FileName>Controls\Dialogs\GroupChannelSelection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.CiceroSplashForm" Collapsed="true">
+    <Position X="3" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAIAAAACAAABAAAACAAAACAAAAIAAAAAAAAABAAAA=</HashCode>
+      <FileName>Controls\Dialogs\CiceroSplashForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.CitationInfoForm" Collapsed="true">
+    <Position X="4.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAABEAAACAAgACAAAIAAAAAEAAQBEAAAA=</HashCode>
+      <FileName>Controls\Dialogs\CitationInfoForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.FormulaHelpDialog" Collapsed="true">
+    <Position X="3" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAACAAAACAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Controls\Dialogs\FormulaHelpDialog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.SequenceDifferencesForm" Collapsed="true">
+    <Position X="11.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAACAAAACAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Controls\Dialogs\SequenceDifferencesForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.SequenceExplorerForm" Collapsed="true">
+    <Position X="13.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAACEAAACAAAAAAAQAAAAIAAAAAA=</HashCode>
+      <FileName>Controls\Dialogs\SequenceExplorerForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.VariablePreviewEditorForm" Collapsed="true">
+    <Position X="8.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAACCAABAAAACAAAACAAAAAAAAAAAAESAAAAA=</HashCode>
+      <FileName>Controls\Dialogs\VariablePreviewEditorForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.VariableRelevanceEditor" Collapsed="true">
+    <Position X="10" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAABAAAACAAAACAAgIAAAAAEAAAAAAACA=</HashCode>
+      <FileName>Controls\Dialogs\VariableRelevanceEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.CommonWaveformEditor" Collapsed="true">
+    <Position X="8.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAACAAAAAAAADAAAACAAAIBAAAgEAgAAAAAAA=</HashCode>
+      <FileName>Controls\OtherTabs\CommonWaveformEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.GpibGroupChannelSelection" Collapsed="true">
+    <Position X="6.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACABBACAEAAAAAACDAQQCBABACAJAAEQCCAAAAIA=</HashCode>
+      <FileName>Controls\OtherTabs\GPIBGroupTab\GpibGroupChannelSelection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.GpibGroupEditor" Collapsed="true">
+    <Position X="8.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAQgBAQBgKAwAjMBKAGIDBACUAQ4ICgUAHAEAAUQhBA=</HashCode>
+      <FileName>Controls\OtherTabs\GPIBGroupTab\GpibGroupEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.AutoNameGlossaryDialog" Collapsed="true">
+    <Position X="13.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAgAAACAAAACAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Controls\PulsesTab\AutoNameGlossaryDialog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.PulseEditor" Collapsed="true">
+    <Position X="11.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAECY4ATKIAIDCEAASMAACrxhAGEAQEFCAEEAQQGAE=</HashCode>
+      <FileName>Controls\PulsesTab\PulseEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.PulsesPage" Collapsed="true">
+    <Position X="13.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACBCACCAAAAAACCAAAACACAAAAAAAAIIHQAAACE=</HashCode>
+      <FileName>Controls\PulsesTab\PulsesPage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.AnalogChannelLabelsPanel" Collapsed="true">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACIABAAAAAAAAAACAAAACAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>Controls\SequencePage\AnalogChannelLabelsPanel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.AnalogPreviewPane" Collapsed="true">
+    <Position X="11.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EACACAAAACAAAAAIAACIAAEDAAIABCAAAABAAAIAAAA=</HashCode>
+      <FileName>Controls\SequencePage\AnalogPreviewPane.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.DigitalChannelLabelsPanel" Collapsed="true">
+    <Position X="10" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIACIABACAAAAAAAACAAAACAAAAAAACAAAACAAAAAA=</HashCode>
+      <FileName>Controls\SequencePage\DigitalChannelLabelsPanel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.DigitalGrid" Collapsed="true">
+    <Position X="11.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>UYKAiFgoKAxQAIBASISsCAAiCBAAJo6IJiD4ABAGSAA=</HashCode>
+      <FileName>Controls\SequencePage\DigitalGrid.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.RunControl" Collapsed="true">
+    <Position X="6.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IhAIAACBQCMAEBAAAASAAAACBKAgAAIgKEASKwEAAAA=</HashCode>
+      <FileName>Controls\SequencePage\RunControl.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.SequencePage" Collapsed="true">
+    <Position X="15.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IKyTQQN1wKpYLBUQFGbBI6Qil2HENghwoUJQBCGEtqQ=</HashCode>
+      <FileName>Controls\SequencePage\SequencePage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.TimestepEditor" Collapsed="true">
+    <Position X="11.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>mQ2VGP0FUKOESMNDoLTRcwYH+ADLyXZYZmggIFMCotc=</HashCode>
+      <FileName>Controls\SequencePage\TimestepEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.AlternateFlowLayoutPanel" Collapsed="true">
+    <Position X="4.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controls\Shared\AlternateFlowLayoutPanel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.HorizontalParameterEditor" Collapsed="true">
+    <Position X="0.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAFAAAAQBigAAREAQACAAAQCABISACAEAEAEAAAAABA=</HashCode>
+      <FileName>Controls\Shared\HorizontalParameterEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.IParameterEditor" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAEAACAAAAAAAACAEAECAABAAAAAQAQAAQAAABA=</HashCode>
+      <FileName>Controls\Shared\IParameterEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.NiceScale" Collapsed="true">
+    <Position X="3" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAAAAIAAIwAIiAAAAAAIIAAICAAAABA=</HashCode>
+      <FileName>Controls\Shared\NiceScale.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.StringParameterStringEditor" Collapsed="true">
+    <Position X="10" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAQAACAAAAAACAKAkRACBAAAEAAIAAAUyQAAAAA=</HashCode>
+      <FileName>Controls\SequencePage\StringParameterStringEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.ToolStripNumericOrVariableEditor" Collapsed="true">
+    <Position X="13.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAACAAAAAQAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Controls\Shared\ToolStripNumericOrVariableEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.ToolStripNumericUpDown" Collapsed="true">
+    <Position X="15.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controls\Shared\ToolStripNumericUpDown.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.VariableComboBox" Collapsed="true">
+    <Position X="3" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYAAIADACQgAAAQAACAAQQDQAAAAAAAAAhIEEAAAAE=</HashCode>
+      <FileName>Controls\Shared\VariableComboBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.VariablePreviewEditor" Collapsed="true">
+    <Position X="6.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAACAAAQIAAICAAAACAEAEAgAAAAAAQEAEEAA=</HashCode>
+      <FileName>Controls\Shared\VariablePreviewEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.VerticalParameterEditor" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAACAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controls\Shared\VerticalParameterEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.WaveformEditor" Collapsed="true">
+    <Position X="13.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>hAAmgwRDQLFEAChQJTDpQBAuSoRs4AAUgUAmkWAFBiE=</HashCode>
+      <FileName>Controls\Shared\WaveformEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.WaveformGraph" Collapsed="true">
+    <Position X="15.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAigACABAAlAgABEIQQEAIIiIQAEFBoEAFEoAAAQARA=</HashCode>
+      <FileName>Controls\Shared\WaveformGraph.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.WaveformGraphCollection" Collapsed="true">
+    <Position X="3" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAGAAACEAAAAAAACMQAACAIAAAEAAAEAAACAAAAA=</HashCode>
+      <FileName>Controls\Shared\WaveformGraphCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.ListEditorPanel" Collapsed="true">
+    <Position X="11.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAEAAAEEKKAIAAAAAAaAAAASAQAEAQgAECAAAABCAIA=</HashCode>
+      <FileName>Controls\VariablesTab\ListEditorPanel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.PermanentVariablesEditor" Collapsed="true">
+    <Position X="6.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAACAAAAAAgACAAAACACgAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Controls\VariablesTab\PermanentVariablesEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.VariableEditor" Collapsed="true">
+    <Position X="4.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgIGAEABAiEwgAAAwMCRQIETAABEKBABOAIAAABEAAk=</HashCode>
+      <FileName>Controls\VariablesTab\VariableEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.VariablesAndListPage" Collapsed="true">
+    <Position X="11.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AJAAGIACAnQiBDASECCAAQBKqIssACAEgagqKQQUALo=</HashCode>
+      <FileName>Controls\VariablesTab\VariablesAndListPage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.ChannelManager.AddDevice" Collapsed="true">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AUkCIAAgRCQoAQQAAACAACgCIAgAEAAAIIAQAAEAAAA=</HashCode>
+      <FileName>Controls\Dialogs\ChannelManager\AddDevice.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.ChannelManager.ChannelManager" Collapsed="true">
+    <Position X="15.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEEAAKgAACQgAAICAACAQgIiAIhAggCBAAQBEAAQAAA=</HashCode>
+      <FileName>Controls\Dialogs\ChannelManager\ChannelManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.ChannelManager.EditDevice" Collapsed="true">
+    <Position X="15.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AwgCIAAgRCQIAQQAAACAACgSIAgAEAAAIIAYIAEAAAg=</HashCode>
+      <FileName>Controls\Dialogs\ChannelManager\EditDevice.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.ChannelManager.SelectedDevice" Collapsed="true">
+    <Position X="10" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgCAAAAAABAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controls\Dialogs\ChannelManager\SelectedDevice.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.Dialogs.LogAnnotator" Collapsed="true">
+    <Position X="13.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIEAACAAABACAACBAAACAIAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Controls\Dialogs\LogAnnotator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="wgControlLibrary.RS232GroupChannelSelection" Collapsed="true">
+    <Position X="3" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACABBACAEAAAAAACBAQQCBABACAJAAEQCCAAAAIg=</HashCode>
+      <FileName>Controls\RS232GroupTab\RS232GroupChannelSelection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Controls.Temporary.RS232GroupEditor" Collapsed="true">
+    <Position X="4.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QASABAwBgCEwQjEBKAGICAACUAQ4IAgUAHEAAAUQBBA=</HashCode>
+      <FileName>Controls\RS232GroupTab\RS232GroupEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Properties.Resources" Collapsed="true">
+    <Position X="15.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABQAAQAAAAAABEAAAAQCAAAAAAAAAQAABAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordGenerator.Properties.Settings" Collapsed="true">
+    <Position X="4.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

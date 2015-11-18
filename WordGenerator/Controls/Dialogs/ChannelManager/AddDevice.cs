@@ -84,6 +84,15 @@ namespace WordGenerator.ChannelManager
             {
                 togglingCheck.Visible = false;
             }
+            //Show color swatch
+            if (selectedChannelType == HardwareChannel.HardwareConstants.ChannelTypes.digital)
+            {
+                colorSwatch.Visible = true;
+            }
+            else
+            {
+                colorSwatch.Visible = false;
+            }
         }
 
         /// <summary>
@@ -106,6 +115,7 @@ namespace WordGenerator.ChannelManager
             lc.Description = this.deviceDescText.Text;
             lc.AnalogChannelOutputNowUsesDwellWord = checkBox1.Checked;
             lc.TogglingChannel = togglingCheck.Checked;
+            lc.ChannelColor = colorSwatch.BackColor;
 
             if (this.availableHardwareChanCombo.SelectedItem is HardwareChannel)
                 lc.HardwareChannel = (HardwareChannel)this.availableHardwareChanCombo.SelectedItem;
@@ -124,7 +134,23 @@ namespace WordGenerator.ChannelManager
 
         private void togglingCheck_CheckedChanged(object sender, EventArgs e)
         {
-            
+
+        }
+
+        private void AddDevice_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void colorSwatch_Click(object sender, EventArgs e)
+        {
+            colorDialog1.ShowDialog();
+            colorSwatch.BackColor = colorDialog1.Color;
         }
 
 

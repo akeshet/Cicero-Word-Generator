@@ -117,7 +117,7 @@ namespace WordGenerator.Controls
         {
             this.variablesPanel.SuspendLayout();
 
-            if (Storage.sequenceData == null || Storage.sequenceData.Variables == null)
+            if (Storage.sequenceData == null || Storage.sequenceData.Variables == null||Storage.settingsData.LookupTables != null)
                 discardAndRefreshAllVariableEditors();
             else
             {
@@ -541,6 +541,16 @@ namespace WordGenerator.Controls
         {
             SequenceData copyOfCurrentSequence = (SequenceData)Common.createDeepCopyBySerialization(Storage.sequenceData);
             setCalibrationSequence(copyOfCurrentSequence);
+        }
+
+        private void variableEditorPlaceholder_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void variablesPanel_Paint(object sender, PaintEventArgs e)
+        {
+
         }
 
 

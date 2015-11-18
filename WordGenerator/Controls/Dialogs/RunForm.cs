@@ -13,6 +13,9 @@ using System.Net.Sockets;
 using DataStructures.UtilityClasses;
 using DataStructures.Database;
 using DataStructures.Timing;
+using System.Linq;
+using System.Text;
+using System.IO;
 
 namespace WordGenerator
 {
@@ -34,6 +37,7 @@ namespace WordGenerator
 
         bool isIdle = false;
         bool isCameraSaving = true;
+      
 
         DateTime runStartTime;
 
@@ -406,6 +410,7 @@ namespace WordGenerator
         {
             // start run! woo hoo!
             // do it async so as not to block the UI thread.
+         
 
             if (!runningSequence.Lists.ListLocked)
             {
@@ -616,6 +621,9 @@ namespace WordGenerator
             while (keepGoing)
             {
                 MainClientForm.instance.CurrentlyOutputtingTimestep = null;
+                runningSequence.RunningCounter++; //Increment this motherfucker right off the bat
+                addMessageLogText(this, new MessageEvent("The running counter is at " + runningSequence.RunningCounter.ToString()));
+
 
 
 
@@ -728,6 +736,7 @@ namespace WordGenerator
                         }
                         listBoundVariableValues += var.VariableName + " = " + var.VariableValue.ToString() + ", ";
                     }
+                   
                 }
 
                 if (listBoundVariableValues != "")
@@ -747,6 +756,45 @@ namespace WordGenerator
                         }
                     }
                 }
+
+                foreach (Variable var in sequence.Variables)
+                {
+                    if (var.LUTDriven)
+                    {
+                       //Interpolate!
+                        int tableIndex = var.LUTNumber;
+                        double inputX = var.LUTInput.VariableValue;
+                        double tableX1;
+                        double tableX2;
+                        double tableY1;
+                        double tableY2;
+                        int we = Storage.settingsData.LookupTables[tableIndex].Table.Count;
+                       //Simple case: See if this particular value is already defined in the LUT
+                        if (Storage.settingsData.LookupTables[tableIndex].Table.ContainsKey(inputX))
+                        {
+                            var.VariableValue = Storage.settingsData.LookupTables[tableIndex].Table[inputX];
+                        }
+                        //General case: Fix value at end values if it exceeds the lowest or highest table x value, and interpolate between other values
+                        else
+                        {
+                            int numberOfRows = Storage.settingsData.LookupTables[tableIndex].Table.Count;
+                            if (inputX > Storage.settingsData.LookupTables[tableIndex].Table.Keys.Max()) var.VariableValue = Storage.settingsData.LookupTables[tableIndex].Table[Storage.settingsData.LookupTables[tableIndex].Table.Keys.Max()];
+                            else if (inputX < Storage.settingsData.LookupTables[tableIndex].Table.Keys.Min()) var.VariableValue = Storage.settingsData.LookupTables[tableIndex].Table[Storage.settingsData.LookupTables[tableIndex].Table.Keys.Min()];
+                            else
+                            {
+                                tableX1 = Storage.settingsData.LookupTables[tableIndex].Table.Keys.First(x => x > inputX);
+                                tableX2 = Storage.settingsData.LookupTables[tableIndex].Table.Keys.Last(x => x < inputX);
+                                tableY1 = Storage.settingsData.LookupTables[tableIndex].Table[tableX1];
+                                tableY2 = Storage.settingsData.LookupTables[tableIndex].Table[tableX2];
+                                var.VariableValue = tableY1 + (inputX - tableX1) / (tableX2 - tableX1) * (tableY2 - tableY1);
+
+                            }
+                        }
+                        addMessageLogText(this, new MessageEvent("Variable "+var.VariableName+" assumes value "+var.VariableValue.ToString()+" for this run."));
+
+                    }
+                }
+
                 if (!calibrationShot)
                 {
                     foreach (Variable var in sequence.Variables)
@@ -905,6 +953,23 @@ namespace WordGenerator
 
                 ServerManager.ServerActionStatus actionStatus;
 
+                addMessageLogText(this, new MessageEvent("Starting run. Writing log file and updating database"));
+                RunLog runLog = new RunLog(runStartTime, formCreationTime, sequence, Storage.settingsData, WordGenerator.MainClientForm.instance.OpenSequenceFileName, WordGenerator.MainClientForm.instance.OpenSettingsFileName);
+                string fileName = runLog.WriteLogFile();
+
+                if (fileName != null)
+                {
+                    addMessageLogText(this, new MessageEvent("Log written to " + fileName));
+                }
+                else
+                {
+                    addMessageLogText(this, new MessageEvent("Log not written! Perhaps a file with this name already exists?"));
+                    ErrorDetected = false; //Actualyl true, but just keeping the screen from turning red
+                }
+
+             
+
+
                 // send start timestamp
                 addMessageLogText(this, new MessageEvent("Sending run start timestamp."));
                 actionStatus = Storage.settingsData.serverManager.setNextRunTimestampOnConnectedServers(runStartTime, addMessageLogText);
@@ -915,7 +980,6 @@ namespace WordGenerator
                     setStatus(RunFormStatus.FinishedRun);
                     return false;
                 }
-
 
 
                 // send settings data.
@@ -1059,51 +1123,7 @@ namespace WordGenerator
                     sequence.cleanupLoopCopies();
 
 
-                addMessageLogText(this, new MessageEvent("Finished run. Writing log file..."));
-                RunLog runLog = new RunLog(runStartTime, formCreationTime, sequence, Storage.settingsData, WordGenerator.MainClientForm.instance.OpenSequenceFileName, WordGenerator.MainClientForm.instance.OpenSettingsFileName);
-                string fileName = runLog.WriteLogFile();
 
-                if (fileName != null)
-                {
-                    addMessageLogText(this, new MessageEvent("Log written to " + fileName));
-                }
-                else
-                {
-                    addMessageLogText(this, new MessageEvent("Log not written! Perhaps a file with this name already exists?"));
-                    ErrorDetected = true;
-                }
-
-                foreach (RunLogDatabaseSettings rset in Storage.settingsData.RunlogDatabaseSettings)
-                {
-
-                    if (rset.Enabled)
-                    {
-                        RunlogDatabaseHandler handler = null;
-                        try
-                        {
-                            handler = new RunlogDatabaseHandler(rset);
-                            handler.addRunLog(fileName, runLog);
-                            addMessageLogText(this, new MessageEvent("Run log added to mysql database at url " + rset.Url + " successfully."));
-                        }
-                        catch (RunLogDatabaseException e)
-                        {
-                            addMessageLogText(this, new MessageEvent("Caught exception when attempting to add runlog to mysqldatabase at " + rset.Url + "."));
-                            if (rset.VerboseErrorReporting)
-                            {
-                                addMessageLogText(this, new MessageEvent("Displaying runlogdatabase exception. To disable this display, turn off verbose error reporting for this runlog database in Cicero settings (under Advanced->Settings Explorer)"));
-                                ExceptionViewerDialog ev = new ExceptionViewerDialog(e);
-                                ev.ShowDialog();
-                            }
-                            else
-                            {
-                                addMessageLogText(this, new MessageEvent("Exception was " + e.Message + ". For more detailed information, turn on verbose error reporting for this runlog database in Cicero settings (under Advanced->Settings Explorer)"));
-                            }
-                        }
-
-                        if (handler != null)
-                            handler.closeConnection();
-                    }
-                }
 
 
 
@@ -1112,7 +1132,10 @@ namespace WordGenerator
 
 
                 if (runRepeat)
+                {
                     keepGoing = true;
+                    
+                }
                 else
                     keepGoing = false;
 
@@ -1525,5 +1548,20 @@ namespace WordGenerator
             }
         }
         #endregion
+
+        private void progressBar_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void RunForm_Load(object sender, EventArgs e)
+        {
+            runningSequence.RunningCounter = 0;
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
