@@ -219,6 +219,65 @@ namespace WordGenerator.ChannelManager
             chan2_analog = Ch2AnalogCheckBox.Checked;
         }
 
+        private void moveChannels(int key, int target, HardwareChannel.HardwareConstants.ChannelTypes selectedType)
+        {
+            ChannelCollection channelSet= Storage.settingsData.logicalChannelManager.GetDeviceCollection(selectedType);
+
+
+           
+            List<TimeStep> oldTimeStepList = Storage.sequenceData.TimeSteps;
+
+            List<DigitalDataPoint> toInsertDigitalLine = Storage.sequenceData.getDigitalSequenceLine(key);
+
+            //hold on to logical channel that will be inserted
+            LogicalChannel lc1 = channelSet.Channels[key];
+            
+            //remove the logical channel that we will late re-insert
+            channelSet.RemoveChannel(key);
+
+
+            //dump dictionary to a list (only possible because of System.Linq, I think)
+            List<KeyValuePair<int, LogicalChannel>> tempList = channelSet.Channels.ToList();
+
+            //sort the list by keys to preserve old ordering when repopulating
+            tempList.Sort(
+                delegate(KeyValuePair<int, LogicalChannel> p1, KeyValuePair<int, LogicalChannel> p2)
+                {
+                    return p1.Key.CompareTo(p2.Key);
+                });
+
+            int newKey = 0;
+            channelSet.Channels.Clear();
+
+            Dictionary<int,List<DigitalDataPoint>> rearrangedDigitals = new Dictionary<int,List<DigitalDataPoint>>();
+
+            foreach (KeyValuePair<int, LogicalChannel> i in tempList)
+            {
+                if (newKey == target)
+                {
+                    channelSet.Channels.Add(newKey, lc1);
+                    rearrangedDigitals.Add(newKey,toInsertDigitalLine);
+                    newKey++;
+                    channelSet.Channels.Add(newKey, i.Value);
+                    rearrangedDigitals.Add(newKey,Storage.sequenceData.getDigitalSequenceLine(i.Key));
+
+                }
+                else
+                {
+                    rearrangedDigitals.Add(newKey,Storage.sequenceData.getDigitalSequenceLine(i.Key));
+                    channelSet.Channels.Add(newKey, i.Value);
+                }
+                newKey++;
+            }
+
+            foreach (KeyValuePair<int, List<DigitalDataPoint>> i in rearrangedDigitals)
+            {
+                Storage.sequenceData.setDigitalSequenceLine(i.Key, i.Value);
+            }
+            //repopulate list, inserting the moved logical channel when we are at the right key value
+          
+        }
+
         private void swapChannelsButton_Click(object sender, EventArgs e)
         {
             //First, check if the swap input is valid
@@ -242,8 +301,25 @@ namespace WordGenerator.ChannelManager
 
             ChannelCollection selectedChannelCollection = Storage.settingsData.logicalChannelManager.GetDeviceCollection(selectedType);
 
-            selectedChannelCollection.MoveValue(chan1_ID, chan2_ID);
+            //selectedChannelCollection.MoveValue(chan1_ID, chan2_ID);
+            moveChannels(chan1_ID, chan2_ID, selectedType);
+           // DigitalDataPoint temp = Storage.sequenceData.TimeSteps[0].DigitalData[0];
+           // Storage.sequenceData.TimeSteps[0].DigitalData.Remove(0);
+           // Storage.sequenceData.TimeSteps[0].DigitalData.Add(0,temp);
+           // Storage.sequenceData.TimeSteps[0].DigitalData[1] = temp;
+
+           // Storage.sequenceData.TimeSteps.
+          
+
+
+        
+
+//   ChannelCollection selectedDeviceCollection = Storage.settingsData.logicalChannelManager.GetDeviceCollection(
+  //                                                              selectedDevice.channelType);
+    //            selectedDeviceCollection.RemoveChannel(selectedDevice.logicalID);
+      //      asdsa
             RefreshLogicalDeviceDataGrid();
+            
 
         }
  

@@ -240,6 +240,13 @@ namespace WordGenerator.Controls
             }
         }
 
+        private void cleanButton_Click(object sender, EventArgs e)
+        {
+            //for each variable, search the sequence of it's usage? if none found, then delete??
+
+
+        }
+
         private void addButton_Click(object sender, EventArgs e)
         {
             Variable var = new Variable();

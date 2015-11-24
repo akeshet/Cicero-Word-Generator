@@ -64,6 +64,7 @@ namespace WordGenerator.Controls
             this.LockMessage = new System.Windows.Forms.Label();
             this.listEditorPanelPlaceholder = new WordGenerator.Controls.ListEditorPanel();
             this.runControl1 = new WordGenerator.Controls.RunControl();
+            this.remUnusedButton = new System.Windows.Forms.Button();
             this.variablesPanel.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -92,7 +93,7 @@ namespace WordGenerator.Controls
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.71028F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67.28972F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 53F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 103F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 104F));
             this.tableLayoutPanel1.Controls.Add(this.label1, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.nameLabel, 1, 0);
@@ -107,7 +108,7 @@ namespace WordGenerator.Controls
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(75, 0);
+            this.label1.Location = new System.Drawing.Point(74, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(34, 13);
             this.label1.TabIndex = 1;
@@ -134,7 +135,7 @@ namespace WordGenerator.Controls
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(128, 0);
+            this.label3.Location = new System.Drawing.Point(127, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(55, 13);
             this.label3.TabIndex = 4;
@@ -470,10 +471,20 @@ namespace WordGenerator.Controls
             this.runControl1.Size = new System.Drawing.Size(119, 300);
             this.runControl1.TabIndex = 5;
             // 
+            // remUnusedButton
+            // 
+            this.remUnusedButton.Location = new System.Drawing.Point(221, 53);
+            this.remUnusedButton.Name = "remUnusedButton";
+            this.remUnusedButton.Size = new System.Drawing.Size(75, 55);
+            this.remUnusedButton.TabIndex = 12;
+            this.remUnusedButton.Text = "Remove Unused Variables";
+            this.remUnusedButton.UseVisualStyleBackColor = true;
+            // 
             // VariablesAndListPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.remUnusedButton);
             this.Controls.Add(this.LockMessage);
             this.Controls.Add(this.listFiller);
             this.Controls.Add(this.permanentVariablesButton);
@@ -542,5 +553,6 @@ namespace WordGenerator.Controls
         private System.Windows.Forms.Label LockMessage;
         private RunControl runControl1;
         private System.Windows.Forms.Button loadCalSequenceFromCurrentSequence;
+        private System.Windows.Forms.Button remUnusedButton;
     }
 }

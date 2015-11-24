@@ -1937,6 +1937,43 @@ namespace DataStructures
             return ans;
         }
 
+        //This function outputs a list which contains all of the digital data for a given
+        //digitalID. Important here is that it output the *exact* objects which are in the sequenceData,
+        //and not duplicates. The idea is that if someone wants to modify the DigitalDataPoints via this
+        //list, they can, and it should affect the sequence.
+        public List<DigitalDataPoint> getDigitalSequenceLine(int digitalID)
+        {
+            List<DigitalDataPoint> outputList=new List<DigitalDataPoint>();
+
+            foreach (TimeStep tstep in TimeSteps)
+            {
+                if (tstep.DigitalData[digitalID] != null)
+                    outputList.Add(tstep.DigitalData[digitalID]);
+                else
+                {
+                    tstep.DigitalData[digitalID]=new DigitalDataPoint();
+                    outputList.Add(tstep.DigitalData[digitalID]);
+                }
+            }
+
+            return outputList;
+        }
+        public void setDigitalSequenceLine(int digitalID, List<DigitalDataPoint> setValues)
+        {
+            if (TimeSteps.Count != setValues.Count)
+            {
+                throw new Exception("Attempted to set digital sequence line to a list with the incorrect length.");
+                //return;
+            }
+
+            for (int i =0; i < TimeSteps.Count; i++)
+            {
+                //make sure the make a new object to put into the sequence, so it cant be modified by something external
+                TimeSteps[i].DigitalData[digitalID] = new DigitalDataPoint(setValues[i]);
+            }
+        
+        }
+
         /// <summary>
         /// 
         /// </summary>
