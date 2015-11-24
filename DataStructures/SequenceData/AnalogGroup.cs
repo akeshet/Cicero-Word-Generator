@@ -206,6 +206,14 @@ namespace DataStructures
             this.channelWaveformIsCommon = channelWaveformIsCommon;
         }
 
+        public AnalogGroupChannelData(AnalogGroupChannelData copyMe)
+        {
+            //copy constructor, which duplicates the copyMe object;
+            this.myWaveform = new Waveform(copyMe.myWaveform);
+            this.channelEnabled = copyMe.ChannelEnabled;
+            this.channelWaveformIsCommon = copyMe.ChannelWaveformIsCommon;
+        }
+
         public AnalogGroupChannelData()
             : this(new Waveform(), false, false)
         {

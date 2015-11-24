@@ -219,18 +219,108 @@ namespace WordGenerator.ChannelManager
             chan2_analog = Ch2AnalogCheckBox.Checked;
         }
 
-        private void moveChannels(int key, int target, HardwareChannel.HardwareConstants.ChannelTypes selectedType)
+        private void moveAnalogChannels(int key, int target)
         {
-            ChannelCollection channelSet= Storage.settingsData.logicalChannelManager.GetDeviceCollection(selectedType);
+            ChannelCollection channelSet = Storage.settingsData.logicalChannelManager.GetDeviceCollection(HardwareChannel.HardwareConstants.ChannelTypes.analog);
+
+            List<int> keyList = channelSet.getSortedChannelIDList();
+
+            //checking that the move is valid, i.e. the key and target are valid selections
+            if (key < keyList[0])
+                key = keyList[0];
+            else if (key > keyList[keyList.Count - 1])
+                key = keyList[keyList.Count - 1];
+
+            if (target < keyList[0])
+                target = keyList[0];
+            else if (target > keyList[keyList.Count - 1])
+                target = keyList[keyList.Count - 1];
 
 
+            if (key == target)
+                return;
+
+            List<AnalogGroupChannelData> toInsertAnalogLine = Storage.sequenceData.getAnalogSequenceLine(key);
+
+            //hold on to logical channel that will be inserted
+            LogicalChannel toInsertIntoSettings = channelSet.Channels[key];
+
+            //remove the logical channel that we will late re-insert
+            channelSet.RemoveChannel(key);
+
+
+            //dump dictionary to a list (only possible because of System.Linq, I think)
+            List<KeyValuePair<int, LogicalChannel>> tempList = channelSet.Channels.ToList();
+
+            //sort the list by keys to preserve old ordering when repopulating
+            tempList.Sort(
+                delegate(KeyValuePair<int, LogicalChannel> p1, KeyValuePair<int, LogicalChannel> p2)
+                {
+                    return p1.Key.CompareTo(p2.Key);
+                });
+
+            int newKey = 0;
+            channelSet.Channels.Clear();
+
+            Dictionary<int, List<AnalogGroupChannelData>> rearrangedDigitals = new Dictionary<int, List<AnalogGroupChannelData>>();
+            bool insertSuccessfull = false;
+            foreach (KeyValuePair<int, LogicalChannel> i in tempList)
+            {
+                if (newKey == target)
+                {
+                    channelSet.Channels.Add(newKey, toInsertIntoSettings);
+                    rearrangedDigitals.Add(newKey, toInsertAnalogLine);
+                    newKey++;
+                    channelSet.Channels.Add(newKey, i.Value);
+                    rearrangedDigitals.Add(newKey, Storage.sequenceData.getAnalogSequenceLine(i.Key));
+                    insertSuccessfull = true;
+                }
+                else
+                {
+                    rearrangedDigitals.Add(newKey, Storage.sequenceData.getAnalogSequenceLine(i.Key));
+                    channelSet.Channels.Add(newKey, i.Value);
+                }
+                newKey++;
+            }
+
+            if (!insertSuccessfull)
+            {
+                channelSet.Channels.Add(newKey, toInsertIntoSettings);
+                rearrangedDigitals.Add(newKey, toInsertAnalogLine);
+            }
+
+            foreach (KeyValuePair<int, List<AnalogGroupChannelData>> i in rearrangedDigitals)
+            {
+                Storage.sequenceData.setAnalogSequenceLine(i.Key, i.Value);
+            }
+        }
+
+        private void moveDigitalChannels(int key, int target)
+        {
+
+
+            ChannelCollection channelSet = Storage.settingsData.logicalChannelManager.GetDeviceCollection(HardwareChannel.HardwareConstants.ChannelTypes.digital);
+            List<int> keyList = channelSet.getSortedChannelIDList();
+            //checking that the move is valid, i.e. the key and target are valid selections
+            if (key < keyList[0])
+                key = keyList[0];
+            else if (key > keyList[keyList.Count-1])
+                key = keyList[keyList.Count-1];
+
+            if (target < keyList[0])
+                target = keyList[0];
+            else if (target > keyList[keyList.Count-1])
+                target = keyList[keyList.Count-1];
+
+
+            if (key == target)
+                return;
            
-            List<TimeStep> oldTimeStepList = Storage.sequenceData.TimeSteps;
-
+           
             List<DigitalDataPoint> toInsertDigitalLine = Storage.sequenceData.getDigitalSequenceLine(key);
 
             //hold on to logical channel that will be inserted
-            LogicalChannel lc1 = channelSet.Channels[key];
+            LogicalChannel toInsertIntoSettings = channelSet.Channels[key];
             
             //remove the logical channel that we will late re-insert
             channelSet.RemoveChannel(key);
@@ -250,17 +340,17 @@ namespace WordGenerator.ChannelManager
             channelSet.Channels.Clear();
 
             Dictionary<int,List<DigitalDataPoint>> rearrangedDigitals = new Dictionary<int,List<DigitalDataPoint>>();
-
+            bool insertSuccessfull = false;
             foreach (KeyValuePair<int, LogicalChannel> i in tempList)
             {
                 if (newKey == target)
                 {
-                    channelSet.Channels.Add(newKey, lc1);
+                    channelSet.Channels.Add(newKey, toInsertIntoSettings);
                     rearrangedDigitals.Add(newKey,toInsertDigitalLine);
                     newKey++;
                     channelSet.Channels.Add(newKey, i.Value);
                     rearrangedDigitals.Add(newKey,Storage.sequenceData.getDigitalSequenceLine(i.Key));
-
+                    insertSuccessfull = true;
                 }
                 else
                 {
@@ -270,6 +360,14 @@ namespace WordGenerator.ChannelManager
                 newKey++;
             }
 
+            //sloppy way to handle an edge case. It turns out because I removed the toInsert element from the channelSet,
+            //if the element is to be inserted with the highest key (i.e. at the end of the dictionary), then the above
+            //loop doesn't actually ever get there. So this little if-statement will take care of that.
+            if (!insertSuccessfull)
+            {
+                channelSet.Channels.Add(newKey, toInsertIntoSettings);
+                rearrangedDigitals.Add(newKey, toInsertDigitalLine);
+            }
             foreach (KeyValuePair<int, List<DigitalDataPoint>> i in rearrangedDigitals)
             {
                 Storage.sequenceData.setDigitalSequenceLine(i.Key, i.Value);
@@ -292,17 +390,17 @@ namespace WordGenerator.ChannelManager
             //If we made it this far without returning, then we have a valid swap to perform:
             HardwareChannel.HardwareConstants.ChannelTypes selectedType;
             if (chan1_analog)
-                selectedType = HardwareChannel.HardwareConstants.ChannelTypes.analog;
+                moveAnalogChannels(chan1_ID, chan2_ID);
             else
-                selectedType = HardwareChannel.HardwareConstants.ChannelTypes.digital;
+                moveDigitalChannels(chan1_ID, chan2_ID);
 
             //get the two logical channels to swap
 
 
-            ChannelCollection selectedChannelCollection = Storage.settingsData.logicalChannelManager.GetDeviceCollection(selectedType);
+           // ChannelCollection selectedChannelCollection = Storage.settingsData.logicalChannelManager.GetDeviceCollection(selectedType);
 
             //selectedChannelCollection.MoveValue(chan1_ID, chan2_ID);
-            moveChannels(chan1_ID, chan2_ID, selectedType);
+            
            // DigitalDataPoint temp = Storage.sequenceData.TimeSteps[0].DigitalData[0];
            // Storage.sequenceData.TimeSteps[0].DigitalData.Remove(0);
            // Storage.sequenceData.TimeSteps[0].DigitalData.Add(0,temp);

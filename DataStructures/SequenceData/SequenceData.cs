@@ -1974,6 +1974,39 @@ namespace DataStructures
         
         }
 
+        public List<AnalogGroupChannelData> getAnalogSequenceLine(int channelID)
+        {
+            List<AnalogGroupChannelData> outputList = new List<AnalogGroupChannelData>();
+           
+            foreach (TimeStep tstep in TimeSteps)
+            {
+                if (tstep.AnalogGroup != null)
+                    outputList.Add(tstep.AnalogGroup.ChannelDatas[channelID]);
+                else
+                {
+                    outputList.Add(null);
+                }
+            }
+
+            return outputList;
+        }
+
+        public void setAnalogSequenceLine(int channelID, List<AnalogGroupChannelData> setValues)
+        {
+            if (TimeSteps.Count != setValues.Count)
+            {
+                throw new Exception("Attempted to set digital sequence line to a list with the incorrect length.");
+                //return;
+            }
+
+            for (int i = 0; i < TimeSteps.Count; i++)
+            {
+                //make sure the make a new object to put into the sequence, so it cant be modified by something external
+                if (setValues[i] != null)
+                    TimeSteps[i].AnalogGroup.ChannelDatas[channelID] = new AnalogGroupChannelData(setValues[i]);
+
+            }
+        }
         /// <summary>
         /// 
         /// </summary>
