@@ -16,16 +16,16 @@ namespace DataStructures.Database
 
     /// 
     /// </summary>
-    public class VariableInputDatabaseHandler
+    public class VariableDatabaseHandler
     {
 
         public MySqlConnection conn = null;
 
-        public VariableInputDatabaseHandler(RunLogDatabaseSettings databaseSettings)
+        public VariableDatabaseHandler(VariableDatabaseSettings databaseSettings)
         {
             if (conn != null)
             {
-                throw new RunLogDatabaseException("Attempted to re-open a database connection without first closing the same handle.");
+                throw new VariableDatabaseException("Attempted to re-open a database connection without first closing the same handle.");
             }
 
             string connStr = databaseSettings.getConnectionString();
@@ -39,12 +39,12 @@ namespace DataStructures.Database
                 try { conn.Close(); } catch(Exception) {};
 
                 conn = null;
-                RunLogDatabaseException newex = new RunLogDatabaseException("Unable to open database due to exception: " + ex.Message, ex);
+                VariableDatabaseException newex = new VariableDatabaseException("Unable to open database due to exception: " + ex.Message, ex);
                 throw newex;
             }            
         }
 
-        ~VariableInputDatabaseHandler()
+        ~VariableDatabaseHandler()
         {
             closeConnection();
         }
@@ -71,7 +71,7 @@ namespace DataStructures.Database
             }
             catch (Exception ex)
             {
-                throw new RunLogDatabaseException("Exception when attempting to execute sql query: " + ex.Message, ex);
+                throw new VariableDatabaseException("Exception when attempting to execute sql query: " + ex.Message, ex);
             }
         }
 
@@ -80,7 +80,7 @@ namespace DataStructures.Database
         /// </summary>
         /// <param name="runLogFileName"></param>
         /// <param name="log"></param>
-        public double readFromDB(int fieldIndex,bool waitForUpdates)
+        public double readFromDB(int fieldIndex)
         {
 
             string updatedColumnName = "field" + fieldIndex + "_updated";
@@ -88,25 +88,13 @@ namespace DataStructures.Database
 
             if (conn == null)
             {
-                throw new RunLogDatabaseException("Handler not connected to database");
+                throw new VariableDatabaseException("Handler not connected to database");
             }
 
-            //If the waitForUpdates parameter is true,
-            //we wait in an infinite loop until the "updated" field has been set to true
-            //(This will hang up the run dialog prior to buffer creation)
             
-            
-            MySqlCommand cmd1 = new MySqlCommand("SELECT "+updatedColumnName+" FROM InputValues", this.conn);
+            //We set the update field to false, and then grab the variable value
+            MySqlCommand cmd1 = new MySqlCommand("UPDATE InputValues SET " + updatedColumnName + " = false", this.conn);
             object result1 = cmd1.ExecuteScalar();
-            while(Convert.ToInt32(result1) != 1 && waitForUpdates)
-            {
-                //This is where we wait
-                cmd1 = new MySqlCommand("SELECT " + updatedColumnName + " FROM InputValues", this.conn);
-                result1 = cmd1.ExecuteScalar();
-            }
-            //After the update has happened, we set the update field to false, and then grab the variable value
-            cmd1 = new MySqlCommand("UPDATE InputValues SET "+updatedColumnName+" = false",this.conn);
-            result1 = cmd1.ExecuteScalar();
             cmd1 = new MySqlCommand("SELECT "+columnName+" FROM InputValues", this.conn);
             result1 = cmd1.ExecuteScalar();
           

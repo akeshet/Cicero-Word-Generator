@@ -201,7 +201,7 @@ namespace DataStructures
             get { return listDriven; }
             set { listDriven = value; }
         }
-
+        //Added by Samarth (DB and LUT Driven both)
         //LUT driven:
         private bool lutDriven;
 
@@ -213,12 +213,12 @@ namespace DataStructures
         }
 
         //LUT number if applicable:
-        private int dbFieldNumber;
+        private int LUTdbFieldNumber;
 
         public int LUTNumber
         {
-            get { return dbFieldNumber; }
-            set { dbFieldNumber = value; }
+            get { return LUTdbFieldNumber; }
+            set { LUTdbFieldNumber = value; }
 
         }
 
@@ -229,6 +229,26 @@ namespace DataStructures
         {
             get { return lutInput; }
             set { lutInput = value; }
+        }
+        
+        //Database driven:
+        private bool dbDriven;
+
+        public bool DBDriven
+        {
+            get { return dbDriven; }
+            set { dbDriven = value; }
+
+        }
+
+        //Database field number if applicable:
+        private int dbFieldNumber;
+
+        public int DBFieldNumber
+        {
+            get { return dbFieldNumber; }
+            set { dbFieldNumber = value; }
+
         }
 
 

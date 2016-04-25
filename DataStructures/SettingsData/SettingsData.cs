@@ -16,7 +16,6 @@ namespace DataStructures
     [Serializable, TypeConverter(typeof(ExpandableObjectConverter))]
     public class SettingsData
     {
-
         private List<LUT> lookupTables;
 
         public List<LUT> LookupTables
@@ -220,6 +219,50 @@ namespace DataStructures
         {
             get { return myServerManager; }
             set { myServerManager = value; }
+        }
+
+
+
+        private List<Database.RunLogDatabaseSettings> runlogDatabaseSettings;
+
+        [Description("Run log database MySql servers to connect to, if any.")]
+        public List<Database.RunLogDatabaseSettings> RunlogDatabaseSettings
+        {
+            get
+            {
+                if (runlogDatabaseSettings == null)
+                    runlogDatabaseSettings = new List<Database.RunLogDatabaseSettings>();
+                return runlogDatabaseSettings;
+            }
+            set { runlogDatabaseSettings = value; }
+        }
+
+        private List<Database.VariableDatabaseSettings> variableDatabaseSettings;
+
+        [Description("MySQL database to get variable values from, if any variables are bound to database fields."), Category("Database Binding of Variables")]
+        public List<Database.VariableDatabaseSettings> VariableDatabaseSettings
+        {
+            get
+            {
+                if (variableDatabaseSettings == null)
+                    variableDatabaseSettings = new List<Database.VariableDatabaseSettings>();
+                return variableDatabaseSettings;
+            }
+            set { variableDatabaseSettings = value; }
+        }
+
+        private Boolean waitForHub;
+
+        [Description("Whether to wait for the Hub to give the all-clear."), Category("BECV Customization")]
+        public Boolean WaitForHub
+        {
+            get
+            {
+                if (waitForHub == null)
+                    waitForHub = false;
+                return waitForHub;
+            }
+            set { waitForHub = value; }
         }
 
         public SettingsData()
