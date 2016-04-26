@@ -35,7 +35,7 @@
   <ItemGroup>
     <Reference Include="AtticusServer, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\atticusserver\bin\Release-x86\AtticusServer.exe</HintPath>
+      <HintPath>..\atticusserver\bin\Debug\AtticusServer.exe</HintPath>
     </Reference>
     <Reference Include="DatabaseHelper">
       <HintPath>..\..\..\Zeus\databasehelper3\databasehelper3\bin\Debug\DatabaseHelper.dll</HintPath>
