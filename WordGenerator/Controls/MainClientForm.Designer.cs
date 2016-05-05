@@ -125,6 +125,7 @@ namespace WordGenerator
             this.variablesEditor = new WordGenerator.Controls.VariablesAndListPage();
             this.pulsesPage = new WordGenerator.Controls.PulsesPage();
             this.LUTEditor = new WordGenerator.Controls.LookUpTableTab.LookupTableControl();
+            this.editRunLoggingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.variablesTab.SuspendLayout();
@@ -447,7 +448,8 @@ namespace WordGenerator
             this.editLogicalDevicesToolStripMenuItem,
             this.editServerManagerToolStripMenuItem,
             this.populateSequenceWithNewChannelsToolStripMenuItem,
-            this.enableDebugMenuToolStripMenuItem});
+            this.enableDebugMenuToolStripMenuItem,
+            this.editRunLoggingToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
@@ -978,6 +980,14 @@ namespace WordGenerator
             this.LUTEditor.TabIndex = 0;
             this.LUTEditor.Load += new System.EventHandler(this.lookupTableControl1_Load);
             // 
+            // editRunLoggingToolStripMenuItem
+            // 
+            this.editRunLoggingToolStripMenuItem.Name = "editRunLoggingToolStripMenuItem";
+            this.editRunLoggingToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.editRunLoggingToolStripMenuItem.Text = "Run Log Config";
+            this.editRunLoggingToolStripMenuItem.Click += new System.EventHandler(this.editRunLoggingToolStripMenuItem_Click);
+            // 
+            // 
             // MainClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1115,6 +1125,7 @@ namespace WordGenerator
         private System.Windows.Forms.CheckBox useNetworkClockCheckBox;
         private System.Windows.Forms.TabPage lutTab;
         private Controls.LookUpTableTab.LookupTableControl LUTEditor;
+        private System.Windows.Forms.ToolStripMenuItem editRunLoggingToolStripMenuItem;
 
     }
 }

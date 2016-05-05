@@ -109,6 +109,50 @@ namespace DataStructures
 
         private List<IPAdresses> cameraPCs;
 
+        #region Variable Output To File Properties
+        [Description("Describes whether or not this sequence will output a text file with the variable values every run."),
+         Category("Global")]
+        private bool writeVariableOutputTextFile;
+        public bool WriteVariableOutputTextFile
+        {
+            get
+            {
+                if (writeVariableOutputTextFile == null)
+                    writeVariableOutputTextFile = false;
+                return writeVariableOutputTextFile;
+            }
+            set { writeVariableOutputTextFile = value; }
+        }
+
+
+        private string variableOutputFilename;
+        [Category("Global"), Description("The name of file to which variable values are output.")]
+        public string VariableOutputFilename
+        {
+            get
+            {
+                if (variableOutputFilename == null)
+                    variableOutputFilename = "";
+
+                return variableOutputFilename;
+            }
+            set { variableOutputFilename = value; }
+        }
+        private string variableOutputFilenameDirectory;
+        [Category("Global"), Description("The name of file to which variable values are output.")]
+        public string VariableOutputFilenameDirectory
+        {
+            get
+            {
+                if (variableOutputFilenameDirectory == null)
+                    variableOutputFilenameDirectory = "";
+
+                return variableOutputFilenameDirectory;
+            }
+            set { variableOutputFilenameDirectory = value; }
+        }
+        #endregion
+
         [TypeConverter(typeof(ExpandableObjectConverter)), Serializable]
         public class IPAdresses
         {

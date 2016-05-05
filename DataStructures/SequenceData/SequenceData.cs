@@ -362,6 +362,33 @@ namespace DataStructures
             set { variables = value; }
         }
 
+        public bool writeVariableListToFile(string filename, string path)
+        {
+            bool writeSuccess = true;
+            string varFileDirectory = path;
+            string varFileExt = ".txt";
+            string varFullFileName = varFileDirectory + "\\" + filename + varFileExt;
+
+            if (path == "" || filename == "")
+            {
+                return false;
+            }
+
+
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(varFullFileName))
+            {
+                file.WriteLine(DateTime.Now);
+                foreach (Variable var in variables)
+                {
+                    file.WriteLine(var.VariableName + ' ' + Convert.ToString(var.VariableValue));
+                }
+                file.Close();
+            }
+
+            return true;
+
+        }
+
         /// <summary>
         /// When inserting a sequence, the inserted sequence had its own copies of the special variables. Here, we will clean up
         /// and duplicate special variables. This will require the use of the passThroughVariable field of Variable. This is the

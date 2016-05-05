@@ -518,6 +518,14 @@ namespace WordGenerator
                 new ChannelManager.ChannelManager();
             logicalChannelManager.ShowDialog();
         }
+
+        private void editRunLoggingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            RunLogManager runLogManager = new RunLogManager(Storage.settingsData);
+            runLogManager.ShowDialog();
+        }
+
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
