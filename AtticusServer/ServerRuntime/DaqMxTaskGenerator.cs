@@ -43,13 +43,13 @@ namespace AtticusServer
         /// <param name="usedAnalogChannels"></param>
         /// <param name="serverSettings"></param>
         /// <returns></returns>
-        public static Task createDaqMxDigitalOutputAndVariableTimebaseSource(string channelName, List<int> portsToUse, int masterFrequency, 
+        public static Task createDaqMxDigitalOutputAndVariableTimebaseSource(string channelName, List<int> portsToUse, int masterFrequency,
             SequenceData sequenceData, SequenceData.VariableTimebaseTypes timebaseType,
-            string deviceName, DeviceSettings deviceSettings, SettingsData settings, Dictionary<int, HardwareChannel> usedDigitalChannels,  ServerSettings serverSettings)
+            string deviceName, DeviceSettings deviceSettings, SettingsData settings, Dictionary<int, HardwareChannel> usedDigitalChannels, ServerSettings serverSettings)
         {
 
             // First generate the variable timebase buffer. We will need stuff like its length for configuring the task, which is why we do this first.
-                      
+
             TimestepTimebaseSegmentCollection timebaseSegments = sequenceData.generateVariableTimebaseSegments(timebaseType, Common.getPeriodFromFrequency(masterFrequency));
             bool[] variableTimebaseBuffer = sequenceData.getVariableTimebaseClock(timebaseSegments);
 
@@ -72,7 +72,7 @@ namespace AtticusServer
                 throw new Exception("Channel name " + channelName + " is not a valid digital channel name. Cannot create a variable timebase output on this channel.");
             }
 
-            
+
 
             if (portsToUse == null)
             {
@@ -258,7 +258,7 @@ namespace AtticusServer
                     channelName, masterFrequency, sequenceData, timebaseType, serverSettings, deviceSettings);
             }
         }
-        
+
         /// <summary>
         /// Creates a task for a variable timebase output. Consumes the entire port (8 bits) that the timebase is on. (ie outputs the
         /// signal on all 8 bits
@@ -268,7 +268,7 @@ namespace AtticusServer
         /// <param name="sequenceData"></param>
         /// <param name="timebaseType"></param>
         /// <returns></returns>
-        public static Task createDaqMxVariableTimebaseSource(string channelName, int masterFrequency, SequenceData sequenceData, 
+        public static Task createDaqMxVariableTimebaseSource(string channelName, int masterFrequency, SequenceData sequenceData,
             SequenceData.VariableTimebaseTypes timebaseType, ServerSettings serverSettings, DeviceSettings deviceSettings)
         {
             Task task = new Task("Variable timebase output task");
@@ -276,10 +276,10 @@ namespace AtticusServer
             TimestepTimebaseSegmentCollection timebaseSegments = sequenceData.generateVariableTimebaseSegments(timebaseType,
                 Common.getPeriodFromFrequency(masterFrequency));
 
-            bool [] buffer = sequenceData.getVariableTimebaseClock(timebaseSegments);
+            bool[] buffer = sequenceData.getVariableTimebaseClock(timebaseSegments);
 
             string timebaseDeviceName = HardwareChannel.parseDeviceNameStringFromPhysicalChannelString(channelName);
-            
+
             string timebasePort = HardwareChannel.parsePortStringFromChannelString(channelName);
 
             task.DOChannels.CreateChannel(timebasePort, "", ChannelLineGrouping.OneChannelForAllLines);
@@ -290,7 +290,7 @@ namespace AtticusServer
             {
                 task.Triggers.StartTrigger.ConfigureDigitalEdgeTrigger(serverSettings.VariableTimebaseTriggerInput, DigitalEdgeStartTriggerEdge.Rising);
             }
-            
+
             DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(task.Stream);
 
             byte[] byteBuffer = new byte[buffer.Length];
@@ -341,7 +341,7 @@ namespace AtticusServer
         /// <returns></returns>
 
 
-        public static Task createDaqMxTaskAndOutputNow(string deviceName, DeviceSettings deviceSettings, SingleOutputFrame output, 
+        public static Task createDaqMxTaskAndOutputNow(AtticusServerCommunicator sender, string deviceName, DeviceSettings deviceSettings, SingleOutputFrame output,
             SettingsData settings, Dictionary<int, HardwareChannel> usedDigitalChannels, Dictionary<int, HardwareChannel> usedAnalogChannels)
         {
 
@@ -352,8 +352,9 @@ namespace AtticusServer
             Dictionary<int, int[]> port_digital_IDs;
             List<int> usedPortNumbers;
 
+
             // Parse and create channels.
-            parseAndCreateChannels(deviceName,deviceSettings, usedDigitalChannels, usedAnalogChannels, task, out analogIDs, out analogs, out port_digital_IDs, out usedPortNumbers);
+            parseAndCreateChannels(sender, deviceName, deviceSettings, usedDigitalChannels, usedAnalogChannels, task, out analogIDs, out analogs, out port_digital_IDs, out usedPortNumbers);
 
 
             // now create buffer.
@@ -364,8 +365,8 @@ namespace AtticusServer
             if (analogIDs.Count != 0)
             {
 
-               
-                
+
+
 
                 // extract a list of analog values corresponding to the list analodIDs. This is 
                 // sorted in the same way as the channels were created in parseAndCreateChannels
@@ -385,42 +386,86 @@ namespace AtticusServer
             }
 
             // digital output
+
             if (usedPortNumbers.Count != 0)
             {
-                List<byte> outputValues = new List<byte>();
-
-                foreach (int portNumber in usedPortNumbers)
+                if (deviceSettings.DigitalHardwareStructure[0] == 8)
                 {
-                    byte digitalMask = 1;
-                    byte value=0;
-                    for (int lineNum = 0; lineNum < 8; lineNum++)
-                    {
-                        int digitalID = port_digital_IDs[portNumber][lineNum];
-                        if (digitalID != -1)
-                        {
-                            bool val = false;
-                            if (output.digitalValues.ContainsKey(digitalID))
-                                val = output.digitalValues[digitalID];
+                    List<byte> outputValues = new List<byte>();
 
-                            if (val)
-                                value |= digitalMask;
+                    foreach (int portNumber in usedPortNumbers)
+                    {
+                        byte digitalMask = 1;
+                        byte value = 0;
+                        for (int lineNum = 0; lineNum < deviceSettings.DigitalHardwareStructure[portNumber]; lineNum++)
+                        {
+                            int digitalID = port_digital_IDs[portNumber][lineNum];
+                            if (digitalID != -1)
+                            {
+                                bool val = false;
+                                if (output.digitalValues.ContainsKey(digitalID))
+                                    val = output.digitalValues[digitalID];
+
+                                if (val)
+                                    value |= digitalMask;
+                            }
+                            digitalMask = (byte)(digitalMask << 1);
                         }
-                        digitalMask = (byte) (digitalMask << 1);
+
+                        outputValues.Add(value);
                     }
 
-                    outputValues.Add(value);
+                    DigitalMultiChannelWriter writer = new DigitalMultiChannelWriter(task.Stream);
+
+
+                    writer.WriteSingleSamplePort(true, outputValues.ToArray());
+                    // writer.WriteSingleSamplePort(
+                }
+                else if (deviceSettings.DigitalHardwareStructure[0] == 32)
+                {
+
+                    List<UInt32> outputValues = new List<UInt32>();
+
+                    foreach (int portNumber in usedPortNumbers)
+                    {
+                        UInt32 digitalMask = 1;
+                        UInt32 value = 0;
+                        for (int lineNum = 0; lineNum < deviceSettings.DigitalHardwareStructure[portNumber]; lineNum++)
+                        {
+                            int digitalID = port_digital_IDs[portNumber][lineNum];
+                            if (digitalID != -1)
+                            {
+                                bool val = false;
+                                if (output.digitalValues.ContainsKey(digitalID))
+                                    val = output.digitalValues[digitalID];
+
+                                if (val)
+                                    value |= digitalMask;
+                            }
+                            digitalMask = (UInt32)(digitalMask << 1);
+                        }
+
+                        outputValues.Add(value);
+                    }
+
+                    DigitalMultiChannelWriter writer = new DigitalMultiChannelWriter(task.Stream);
+                    writer.WriteSingleSamplePort(true, outputValues.ToArray());
+                }
+                else
+                {
+                    throw new Exception("The number of ports per line on " + deviceSettings.DeviceName + " is not 32 or 8. This could be because you have bound digital outputs to software times channels.");
                 }
 
-                DigitalMultiChannelWriter writer = new DigitalMultiChannelWriter(task.Stream);
-                writer.WriteSingleSamplePort(true, outputValues.ToArray());
             }
+
+
 
             return task;
 
 
         }
 
-     
+
         /// <summary>
         /// This method creates analog and digital output buffers for daqMx cards. Note that the daqmx library seems to only support
         /// either analog OR digital on a given card at one time. Despite the fact that this method will create both types of buffers,
@@ -433,23 +478,25 @@ namespace AtticusServer
         /// <param name="usedDigitalChannels">digital channels which reside on this server.</param>
         /// <param name="usedAnalogChannels">analog channels which reside on this server</param>
         /// <returns></returns>
-        public static Task createDaqMxTask(string deviceName, DeviceSettings deviceSettings, SequenceData sequence, 
-            SettingsData settings, Dictionary<int, HardwareChannel> usedDigitalChannels, Dictionary<int, HardwareChannel> usedAnalogChannels, 
+        public static Task createDaqMxTask(AtticusServerCommunicator sender, string deviceName, DeviceSettings deviceSettings, SequenceData sequence,
+            SettingsData settings, Dictionary<int, HardwareChannel> usedDigitalChannels, Dictionary<int, HardwareChannel> usedAnalogChannels,
             ServerSettings serverSettings, out long expectedSamplesGenerated)
         {
             expectedSamplesGenerated = 0;
 
             Task task = new Task(deviceName + " output task");
 
-
+            Task DOtask = new Task(deviceName + " output DO task");
 
             List<int> analogIDs;
             List<HardwareChannel> analogs;
             Dictionary<int, int[]> port_digital_IDs;
             List<int> usedPortNumbers;
 
+            //boolean to check for 6363 device, which requires 32lines per port
+
             // Parse and create channels.
-            parseAndCreateChannels(deviceName,deviceSettings, usedDigitalChannels, usedAnalogChannels, task, out analogIDs, out analogs, out port_digital_IDs, out usedPortNumbers);
+            parseAndCreateChannels(sender, deviceName, deviceSettings, usedDigitalChannels, usedAnalogChannels, task, out analogIDs, out analogs, out port_digital_IDs, out usedPortNumbers);
 
 
 
@@ -474,7 +521,7 @@ namespace AtticusServer
 
             #region NON variable timebase buffer
             if (deviceSettings.UsingVariableTimebase == false)
-            { 
+            {
                 // non "variable timebase" buffer creation
 
 
@@ -495,6 +542,7 @@ namespace AtticusServer
                 if (deviceSettings.MySampleClockSource == DeviceSettings.SampleClockSource.DerivedFromMaster)
                 {
                     task.Timing.ConfigureSampleClock("", deviceSettings.SampleClockRate, deviceSettings.ClockEdge, SampleQuantityMode.FiniteSamples, nSamples);
+                    //"" empty string defaults to analog input sample clock.
                 }
                 else
                 {
@@ -565,70 +613,146 @@ namespace AtticusServer
 
                 }
 
-
+                //Now on to the digital
+                //SOMEBULLSHIT
                 if (usedPortNumbers.Count != 0)
                 {
-                    byte[,] digitalBuffer;
-                    bool[] singleChannelBuffer;
+                    if (deviceSettings.DigitalHardwareStructure[0] == 8)
+                    {
+                        byte[,] digitalBuffer;
+                        bool[] singleChannelBuffer;
 
-                    try
-                    {
-                        digitalBuffer = new byte[usedPortNumbers.Count, nSamples];
-                        singleChannelBuffer = new bool[nSamples];
-                    }
-                    catch (Exception e)
-                    {
-                        throw new Exception("Unable to allocate digital buffer for device " + deviceName + ". Reason: " + e.Message + "\n" + e.StackTrace);
-                    }
-
-                    for (int i = 0; i < usedPortNumbers.Count; i++)
-                    {
-                        int portNum = usedPortNumbers[i];
-                        byte digitalBitMask = 1;
-                        for (int lineNum = 0; lineNum < 8; lineNum++)
+                        try
                         {
-                            int digitalID = port_digital_IDs[portNum][lineNum];
-                            if (digitalID != -1)
+                            digitalBuffer = new byte[usedPortNumbers.Count, nSamples];
+                            singleChannelBuffer = new bool[nSamples];
+                        }
+                        catch (Exception e)
+                        {
+                            throw new Exception("Unable to allocate digital buffer for device " + deviceName + ". Reason: " + e.Message + "\n" + e.StackTrace);
+                        }
+
+                        for (int i = 0; i < usedPortNumbers.Count; i++)
+                        {
+
+                            int portNum = usedPortNumbers[i];
+                            byte digitalBitMask = 1;
+                            for (int lineNum = 0; lineNum < deviceSettings.DigitalHardwareStructure[portNum]; lineNum++)
                             {
-                                if (settings.logicalChannelManager.Digitals[digitalID].TogglingChannel)
+                                int digitalID = port_digital_IDs[portNum][lineNum];
+                                if (digitalID != -1)
                                 {
-                                    getDigitalTogglingBuffer(singleChannelBuffer);
-                                }
-                                else if (settings.logicalChannelManager.Digitals[digitalID].overridden)
-                                {
-                                    for (int j = 0; j < singleChannelBuffer.Length; j++)
+                                    if (settings.logicalChannelManager.Digitals[digitalID].TogglingChannel)
                                     {
-                                        singleChannelBuffer[j] = settings.logicalChannelManager.Digitals[digitalID].digitalOverrideValue;
+                                        getDigitalTogglingBuffer(singleChannelBuffer);
                                     }
-                                }
-                                else
-                                {
+                                    else if (settings.logicalChannelManager.Digitals[digitalID].overridden)
+                                    {
+                                        for (int j = 0; j < singleChannelBuffer.Length; j++)
+                                        {
+                                            singleChannelBuffer[j] = settings.logicalChannelManager.Digitals[digitalID].digitalOverrideValue;
+                                        }
+                                    }
+                                    else
+                                    {
 
-                                    sequence.computeDigitalBuffer(digitalID, timeStepSize, singleChannelBuffer);
-                                }
-                                // byte digitalBitMask = (byte)(((byte) 2)^ ((byte)lineNum));
-                                for (int j = 0; j < nBaseSamples; j++)
-                                {
-                                    // copy the bit value into the digital buffer byte.
-                                    if (singleChannelBuffer[j])
-                                        digitalBuffer[i, j] |= digitalBitMask;
-                                }
+                                        sequence.computeDigitalBuffer(digitalID, timeStepSize, singleChannelBuffer);
+                                    }
+                                    // byte digitalBitMask = (byte)(((byte) 2)^ ((byte)lineNum));
+                                    for (int j = 0; j < nBaseSamples; j++)
+                                    {
+                                        // copy the bit value into the digital buffer byte.
+                                        if (singleChannelBuffer[j])
+                                            digitalBuffer[i, j] |= digitalBitMask;
+                                    }
 
+                                }
+                                digitalBitMask = (byte)(digitalBitMask << 1);
                             }
-                            digitalBitMask = (byte)(digitalBitMask << 1);
+                            for (int j = nBaseSamples; j < nSamples; j++)
+                            {
+                                digitalBuffer[i, j] = digitalBuffer[i, j - 1];
+                            }
                         }
-                        for (int j = nBaseSamples; j < nSamples; j++)
-                        {
-                            digitalBuffer[i, j] = digitalBuffer[i, j - 1];
-                        }
+                        singleChannelBuffer = null;
+                        System.GC.Collect();
+                        DigitalMultiChannelWriter writer = new DigitalMultiChannelWriter(task.Stream);
+                        writer.WriteMultiSamplePort(false, digitalBuffer);
+
+                        /// Digital cards report the number of generated samples as a multiple of 4
+                        expectedSamplesGenerated = nSamples;
                     }
-                    singleChannelBuffer = null;
-                    System.GC.Collect();
-                    DigitalMultiChannelWriter writer = new DigitalMultiChannelWriter(task.Stream);
-                    writer.WriteMultiSamplePort(false, digitalBuffer);
-                    /// Digital cards report the number of generated samples as a multiple of 4
-                    expectedSamplesGenerated = nSamples;
+                    else if (deviceSettings.DigitalHardwareStructure[0] == 32)
+                    {
+                        UInt32[,] digitalBuffer;
+                        bool[] singleChannelBuffer;
+
+                        try
+                        {
+                            digitalBuffer = new UInt32[usedPortNumbers.Count, nSamples];
+                            singleChannelBuffer = new bool[nSamples];
+                        }
+                        catch (Exception e)
+                        {
+                            throw new Exception("Unable to allocate digital buffer for device " + deviceName + ". Reason: " + e.Message + "\n" + e.StackTrace);
+                        }
+
+                        for (int i = 0; i < usedPortNumbers.Count; i++)
+                        {
+
+                            int portNum = usedPortNumbers[i];
+                            UInt32 digitalBitMask = 1;
+                            for (int lineNum = 0; lineNum < deviceSettings.DigitalHardwareStructure[portNum]; lineNum++)
+                            {
+                                int digitalID = port_digital_IDs[portNum][lineNum];
+                                if (digitalID != -1)
+                                {
+                                    if (settings.logicalChannelManager.Digitals[digitalID].TogglingChannel)
+                                    {
+                                        getDigitalTogglingBuffer(singleChannelBuffer);
+                                    }
+                                    else if (settings.logicalChannelManager.Digitals[digitalID].overridden)
+                                    {
+                                        for (int j = 0; j < singleChannelBuffer.Length; j++)
+                                        {
+                                            singleChannelBuffer[j] = settings.logicalChannelManager.Digitals[digitalID].digitalOverrideValue;
+                                        }
+                                    }
+                                    else
+                                    {
+
+                                        sequence.computeDigitalBuffer(digitalID, timeStepSize, singleChannelBuffer);
+                                    }
+                                    // byte digitalBitMask = (byte)(((byte) 2)^ ((byte)lineNum));
+                                    for (int j = 0; j < nBaseSamples; j++)
+                                    {
+                                        // copy the bit value into the digital buffer byte.
+                                        if (singleChannelBuffer[j])
+                                            digitalBuffer[i, j] |= digitalBitMask;
+                                    }
+
+                                }
+                                digitalBitMask = (UInt32)(digitalBitMask << 1);
+                            }
+                            for (int j = nBaseSamples; j < nSamples; j++)
+                            {
+                                digitalBuffer[i, j] = digitalBuffer[i, j - 1];
+                            }
+                        }
+                        singleChannelBuffer = null;
+                        System.GC.Collect();
+                        DigitalMultiChannelWriter writer = new DigitalMultiChannelWriter(task.Stream);
+                        writer.WriteMultiSamplePort(false, digitalBuffer);
+                        /// Digital cards report the number of generated samples as a multiple of 4
+                        expectedSamplesGenerated = nSamples;
+                    }
+                    else
+                    {
+                        throw new Exception("The number of ports per line on " + deviceSettings.DeviceName + " is not 32 or 8. This could be because you have bound digital outputs to software times channels.");
+                    }
                 }
+
+
             }
             #endregion
             #region Variable timebase buffer creation
@@ -728,66 +852,132 @@ namespace AtticusServer
 
                 if (usedPortNumbers.Count != 0)
                 {
-                    byte[,] digitalBuffer;
-                    bool[] singleChannelBuffer;
+                    if (deviceSettings.DigitalHardwareStructure[0] == 8)
+                    {
+                        byte[,] digitalBuffer;
+                        bool[] singleChannelBuffer;
 
-                    try
-                    {
-                        digitalBuffer = new byte[usedPortNumbers.Count, nSamples];
-                        singleChannelBuffer = new bool[nSamples];
-                    }
-                    catch (Exception e)
-                    {
-                        throw new Exception("Unable to allocate digital buffer for device " + deviceName + ". Reason: " + e.Message + "\n" + e.StackTrace);
-                    }
-
-                    for (int i = 0; i < usedPortNumbers.Count; i++)
-                    {
-                        int portNum = usedPortNumbers[i];
-                        byte digitalBitMask = 1;
-                        for (int lineNum = 0; lineNum < 8; lineNum++)
+                        try
                         {
-                            int digitalID = port_digital_IDs[portNum][lineNum];
-                            if (digitalID != -1)
+                            digitalBuffer = new byte[usedPortNumbers.Count, nSamples];
+                            singleChannelBuffer = new bool[nSamples];
+                        }
+                        catch (Exception e)
+                        {
+                            throw new Exception("Unable to allocate digital buffer for device " + deviceName + ". Reason: " + e.Message + "\n" + e.StackTrace);
+                        }
+
+                        for (int i = 0; i < usedPortNumbers.Count; i++)
+                        {
+                            int portNum = usedPortNumbers[i];
+                            byte digitalBitMask = 1;
+                            for (int lineNum = 0; lineNum < 8; lineNum++)
                             {
-                                if (settings.logicalChannelManager.Digitals[digitalID].TogglingChannel)
+                                int digitalID = port_digital_IDs[portNum][lineNum];
+                                if (digitalID != -1)
                                 {
-                                    getDigitalTogglingBuffer(singleChannelBuffer);
-                                }
-                                else if (settings.logicalChannelManager.Digitals[digitalID].overridden)
-                                {
-                                    for (int j = 0; j < singleChannelBuffer.Length; j++)
+                                    if (settings.logicalChannelManager.Digitals[digitalID].TogglingChannel)
                                     {
-                                        singleChannelBuffer[j] = settings.logicalChannelManager.Digitals[digitalID].digitalOverrideValue;
+                                        getDigitalTogglingBuffer(singleChannelBuffer);
                                     }
-                                }
-                                else
-                                {
+                                    else if (settings.logicalChannelManager.Digitals[digitalID].overridden)
+                                    {
+                                        for (int j = 0; j < singleChannelBuffer.Length; j++)
+                                        {
+                                            singleChannelBuffer[j] = settings.logicalChannelManager.Digitals[digitalID].digitalOverrideValue;
+                                        }
+                                    }
+                                    else
+                                    {
 
-                                    sequence.computeDigitalBuffer(digitalID, timeStepSize, singleChannelBuffer, timebaseSegments);
-                                }
-                                // byte digitalBitMask = (byte)(((byte) 2)^ ((byte)lineNum));
-                                for (int j = 0; j < nBaseSamples; j++)
-                                {
-                                    // copy the bit value into the digital buffer byte.
-                                    if (singleChannelBuffer[j])
-                                        digitalBuffer[i, j] |= digitalBitMask;
-                                }
+                                        sequence.computeDigitalBuffer(digitalID, timeStepSize, singleChannelBuffer, timebaseSegments);
+                                    }
+                                    // byte digitalBitMask = (byte)(((byte) 2)^ ((byte)lineNum));
+                                    for (int j = 0; j < nBaseSamples; j++)
+                                    {
+                                        // copy the bit value into the digital buffer byte.
+                                        if (singleChannelBuffer[j])
+                                            digitalBuffer[i, j] |= digitalBitMask;
+                                    }
 
+                                }
+                                digitalBitMask = (byte)(digitalBitMask << 1);
                             }
-                            digitalBitMask = (byte)(digitalBitMask << 1);
+                            for (int j = nBaseSamples; j < nSamples; j++)
+                            {
+                                digitalBuffer[i, j] = digitalBuffer[i, j - 1];
+                            }
                         }
-                        for (int j = nBaseSamples; j < nSamples; j++)
-                        {
-                            digitalBuffer[i, j] = digitalBuffer[i, j - 1];
-                        }
+                        singleChannelBuffer = null;
+                        System.GC.Collect();
+                        DigitalMultiChannelWriter writer = new DigitalMultiChannelWriter(task.Stream);
+                        writer.WriteMultiSamplePort(false, digitalBuffer);
+                        // digital cards report number of samples generated up to multiple of 4
+                        expectedSamplesGenerated = nSamples;
                     }
-                    singleChannelBuffer = null;
-                    System.GC.Collect();
-                    DigitalMultiChannelWriter writer = new DigitalMultiChannelWriter(task.Stream);
-                    writer.WriteMultiSamplePort(false, digitalBuffer);
-                    // digital cards report number of samples generated up to multiple of 4
-                    expectedSamplesGenerated = nSamples;
+                    else if (deviceSettings.DigitalHardwareStructure[0] == 32)
+                    {
+                        UInt32[,] digitalBuffer;
+                        bool[] singleChannelBuffer;
+
+                        try
+                        {
+                            digitalBuffer = new UInt32[usedPortNumbers.Count, nSamples];
+                            singleChannelBuffer = new bool[nSamples];
+                        }
+                        catch (Exception e)
+                        {
+                            throw new Exception("Unable to allocate digital buffer for device " + deviceName + ". Reason: " + e.Message + "\n" + e.StackTrace);
+                        }
+
+                        for (int i = 0; i < usedPortNumbers.Count; i++)
+                        {
+                            int portNum = usedPortNumbers[i];
+                            UInt32 digitalBitMask = 1;
+                            for (int lineNum = 0; lineNum < 8; lineNum++)
+                            {
+                                int digitalID = port_digital_IDs[portNum][lineNum];
+                                if (digitalID != -1)
+                                {
+                                    if (settings.logicalChannelManager.Digitals[digitalID].TogglingChannel)
+                                    {
+                                        getDigitalTogglingBuffer(singleChannelBuffer);
+                                    }
+                                    else if (settings.logicalChannelManager.Digitals[digitalID].overridden)
+                                    {
+                                        for (int j = 0; j < singleChannelBuffer.Length; j++)
+                                        {
+                                            singleChannelBuffer[j] = settings.logicalChannelManager.Digitals[digitalID].digitalOverrideValue;
+                                        }
+                                    }
+                                    else
+                                    {
+
+                                        sequence.computeDigitalBuffer(digitalID, timeStepSize, singleChannelBuffer, timebaseSegments);
+                                    }
+                                    // byte digitalBitMask = (byte)(((byte) 2)^ ((byte)lineNum));
+                                    for (int j = 0; j < nBaseSamples; j++)
+                                    {
+                                        // copy the bit value into the digital buffer byte.
+                                        if (singleChannelBuffer[j])
+                                            digitalBuffer[i, j] |= digitalBitMask;
+                                    }
+
+                                }
+                                digitalBitMask = (UInt32)(digitalBitMask << 1);
+                            }
+                            for (int j = nBaseSamples; j < nSamples; j++)
+                            {
+                                digitalBuffer[i, j] = digitalBuffer[i, j - 1];
+                            }
+                        }
+                        singleChannelBuffer = null;
+                        System.GC.Collect();
+                        DigitalMultiChannelWriter writer = new DigitalMultiChannelWriter(task.Stream);
+                        writer.WriteMultiSamplePort(false, digitalBuffer);
+                        // digital cards report number of samples generated up to multiple of 4
+                        expectedSamplesGenerated = nSamples;
+                    }
                 }
             }
 
@@ -835,7 +1025,7 @@ namespace AtticusServer
         /// <param name="usedPortNumbers">
         /// An out parameter, which will store a list of integers corresponding to the digital port numbers that were used on this device, in the order created.
         /// </param>
-        private static void parseAndCreateChannels(string deviceName,DeviceSettings deviceSettings, Dictionary<int, HardwareChannel> usedDigitalChannels, Dictionary<int, HardwareChannel> usedAnalogChannels, Task task, out List<int> analogIDs, out List<HardwareChannel> analogs, out Dictionary<int, int[]> port_digital_IDs, out List<int> usedPortNumbers)
+        private static void parseAndCreateChannels(AtticusServerCommunicator sender, string deviceName, DeviceSettings deviceSettings, Dictionary<int, HardwareChannel> usedDigitalChannels, Dictionary<int, HardwareChannel> usedAnalogChannels, Task task, out List<int> analogIDs, out List<HardwareChannel> analogs, out Dictionary<int, int[]> port_digital_IDs, out List<int> usedPortNumbers)
         {
             // figure out which of the analog and digital channels belong on this device. Add them here and index by 
             // logical ID#
@@ -854,17 +1044,26 @@ namespace AtticusServer
             List<HardwareChannel> digitals = new List<HardwareChannel>();
             sortDicionaryByID(digitalIDs, digitals, digitalsUnsorted);
 
+
+            //**deviceSettings IS VERY IMPORTANT HERE
+
+
             // ****
             // description of port_digital_IDs:
             // mapping from port number to an array of integers. The nth element of the array gives the digital ID
             // of the channel which is connected to the nth line of that port. If there is no channel on that port,
             // the ID is -1.
 
-            if (deviceSettings.DeviceDescription.Contains("6533"))
-            groupDigitalChannels(digitalIDs, digitals, out port_digital_IDs, out usedPortNumbers,true);
-            else
-            groupDigitalChannels(digitalIDs, digitals, out port_digital_IDs, out usedPortNumbers, false);
+            if (deviceSettings.DeviceDescription.Contains("6533") | deviceSettings.DeviceDescription.Contains("6534"))
+            {
+                groupDigitalChannels(digitalIDs, digitals, out port_digital_IDs, out usedPortNumbers, deviceSettings.DigitalHardwareStructure, true);
 
+            }
+            else
+            {
+                groupDigitalChannels(digitalIDs, digitals, out port_digital_IDs, out usedPortNumbers, deviceSettings.DigitalHardwareStructure, false);
+
+            }
             //ok! create the channels.
 
             // analog first
@@ -877,7 +1076,14 @@ namespace AtticusServer
             for (int i = 0; i < usedPortNumbers.Count; i++)
             {
                 int portNum = usedPortNumbers[i];
-                task.DOChannels.CreateChannel(deviceName + '/' + HardwareChannel.digitalPhysicalChannelName(portNum), "", ChannelLineGrouping.OneChannelForAllLines);
+                try
+                {
+                    task.DOChannels.CreateChannel(deviceName + '/' + HardwareChannel.digitalPhysicalChannelName(portNum), "", ChannelLineGrouping.OneChannelForAllLines);
+                }
+                catch (Exception e)
+                {
+                    sender.messageLog(sender, new MessageEvent("Couldn't create channel:" + deviceName + '/' + HardwareChannel.digitalPhysicalChannelName(portNum)));
+                }
             }
         }
 
@@ -891,14 +1097,14 @@ namespace AtticusServer
         /// <param name="digitals"></param>
         /// <param name="port_digital_IDs"></param>
         /// <param name="usedPortNumbers"></param>
-        private static void groupDigitalChannels(List<int> digitalIDs, List<HardwareChannel> digitals, out Dictionary<int, int[]> port_digital_IDs, out List<int> usedPortNumbers,bool is6533)
+        private static void groupDigitalChannels(List<int> digitalIDs, List<HardwareChannel> digitals, out Dictionary<int, int[]> port_digital_IDs, out List<int> usedPortNumbers, int[] digitalHardwareStructure, bool requiresLegacyPortPairs)
         {
             List<int> allPorts = new List<int>();
             for (int i = 0; i < 100; i++)
             {
                 allPorts.Add(i);
             }
-            groupDigitalChannels(digitalIDs, digitals,out port_digital_IDs, out usedPortNumbers, is6533, allPorts);
+            groupDigitalChannels(digitalIDs, digitals, out port_digital_IDs, out usedPortNumbers, digitalHardwareStructure, requiresLegacyPortPairs, allPorts);
         }
 
         /// <summary>
@@ -909,7 +1115,7 @@ namespace AtticusServer
         /// <param name="port_digital_IDs"></param>
         /// <param name="usedPortNumbers"></param>
         /// <param name="allowedPortsToUse"></param>
-        private static void groupDigitalChannels(List<int> digitalIDs, List<HardwareChannel> digitals, out Dictionary<int, int[]> port_digital_IDs, out List<int> usedPortNumbers, bool is6533,List<int> allowedPortsToUse)
+        private static void groupDigitalChannels(List<int> digitalIDs, List<HardwareChannel> digitals, out Dictionary<int, int[]> port_digital_IDs, out List<int> usedPortNumbers, int[] digitalHardwareStructure, bool requiresLegacyPortPairs, List<int> allowedPortsToUse)
         {
             // Irritating but true fact of life: To make the DAQmx drivers happy 
             // we have to output the digital outputs in 8 bit groups corresponding to 
@@ -917,6 +1123,8 @@ namespace AtticusServer
             // to the same port, and fill in any "holes" (ie missing channels) with empty data
             {
                 usedPortNumbers = new List<int>();
+
+
                 // mapping from port number to an array of integers. The nth element of the array gives the digital ID
                 // of the channel which is connected to the nth line of that port. If there is no channel on that port,
                 // the ID is -1.
@@ -928,23 +1136,14 @@ namespace AtticusServer
                     HardwareChannel hc = digitals[i];
 
                     int portNum = hc.daqMxDigitalPortNumber();
-                    int portNumBis;
                     if (!usedPortNumbers.Contains(portNum))
                     {
                         if (allowedPortsToUse.Contains(portNum))
                         {
-                            if (!is6533)
+                            if (requiresLegacyPortPairs)
                             {
-                                usedPortNumbers.Add(portNum);
                                 // Ports have to be used by pairs for the Daqmx driver to work. If port 0 is used, port 1 has to be used too, and the opposite too, etc...
-                                portNumBis = portNum - 2 * (portNum % 2) + 1;
-                                usedPortNumbers.Add(portNumBis);
-                                // create the array mapping line number to digital IDs, and fill it with -1s.
-                                port_digital_IDs.Add(portNum, new int[] { -1, -1, -1, -1, -1, -1, -1, -1 });
-                                port_digital_IDs.Add(portNumBis, new int[] { -1, -1, -1, -1, -1, -1, -1, -1 });
-                            }
-                            else
-                            {
+                                //..so we just add all of the ports available on these cards. This is necessary only for 6533 and 6534 cards, which are legacy cards now
                                 usedPortNumbers.Add(0);
                                 usedPortNumbers.Add(1);
                                 usedPortNumbers.Add(2);
@@ -953,7 +1152,35 @@ namespace AtticusServer
                                 port_digital_IDs.Add(1, new int[] { -1, -1, -1, -1, -1, -1, -1, -1 });
                                 port_digital_IDs.Add(2, new int[] { -1, -1, -1, -1, -1, -1, -1, -1 });
                                 port_digital_IDs.Add(3, new int[] { -1, -1, -1, -1, -1, -1, -1, -1 });
+                                //SOMEBULLSHIT
+
+
                             }
+                            else
+                            {
+                                //the PXIe6363 card has port0/(line0-31), port1/(line0-7), port2/(line0-7). Only port0 is hardware timed, hence we don't even try to buffer port1 and port 2. 
+
+
+
+                                usedPortNumbers.Add(portNum);
+                                //digitalHardwareStructure contains all of the information about the number of lines per port on a given card. 
+                                int[] add_port = new int[digitalHardwareStructure[portNum]];
+                                for (int line_count = 0; line_count < add_port.Length; line_count++)
+                                {
+                                    add_port[line_count] = -1;
+                                }
+                                //the above loop usually ends up adding either {-1,-1,-1,-1,-1,-1,-1,-1} or 
+                                //{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}, depending on whether
+                                //the channel has 8 or 32 lines per port. (The code is flexible to be able to add any number of lines per port, but 8 and 32 is typical in NI systems)
+
+
+                                //pass by reference
+                                port_digital_IDs.Add(portNum, add_port);
+                                //Possible issue: I do not explicity disallow the use of port1 and port2 for a 6363 card here. I assume that they've somehow been disabled in Cicero, so we're only working
+                                //with port0
+
+                            }
+
                         }
                     }
 
@@ -991,7 +1218,7 @@ namespace AtticusServer
         /// <returns></returns>
         private static Dictionary<int, HardwareChannel> getChannelsOnDevice(Dictionary<int, HardwareChannel> channels, string deviceName)
         {
-            Dictionary<int, HardwareChannel> ans = new Dictionary<int,HardwareChannel>();
+            Dictionary<int, HardwareChannel> ans = new Dictionary<int, HardwareChannel>();
             foreach (int id in channels.Keys)
             {
                 if (channels[id].DeviceName == deviceName)
@@ -1003,21 +1230,21 @@ namespace AtticusServer
             return ans;
         }
 
-        public static void getDigitalTogglingBuffer(bool [] buffer)
+        public static void getDigitalTogglingBuffer(bool[] buffer)
         {
-            for (int i = 0; i < buffer.Length; i+=2)
+            for (int i = 0; i < buffer.Length; i += 2)
             {
                 buffer[i] = true;
-                buffer[i+1] = false;
+                buffer[i + 1] = false;
             }
         }
 
-        public static void getAnalogTogglingBuffer(double [] buffer)
+        public static void getAnalogTogglingBuffer(double[] buffer)
         {
             for (int i = 0; i < buffer.Length; i += 2)
             {
                 buffer[i] = 5;
-                buffer[i+1]=0;
+                buffer[i + 1] = 0;
             }
         }
     }
