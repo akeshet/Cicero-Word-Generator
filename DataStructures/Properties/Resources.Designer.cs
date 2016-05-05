@@ -61,7 +61,7 @@ namespace DataStructures.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (c) 2008  Aviv Keshet  (MIT),  Free software under GNU General Public License..
+        ///   Looks up a localized string similar to (c) 2016  Aviv Keshet  (MIT),  Free software under GNU General Public License..
         /// </summary>
         internal static string AuthorString {
             get {
@@ -70,7 +70,7 @@ namespace DataStructures.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Jan 12, 2013.
+        ///   Looks up a localized string similar to May 05, 2016.
         /// </summary>
         internal static string BuildDateString {
             get {
@@ -79,7 +79,7 @@ namespace DataStructures.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tony Kim (MIT), Ryan Olf (Berkeley), Emmanuel Mimoun (ENS Paris), Timur Rvachov (MIT).
+        ///   Looks up a localized string similar to Tony Kim (MIT), Ryan Olf (Berkeley), Emmanuel Mimoun (ENS Paris), Timur Rvachov (MIT), Will Lunden (MIT), Samarth Vadia (MIT).
         /// </summary>
         internal static string ContribsString {
             get {
@@ -88,7 +88,7 @@ namespace DataStructures.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to rev7.
+        ///   Looks up a localized string similar to .
         /// </summary>
         internal static string RevisionString {
             get {
@@ -97,7 +97,7 @@ namespace DataStructures.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1.64.
+        ///   Looks up a localized string similar to 1.8.
         /// </summary>
         internal static string VersionString {
             get {

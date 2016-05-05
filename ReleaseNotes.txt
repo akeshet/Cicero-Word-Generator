@@ -138,3 +138,15 @@ operation. (timestep editors, variable editors, and pulse editors were not being
 properly disposed of. bugs introduced in version 1.61 and 1.62)
 
 [rev7] Add citation information and initial startup message.
+
+1.65
+-----
+
+Implemented support for newer digital cards which have 32 lines per port (e.g.PXI-6254,
+PXI-6363).
+
+1.8
+-----
+
+Implemented Database Server (Zeus) and enabled running multiple servers on same IP by specifying
+different port numbers in Server Manager in Cicero.
