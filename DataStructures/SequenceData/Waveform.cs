@@ -1024,6 +1024,23 @@ namespace DataStructures
         }
 
         /// <summary>
+        /// Here we keep track of whether the data for this waveform should be reloaded each run.
+        /// Added by Will Lunden 11/18/2015
+        /// </summary>
+        private bool reloadFromFile = false;
+
+        [Description("Data from file."), Category("Parameters")]
+        public bool ReloadFromFile
+        {
+            get { return reloadFromFile; }
+            set
+            {
+                reloadFromFile = value;
+            }
+        }
+
+
+        /// <summary>
         /// The name of the file the data was loaded from.
         /// REO 10/2008
         /// </summary>

@@ -2142,6 +2142,7 @@ namespace DataStructures
             }
 
             ans[currentSample] = dwellWord().getEndAnalogValue(analogChannelID, Variables, CommonWaveforms);
+
         }
 
         /// <summary>

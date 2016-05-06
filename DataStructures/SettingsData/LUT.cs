@@ -29,6 +29,6 @@ namespace DataStructures
             table = new SortedDictionary<double, double>();
         }
 
-    }       
+    }
 
 }

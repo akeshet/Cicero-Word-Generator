@@ -128,6 +128,7 @@ namespace WordGenerator
             this.fortuneCookieLabel.Name = "fortuneCookieLabel";
             this.fortuneCookieLabel.Size = new System.Drawing.Size(477, 121);
             this.fortuneCookieLabel.TabIndex = 8;
+            this.fortuneCookieLabel.Click += new System.EventHandler(this.fortuneCookieLabel_Click);
             // 
             // abortAfterThis
             // 

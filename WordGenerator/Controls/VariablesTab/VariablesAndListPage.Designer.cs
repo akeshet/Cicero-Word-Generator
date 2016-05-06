@@ -34,6 +34,7 @@ namespace WordGenerator.Controls
             this.label2 = new System.Windows.Forms.Label();
             this.nameLabel = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.variableEditorPlaceholder = new WordGenerator.Controls.VariableEditor();
             this.addButton = new System.Windows.Forms.Button();
             this.lockButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -138,7 +139,16 @@ namespace WordGenerator.Controls
             this.label3.Size = new System.Drawing.Size(55, 13);
             this.label3.TabIndex = 4;
             this.label3.Text = "Equation?";
+            //
+            // variableEditorPlaceholder
             // 
+            this.variableEditorPlaceholder.ListLocked = false;
+            this.variableEditorPlaceholder.Location = new System.Drawing.Point(3, 28);
+            this.variableEditorPlaceholder.Name = "variableEditorPlaceholder";
+            this.variableEditorPlaceholder.Size = new System.Drawing.Size(220, 22);
+            this.variableEditorPlaceholder.TabIndex = 2;
+            this.variableEditorPlaceholder.Visible = false;
+            //  
             // addButton
             // 
             this.addButton.Location = new System.Drawing.Point(24, 74);

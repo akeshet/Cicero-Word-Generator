@@ -19,7 +19,7 @@
     <GenerateManifests>false</GenerateManifests>
     <SignManifests>false</SignManifests>
     <TargetZone>LocalIntranet</TargetZone>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -59,9 +59,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DatabaseHelper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DatabaseHelper">
+      <HintPath>..\..\..\Zeus\databasehelper3\databasehelper3\bin\Debug\DatabaseHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="DataStructures, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Database Helper DLL\DatabaseHelper3\DatabaseHelper3\bin\Release\DatabaseHelper.dll</HintPath>
+      <HintPath>..\atticusserver\bin\Release-x86\DataStructures.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -81,6 +84,12 @@
     </Compile>
     <Compile Include="Controls\LookUpTableTab\LUTEditor.Designer.cs">
       <DependentUpon>LUTEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Shared\WaveformEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Shared\WaveformEditor.Designer.cs">
+      <DependentUpon>WaveformEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\VariablesTab\varSelector.cs">
       <SubType>Form</SubType>
@@ -349,22 +358,16 @@
     <Compile Include="Controls\Shared\VerticalParameterEditor.Designer.cs">
       <DependentUpon>VerticalParameterEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Shared\WaveformEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\Shared\WaveformEditor.Designer.cs">
-      <DependentUpon>WaveformEditor.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Shared\WaveformGraphCollection.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\Shared\WaveformGraphCollection.Designer.cs">
       <DependentUpon>WaveformGraphCollection.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainClientForm.cs">
+    <Compile Include="Controls\MainClientForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainClientForm.Designer.cs">
+    <Compile Include="Controls\MainClientForm.Designer.cs">
       <DependentUpon>MainClientForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -399,6 +402,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\LookUpTableTab\LUTEditor.resx">
       <DependentUpon>LUTEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Shared\WaveformEditor.resx">
+      <DependentUpon>WaveformEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\VariablesTab\varSelector.resx">
       <DependentUpon>varSelector.cs</DependentUpon>
@@ -547,15 +553,11 @@
       <DependentUpon>VerticalParameterEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Shared\WaveformEditor.resx">
-      <DependentUpon>WaveformEditor.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Controls\Shared\WaveformGraphCollection.resx">
       <DependentUpon>WaveformGraphCollection.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainClientForm.resx">
+    <EmbeddedResource Include="Controls\MainClientForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>MainClientForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -581,7 +583,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="ClassDiagram1.cd" />
     <None Include="Properties\DataSources\DataStructures.LUT.datasource" />
     <None Include="Properties\DataSources\DataStructures.LUT1.datasource" />
@@ -614,12 +618,6 @@
       <DependentUpon>SettingsExplorerForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Storage.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DataStructures\DataStructures.csproj">
-      <Project>{07B67011-62AB-43E3-80F6-E00BCBFF8558}</Project>
-      <Name>DataStructures</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\CiceroSplash.jpg" />
