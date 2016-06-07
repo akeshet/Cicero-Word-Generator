@@ -91,6 +91,12 @@
     <Compile Include="Controls\LookUpTableTab\LUTEditor.Designer.cs">
       <DependentUpon>LUTEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SequencePage\AnalogQuickEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\SequencePage\AnalogQuickEdit.Designer.cs">
+      <DependentUpon>AnalogQuickEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Shared\WaveformEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
