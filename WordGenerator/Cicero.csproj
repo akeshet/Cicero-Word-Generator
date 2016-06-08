@@ -60,11 +60,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DatabaseHelper">
-      <HintPath>..\..\..\Zeus\databasehelper3\databasehelper3\bin\Debug\DatabaseHelper.dll</HintPath>
+      <HintPath>..\..\..\databasehelper3\databasehelper3\bin\Debug\DatabaseHelper.dll</HintPath>
     </Reference>
-    <Reference Include="DataStructures, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\datastructures\bin\Release\DataStructures.dll</HintPath>
+    <Reference Include="DataStructures">
+      <HintPath>..\DataStructures\bin\Debug\DataStructures.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
