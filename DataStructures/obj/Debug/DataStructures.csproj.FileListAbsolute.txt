@@ -1,0 +1,12 @@
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\bin\Debug\DataStructures.dll
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\bin\Debug\DataStructures.pdb
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\bin\Debug\dotMath.dll
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\bin\Debug\MySql.Data.dll
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\bin\Debug\dotMath.pdb
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\obj\Debug\DataStructures.csprojResolveAssemblyReference.cache
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\obj\Debug\DataStructures.ExceptionViewerDialog.resources
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\obj\Debug\DataStructures.LicenseInfoForm.resources
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\obj\Debug\DataStructures.Properties.Resources.resources
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\obj\Debug\DataStructures.csproj.GenerateResource.Cache
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\obj\Debug\DataStructures.dll
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\obj\Debug\DataStructures.pdb

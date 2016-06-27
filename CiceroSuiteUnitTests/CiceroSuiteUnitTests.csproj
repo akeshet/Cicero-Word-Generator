@@ -38,7 +38,7 @@
       <HintPath>..\atticusserver\bin\Debug\AtticusServer.exe</HintPath>
     </Reference>
     <Reference Include="DatabaseHelper">
-      <HintPath>..\..\..\Zeus\databasehelper3\databasehelper3\bin\Debug\DatabaseHelper.dll</HintPath>
+      <HintPath>..\Dynamic Linked Libraries\DatabaseHelper.dll</HintPath>
     </Reference>
     <Reference Include="DataStructures">
       <HintPath>..\datastructures\bin\Debug\DataStructures.dll</HintPath>
@@ -47,16 +47,18 @@
       <HintPath>..\Opal Kelly\Opal Kelly 4.0.8\API-32\Csharp\libFrontPanel-csharp.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="NationalInstruments.Common, Version=15.0.40.49154, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Release-x86-the_NEW_Atticus\NationalInstruments.Common.dll</HintPath>
+    <Reference Include="NationalInstruments.Common">
+      <HintPath>..\Dynamic Linked Libraries\NationalInstruments.Common.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.DAQmx, Version=15.1.40.61, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Release-x86-the_NEW_Atticus\NationalInstruments.DAQmx.dll</HintPath>
+    <Reference Include="NationalInstruments.DAQmx">
+      <HintPath>..\Dynamic Linked Libraries\NationalInstruments.DAQmx.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.NI4882, Version=9.0.40.157, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=MSIL" />
-    <Reference Include="NationalInstruments.VisaNS, Version=9.0.40.156, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=MSIL" />
+    <Reference Include="NationalInstruments.NI4882">
+      <HintPath>..\Dynamic Linked Libraries\NationalInstruments.NI4882.dll</HintPath>
+    </Reference>
+    <Reference Include="NationalInstruments.VisaNS">
+      <HintPath>..\Dynamic Linked Libraries\NationalInstruments.VisaNS.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core">
@@ -70,7 +72,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="WordGenerator">
-      <HintPath>..\WordGenerator\bin\Release\WordGenerator.exe</HintPath>
+      <HintPath>..\WordGenerator\bin\Debug\WordGenerator.exe</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

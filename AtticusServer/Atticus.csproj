@@ -75,21 +75,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Opal Kelly\Opal Kelly 4.0.8\API-32\Csharp\libFrontPanel-csharp.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.Common, Version=13.0.35.190, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Dropbox\Cold Atoms\Will\Cicero Update\NationalInstruments.Common.dll</HintPath>
+    <Reference Include="NationalInstruments.Common">
+      <HintPath>..\Dynamic Linked Libraries\NationalInstruments.Common.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.DAQmx, Version=9.8.35.42, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Dropbox\Cold Atoms\Will\Cicero Update\NationalInstruments.DAQmx.dll</HintPath>
+    <Reference Include="NationalInstruments.DAQmx">
+      <HintPath>..\Dynamic Linked Libraries\NationalInstruments.DAQmx.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.NI4882, Version=9.0.35.157, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Dropbox\Cold Atoms\Will\Cicero Update\NationalInstruments.NI4882.dll</HintPath>
+    <Reference Include="NationalInstruments.NI4882">
+      <HintPath>..\Dynamic Linked Libraries\NationalInstruments.NI4882.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.VisaNS, Version=13.0.35.167, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Dropbox\Cold Atoms\Will\Cicero Update\NationalInstruments.VisaNS.dll</HintPath>
+    <Reference Include="NationalInstruments.VisaNS">
+      <HintPath>..\Dynamic Linked Libraries\NationalInstruments.VisaNS.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

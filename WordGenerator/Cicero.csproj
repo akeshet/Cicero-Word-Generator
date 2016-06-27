@@ -60,7 +60,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DatabaseHelper">
-      <HintPath>..\..\..\databasehelper3\databasehelper3\bin\Debug\DatabaseHelper.dll</HintPath>
+      <HintPath>..\Dynamic Linked Libraries\DatabaseHelper.dll</HintPath>
     </Reference>
     <Reference Include="DataStructures">
       <HintPath>..\DataStructures\bin\Debug\DataStructures.dll</HintPath>

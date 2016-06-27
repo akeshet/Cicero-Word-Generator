@@ -1,0 +1,2 @@
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\dotmath\bin\Release\dotMath.dll
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\dotmath\obj\Release\dotMath.dll

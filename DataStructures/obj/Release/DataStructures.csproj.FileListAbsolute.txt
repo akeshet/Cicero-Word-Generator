@@ -1,0 +1,11 @@
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\bin\Release\DataStructures.dll
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\bin\Release\DataStructures.pdb
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\bin\Release\dotMath.dll
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\bin\Release\MySql.Data.dll
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\obj\Release\DataStructures.csprojResolveAssemblyReference.cache
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\obj\Release\DataStructures.ExceptionViewerDialog.resources
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\obj\Release\DataStructures.LicenseInfoForm.resources
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\obj\Release\DataStructures.Properties.Resources.resources
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\obj\Release\DataStructures.csproj.GenerateResource.Cache
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\obj\Release\DataStructures.dll
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\obj\Release\DataStructures.pdb

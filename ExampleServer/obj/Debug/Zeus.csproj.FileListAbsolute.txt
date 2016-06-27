@@ -1,0 +1,16 @@
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\exampleserver\obj\Debug\Zeus.MainExampleServerlForm.resources
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\exampleserver\obj\Debug\Zeus.Properties.Resources.resources
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\exampleserver\obj\Debug\Zeus.csproj.GenerateResource.Cache
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\exampleserver\bin\Debug\Zeus.exe.config
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\exampleserver\bin\Debug\Zeus.exe
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\exampleserver\bin\Debug\Zeus.pdb
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\exampleserver\bin\Debug\DatabaseHelper.dll
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\exampleserver\bin\Debug\DataStructures.dll
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\exampleserver\bin\Debug\MySql.Data.dll
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\exampleserver\bin\Debug\Enyim.Caching.dll
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\exampleserver\bin\Debug\dotMath.dll
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\exampleserver\bin\Debug\DatabaseHelper.pdb
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\exampleserver\bin\Debug\DataStructures.pdb
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\exampleserver\bin\Debug\dotMath.pdb
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\exampleserver\obj\Debug\Zeus.exe
+C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\exampleserver\obj\Debug\Zeus.pdb

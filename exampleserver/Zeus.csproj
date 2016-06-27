@@ -51,12 +51,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DatabaseHelper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\databasehelper3\databasehelper3\bin\Debug\DatabaseHelper.dll</HintPath>
+    <Reference Include="DatabaseHelper">
+      <HintPath>..\Dynamic Linked Libraries\DatabaseHelper.dll</HintPath>
     </Reference>
     <Reference Include="DataStructures">
       <HintPath>..\DataStructures\bin\Debug\DataStructures.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
