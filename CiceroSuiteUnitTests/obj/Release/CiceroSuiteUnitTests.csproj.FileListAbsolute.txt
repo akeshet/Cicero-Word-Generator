@@ -70,3 +70,21 @@ C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)
 C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\CiceroSuiteUnitTests\obj\Release\CiceroSuiteUnitTests.csprojResolveAssemblyReference.cache
 C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\CiceroSuiteUnitTests\obj\Release\CiceroSuiteUnitTests.dll
 C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\CiceroSuiteUnitTests\obj\Release\CiceroSuiteUnitTests.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\CiceroSuiteUnitTests\bin\Release\CiceroSuiteUnitTests.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\CiceroSuiteUnitTests\bin\Release\CiceroSuiteUnitTests.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\CiceroSuiteUnitTests\bin\Release\AtticusServer.exe
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\CiceroSuiteUnitTests\bin\Release\DataStructures.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\CiceroSuiteUnitTests\bin\Release\dotMath.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\CiceroSuiteUnitTests\bin\Release\libFrontPanel-csharp.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\CiceroSuiteUnitTests\bin\Release\WordGenerator.exe
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\CiceroSuiteUnitTests\bin\Release\NationalInstruments.Common.Native.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\CiceroSuiteUnitTests\bin\Release\AtticusServer.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\CiceroSuiteUnitTests\bin\Release\DataStructures.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\CiceroSuiteUnitTests\bin\Release\WordGenerator.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\CiceroSuiteUnitTests\bin\Release\WordGenerator_Accessor.exe
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\CiceroSuiteUnitTests\bin\Release\AtticusServer_Accessor.exe
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\CiceroSuiteUnitTests\bin\Release\WordGenerator_Accessor.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\CiceroSuiteUnitTests\bin\Release\AtticusServer_Accessor.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\CiceroSuiteUnitTests\obj\Release\CiceroSuiteUnitTests.csprojResolveAssemblyReference.cache
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\CiceroSuiteUnitTests\obj\Release\CiceroSuiteUnitTests.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\CiceroSuiteUnitTests\obj\Release\CiceroSuiteUnitTests.pdb

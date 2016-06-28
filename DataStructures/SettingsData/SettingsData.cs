@@ -16,6 +16,15 @@ namespace DataStructures
     [Serializable, TypeConverter(typeof(ExpandableObjectConverter))]
     public class SettingsData
     {
+
+        private List<LUT> lookupTables;
+
+        public List<LUT> LookupTables
+        {
+            get { return lookupTables; }
+            set { lookupTables = value; }
+        }
+
         private LogicalChannelManager myLogicalChannelManager;
 
         public LogicalChannelManager logicalChannelManager
@@ -248,6 +257,7 @@ namespace DataStructures
 
         public SettingsData()
         {
+            lookupTables = new List<LUT>();
             myLogicalChannelManager = new LogicalChannelManager();
             myServerManager = new ServerManager();
             cameraPCs = new List<IPAdresses>();

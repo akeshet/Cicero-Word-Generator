@@ -122,6 +122,7 @@
     <Compile Include="SettingsData\HardwareChannel.cs" />
     <Compile Include="SettingsData\LogicalChannel.cs" />
     <Compile Include="SettingsData\LogicalChannelManager.cs" />
+    <Compile Include="SettingsData\LUT.cs" />
     <Compile Include="SettingsData\SettingsData.cs" />
     <Compile Include="SequenceData\Units.cs" />
     <Compile Include="Communication\ServerCommunicator.cs" />

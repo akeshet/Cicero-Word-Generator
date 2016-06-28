@@ -479,6 +479,7 @@ namespace WordGenerator
                 this.gpibGroupEditor.setChannelCollection(settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.gpib]);
                 this.rS232GroupEditor.setChannelCollection(settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.rs232]);
                 this.overridePage.setSettings(Storage.settingsData);
+                this.lookupTableControl1.setUp();
                 this.sequencePage.layoutSettingsData();
                 this.sequencePage.updateOverrideCount();
                 this.useNetworkClockCheckBox.Checked = settingsData.AlwaysUseNetworkClock;

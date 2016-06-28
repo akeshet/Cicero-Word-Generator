@@ -77,3 +77,22 @@ C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)
 C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\Elgin\obj\Release\Elgin.exe.licenses
 C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\Elgin\obj\Release\Elgin.exe
 C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\Elgin\obj\Release\Elgin.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\Elgin\bin\Release\Elgin.exe.config
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\Elgin\bin\Release\Elgin.exe
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\Elgin\bin\Release\Elgin.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\Elgin\bin\Release\DataStructures.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\Elgin\bin\Release\WordGenerator.exe
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\Elgin\bin\Release\MySql.Data.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\Elgin\bin\Release\dotMath.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\Elgin\bin\Release\DataStructures.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\Elgin\bin\Release\WordGenerator.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\Elgin\obj\Release\Elgin.csprojResolveAssemblyReference.cache
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\Elgin\obj\Release\Elgin.ElginSplash.resources
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\Elgin\obj\Release\Elgin.ElginTrackerForm.resources
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\Elgin\obj\Release\Elgin.ElginMDIParent.resources
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\Elgin\obj\Release\Elgin.Properties.Resources.resources
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\Elgin\obj\Release\Elgin.RunLogExplorerForm.resources
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\Elgin\obj\Release\Elgin.csproj.GenerateResource.Cache
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\Elgin\obj\Release\Elgin.exe.licenses
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\Elgin\obj\Release\Elgin.exe
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\Elgin\obj\Release\Elgin.pdb

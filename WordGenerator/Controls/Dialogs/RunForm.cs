@@ -14,6 +14,9 @@ using DataStructures.UtilityClasses;
 using DataStructures.Database;
 using DataStructures.Timing;
 using System.IO;
+using System.Linq;
+using System.Text;
+
 
 namespace WordGenerator
 {
@@ -754,6 +757,45 @@ namespace WordGenerator
                         }
                     }
                 }
+
+                foreach (Variable var in sequence.Variables)
+                {
+                    if (var.LUTDriven)
+                    {
+                        //Interpolate!
+                        int tableIndex = var.LUTNumber;
+                        double inputX = var.LUTInput.VariableValue;
+                        double tableX1;
+                        double tableX2;
+                        double tableY1;
+                        double tableY2;
+                        int we = Storage.settingsData.LookupTables[tableIndex].Table.Count;
+                        //Simple case: See if this particular value is already defined in the LUT
+                        if (Storage.settingsData.LookupTables[tableIndex].Table.ContainsKey(inputX))
+                        {
+                            var.VariableValue = Storage.settingsData.LookupTables[tableIndex].Table[inputX];
+                        }
+                        //General case: Fix value at end values if it exceeds the lowest or highest table x value, and interpolate between other values
+                        else
+                        {
+                            int numberOfRows = Storage.settingsData.LookupTables[tableIndex].Table.Count;
+                            if (inputX > Storage.settingsData.LookupTables[tableIndex].Table.Keys.Max()) var.VariableValue = Storage.settingsData.LookupTables[tableIndex].Table[Storage.settingsData.LookupTables[tableIndex].Table.Keys.Max()];
+                            else if (inputX < Storage.settingsData.LookupTables[tableIndex].Table.Keys.Min()) var.VariableValue = Storage.settingsData.LookupTables[tableIndex].Table[Storage.settingsData.LookupTables[tableIndex].Table.Keys.Min()];
+                            else
+                            {
+                                tableX1 = Storage.settingsData.LookupTables[tableIndex].Table.Keys.First(x => x > inputX);
+                                tableX2 = Storage.settingsData.LookupTables[tableIndex].Table.Keys.Last(x => x < inputX);
+                                tableY1 = Storage.settingsData.LookupTables[tableIndex].Table[tableX1];
+                                tableY2 = Storage.settingsData.LookupTables[tableIndex].Table[tableX2];
+                                var.VariableValue = tableY1 + (inputX - tableX1) / (tableX2 - tableX1) * (tableY2 - tableY1);
+
+                            }
+                        }
+                        addMessageLogText(this, new MessageEvent("Variable " + var.VariableName + " assumes value " + var.VariableValue.ToString() + " for this run."));
+
+                    }
+                }
+
                 if (!calibrationShot)
                 {
                     foreach (Variable var in sequence.Variables)

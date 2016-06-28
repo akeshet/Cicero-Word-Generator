@@ -126,3 +126,22 @@ C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)
 C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\bin\Release-x86\NationalInstruments.VisaNS.xml
 C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Release-x86\AtticusServer.exe
 C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Release-x86\AtticusServer.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\bin\Release-x86\AtticusServer.exe.config
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\bin\Release-x86\AtticusServer.exe
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\bin\Release-x86\AtticusServer.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\bin\Release-x86\DataStructures.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\bin\Release-x86\libFrontPanel-csharp.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\bin\Release-x86\MySql.Data.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\bin\Release-x86\dotMath.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\bin\Release-x86\DataStructures.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\bin\Release-x86\NationalInstruments.NI4882.xml
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\obj\Release-x86\Atticus.csprojResolveAssemblyReference.cache
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\obj\Release-x86\AtticusServer.AtticusSplashForm.resources
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\obj\Release-x86\AtticusServer.DaqmxBrowser.resources
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\obj\Release-x86\AtticusServer.MainServerForm.resources
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\obj\Release-x86\AtticusServer.HardwareChannelsBrowser.resources
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\obj\Release-x86\AtticusServer.Properties.Resources.resources
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\obj\Release-x86\AtticusServer.ServerSettingsBrowser.resources
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\obj\Release-x86\Atticus.csproj.GenerateResource.Cache
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\obj\Release-x86\AtticusServer.exe
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\obj\Release-x86\AtticusServer.pdb

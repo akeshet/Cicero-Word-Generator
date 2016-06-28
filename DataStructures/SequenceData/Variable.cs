@@ -221,8 +221,34 @@ namespace DataStructures
             set { dbFieldNumber = value; }
 
         }
+        //LUT driven status:
+        private bool lutDriven;
 
+        public bool LUTDriven
+        {
+            get { return lutDriven; }
+            set { lutDriven = value; }
 
+        }
+
+        //LUT number if applicable:
+        private int LUTdbFieldNumber;
+
+        public int LUTNumber
+        {
+            get { return LUTdbFieldNumber; }
+            set { LUTdbFieldNumber = value; }
+
+        }
+
+        //LUT input variable if applicable
+        private Variable lutInput;
+
+        public Variable LUTInput
+        {
+            get { return lutInput; }
+            set { lutInput = value; }
+        }
 
         private int listNumber;
 
