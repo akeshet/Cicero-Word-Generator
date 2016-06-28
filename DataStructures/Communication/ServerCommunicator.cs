@@ -104,5 +104,21 @@ namespace DataStructures
 
         public abstract void stop();
 
+        //----------------------------------------------------
+        //Begin new methods to be used by the database server
+        //----------------------------------------------------
+
+        public abstract bool checkIfCiceroCanRun();
+
+        public abstract bool waitForDatabaseUpdates(List<Variable> Variables);
+
+        public abstract bool writeVariablesIntoDatabase(List<Variable> Variables);
+
+        public abstract bool moveImageDataFromCacheToDatabase();
+
+        //----------------------------------------------------
+        //End new methods to be used by the database server
+        //----------------------------------------------------
+
     }
 }

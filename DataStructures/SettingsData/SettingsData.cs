@@ -229,33 +229,22 @@ namespace DataStructures
             set { runlogDatabaseSettings = value; }
         }
 
-        private List<Database.RunLogDatabaseSettings> becVDatabaseSettings;
+        private List<Database.VariableDatabaseSettings> variableDatabaseSettings;
 
-        [Description("BECV database MySql servers to connect to, if any."), Category("BECV Customization")]
-        public List<Database.RunLogDatabaseSettings> BECVDatabaseSettings
+        [Description("MySQL database to get variable values from, if any variables are bound to database fields."), Category("Database Binding of Variables")]
+        public List<Database.VariableDatabaseSettings> VariableDatabaseSettings
         {
             get
             {
-                if (becVDatabaseSettings == null)
-                    becVDatabaseSettings = new List<Database.RunLogDatabaseSettings>();
-                return becVDatabaseSettings;
+                if (variableDatabaseSettings == null)
+                    variableDatabaseSettings = new List<Database.VariableDatabaseSettings>();
+                return variableDatabaseSettings;
             }
-            set { becVDatabaseSettings = value; }
+            set { variableDatabaseSettings = value; }
         }
 
-        private Boolean waitForHub;
 
-        [Description("Whether to wait for the Hub to give the all-clear."), Category("BECV Customization")]
-        public Boolean WaitForHub
-        {
-            get
-            {
-                if (waitForHub == null)
-                    waitForHub = false;
-                return waitForHub;
-            }
-            set { waitForHub = value; }
-        }
+      
 
         public SettingsData()
         {

@@ -925,34 +925,45 @@ namespace WordGenerator
                     else
                     {
                         addMessageLogText(this, new MessageEvent("Log not written! Perhaps a file with this name already exists?"));
-                        ErrorDetected = false; //Actualyl true, but just keeping the screen from turning red
+                        ErrorDetected = false; //Actually true, but just keeping the screen from turning red
                     }
                 }
-               
+             
+                    // Ask servers if we can run. All servers except for the database server simply return true. The database server returns false or true
+                    // depending on user-configured conditions
 
-                foreach (RunLogDatabaseSettings rset in Storage.settingsData.BECVDatabaseSettings) //Should only have one working one in here for db-binding of variables
-                {
-
-                    if (Storage.settingsData.WaitForHub)
+                    addMessageLogText(this, new MessageEvent("Asking any connected Zeus servers for permission to run ... "));
+                    actionStatus = Storage.settingsData.serverManager.checkIfCiceroCanRunOnConnectedServers(addMessageLogText);
+                    while(actionStatus != ServerManager.ServerActionStatus.Success)
                     {
-                     
-                            DatabaseHelper.DatabaseHelper newDatabaseHelper2 = new DatabaseHelper.DatabaseHelper(rset.getConnectionString());
-
-                            addMessageLogText(this, new MessageEvent("Now waiting for BEC V Hub to give all clear."));
-                            newDatabaseHelper2.setHubHandshakeValue(false); //Set to false, wait for true
-                            while (!newDatabaseHelper2.checkHubHandshakeValue())
-                            {
-                                //Nothing -- we wait here
-                            }
-                            addMessageLogText(this, new MessageEvent("BEC V Hub handshake completed!"));
-                      
-
+                        actionStatus = Storage.settingsData.serverManager.checkIfCiceroCanRunOnConnectedServers(addMessageLogText);
+                        Thread.Sleep(100);
                     }
+                    addMessageLogText(this, new MessageEvent("Permission to run has been granted."));
 
+                    // If any variables are database-bound, ask servers if we can proceed to update the variable values. All servers return true except for
+                    // the database server, which either waits for the "updated" fields to all be true (if this option is enabled) or simply returns true
+                    // because the user has opted to not perform this check using the corresponding checkbox
+
+                    addMessageLogText(this, new MessageEvent("Waiting for any database-bound variables to be updated to begin run ... "));
+                    actionStatus = Storage.settingsData.serverManager.waitForDatabaseUpdatesOnConnectedServers(sequence.Variables, addMessageLogText);
+                    while(actionStatus != ServerManager.ServerActionStatus.Success)
+                    {
+                        actionStatus = Storage.settingsData.serverManager.waitForDatabaseUpdatesOnConnectedServers(sequence.Variables, addMessageLogText);
+                        Thread.Sleep(100);
+                    }
+                    addMessageLogText(this, new MessageEvent("Run proceeding."));
+
+
+                    // Now we update any database-bound variables using a database connection here in Cicero
+                    // Note that there is NO dependency on the database helper dll, as there is in the Database Server
+
+                    foreach (VariableDatabaseSettings rset in Storage.settingsData.VariableDatabaseSettings)
+                    {
                     if (rset.Enabled)
                     {
                         //First, DB-binding of variables
-                        VariableInputDatabaseHandler handler1 = null;
+                        VariableDatabaseHandler handler1 = null;
                         foreach (Variable var in sequence.Variables)
                         {
 
@@ -960,9 +971,9 @@ namespace WordGenerator
                             {
                                 try
                                 {
-                                    addMessageLogText(this, new MessageEvent("Waiting for Database Update for Variable " + var.VariableName + "."));
-                                    handler1 = new VariableInputDatabaseHandler(rset);
-                                    var.VariableValue = handler1.readFromDB(var.DBFieldNumber, rset.WaitForUpdates);
+                                    addMessageLogText(this, new MessageEvent("Retrieving value of variable " + var.VariableName + " from the database."));
+                                    handler1 = new VariableDatabaseHandler(rset);
+                                    var.VariableValue = handler1.readFromDB(var.DBFieldNumber);
                                     addMessageLogText(this, new MessageEvent("Received Updated Value!"));
 
                                 }
@@ -971,7 +982,7 @@ namespace WordGenerator
                                     addMessageLogText(this, new MessageEvent("Caught exception when attempting to connect to the BECVDatabase " + rset.Url + "."));
                                     if (rset.VerboseErrorReporting)
                                     {
-                                        addMessageLogText(this, new MessageEvent("Displaying BECVDatabase exception. To disable this display, turn off verbose error reporting for this runlog database in Cicero settings (under Advanced->Settings Explorer)"));
+                                        addMessageLogText(this, new MessageEvent("Displaying database exception. To disable this display, turn off verbose error reporting for this runlog database in Cicero settings (under Advanced->Settings Explorer)"));
                                         ExceptionViewerDialog ev = new ExceptionViewerDialog(e);
                                         ev.ShowDialog();
                                     }
@@ -982,72 +993,28 @@ namespace WordGenerator
                                 }
                             }
                         }
+                  }
+             }
 
-                        //Then, writing the variable values and updating the slaves
-                       
-                        try
-                        {
-                            DatabaseHelper.DatabaseHelper newDatabaseHelper = new DatabaseHelper.DatabaseHelper(rset.getConnectionString());
-                           //First, write to the variable table "ciceroOut"
-                           variableStruct outgoingStruct = new variableStruct();
-                           List<variable> outgoingList = new List<variable>();
-                           foreach (Variable var in sequence.Variables)
-                           {
-                               variable temp = new variable(var.VariableName, var.VariableValue);
-                               outgoingList.Add(temp);
-                           }
-
-                           outgoingStruct.variableList = outgoingList.ToArray();
-                           newDatabaseHelper.writeVariableValues(outgoingStruct);
-
-                           //Then, tell the slaves that there is a new run coming
-                           while (newDatabaseHelper.checkForRunUpdate() != 1)
-                           {
-                               newDatabaseHelper.updateNewRun();
-                           }
-
-                           //Finally, if it's the first run, then create a new sequence
-                           if (runningSequence.RunningCounter == 1)
-                           {
-                               newDatabaseHelper.createNewSequence("no name", "no description");
-                           }
-                        }
-                        catch
-                        {
-                            addMessageLogText(this, new MessageEvent("Caught exception when attempting to add runlog to mysqldatabase at " + rset.Url + "."));
-                        }
-                       
+                    // Next, we pass the sequence data over to the servers. Most servers do nothing with it, but the database server uses it to
+                    // write the current round of variables into the database using a dbhelper .dll function
+                    addMessageLogText(this, new MessageEvent("Telling Zeus servers to write variables and values into database... "));
+                    actionStatus = Storage.settingsData.serverManager.saveVariablesOnConnectedServers(sequence.Variables, addMessageLogText);
+                    if (actionStatus != ServerManager.ServerActionStatus.Success)
+                    {
+                        addMessageLogText(this, new MessageEvent("Unable to run. " + actionStatus.ToString()));
+                        ErrorDetected = true;
+                        setStatus(RunFormStatus.FinishedRun);
+                        return false;
                     }
+                    addMessageLogText(this, new MessageEvent("Continuing with run."));
 
-                }
-
+                //This code adds the runlog to the runlog database, if any are specified
                 foreach (RunLogDatabaseSettings rset in Storage.settingsData.RunlogDatabaseSettings)
                 {
 
                     if (rset.Enabled)
                     {
-
-
-                        //Database binding of variables
-                        /* VariableInputDatabaseHandler handler2 = null;
-                         handler2 = new VariableInputDatabaseHandler(rset);
-                         foreach (Variable var in sequence.Variables)
-                         {
-
-                             if (var.DBDriven)
-                             {
-
-                                 addMessageLogText(this, new MessageEvent("Waiting for the Database Field to be Updated..."));
-                                 var.VariableValue = handler2.readFromDB();
-                                 addMessageLogText(this, new MessageEvent("Continuing with Run"));
-
-
-                             }
-                         }
-                         */
-
-                           
-
 
                             RunlogDatabaseHandler handler = null;
                             try
@@ -1075,14 +1042,13 @@ namespace WordGenerator
 
                             if (handler != null)
                                 handler.closeConnection();
-                            /* if (handler2 != null)
-                                 handler2.closeConnection();
-                             */
                         
                     }
                 }
+                //----------------------------------------------------------------------
                 //Added by Will Lunden 2015
-                //Now reload any waveform data files that need to be reloaded
+                //Now reload any waveform data files that need to be reloaded every run
+                //----------------------------------------------------------------------
                 foreach (AnalogGroup analogGroup in Storage.sequenceData.AnalogGroups)
                 {
                     foreach (System.Collections.Generic.KeyValuePair<int,AnalogGroupChannelData> channelDataKVP in analogGroup.ChannelDatas)
@@ -1131,6 +1097,10 @@ namespace WordGenerator
                         }
                     }
                 }
+
+                //----------------------------------------------------
+                // End of Waveform Updating Code
+                //----------------------------------------------------
 
                 // send start timestamp
                 addMessageLogText(this, new MessageEvent("Sending run start timestamp."));
@@ -1287,13 +1257,6 @@ namespace WordGenerator
 
 
 
-
-
-
-
-
-
-
                 if (runRepeat)
                 {
                     keepGoing = true;
@@ -1303,6 +1266,19 @@ namespace WordGenerator
                     keepGoing = false;
 
                 repeatCount++;
+
+                // At the end of the run, we hold up while the database server waits for camera data (in the cache) and then writes the cache data
+                // to the database (if the user specified so)
+                addMessageLogText(this, new MessageEvent("Waiting for Zeus servers to collect and store image data ..."));
+                actionStatus = Storage.settingsData.serverManager.saveImageDataOnConnectedServers(addMessageLogText);
+                while(actionStatus != ServerManager.ServerActionStatus.Success)
+                {
+                    actionStatus = Storage.settingsData.serverManager.saveImageDataOnConnectedServers(addMessageLogText);
+                    Thread.Sleep(100);
+                }
+                addMessageLogText(this, new MessageEvent("Completed."));
+
+
 
                 if (abortAfterThis.Checked)
                 {
@@ -1441,29 +1417,7 @@ namespace WordGenerator
 
         private void stopButton_Click(object sender, EventArgs e)
         {
-            foreach (RunLogDatabaseSettings rset in Storage.settingsData.BECVDatabaseSettings) //Should only have one working one in here for db-binding of variables
-            {
-
-
-                if (Storage.settingsData.WaitForHub)
-                {
-                    try
-                    {
-                        DatabaseHelper.DatabaseHelper newDatabaseHelper3 = new DatabaseHelper.DatabaseHelper(rset.getConnectionString());
-                        while (newDatabaseHelper3.checkForRunUpdate() == 1)
-                        {
-                            newDatabaseHelper3.undoUpdateNewRun();
-                        }
-                    }
-                    catch
-                    {
-                       
-
-                    }
-
-                }
-
-            }
+            
             userAborted = true;
             foreach (Socket theSocket in CameraPCsSocketList)
             {
@@ -1743,29 +1697,7 @@ namespace WordGenerator
         private void RunForm_Load(object sender, EventArgs e)
         {
             runningSequence.RunningCounter = 0;
-            foreach (RunLogDatabaseSettings rset in Storage.settingsData.BECVDatabaseSettings) //Should only have one working one in here for db-binding of variables
-            {
-
-
-                if (Storage.settingsData.WaitForHub)
-                {
-                    try
-                    {
-                        DatabaseHelper.DatabaseHelper newDatabaseHelper3 = new DatabaseHelper.DatabaseHelper(rset.getConnectionString());
-                        while (newDatabaseHelper3.checkForRunUpdate() == 1)
-                        {
-                            newDatabaseHelper3.undoUpdateNewRun();
-                        }
-                    }
-                    catch
-                    {
-
-
-                    }
-
-                }
-
-            }
+       
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)

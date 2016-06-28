@@ -267,6 +267,46 @@ namespace AtticusServer
             }
         }
 
+        //----------------------------------------------------
+        //Begin new methods to be used by the database server
+        //----------------------------------------------------
+        public override bool checkIfCiceroCanRun()
+        {
+            lock (remoteLockObj)
+            {
+                return true;
+            }
+        }
+
+        public override bool waitForDatabaseUpdates(List<Variable> Variables)
+        {
+           lock (remoteLockObj)
+            {
+                return true;
+            }
+        }
+
+        public override bool writeVariablesIntoDatabase(List<Variable> Variables)
+        {
+            lock (remoteLockObj)
+            {
+                return true;
+            }
+        }
+
+
+
+        public override bool moveImageDataFromCacheToDatabase()
+        {
+            lock (remoteLockObj)
+            {
+                return true;
+            }
+        }
+
+        //----------------------------------------------------
+        //End new methods to be used by the database server
+        //----------------------------------------------------
         /// <summary>
         /// Outputs a single output frame to analog and digital cards. All other cards / outputs are unaffected.
         /// </summary>

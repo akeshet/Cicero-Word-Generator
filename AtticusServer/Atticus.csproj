@@ -75,21 +75,21 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Opal Kelly\Opal Kelly 4.0.8\API-32\Csharp\libFrontPanel-csharp.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.Common, Version=13.0.35.190, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
+    <Reference Include="NationalInstruments.Common, Version=8.7.35.133, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\\NationalInstruments.Common.dll</HintPath>
+      <HintPath>..\..\..\NationalInstruments.Common.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.DAQmx, Version=9.8.35.42, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=AMD64">
+    <Reference Include="NationalInstruments.DAQmx, Version=9.3.35.219, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\\NationalInstruments.DAQmx.dll</HintPath>
+      <HintPath>..\..\..\NationalInstruments.DAQmx.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.NI4882, Version=8.9.35.104, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
+    <Reference Include="NationalInstruments.NI4882, Version=9.0.35.157, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\\NationalInstruments.NI4882.dll</HintPath>
+      <HintPath>..\..\..\Dropbox\Cold Atoms\Will\Cicero Update\NationalInstruments.NI4882.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.VisaNS, Version=13.0.35.167, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
+    <Reference Include="NationalInstruments.VisaNS, Version=9.0.35.156, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\\NationalInstruments.VisaNS.dll</HintPath>
+      <HintPath>..\..\..\NationalInstruments.VisaNS.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -194,12 +194,6 @@
     <Compile Include="Wrappers\niRFSG.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataStructures\DataStructures.csproj">
-      <Project>{07B67011-62AB-43E3-80F6-E00BCBFF8558}</Project>
-      <Name>DataStructures</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\athens_parthenon1.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -224,6 +218,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataStructures\DataStructures.csproj">
+      <Project>{07B67011-62AB-43E3-80F6-E00BCBFF8558}</Project>
+      <Name>DataStructures</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

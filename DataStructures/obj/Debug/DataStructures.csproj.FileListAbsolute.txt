@@ -1,0 +1,12 @@
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\DataStructures\bin\Debug\DataStructures.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\DataStructures\bin\Debug\DataStructures.pdb
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\DataStructures\bin\Debug\dotMath.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\DataStructures\bin\Debug\MySql.Data.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\DataStructures\bin\Debug\dotMath.pdb
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\DataStructures\obj\Debug\DataStructures.csprojResolveAssemblyReference.cache
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\DataStructures\obj\Debug\DataStructures.ExceptionViewerDialog.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\DataStructures\obj\Debug\DataStructures.LicenseInfoForm.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\DataStructures\obj\Debug\DataStructures.Properties.Resources.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\DataStructures\obj\Debug\DataStructures.csproj.GenerateResource.Cache
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\DataStructures\obj\Debug\DataStructures.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\DataStructures\obj\Debug\DataStructures.pdb

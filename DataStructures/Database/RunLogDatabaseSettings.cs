@@ -18,15 +18,7 @@ namespace DataStructures.Database
             set { url = value; }
         }
 
-        private bool waitForUpdates;
-
-        [Description("Should Cicero wait until the DB has been updated with new variable values (by an external application) before running?")]
-        public bool WaitForUpdates
-        {
-            get { return waitForUpdates; }
-            set { waitForUpdates = value; }
-        }
-
+       
 
         private string port;
         [Description("Port # MySql server (default: 3306)."), DefaultValue("3306")]

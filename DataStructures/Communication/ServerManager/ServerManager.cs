@@ -682,6 +682,26 @@ namespace DataStructures
         {
             return runNamedMethodOnConnectedServers("outputRS232Group", new object[] { rs232Group, settings }, 4000, messageLog);
         }
+         
+        public ServerActionStatus checkIfCiceroCanRunOnConnectedServers(EventHandler<MessageEvent> messageLog)
+        {
+            return runNamedMethodOnConnectedServers("checkIfCiceroCanRun", null , 4000, messageLog);
+        }
+
+        public ServerActionStatus waitForDatabaseUpdatesOnConnectedServers(List<Variable> Variables, EventHandler<MessageEvent> messageLog)
+        {
+            return runNamedMethodOnConnectedServers("waitForDatabaseUpdates", new object[] { Variables }, 4000, messageLog);
+        }
+
+        public ServerActionStatus saveVariablesOnConnectedServers(List<Variable> Variables, EventHandler<MessageEvent> messageLog)
+        {
+            return runNamedMethodOnConnectedServers("writeVariablesIntoDatabase", new object[] { Variables }, 4000, messageLog);
+        }
+
+        public ServerActionStatus saveImageDataOnConnectedServers(EventHandler<MessageEvent> messageLog)
+        {
+            return runNamedMethodOnConnectedServers("moveImageDataFromCacheToDatabase", null, 4000, messageLog);
+        }
 
         private ServerActionStatus verifyConnection(ServerInfo server)
         {

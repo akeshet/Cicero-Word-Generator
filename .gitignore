@@ -1,15 +1,11 @@
-bin/
-obj/
 *.clg
 *.set
 *.seq
 *.cache
-*.dll
 *.bit
 *.backup
 *.licx
 *.dat
-*.exe
 *.exe.config
 *.suo
 *.pdb

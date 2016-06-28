@@ -1,0 +1,52 @@
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Debug\AtticusServer.exe.config
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Debug\AtticusServer.exe
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Debug\AtticusServer.pdb
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Debug\DataStructures.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Debug\libFrontPanel-csharp.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Debug\NationalInstruments.Common.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Debug\NationalInstruments.DAQmx.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Debug\NationalInstruments.NI4882.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Debug\NationalInstruments.VisaNS.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Debug\MySql.Data.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Debug\dotMath.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Debug\DataStructures.pdb
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Debug\NationalInstruments.Common.xml
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Debug\NationalInstruments.DAQmx.xml
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Debug\NationalInstruments.NI4882.xml
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Debug\NationalInstruments.VisaNS.xml
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Debug\dotMath.pdb
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Debug\Atticus.csprojResolveAssemblyReference.cache
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Debug\AtticusServer.AtticusSplashForm.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Debug\AtticusServer.DaqmxBrowser.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Debug\AtticusServer.MainServerForm.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Debug\AtticusServer.HardwareChannelsBrowser.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Debug\AtticusServer.Properties.Resources.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Debug\AtticusServer.ServerSettingsBrowser.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Debug\Atticus.csproj.GenerateResource.Cache
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Debug\AtticusServer.exe
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Debug\AtticusServer.pdb
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\bin\Debug\AtticusServer.exe.config
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Debug\AtticusServer.exe
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Debug\AtticusServer.pdb
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Debug\Atticus.csprojResolveAssemblyReference.cache
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Debug\AtticusServer.AtticusSplashForm.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Debug\AtticusServer.DaqmxBrowser.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Debug\AtticusServer.MainServerForm.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Debug\AtticusServer.HardwareChannelsBrowser.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Debug\AtticusServer.Properties.Resources.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Debug\AtticusServer.ServerSettingsBrowser.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Debug\Atticus.csproj.GenerateResource.Cache
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\bin\Debug\AtticusServer.exe
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\bin\Debug\AtticusServer.pdb
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\bin\Debug\DataStructures.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\bin\Debug\libFrontPanel-csharp.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\bin\Debug\NationalInstruments.Common.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\bin\Debug\NationalInstruments.DAQmx.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\bin\Debug\NationalInstruments.VisaNS.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\bin\Debug\MySql.Data.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\bin\Debug\dotMath.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\bin\Debug\DataStructures.pdb
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\bin\Debug\NationalInstruments.Common.xml
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\bin\Debug\NationalInstruments.DAQmx.xml
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\bin\Debug\NationalInstruments.NI4882.xml
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\bin\Debug\NationalInstruments.VisaNS.xml

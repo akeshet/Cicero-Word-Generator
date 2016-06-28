@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<ExampleServerSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Heartbeats>
+    <heartBeat>
+      <name>proem</name>
+      <group>1</group>
+    </heartBeat>
+  </Heartbeats>
+  <ServerName>z1</ServerName>
+  <DatabaseServerIP>192.168.1.227</DatabaseServerIP>
+  <MemcachedServerIP>192.168.1.227</MemcachedServerIP>
+  <Username>root</Username>
+  <Password>w0lfg4ng</Password>
+  <DBName>BECVDatabase</DBName>
+</ExampleServerSettings>

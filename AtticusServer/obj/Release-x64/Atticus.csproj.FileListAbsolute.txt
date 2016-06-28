@@ -1,0 +1,111 @@
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\AtticusServer.exe.config
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\AtticusServer.exe
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\AtticusServer.pdb
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\DataStructures.dll
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\libFrontPanel-csharp.dll
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\NationalInstruments.NI4882.dll
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\NationalInstruments.VisaNS.dll
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\MySql.Data.dll
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\dotMath.dll
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\DataStructures.pdb
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\ResolveAssemblyReference.cache
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\AtticusServer.AtticusSplashForm.resources
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\AtticusServer.DaqmxBrowser.resources
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\AtticusServer.MainServerForm.resources
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\AtticusServer.HardwareChannelsBrowser.resources
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\AtticusServer.Properties.Resources.resources
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\AtticusServer.ServerSettingsBrowser.resources
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\ResGen.read.1.tlog
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\ResGen.write.1.tlog
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\AtticusServer.exe
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\AtticusServer.pdb
+F:\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\AtticusServer.exe.config
+F:\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\AtticusServer.exe
+F:\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\AtticusServer.pdb
+F:\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\AtticusServer.exe
+F:\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\AtticusServer.pdb
+F:\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\DataStructures.dll
+F:\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\libFrontPanel-csharp.dll
+F:\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\NationalInstruments.NI4882.dll
+F:\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\NationalInstruments.VisaNS.dll
+F:\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\MySql.Data.dll
+F:\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\dotMath.dll
+F:\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\DataStructures.pdb
+F:\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\ResolveAssemblyReference.cache
+F:\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\AtticusServer.AtticusSplashForm.resources
+F:\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\AtticusServer.DaqmxBrowser.resources
+F:\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\AtticusServer.MainServerForm.resources
+F:\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\AtticusServer.HardwareChannelsBrowser.resources
+F:\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\AtticusServer.Properties.Resources.resources
+F:\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\AtticusServer.ServerSettingsBrowser.resources
+F:\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\ResGen.read.1.tlog
+F:\Cicero-Word-Generator-master\AtticusServer\obj\Release-x64\ResGen.write.1.tlog
+F:\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\NationalInstruments.Common.dll
+F:\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\NationalInstruments.DAQmx.dll
+F:\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\NationalInstruments.Common.xml
+F:\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\NationalInstruments.DAQmx.xml
+F:\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\NationalInstruments.NI4882.xml
+F:\Cicero-Word-Generator-master\AtticusServer\bin\Release-x64\NationalInstruments.VisaNS.xml
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\AtticusServer.exe.config
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Release-x64\AtticusServer.exe
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Release-x64\AtticusServer.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\AtticusServer.exe
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\AtticusServer.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\DataStructures.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\libFrontPanel-csharp.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\NationalInstruments.Common.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\NationalInstruments.DAQmx.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\NationalInstruments.NI4882.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\NationalInstruments.VisaNS.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\MySql.Data.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\dotMath.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\DataStructures.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\NationalInstruments.Common.xml
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\NationalInstruments.DAQmx.xml
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\NationalInstruments.NI4882.xml
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\NationalInstruments.VisaNS.xml
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Release-x64\Atticus.csprojResolveAssemblyReference.cache
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Release-x64\AtticusServer.AtticusSplashForm.resources
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Release-x64\AtticusServer.DaqmxBrowser.resources
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Release-x64\AtticusServer.MainServerForm.resources
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Release-x64\AtticusServer.HardwareChannelsBrowser.resources
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Release-x64\AtticusServer.Properties.Resources.resources
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Release-x64\AtticusServer.ServerSettingsBrowser.resources
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Release-x64\Atticus.csproj.GenerateResource.Cache
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\AtticusServer.exe.config
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Release-x64\AtticusServer.exe
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Release-x64\AtticusServer.pdb
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\AtticusServer.exe
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\AtticusServer.pdb
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\DataStructures.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\libFrontPanel-csharp.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\NationalInstruments.Common.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\NationalInstruments.DAQmx.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\NationalInstruments.NI4882.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\NationalInstruments.VisaNS.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\MySql.Data.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\dotMath.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\DataStructures.pdb
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\NationalInstruments.Common.xml
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\NationalInstruments.DAQmx.xml
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\NationalInstruments.NI4882.xml
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\bin\Release-x64\NationalInstruments.VisaNS.xml
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Release-x64\Atticus.csprojResolveAssemblyReference.cache
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Release-x64\AtticusServer.AtticusSplashForm.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Release-x64\AtticusServer.DaqmxBrowser.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Release-x64\AtticusServer.MainServerForm.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Release-x64\AtticusServer.HardwareChannelsBrowser.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Release-x64\AtticusServer.Properties.Resources.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Release-x64\AtticusServer.ServerSettingsBrowser.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\AtticusServer\obj\Release-x64\Atticus.csproj.GenerateResource.Cache
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\bin\Release-x64\AtticusServer.exe.config
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Release-x64\AtticusServer.exe
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Release-x64\AtticusServer.pdb
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Release-x64\Atticus.csprojResolveAssemblyReference.cache
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Release-x64\AtticusServer.AtticusSplashForm.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Release-x64\AtticusServer.DaqmxBrowser.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Release-x64\AtticusServer.MainServerForm.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Release-x64\AtticusServer.HardwareChannelsBrowser.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Release-x64\AtticusServer.Properties.Resources.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Release-x64\AtticusServer.ServerSettingsBrowser.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\AtticusServer\obj\Release-x64\Atticus.csproj.GenerateResource.Cache

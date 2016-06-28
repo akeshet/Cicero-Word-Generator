@@ -1,0 +1,16 @@
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\dotmath\bin\Release\dotMath.dll
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\dotmath\obj\Release\dotMath.dll
+C:\Users\will\Documents\Cicero\Cicero-Word-Generator-master\dotmath\obj\Release\dotMath.csprojResolveAssemblyReference.cache
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\dotmath\bin\Release\dotMath.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\dotmath\obj\Release\dotMath.csprojResolveAssemblyReference.cache
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\dotmath\obj\Release\dotMath.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\dotmath\bin\Release\dotMath.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\dotmath\obj\Release\dotMath.csprojResolveAssemblyReference.cache
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\dotmath\obj\Release\dotMath.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC\dotmath\bin\Release\dotMath.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC\dotmath\obj\Release\dotMath.csprojResolveAssemblyReference.cache
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC\dotmath\obj\Release\dotMath.dll
+C:\Users\will\Desktop\BEC 5 Cicero VC\dotmath\bin\Release\dotMath.dll
+C:\Users\will\Desktop\BEC 5 Cicero VC\dotmath\obj\Release\dotMath.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\dotmath\bin\Release\dotMath.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\BEC 5 Cicero VC\dotmath\obj\Release\dotMath.dll

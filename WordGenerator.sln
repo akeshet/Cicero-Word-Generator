@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elgin", "Elgin\Elgin.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotMath", "dotmath\dotMath.csproj", "{B2EBEDE8-441A-4CC2-80FF-5F290D528919}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleServer", "ExampleServer\ExampleServer.csproj", "{E87C4F05-BCED-47F5-8A02-637A5A669E38}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zeus", "ExampleServer\Zeus.csproj", "{E87C4F05-BCED-47F5-8A02-637A5A669E38}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CiceroSuiteUnitTests", "CiceroSuiteUnitTests\CiceroSuiteUnitTests.csproj", "{2C5EAE42-1165-4350-A549-A13F5F50C874}"
 EndProject
