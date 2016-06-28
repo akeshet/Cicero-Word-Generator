@@ -145,3 +145,10 @@ C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\Att
 C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\obj\Release-x86\Atticus.csproj.GenerateResource.Cache
 C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\obj\Release-x86\AtticusServer.exe
 C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\obj\Release-x86\AtticusServer.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\bin\Release-x86\NationalInstruments.Common.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\bin\Release-x86\NationalInstruments.DAQmx.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\bin\Release-x86\NationalInstruments.NI4882.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\bin\Release-x86\NationalInstruments.VisaNS.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\bin\Release-x86\NationalInstruments.Common.xml
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\bin\Release-x86\NationalInstruments.DAQmx.xml
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\AtticusServer\bin\Release-x86\NationalInstruments.VisaNS.xml
