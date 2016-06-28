@@ -1,0 +1,24 @@
+C:\Users\BECV\Desktop\DatabaseHelper3\DatabaseHelper3\bin\Debug\DatabaseHelper.dll
+C:\Users\BECV\Desktop\DatabaseHelper3\DatabaseHelper3\bin\Debug\DatabaseHelper.pdb
+C:\Users\BECV\Desktop\DatabaseHelper3\DatabaseHelper3\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\BECV\Desktop\DatabaseHelper3\DatabaseHelper3\obj\Debug\DatabaseHelper.dll
+C:\Users\BECV\Desktop\DatabaseHelper3\DatabaseHelper3\obj\Debug\DatabaseHelper.pdb
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Database Helper DLL\DatabaseHelper3\DatabaseHelper3\bin\Debug\DatabaseHelper.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Database Helper DLL\DatabaseHelper3\DatabaseHelper3\bin\Debug\DatabaseHelper.pdb
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Database Helper DLL\DatabaseHelper3\DatabaseHelper3\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Database Helper DLL\DatabaseHelper3\DatabaseHelper3\obj\Debug\DatabaseHelper.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Database Helper DLL\DatabaseHelper3\DatabaseHelper3\obj\Debug\DatabaseHelper.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Database Helper DLL\DatabaseHelper3\DatabaseHelper3\bin\Debug\DatabaseHelper.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Database Helper DLL\DatabaseHelper3\DatabaseHelper3\bin\Debug\DatabaseHelper.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Database Helper DLL\DatabaseHelper3\DatabaseHelper3\obj\Debug\DatabaseHelper.csprojResolveAssemblyReference.cache
+C:\Users\will\Dropbox\Cold Atoms\Will\Database Helper DLL\DatabaseHelper3\DatabaseHelper3\obj\Debug\DatabaseHelper.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Database Helper DLL\DatabaseHelper3\DatabaseHelper3\obj\Debug\DatabaseHelper.pdb
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Database Helper DLL\DatabaseHelper3\DatabaseHelper3\bin\Debug\Enyim.Caching.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Database Helper DLL\DatabaseHelper3\DatabaseHelper3\bin\Debug\public_key.snk
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Database Helper DLL\DatabaseHelper3\DatabaseHelper3\bin\Debug\Enyim.Caching.Log4NetAdapter.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Database Helper DLL\DatabaseHelper3\DatabaseHelper3\bin\Debug\Enyim.Caching.NLogAdapter.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Database Helper DLL\DatabaseHelper3\DatabaseHelper3\bin\Debug\Enyim.Caching.Log4NetAdapter.pdb
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Database Helper DLL\DatabaseHelper3\DatabaseHelper3\bin\Debug\Enyim.Caching.NLogAdapter.pdb
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Database Helper DLL\DatabaseHelper3\DatabaseHelper3\bin\Debug\MySql.Data.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Database Helper DLL\DatabaseHelper3\DatabaseHelper3\bin\Debug\MySql.Data.Entity.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Database Helper DLL\DatabaseHelper3\DatabaseHelper3\bin\Debug\MySql.Web.dll

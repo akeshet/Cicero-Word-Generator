@@ -1,0 +1,13 @@
+c:\users\will\documents\visual studio 2010\Projects\DatabaseHelper3\DatabaseHelper3\bin\Debug\DatabaseHelper3.dll
+c:\users\will\documents\visual studio 2010\Projects\DatabaseHelper3\DatabaseHelper3\bin\Debug\DatabaseHelper3.pdb
+c:\users\will\documents\visual studio 2010\Projects\DatabaseHelper3\DatabaseHelper3\bin\Debug\MySql.Data.dll
+c:\users\will\documents\visual studio 2010\Projects\DatabaseHelper3\DatabaseHelper3\bin\Debug\MySql.Data.Entity.dll
+c:\users\will\documents\visual studio 2010\Projects\DatabaseHelper3\DatabaseHelper3\bin\Debug\MySql.Web.dll
+c:\users\will\documents\visual studio 2010\Projects\DatabaseHelper3\DatabaseHelper3\obj\Debug\DatabaseHelper3.csprojResolveAssemblyReference.cache
+c:\users\will\documents\visual studio 2010\Projects\DatabaseHelper3\DatabaseHelper3\obj\Debug\DatabaseHelper3.dll
+c:\users\will\documents\visual studio 2010\Projects\DatabaseHelper3\DatabaseHelper3\obj\Debug\DatabaseHelper3.pdb
+C:\Users\BECV\Desktop\DatabaseHelper3\DatabaseHelper3\bin\Debug\DatabaseHelper3.dll
+C:\Users\BECV\Desktop\DatabaseHelper3\DatabaseHelper3\bin\Debug\DatabaseHelper3.pdb
+C:\Users\BECV\Desktop\DatabaseHelper3\DatabaseHelper3\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\BECV\Desktop\DatabaseHelper3\DatabaseHelper3\obj\Debug\DatabaseHelper3.dll
+C:\Users\BECV\Desktop\DatabaseHelper3\DatabaseHelper3\obj\Debug\DatabaseHelper3.pdb
