@@ -201,7 +201,6 @@ namespace Zeus
                 exampleServerForm.addMessageLogText(this, new MessageEvent("Run check successful - Cicero is allowed to run."));
             }
 
-            dbhelper.undoUpdateNewImage();
             return errorFlag;
         }
 
@@ -266,6 +265,8 @@ namespace Zeus
             } 
             temporaryVariableStruct.variableList = temporaryVariableList.ToArray();
             dbhelper.writeVariableValues(temporaryVariableStruct);
+
+            dbhelper.undoUpdateNewImage(); //Also clear the "new image" field in the database (reset it to 0)
 
             exampleServerForm.addMessageLogText(this, new MessageEvent("Variable value save complete - all variable values have been written into the database."));
             return true;

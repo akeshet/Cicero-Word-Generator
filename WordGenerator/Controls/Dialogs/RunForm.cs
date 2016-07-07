@@ -621,6 +621,7 @@ namespace WordGenerator
             bool keepGoing = true;
             while (keepGoing)
             {
+                bool skipImageSave = false;
                 MainClientForm.instance.CurrentlyOutputtingTimestep = null;
                 runningSequence.RunningCounter++; //Increment this motherfucker right off the bat
                 addMessageLogText(this, new MessageEvent("The running counter is at " + runningSequence.RunningCounter.ToString()));
@@ -1302,23 +1303,38 @@ namespace WordGenerator
                 if (runRepeat)
                 {
                     keepGoing = true;
-                    
                 }
                 else
                     keepGoing = false;
 
                 repeatCount++;
 
+                //First, we do a check to see if a (possibly connected) Zeus server entered the fault state during the run
+                //(due to laser unlock, human override, etc.)
+                //If it DID, then we repeat that run!
+
+                addMessageLogText(this, new MessageEvent("Checking if Zeus is still giving all-clear ..."));
+                actionStatus = Storage.settingsData.serverManager.checkIfCiceroCanRunOnConnectedServers(addMessageLogText);
+                if (actionStatus != ServerManager.ServerActionStatus.Success)
+                {
+                    addMessageLogText(this, new MessageEvent("Zeus entered fault state during run - repeating last run"));
+                    keepGoing = true;
+                    skipImageSave = true; //We entered a fault state, so let's not save the image. If imaghe data comes in, it gets reset during next variable save Zeus performs
+                }
+
                 // At the end of the run, we hold up while the database server waits for camera data (in the cache) and then writes the cache data
                 // to the database (if the user specified so)
-                addMessageLogText(this, new MessageEvent("Waiting for Zeus servers to collect and store image data ..."));
-                actionStatus = Storage.settingsData.serverManager.saveImageDataOnConnectedServers(addMessageLogText);
-                while(actionStatus != ServerManager.ServerActionStatus.Success)
+                if (!skipImageSave)
                 {
+                    addMessageLogText(this, new MessageEvent("Waiting for Zeus servers to collect and store image data ..."));
                     actionStatus = Storage.settingsData.serverManager.saveImageDataOnConnectedServers(addMessageLogText);
-                    Thread.Sleep(100);
+                    while (actionStatus != ServerManager.ServerActionStatus.Success)
+                    {
+                        actionStatus = Storage.settingsData.serverManager.saveImageDataOnConnectedServers(addMessageLogText);
+                        Thread.Sleep(100);
+                    }
+                    addMessageLogText(this, new MessageEvent("Completed."));
                 }
-                addMessageLogText(this, new MessageEvent("Completed."));
 
 
 
@@ -1331,6 +1347,8 @@ namespace WordGenerator
 
                 setStatus(RunFormStatus.FinishedRun);
             }
+
+
 
 
             return true;
