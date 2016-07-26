@@ -72,9 +72,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Implementation.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="ClassDiagram1.cd" />
     <None Include="public_key.snk">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

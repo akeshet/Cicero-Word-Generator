@@ -286,7 +286,7 @@ namespace AtticusServer
             }
         }
 
-        public override bool writeVariablesIntoDatabase(List<Variable> Variables)
+        public override bool writeVariablesIntoDatabase(List<Variable> Variables, string SequenceName, string SequenceDescription)
         {
             lock (remoteLockObj)
             {

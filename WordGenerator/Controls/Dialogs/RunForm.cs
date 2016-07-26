@@ -1039,10 +1039,10 @@ namespace WordGenerator
                   }
              }
 
-                    // Next, we pass the sequence data over to the servers. Most servers do nothing with it, but the database server uses it to
+                    // Next, we pass the variable data over to the servers. Most servers do nothing with it, but the database server uses it to
                     // write the current round of variables into the database using a dbhelper .dll function
                     addMessageLogText(this, new MessageEvent("Telling Zeus servers to write variables and values into database... "));
-                    actionStatus = Storage.settingsData.serverManager.saveVariablesOnConnectedServers(sequence.Variables, addMessageLogText);
+                    actionStatus = Storage.settingsData.serverManager.saveVariablesOnConnectedServers(sequence.Variables,sequence.SequenceName,sequence.SequenceDescription, addMessageLogText);
                     if (actionStatus != ServerManager.ServerActionStatus.Success)
                     {
                         addMessageLogText(this, new MessageEvent("Unable to run. " + actionStatus.ToString()));

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ExampleServerSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<ExampleServerSettings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Heartbeats>
     <heartBeat>
       <name>proem</name>
@@ -12,4 +12,25 @@
   <Username>root</Username>
   <Password>w0lfg4ng</Password>
   <DBName>BECVDatabase</DBName>
+  <Rules>
+    <HardwareChannelRule>
+      <ChannelName>Interlock 1</ChannelName>
+      <InputPin>0</InputPin>
+      <ResponsePin>0</ResponsePin>
+      <UseResponse>true</UseResponse>
+      <DesiredState>true</DesiredState>
+    </HardwareChannelRule>
+  </Rules>
+  <NumberOfRelocks>3</NumberOfRelocks>
+  <Emails>
+    <emailList>
+      <AddressString>6312357303@txt.att.net</AddressString>
+    </emailList>
+    <emailList>
+      <AddressString>9174399692@vtext.com</AddressString>
+    </emailList>
+    <emailList>
+      <AddressString>6174600614@txt.att.net</AddressString>
+    </emailList>
+  </Emails>
 </ExampleServerSettings>

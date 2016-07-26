@@ -46,3 +46,17 @@ C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)
 C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\DatabaseHelper3\WindowsFormsApplication1\obj\x86\Release\WindowsFormsApplication1.Form1.resources
 C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\DatabaseHelper3\WindowsFormsApplication1\obj\x86\Release\WindowsFormsApplication1.Properties.Resources.resources
 C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\DatabaseHelper3\WindowsFormsApplication1\obj\x86\Release\WindowsFormsApplication1.csproj.GenerateResource.Cache
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\WindowsFormsApplication1\bin\Release\WindowsFormsApplication1.exe.config
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\WindowsFormsApplication1\obj\x86\Release\WindowsFormsApplication1.exe
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\WindowsFormsApplication1\obj\x86\Release\WindowsFormsApplication1.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\WindowsFormsApplication1\bin\Release\public_key.snk
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\WindowsFormsApplication1\bin\Release\WindowsFormsApplication1.exe
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\WindowsFormsApplication1\bin\Release\WindowsFormsApplication1.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\WindowsFormsApplication1\bin\Release\DatabaseHelper.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\WindowsFormsApplication1\bin\Release\MySql.Data.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\WindowsFormsApplication1\bin\Release\Enyim.Caching.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\WindowsFormsApplication1\bin\Release\DatabaseHelper.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\WindowsFormsApplication1\obj\x86\Release\WindowsFormsApplication1.csprojResolveAssemblyReference.cache
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\WindowsFormsApplication1\obj\x86\Release\WindowsFormsApplication1.Form1.resources
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\WindowsFormsApplication1\obj\x86\Release\WindowsFormsApplication1.Properties.Resources.resources
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\WindowsFormsApplication1\obj\x86\Release\WindowsFormsApplication1.csproj.GenerateResource.Cache

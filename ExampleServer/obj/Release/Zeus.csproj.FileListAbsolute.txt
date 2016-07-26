@@ -41,10 +41,13 @@ C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\Exa
 C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\ExampleServer\bin\Release\DataStructures.dll
 C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\ExampleServer\bin\Release\MySql.Data.dll
 C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\ExampleServer\bin\Release\dotMath.dll
-C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\ExampleServer\bin\Release\Enyim.Caching.dll
 C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\ExampleServer\bin\Release\DataStructures.pdb
-C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\ExampleServer\bin\Release\DatabaseHelper.pdb
 C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\ExampleServer\obj\Release\Zeus.csprojResolveAssemblyReference.cache
 C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\ExampleServer\obj\Release\Zeus.MainExampleServerlForm.resources
 C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\ExampleServer\obj\Release\Zeus.Properties.Resources.resources
 C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\ExampleServer\obj\Release\Zeus.csproj.GenerateResource.Cache
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\ExampleServer\bin\Release\HidLibrary.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\ExampleServer\bin\Release\HidLibrary.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\ExampleServer\bin\Release\DatabaseHelper.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\ExampleServer\bin\Release\Enyim.Caching.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\ExampleServer\bin\Release\DatabaseHelper.pdb

@@ -34,3 +34,14 @@ C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)
 C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\DatabaseHelper3\DatabaseHelper3\obj\Release\DatabaseHelper.csprojResolveAssemblyReference.cache
 C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\DatabaseHelper3\DatabaseHelper3\obj\Release\DatabaseHelper.dll
 C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero + Zeus (non VC)\DatabaseHelper3\DatabaseHelper3\obj\Release\DatabaseHelper.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\DatabaseHelper3\bin\Release\public_key.snk
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\DatabaseHelper3\bin\Release\DatabaseHelper.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\DatabaseHelper3\bin\Release\DatabaseHelper.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\DatabaseHelper3\bin\Release\MySql.Data.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\DatabaseHelper3\bin\Release\MySql.Data.Entity.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\DatabaseHelper3\bin\Release\MySql.Web.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\DatabaseHelper3\bin\Release\Enyim.Caching.Log4NetAdapter.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\DatabaseHelper3\bin\Release\Enyim.Caching.NLogAdapter.pdb
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\DatabaseHelper3\obj\Release\DatabaseHelper.csprojResolveAssemblyReference.cache
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\DatabaseHelper3\obj\Release\DatabaseHelper.dll
+C:\Users\will\Dropbox\Cold Atoms\Will\Cicero Update\BEC 5 Cicero VC (Latest)\DatabaseHelper3\DatabaseHelper3\obj\Release\DatabaseHelper.pdb

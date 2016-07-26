@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.Text.RegularExpressions;
 using Enyim.Caching;
 using Enyim.Caching.Configuration;
 using Enyim.Caching.Memcached;
@@ -351,10 +352,38 @@ namespace DatabaseHelper
                 {
                     if (name == colName) flag++;
                 }
-                if (flag == 0) //need to add a column
+                if (flag == 0) //need to add a column, so we see if there is an unused column to rename
                 {
-                    cmd1 = new MySqlCommand("ALTER TABLE ciceroOut ADD "+name +" dec(20,10)", this.conn);
-                    object result1 = cmd1.ExecuteScalar();
+                    bool matchFound = false;
+                    string key = "";
+                    foreach (string columnName in columnNames)
+                    {
+                        Match match = Regex.Match(columnName, @"^(_unusedcolumn_[0-9]*)$", RegexOptions.IgnoreCase);
+
+                        // Here we check the Match instance.
+                        if (match.Success && matchFound == false)
+                        {
+                            // Finally, we get the Group value and display it.
+                            key = match.Groups[1].Value;
+                            matchFound = true;
+                        }
+                    }
+
+                    if (matchFound)
+                    {
+                        cmd1 = new MySqlCommand("ALTER TABLE ciceroOut CHANGE " + key + " " + name + " decimal(20,10)", conn);
+                        object result1 = cmd1.ExecuteScalar();
+                        //cmd1 = new MySqlCommand("ALTER TABLE ciceroOut ADD " + name + " dec(20,10)", this.conn);
+                        //object result1 = cmd1.ExecuteScalar();
+                    }
+
+                    else
+                    {
+                        MessageBox.Show("Database Error! There are no more available columns for your newly named variables. Database table maintenance is required - see documentation or email LundenWill@gmail.com for help.");
+                    }
+
+
+                    
                 }
             }
 

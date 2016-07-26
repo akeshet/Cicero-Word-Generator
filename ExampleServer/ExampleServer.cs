@@ -8,6 +8,9 @@ using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
 using DatabaseHelper;
 using System.Diagnostics;
+using HidLibrary;
+using System.Net;
+using System.Net.Mail;
 
 namespace Zeus
 {
@@ -119,6 +122,7 @@ namespace Zeus
         public override bool checkIfCiceroCanRun()
         {
             bool errorFlag = true;
+            hardwareChannelTripped = false;
 
             if (waitForZeus)
             {
@@ -184,12 +188,87 @@ namespace Zeus
 
                 //4: Check interlock values
 
-                //Not yet implemented
+                if (checkHardwareChannels)
+                {
+                    //Compare values to those desired by rules
+                    //Set errorFlag false if any rules are violated
+                    try
+                    {
+                        byte[] data = new byte[128];
+                        connectedHID.ReadFeatureData(out data, 0);
+                        foreach (HardwareChannelRule rule in serverSettings.Rules)
+                        {
+                            bool boolValue = data[rule.InputPin + 1] != 0;
+                            if (boolValue != rule.DesiredState)
+                            {
+                                errorFlag = false;
+                                hardwareChannelTripped = true;
+                                hardwareChannelThatTripped = rule;
+                            }
+                        }
+                
+
+                    }
+                    catch
+                    {
+                        //Error if USB hardware rule checking is enabled BUT the USb device is unplugged 
+                        errorFlag = false;
+
+                    }
+
+                    //6: If response pulses enabled, fire a response, but STILL return false for this run of the hardware rule checks
+
+                    if (useResponsePulses && errorFlag == false && hardwareChannelTripped == true)
+                    {
+                        if (responsesTried >= serverSettings.NumberOfRelocks)
+                        {
+
+                            if (messageSent == false)
+                            {
+                                exampleServerForm.addMessageLogText(this, new MessageEvent("Maximum number of relocks reached - please address and then reset relock counter"));
+                                messageSent = true; //Don't spam this message - only send once until errors are cleared
+                                foreach (emailList address in serverSettings.Emails) //confusingly named. emailList class contains one property: AddressString. Emails is a list of "emailList"s.
+                                    //Needed to wrap "string" in a class and make a list of these classes in order to get the address list to work with the propertGrid
+                                {
+                                    var client = new SmtpClient("smtp.gmail.com", 587)
+                                    {
+                                        Credentials = new NetworkCredential("zeus.bec5@gmail.com", "w0lfg4ng"),
+                                        EnableSsl = true
+                                    };
+                                    client.Send("Zeus@mit.edu", address.AddressString, " ", "Relocks expired - human required.");
+                                }  
+                            }
+
+                            
+                        }
+
+                        else
+                        {
+                            if (hardwareChannelThatTripped.UseResponse)
+                                {
+                                    try
+                                    {
+                                        byte[] data = new byte[128];
+                                        data[hardwareChannelThatTripped.ResponsePin + 3] = 255;
+                                        connectedHID.WriteFeatureData(data);
+                                        exampleServerForm.addMessageLogText(this, new MessageEvent("Relock pulse sent on channel " + hardwareChannelThatTripped.ResponsePin.ToString()));
+                                        responsesTried++;
+                                    }
+
+                                    catch
+                                    {
+
+                                    }
+                                }
+                            
+                        }
+                    }
+                }
 
              
             }
            
-            //Check human override
+            //5: Check human override
             if (humanOverride == true)
             {
                 errorFlag = false;
@@ -199,6 +278,14 @@ namespace Zeus
             if (errorFlag == true)
             {
                 exampleServerForm.addMessageLogText(this, new MessageEvent("Run check successful - Cicero is allowed to run."));
+            }
+
+           
+
+
+            if (errorFlag == true)
+            {
+                messageSent = false; 
             }
 
             return errorFlag;
@@ -249,7 +336,7 @@ namespace Zeus
             }
         }
 
-        public override bool writeVariablesIntoDatabase(List<Variable> Variables)
+        public override bool writeVariablesIntoDatabase(List<Variable> Variables, string SequenceName, string SequenceDescription)
         {
             // Note the unfortunate naming scheme here:
             // Variable (capital V) is the data type for a variable in the Word Generator project
@@ -265,6 +352,8 @@ namespace Zeus
             } 
             temporaryVariableStruct.variableList = temporaryVariableList.ToArray();
             dbhelper.writeVariableValues(temporaryVariableStruct);
+
+            dbhelper.createNewSequence(SequenceName, SequenceDescription); //Save the sequence name and description now
 
             dbhelper.undoUpdateNewImage(); //Also clear the "new image" field in the database (reset it to 0)
 
@@ -314,6 +403,14 @@ namespace Zeus
         public bool waitForZeus = false;
         public bool humanOverride = false;
         public bool waitForVariableUpdates = false;
+        public bool checkHardwareChannels = false;
+        public HidDevice connectedHID = null;
+        public bool useResponsePulses = false;
+        public int responsesTried = 0;
+        public bool messageSent = false;
+
+        public bool hardwareChannelTripped = false;
+        public HardwareChannelRule hardwareChannelThatTripped = new HardwareChannelRule();
 
         //----------------------------------------------------
         //End new properties to be used by the database server

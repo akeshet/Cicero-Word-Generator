@@ -693,9 +693,9 @@ namespace DataStructures
             return runNamedMethodOnConnectedServers("waitForDatabaseUpdates", new object[] { Variables }, 4000, messageLog);
         }
 
-        public ServerActionStatus saveVariablesOnConnectedServers(List<Variable> Variables, EventHandler<MessageEvent> messageLog)
+        public ServerActionStatus saveVariablesOnConnectedServers(List<Variable> Variables, string SequenceName, string SequenceDescription, EventHandler<MessageEvent> messageLog)
         {
-            return runNamedMethodOnConnectedServers("writeVariablesIntoDatabase", new object[] { Variables }, 4000, messageLog);
+            return runNamedMethodOnConnectedServers("writeVariablesIntoDatabase", new object[] { Variables,SequenceName,SequenceDescription }, 4000, messageLog);
         }
 
         public ServerActionStatus saveImageDataOnConnectedServers(EventHandler<MessageEvent> messageLog)

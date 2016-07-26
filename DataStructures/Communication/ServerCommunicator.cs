@@ -112,7 +112,7 @@ namespace DataStructures
 
         public abstract bool waitForDatabaseUpdates(List<Variable> Variables);
 
-        public abstract bool writeVariablesIntoDatabase(List<Variable> Variables);
+        public abstract bool writeVariablesIntoDatabase(List<Variable> Variables, string SeriesName, string SeriesDescription);
 
         public abstract bool moveImageDataFromCacheToDatabase();
 
