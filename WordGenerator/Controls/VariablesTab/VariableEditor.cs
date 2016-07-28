@@ -89,7 +89,7 @@ namespace WordGenerator.Controls
             else if (this.variable.LUTDriven)
             {
                 this.listSelector.Visible = true;
-                this.listSelector.SelectedIndex = (30 + this.variable.LUTNumber);
+                this.listSelector.SelectedIndex = (31 + this.variable.LUTNumber);
             }
             else
                 this.listSelector.Visible = false;
@@ -187,7 +187,7 @@ namespace WordGenerator.Controls
                 variable.DBDriven = true;
                 variable.DBFieldNumber = (listSelector.SelectedIndex - 10);
             }
-            else //LUT Options 
+            /* else //LUT Options //Moved to different event handler
             {
                 this.backupValue = valueSelector.Value;
                 variable.ListDriven = false;
@@ -200,7 +200,7 @@ namespace WordGenerator.Controls
                 vs1.ShowDialog();
                 toolTip1.SetToolTip(this.listSelector, "Value Calculated Based On "+variable.LUTInput.VariableName);
             }
- 
+            */
             if (valueChanged != null)
                 valueChanged(this, null);
         }
@@ -434,33 +434,55 @@ namespace WordGenerator.Controls
 
         }
 
-    /*    private void downButton_Click(object sender, EventArgs e)
+        private void VariableEditor_Load(object sender, EventArgs e)
         {
-            if (variable != null)
+
+        }
+
+        private void listSelector_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            if (listSelector.SelectedIndex > 30)
             {
-                if (variable.DerivedVariable)
-                {
-                    variable.Combiners.Add(Variable.plus);
-                    variable.CombinedValues.Add(new DimensionedParameter(Units.Dimension.unity));
-                    updateLayout();
-                }
+                this.backupValue = valueSelector.Value;
+                variable.ListDriven = false;
+                variable.LUTDriven = true;
+                variable.LUTNumber = (listSelector.SelectedIndex - 31);
+
+                variable.LUTInput = Storage.sequenceData.Variables[0];
+                //Show the independent var selection form
+                varSelector vs1 = new varSelector(variable);
+                vs1.ShowDialog();
+                toolTip1.SetToolTip(this.listSelector, "Value Calculated Based On " + variable.LUTInput.VariableName);
             }
         }
 
-        private void upButton_Click(object sender, EventArgs e)
-        {
-            if (variable != null)
+        /*    private void downButton_Click(object sender, EventArgs e)
             {
-                if (variable.DerivedVariable)
+                if (variable != null)
                 {
-                    if (variable.CombinedValues.Count > 1)
+                    if (variable.DerivedVariable)
                     {
-                        variable.CombinedValues.RemoveAt(variable.CombinedValues.Count - 1);
-                        variable.Combiners.RemoveAt(variable.Combiners.Count - 1);
+                        variable.Combiners.Add(Variable.plus);
+                        variable.CombinedValues.Add(new DimensionedParameter(Units.Dimension.unity));
                         updateLayout();
                     }
                 }
             }
-        }*/
+
+            private void upButton_Click(object sender, EventArgs e)
+            {
+                if (variable != null)
+                {
+                    if (variable.DerivedVariable)
+                    {
+                        if (variable.CombinedValues.Count > 1)
+                        {
+                            variable.CombinedValues.RemoveAt(variable.CombinedValues.Count - 1);
+                            variable.Combiners.RemoveAt(variable.Combiners.Count - 1);
+                            updateLayout();
+                        }
+                    }
+                }
+            }*/
     }
 }

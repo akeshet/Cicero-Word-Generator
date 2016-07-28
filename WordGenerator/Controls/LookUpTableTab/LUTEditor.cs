@@ -58,7 +58,6 @@ namespace WordGenerator.Controls.LookUpTableTab
             LUT newLUT = new LUT("New Table");
             Storage.settingsData.LookupTables.Add(newLUT);
  
-            WordGenerator.MainClientForm.instance.variablesEditor.layout();
             tableDisplay.Rows.Clear();
             LUTSelector.Items.Clear();
             tableDisplay.Enabled = true;
@@ -166,7 +165,6 @@ namespace WordGenerator.Controls.LookUpTableTab
                 LUTSelector.Items.Add(table.Name);
             }
             LUTSelector.SelectedIndex = selected;
-            WordGenerator.MainClientForm.instance.variablesEditor.layout();
         }
 
 
@@ -176,7 +174,6 @@ namespace WordGenerator.Controls.LookUpTableTab
             if (MessageBox.Show("Are you sure you want to delete this lookup table?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 Storage.settingsData.LookupTables.RemoveAt(LUTSelector.SelectedIndex);
-                WordGenerator.MainClientForm.instance.variablesEditor.layout();
                 
             }
             
@@ -255,6 +252,11 @@ namespace WordGenerator.Controls.LookUpTableTab
         private void tableDisplay_CellClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void varUpdate_Click(object sender, EventArgs e)
+        {
+            WordGenerator.MainClientForm.instance.variablesEditor.discardAndRefreshAllVariableEditors();
         }
     }
 }

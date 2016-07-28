@@ -172,7 +172,7 @@ namespace WordGenerator.Controls
         /// <summary>
         /// Somewhat slow but guaranteed to work layout of variable editors.
         /// </summary>
-        private void discardAndRefreshAllVariableEditors()
+        public void discardAndRefreshAllVariableEditors()
         {
             foreach (VariableEditor ved in variableEditors)
             {

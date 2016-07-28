@@ -83,6 +83,7 @@ namespace WordGenerator.Controls
             this.listSelector.TabIndex = 2;
             this.listSelector.Visible = false;
             this.listSelector.SelectedIndexChanged += new System.EventHandler(this.listSelector_SelectedIndexChanged);
+            this.listSelector.SelectionChangeCommitted += new System.EventHandler(this.listSelector_SelectionChangeCommitted);
             this.listSelector.SelectedValueChanged += new System.EventHandler(this.comboBox1_SelectedValueChanged);
             // 
             // deleteButton
@@ -144,7 +145,7 @@ namespace WordGenerator.Controls
             // 
             this.permanentValueLabel.AutoSize = true;
             this.permanentValueLabel.ForeColor = System.Drawing.Color.White;
-            this.permanentValueLabel.Location = new System.Drawing.Point(109, 4);
+            this.permanentValueLabel.Location = new System.Drawing.Point(110, 5);
             this.permanentValueLabel.Name = "permanentValueLabel";
             this.permanentValueLabel.Size = new System.Drawing.Size(110, 13);
             this.permanentValueLabel.TabIndex = 9;
@@ -166,6 +167,7 @@ namespace WordGenerator.Controls
             this.Controls.Add(this.textBox1);
             this.Name = "VariableEditor";
             this.Size = new System.Drawing.Size(220, 104);
+            this.Load += new System.EventHandler(this.VariableEditor_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.VariableEditor_Paint);
             ((System.ComponentModel.ISupportInitialize)(this.valueSelector)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
