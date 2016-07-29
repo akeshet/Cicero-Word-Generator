@@ -110,9 +110,9 @@ namespace DataStructures
 
         public abstract bool checkIfCiceroCanRun();
 
-        public abstract bool waitForDatabaseUpdates(SequenceData Sequence);
+        public abstract bool waitForDatabaseUpdates(List<Variable> Variables);
 
-        public abstract bool writeVariablesIntoDatabase(SequenceData Sequence);
+        public abstract bool writeVariablesIntoDatabase(List<Variable> Variables, string SequenceName, string SequenceDescription);
 
         public abstract bool moveImageDataFromCacheToDatabase();
 

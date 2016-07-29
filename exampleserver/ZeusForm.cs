@@ -12,6 +12,8 @@ using DataStructures;
 using DatabaseHelper;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using HidLibrary;
+using System.Linq;
 
 namespace Zeus
 {
@@ -23,15 +25,17 @@ namespace Zeus
         public List<bool> heartbeatStatuses = new List<bool>();
         public List<Int64> heartbeatMemory = new List<Int64>();
         public List<string> lastBoundVarName = new List<string>();
-   
+        private HidDevice[] _deviceList;
+        private HidDevice _selectedDevice;
 
 
         public MainExampleServerlForm() : this(new ExampleServerSettings())
         {
-           
+
         }
 
-        public MainExampleServerlForm(ExampleServerSettings settings) {
+        public MainExampleServerlForm(ExampleServerSettings settings)
+        {
             InitializeComponent();
             if (File.Exists("./ZeusSettings.zsf"))
             {
@@ -42,7 +46,7 @@ namespace Zeus
             {
                 MessageBox.Show("Settings were not automatically loaded. Save or place a settings file named 'ZeusSettings.zsf' in the directory containing the Zeus executable in order to enable automatic loading of settings.");
             }
-   
+
             this.server = new ExampleServer(this, settings);
             this.server.messageLog += addMessageLogText;
             if (!File.Exists("./ZeusSettings.zsf")) //(initialize heartbeats if no settings were autoloaded)
@@ -59,10 +63,11 @@ namespace Zeus
                 }
             }
 
-            for(int i = 0; i < 20; i++)
+            for (int i = 0; i < 20; i++)
             {
                 lastBoundVarName.Add("N/A");
             }
+            refreshList();
         }
 
         private void connectButton_Click(object sender, EventArgs e)
@@ -135,12 +140,12 @@ namespace Zeus
             for (int h = 0; h < 20; h++)
             {
 
-                variableTable.Rows.Add(h+1, enableStates[h], varValues[h],lastBoundVarName[h]);
+                variableTable.Rows.Add(h + 1, enableStates[h], varValues[h], lastBoundVarName[h]);
 
             }
             //Deselect the first cell
             variableTable.CurrentCell = null;
-            if(rowIndex >= 0) variableTable.FirstDisplayedScrollingRowIndex = rowIndex;
+            if (rowIndex >= 0) variableTable.FirstDisplayedScrollingRowIndex = rowIndex;
             //2: Update the images table
             rowIndex = imageList.FirstDisplayedScrollingRowIndex;
             List<int> imageIDs = new List<int>();
@@ -156,7 +161,7 @@ namespace Zeus
             {
                 timestamps.Add(tempArray2[i]);
             }
-            
+
 
             //Clear the table
             imageList.Rows.Clear();
@@ -170,6 +175,20 @@ namespace Zeus
             //Deselect the first cell
             imageList.CurrentCell = null;
             if (rowIndex >= 0) imageList.FirstDisplayedScrollingRowIndex = rowIndex;
+
+            //3: Update hardware channel table
+            hardwareTable.Rows.Clear();
+            byte[] data = new byte[128];
+            _selectedDevice.ReadFeatureData(out data, 0);
+            //Populate the table
+            foreach (HardwareChannelRule rule in server.serverSettings.Rules)
+            {
+                hardwareTable.Rows.Add(rule.ChannelName, rule.InputPin, data[rule.InputPin + 1]);
+            }
+
+
+            relockLabel.Text = server.responsesTried.ToString() + "/" + server.serverSettings.NumberOfRelocks.ToString();
+
         }
 
         private void configureToolStripMenuItem_Click(object sender, EventArgs e)
@@ -309,8 +328,102 @@ namespace Zeus
             server.waitForVariableUpdates = checkBox4.Checked;
         }
 
-      
+        private void label1_Click(object sender, EventArgs e)
+        {
 
+        }
 
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        //Begin functions related to USB peripeheral
+
+        private void refreshList()
+        {
+            _deviceList = HidDevices.Enumerate(5824).ToArray();
+            listBox1.DisplayMember = "Description";
+            listBox1.DataSource = _deviceList;
+            if (_deviceList.Length > 0)
+            {
+                _selectedDevice = _deviceList[0];
+                listBox1.Enabled = true;
+                connectToHID.Enabled = true;
+            }
+            else
+            {
+                listBox1.Enabled = false;
+                connectToHID.Enabled = false;
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            refreshList();
+        }
+
+        private void connectToHID_Click(object sender, EventArgs e)
+        {
+            if ((_selectedDevice != null)) _selectedDevice.CloseDevice();
+            _selectedDevice = _deviceList[listBox1.SelectedIndex];
+            _selectedDevice.OpenDevice();
+            _selectedDevice.MonitorDeviceEvents = true;
+            _selectedDevice.Inserted += Device_Inserted;
+            _selectedDevice.Removed += Device_Removed;
+            button2.Enabled = false;
+            connectToHID.Enabled = false;
+            server.connectedHID = _selectedDevice;
+            checkBox5.Enabled = true;
+            checkBox6.Enabled = true;
+            resetRelock.Enabled = true;
+        }
+
+        private void Device_Inserted()
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(Device_Inserted));
+                return;
+            }
+            addMessageLogText(this, new MessageEvent("USB Lab Monitor connected."));
+            listBox1.Enabled = true;
+        }
+
+        private void Device_Removed()
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(Device_Removed));
+                return;
+            }
+            addMessageLogText(this, new MessageEvent("USB Lab Monitor disconnected."));
+            listBox1.Enabled = false;
+        }
+
+        private void checkBox5_CheckedChanged(object sender, EventArgs e)
+        {
+            server.checkHardwareChannels = checkBox5.Checked;
+        }
+
+        private void checkBox6_CheckedChanged(object sender, EventArgs e)
+        {
+            server.useResponsePulses = checkBox6.Checked;
+        }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("USB Help: Input pins 0 through 5 are {D5,B0,B1,C0,C1,D4}. Output pulse pins 0 through 2 are {C2,C3,C4}.");
+        }
+
+        private void resetRelock_Click(object sender, EventArgs e)
+        {
+            server.responsesTried = 0;
+        }
+
+        private void MainExampleServerlForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

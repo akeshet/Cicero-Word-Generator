@@ -278,7 +278,7 @@ namespace AtticusServer
             }
         }
 
-        public override bool waitForDatabaseUpdates(SequenceData Sequence)
+        public override bool waitForDatabaseUpdates(List<Variable> Variables)
         {
             lock (remoteLockObj)
             {
@@ -286,7 +286,7 @@ namespace AtticusServer
             }
         }
 
-        public override bool writeVariablesIntoDatabase(SequenceData Sequence)
+        public override bool writeVariablesIntoDatabase(List<Variable> Variables, string SequenceName, string SequenceDescription)
         {
             lock (remoteLockObj)
             {

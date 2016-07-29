@@ -9,3 +9,14 @@ C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\obj
 C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\obj\Release\DataStructures.csproj.GenerateResource.Cache
 C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\obj\Release\DataStructures.dll
 C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\DataStructures\obj\Release\DataStructures.pdb
+Z:\LAB\Samarth\Zeus\Master\DataStructures\bin\Release\DataStructures.dll
+Z:\LAB\Samarth\Zeus\Master\DataStructures\bin\Release\DataStructures.pdb
+Z:\LAB\Samarth\Zeus\Master\DataStructures\bin\Release\dotMath.dll
+Z:\LAB\Samarth\Zeus\Master\DataStructures\bin\Release\MySql.Data.dll
+Z:\LAB\Samarth\Zeus\Master\DataStructures\obj\Release\DataStructures.csprojResolveAssemblyReference.cache
+Z:\LAB\Samarth\Zeus\Master\DataStructures\obj\Release\DataStructures.ExceptionViewerDialog.resources
+Z:\LAB\Samarth\Zeus\Master\DataStructures\obj\Release\DataStructures.LicenseInfoForm.resources
+Z:\LAB\Samarth\Zeus\Master\DataStructures\obj\Release\DataStructures.Properties.Resources.resources
+Z:\LAB\Samarth\Zeus\Master\DataStructures\obj\Release\DataStructures.csproj.GenerateResource.Cache
+Z:\LAB\Samarth\Zeus\Master\DataStructures\obj\Release\DataStructures.dll
+Z:\LAB\Samarth\Zeus\Master\DataStructures\obj\Release\DataStructures.pdb

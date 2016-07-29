@@ -78,8 +78,35 @@ namespace Zeus
             set { dbName = value; }
         }
 
-         
-        
-        
+        private List<HardwareChannelRule> rules;
+        [Description("Monitored USB peripheral hardware channels and desired states"),
+         Category("USB")]
+        public List<HardwareChannelRule> Rules
+        {
+            get { return rules; }
+            set { rules = value; }
+        }
+
+
+        private int numberOfRelocks;
+        [Description("Number of Auto-Relocks to try"),
+   Category("USB")]
+        public int NumberOfRelocks
+        {
+            get { return numberOfRelocks; }
+            set { numberOfRelocks = value; }
+        }
+
+
+        private List<emailList> emails;
+        [Description("Email/SMS addresses to notify if relocks fail"),
+         Category("USB")]
+        public List<emailList> Emails
+        {
+            get { return emails; }
+            set { emails = value; }
+        }
+
+
     }
 }

@@ -3,3 +3,8 @@ C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\dotmath\bin\Debug\
 C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\dotmath\obj\Debug\dotMath.csprojResolveAssemblyReference.cache
 C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\dotmath\obj\Debug\dotMath.dll
 C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\dotmath\obj\Debug\dotMath.pdb
+Z:\LAB\Samarth\Zeus\Master\dotmath\bin\Debug\dotMath.dll
+Z:\LAB\Samarth\Zeus\Master\dotmath\bin\Debug\dotMath.pdb
+Z:\LAB\Samarth\Zeus\Master\dotmath\obj\Debug\dotMath.csprojResolveAssemblyReference.cache
+Z:\LAB\Samarth\Zeus\Master\dotmath\obj\Debug\dotMath.dll
+Z:\LAB\Samarth\Zeus\Master\dotmath\obj\Debug\dotMath.pdb

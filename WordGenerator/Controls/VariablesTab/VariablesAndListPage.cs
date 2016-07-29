@@ -524,12 +524,24 @@ namespace WordGenerator.Controls
             List<Double> fillers = new List<double>();
             try
             {
+                DialogResult dialogResult = new DialogResult();
                 int numOfFillers = (int)(1 + (this.listFillerStop.Value - this.listFillerStart.Value) / this.listFillerStep.Value);
-                for (int i = 0; i < numOfFillers; i++)
+                if (numOfFillers > 500)
                 {
-                    fillers.Add((double)(this.listFillerStart.Value + i * this.listFillerStep.Value));
+                    dialogResult = MessageBox.Show("More than 500 list items are about to be added - are you sure?", "Warning", MessageBoxButtons.YesNo);
                 }
-                listPanels[listFillerSelector.SelectedIndex].setData(fillers);
+                if (dialogResult == DialogResult.No)
+                {
+                    //do nothing
+                }
+                else
+                {
+                    for (int i = 0; i < numOfFillers; i++)
+                    {
+                        fillers.Add((double)(this.listFillerStart.Value + i * this.listFillerStep.Value));
+                    }
+                    listPanels[listFillerSelector.SelectedIndex].setData(fillers);
+                }
             }
             catch
             {

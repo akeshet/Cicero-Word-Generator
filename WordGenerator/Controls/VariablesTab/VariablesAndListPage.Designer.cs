@@ -34,7 +34,6 @@ namespace WordGenerator.Controls
             this.label2 = new System.Windows.Forms.Label();
             this.nameLabel = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.variableEditorPlaceholder = new WordGenerator.Controls.VariableEditor();
             this.addButton = new System.Windows.Forms.Button();
             this.lockButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -92,7 +91,7 @@ namespace WordGenerator.Controls
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.71028F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67.28972F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 53F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 112F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 116F));
             this.tableLayoutPanel1.Controls.Add(this.label1, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.nameLabel, 1, 0);
@@ -107,7 +106,7 @@ namespace WordGenerator.Controls
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(66, 0);
+            this.label1.Location = new System.Drawing.Point(62, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(34, 13);
             this.label1.TabIndex = 1;
@@ -118,14 +117,14 @@ namespace WordGenerator.Controls
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(3, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(14, 19);
+            this.label2.Size = new System.Drawing.Size(12, 19);
             this.label2.TabIndex = 3;
             this.label2.Text = "Del";
             // 
             // nameLabel
             // 
             this.nameLabel.AutoSize = true;
-            this.nameLabel.Location = new System.Drawing.Point(23, 0);
+            this.nameLabel.Location = new System.Drawing.Point(21, 0);
             this.nameLabel.Name = "nameLabel";
             this.nameLabel.Size = new System.Drawing.Size(35, 13);
             this.nameLabel.TabIndex = 0;
@@ -134,21 +133,12 @@ namespace WordGenerator.Controls
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(119, 0);
+            this.label3.Location = new System.Drawing.Point(115, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(55, 13);
             this.label3.TabIndex = 4;
             this.label3.Text = "Equation?";
             //
-            // variableEditorPlaceholder
-            // 
-            this.variableEditorPlaceholder.ListLocked = false;
-            this.variableEditorPlaceholder.Location = new System.Drawing.Point(3, 28);
-            this.variableEditorPlaceholder.Name = "variableEditorPlaceholder";
-            this.variableEditorPlaceholder.Size = new System.Drawing.Size(220, 22);
-            this.variableEditorPlaceholder.TabIndex = 2;
-            this.variableEditorPlaceholder.Visible = false;
-            //  
             // addButton
             // 
             this.addButton.Location = new System.Drawing.Point(24, 74);
@@ -339,7 +329,7 @@ namespace WordGenerator.Controls
             this.listFiller.Controls.Add(this.listFillerStart);
             this.listFiller.Controls.Add(this.listFillerButton);
             this.listFiller.Controls.Add(this.listFillerSelector);
-            this.listFiller.Location = new System.Drawing.Point(674, 755);
+            this.listFiller.Location = new System.Drawing.Point(671, 755);
             this.listFiller.Name = "listFiller";
             this.listFiller.Size = new System.Drawing.Size(210, 134);
             this.listFiller.TabIndex = 10;

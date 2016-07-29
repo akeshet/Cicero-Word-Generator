@@ -621,6 +621,7 @@ namespace WordGenerator
             bool keepGoing = true;
             while (keepGoing)
             {
+                bool skipImageSave = false;
                 MainClientForm.instance.CurrentlyOutputtingTimestep = null;
                 runningSequence.RunningCounter++; //Increment this motherfucker right off the bat
                 addMessageLogText(this, new MessageEvent("The running counter is at " + runningSequence.RunningCounter.ToString()));
@@ -1001,10 +1002,10 @@ namespace WordGenerator
                 // because the user has opted to not perform this check using the corresponding checkbox
 
                 addMessageLogText(this, new MessageEvent("Waiting for any database-bound variables to be updated to begin run ... "));
-                actionStatus = Storage.settingsData.serverManager.waitForDatabaseUpdatesOnConnectedServers(sequence, addMessageLogText);
+                actionStatus = Storage.settingsData.serverManager.waitForDatabaseUpdatesOnConnectedServers(sequence.Variables, addMessageLogText);
                 while (actionStatus != ServerManager.ServerActionStatus.Success)
                 {
-                    actionStatus = Storage.settingsData.serverManager.waitForDatabaseUpdatesOnConnectedServers(sequence, addMessageLogText);
+                    actionStatus = Storage.settingsData.serverManager.waitForDatabaseUpdatesOnConnectedServers(sequence.Variables, addMessageLogText);
                     Thread.Sleep(100);
                 }
                 addMessageLogText(this, new MessageEvent("Run proceeding."));
@@ -1051,10 +1052,10 @@ namespace WordGenerator
                     }
                 }
 
-                // Next, we pass the sequence data over to the servers. Most servers do nothing with it, but the database server uses it to
+                // Next, we pass the variable data over to the servers. Most servers do nothing with it, but the database server uses it to
                 // write the current round of variables into the database using a dbhelper .dll function
                 addMessageLogText(this, new MessageEvent("Telling Zeus servers to write variables and values into database... "));
-                actionStatus = Storage.settingsData.serverManager.saveVariablesOnConnectedServers(sequence, addMessageLogText);                     //Ref Samarth
+                actionStatus = Storage.settingsData.serverManager.saveVariablesOnConnectedServers(sequence.Variables, sequence.SequenceName, sequence.SequenceDescription, addMessageLogText);                     //Ref Samarth
                 if (actionStatus != ServerManager.ServerActionStatus.Success)
                 {
                     addMessageLogText(this, new MessageEvent("Unable to run. " + actionStatus.ToString()));
@@ -1323,16 +1324,33 @@ namespace WordGenerator
                 repeatCount++;
 
                 // Added by Samarth (Start)
+                //First, we do a check to see if a (possibly connected) Zeus server entered the fault state during the run
+                //(due to laser unlock, human override, etc.)
+                //If it DID, then we repeat that run!
+
+                addMessageLogText(this, new MessageEvent("Checking if Zeus is still giving all-clear ..."));
+                actionStatus = Storage.settingsData.serverManager.checkIfCiceroCanRunOnConnectedServers(addMessageLogText);
+                if (actionStatus != ServerManager.ServerActionStatus.Success)
+                {
+                    addMessageLogText(this, new MessageEvent("Zeus entered fault state during run - repeating last run"));
+                    keepGoing = true;
+                    skipImageSave = true; //We entered a fault state, so let's not save the image. If imaghe data comes in, it gets reset during next variable save Zeus performs
+                }
+
+
                 // At the end of the run, we hold up while the database server waits for camera data (in the cache) and then writes the cache data
                 // to the database (if the user specified so)
-                addMessageLogText(this, new MessageEvent("Waiting for Zeus servers to collect and store image data ..."));
-                actionStatus = Storage.settingsData.serverManager.saveImageDataOnConnectedServers(addMessageLogText);       //Ref Samarth
-                while (actionStatus != ServerManager.ServerActionStatus.Success)
+                if (!skipImageSave)
                 {
+                    addMessageLogText(this, new MessageEvent("Waiting for Zeus servers to collect and store image data ..."));
                     actionStatus = Storage.settingsData.serverManager.saveImageDataOnConnectedServers(addMessageLogText);
-                    Thread.Sleep(100);
+                    while (actionStatus != ServerManager.ServerActionStatus.Success)
+                    {
+                        actionStatus = Storage.settingsData.serverManager.saveImageDataOnConnectedServers(addMessageLogText);
+                        Thread.Sleep(100);
+                    }
+                    addMessageLogText(this, new MessageEvent("Completed."));
                 }
-                addMessageLogText(this, new MessageEvent("Completed."));
                 // Added by Samarth (Stop)
 
 

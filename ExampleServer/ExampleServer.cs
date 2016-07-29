@@ -7,6 +7,11 @@ using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
 using DatabaseHelper;
+using System.Diagnostics;
+using HidLibrary;
+using System.Net;
+using System.Net.Mail;
+
 namespace Zeus
 {
     class ExampleServer : ServerCommunicator
@@ -28,11 +33,11 @@ namespace Zeus
         {
             this.exampleServerForm = form;
             this.serverSettings = serverSettings;
-            
+
         }
 
-    
-       
+
+
 
         #region Implementation of ServerCommunicator
         public override bool armTasks(UInt32 clockID)
@@ -67,7 +72,7 @@ namespace Zeus
 
         public override void nextRunTimeStamp(DateTime timeStamp)
         {
-            
+
         }
 
         public override bool outputGPIBGroup(GPIBGroup gpibGroup, SettingsData settings)
@@ -107,16 +112,17 @@ namespace Zeus
 
         public override void stop()
         {
-            
+
         }
-        
-       
+
+
         //----------------------------------------------------
         //Begin new methods to be used by the database server
         //----------------------------------------------------
         public override bool checkIfCiceroCanRun()
         {
             bool errorFlag = true;
+            hardwareChannelTripped = false;
 
             if (waitForZeus)
             {
@@ -182,12 +188,87 @@ namespace Zeus
 
                 //4: Check interlock values
 
-                //Not yet implemented
+                if (checkHardwareChannels)
+                {
+                    //Compare values to those desired by rules
+                    //Set errorFlag false if any rules are violated
+                    try
+                    {
+                        byte[] data = new byte[128];
+                        connectedHID.ReadFeatureData(out data, 0);
+                        foreach (HardwareChannelRule rule in serverSettings.Rules)
+                        {
+                            bool boolValue = data[rule.InputPin + 1] != 0;
+                            if (boolValue != rule.DesiredState)
+                            {
+                                errorFlag = false;
+                                hardwareChannelTripped = true;
+                                hardwareChannelThatTripped = rule;
+                            }
+                        }
 
-             
+
+                    }
+                    catch
+                    {
+                        //Error if USB hardware rule checking is enabled BUT the USb device is unplugged 
+                        errorFlag = false;
+
+                    }
+
+                    //6: If response pulses enabled, fire a response, but STILL return false for this run of the hardware rule checks
+
+                    if (useResponsePulses && errorFlag == false && hardwareChannelTripped == true)
+                    {
+                        if (responsesTried >= serverSettings.NumberOfRelocks)
+                        {
+
+                            if (messageSent == false)
+                            {
+                                exampleServerForm.addMessageLogText(this, new MessageEvent("Maximum number of relocks reached - please address and then reset relock counter"));
+                                messageSent = true; //Don't spam this message - only send once until errors are cleared
+                                foreach (emailList address in serverSettings.Emails) //confusingly named. emailList class contains one property: AddressString. Emails is a list of "emailList"s.
+                                                                                     //Needed to wrap "string" in a class and make a list of these classes in order to get the address list to work with the propertGrid
+                                {
+                                    var client = new SmtpClient("smtp.gmail.com", 587)
+                                    {
+                                        Credentials = new NetworkCredential("bec4lab@gmail.com", "w0lfg4ng"),
+                                        EnableSsl = true
+                                    };
+                                    client.Send("Zeus@mit.edu", address.AddressString, " ", "Relocks expired - human required.");
+                                }
+                            }
+
+
+                        }
+
+                        else
+                        {
+                            if (hardwareChannelThatTripped.UseResponse)
+                            {
+                                try
+                                {
+                                    byte[] data = new byte[128];
+                                    data[hardwareChannelThatTripped.ResponsePin + 3] = 255;
+                                    connectedHID.WriteFeatureData(data);
+                                    exampleServerForm.addMessageLogText(this, new MessageEvent("Relock pulse sent on channel " + hardwareChannelThatTripped.ResponsePin.ToString()));
+                                    responsesTried++;
+                                }
+
+                                catch
+                                {
+
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+
             }
-           
-            //Check human override
+
+            //5: Check human override
             if (humanOverride == true)
             {
                 errorFlag = false;
@@ -199,14 +280,22 @@ namespace Zeus
                 exampleServerForm.addMessageLogText(this, new MessageEvent("Run check successful - Cicero is allowed to run."));
             }
 
+
+
+
+            if (errorFlag == true)
+            {
+                messageSent = false;
+            }
+
             return errorFlag;
         }
 
-        public override bool waitForDatabaseUpdates(SequenceData Sequence)
+        public override bool waitForDatabaseUpdates(List<Variable> Variables)
         {
 
             //First we update the "last bound variable name" list that belongs to the form
-            foreach (Variable var in Sequence.Variables)
+            foreach (Variable var in Variables)
             {
                 if (var.DBDriven)
                 {
@@ -218,7 +307,7 @@ namespace Zeus
             if (waitForVariableUpdates)
             {
                 List<int> indices = new List<int>();
-                foreach (Variable var in Sequence.Variables)
+                foreach (Variable var in Variables)
                 {
                     if (var.DBDriven)
                     {
@@ -247,29 +336,31 @@ namespace Zeus
             }
         }
 
-        public override bool writeVariablesIntoDatabase(SequenceData Sequence)
+        public override bool writeVariablesIntoDatabase(List<Variable> Variables, string SequenceName, string SequenceDescription)
         {
             // Note the unfortunate naming scheme here:
             // Variable (capital V) is the data type for a variable in the Word Generator project
             // variable (little v) is the data type for a variable in the dbhelper project
             variableStruct temporaryVariableStruct = new variableStruct();
             List<variable> temporaryVariableList = new List<variable>();
-            foreach (Variable var in Sequence.Variables)
+            foreach (Variable var in Variables)
             {
-                variable tempVariable = new variable("default", 0); 
-                tempVariable.Name = var.VariableName.Replace(" ",string.Empty); //kill spaces in variable names before database
+                variable tempVariable = new variable("default", 0);
+                tempVariable.Name = var.VariableName.Replace(" ", string.Empty); //kill spaces in variable names before database
                 tempVariable.VarValue = var.VariableValue;
                 temporaryVariableList.Add(tempVariable);
-            } 
+            }
             temporaryVariableStruct.variableList = temporaryVariableList.ToArray();
             dbhelper.writeVariableValues(temporaryVariableStruct);
-            string CurName = Sequence.SequenceName;
-            string CurDescription = Sequence.SequenceDescription;
+            string CurName = SequenceName;
+            string CurDescription = SequenceDescription;
             description prevSeq = (description)dbhelper.readLastSequenceNameAndDescription();
             if (!CurName.Equals(prevSeq.name) || !CurDescription.Equals(prevSeq.descriptionString))
             {
                 dbhelper.createNewSequence(CurName, CurDescription);
             }
+            dbhelper.undoUpdateNewImage(); //Also clear the "new image" field in the database (reset it to 0)
+
             exampleServerForm.addMessageLogText(this, new MessageEvent("Variable value save complete - all variable values have been written into the database."));
             return true;
         }
@@ -301,7 +392,7 @@ namespace Zeus
                 exampleServerForm.addMessageLogText(this, new MessageEvent("Image save bypassed - image data was not saved to the database, but may be in the cache."));
                 return true;
             }
-         
+
         }
 
 
@@ -316,6 +407,14 @@ namespace Zeus
         public bool waitForZeus = false;
         public bool humanOverride = false;
         public bool waitForVariableUpdates = false;
+        public bool checkHardwareChannels = false;
+        public HidDevice connectedHID = null;
+        public bool useResponsePulses = false;
+        public int responsesTried = 0;
+        public bool messageSent = false;
+
+        public bool hardwareChannelTripped = false;
+        public HardwareChannelRule hardwareChannelThatTripped = new HardwareChannelRule();
 
         //----------------------------------------------------
         //End new properties to be used by the database server
@@ -354,7 +453,7 @@ namespace Zeus
             {
                 lock (marshalLock)
                 {
-                    tcpChannel = new TcpChannel(5679);
+                    tcpChannel = new TcpChannel(5678);
                     ChannelServices.RegisterChannel(tcpChannel, false);
                     objRef = RemotingServices.Marshal(this, "serverCommunicator");
                 }

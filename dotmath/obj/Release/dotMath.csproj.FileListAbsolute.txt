@@ -1,2 +1,5 @@
 C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\dotmath\bin\Release\dotMath.dll
 C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\dotmath\obj\Release\dotMath.dll
+Z:\LAB\Samarth\Zeus\Master\dotmath\bin\Release\dotMath.dll
+Z:\LAB\Samarth\Zeus\Master\dotmath\obj\Release\dotMath.csprojResolveAssemblyReference.cache
+Z:\LAB\Samarth\Zeus\Master\dotmath\obj\Release\dotMath.dll

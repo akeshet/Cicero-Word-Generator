@@ -1,0 +1,14 @@
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\ExampleServer\bin\Debug\Virgil.exe.config
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\ExampleServer\bin\Debug\Virgil.exe
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\ExampleServer\bin\Debug\Virgil.pdb
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\ExampleServer\bin\Debug\DataStructures.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\ExampleServer\bin\Debug\MySql.Data.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\ExampleServer\bin\Debug\dotMath.dll
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\ExampleServer\bin\Debug\DataStructures.pdb
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\ExampleServer\bin\Debug\dotMath.pdb
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\ExampleServer\obj\Debug\ExampleServer.csprojResolveAssemblyReference.cache
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\ExampleServer\obj\Debug\Virgil.MainExampleServerlForm.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\ExampleServer\obj\Debug\Virgil.Properties.Resources.resources
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\ExampleServer\obj\Debug\ExampleServer.csproj.GenerateResource.Cache
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\ExampleServer\obj\Debug\Virgil.exe
+C:\Users\BECV\Dropbox\Cold Atoms\Will\Cicero Update\Cicero Master With BECV Database\ExampleServer\obj\Debug\Virgil.pdb

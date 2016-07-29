@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<ExampleServerSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Heartbeats />
+  <ServerName>Zeus</ServerName>
+  <DatabaseServerIP>18.62.9.117</DatabaseServerIP>
+  <MemcachedServerIP>18.62.20.173</MemcachedServerIP>
+  <Username>root</Username>
+  <Password>w0lfg4ng</Password>
+  <DBName>becivdatabase</DBName>
+</ExampleServerSettings>

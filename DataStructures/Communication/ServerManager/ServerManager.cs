@@ -690,14 +690,14 @@ namespace DataStructures
             return runNamedMethodOnConnectedServers("checkIfCiceroCanRun", null , 4000, messageLog);
         }
 
-        public ServerActionStatus waitForDatabaseUpdatesOnConnectedServers(SequenceData sequence, EventHandler<MessageEvent> messageLog)
+        public ServerActionStatus waitForDatabaseUpdatesOnConnectedServers(List<Variable> Variables, EventHandler<MessageEvent> messageLog)
         {
-            return runNamedMethodOnConnectedServers("waitForDatabaseUpdates", new object[] { sequence }, 4000, messageLog);
+            return runNamedMethodOnConnectedServers("waitForDatabaseUpdates", new object[] { Variables }, 4000, messageLog);
         }
 
-        public ServerActionStatus saveVariablesOnConnectedServers(SequenceData sequence, EventHandler<MessageEvent> messageLog)
+        public ServerActionStatus saveVariablesOnConnectedServers(List<Variable> Variables, string SequenceName, string SequenceDescription, EventHandler<MessageEvent> messageLog)
         {
-            return runNamedMethodOnConnectedServers("writeVariablesIntoDatabase", new object[] { sequence }, 4000, messageLog);
+            return runNamedMethodOnConnectedServers("writeVariablesIntoDatabase", new object[] { Variables,SequenceName,SequenceDescription }, 4000, messageLog);
         }
 
         public ServerActionStatus saveImageDataOnConnectedServers(EventHandler<MessageEvent> messageLog)

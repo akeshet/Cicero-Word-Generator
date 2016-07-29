@@ -18,3 +18,16 @@ C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\Elgin\obj\Debug\El
 C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\Elgin\obj\Debug\Elgin.exe.licenses
 C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\Elgin\obj\Debug\Elgin.exe
 C:\Users\TheDarkKnight\Documents\GitHub\Cicero-Word-Generator\Elgin\obj\Debug\Elgin.pdb
+Z:\LAB\Samarth\Zeus\Master\Elgin\bin\Debug\Elgin.exe.config
+Z:\LAB\Samarth\Zeus\Master\Elgin\bin\Debug\Elgin.exe
+Z:\LAB\Samarth\Zeus\Master\Elgin\bin\Debug\Elgin.pdb
+Z:\LAB\Samarth\Zeus\Master\Elgin\obj\Debug\Elgin.csprojResolveAssemblyReference.cache
+Z:\LAB\Samarth\Zeus\Master\Elgin\obj\Debug\Elgin.ElginSplash.resources
+Z:\LAB\Samarth\Zeus\Master\Elgin\obj\Debug\Elgin.ElginTrackerForm.resources
+Z:\LAB\Samarth\Zeus\Master\Elgin\obj\Debug\Elgin.ElginMDIParent.resources
+Z:\LAB\Samarth\Zeus\Master\Elgin\obj\Debug\Elgin.Properties.Resources.resources
+Z:\LAB\Samarth\Zeus\Master\Elgin\obj\Debug\Elgin.RunLogExplorerForm.resources
+Z:\LAB\Samarth\Zeus\Master\Elgin\obj\Debug\Elgin.csproj.GenerateResource.Cache
+Z:\LAB\Samarth\Zeus\Master\Elgin\obj\Debug\Elgin.exe.licenses
+Z:\LAB\Samarth\Zeus\Master\Elgin\obj\Debug\Elgin.exe
+Z:\LAB\Samarth\Zeus\Master\Elgin\obj\Debug\Elgin.pdb
