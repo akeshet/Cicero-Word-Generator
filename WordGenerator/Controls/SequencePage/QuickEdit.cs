@@ -14,11 +14,35 @@ namespace WordGenerator.Controls
     {
         private int incomingID;
 
+        private int RGB(int R, int G, int B)
+        {
+            return R + 256 * G + 256 * 256 * B;
+        }
+
         public QuickEdit(int selectedID)
         {
             InitializeComponent();
             IDText.Text = selectedID.ToString();
             incomingID = selectedID;
+            colorDialog1.CustomColors = new int[] {
+
+            RGB(153,87,8),
+            RGB(163,53,2),
+            RGB(140,13,0),
+            RGB(163,2,77),
+            RGB(56,6,138),
+            RGB(2,40,163),
+            RGB(0,90,140),
+            RGB(2,163,154),
+            
+            RGB(4,73,68),
+            RGB(5,140,0),
+            RGB(101,189,4),
+            RGB(202,230,6),
+            RGB(141,141,143),
+            RGB(66,65,66),
+            RGB(0,0,0)
+            };
             if (Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.digital].Channels[incomingID].ChannelColor != System.Drawing.Color.Empty)
             {
                 colorSwatch.BackColor = Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.digital].Channels[incomingID].ChannelColor;
@@ -227,6 +251,7 @@ namespace WordGenerator.Controls
 
         private void colorSwatch_Click(object sender, EventArgs e)
         {
+
             this.colorDialog1.ShowDialog();
             colorSwatch.BackColor = colorDialog1.Color;
         }

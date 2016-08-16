@@ -68,6 +68,7 @@ namespace WordGenerator.Controls
             this.digitalGrid = new WordGenerator.Controls.DigitalGrid();
             this.contextMenuStrip1.SuspendLayout();
             this.timeStepsPanel.SuspendLayout();
+            this.timeStepsFlowPanel.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.leftColumnPanel.SuspendLayout();
             this.sequenceViewPanel.SuspendLayout();
@@ -75,6 +76,7 @@ namespace WordGenerator.Controls
             this.upperRowPanel.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.upperCornerPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.digitalAnalogSplitContainer)).BeginInit();
             this.digitalAnalogSplitContainer.Panel1.SuspendLayout();
             this.digitalAnalogSplitContainer.Panel2.SuspendLayout();
             this.digitalAnalogSplitContainer.SuspendLayout();
@@ -135,7 +137,6 @@ namespace WordGenerator.Controls
             // 
             this.timeStepsPanel.AutoScroll = true;
             this.timeStepsPanel.ContextMenuStrip = this.contextMenuStrip1;
-            this.timeStepsPanel.Controls.Add(this.beginHintLabel);
             this.timeStepsPanel.Controls.Add(this.timeStepsFlowPanel);
             this.timeStepsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.timeStepsPanel.Location = new System.Drawing.Point(130, 0);
@@ -149,7 +150,7 @@ namespace WordGenerator.Controls
             // beginHintLabel
             // 
             this.beginHintLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.beginHintLabel.Location = new System.Drawing.Point(0, 0);
+            this.beginHintLabel.Location = new System.Drawing.Point(3, 0);
             this.beginHintLabel.Name = "beginHintLabel";
             this.beginHintLabel.Size = new System.Drawing.Size(188, 175);
             this.beginHintLabel.TabIndex = 0;
@@ -159,6 +160,7 @@ namespace WordGenerator.Controls
             // timeStepsFlowPanel
             // 
             this.timeStepsFlowPanel.AutoSize = true;
+            this.timeStepsFlowPanel.Controls.Add(this.beginHintLabel);
             this.timeStepsFlowPanel.Location = new System.Drawing.Point(0, 0);
             this.timeStepsFlowPanel.Margin = new System.Windows.Forms.Padding(0);
             this.timeStepsFlowPanel.Name = "timeStepsFlowPanel";
@@ -176,6 +178,7 @@ namespace WordGenerator.Controls
             // 
             // seqDescBox
             // 
+            this.seqDescBox.BackColor = System.Drawing.SystemColors.Window;
             this.seqDescBox.Location = new System.Drawing.Point(3, 416);
             this.seqDescBox.Multiline = true;
             this.seqDescBox.Name = "seqDescBox";
@@ -257,6 +260,7 @@ namespace WordGenerator.Controls
             // 
             // tableLayoutPanel1
             // 
+            this.tableLayoutPanel1.BackColor = System.Drawing.SystemColors.Control;
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 125F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -513,6 +517,7 @@ namespace WordGenerator.Controls
             this.contextMenuStrip1.ResumeLayout(false);
             this.timeStepsPanel.ResumeLayout(false);
             this.timeStepsPanel.PerformLayout();
+            this.timeStepsFlowPanel.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.leftColumnPanel.ResumeLayout(false);
             this.leftColumnPanel.PerformLayout();
@@ -524,6 +529,7 @@ namespace WordGenerator.Controls
             this.upperCornerPanel.PerformLayout();
             this.digitalAnalogSplitContainer.Panel1.ResumeLayout(false);
             this.digitalAnalogSplitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.digitalAnalogSplitContainer)).EndInit();
             this.digitalAnalogSplitContainer.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);
