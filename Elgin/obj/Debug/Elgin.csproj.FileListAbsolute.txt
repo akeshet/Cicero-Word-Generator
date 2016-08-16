@@ -31,3 +31,13 @@ Z:\LAB\Samarth\Zeus\Master\Elgin\obj\Debug\Elgin.csproj.GenerateResource.Cache
 Z:\LAB\Samarth\Zeus\Master\Elgin\obj\Debug\Elgin.exe.licenses
 Z:\LAB\Samarth\Zeus\Master\Elgin\obj\Debug\Elgin.exe
 Z:\LAB\Samarth\Zeus\Master\Elgin\obj\Debug\Elgin.pdb
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\Elgin\obj\Debug\Elgin.csprojResolveAssemblyReference.cache
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\Elgin\obj\Debug\Elgin.ElginSplash.resources
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\Elgin\obj\Debug\Elgin.ElginTrackerForm.resources
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\Elgin\obj\Debug\Elgin.ElginMDIParent.resources
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\Elgin\obj\Debug\Elgin.Properties.Resources.resources
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\Elgin\obj\Debug\Elgin.RunLogExplorerForm.resources
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\Elgin\obj\Debug\Elgin.csproj.GenerateResource.Cache
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\Elgin\obj\Debug\Elgin.exe.licenses
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\Elgin\obj\Debug\Elgin.exe
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\Elgin\obj\Debug\Elgin.pdb

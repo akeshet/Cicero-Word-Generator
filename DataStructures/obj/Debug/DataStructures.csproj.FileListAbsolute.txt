@@ -22,3 +22,15 @@ Z:\LAB\Samarth\Zeus\Master\DataStructures\obj\Debug\DataStructures.Properties.Re
 Z:\LAB\Samarth\Zeus\Master\DataStructures\obj\Debug\DataStructures.csproj.GenerateResource.Cache
 Z:\LAB\Samarth\Zeus\Master\DataStructures\obj\Debug\DataStructures.dll
 Z:\LAB\Samarth\Zeus\Master\DataStructures\obj\Debug\DataStructures.pdb
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\DataStructures\bin\Debug\DataStructures.dll
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\DataStructures\bin\Debug\DataStructures.pdb
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\DataStructures\bin\Debug\dotMath.dll
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\DataStructures\bin\Debug\MySql.Data.dll
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\DataStructures\bin\Debug\dotMath.pdb
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\DataStructures\obj\Debug\DataStructures.csprojResolveAssemblyReference.cache
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\DataStructures\obj\Debug\DataStructures.ExceptionViewerDialog.resources
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\DataStructures\obj\Debug\DataStructures.LicenseInfoForm.resources
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\DataStructures\obj\Debug\DataStructures.Properties.Resources.resources
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\DataStructures\obj\Debug\DataStructures.csproj.GenerateResource.Cache
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\DataStructures\obj\Debug\DataStructures.dll
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\DataStructures\obj\Debug\DataStructures.pdb
