@@ -373,6 +373,7 @@ namespace DatabaseHelper
                     {
                         cmd1 = new MySqlCommand("ALTER TABLE ciceroOut CHANGE " + key + " " + name + " decimal(20,10)", conn);
                         object result1 = cmd1.ExecuteScalar();
+                        columnNames.Remove(key);
                         //cmd1 = new MySqlCommand("ALTER TABLE ciceroOut ADD " + name + " dec(20,10)", this.conn);
                         //object result1 = cmd1.ExecuteScalar();
                     }
