@@ -148,7 +148,6 @@ C:\Users\bec3\Documents\code\Cicero-Word-Generator\WordGenerator\bin\Debug\dotMa
 C:\Users\bec3\Documents\code\Cicero-Word-Generator\WordGenerator\bin\Debug\DatabaseHelper.pdb
 C:\Users\bec3\Documents\code\Cicero-Word-Generator\WordGenerator\bin\Debug\DataStructures.pdb
 C:\Users\bec3\Documents\code\Cicero-Word-Generator\WordGenerator\bin\Debug\dotMath.pdb
-C:\Users\bec3\Documents\code\Cicero-Word-Generator\WordGenerator\obj\Debug\Cicero.csprojResolveAssemblyReference.cache
 C:\Users\bec3\Documents\code\Cicero-Word-Generator\WordGenerator\obj\Debug\WordGenerator.ChannelManager.AddDevice.resources
 C:\Users\bec3\Documents\code\Cicero-Word-Generator\WordGenerator\obj\Debug\WordGenerator.ChannelManager.ChannelManager.resources
 C:\Users\bec3\Documents\code\Cicero-Word-Generator\WordGenerator\obj\Debug\WordGenerator.ChannelManager.EditDevice.resources
@@ -202,3 +201,4 @@ C:\Users\bec3\Documents\code\Cicero-Word-Generator\WordGenerator\obj\Debug\WordG
 C:\Users\bec3\Documents\code\Cicero-Word-Generator\WordGenerator\obj\Debug\WordGenerator.ServerManagerForm.resources
 C:\Users\bec3\Documents\code\Cicero-Word-Generator\WordGenerator\obj\Debug\WordGenerator.SettingsExplorerForm.resources
 C:\Users\bec3\Documents\code\Cicero-Word-Generator\WordGenerator\obj\Debug\Cicero.csproj.GenerateResource.Cache
+C:\Users\bec3\Documents\code\Cicero-Word-Generator\WordGenerator\obj\Debug\Cicero.csprojResolveAssemblyReference.cache

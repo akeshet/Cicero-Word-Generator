@@ -73,6 +73,7 @@ namespace WordGenerator
             this.editServerManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.populateSequenceWithNewChannelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enableDebugMenuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editRunLoggingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sequenceExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -125,7 +126,6 @@ namespace WordGenerator
             this.variablesEditor = new WordGenerator.Controls.VariablesAndListPage();
             this.pulsesPage = new WordGenerator.Controls.PulsesPage();
             this.LUTEditor = new WordGenerator.Controls.LookUpTableTab.LookupTableControl();
-            this.editRunLoggingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.variablesTab.SuspendLayout();
@@ -165,7 +165,7 @@ namespace WordGenerator
             // 
             // menuStrip
             // 
-            this.menuStrip.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.menuStrip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.runToolStripMenuItem,
@@ -201,6 +201,7 @@ namespace WordGenerator
             this.loadLogToolStripMenuItem,
             this.toolStripMenuItem4,
             this.exitToolStripMenuItem});
+            this.fileToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
@@ -485,6 +486,13 @@ namespace WordGenerator
             this.enableDebugMenuToolStripMenuItem.Text = "Enable Debug Menu";
             this.enableDebugMenuToolStripMenuItem.Click += new System.EventHandler(this.enableDebugMenuToolStripMenuItem_Click);
             // 
+            // editRunLoggingToolStripMenuItem
+            // 
+            this.editRunLoggingToolStripMenuItem.Name = "editRunLoggingToolStripMenuItem";
+            this.editRunLoggingToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.editRunLoggingToolStripMenuItem.Text = "Run Log Config";
+            this.editRunLoggingToolStripMenuItem.Click += new System.EventHandler(this.editRunLoggingToolStripMenuItem_Click);
+            // 
             // advancedToolStripMenuItem
             // 
             this.advancedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -726,11 +734,13 @@ namespace WordGenerator
             // useNetworkClockCheckBox
             // 
             this.useNetworkClockCheckBox.AutoSize = true;
-            this.useNetworkClockCheckBox.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.useNetworkClockCheckBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.useNetworkClockCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.useNetworkClockCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.useNetworkClockCheckBox.Location = new System.Drawing.Point(14, 762);
+            this.useNetworkClockCheckBox.ForeColor = System.Drawing.Color.White;
+            this.useNetworkClockCheckBox.Location = new System.Drawing.Point(10, 769);
             this.useNetworkClockCheckBox.Name = "useNetworkClockCheckBox";
-            this.useNetworkClockCheckBox.Size = new System.Drawing.Size(118, 17);
+            this.useNetworkClockCheckBox.Size = new System.Drawing.Size(115, 17);
             this.useNetworkClockCheckBox.TabIndex = 10;
             this.useNetworkClockCheckBox.Text = "Use Network Clock";
             this.useNetworkClockCheckBox.UseVisualStyleBackColor = false;
@@ -739,11 +749,13 @@ namespace WordGenerator
             // waitForReady
             // 
             this.waitForReady.AutoSize = true;
-            this.waitForReady.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.waitForReady.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.waitForReady.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.waitForReady.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.waitForReady.Location = new System.Drawing.Point(14, 741);
+            this.waitForReady.ForeColor = System.Drawing.Color.White;
+            this.waitForReady.Location = new System.Drawing.Point(10, 746);
             this.waitForReady.Name = "waitForReady";
-            this.waitForReady.Size = new System.Drawing.Size(97, 17);
+            this.waitForReady.Size = new System.Drawing.Size(94, 17);
             this.waitForReady.TabIndex = 9;
             this.waitForReady.Text = "Wait for Ready";
             this.waitForReady.UseVisualStyleBackColor = false;
@@ -752,11 +764,13 @@ namespace WordGenerator
             // lockDigitalCheckBox
             // 
             this.lockDigitalCheckBox.AutoSize = true;
-            this.lockDigitalCheckBox.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.lockDigitalCheckBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lockDigitalCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.lockDigitalCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.lockDigitalCheckBox.Location = new System.Drawing.Point(14, 720);
+            this.lockDigitalCheckBox.ForeColor = System.Drawing.Color.White;
+            this.lockDigitalCheckBox.Location = new System.Drawing.Point(10, 723);
             this.lockDigitalCheckBox.Name = "lockDigitalCheckBox";
-            this.lockDigitalCheckBox.Size = new System.Drawing.Size(112, 17);
+            this.lockDigitalCheckBox.Size = new System.Drawing.Size(109, 17);
             this.lockDigitalCheckBox.TabIndex = 8;
             this.lockDigitalCheckBox.Text = "Lock Digital Panel";
             this.lockDigitalCheckBox.UseVisualStyleBackColor = false;
@@ -764,7 +778,8 @@ namespace WordGenerator
             // rs232GroupsLabel
             // 
             this.rs232GroupsLabel.AutoSize = true;
-            this.rs232GroupsLabel.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.rs232GroupsLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.rs232GroupsLabel.ForeColor = System.Drawing.Color.White;
             this.rs232GroupsLabel.Location = new System.Drawing.Point(167, 200);
             this.rs232GroupsLabel.Name = "rs232GroupsLabel";
             this.rs232GroupsLabel.Size = new System.Drawing.Size(75, 13);
@@ -774,7 +789,8 @@ namespace WordGenerator
             // gpibGroupsLabel
             // 
             this.gpibGroupsLabel.AutoSize = true;
-            this.gpibGroupsLabel.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.gpibGroupsLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.gpibGroupsLabel.ForeColor = System.Drawing.Color.White;
             this.gpibGroupsLabel.Location = new System.Drawing.Point(175, 174);
             this.gpibGroupsLabel.Name = "gpibGroupsLabel";
             this.gpibGroupsLabel.Size = new System.Drawing.Size(67, 13);
@@ -784,7 +800,8 @@ namespace WordGenerator
             // analogGroupsLabel
             // 
             this.analogGroupsLabel.AutoSize = true;
-            this.analogGroupsLabel.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.analogGroupsLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.analogGroupsLabel.ForeColor = System.Drawing.Color.White;
             this.analogGroupsLabel.Location = new System.Drawing.Point(168, 148);
             this.analogGroupsLabel.Name = "analogGroupsLabel";
             this.analogGroupsLabel.Size = new System.Drawing.Size(75, 13);
@@ -793,24 +810,36 @@ namespace WordGenerator
             // 
             // serverManagerButton
             // 
+            this.serverManagerButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.serverManagerButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.serverManagerButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.serverManagerButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gray;
+            this.serverManagerButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.serverManagerButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.serverManagerButton.Location = new System.Drawing.Point(11, 679);
+            this.serverManagerButton.ForeColor = System.Drawing.Color.White;
+            this.serverManagerButton.Location = new System.Drawing.Point(9, 670);
             this.serverManagerButton.Name = "serverManagerButton";
-            this.serverManagerButton.Size = new System.Drawing.Size(116, 35);
+            this.serverManagerButton.Size = new System.Drawing.Size(116, 45);
             this.serverManagerButton.TabIndex = 3;
             this.serverManagerButton.Text = "Server Manager (F11)";
-            this.serverManagerButton.UseVisualStyleBackColor = true;
+            this.serverManagerButton.UseVisualStyleBackColor = false;
             this.serverManagerButton.Click += new System.EventHandler(this.editServerManagerToolStripMenuItem_Click);
             // 
             // button2
             // 
+            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.button2.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.button2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gray;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.button2.Location = new System.Drawing.Point(11, 640);
+            this.button2.ForeColor = System.Drawing.Color.White;
+            this.button2.Location = new System.Drawing.Point(10, 629);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(116, 33);
+            this.button2.Size = new System.Drawing.Size(115, 33);
             this.button2.TabIndex = 2;
             this.button2.Text = "Channel Manager";
-            this.button2.UseVisualStyleBackColor = true;
+            this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.editLogicalDevicesToolStripMenuItem_Click);
             // 
             // mainTab
@@ -903,7 +932,7 @@ namespace WordGenerator
             // 
             // sequencePage
             // 
-            this.sequencePage.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.sequencePage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.sequencePage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.sequencePage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sequencePage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
@@ -979,14 +1008,6 @@ namespace WordGenerator
             this.LUTEditor.Size = new System.Drawing.Size(1264, 918);
             this.LUTEditor.TabIndex = 0;
             this.LUTEditor.Load += new System.EventHandler(this.lookupTableControl1_Load);
-            // 
-            // editRunLoggingToolStripMenuItem
-            // 
-            this.editRunLoggingToolStripMenuItem.Name = "editRunLoggingToolStripMenuItem";
-            this.editRunLoggingToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.editRunLoggingToolStripMenuItem.Text = "Run Log Config";
-            this.editRunLoggingToolStripMenuItem.Click += new System.EventHandler(this.editRunLoggingToolStripMenuItem_Click);
-            // 
             // 
             // MainClientForm
             // 

@@ -88,6 +88,7 @@ namespace WordGenerator.Controls
             // hideHiddenTimestepsCheckbox
             // 
             this.hideHiddenTimestepsCheckbox.AutoSize = true;
+            this.hideHiddenTimestepsCheckbox.ForeColor = System.Drawing.Color.White;
             this.hideHiddenTimestepsCheckbox.Location = new System.Drawing.Point(59, 58);
             this.hideHiddenTimestepsCheckbox.Name = "hideHiddenTimestepsCheckbox";
             this.hideHiddenTimestepsCheckbox.Size = new System.Drawing.Size(54, 17);
@@ -116,6 +117,8 @@ namespace WordGenerator.Controls
             this.analogPreviewAutoUpdate.AutoSize = true;
             this.analogPreviewAutoUpdate.Checked = true;
             this.analogPreviewAutoUpdate.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.analogPreviewAutoUpdate.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.analogPreviewAutoUpdate.ForeColor = System.Drawing.Color.White;
             this.analogPreviewAutoUpdate.Location = new System.Drawing.Point(65, 216);
             this.analogPreviewAutoUpdate.Name = "analogPreviewAutoUpdate";
             this.analogPreviewAutoUpdate.Size = new System.Drawing.Size(48, 17);
@@ -125,6 +128,7 @@ namespace WordGenerator.Controls
             // 
             // analogPreviewUpdate
             // 
+            this.analogPreviewUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.analogPreviewUpdate.Location = new System.Drawing.Point(2, 212);
             this.analogPreviewUpdate.Name = "analogPreviewUpdate";
             this.analogPreviewUpdate.Size = new System.Drawing.Size(57, 23);
@@ -136,6 +140,7 @@ namespace WordGenerator.Controls
             // timeStepsPanel
             // 
             this.timeStepsPanel.AutoScroll = true;
+            this.timeStepsPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.timeStepsPanel.ContextMenuStrip = this.contextMenuStrip1;
             this.timeStepsPanel.Controls.Add(this.timeStepsFlowPanel);
             this.timeStepsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -149,7 +154,9 @@ namespace WordGenerator.Controls
             // 
             // beginHintLabel
             // 
+            this.beginHintLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.beginHintLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.beginHintLabel.ForeColor = System.Drawing.Color.White;
             this.beginHintLabel.Location = new System.Drawing.Point(3, 0);
             this.beginHintLabel.Name = "beginHintLabel";
             this.beginHintLabel.Size = new System.Drawing.Size(188, 175);
@@ -170,6 +177,9 @@ namespace WordGenerator.Controls
             // 
             // seqNameBox
             // 
+            this.seqNameBox.BackColor = System.Drawing.Color.Gray;
+            this.seqNameBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.seqNameBox.ForeColor = System.Drawing.Color.White;
             this.seqNameBox.Location = new System.Drawing.Point(2, 373);
             this.seqNameBox.Name = "seqNameBox";
             this.seqNameBox.Size = new System.Drawing.Size(112, 20);
@@ -178,7 +188,9 @@ namespace WordGenerator.Controls
             // 
             // seqDescBox
             // 
-            this.seqDescBox.BackColor = System.Drawing.SystemColors.Window;
+            this.seqDescBox.BackColor = System.Drawing.Color.Gray;
+            this.seqDescBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.seqDescBox.ForeColor = System.Drawing.Color.White;
             this.seqDescBox.Location = new System.Drawing.Point(3, 416);
             this.seqDescBox.Multiline = true;
             this.seqDescBox.Name = "seqDescBox";
@@ -189,6 +201,8 @@ namespace WordGenerator.Controls
             // sequenceNameLabel
             // 
             this.sequenceNameLabel.AutoSize = true;
+            this.sequenceNameLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.sequenceNameLabel.ForeColor = System.Drawing.Color.White;
             this.sequenceNameLabel.Location = new System.Drawing.Point(13, 357);
             this.sequenceNameLabel.Name = "sequenceNameLabel";
             this.sequenceNameLabel.Size = new System.Drawing.Size(90, 13);
@@ -198,6 +212,7 @@ namespace WordGenerator.Controls
             // sequenceDescriptionLabel
             // 
             this.sequenceDescriptionLabel.AutoSize = true;
+            this.sequenceDescriptionLabel.ForeColor = System.Drawing.Color.White;
             this.sequenceDescriptionLabel.Location = new System.Drawing.Point(2, 400);
             this.sequenceDescriptionLabel.Name = "sequenceDescriptionLabel";
             this.sequenceDescriptionLabel.Size = new System.Drawing.Size(115, 13);
@@ -206,8 +221,12 @@ namespace WordGenerator.Controls
             // 
             // createModeButton
             // 
-            this.createModeButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.createModeButton.Location = new System.Drawing.Point(81, 90);
+            this.createModeButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.createModeButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.createModeButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gray;
+            this.createModeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.createModeButton.ForeColor = System.Drawing.Color.White;
+            this.createModeButton.Location = new System.Drawing.Point(80, 82);
             this.createModeButton.Name = "createModeButton";
             this.createModeButton.Size = new System.Drawing.Size(20, 20);
             this.createModeButton.TabIndex = 18;
@@ -218,8 +237,12 @@ namespace WordGenerator.Controls
             // 
             // destroyModeButton
             // 
-            this.destroyModeButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.destroyModeButton.Location = new System.Drawing.Point(106, 90);
+            this.destroyModeButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.destroyModeButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.destroyModeButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gray;
+            this.destroyModeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.destroyModeButton.ForeColor = System.Drawing.Color.White;
+            this.destroyModeButton.Location = new System.Drawing.Point(106, 82);
             this.destroyModeButton.Name = "destroyModeButton";
             this.destroyModeButton.Size = new System.Drawing.Size(20, 20);
             this.destroyModeButton.TabIndex = 19;
@@ -230,10 +253,14 @@ namespace WordGenerator.Controls
             // 
             // storeMode
             // 
-            this.storeMode.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.storeMode.Location = new System.Drawing.Point(80, 114);
+            this.storeMode.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.storeMode.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.storeMode.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gray;
+            this.storeMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.storeMode.ForeColor = System.Drawing.Color.White;
+            this.storeMode.Location = new System.Drawing.Point(80, 107);
             this.storeMode.Name = "storeMode";
-            this.storeMode.Size = new System.Drawing.Size(47, 20);
+            this.storeMode.Size = new System.Drawing.Size(47, 33);
             this.storeMode.TabIndex = 21;
             this.storeMode.Text = "Store";
             this.toolTip1.SetToolTip(this.storeMode, "Store current Mode.");
@@ -243,6 +270,7 @@ namespace WordGenerator.Controls
             // digitalOverridesCountLabel
             // 
             this.digitalOverridesCountLabel.AutoSize = true;
+            this.digitalOverridesCountLabel.ForeColor = System.Drawing.Color.White;
             this.digitalOverridesCountLabel.Location = new System.Drawing.Point(3, 36);
             this.digitalOverridesCountLabel.Name = "digitalOverridesCountLabel";
             this.digitalOverridesCountLabel.Size = new System.Drawing.Size(35, 13);
@@ -252,6 +280,7 @@ namespace WordGenerator.Controls
             // analogOverridesCountLabel
             // 
             this.analogOverridesCountLabel.AutoSize = true;
+            this.analogOverridesCountLabel.ForeColor = System.Drawing.Color.White;
             this.analogOverridesCountLabel.Location = new System.Drawing.Point(3, 13);
             this.analogOverridesCountLabel.Name = "analogOverridesCountLabel";
             this.analogOverridesCountLabel.Size = new System.Drawing.Size(35, 13);
@@ -260,13 +289,14 @@ namespace WordGenerator.Controls
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.BackColor = System.Drawing.SystemColors.Control;
+            this.tableLayoutPanel1.BackColor = System.Drawing.Color.Black;
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 125F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.leftColumnPanel, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.sequenceViewPanel, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.ForeColor = System.Drawing.Color.White;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -277,6 +307,7 @@ namespace WordGenerator.Controls
             // 
             // leftColumnPanel
             // 
+            this.leftColumnPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.leftColumnPanel.Controls.Add(this.runControl1);
             this.leftColumnPanel.Controls.Add(this.sequenceNameLabel);
             this.leftColumnPanel.Controls.Add(this.seqNameBox);
@@ -340,6 +371,7 @@ namespace WordGenerator.Controls
             // 
             // upperCornerPanel
             // 
+            this.upperCornerPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.upperCornerPanel.Controls.Add(this.storeMode);
             this.upperCornerPanel.Controls.Add(this.modeTextBox);
             this.upperCornerPanel.Controls.Add(this.destroyModeButton);
@@ -359,16 +391,22 @@ namespace WordGenerator.Controls
             // 
             // modeTextBox
             // 
-            this.modeTextBox.Location = new System.Drawing.Point(5, 114);
+            this.modeTextBox.BackColor = System.Drawing.Color.Gray;
+            this.modeTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.modeTextBox.ForeColor = System.Drawing.Color.White;
+            this.modeTextBox.Location = new System.Drawing.Point(5, 108);
             this.modeTextBox.Name = "modeTextBox";
             this.modeTextBox.Size = new System.Drawing.Size(73, 20);
             this.modeTextBox.TabIndex = 20;
             // 
             // modeBox
             // 
+            this.modeBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.modeBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.modeBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.modeBox.ForeColor = System.Drawing.Color.White;
             this.modeBox.FormattingEnabled = true;
-            this.modeBox.Location = new System.Drawing.Point(5, 90);
+            this.modeBox.Location = new System.Drawing.Point(5, 81);
             this.modeBox.Name = "modeBox";
             this.modeBox.Size = new System.Drawing.Size(73, 21);
             this.modeBox.TabIndex = 17;
@@ -454,6 +492,7 @@ namespace WordGenerator.Controls
             // analogChannelLabelsPanel
             // 
             this.analogChannelLabelsPanel.AutoScroll = true;
+            this.analogChannelLabelsPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.analogChannelLabelsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.analogChannelLabelsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.analogChannelLabelsPanel.Location = new System.Drawing.Point(0, 0);
@@ -494,6 +533,7 @@ namespace WordGenerator.Controls
             // digitalGrid
             // 
             this.digitalGrid.AutoScroll = true;
+            this.digitalGrid.BackColor = System.Drawing.Color.Gray;
             this.digitalGrid.ContainerSize = new System.Drawing.Size(0, 0);
             this.digitalGrid.Location = new System.Drawing.Point(0, 0);
             this.digitalGrid.Margin = new System.Windows.Forms.Padding(0);

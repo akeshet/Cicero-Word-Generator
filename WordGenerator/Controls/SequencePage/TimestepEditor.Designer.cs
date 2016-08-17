@@ -91,6 +91,7 @@ namespace WordGenerator.Controls
             // timeStepNumber
             // 
             this.timeStepNumber.AutoSize = true;
+            this.timeStepNumber.ForeColor = System.Drawing.Color.White;
             this.timeStepNumber.Location = new System.Drawing.Point(0, 0);
             this.timeStepNumber.Name = "timeStepNumber";
             this.timeStepNumber.Size = new System.Drawing.Size(14, 13);
@@ -101,7 +102,10 @@ namespace WordGenerator.Controls
             // 
             // timestepName
             // 
+            this.timestepName.BackColor = System.Drawing.Color.DimGray;
+            this.timestepName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.timestepName.ContextMenuStrip = this.contextMenuStrip1;
+            this.timestepName.ForeColor = System.Drawing.Color.White;
             this.timestepName.Location = new System.Drawing.Point(0, 16);
             this.timestepName.Name = "timestepName";
             this.timestepName.Size = new System.Drawing.Size(84, 20);
@@ -389,10 +393,10 @@ namespace WordGenerator.Controls
             // 
             // analogSelector
             // 
-            this.analogSelector.BackColor = System.Drawing.SystemColors.Window;
+            this.analogSelector.BackColor = System.Drawing.Color.DimGray;
             this.analogSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.analogSelector.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.analogSelector.ForeColor = System.Drawing.SystemColors.Window;
+            this.analogSelector.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.analogSelector.ForeColor = System.Drawing.Color.White;
             this.analogSelector.FormattingEnabled = true;
             this.analogSelector.Location = new System.Drawing.Point(0, 142);
             this.analogSelector.Name = "analogSelector";
@@ -406,8 +410,10 @@ namespace WordGenerator.Controls
             // 
             // gpibSelector
             // 
+            this.gpibSelector.BackColor = System.Drawing.Color.DimGray;
             this.gpibSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.gpibSelector.ForeColor = System.Drawing.SystemColors.Window;
+            this.gpibSelector.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.gpibSelector.ForeColor = System.Drawing.Color.White;
             this.gpibSelector.FormattingEnabled = true;
             this.gpibSelector.Location = new System.Drawing.Point(0, 168);
             this.gpibSelector.Name = "gpibSelector";
@@ -421,8 +427,10 @@ namespace WordGenerator.Controls
             // 
             // rs232Selector
             // 
+            this.rs232Selector.BackColor = System.Drawing.Color.DimGray;
             this.rs232Selector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.rs232Selector.ForeColor = System.Drawing.SystemColors.Window;
+            this.rs232Selector.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rs232Selector.ForeColor = System.Drawing.Color.White;
             this.rs232Selector.FormattingEnabled = true;
             this.rs232Selector.Location = new System.Drawing.Point(0, 194);
             this.rs232Selector.Name = "rs232Selector";
@@ -577,6 +585,7 @@ namespace WordGenerator.Controls
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ContextMenuStrip = this.contextMenuStrip1;
             this.Controls.Add(this.insertRight);
             this.Controls.Add(this.insertLeft);

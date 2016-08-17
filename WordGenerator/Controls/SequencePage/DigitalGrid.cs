@@ -614,12 +614,12 @@ namespace WordGenerator.Controls
            // return new HatchBrush(HatchStyle.DarkUpwardDiagonal, TrueBrushColors[row % TrueBrushColors.Count], Color.Tan);
         }
 
-        private static readonly Brush falseBrush = Brushes.White;
+        private static readonly Brush falseBrush = new SolidBrush(Color.FromArgb(255,40,40,40));
 
         private static readonly Pen normalOutlinePen = Pens.Black;
         private static readonly Pen pulseOutlintPen = Pens.White;
 
-        private static readonly Brush draggingBrush = new HatchBrush(HatchStyle.Percent20, Color.Black, Color.Transparent);
+        private static readonly Brush draggingBrush = new HatchBrush(HatchStyle.Percent20, Color.White, Color.Transparent);
 
         private static readonly Brush variableBrush = Brushes.Thistle;
 
@@ -1008,10 +1008,10 @@ namespace WordGenerator.Controls
         private void InitializeComponent()
         {
             this.SuspendLayout();
-
             // 
             // DigitalGrid
             // 
+            this.BackColor = System.Drawing.Color.Gray;
             this.Name = "DigitalGrid";
             this.ResumeLayout(false);
 

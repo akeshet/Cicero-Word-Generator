@@ -35,7 +35,7 @@ namespace WordGenerator.Controls
             // 
             // comboBox1
             // 
-            this.comboBox1.BackColor = System.Drawing.ColorTranslator.FromHtml("#A9B7E1");
+            this.comboBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(183)))), ((int)(((byte)(225)))));
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.comboBox1.ForeColor = System.Drawing.Color.White;
@@ -66,12 +66,13 @@ namespace WordGenerator.Controls
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Window;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.comboBox1);
-            this.ForeColor = System.Drawing.SystemColors.Window;
+            this.ForeColor = System.Drawing.Color.White;
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "VariableComboBox";
-            this.Size = new System.Drawing.Size(80, 21);
+            this.Size = new System.Drawing.Size(78, 19);
             this.Load += new System.EventHandler(this.VariableComboBox_Load);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.VariableComboBox_MouseClick);
             this.ResumeLayout(false);

@@ -33,6 +33,7 @@ namespace WordGenerator.Controls
             // VerticalParameterEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.Name = "VerticalParameterEditor";
             this.Size = new System.Drawing.Size(157, 68);
             this.UnitSelectorVisibility = true;

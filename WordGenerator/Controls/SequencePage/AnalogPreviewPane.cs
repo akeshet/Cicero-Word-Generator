@@ -138,7 +138,7 @@ namespace WordGenerator.Controls
                 {
 
                     Rectangle sourceRectangle = new Rectangle(e.ClipRectangle.X + HorizontalScroll.Value, e.ClipRectangle.Y + VerticalScroll.Value, e.ClipRectangle.Width, e.ClipRectangle.Height);
-
+                    e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                     e.Graphics.DrawImage(buffer, e.ClipRectangle, sourceRectangle, GraphicsUnit.Pixel);
 
                     if (drawCursor)
@@ -218,9 +218,10 @@ namespace WordGenerator.Controls
                    buffer = new Bitmap(xSize, ySize);
                    gc = Graphics.FromImage(buffer);
                }
-               Brush continueBrush = new HatchBrush(HatchStyle.Percent20, Color.RoyalBlue);
-               Brush disabledBrush = new HatchBrush(HatchStyle.Percent20, Color.Black);
-
+               //Brush continueBrush = new HatchBrush(HatchStyle.Percent20, Color.DimGray);
+               Brush continueBrush = new SolidBrush(Color.Black);
+               Brush disabledBrush = new HatchBrush(HatchStyle.Percent20, Color.FromArgb(255,40,40,40));
+                gc.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                gc.FillRectangle(continueBrush, 0, 0, xSize, ySize);
 
 
@@ -326,9 +327,9 @@ namespace WordGenerator.Controls
 
                    int oldY = offs + (int)(scale * (channelValues[0] - minValue) + y_offset - 1);
                    int newY;
-
-                   Pen linePen = new Pen(Color.White);
-
+                    //draw analog channel values
+                    Pen linePen = new Pen(Color.Green,(float)1.8);
+                    
                    for (int x = 1; x < xSize * samples_per_pixel; x++)
                    {
                        newY = offs + (int)(scale * (channelValues[x] - minValue) + y_offset - 1);
