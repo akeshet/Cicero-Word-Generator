@@ -34,8 +34,9 @@ namespace WordGenerator.Controls
         private Dictionary<int, double> maxValues;
         private Dictionary<int, double> minValues;
 
-
-
+        
+        private readonly Brush continueBrush = new SolidBrush(Color.Black);
+        private readonly Brush disabledBrush = new HatchBrush(HatchStyle.Percent20, Color.FromArgb(255, 40, 40, 40));
         public AnalogPreviewPane()
         {
             InitializeComponent();
@@ -219,9 +220,8 @@ namespace WordGenerator.Controls
                    gc = Graphics.FromImage(buffer);
                }
                //Brush continueBrush = new HatchBrush(HatchStyle.Percent20, Color.DimGray);
-               Brush continueBrush = new SolidBrush(Color.Black);
-               Brush disabledBrush = new HatchBrush(HatchStyle.Percent20, Color.FromArgb(255,40,40,40));
-                gc.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+               
+               gc.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                gc.FillRectangle(continueBrush, 0, 0, xSize, ySize);
 
 

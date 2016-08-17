@@ -453,7 +453,7 @@ namespace Zeus
             {
                 lock (marshalLock)
                 {
-                    tcpChannel = new TcpChannel(5678);
+                    tcpChannel = new TcpChannel(5679);
                     ChannelServices.RegisterChannel(tcpChannel, false);
                     objRef = RemotingServices.Marshal(this, "serverCommunicator");
                 }

@@ -36,7 +36,9 @@ namespace WordGenerator.Controls
             // 
             // valueSelector
             // 
+            this.valueSelector.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.valueSelector.DecimalPlaces = 4;
+            this.valueSelector.ForeColor = System.Drawing.Color.White;
             this.valueSelector.Location = new System.Drawing.Point(0, 1);
             this.valueSelector.Maximum = new decimal(new int[] {
             1316134912,
@@ -60,7 +62,10 @@ namespace WordGenerator.Controls
             // 
             // unitSelector
             // 
+            this.unitSelector.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.unitSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.unitSelector.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.unitSelector.ForeColor = System.Drawing.Color.White;
             this.unitSelector.FormattingEnabled = true;
             this.unitSelector.Location = new System.Drawing.Point(83, 0);
             this.unitSelector.Name = "unitSelector";
@@ -71,10 +76,11 @@ namespace WordGenerator.Controls
             // 
             // variableComboBox1
             // 
-            this.variableComboBox1.BackColor = System.Drawing.Color.White;
+            this.variableComboBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.variableComboBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.variableComboBox1.Enabled = false;
             this.variableComboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.variableComboBox1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.variableComboBox1.ForeColor = System.Drawing.Color.White;
             this.variableComboBox1.Location = new System.Drawing.Point(0, 0);
             this.variableComboBox1.Margin = new System.Windows.Forms.Padding(0);
             this.variableComboBox1.Name = "variableComboBox1";

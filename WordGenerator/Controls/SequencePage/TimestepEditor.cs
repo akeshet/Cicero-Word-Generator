@@ -19,6 +19,9 @@ namespace WordGenerator.Controls
 
         private bool marked;
 
+        private readonly Color continueBackColor = Color.FromArgb(255,30,30,30);
+        private readonly Color nonContinueBackColor = Color.DarkBlue;
+
         public bool Marked
         {
             get { return marked; }
@@ -86,7 +89,7 @@ namespace WordGenerator.Controls
 
             if (currentlyOutput)
             {
-                this.BackColor = Color.DarkGray;
+                this.BackColor = Color.DarkCyan;
             }
 
             if (currentlyOutput && Marked)
@@ -153,9 +156,9 @@ namespace WordGenerator.Controls
             // style in order to support background colors
             if (WordGenerator.GlobalInfo.usingWindows7)
             {
-                analogSelector.FlatStyle = FlatStyle.Popup;
-                gpibSelector.FlatStyle = FlatStyle.Popup;
-                rs232Selector.FlatStyle = FlatStyle.Popup;
+                analogSelector.FlatStyle = FlatStyle.Flat;
+                gpibSelector.FlatStyle = FlatStyle.Flat;
+                rs232Selector.FlatStyle = FlatStyle.Flat;
             }
 
             durationEditor.setMinimumAllowableManualValue(0);
@@ -187,38 +190,38 @@ namespace WordGenerator.Controls
             if (stepData.AnalogGroup != null)
             {
                 this.analogSelector.SelectedItem = stepData.AnalogGroup;
-                this.analogSelector.BackColor = System.Drawing.ColorTranslator.FromHtml("#A9B7E1");;
+                this.analogSelector.BackColor = nonContinueBackColor;// System.Drawing.ColorTranslator.FromHtml("#A9B7E1");;
                 this.analogSelector.Visible = true;
             }
             else
             {
                 this.analogSelector.SelectedItem = "Continue";
-                this.analogSelector.BackColor = Color.RoyalBlue;
+                this.analogSelector.BackColor = continueBackColor;
             }
 
 
             if (stepData.GpibGroup != null)
             {
                 this.gpibSelector.SelectedItem = stepData.GpibGroup;
-                this.gpibSelector.BackColor = System.Drawing.ColorTranslator.FromHtml("#A9B7E1");;
+                this.gpibSelector.BackColor = nonContinueBackColor;// System.Drawing.ColorTranslator.FromHtml("#A9B7E1");;
                 this.gpibSelector.Visible = true;
             }
             else
             {
                 this.gpibSelector.SelectedItem = "Continue";
-                this.gpibSelector.BackColor = Color.RoyalBlue;
+                this.gpibSelector.BackColor = continueBackColor;
             }
 
             if (stepData.rs232Group != null)
             {
                 rs232Selector.SelectedItem = stepData.rs232Group;
-                rs232Selector.BackColor = System.Drawing.ColorTranslator.FromHtml("#A9B7E1");;
+                rs232Selector.BackColor = nonContinueBackColor; // System.Drawing.ColorTranslator.FromHtml("#A9B7E1");;
                 this.rs232Selector.Visible = true;
             }
             else
             {
                 rs232Selector.SelectedItem = "Continue";
-                rs232Selector.BackColor = Color.RoyalBlue;
+                rs232Selector.BackColor = continueBackColor;
             }
 
             this.negativeRetriggerEdgeOrValueToolStripMenuItem.Checked = stepData.RetriggerOptions.RetriggerOnNegativeValueOrEdge;
@@ -266,11 +269,15 @@ namespace WordGenerator.Controls
             if (stepData.StepEnabled)
             {
                 enabledButton.Text = "Enabled";
-                enabledButton.BackColor = Color.RoyalBlue;
+                enabledButton.Font = new Font(enabledButton.Font, FontStyle.Bold);
+                enabledButton.ForeColor = Color.White;
+                enabledButton.BackColor = Color.FromArgb(255,20,140,0);
             }
             else
             {
                 enabledButton.Text = "Disabled";
+                enabledButton.ForeColor = Color.Gray;
+                enabledButton.Font = new Font(enabledButton.Font, FontStyle.Regular);
                 enabledButton.BackColor = Color.Black;
             }
             enabledButton.Invalidate();
@@ -294,13 +301,13 @@ namespace WordGenerator.Controls
             if (stepData.StepHidden)
             {
                 showHideButton.Text = "Hidden";
-                showHideButton.BackColor = Color.Black;
+                showHideButton.BackColor = Color.Red;
                 showHideButton.ForeColor = Color.White;
             }
             else
             {
                 showHideButton.Text = "Visible";
-                showHideButton.BackColor = Color.RoyalBlue;
+                showHideButton.BackColor = Color.FromArgb(255,30,30,30);
                 showHideButton.ForeColor = Color.White;
             }
         }
@@ -308,7 +315,7 @@ namespace WordGenerator.Controls
         private void analogSelector_DropDown(object sender, EventArgs e)
         {
             analogSelector.Items.Clear();
-            analogSelector.BackColor = System.Drawing.ColorTranslator.FromHtml("#A9B7E1");;
+            analogSelector.BackColor = Color.FromArgb(255, 30, 30, 30);//System.Drawing.ColorTranslator.FromHtml("#A9B7E1");;
             analogSelector.Items.Add("Continue");
             analogSelector.Items.AddRange(Storage.sequenceData.AnalogGroups.ToArray());
         }
@@ -319,11 +326,11 @@ namespace WordGenerator.Controls
         {
             if (analogSelector.SelectedItem.ToString() == "Continue")
             {
-                analogSelector.BackColor = Color.RoyalBlue;
+                analogSelector.BackColor = Color.Black;
                 toolTip1.SetToolTip(analogSelector, "Continue previous analog group.");
             }
             else
-                analogSelector.BackColor = System.Drawing.ColorTranslator.FromHtml("#A9B7E1");;
+                analogSelector.BackColor = Color.DarkSlateBlue;//System.Drawing.ColorTranslator.FromHtml("#A9B7E1");;
 
             if (stepData != null)
             {
@@ -346,11 +353,11 @@ namespace WordGenerator.Controls
         {
             if (gpibSelector.SelectedItem.ToString() == "Continue")
             {
-                gpibSelector.BackColor = Color.RoyalBlue;
+                gpibSelector.BackColor = continueBackColor;
                 toolTip1.SetToolTip(gpibSelector, "Continue previous GPIB group.");
             }
             else
-                gpibSelector.BackColor = System.Drawing.ColorTranslator.FromHtml("#A9B7E1");;
+                gpibSelector.BackColor = nonContinueBackColor;//System.Drawing.ColorTranslator.FromHtml("#A9B7E1");;
 
             if (stepData != null)
             {
@@ -502,11 +509,11 @@ namespace WordGenerator.Controls
         {
             if (rs232Selector.SelectedItem.ToString() == "Continue")
             {
-                rs232Selector.BackColor = Color.RoyalBlue;
+                rs232Selector.BackColor = continueBackColor;
                 toolTip1.SetToolTip(rs232Selector, "Continue previous RS232 group.");
             }
             else
-               rs232Selector.BackColor = System.Drawing.ColorTranslator.FromHtml("#A9B7E1");
+                rs232Selector.BackColor = nonContinueBackColor;//System.Drawing.ColorTranslator.FromHtml("#A9B7E1");
 
             if (stepData != null)
             {

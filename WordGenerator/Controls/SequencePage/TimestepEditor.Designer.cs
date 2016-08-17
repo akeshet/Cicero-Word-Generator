@@ -381,7 +381,7 @@ namespace WordGenerator.Controls
             this.enabledButton.BackColor = System.Drawing.Color.Chartreuse;
             this.enabledButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.enabledButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.enabledButton.ForeColor = System.Drawing.SystemColors.Control;
+            this.enabledButton.ForeColor = System.Drawing.Color.White;
             this.enabledButton.Location = new System.Drawing.Point(0, 38);
             this.enabledButton.Name = "enabledButton";
             this.enabledButton.Size = new System.Drawing.Size(84, 22);
@@ -571,6 +571,7 @@ namespace WordGenerator.Controls
             // 
             // durationEditor
             // 
+            this.durationEditor.BackColor = System.Drawing.Color.DimGray;
             this.durationEditor.Location = new System.Drawing.Point(3, 90);
             this.durationEditor.Name = "durationEditor";
             this.durationEditor.Size = new System.Drawing.Size(81, 49);
