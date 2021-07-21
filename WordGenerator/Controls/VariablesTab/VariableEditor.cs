@@ -6,6 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using DataStructures;
+using DataStructures.Database;
 
 namespace WordGenerator.Controls
 {
@@ -51,6 +52,17 @@ namespace WordGenerator.Controls
             {
                 this.listSelector.Items.Add("List " + (i + 1));
             }
+            for (int i = 0; i < 20; i++)
+            {
+                this.listSelector.Items.Add("Database " + (i + 1));
+            }
+            if (Storage.settingsData.LookupTables != null)
+            {
+                foreach (LUT table in Storage.settingsData.LookupTables)
+                {
+                    this.listSelector.Items.Add(table.Name);
+                }
+            }
 
             this.toolTip1.SetToolTip(this.deleteButton, "Delete this variable.");
 
@@ -68,6 +80,16 @@ namespace WordGenerator.Controls
             if (this.variable.ListDriven) {
                 this.listSelector.Visible = true;
                 this.listSelector.SelectedIndex = this.variable.ListNumber;
+            }
+            else if (this.variable.DBDriven)
+            {
+                this.listSelector.Visible = true;
+                this.listSelector.SelectedIndex = (10 + this.variable.DBFieldNumber);
+            }
+            else if (this.variable.LUTDriven)
+            {
+                this.listSelector.Visible = true;
+                this.listSelector.SelectedIndex = (30 + this.variable.LUTNumber);
             }
             else
                 this.listSelector.Visible = false;
@@ -107,7 +129,7 @@ namespace WordGenerator.Controls
                 this.variable.VariableName = textBox1.Text;
                 if (this.variable.VariableName == "SeqMode")
                 {
-                    this.BackColor = Color.Salmon;
+                    this.BackColor = Color.White;
                     this.variable.PermanentVariable = false;
                 }
                 else
@@ -142,16 +164,43 @@ namespace WordGenerator.Controls
             {
                 variable.ListDriven = false;
                 listSelector.Visible = false;
+                variable.DBDriven = false;
+                variable.LUTDriven = false;
                 this.valueSelector.Value = backupValue;
+                toolTip1.SetToolTip(this.listSelector, "");
+               
             }
-            else
+            else if (listSelector.SelectedIndex < 11) //List Options
             {
                 this.backupValue = valueSelector.Value;
-                int listNum = listSelector.SelectedIndex;
+                int listNum = (listSelector.SelectedIndex);
                 this.variable.ListDriven = true;
+                variable.LUTDriven = false;
                 this.variable.ListNumber = listNum;
+                toolTip1.SetToolTip(this.listSelector, "");
+               
             }
+            else if (listSelector.SelectedIndex >10 && listSelector.SelectedIndex <31) //Database Options
+            {
+                this.backupValue = valueSelector.Value;
+                variable.ListDriven = false;
+                variable.DBDriven = true;
+                variable.DBFieldNumber = (listSelector.SelectedIndex - 10);
+            }
+            else //LUT Options 
+            {
+                this.backupValue = valueSelector.Value;
+                variable.ListDriven = false;
+                variable.LUTDriven = true;
+                variable.LUTNumber = (listSelector.SelectedIndex - 11);
 
+                variable.LUTInput = Storage.sequenceData.Variables[0];
+                //Show the independent var selection form
+                varSelector vs1 = new varSelector(variable);
+                vs1.ShowDialog();
+                toolTip1.SetToolTip(this.listSelector, "Value Calculated Based On "+variable.LUTInput.VariableName);
+            }
+ 
             if (valueChanged != null)
                 valueChanged(this, null);
         }
@@ -368,6 +417,21 @@ namespace WordGenerator.Controls
         {
             FormulaHelpDialog dial = new FormulaHelpDialog();
             dial.ShowDialog();
+        }
+
+        private void derivedValueLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listSelector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void permanentValueLabel_Click(object sender, EventArgs e)
+        {
+
         }
 
     /*    private void downButton_Click(object sender, EventArgs e)

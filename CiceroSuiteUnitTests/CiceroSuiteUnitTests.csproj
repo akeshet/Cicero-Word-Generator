@@ -33,17 +33,32 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AtticusServer, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\atticusserver\bin\Debug\AtticusServer.exe</HintPath>
+    </Reference>
+    <Reference Include="DatabaseHelper">
+      <HintPath>..\Dynamic Linked Libraries\DatabaseHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="DataStructures">
+      <HintPath>..\datastructures\bin\Debug\DataStructures.dll</HintPath>
+    </Reference>
     <Reference Include="libFrontPanel-csharp">
       <HintPath>..\Opal Kelly\Opal Kelly 4.0.8\API-32\Csharp\libFrontPanel-csharp.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="MySql.Data, Version=6.4.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <Private>True</Private>
+    <Reference Include="NationalInstruments.Common">
+      <HintPath>..\Dynamic Linked Libraries\NationalInstruments.Common.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.Common, Version=9.1.40.163, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=MSIL" />
-    <Reference Include="NationalInstruments.DAQmx, Version=9.5.40.112, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=x86" />
-    <Reference Include="NationalInstruments.NI4882, Version=9.0.40.157, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=MSIL" />
-    <Reference Include="NationalInstruments.VisaNS, Version=9.0.40.156, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=MSIL" />
+    <Reference Include="NationalInstruments.DAQmx">
+      <HintPath>..\Dynamic Linked Libraries\NationalInstruments.DAQmx.dll</HintPath>
+    </Reference>
+    <Reference Include="NationalInstruments.NI4882">
+      <HintPath>..\Dynamic Linked Libraries\NationalInstruments.NI4882.dll</HintPath>
+    </Reference>
+    <Reference Include="NationalInstruments.VisaNS">
+      <HintPath>..\Dynamic Linked Libraries\NationalInstruments.VisaNS.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core">
@@ -56,6 +71,9 @@
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WordGenerator">
+      <HintPath>..\WordGenerator\bin\Debug\WordGenerator.exe</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
@@ -74,21 +92,9 @@
     <Compile Include="VariableTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AtticusServer\Atticus.csproj">
-      <Project>{88DA2EF3-B748-43AB-8279-F22293844E29}</Project>
-      <Name>Atticus</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DataStructures\DataStructures.csproj">
-      <Project>{07B67011-62AB-43E3-80F6-E00BCBFF8558}</Project>
-      <Name>DataStructures</Name>
-    </ProjectReference>
     <ProjectReference Include="..\dotmath\dotMath.csproj">
       <Project>{B2EBEDE8-441A-4CC2-80FF-5F290D528919}</Project>
       <Name>dotMath</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WordGenerator\Cicero.csproj">
-      <Project>{AA55BBAF-9C99-4CC8-9FE3-D8F6A8B7EBA8}</Project>
-      <Name>Cicero</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

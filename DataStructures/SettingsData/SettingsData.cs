@@ -16,6 +16,14 @@ namespace DataStructures
     [Serializable, TypeConverter(typeof(ExpandableObjectConverter))]
     public class SettingsData
     {
+        private List<LUT> lookupTables;
+
+        public List<LUT> LookupTables
+        {
+            get { return lookupTables; }
+            set { lookupTables = value; }
+        }
+
         private LogicalChannelManager myLogicalChannelManager;
 
         public LogicalChannelManager logicalChannelManager
@@ -60,7 +68,8 @@ namespace DataStructures
         [Description("Colors to be used for the digital grid panel. To return to default values, remove all elements from the list. Colors can either be selected from pre-existing list, or specified in R,G,B coordinates.")]
         public List<System.Drawing.Color> DigitalGridColors
         {
-            get {
+            get
+            {
                 if (colors == null)
                 {
                     colors = new List<System.Drawing.Color>();
@@ -99,6 +108,50 @@ namespace DataStructures
         }
 
         private List<IPAdresses> cameraPCs;
+
+        #region Variable Output To File Properties
+        [Description("Describes whether or not this sequence will output a text file with the variable values every run."),
+         Category("Global")]
+        private bool writeVariableOutputTextFile;
+        public bool WriteVariableOutputTextFile
+        {
+            get
+            {
+                if (writeVariableOutputTextFile == null)
+                    writeVariableOutputTextFile = false;
+                return writeVariableOutputTextFile;
+            }
+            set { writeVariableOutputTextFile = value; }
+        }
+
+
+        private string variableOutputFilename;
+        [Category("Global"), Description("The name of file to which variable values are output.")]
+        public string VariableOutputFilename
+        {
+            get
+            {
+                if (variableOutputFilename == null)
+                    variableOutputFilename = "";
+
+                return variableOutputFilename;
+            }
+            set { variableOutputFilename = value; }
+        }
+        private string variableOutputFilenameDirectory;
+        [Category("Global"), Description("The name of file to which variable values are output.")]
+        public string VariableOutputFilenameDirectory
+        {
+            get
+            {
+                if (variableOutputFilenameDirectory == null)
+                    variableOutputFilenameDirectory = "";
+
+                return variableOutputFilenameDirectory;
+            }
+            set { variableOutputFilenameDirectory = value; }
+        }
+        #endregion
 
         [TypeConverter(typeof(ExpandableObjectConverter)), Serializable]
         public class IPAdresses
@@ -228,8 +281,37 @@ namespace DataStructures
             set { runlogDatabaseSettings = value; }
         }
 
+        private List<Database.VariableDatabaseSettings> variableDatabaseSettings;
+
+        [Description("MySQL database to get variable values from, if any variables are bound to database fields."), Category("Database Binding of Variables")]
+        public List<Database.VariableDatabaseSettings> VariableDatabaseSettings
+        {
+            get
+            {
+                if (variableDatabaseSettings == null)
+                    variableDatabaseSettings = new List<Database.VariableDatabaseSettings>();
+                return variableDatabaseSettings;
+            }
+            set { variableDatabaseSettings = value; }
+        }
+
+        private Boolean waitForHub;
+
+        [Description("Whether to wait for the Hub to give the all-clear."), Category("BECV Customization")]
+        public Boolean WaitForHub
+        {
+            get
+            {
+                if (waitForHub == null)
+                    waitForHub = false;
+                return waitForHub;
+            }
+            set { waitForHub = value; }
+        }
+
         public SettingsData()
         {
+            lookupTables = new List<LUT>();
             myLogicalChannelManager = new LogicalChannelManager();
             myServerManager = new ServerManager();
             cameraPCs = new List<IPAdresses>();

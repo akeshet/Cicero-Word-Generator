@@ -74,6 +74,7 @@ namespace WordGenerator.Controls
 
                 channelLabels.Add(lbl);
                 channelLabels.Add(idLbl);
+                channelLabels[2 * i + 1].Click += new EventHandler(AnalogChannelLabelsPanel_Click); //For ID
             }
 
             this.Controls.AddRange(channelLabels.ToArray());
@@ -102,6 +103,24 @@ namespace WordGenerator.Controls
             this.Size = new System.Drawing.Size(148, 148);
             this.ResumeLayout(false);
 
+        }
+
+        private void AnalogChannelLabelsPanel_Load(object sender, EventArgs e)
+        {
+
+        }
+
+
+        private void AnalogChannelLabelsPanel_Click(object sender, EventArgs e)
+        {
+            //From stack overflow... can cast the sender to get some info about what we clicked on!
+            Label temp = (Label)sender;
+            int selectedLogicalID = Convert.ToInt32(temp.Text);
+            AnalogQuickEdit quick = new AnalogQuickEdit(selectedLogicalID);
+            quick.ShowDialog();
+            quick.Dispose();
+            MainClientForm.instance.RefreshSequenceDataToUI();
+            MainClientForm.instance.RefreshSettingsDataToUI();
         }
     }
 }

@@ -13,6 +13,9 @@ using System.Net.Sockets;
 using DataStructures.UtilityClasses;
 using DataStructures.Database;
 using DataStructures.Timing;
+using System.Linq;
+using System.Text;
+using System.IO;
 
 namespace WordGenerator
 {
@@ -26,6 +29,7 @@ namespace WordGenerator
 
         int repeatCount = 1;
 
+        private bool variableOutputTextFile;
 
         Thread getConfirmationThread;
 
@@ -34,6 +38,7 @@ namespace WordGenerator
 
         bool isIdle = false;
         bool isCameraSaving = true;
+      
 
         DateTime runStartTime;
 
@@ -406,6 +411,7 @@ namespace WordGenerator
         {
             // start run! woo hoo!
             // do it async so as not to block the UI thread.
+         
 
             if (!runningSequence.Lists.ListLocked)
             {
@@ -616,6 +622,9 @@ namespace WordGenerator
             while (keepGoing)
             {
                 MainClientForm.instance.CurrentlyOutputtingTimestep = null;
+                runningSequence.RunningCounter++; //Increment this motherfucker right off the bat
+                addMessageLogText(this, new MessageEvent("The running counter is at " + runningSequence.RunningCounter.ToString()));
+
 
 
 
@@ -702,6 +711,7 @@ namespace WordGenerator
 
                 sequence.ListIterationNumber = iterationNumber;
 
+                #region Pre-run Variables Check
                 string listBoundVariableValues = "";
 
                 foreach (Variable var in sequence.Variables)
@@ -728,6 +738,7 @@ namespace WordGenerator
                         }
                         listBoundVariableValues += var.VariableName + " = " + var.VariableValue.ToString() + ", ";
                     }
+                   
                 }
 
                 if (listBoundVariableValues != "")
@@ -747,6 +758,45 @@ namespace WordGenerator
                         }
                     }
                 }
+
+                foreach (Variable var in sequence.Variables)
+                {
+                    if (var.LUTDriven)
+                    {
+                       //Interpolate!
+                        int tableIndex = var.LUTNumber;
+                        double inputX = var.LUTInput.VariableValue;
+                        double tableX1;
+                        double tableX2;
+                        double tableY1;
+                        double tableY2;
+                        int we = Storage.settingsData.LookupTables[tableIndex].Table.Count;
+                       //Simple case: See if this particular value is already defined in the LUT
+                        if (Storage.settingsData.LookupTables[tableIndex].Table.ContainsKey(inputX))
+                        {
+                            var.VariableValue = Storage.settingsData.LookupTables[tableIndex].Table[inputX];
+                        }
+                        //General case: Fix value at end values if it exceeds the lowest or highest table x value, and interpolate between other values
+                        else
+                        {
+                            int numberOfRows = Storage.settingsData.LookupTables[tableIndex].Table.Count;
+                            if (inputX > Storage.settingsData.LookupTables[tableIndex].Table.Keys.Max()) var.VariableValue = Storage.settingsData.LookupTables[tableIndex].Table[Storage.settingsData.LookupTables[tableIndex].Table.Keys.Max()];
+                            else if (inputX < Storage.settingsData.LookupTables[tableIndex].Table.Keys.Min()) var.VariableValue = Storage.settingsData.LookupTables[tableIndex].Table[Storage.settingsData.LookupTables[tableIndex].Table.Keys.Min()];
+                            else
+                            {
+                                tableX1 = Storage.settingsData.LookupTables[tableIndex].Table.Keys.First(x => x > inputX);
+                                tableX2 = Storage.settingsData.LookupTables[tableIndex].Table.Keys.Last(x => x < inputX);
+                                tableY1 = Storage.settingsData.LookupTables[tableIndex].Table[tableX1];
+                                tableY2 = Storage.settingsData.LookupTables[tableIndex].Table[tableX2];
+                                var.VariableValue = tableY1 + (inputX - tableX1) / (tableX2 - tableX1) * (tableY2 - tableY1);
+
+                            }
+                        }
+                        addMessageLogText(this, new MessageEvent("Variable "+var.VariableName+" assumes value "+var.VariableValue.ToString()+" for this run."));
+
+                    }
+                }
+
                 if (!calibrationShot)
                 {
                     foreach (Variable var in sequence.Variables)
@@ -784,7 +834,18 @@ namespace WordGenerator
                     int nChanged = variablePreviewForm.refresh(sequence);
                     addMessageLogText(this, new MessageEvent("... " + nChanged + " variable values changed."));
                 }
+                #endregion
+                if (Storage.settingsData.WriteVariableOutputTextFile)
+                {
+                    addMessageLogText(this, new MessageEvent("Variable-to-file output enabled. Writing variable file..."));
 
+                    bool write_success = sequence.writeVariableListToFile(Storage.settingsData.VariableOutputFilename, Storage.settingsData.VariableOutputFilenameDirectory);
+                    if (write_success)
+                        addMessageLogText(this, new MessageEvent("Variable-to-file output succeeded."));
+                    else
+                        addMessageLogText(this, new MessageEvent("Variable-to-file output failed. Check path and filename of output file."));
+
+                }
 
                 // Create timestep "loop copies" if there are timestep loops in use
                 bool useLoops = false;
@@ -904,6 +965,199 @@ namespace WordGenerator
                 #endregion
 
                 ServerManager.ServerActionStatus actionStatus;
+                //Added by Samarth (Start)
+                string fileName = "";
+                RunLog runLog = runLog = new RunLog(runStartTime, formCreationTime, sequence, Storage.settingsData, WordGenerator.MainClientForm.instance.OpenSequenceFileName, WordGenerator.MainClientForm.instance.OpenSettingsFileName);
+                addMessageLogText(this, new MessageEvent("Starting run. Writing log file (for first run) and updating database"));
+                if (runningSequence.RunningCounter == 1)
+                {
+                    runLog = new RunLog(runStartTime, formCreationTime, sequence, Storage.settingsData, WordGenerator.MainClientForm.instance.OpenSequenceFileName, WordGenerator.MainClientForm.instance.OpenSettingsFileName);
+                    fileName = runLog.WriteLogFile();
+                    if (fileName != null)
+                    {
+                        addMessageLogText(this, new MessageEvent("Log written to " + fileName));
+                    }
+                    else
+                    {
+                        addMessageLogText(this, new MessageEvent("Log not written! Perhaps a file with this name already exists?"));
+                        ErrorDetected = false; //Actually true, but just keeping the screen from turning red
+                    }
+                }
+
+                // Ask servers if we can run. All servers except for the database server simply return true. The database server returns false or true
+                // depending on user-configured conditions
+
+                addMessageLogText(this, new MessageEvent("Asking any connected Zeus servers for permission to run ... "));
+                actionStatus = Storage.settingsData.serverManager.checkIfCiceroCanRunOnConnectedServers(addMessageLogText);
+                while (actionStatus != ServerManager.ServerActionStatus.Success)
+                {
+                    actionStatus = Storage.settingsData.serverManager.checkIfCiceroCanRunOnConnectedServers(addMessageLogText);
+                    Thread.Sleep(100);
+                }
+                addMessageLogText(this, new MessageEvent("Permission to run has been granted."));
+
+                // If any variables are database-bound, ask servers if we can proceed to update the variable values. All servers return true except for
+                // the database server, which either waits for the "updated" fields to all be true (if this option is enabled) or simply returns true
+                // because the user has opted to not perform this check using the corresponding checkbox
+
+                addMessageLogText(this, new MessageEvent("Waiting for any database-bound variables to be updated to begin run ... "));
+                actionStatus = Storage.settingsData.serverManager.waitForDatabaseUpdatesOnConnectedServers(sequence, addMessageLogText);
+                while (actionStatus != ServerManager.ServerActionStatus.Success)
+                {
+                    actionStatus = Storage.settingsData.serverManager.waitForDatabaseUpdatesOnConnectedServers(sequence, addMessageLogText);
+                    Thread.Sleep(100);
+                }
+                addMessageLogText(this, new MessageEvent("Run proceeding."));
+
+
+                // Now we update any database-bound variables using a database connection here in Cicero
+                // Note that there is NO dependency on the database helper dll, as there is in the Database Server
+
+                foreach (VariableDatabaseSettings rset in Storage.settingsData.VariableDatabaseSettings)
+                {
+                    if (rset.Enabled)
+                    {
+                        //First, DB-binding of variables
+                        VariableDatabaseHandler handler1 = null;
+                        foreach (Variable var in sequence.Variables)
+                        {
+
+                            if (var.DBDriven)
+                            {
+                                try
+                                {
+                                    addMessageLogText(this, new MessageEvent("Retrieving value of variable " + var.VariableName + " from the database."));
+                                    handler1 = new VariableDatabaseHandler(rset);
+                                    var.VariableValue = handler1.readFromDB(var.DBFieldNumber);
+                                    addMessageLogText(this, new MessageEvent("Received Updated Value!"));
+
+                                }
+                                catch (RunLogDatabaseException e)
+                                {
+                                    addMessageLogText(this, new MessageEvent("Caught exception when attempting to connect to the BECIVDatabase " + rset.Url + "."));
+                                    if (rset.VerboseErrorReporting)
+                                    {
+                                        addMessageLogText(this, new MessageEvent("Displaying database exception. To disable this display, turn off verbose error reporting for this runlog database in Cicero settings (under Advanced->Settings Explorer)"));
+                                        ExceptionViewerDialog ev = new ExceptionViewerDialog(e);
+                                        ev.ShowDialog();
+                                    }
+                                    else
+                                    {
+                                        addMessageLogText(this, new MessageEvent("Exception was " + e.Message + ". For more detailed information, turn on verbose error reporting for this runlog database in Cicero settings (under Advanced->Settings Explorer)"));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Next, we pass the sequence data over to the servers. Most servers do nothing with it, but the database server uses it to
+                // write the current round of variables into the database using a dbhelper .dll function
+                addMessageLogText(this, new MessageEvent("Telling Zeus servers to write variables and values into database... "));
+                actionStatus = Storage.settingsData.serverManager.saveVariablesOnConnectedServers(sequence, addMessageLogText);                     //Ref Samarth
+                if (actionStatus != ServerManager.ServerActionStatus.Success)
+                {
+                    addMessageLogText(this, new MessageEvent("Unable to run. " + actionStatus.ToString()));
+                    ErrorDetected = true;
+                    setStatus(RunFormStatus.FinishedRun);
+                    return false;
+                }
+                addMessageLogText(this, new MessageEvent("Continuing with run."));
+
+                //This code adds the runlog to the runlog database, if any are specified
+                foreach (RunLogDatabaseSettings rset in Storage.settingsData.RunlogDatabaseSettings)
+                {
+
+                    if (rset.Enabled)
+                    {
+
+                        RunlogDatabaseHandler handler = null;
+                        try
+                        {
+                            handler = new RunlogDatabaseHandler(rset);
+                            handler.addRunLog(fileName, runLog);
+                            addMessageLogText(this, new MessageEvent("Run log added to mysql database at url " + rset.Url + " successfully."));
+                        }
+                        catch (RunLogDatabaseException e)
+                        {
+                            addMessageLogText(this, new MessageEvent("Caught exception when attempting to add runlog to mysqldatabase at " + rset.Url + "."));
+                            if (rset.VerboseErrorReporting)
+                            {
+                                addMessageLogText(this, new MessageEvent("Displaying runlogdatabase exception. To disable this display, turn off verbose error reporting for this runlog database in Cicero settings (under Advanced->Settings Explorer)"));
+                                ExceptionViewerDialog ev = new ExceptionViewerDialog(e);
+                                ev.ShowDialog();
+                            }
+                            else
+                            {
+                                addMessageLogText(this, new MessageEvent("Exception was " + e.Message + ". For more detailed information, turn on verbose error reporting for this runlog database in Cicero settings (under Advanced->Settings Explorer)"));
+                            }
+                        }
+
+
+
+                        if (handler != null)
+                            handler.closeConnection();
+
+                    }
+                }
+                //----------------------------------------------------------------------
+                //Added by Will Lunden 2015
+                //Now reload any waveform data files that need to be reloaded every run
+                //----------------------------------------------------------------------
+                foreach (AnalogGroup analogGroup in Storage.sequenceData.AnalogGroups)
+                {
+                    foreach (System.Collections.Generic.KeyValuePair<int, AnalogGroupChannelData> channelDataKVP in analogGroup.ChannelDatas)
+                    {
+                        if (analogGroup.ChannelDatas[channelDataKVP.Key].waveform.ReloadFromFile)
+                        {
+                            //Running the load-datafile code from WaveformEditor.cs
+                            Waveform currentWaveform = analogGroup.ChannelDatas[channelDataKVP.Key].waveform;
+                            try
+                            {
+                                // Create an instance of StreamReader to read from a file.
+                                // The using statement also closes the StreamReader.
+                                using (StreamReader sr = new StreamReader(currentWaveform.DataFileName))
+                                {
+                                    //to hold temporary X and Y values
+                                    Waveform tempwaveform = new Waveform();
+                                    //to parse each line in the file at either space or comma seperator
+                                    //trimming each line of white space at the beginning and end
+                                    DataStructures.UtilityClasses.WaveformParser p = new DataStructures.UtilityClasses.WaveformParser(sr, @"[,\s]\s*", delegate (string s) { return s.Trim(); });
+
+                                    double[] values;
+                                    while ((values = p.ReadFloats()) != null)
+                                    {
+                                        //there should be two values, otherwise the file is formated wrong
+                                        if (values.Length != 2)
+                                            throw new System.ApplicationException("File should have two comma or tab separated numbers per line");
+
+                                        tempwaveform.XValues.Add(new DimensionedParameter(Units.s, values[0]));
+                                        tempwaveform.YValues.Add(new DimensionedParameter(new Units(currentWaveform.YUnits, Units.Multiplier.unity), values[1]));
+                                    }
+
+                                    currentWaveform.XValues = tempwaveform.XValues;
+                                    currentWaveform.YValues = tempwaveform.YValues;
+                                    currentWaveform.WaveformDuration = (currentWaveform.XValues.Count > 0)
+                                        ? currentWaveform.XValues[currentWaveform.XValues.Count - 1] : currentWaveform.WaveformDuration;
+
+
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                // Let the user know what went wrong.
+                                MessageBox.Show("The file could not be read:\n" + ex.Message);
+                            }
+
+                        }
+                    }
+                }
+
+                //----------------------------------------------------
+                // End of Waveform Updating Code
+                //----------------------------------------------------
+                //Added by Samarth (End)
+
 
                 // send start timestamp
                 addMessageLogText(this, new MessageEvent("Sending run start timestamp."));
@@ -915,7 +1169,6 @@ namespace WordGenerator
                     setStatus(RunFormStatus.FinishedRun);
                     return false;
                 }
-
 
 
                 // send settings data.
@@ -1057,66 +1310,31 @@ namespace WordGenerator
 
                 if (useLoops)
                     sequence.cleanupLoopCopies();
-
-
-                addMessageLogText(this, new MessageEvent("Finished run. Writing log file..."));
-                RunLog runLog = new RunLog(runStartTime, formCreationTime, sequence, Storage.settingsData, WordGenerator.MainClientForm.instance.OpenSequenceFileName, WordGenerator.MainClientForm.instance.OpenSettingsFileName);
-                string fileName = runLog.WriteLogFile();
-
-                if (fileName != null)
-                {
-                    addMessageLogText(this, new MessageEvent("Log written to " + fileName));
-                }
-                else
-                {
-                    addMessageLogText(this, new MessageEvent("Log not written! Perhaps a file with this name already exists?"));
-                    ErrorDetected = true;
-                }
-
-                foreach (RunLogDatabaseSettings rset in Storage.settingsData.RunlogDatabaseSettings)
-                {
-
-                    if (rset.Enabled)
-                    {
-                        RunlogDatabaseHandler handler = null;
-                        try
-                        {
-                            handler = new RunlogDatabaseHandler(rset);
-                            handler.addRunLog(fileName, runLog);
-                            addMessageLogText(this, new MessageEvent("Run log added to mysql database at url " + rset.Url + " successfully."));
-                        }
-                        catch (RunLogDatabaseException e)
-                        {
-                            addMessageLogText(this, new MessageEvent("Caught exception when attempting to add runlog to mysqldatabase at " + rset.Url + "."));
-                            if (rset.VerboseErrorReporting)
-                            {
-                                addMessageLogText(this, new MessageEvent("Displaying runlogdatabase exception. To disable this display, turn off verbose error reporting for this runlog database in Cicero settings (under Advanced->Settings Explorer)"));
-                                ExceptionViewerDialog ev = new ExceptionViewerDialog(e);
-                                ev.ShowDialog();
-                            }
-                            else
-                            {
-                                addMessageLogText(this, new MessageEvent("Exception was " + e.Message + ". For more detailed information, turn on verbose error reporting for this runlog database in Cicero settings (under Advanced->Settings Explorer)"));
-                            }
-                        }
-
-                        if (handler != null)
-                            handler.closeConnection();
-                    }
-                }
-
-
-
-
-
-
+                
 
                 if (runRepeat)
+                {
                     keepGoing = true;
+                    
+                }
                 else
                     keepGoing = false;
 
                 repeatCount++;
+
+                // Added by Samarth (Start)
+                // At the end of the run, we hold up while the database server waits for camera data (in the cache) and then writes the cache data
+                // to the database (if the user specified so)
+                addMessageLogText(this, new MessageEvent("Waiting for Zeus servers to collect and store image data ..."));
+                actionStatus = Storage.settingsData.serverManager.saveImageDataOnConnectedServers(addMessageLogText);       //Ref Samarth
+                while (actionStatus != ServerManager.ServerActionStatus.Success)
+                {
+                    actionStatus = Storage.settingsData.serverManager.saveImageDataOnConnectedServers(addMessageLogText);
+                    Thread.Sleep(100);
+                }
+                addMessageLogText(this, new MessageEvent("Completed."));
+                // Added by Samarth (Stop)
+
 
                 if (abortAfterThis.Checked)
                 {
@@ -1525,5 +1743,26 @@ namespace WordGenerator
             }
         }
         #endregion
+
+        private void progressBar_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void RunForm_Load(object sender, EventArgs e)
+        {
+            runningSequence.RunningCounter = 0;
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void fortuneCookieLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

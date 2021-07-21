@@ -28,6 +28,7 @@ namespace WordGenerator.Controls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.addButton = new System.Windows.Forms.Button();
             this.waveformGraphCollection1 = new WordGenerator.Controls.WaveformGraphCollection();
             this.waveformEditor1 = new WordGenerator.Controls.WaveformEditor();
@@ -60,6 +61,7 @@ namespace WordGenerator.Controls
             this.waveformEditor1.Name = "waveformEditor1";
             this.waveformEditor1.Size = new System.Drawing.Size(269, 790);
             this.waveformEditor1.TabIndex = 0;
+            this.waveformEditor1.Load += new System.EventHandler(this.waveformEditor1_Load);
             // 
             // button1
             // 

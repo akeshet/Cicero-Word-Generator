@@ -67,7 +67,7 @@ namespace wgControlLibrary
         {
 			if (groupChannelData.Enabled)
 		    {
-			    enabledButton.BackColor = Color.Green;
+			    enabledButton.BackColor = Color.RoyalBlue;
 			    enabledButton.Text = "Enabled";
                 dataTypeSelector.Enabled = true;
                 if (groupChannelData.DataType == RS232GroupChannelData.RS232DataType.Raw)

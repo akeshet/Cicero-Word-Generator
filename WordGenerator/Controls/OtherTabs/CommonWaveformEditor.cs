@@ -51,5 +51,10 @@ namespace WordGenerator.Controls
                 this.waveformGraphCollection1.setWaveforms(Storage.sequenceData.CommonWaveforms);
             }
         }
+
+        private void waveformEditor1_Load(object sender, EventArgs e)
+        {
+ 
+        }
     }
 }

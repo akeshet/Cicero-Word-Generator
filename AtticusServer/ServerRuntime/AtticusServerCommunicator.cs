@@ -216,7 +216,7 @@ namespace AtticusServer
                     0, MessageEvent.MessageTypes.Error, MessageEvent.MessageCategories.Networking));
 
             }
-            
+
 
 
             System.Console.WriteLine("... done running AtticusServerRuntime constructor.");
@@ -235,7 +235,7 @@ namespace AtticusServer
                 foreach (DataStructures.Timing.NetworkClockEndpointInfo endPoint in serverSettings.BroadcastNetworkRecipients)
                     DataStructures.Timing.NetworkClockBroadcaster.addListener(endPoint);
             }
-            
+
         }
 
 
@@ -267,6 +267,46 @@ namespace AtticusServer
             }
         }
 
+        //----------------------------------------------------
+        //Begin new methods to be used by the database server
+        //----------------------------------------------------
+        public override bool checkIfCiceroCanRun()
+        {
+            lock (remoteLockObj)
+            {
+                return true;
+            }
+        }
+
+        public override bool waitForDatabaseUpdates(SequenceData Sequence)
+        {
+            lock (remoteLockObj)
+            {
+                return true;
+            }
+        }
+
+        public override bool writeVariablesIntoDatabase(SequenceData Sequence)
+        {
+            lock (remoteLockObj)
+            {
+                return true;
+            }
+        }
+
+
+
+        public override bool moveImageDataFromCacheToDatabase()
+        {
+            lock (remoteLockObj)
+            {
+                return true;
+            }
+        }
+
+        //----------------------------------------------------
+        //End new methods to be used by the database server
+        //----------------------------------------------------
         /// <summary>
         /// Outputs a single output frame to analog and digital cards. All other cards / outputs are unaffected.
         /// </summary>
@@ -301,7 +341,7 @@ namespace AtticusServer
                         if (deviceSettings.DeviceEnabled)
                         {
                             messageLog(this, new MessageEvent("Generating single output for " + dev));
-                            Task task = DaqMxTaskGenerator.createDaqMxTaskAndOutputNow(dev,
+                            Task task = DaqMxTaskGenerator.createDaqMxTaskAndOutputNow(this, dev,
                                 deviceSettings,
                                 output,
                                 settings,
@@ -629,8 +669,8 @@ namespace AtticusServer
 
                     // This is where the analog input task is defined
                     #region Analog In Task
-                    
-					//First we determine if an analog in task should be created
+
+                    //First we determine if an analog in task should be created
                     foreach (DeviceSettings ds in AtticusServer.server.serverSettings.myDevicesSettings.Values)
                     {
                         analogInCardDetected |= (ds.DeviceDescription.Contains("6259") || ds.DeviceDescription.Contains("6363")) && ds.AnalogInEnabled; // program will also support PXIe-6363 cards
@@ -645,65 +685,65 @@ namespace AtticusServer
                         // bool isUsed; // adareau : now obsolete
 
                         #region Old Code
-                       // // Obtains a list of the analog in channels to be included in the task, and their name
-                       // AnalogInChannels the_channels = AtticusServer.server.serverSettings.AIChannels[0];
-                       // AnalogInNames the_names = AtticusServer.server.serverSettings.AINames[0];
+                        // // Obtains a list of the analog in channels to be included in the task, and their name
+                        // AnalogInChannels the_channels = AtticusServer.server.serverSettings.AIChannels[0];
+                        // AnalogInNames the_names = AtticusServer.server.serverSettings.AINames[0];
 
-                       //// We use part of the channels as single ended, and part as differential. He channels are added here. The task is created on Slot 7. This shouldn't be hard coded and will be changed.
-                       // #region Single ended
-                       // for (int analog_index = 0; analog_index < 10; analog_index++)
-                       // {
-                       //     PropertyInfo the_channel = the_channels.GetType().GetProperty("AS" + analog_index.ToString());
-                       //     isUsed = (bool)the_channel.GetValue(the_channels, null);
-                       //     if (isUsed)
-                       //     {
-                       //         if (analog_index < 5)
-                       //         {
-                       //             analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + analog_index.ToString(), "",
-                       //                 AITerminalConfiguration.Nrse, -10, 10, AIVoltageUnits.Volts);
-                       //         }
-                       //         else
-                       //         {
-                       //             analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 3).ToString(), "",
-                       //                 AITerminalConfiguration.Nrse, -10, 10, AIVoltageUnits.Volts);
-                       //         }
-                       //         string theName = (string)(the_names.GetType().GetProperty("AS" + analog_index.ToString()).GetValue(the_names, null));
-                       //         if (theName == "")
-                       //             analog_in_names.Add("AIS" + analog_index.ToString());
-                       //         else
-                       //             analog_in_names.Add(theName);
-                       //     }
-                       // }
-                       // #endregion
+                        //// We use part of the channels as single ended, and part as differential. He channels are added here. The task is created on Slot 7. This shouldn't be hard coded and will be changed.
+                        // #region Single ended
+                        // for (int analog_index = 0; analog_index < 10; analog_index++)
+                        // {
+                        //     PropertyInfo the_channel = the_channels.GetType().GetProperty("AS" + analog_index.ToString());
+                        //     isUsed = (bool)the_channel.GetValue(the_channels, null);
+                        //     if (isUsed)
+                        //     {
+                        //         if (analog_index < 5)
+                        //         {
+                        //             analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + analog_index.ToString(), "",
+                        //                 AITerminalConfiguration.Nrse, -10, 10, AIVoltageUnits.Volts);
+                        //         }
+                        //         else
+                        //         {
+                        //             analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 3).ToString(), "",
+                        //                 AITerminalConfiguration.Nrse, -10, 10, AIVoltageUnits.Volts);
+                        //         }
+                        //         string theName = (string)(the_names.GetType().GetProperty("AS" + analog_index.ToString()).GetValue(the_names, null));
+                        //         if (theName == "")
+                        //             analog_in_names.Add("AIS" + analog_index.ToString());
+                        //         else
+                        //             analog_in_names.Add(theName);
+                        //     }
+                        // }
+                        // #endregion
 
-                       // #region Differential
-                       // for (int analog_index = 0; analog_index < 11; analog_index++)
-                       // {
-                       //     PropertyInfo the_channel = the_channels.GetType().GetProperty("AD" + NamingFunctions.number_to_string(analog_index, 2));
-                       //     isUsed = (bool)the_channel.GetValue(the_channels, null);
+                        // #region Differential
+                        // for (int analog_index = 0; analog_index < 11; analog_index++)
+                        // {
+                        //     PropertyInfo the_channel = the_channels.GetType().GetProperty("AD" + NamingFunctions.number_to_string(analog_index, 2));
+                        //     isUsed = (bool)the_channel.GetValue(the_channels, null);
 
-                       //     if (isUsed)
-                       //     {
-                       //         if (analog_index < 3)
-                       //         {
-                       //             analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 5).ToString(), "",
-                       //                 AITerminalConfiguration.Differential, -10, 10, AIVoltageUnits.Volts);
-                       //         }
-                       //         else
-                       //         {
-                       //             analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 13).ToString(), "",
-                       //                 AITerminalConfiguration.Differential, -10, 10, AIVoltageUnits.Volts);
-                       //         }
-                       //         string theName = (string)(the_names.GetType().GetProperty("AD" + NamingFunctions.number_to_string(analog_index, 2)).GetValue(the_names, null));
-                       //         if (theName == "")
-                       //             analog_in_names.Add("AID" + analog_index.ToString());
-                       //         else
-                       //             analog_in_names.Add(theName);
-                       //     }
-                       // }
-                       // #endregion
+                        //     if (isUsed)
+                        //     {
+                        //         if (analog_index < 3)
+                        //         {
+                        //             analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 5).ToString(), "",
+                        //                 AITerminalConfiguration.Differential, -10, 10, AIVoltageUnits.Volts);
+                        //         }
+                        //         else
+                        //         {
+                        //             analogS7ReadTask.AIChannels.CreateVoltageChannel("PXI1Slot7/ai" + (analog_index + 13).ToString(), "",
+                        //                 AITerminalConfiguration.Differential, -10, 10, AIVoltageUnits.Volts);
+                        //         }
+                        //         string theName = (string)(the_names.GetType().GetProperty("AD" + NamingFunctions.number_to_string(analog_index, 2)).GetValue(the_names, null));
+                        //         if (theName == "")
+                        //             analog_in_names.Add("AID" + analog_index.ToString());
+                        //         else
+                        //             analog_in_names.Add(theName);
+                        //     }
+                        // }
+                        // #endregion
 
-                        #endregion 
+                        #endregion
 
                         #region New Code
 
@@ -734,21 +774,21 @@ namespace AtticusServer
                         }
 
                         #endregion
-                        
+
 
                         // Configure timing specs of the analog In task. Again these things shouldn't be hard coded and will be changed    
                         analogS7ReadTask.Timing.ConfigureSampleClock("", (double)(AtticusServer.server.serverSettings.AIFrequency), SampleClockActiveEdge.Rising,
                             SampleQuantityMode.FiniteSamples, sequence.nSamples(1 / ((double)(AtticusServer.server.serverSettings.AIFrequency))));
 
                         //analogS7ReadTask.Timing.ReferenceClockSource = "/PXI1Slot7/PXI_Trig7"; // adareau : with my configuration, declaring a ReferenceClockSource was generating errors. I remove this for now...
-                        
+
                         if (AtticusServer.server.serverSettings.UseAITaskTriggering) //AD
                         {
 
                             DigitalEdgeStartTriggerEdge triggerEdge = DigitalEdgeStartTriggerEdge.Rising;  // AD : see below
                             analogS7ReadTask.Triggers.StartTrigger.ConfigureDigitalEdgeTrigger(AtticusServer.server.serverSettings.AITriggerSource, triggerEdge); // AD : to fix synchronization problem between analog in and output tasks, I trigger
-                                                                                                                                                                 //  the analog in task, using the variable timebase source signal (available on PXI_Trig0)
-                                                                                                                                                                 // the task starts with the first signal sent by the VT source...
+                                                                                                                                                                  //  the analog in task, using the variable timebase source signal (available on PXI_Trig0)
+                                                                                                                                                                  // the task starts with the first signal sent by the VT source...
                         }
                         analogS7ReadTask.Timing.ReferenceClockRate = 20000000;
                         analogS7ReadTask.Stream.Timeout = Convert.ToInt32(sequence.SequenceDuration * 1000) + 10000;
@@ -792,7 +832,7 @@ namespace AtticusServer
                             messageLog(this, new MessageEvent("Generating gpib buffer for gpib ID " + gpibID));
 
                             NationalInstruments.NI4882.Device gpibDevice = new NationalInstruments.NI4882.Device(
-                                gpibChannel.gpibBoardNumber(), 
+                                gpibChannel.gpibBoardNumber(),
                                 new NationalInstruments.NI4882.Address(gpibChannel.GpibAddress.PrimaryAddress, gpibChannel.GpibAddress.SecondaryAddress));
                             GpibTask gpibTask = new GpibTask(gpibDevice);
                             gpibTask.generateBuffer(sequence, myServerSettings.myDevicesSettings[gpibChannel.DeviceName],
@@ -800,7 +840,7 @@ namespace AtticusServer
                             gpibTask.Done += new TaskDoneEventHandler(aTaskFinished);
                             gpibTasks.Add(gpibChannel, gpibTask);
                             messageLog(this, new MessageEvent("Done."));
-                            
+
                         }
                         else
                         {
@@ -945,27 +985,27 @@ namespace AtticusServer
         }
 
         private void callback_S7(IAsyncResult ar) //This is what happens when the analog in task completes
-        {   
+        {
             try
             {
-				//Read the available data from the channels 
+                //Read the available data from the channels 
                 double[,] data_ana_in_S7 = new double[analogS7ReadTask.AIChannels.Count, sequence.nSamples(1 / (double)(AtticusServer.server.serverSettings.AIFrequency))];
                 data_ana_in_S7 = reader_analog_S7.EndReadMultiSample(ar);
                 DataTable dataTable = new DataTable();
                 //Creates a new datatable to store data
-				DataTableHelper.InitializeDataTable(dataTable,sequence,AtticusServer.server.serverSettings,analog_in_names);
+                DataTableHelper.InitializeDataTable(dataTable, sequence, AtticusServer.server.serverSettings, analog_in_names);
                 analogS7ReadTask.Dispose();
                 //Only if the sequence needs to save analog in, the data is exported to CSV
                 if (sequence.AISaved)
                 {
-                    DataTableHelper.dataToDataTable(data_ana_in_S7, dataTable,AtticusServer.server.serverSettings.AIFrequency);
+                    DataTableHelper.dataToDataTable(data_ana_in_S7, dataTable, AtticusServer.server.serverSettings.AIFrequency);
 
                     string day_folder = NamingFunctions.get_fileDirectory(settings);
                     if (!System.IO.Directory.Exists(day_folder + @"\Analog in"))
                         System.IO.Directory.CreateDirectory(day_folder + @"\Analog in");
 
 
-                    string shot_name = NamingFunctions.get_fileStamp(sequence,settings,runTime);
+                    string shot_name = NamingFunctions.get_fileStamp(sequence, settings, runTime);
 
 
                     System.IO.StreamWriter a = System.IO.File.CreateText(day_folder + @"\Analog in\" + shot_name + ".csv");
@@ -994,12 +1034,14 @@ namespace AtticusServer
 
                 bool samplesGeneratedMismatchDetected = false;
 
-                if (fpgaTasks!=null) {
-                    if (fpgaTasks.Count>0) {
+                if (fpgaTasks != null)
+                {
+                    if (fpgaTasks.Count > 0)
+                    {
                         IEnumerator<FpgaTimebaseTask> enumerator = fpgaTasks.Values.GetEnumerator();
                         enumerator.MoveNext();
                         FpgaTimebaseTask task = enumerator.Current;
-                        FpgaRunReport fpgaReport = task.getRunReport();                    
+                        FpgaRunReport fpgaReport = task.getRunReport();
                     }
                 }
 
@@ -1024,9 +1066,9 @@ namespace AtticusServer
                                         {
                                             // The number of samples is not equal to the expected number. Should we announce this as an error?
                                             // That depends on the error check sensitivity.
-                                            
-                                            bool announceError=false;
-                                            
+
+                                            bool announceError = false;
+
                                             if (myServerSettings.myDevicesSettings[str].SamplesGeneratedCheckSensitivity == DeviceSettings.DeviceErrorCheckSamplesGeneratedSensitivity.Strict)
                                             {
                                                 announceError = true;
@@ -1214,7 +1256,7 @@ namespace AtticusServer
                     long expectedGenerated = 0;
 
                     messageLog(this, new MessageEvent("Generating buffer for " + dev));
-                    Task task = DaqMxTaskGenerator.createDaqMxTask(dev,
+                    Task task = DaqMxTaskGenerator.createDaqMxTask(this, dev,
                         deviceSettings,
                         sequence,
                         settings,
@@ -1452,14 +1494,14 @@ namespace AtticusServer
 
 
                     DataStructures.Timing.SoftwareClockProvider softwareClockProvider;
-                    
+
                     // chose local software clock provider...
                     if (serverSettings.ReceiveNetworkClock)
                     {
                         softwareClockProvider = new DataStructures.Timing.NetworkClockProvider(clockID);
                         messageLog(this, new MessageEvent("Using network clock as software clock provider."));
                     }
-                    else if (fpgaTasks!=null && fpgaTasks.Count != 0)
+                    else if (fpgaTasks != null && fpgaTasks.Count != 0)
                     {
                         IEnumerator<string> e = fpgaTasks.Keys.GetEnumerator();
                         e.MoveNext();
@@ -1483,7 +1525,7 @@ namespace AtticusServer
                     {
                         throw new Exception("Expected clockBroadcaster to be null when it was not.");
                     }
-                    if (serverSettings.BroadcastNetworkClock && ! serverSettings.ReceiveNetworkClock)
+                    if (serverSettings.BroadcastNetworkClock && !serverSettings.ReceiveNetworkClock)
                     {
                         clockBroadcaster = new DataStructures.Timing.NetworkClockBroadcaster(clockID, (uint)((sequence.SequenceDuration * 1000.0) + 100));
                         softwareClockProvider.addSubscriber(clockBroadcaster, 20);
@@ -1499,9 +1541,9 @@ namespace AtticusServer
                     foreach (RS232Task task in this.rs232Tasks.Values)
                         softwareClockProvider.addSubscriber(task, 1);
 
-                    
 
-                   
+
+
 
 
                     lock (softwareTriggeringTaskLock)
@@ -1509,7 +1551,7 @@ namespace AtticusServer
                         softwareTriggeringTask = null;
                     }
 
-                   
+
 
 
                     softwareTimedTasksTriggered = false;
@@ -1588,7 +1630,7 @@ namespace AtticusServer
                         variableTimebaseClockTask.Control(TaskAction.Commit);
                     }
 
-					//if needed, the analog input task is launched here
+                    //if needed, the analog input task is launched here
                     if (analogInCardDetected)
                         reader_analog_S7.BeginReadMultiSample(sequence.nSamples(1 / (double)(AtticusServer.server.serverSettings.AIFrequency)), new AsyncCallback(callback_S7), null);
 
@@ -1862,9 +1904,9 @@ namespace AtticusServer
                                 computerClockProvider.StartClockProvider();
                                 messageLog(this, new MessageEvent("Triggered computer-software-clock (without sync to a hardware timed task)."));
                             }
-                            
 
-                           
+
+
                         }
                     }
 
@@ -1917,10 +1959,10 @@ namespace AtticusServer
                             {
                                 computerClockProvider.ArmClockProvider();
                                 computerClockProvider.StartClockProvider();
-                                messageLog(this, new MessageEvent("Triggered software-timed task(s) (without sync to a hardware timed task)."));   
+                                messageLog(this, new MessageEvent("Triggered software-timed task(s) (without sync to a hardware timed task)."));
                             }
 
-                     
+
                         }
 
                     }
@@ -2111,7 +2153,7 @@ namespace AtticusServer
 
 
                 if (computerClockProvider != null)
-                    if (computerClockProvider.ClockStatus== DataStructures.Timing.SoftwareClockProvider.Status.Running)
+                    if (computerClockProvider.ClockStatus == DataStructures.Timing.SoftwareClockProvider.Status.Running)
                         computerClockProvider.AbortClockProvider();
                 computerClockProvider = null;
 
@@ -2124,7 +2166,7 @@ namespace AtticusServer
                 }
                 else
                 {
-    
+
                     gpibTasks.Clear();
                 }
 
@@ -2134,7 +2176,7 @@ namespace AtticusServer
                 }
                 else
                 {
-                     rs232Tasks.Clear();
+                    rs232Tasks.Clear();
                 }
 
                 if (rfsgTasks == null)
@@ -2405,25 +2447,108 @@ namespace AtticusServer
 
                     Device device = daqSystem.LoadDevice(devices[i]);
 
+                    System.Console.WriteLine("Device type " + device.ProductType);
+                    //Attempts to weed out non-hardware timed channels.
+                    /*object thingy = device.DOPorts;
+                    object thingy2 = device.COSampleModes;
+
+                    string[] thingy3 = device.GetPhysicalChannels(PhysicalChannelTypes.CO, PhysicalChannelAccess.All); ;
+                    */
+
 
                     myDeviceDescriptions.Add(devices[i], device.ProductType);
                     string[] analogs = device.AOPhysicalChannels;
                     string[] digitalLines = device.DOLines;
 
+                    //analogHardWareStructure stores the number of analog outputs the card has. This is useful later when generating buffers
+                    int analogHardwareStructure = analogs.Length;
+
+
+                    //digitalHardwareStructure holds information about the port/line structure on the card. It is a variable length array. The length of the
+                    //array corresponds to all of the ports, while the value in each array index is the number of lines on that port (usualy 8 or 32).
+
+
+                    int[] digitalHardwareStructure;
+                    int num_DO_channels = digitalLines.Length;
+                    int array_length = -1;
+                    if (num_DO_channels != 0)
+                    {
+                        //NOTE: My assumptions is that the digitalLines string array is *ordered*, i.e. port0/line0, port0/line1...portN/lineM, such that N is the largest
+                        //port number in digitalLines. This way, I can extract the number of ports I need by simply looking at the last element of digitalLines. (If NI ever chooses
+                        //not return an un-ordered array, well, then it's a slight complication to fix.
+                        //I also assume we have 10 or less total ports, i.e. that the port number is a single digit.
+
+                        //Find index of the string "port" in the last element of digitalLines:
+                        int port_string_index = digitalLines[digitalLines.Length - 1].IndexOf("port") + 4;
+                        System.Console.WriteLine("Highest port index (number of ports-1) on this device:" + digitalLines[digitalLines.Length - 1][port_string_index]);
+                        System.Console.WriteLine("Number of available analog outputs on this device:" + analogHardwareStructure);
+                        //Use that number to determine the length digitalHardwareStrucrue array...
+
+
+                        Int32.TryParse(digitalLines[digitalLines.Length - 1][port_string_index].ToString(), out array_length);
+                        array_length += 1; //the total array length should actually be 1 longer than the index, because the index runs from 0..n-1
+                        digitalHardwareStructure = new int[array_length];
+
+                        if (array_length == 0)
+                            System.Console.WriteLine("Irregular port structure, or no digital outputs found on " + devices[i] + " of type " + device.ProductType);
+
+
+
+                        //now that the digitalHardWareStructure array has a defined length, wan count the number of lines per port:
+
+                        //initialize digitalHardwareStructure array
+                        //Possibl arrayOutOfBounds exception here
+                        for (int j = 0; j < array_length; j++)
+                        {
+                            digitalHardwareStructure[j] = 0;
+                        }
+
+                        //Note: the port_string_index used above should still be a good location to find the port numbers, so we use it here
+                        int port_num_holder = -1;
+                        for (int j = 0; j < digitalLines.Length; j++)
+                        {
+                            Int32.TryParse(digitalLines[j][port_string_index].ToString(), out port_num_holder);
+                            digitalHardwareStructure[port_num_holder] += 1;
+                        }
+                    }
+                    else
+                    {
+                        //Set array_length equal to zero if there are no DO founds--later this will force the digitalHardwareStructure for this
+                        //device to be null (see next if statement)
+                        array_length = 0;
+                        digitalHardwareStructure = null;
+                        System.Console.WriteLine("No digital outputs found on " + devices[i] + " of type " + device.ProductType);
+                    }
+                    //SOMEBULLSHIT
+
+                    //SETTINGS_LOAD_BUG: This adds a new device to the list if there isn't already a device in the settings with the same key (e.g. Dev1)
+                    //Note: the serverSettings are *loaded* from a file. If you have a settings file with Dev1, and then change
+                    //which card is labelled Dev1 in Automation Explorer, the change will *not* be updated here. This should perhaps be fixed at some point.
                     if (!serverSettings.myDevicesSettings.ContainsKey(devices[i]))
                     {
-                        serverSettings.myDevicesSettings.Add(devices[i], new DeviceSettings(devices[i], myDeviceDescriptions[devices[i]]));
+                        //If the digitalHardwareStructure will have a non-sensical value, then set it to null
+                        if (array_length <= 0)
+                            serverSettings.myDevicesSettings.Add(devices[i], new DeviceSettings(devices[i], device.ProductType, analogHardwareStructure, null));
+                        else
+                            serverSettings.myDevicesSettings.Add(devices[i], new DeviceSettings(devices[i], device.ProductType, analogHardwareStructure, digitalHardwareStructure));
+                        // serverSettings.myDevicesSettings.Add(devices[i], new DeviceSettings(devices[i], device.ProductType, digitalHardwareStructure, analogHardwareStructure));
                     }
 
+
                     // Special case: 6259 cards use 32-bit wide ports instead of 16 bit wide.
+
+
+                    //Below is hardcoded support for the 6259 card, which is now commented out because the 32 or 8 lines per
+                    //port business should all be taken care of using the DigitalHardwareStructure object
+
+                    /*
                     if (myDeviceDescriptions[devices[i]].Contains("6259"))
                     {
                         serverSettings.myDevicesSettings[devices[i]].use32BitDigitalPorts = true;
                     }
-
+                    */
 
                     // Add all the analog channels, but only if the device settings say this card is enabled
-
                     if (serverSettings.myDevicesSettings.ContainsKey(devices[i]) && serverSettings.myDevicesSettings[devices[i]].DeviceEnabled)
                     {
 
@@ -2454,7 +2579,7 @@ namespace AtticusServer
                         }
                     }
 
-                    System.Console.WriteLine("...done.");
+                    System.Console.WriteLine("...done.\n");
 
                 }
 
@@ -2476,7 +2601,7 @@ namespace AtticusServer
 
                     if (!serverSettings.myDevicesSettings.ContainsKey(devName))
                     {
-                        DeviceSettings devSettings = new DeviceSettings(devName, "RFSG driver library signal generator");
+                        DeviceSettings devSettings = new DeviceSettings(devName, "RFSG driver library signal generator", 0, null);
                         serverSettings.myDevicesSettings.Add(devName, devSettings);
                     }
 
@@ -2680,7 +2805,7 @@ namespace AtticusServer
                     if (!myServerSettings.myDevicesSettings.ContainsKey(device))
                     {
                         myServerSettings.myDevicesSettings.Add(device,
-                            new DeviceSettings(device, myDeviceDescriptions[device]));
+                            new DeviceSettings(device, myDeviceDescriptions[device], 0, null));
                     }
                     else
                     {
@@ -2726,7 +2851,7 @@ namespace AtticusServer
 
                             if (!myServerSettings.myDevicesSettings.ContainsKey(name))
                             {
-                                DeviceSettings newSettings = new DeviceSettings(name, "Opal Kelly FPGA Device");
+                                DeviceSettings newSettings = new DeviceSettings(name, "Opal Kelly FPGA Device", 0, null);
                                 newSettings.deviceConnected = true;
                                 newSettings.isFPGADevice = true;
                                 myServerSettings.myDevicesSettings.Add(name, newSettings);

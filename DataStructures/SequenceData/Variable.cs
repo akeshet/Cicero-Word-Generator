@@ -201,6 +201,57 @@ namespace DataStructures
             get { return listDriven; }
             set { listDriven = value; }
         }
+        //Added by Samarth (DB and LUT Driven both)
+        //LUT driven:
+        private bool lutDriven;
+
+        public bool LUTDriven
+        {
+            get { return lutDriven; }
+            set { lutDriven = value; }
+
+        }
+
+        //LUT number if applicable:
+        private int LUTdbFieldNumber;
+
+        public int LUTNumber
+        {
+            get { return LUTdbFieldNumber; }
+            set { LUTdbFieldNumber = value; }
+
+        }
+
+        //LUT input variable if applicable
+        private Variable lutInput;
+
+        public Variable LUTInput
+        {
+            get { return lutInput; }
+            set { lutInput = value; }
+        }
+        
+        //Database driven:
+        private bool dbDriven;
+
+        public bool DBDriven
+        {
+            get { return dbDriven; }
+            set { dbDriven = value; }
+
+        }
+
+        //Database field number if applicable:
+        private int dbFieldNumber;
+
+        public int DBFieldNumber
+        {
+            get { return dbFieldNumber; }
+            set { dbFieldNumber = value; }
+
+        }
+
+
 
         private int listNumber;
 
@@ -385,7 +436,7 @@ namespace DataStructures
             get { return isSpecialVariable; }
             set { isSpecialVariable = value; }
         }
-        public enum SpecialVariableType { IterationNum, IterationCount };
+        public enum SpecialVariableType { IterationNum, IterationCount, RunningCounter };
         private SpecialVariableType mySpecialVariableType;
 
         public SpecialVariableType MySpecialVariableType

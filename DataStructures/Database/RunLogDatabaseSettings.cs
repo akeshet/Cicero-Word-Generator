@@ -18,6 +18,7 @@ namespace DataStructures.Database
             set { url = value; }
         }
 
+       
 
         private string port;
         [Description("Port # MySql server (default: 3306)."), DefaultValue("3306")]

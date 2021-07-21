@@ -183,7 +183,7 @@ namespace WordGenerator
             }
 
             if (studentEdition)
-                textPreamble += " *STUDENT EDITION* ";
+                textPreamble += " BEC IV EDITION ";
 
             if (this.OpenSequenceFileName != "" && this.openSequenceFileName != null)
             {
@@ -479,11 +479,13 @@ namespace WordGenerator
                 this.gpibGroupEditor.setChannelCollection(settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.gpib]);
                 this.rS232GroupEditor.setChannelCollection(settingsData.logicalChannelManager.ChannelCollections[HardwareChannel.HardwareConstants.ChannelTypes.rs232]);
                 this.overridePage.setSettings(Storage.settingsData);
+                this.LUTEditor.setUp();
                 this.sequencePage.layoutSettingsData();
                 this.sequencePage.updateOverrideCount();
                 this.useNetworkClockCheckBox.Checked = settingsData.AlwaysUseNetworkClock;
 
                 setTimestepEditorBackgrounds();
+                
             }
             finally
             {
@@ -516,6 +518,14 @@ namespace WordGenerator
                 new ChannelManager.ChannelManager();
             logicalChannelManager.ShowDialog();
         }
+
+        private void editRunLoggingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            RunLogManager runLogManager = new RunLogManager(Storage.settingsData);
+            runLogManager.ShowDialog();
+        }
+
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -575,6 +585,7 @@ namespace WordGenerator
             if (Storage.SaveAndLoad.LoadSettingsData(null))
             {
                 RefreshSettingsDataToUI();
+                RefreshSequenceDataToUI();
                 this.handleMessageEvent(this, new MessageEvent("Loaded settings file " + this.openSettingsFileName));
             }
             else
@@ -1566,6 +1577,41 @@ namespace WordGenerator
         {
             CitationInfoForm cif = new CitationInfoForm(false);
             cif.ShowDialog();
+        }
+
+        private void sequencePage_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void commonWaveformEditor_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lutTab_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void gpibGroupEditor_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lookupTableControl1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void variablesEditor_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void mainTab_TabIndexChanged(object sender, EventArgs e)
+        {
+       
         }
 
     }

@@ -6,6 +6,8 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using DataStructures;
+using System.Diagnostics;
+using System.IO;
 
 namespace WordGenerator.Controls
 {
@@ -35,6 +37,8 @@ namespace WordGenerator.Controls
 
         private void button1_Click(object sender, EventArgs e)
         {
+            //Trying to output to console
+            System.Console.WriteLine("Blah");
             RunForm runform = new RunForm(Storage.sequenceData, RunForm.RunType.Run_Iteration_Zero, repeatCheckBox.Checked,true);
             runform.ShowDialog();
             runform.Dispose();

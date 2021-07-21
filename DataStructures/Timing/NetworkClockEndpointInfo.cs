@@ -17,7 +17,7 @@ namespace DataStructures.Timing
             set { hostName = value; }
         }
 
-        public enum HostTypes { Cicero_Client, Atticus_Server };
+        public enum HostTypes { Cicero_Client, Atticus_Server, Snippet_Server };
 
         private HostTypes hostType;
 
@@ -29,6 +29,8 @@ namespace DataStructures.Timing
 
         public static int getListenerPort(HostTypes hostType)
         {
+            if (hostType == HostTypes.Snippet_Server)
+                return 39720;
             if (hostType == HostTypes.Cicero_Client)
                 return 39721;
             if (hostType == HostTypes.Atticus_Server)

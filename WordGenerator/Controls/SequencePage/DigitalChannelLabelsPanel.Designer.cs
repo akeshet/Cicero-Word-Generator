@@ -45,6 +45,7 @@ namespace WordGenerator.Controls
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.Name = "DigitalChannelLabelsPanel";
+            this.Load += new System.EventHandler(this.DigitalChannelLabelsPanel_Load);
             this.ResumeLayout(false);
 
         }

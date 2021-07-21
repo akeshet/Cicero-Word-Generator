@@ -26,6 +26,7 @@ namespace DataStructures
             get { return connectOnStartup; }
             set { connectOnStartup = value; }
         }
+
         private string serverAddress;
 
         [Description("IP address of the server. If the server is running on the same machine as the client, set this to localhost .")]
@@ -34,6 +35,17 @@ namespace DataStructures
             get { return serverAddress; }
             set { serverAddress = value; }
         }
+
+        //Added by Samarth
+        private int serverPort;
+
+        [Description("Port of the server. This is to determine port of the server.")]
+        public int ServerPort
+        {
+            get { return serverPort; }
+            set { serverPort = value; }
+        }
+        //End
 
         private string serverName;
 
@@ -56,11 +68,13 @@ namespace DataStructures
                 return serverAddress;
         }
 
+
         public ServerInfo()
         {
             connectOnStartup = false;
             ServerAddress = "localhost";
             serverName = "";
+            serverPort = 5678;       //Added by Samarth
         }
     }
 }

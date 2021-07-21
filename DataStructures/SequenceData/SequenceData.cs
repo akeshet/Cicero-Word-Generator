@@ -220,6 +220,18 @@ namespace DataStructures
                 this.setIterationNumber(listIterationNumber);
             }
         }
+
+        private int runningCounter = 0;
+
+        public int RunningCounter
+        {
+            get { return runningCounter; }
+            set
+            {
+                runningCounter = value;
+            }
+        }
+
  
 
         [Category("Global"), Description("The name of the sequence.")]
@@ -292,6 +304,11 @@ namespace DataStructures
                         var.VariableValue = 0;
                     }
                 }
+
+                if (var.IsSpecialVariable && var.MySpecialVariableType == Variable.SpecialVariableType.RunningCounter)
+                {
+                    var.VariableValue = runningCounter;
+                }
             }
 
             foreach (Variable var in variables.FindAll(v => v.DerivedVariable))
@@ -343,6 +360,33 @@ namespace DataStructures
             
             }
             set { variables = value; }
+        }
+
+        public bool writeVariableListToFile(string filename, string path)
+        {
+            bool writeSuccess = true;
+            string varFileDirectory = path;
+            string varFileExt = ".txt";
+            string varFullFileName = varFileDirectory + "\\" + filename + varFileExt;
+
+            if (path == "" || filename == "")
+            {
+                return false;
+            }
+
+
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(varFullFileName))
+            {
+                file.WriteLine(DateTime.Now);
+                foreach (Variable var in variables)
+                {
+                    file.WriteLine(var.VariableName + ' ' + Convert.ToString(var.VariableValue));
+                }
+                file.Close();
+            }
+
+            return true;
+
         }
 
         /// <summary>
@@ -2125,6 +2169,7 @@ namespace DataStructures
             }
 
             ans[currentSample] = dwellWord().getEndAnalogValue(analogChannelID, Variables, CommonWaveforms);
+
         }
 
         /// <summary>

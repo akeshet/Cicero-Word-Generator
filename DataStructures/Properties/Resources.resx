@@ -112,26 +112,26 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AuthorString" xml:space="preserve">
-    <value>(c) 2008  Aviv Keshet  (MIT),  Free software under GNU General Public License.</value>
+    <value>(c) 2016  Aviv Keshet  (MIT),  Free software under GNU General Public License.</value>
   </data>
   <data name="BuildDateString" xml:space="preserve">
-    <value>Jan 12, 2013</value>
+    <value>May 05, 2016</value>
   </data>
   <data name="ContribsString" xml:space="preserve">
-    <value>Tony Kim (MIT), Ryan Olf (Berkeley), Emmanuel Mimoun (ENS Paris), Timur Rvachov (MIT)</value>
+    <value>Tony Kim (MIT), Ryan Olf (Berkeley), Emmanuel Mimoun (ENS Paris), Timur Rvachov (MIT), Will Lunden (MIT), Samarth Vadia (MIT)</value>
   </data>
   <data name="RevisionString" xml:space="preserve">
-    <value>rev7</value>
+    <value />
     <comment>[Optional] eg: rev2. Will be displayed in UI, but not tracked in serialized Sequence, Settings, or ServerSettings files.</comment>
   </data>
   <data name="VersionString" xml:space="preserve">
-    <value>1.64</value>
+    <value>1.8</value>
     <comment>Must be of the form X.YZ</comment>
   </data>
 </root>

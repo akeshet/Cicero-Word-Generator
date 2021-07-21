@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using DataStructures;
+using WordGenerator.ChannelManager;
 
 namespace WordGenerator.Controls
 {
@@ -39,6 +41,7 @@ namespace WordGenerator.Controls
             else
                 channelLabels = new List<Label>();
 
+           
             this.ResumeLayout(true);
 
             this.SuspendLayout();
@@ -56,7 +59,6 @@ namespace WordGenerator.Controls
                 fillerLbl.TextAlign = ContentAlignment.MiddleRight;
                 fillerLbl.AutoEllipsis = true;
                 fillerLbl.AutoSize = false;
-
                 
 
                 int digitalID = digitalIDs[i];
@@ -68,9 +70,10 @@ namespace WordGenerator.Controls
                 lbl.TextAlign = ContentAlignment.MiddleRight;
                 lbl.AutoEllipsis = true;
                 lbl.AutoSize = false;
+                lbl.Name = digitalID.ToString();
 
                 this.toolTip1.SetToolTip(lbl, Storage.settingsData.logicalChannelManager.Digitals[digitalID].Description);
-                
+                 
                 
 
                 Label idLbl = new Label();
@@ -79,11 +82,17 @@ namespace WordGenerator.Controls
                 idLbl.Text = digitalID.ToString();
                 idLbl.Location = new Point(0, i * rowHeight);
                 idLbl.TextAlign = ContentAlignment.MiddleLeft;
+                idLbl.Name = digitalID.ToString();
 
                 this.toolTip1.SetToolTip(idLbl, Storage.settingsData.logicalChannelManager.Digitals[digitalID].Description);
 
-                Color bCol = DigitalGrid.ChannelColor(i);
-
+                //Color bCol = DigitalGrid.ChannelColor(i);
+                //Will:
+                Color bCol;
+                if(Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.digital].Channels[digitalID].ChannelColor != Color.Empty)
+                    bCol = Storage.settingsData.logicalChannelManager.ChannelCollections[DataStructures.HardwareChannel.HardwareConstants.ChannelTypes.digital].Channels[digitalID].ChannelColor;
+                else
+                    bCol = Color.RoyalBlue;
                 lbl.BackColor = bCol;
                 idLbl.BackColor = bCol;
                 fillerLbl.BackColor = bCol;
@@ -93,10 +102,14 @@ namespace WordGenerator.Controls
 
                 channelLabels.Add(lbl);
                 channelLabels.Add(idLbl);
+                channelLabels[2*i + 1].Click += new EventHandler(DigitalChannelLabelsPanel_Click); //For ID 
+              
    //             channelLabels.Add(fillerLbl);
 
  
             }
+
+            
 
             this.Controls.AddRange(channelLabels.ToArray());
 
@@ -104,5 +117,27 @@ namespace WordGenerator.Controls
 
         }
 
+       
+        
+
+        private void DigitalChannelLabelsPanel_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void DigitalChannelLabelsPanel_Click(object sender, EventArgs e)
+        {
+            //From stack overflow... can cast the sender to get some info about what we clicked on!
+            Label temp = (Label) sender;
+            int selectedLogicalID = Convert.ToInt32(temp.Text);
+            QuickEdit quick = new QuickEdit(selectedLogicalID);
+            quick.ShowDialog();
+            quick.Dispose();
+            MainClientForm.instance.RefreshSequenceDataToUI();
+            MainClientForm.instance.RefreshSettingsDataToUI();
+            
+        }
+
+        
     }
 }

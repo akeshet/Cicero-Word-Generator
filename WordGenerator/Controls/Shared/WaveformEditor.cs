@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -426,6 +426,8 @@ namespace WordGenerator.Controls
         {
             fileLoadCheckBox.Enabled = true;
             fileLoadCheckBox.Checked = currentWaveform.DataFromFile;
+            reloadDataFileCheckBox.Enabled = true;
+            reloadDataFileCheckBox.Checked = currentWaveform.ReloadFromFile;
 
             if (currentWaveform.DataFromFile)
             {
@@ -458,6 +460,8 @@ namespace WordGenerator.Controls
             hideLoadFileControls();
             fileLoadCheckBox.Enabled = false;
             fileLoadCheckBox.Checked = false;
+            reloadDataFileCheckBox.Enabled = false;
+            reloadDataFileCheckBox.Checked = false;
         }
 
         //REO 10/2008
@@ -527,7 +531,7 @@ namespace WordGenerator.Controls
                 upButton.Enabled = true;
                 downButton.Enabled = true;
             }
-            
+
             upButton.Visible = true;
             downButton.Visible = true;
 
@@ -752,8 +756,8 @@ namespace WordGenerator.Controls
                     Waveform tempwaveform = new Waveform();
                     //to parse each line in the file at either space or comma seperator
                     //trimming each line of white space at the beginning and end
-                    DataStructures.UtilityClasses.WaveformParser p = new  DataStructures.UtilityClasses.WaveformParser(sr, @"[,\s]\s*", delegate(string s) { return s.Trim(); });
-                 
+                    DataStructures.UtilityClasses.WaveformParser p = new DataStructures.UtilityClasses.WaveformParser(sr, @"[,\s]\s*", delegate (string s) { return s.Trim(); });
+
                     double[] values;
                     while ((values = p.ReadFloats()) != null)
                     {
@@ -768,8 +772,8 @@ namespace WordGenerator.Controls
                     currentWaveform.XValues = tempwaveform.XValues;
                     currentWaveform.YValues = tempwaveform.YValues;
                     currentWaveform.DataFileName = filePathTextBox.Text;
-                    currentWaveform.WaveformDuration = (currentWaveform.XValues.Count > 0) 
-                        ? currentWaveform.XValues[currentWaveform.XValues.Count-1] : currentWaveform.WaveformDuration;
+                    currentWaveform.WaveformDuration = (currentWaveform.XValues.Count > 0)
+                        ? currentWaveform.XValues[currentWaveform.XValues.Count - 1] : currentWaveform.WaveformDuration;
                     layoutNewWaveform();
 
                     updateGraph(this, null);
@@ -825,7 +829,7 @@ namespace WordGenerator.Controls
             }
 
             if (equationStatusLabel.Text == "Valid equation.")
-                equationStatusLabel.BackColor = Color.Green;
+                equationStatusLabel.BackColor = Color.RoyalBlue;
             else
                 equationStatusLabel.BackColor = Color.Red;
         }
@@ -853,7 +857,8 @@ namespace WordGenerator.Controls
 
                     foreach (Variable var in usedVars)
                     {
-                        if (!(Storage.sequenceData.Variables.Contains(var))) {
+                        if (!(Storage.sequenceData.Variables.Contains(var)))
+                        {
                             MessageBox.Show("You have attempted to paste in a waveform from another sequence object that made use of variables. This is not permitted.");
                             return;
                         }
@@ -862,7 +867,7 @@ namespace WordGenerator.Controls
                     this.currentWaveform.copyWaveform(Storage.clipboardWaveform);
 
                     this.layoutNewWaveform();
-                    
+
                 }
             }
         }
@@ -872,6 +877,26 @@ namespace WordGenerator.Controls
 
         }
 
-        
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void fileLoadCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void WaveformEditor_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void reloadDataFileCheckBox_Click(object sender, EventArgs e)
+        {
+            currentWaveform.ReloadFromFile = reloadDataFileCheckBox.Checked;
+        }
+
+
     }
 }

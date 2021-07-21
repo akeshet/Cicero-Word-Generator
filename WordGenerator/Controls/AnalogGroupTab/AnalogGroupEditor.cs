@@ -443,6 +443,11 @@ namespace WordGenerator.Controls
             }
         }
 
+        private void waveformEditor1_Load(object sender, EventArgs e)
+        {
+
+        }
+
 
     }
 }

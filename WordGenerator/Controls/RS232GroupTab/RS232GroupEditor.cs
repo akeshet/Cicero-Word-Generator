@@ -102,7 +102,8 @@ namespace WordGenerator.Controls.Temporary
                 if (rs232Group != null)
                 {
                     List<int> usedChannelIDs = rs232Group.getChannelIDs();
-                    for (int id = 0; id < usedChannelIDs.Count; id++)
+                    //for (int id = 0; id < usedChannelIDs.Count; id++)
+                    foreach(int id in usedChannelIDs)
                     {
                         RS232GroupChannelData channelData = rs232Group.ChannelDatas[id];
                         if (channelData.Enabled)

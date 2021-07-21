@@ -19,7 +19,7 @@
     <GenerateManifests>false</GenerateManifests>
     <SignManifests>false</SignManifests>
     <TargetZone>LocalIntranet</TargetZone>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -59,6 +59,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DatabaseHelper">
+      <HintPath>..\Dynamic Linked Libraries\DatabaseHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="DataStructures">
+      <HintPath>..\DataStructures\bin\Debug\DataStructures.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -72,11 +78,47 @@
     <Compile Include="Controls\Dialogs\CitationInfoForm.Designer.cs">
       <DependentUpon>CitationInfoForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Dialogs\RunLogManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\Dialogs\RunLogManager.Designer.cs">
+      <DependentUpon>RunLogManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LookUpTableTab\LUTEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\LookUpTableTab\LUTEditor.Designer.cs">
+      <DependentUpon>LUTEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SequencePage\AnalogQuickEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\SequencePage\AnalogQuickEdit.Designer.cs">
+      <DependentUpon>AnalogQuickEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Shared\WaveformEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Shared\WaveformEditor.Designer.cs">
+      <DependentUpon>WaveformEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\VariablesTab\varSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\VariablesTab\varSelector.Designer.cs">
+      <DependentUpon>varSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PulsesTab\AutoNameGlossaryDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controls\PulsesTab\AutoNameGlossaryDialog.Designer.cs">
       <DependentUpon>AutoNameGlossaryDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SequencePage\QuickEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\SequencePage\QuickEdit.Designer.cs">
+      <DependentUpon>QuickEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\Shared\AlternateFlowLayoutPanel.cs">
       <SubType>Component</SubType>
@@ -216,25 +258,25 @@
     <Compile Include="Controls\SequencePage\DigitalChannelLabelsPanel.Designer.cs">
       <DependentUpon>DigitalChannelLabelsPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\GPIBGroupTab\GpibGroupChannelSelection.cs">
+    <Compile Include="Controls\OtherTabs\GPIBGroupTab\GpibGroupChannelSelection.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\GPIBGroupTab\GpibGroupChannelSelection.Designer.cs">
+    <Compile Include="Controls\OtherTabs\GPIBGroupTab\GpibGroupChannelSelection.Designer.cs">
       <DependentUpon>GpibGroupChannelSelection.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\GPIBGroupTab\GpibGroupEditor.cs">
+    <Compile Include="Controls\OtherTabs\GPIBGroupTab\GpibGroupEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\GPIBGroupTab\GpibGroupEditor.designer.cs">
+    <Compile Include="Controls\OtherTabs\GPIBGroupTab\GpibGroupEditor.designer.cs">
       <DependentUpon>GpibGroupEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SequencePage\DigitalGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\AnalogGroupTab\GroupChannelSelection.cs">
+    <Compile Include="Controls\Dialogs\GroupChannelSelection.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\AnalogGroupTab\GroupChannelSelection.Designer.cs">
+    <Compile Include="Controls\Dialogs\GroupChannelSelection.Designer.cs">
       <DependentUpon>GroupChannelSelection.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\Shared\HorizontalParameterEditor.cs">
@@ -279,10 +321,10 @@
     <Compile Include="Controls\SequencePage\TimestepEditor.Designer.cs">
       <DependentUpon>TimestepEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Shared\StringParameterStringEditor.cs">
+    <Compile Include="Controls\SequencePage\StringParameterStringEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\Shared\StringParameterStringEditor.Designer.cs">
+    <Compile Include="Controls\SequencePage\StringParameterStringEditor.Designer.cs">
       <DependentUpon>StringParameterStringEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\Shared\ToolStripNumericOrVariableEditor.cs">
@@ -327,12 +369,6 @@
     <Compile Include="Controls\Shared\VerticalParameterEditor.Designer.cs">
       <DependentUpon>VerticalParameterEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Shared\WaveformEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\Shared\WaveformEditor.Designer.cs">
-      <DependentUpon>WaveformEditor.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Shared\WaveformGraphCollection.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -361,6 +397,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Dialogs\CitationInfoForm.resx">
       <DependentUpon>CitationInfoForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Dialogs\FormulaHelpDialog.resx">
       <SubType>Designer</SubType>
@@ -372,6 +409,16 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Dialogs\VariablePreviewEditorForm.resx">
       <DependentUpon>VariablePreviewEditorForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\LookUpTableTab\LUTEditor.resx">
+      <DependentUpon>LUTEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Shared\WaveformEditor.resx">
+      <DependentUpon>WaveformEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\VariablesTab\varSelector.resx">
+      <DependentUpon>varSelector.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\OverrideTab\Analog Override.resx">
       <SubType>Designer</SubType>
@@ -387,6 +434,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\PulsesTab\AutoNameGlossaryDialog.resx">
       <DependentUpon>AutoNameGlossaryDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SequencePage\QuickEdit.resx">
+      <DependentUpon>QuickEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\VariablesTab\PermanentVariablesEditor.resx">
       <SubType>Designer</SubType>
@@ -440,15 +492,15 @@
       <SubType>Designer</SubType>
       <DependentUpon>DigitalChannelLabelsPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\GPIBGroupTab\GpibGroupChannelSelection.resx">
+    <EmbeddedResource Include="Controls\OtherTabs\GPIBGroupTab\GpibGroupChannelSelection.resx">
       <DependentUpon>GpibGroupChannelSelection.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\GPIBGroupTab\GpibGroupEditor.resx">
+    <EmbeddedResource Include="Controls\OtherTabs\GPIBGroupTab\GpibGroupEditor.resx">
       <DependentUpon>GpibGroupEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\AnalogGroupTab\GroupChannelSelection.resx">
+    <EmbeddedResource Include="Controls\Dialogs\GroupChannelSelection.resx">
       <DependentUpon>GroupChannelSelection.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -484,7 +536,7 @@
       <SubType>Designer</SubType>
       <DependentUpon>TimestepEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Shared\StringParameterStringEditor.resx">
+    <EmbeddedResource Include="Controls\SequencePage\StringParameterStringEditor.resx">
       <SubType>Designer</SubType>
       <DependentUpon>StringParameterStringEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -498,6 +550,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Shared\VariablePreviewEditor.resx">
       <DependentUpon>VariablePreviewEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Dialogs\VariableRelevanceEditor.resx">
       <SubType>Designer</SubType>
@@ -509,10 +562,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Shared\VerticalParameterEditor.resx">
       <DependentUpon>VerticalParameterEditor.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Shared\WaveformEditor.resx">
-      <DependentUpon>WaveformEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Shared\WaveformGraphCollection.resx">
@@ -545,7 +594,13 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="Properties\DataSources\DataStructures.LUT.datasource" />
+    <None Include="Properties\DataSources\DataStructures.LUT1.datasource" />
+    <None Include="Properties\DataSources\DataStructures.SettingsData.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -574,12 +629,6 @@
       <DependentUpon>SettingsExplorerForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Storage.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DataStructures\DataStructures.csproj">
-      <Project>{07B67011-62AB-43E3-80F6-E00BCBFF8558}</Project>
-      <Name>DataStructures</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\CiceroSplash.jpg" />

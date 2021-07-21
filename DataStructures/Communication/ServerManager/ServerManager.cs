@@ -221,7 +221,7 @@ namespace DataStructures
         {
 
             if (messageLog != null)
-                messageLog(this, new MessageEvent("Attempting to connect server " + server.ToString()));
+                messageLog(this, new MessageEvent("Attempting to connect server " + server.ToString() + ":" + Convert.ToString(server.ServerPort)));
 
             bool gotLock = Monitor.TryEnter(lockObj, 1000);
             try
@@ -237,7 +237,7 @@ namespace DataStructures
                 if (!servers.Contains(server))
                 {
                     if (messageLog != null)
-                        messageLog(this, new MessageEvent(server.ToString() + " is not on list of known servers. Aborting."));
+                        messageLog(this, new MessageEvent(server.ToString() + ":" + Convert.ToString(server.ServerPort) + " is not on list of known servers. Aborting."));
                     return false;
                 }
 
@@ -251,7 +251,7 @@ namespace DataStructures
                 if (!server.ServerEnabled)
                 {
                     if (messageLog != null)
-                        messageLog(this, new MessageEvent(server.ToString() + " is not enabled. Aborting."));
+                        messageLog(this, new MessageEvent(server.ToString() + ":" + Convert.ToString(server.ServerPort) + " is not enabled. Aborting."));
                     return false;
                 }
 
@@ -259,7 +259,7 @@ namespace DataStructures
                 if (connections[server] == ConnectionStatus.Connecting)
                 {
                     if (messageLog != null)
-                        messageLog(this, new MessageEvent(server.ToString() + " is already connecting. Aborting."));
+                        messageLog(this, new MessageEvent(server.ToString() + ":" + Convert.ToString(server.ServerPort) + " is already connecting. Aborting."));
                     return false;
                 }
 
@@ -354,8 +354,10 @@ namespace DataStructures
             if (server == null)
                 throw new Exception("server_connect_proc was passed an object other than a ServerInfo.");
 
+            //Modified by Samarth
             communicators[server] = (ServerCommunicator)Activator.GetObject(typeof(ServerCommunicator),
-            "tcp://" + server.ServerAddress + ":5678/serverCommunicator");
+            "tcp://" + server.ServerAddress + ":" + Convert.ToString(server.ServerPort) + "/serverCommunicator");
+            //End
         }
 
         #endregion
@@ -681,6 +683,26 @@ namespace DataStructures
         public ServerActionStatus outputRS232GroupOnConnectedServers(RS232Group rs232Group, SettingsData settings, EventHandler<MessageEvent> messageLog)
         {
             return runNamedMethodOnConnectedServers("outputRS232Group", new object[] { rs232Group, settings }, 4000, messageLog);
+        }
+         
+        public ServerActionStatus checkIfCiceroCanRunOnConnectedServers(EventHandler<MessageEvent> messageLog)
+        {
+            return runNamedMethodOnConnectedServers("checkIfCiceroCanRun", null , 4000, messageLog);
+        }
+
+        public ServerActionStatus waitForDatabaseUpdatesOnConnectedServers(SequenceData sequence, EventHandler<MessageEvent> messageLog)
+        {
+            return runNamedMethodOnConnectedServers("waitForDatabaseUpdates", new object[] { sequence }, 4000, messageLog);
+        }
+
+        public ServerActionStatus saveVariablesOnConnectedServers(SequenceData sequence, EventHandler<MessageEvent> messageLog)
+        {
+            return runNamedMethodOnConnectedServers("writeVariablesIntoDatabase", new object[] { sequence }, 4000, messageLog);
+        }
+
+        public ServerActionStatus saveImageDataOnConnectedServers(EventHandler<MessageEvent> messageLog)
+        {
+            return runNamedMethodOnConnectedServers("moveImageDataFromCacheToDatabase", null, 4000, messageLog);
         }
 
         private ServerActionStatus verifyConnection(ServerInfo server)

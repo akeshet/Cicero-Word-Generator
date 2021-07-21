@@ -18,7 +18,7 @@
     <GenerateManifests>false</GenerateManifests>
     <SignManifests>false</SignManifests>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -75,17 +75,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Opal Kelly\Opal Kelly 4.0.8\API-32\Csharp\libFrontPanel-csharp.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.Common, Version=9.1.35.159, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
-      <Private>True</Private>
+    <Reference Include="NationalInstruments.Common">
+      <HintPath>..\Dynamic Linked Libraries\NationalInstruments.Common.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.DAQmx, Version=9.3.35.219, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=x86">
-      <Private>True</Private>
+    <Reference Include="NationalInstruments.DAQmx">
+      <HintPath>..\Dynamic Linked Libraries\NationalInstruments.DAQmx.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.NI4882, Version=9.0.35.157, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
-      <Private>True</Private>
+    <Reference Include="NationalInstruments.NI4882">
+      <HintPath>..\Dynamic Linked Libraries\NationalInstruments.NI4882.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.VisaNS, Version=9.0.35.156, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
-      <Private>True</Private>
+    <Reference Include="NationalInstruments.VisaNS">
+      <HintPath>..\Dynamic Linked Libraries\NationalInstruments.VisaNS.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -190,12 +190,6 @@
     <Compile Include="Wrappers\niRFSG.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataStructures\DataStructures.csproj">
-      <Project>{07B67011-62AB-43E3-80F6-E00BCBFF8558}</Project>
-      <Name>DataStructures</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\athens_parthenon1.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +214,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataStructures\DataStructures.csproj">
+      <Project>{07B67011-62AB-43E3-80F6-E00BCBFF8558}</Project>
+      <Name>DataStructures</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
