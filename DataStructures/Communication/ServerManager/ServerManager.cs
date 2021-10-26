@@ -381,7 +381,7 @@ namespace DataStructures
             {
                 Thread pingThread = new Thread(new ParameterizedThreadStart(ping_server_proc));
                 pingThread.Start(comm);
-                pingThread.Join(1000);
+                pingThread.Join(3000);
                 if (pingThread.ThreadState == ThreadState.Running)
                 {
                     if (messageLog != null)
