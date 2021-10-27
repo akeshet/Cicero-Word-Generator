@@ -111,6 +111,11 @@ namespace AtticusServer
             return serverSettings;
         }
 
+        public static ServerSettings loadServerSettingsForUnitTests(string filename)
+        {
+            return loadServerSettings(filename);
+        }
+
         public static void saveServerSettings(string fileName, ServerSettings serverSettings)
         {
 

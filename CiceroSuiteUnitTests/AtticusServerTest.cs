@@ -72,11 +72,13 @@ namespace CiceroSuiteUnitTests
         public void loadServerSettingsTest()
         {
             string filename = "AtticusServerSettings-1.set";
-            ServerSettings result = AtticusServer_Accessor.loadServerSettings(filename);
+            //ServerSettings result = AtticusServer_Accessor.loadServerSettings(filename);
+            ServerSettings result = AtticusServer.AtticusServer.loadServerSettingsForUnitTests(filename);
             Assert.AreEqual(result.ServerName, "FermiServer", "Deserialized server settings object had incorrect name.");
             Assert.IsTrue(result.myDevicesSettings.ContainsKey("VdqjfUGLEm"), "Deserialized server settings object was missing a device.");
 
-            result = AtticusServer_Accessor.loadServerSettings("AtticusServerSettings-2.set");
+            //result = AtticusServer_Accessor.loadServerSettings("AtticusServerSettings-2.set");
+            result = AtticusServer.AtticusServer.loadServerSettingsForUnitTests("AtticusServerSettings-2.set");
             Assert.AreEqual(result.ServerName, "Samwise", "Deserialized server settings object had incorrect name.");
             Assert.IsTrue(result.myDevicesSettings.ContainsKey("GPIB0/19,0"), "Deserialized server was missing a GPIB device settings object.");
             Assert.AreEqual(result.myDevicesSettings["GPIB0/19,0"].DeviceDescription, "Agilent Technologies,33250A,0,1.05-1.01-1.00-03-1\n",
@@ -84,7 +86,8 @@ namespace CiceroSuiteUnitTests
 
             // Ensure that old-style Analog In settings are deserializing correctly.
             // New style adopted as of commit # 0df279b235b5c9aa91cf05bfc9400a01d7a021e0
-            result = AtticusServer_Accessor.loadServerSettings("AtticusServerSettings-AnalogIn-Old.set");
+            //result = AtticusServer_Accessor.loadServerSettings("AtticusServerSettings-AnalogIn-Old.set");
+            result = AtticusServer.AtticusServer.loadServerSettingsForUnitTests("AtticusServerSettings-AnalogIn-Old.set");
             Assert.AreEqual("Hal", result.ServerName);
             Assert.AreEqual(1, result.AIChannels.Count);
             Assert.AreEqual(1, result.AILogTimes.Count);
