@@ -70,11 +70,11 @@ namespace AtticusServer
 
                 Console.WriteLine("Creating AtticusServerRuntime object...");
 
-                //server = new AtticusServerCommunicator(serverSettings);
+                server = new AtticusServerCommunicator(serverSettings);
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                server = new AtticusServerCommunicator(serverSettings);
+               
 
                 MainServerForm form = new MainServerForm();
 
@@ -105,15 +105,10 @@ namespace AtticusServer
         /// </summary>
         /// <param name="filename"></param>
         /// <returns>loaded server settings object</returns>
-        private static ServerSettings loadServerSettings(string filename)
+        public static ServerSettings loadServerSettings(string filename)
         {
             ServerSettings serverSettings = Common.loadBinaryObjectFromFile(filename) as ServerSettings;
             return serverSettings;
-        }
-
-        public static ServerSettings loadServerSettingsForUnitTests(string filename)
-        {
-            return loadServerSettings(filename);
         }
 
         public static void saveServerSettings(string fileName, ServerSettings serverSettings)
