@@ -70,6 +70,7 @@ namespace DataStructures
             connectOnStartup = false;
             ServerAddress = "localhost";
             serverName = "";
+            serverPort = CommunicationConstants.remotingCommunicationPort;
         }
     }
 }
