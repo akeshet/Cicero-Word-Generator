@@ -35,6 +35,15 @@ namespace DataStructures
             set { serverAddress = value; }
         }
 
+        private int serverPort;
+
+        [Description("Port number of the server.")]
+        public int ServerPort
+        {
+            get { return serverPort; }
+            set { serverPort = value; }
+        }
+
         private string serverName;
 
         [Description("Name of the server. This is determined by conencting to the server.")]
