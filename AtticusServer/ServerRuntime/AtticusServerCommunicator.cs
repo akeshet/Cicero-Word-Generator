@@ -2296,7 +2296,7 @@ namespace AtticusServer
 
                     communicatorStatus = ServerStructures.ServerCommunicatorStatus.Connecting;
                     updateGUI(this, null);
-                    tcpChannel = new TcpChannel(5678);
+                    tcpChannel = new TcpChannel(CommunicationConstants.remotingCommunicationPort);
                     ChannelServices.RegisterChannel(tcpChannel, false);
                     objRef = RemotingServices.Marshal(this, "serverCommunicator");
                     communicatorStatus = ServerStructures.ServerCommunicatorStatus.Connected;

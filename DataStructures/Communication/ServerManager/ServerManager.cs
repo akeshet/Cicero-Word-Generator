@@ -356,7 +356,7 @@ namespace DataStructures
 
             int port = server.ServerPort;
             if (port == 0)
-                port = 5678;
+                port = CommunicationConstants.remotingCommunicationPort;
             communicators[server] = (ServerCommunicator)Activator.GetObject(typeof(ServerCommunicator),
             "tcp://" + server.ServerAddress + ":" + port.ToString() + "/serverCommunicator");
         }
