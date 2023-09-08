@@ -388,7 +388,7 @@ namespace DataStructures
                 if (pingThread.ThreadState == ThreadState.Running)
                 {
                     if (messageLog != null)
-                        messageLog(this, new MessageEvent("Server ping took longer than 1000ms. Aborting."));
+                        messageLog(this, new MessageEvent("Server ping took longer than 3000 ms. Aborting."));
                     
                     pingThread.Abort();
 
