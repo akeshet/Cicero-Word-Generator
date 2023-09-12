@@ -74,6 +74,7 @@ namespace AtticusServer
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
+               
 
                 MainServerForm form = new MainServerForm();
 
@@ -104,7 +105,7 @@ namespace AtticusServer
         /// </summary>
         /// <param name="filename"></param>
         /// <returns>loaded server settings object</returns>
-        private static ServerSettings loadServerSettings(string filename)
+        public static ServerSettings loadServerSettings(string filename)
         {
             ServerSettings serverSettings = Common.loadBinaryObjectFromFile(filename) as ServerSettings;
             return serverSettings;

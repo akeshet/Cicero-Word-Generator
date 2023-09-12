@@ -15,3 +15,5 @@ obj/
 *.pdb
 *.vshost.exe.manifest
 TestResults/
+.vs/
+*.vsmdi

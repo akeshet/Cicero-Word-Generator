@@ -15,7 +15,6 @@ namespace CiceroSuiteUnitTests
     public class SequenceDataTest
     {
 
-
         private TestContext testContextInstance;
 
         /// <summary>
@@ -168,13 +167,13 @@ namespace CiceroSuiteUnitTests
                 Assert.AreEqual(snapshot.AnalogFixed[analogId].Length, newShapshot.AnalogFixed[analogId].Length,
                     "Analog fixed buffer lengths differ.");
                 for (int i = 0; i < snapshot.AnalogFixed[analogId].Length; i++)
-                    Assert.AreEqual(snapshot.AnalogFixed[analogId][i], newShapshot.AnalogFixed[analogId][i],
-                        "Snapshots differ at Analog Fixed, channel id " + analogId + " sample " + i);
+                    Assert.AreEqual(snapshot.AnalogFixed[analogId][i], newShapshot.AnalogFixed[analogId][i], 1e-200,
+                        "Snapshots differ at Analog Fixed, channel id " + analogId + " sample " + i + " by" + (snapshot.AnalogFixed[analogId][i]- newShapshot.AnalogFixed[analogId][i]) );
 
                 Assert.AreEqual(snapshot.AnalogVar[analogId].Length, newShapshot.AnalogVar[analogId].Length,
                     "Analog var buffer lengths differ.");
                 for (int i = 0; i < snapshot.AnalogVar[analogId].Length; i++)
-                    Assert.AreEqual(snapshot.AnalogVar[analogId][i], newShapshot.AnalogVar[analogId][i],
+                    Assert.AreEqual(snapshot.AnalogVar[analogId][i], newShapshot.AnalogVar[analogId][i], 1e-200,
                         "Snapshots differ at Analog Var, channel id " + analogId + " sample " + i);
             }
         }

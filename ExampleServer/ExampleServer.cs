@@ -137,7 +137,7 @@ namespace Virgil
             {
                 lock (marshalLock)
                 {
-                    tcpChannel = new TcpChannel(5678);
+                    tcpChannel = new TcpChannel(CommunicationConstants.remotingCommunicationPort);
                     ChannelServices.RegisterChannel(tcpChannel, false);
                     objRef = RemotingServices.Marshal(this, "serverCommunicator");
                 }
